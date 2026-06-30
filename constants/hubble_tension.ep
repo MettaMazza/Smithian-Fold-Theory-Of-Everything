@@ -32,6 +32,7 @@ import "../foundation/counted_numbers.ep"
 import "../foundation/the_one_and_the_fold.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The vacuum (dark-energy) fraction of a flat universe: binary over colour, 2/3.
@@ -121,3 +122,50 @@ define hubble_calibration_ratio_second_order returning Fraction:
 define hubble_calibration_ratio_second_order_decimal with places as Int returning Str:
     set value to hubble_calibration_ratio_second_order()
     return fraction_to_decimal(value and places)
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique (forced_unique)
+# ----------------------------------------------------------------------------
+#  The calibration ratio is One plus the vacuum spread over the covering tower.
+#  Among admissible forms over the forced ingredients {vacuum 2/3, matter 1/3,
+#  tower 8, the One}, only 1 + vacuum/tower reproduces 13/12. forced_unique halts
+#  if any other admissible form coincides.
+
+define hubble_calibration_form_is_unique returning Int:
+    set total to 0
+    # canonical: 1 + vacuum/tower = 13/12
+    set tower_one to fraction_from_whole_number(covering_tower())
+    set corr_one to fraction_divide(vacuum_fraction() and tower_one)
+    set one_a to fraction_from_whole_number(1)
+    set form_one to fraction_add(one_a and corr_one)
+    set total to count_form_match(total and form_one and hubble_calibration_ratio())
+    # 1 - vacuum/tower
+    set tower_two to fraction_from_whole_number(covering_tower())
+    set corr_two to fraction_divide(vacuum_fraction() and tower_two)
+    set one_b to fraction_from_whole_number(1)
+    set form_two to fraction_subtract(one_b and corr_two)
+    set total to count_form_match(total and form_two and hubble_calibration_ratio())
+    # 1 + matter/tower
+    set tower_three to fraction_from_whole_number(covering_tower())
+    set corr_three to fraction_divide(matter_fraction() and tower_three)
+    set one_c to fraction_from_whole_number(1)
+    set form_three to fraction_add(one_c and corr_three)
+    set total to count_form_match(total and form_three and hubble_calibration_ratio())
+    # vacuum + 1/tower
+    set tower_inv to fraction_from_ratio(1 and covering_tower())
+    set form_four to fraction_add(vacuum_fraction() and tower_inv)
+    set total to count_form_match(total and form_four and hubble_calibration_ratio())
+    # 1 + vacuum*tower
+    set tower_five to fraction_from_whole_number(covering_tower())
+    set prod_five to fraction_multiply(vacuum_fraction() and tower_five)
+    set one_e to fraction_from_whole_number(1)
+    set form_five to fraction_add(one_e and prod_five)
+    set total to count_form_match(total and form_five and hubble_calibration_ratio())
+    # 1 + matter*tower
+    set tower_six to fraction_from_whole_number(covering_tower())
+    set prod_six to fraction_multiply(matter_fraction() and tower_six)
+    set one_f to fraction_from_whole_number(1)
+    set form_six to fraction_add(one_f and prod_six)
+    set total to count_form_match(total and form_six and hubble_calibration_ratio())
+    return forbid_form_selection("the Hubble calibration ratio form" and total)

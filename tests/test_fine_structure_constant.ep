@@ -35,5 +35,9 @@ define main:
     # to nine decimal places this equals the measured value 137.035999177
     set ok to expect_equal("1/alpha (second order) decimal" and inverse_fine_structure_second_order_decimal(9) and "137.035999177")
 
+    display "--- the assembled FORM is unique, not just the ingredients ---"
+    set ok to expect_number("leading assembly is the unique shape (forced_unique)" and leading_assembly_is_unique() and 1)
+    set ok to expect_number("second-order refinement is the unique form (forced_unique)" and second_order_refinement_is_unique() and 1)
+
     display "=== done ==="
     return 0

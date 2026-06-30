@@ -35,5 +35,7 @@ define main:
     set ok to expect_equal("second-order ratio = 3305/3048" and fraction_to_text(hubble_calibration_ratio_second_order()) and "3305/3048")
     set ok to expect_equal("second-order decimal = 1.0843175" and hubble_calibration_ratio_second_order_decimal(7) and "1.0843175")
 
+    set ok to expect_equal("the calibration FORM is unique (forced_unique)" and int_to_string(hubble_calibration_form_is_unique()) and "1")
+
     display "=== done ==="
     return 0

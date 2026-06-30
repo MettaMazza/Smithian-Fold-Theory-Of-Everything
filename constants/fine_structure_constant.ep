@@ -44,6 +44,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The generational volume: the colour count raised to itself (twenty-seven).
@@ -127,3 +128,155 @@ define inverse_fine_structure_second_order_decimal with places as Int returning 
     set effective_top to cov * sub + 1
     set numerator to tower() * effective_top + colour_squared() * (effective_top + sub)
     return ratio_to_decimal_text(numerator and effective_top and places)
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique, not just its ingredients (forced_unique)
+# ----------------------------------------------------------------------------
+#  The ingredients (tower, colour^2, covering volume) are each forced above. This
+#  guards the SHAPE that combines them: among nine admissible structural shapes
+#  (additive vs multiplicative join; the dilation on the colour term or the tower;
+#  the dilation form (1+1/cov), (1-1/cov), additive, subtractive, or C/cov), only
+#  the canonical T + C*(1+1/cov) reproduces 1/alpha. forced_unique halts if any
+#  other admissible shape coincides on the value.
+
+# Fresh ingredient builders for the form enumeration.
+define fs_tower_fraction returning Fraction:
+    return fraction_from_whole_number(tower())
+
+define fs_colour_square_fraction returning Fraction:
+    return fraction_from_whole_number(colour_squared())
+
+define fs_dilation_up returning Fraction:
+    set cov to covering_volume()
+    set cov_plus to cov + 1
+    return fraction_from_ratio(cov_plus and cov)
+
+define fs_dilation_down returning Fraction:
+    set cov to covering_volume()
+    set cov_minus to cov - 1
+    return fraction_from_ratio(cov_minus and cov)
+
+define fs_covering_inverse returning Fraction:
+    set cov to covering_volume()
+    return fraction_from_ratio(1 and cov)
+
+define leading_assembly_is_unique returning Int:
+    set total to 0
+
+    # shape 1 (canonical): tower + colour^2 * (cov+1)/cov
+    set col to fs_colour_square_fraction()
+    set term to fraction_multiply(col and fs_dilation_up())
+    set tw to fs_tower_fraction()
+    set shape_one to fraction_add(tw and term)
+    set total to count_form_match(total and shape_one and inverse_fine_structure_first_order())
+
+    # shape 2: tower + colour^2 * (cov-1)/cov
+    set col_two to fs_colour_square_fraction()
+    set term_two to fraction_multiply(col_two and fs_dilation_down())
+    set tw_two to fs_tower_fraction()
+    set shape_two to fraction_add(tw_two and term_two)
+    set total to count_form_match(total and shape_two and inverse_fine_structure_first_order())
+
+    # shape 3: tower + colour^2 + 1/cov
+    set tw_three to fs_tower_fraction()
+    set sum_three to fraction_add(tw_three and fs_colour_square_fraction())
+    set shape_three to fraction_add(sum_three and fs_covering_inverse())
+    set total to count_form_match(total and shape_three and inverse_fine_structure_first_order())
+
+    # shape 4: tower + colour^2 - 1/cov
+    set tw_four to fs_tower_fraction()
+    set sum_four to fraction_add(tw_four and fs_colour_square_fraction())
+    set shape_four to fraction_subtract(sum_four and fs_covering_inverse())
+    set total to count_form_match(total and shape_four and inverse_fine_structure_first_order())
+
+    # shape 5: tower*(cov+1)/cov + colour^2
+    set tw_five to fs_tower_fraction()
+    set term_five to fraction_multiply(tw_five and fs_dilation_up())
+    set shape_five to fraction_add(term_five and fs_colour_square_fraction())
+    set total to count_form_match(total and shape_five and inverse_fine_structure_first_order())
+
+    # shape 6: tower*(cov-1)/cov + colour^2
+    set tw_six to fs_tower_fraction()
+    set term_six to fraction_multiply(tw_six and fs_dilation_down())
+    set shape_six to fraction_add(term_six and fs_colour_square_fraction())
+    set total to count_form_match(total and shape_six and inverse_fine_structure_first_order())
+
+    # shape 7: tower * colour^2 * (cov+1)/cov
+    set tw_seven to fs_tower_fraction()
+    set prod_seven to fraction_multiply(tw_seven and fs_colour_square_fraction())
+    set shape_seven to fraction_multiply(prod_seven and fs_dilation_up())
+    set total to count_form_match(total and shape_seven and inverse_fine_structure_first_order())
+
+    # shape 8: (tower + colour^2) * (cov+1)/cov
+    set tw_eight to fs_tower_fraction()
+    set sum_eight to fraction_add(tw_eight and fs_colour_square_fraction())
+    set shape_eight to fraction_multiply(sum_eight and fs_dilation_up())
+    set total to count_form_match(total and shape_eight and inverse_fine_structure_first_order())
+
+    # shape 9: tower + colour^2 / cov
+    set col_nine to fs_colour_square_fraction()
+    set term_nine to fraction_multiply(col_nine and fs_covering_inverse())
+    set tw_nine to fs_tower_fraction()
+    set shape_nine to fraction_add(tw_nine and term_nine)
+    set total to count_form_match(total and shape_nine and inverse_fine_structure_first_order())
+
+    return forbid_form_selection("the fine-structure leading assembly shape" and total)
+
+
+# The second-order refinement: the effective cover cov + 1/sub, read through the
+# same outer assembly. Among admissible refinements of cov over the forced sub --
+# cov + 1/sub, cov - 1/sub, cov + 1/cov, cov + sub -- only cov + 1/sub reproduces
+# the second-order value. forced_unique halts if any other coincides.
+
+# The outer assembly applied to a given effective cover: tower + colour^2 *
+# (cov_eff + 1)/cov_eff. The shape is the leading one (already guarded); here the
+# effective cover varies.
+define fs_outer_assembly with cov_eff as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set cov_eff_plus to fraction_add(cov_eff and one)
+    set dilation to fraction_divide(cov_eff_plus and cov_eff)
+    set col to fs_colour_square_fraction()
+    set term to fraction_multiply(col and dilation)
+    set tw to fs_tower_fraction()
+    return fraction_add(tw and term)
+
+define fs_effective_cover_up returning Fraction:
+    set cov to fraction_from_whole_number(covering_volume())
+    set sub_inverse to fraction_from_ratio(1 and sub_correction_scale())
+    return fraction_add(cov and sub_inverse)
+
+define fs_effective_cover_down returning Fraction:
+    set cov to fraction_from_whole_number(covering_volume())
+    set sub_inverse to fraction_from_ratio(1 and sub_correction_scale())
+    return fraction_subtract(cov and sub_inverse)
+
+define fs_effective_cover_self returning Fraction:
+    set cov to fraction_from_whole_number(covering_volume())
+    set cov_inverse to fraction_from_ratio(1 and covering_volume())
+    return fraction_add(cov and cov_inverse)
+
+define fs_effective_cover_additive returning Fraction:
+    set cov to fraction_from_whole_number(covering_volume())
+    set sub_whole to fraction_from_whole_number(sub_correction_scale())
+    return fraction_add(cov and sub_whole)
+
+define second_order_refinement_is_unique returning Int:
+    set total to 0
+    # canonical: cov + 1/sub
+    set eff_a to fs_effective_cover_up()
+    set form_a to fs_outer_assembly(eff_a)
+    set total to count_form_match(total and form_a and inverse_fine_structure_second_order())
+    # cov - 1/sub
+    set eff_b to fs_effective_cover_down()
+    set form_b to fs_outer_assembly(eff_b)
+    set total to count_form_match(total and form_b and inverse_fine_structure_second_order())
+    # cov + 1/cov
+    set eff_c to fs_effective_cover_self()
+    set form_c to fs_outer_assembly(eff_c)
+    set total to count_form_match(total and form_c and inverse_fine_structure_second_order())
+    # cov + sub
+    set eff_d to fs_effective_cover_additive()
+    set form_d to fs_outer_assembly(eff_d)
+    set total to count_form_match(total and form_d and inverse_fine_structure_second_order())
+    return forbid_form_selection("the fine-structure second-order refinement form" and total)

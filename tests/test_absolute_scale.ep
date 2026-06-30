@@ -46,5 +46,7 @@ define main:
     else:
         display "  FAIL  forced 2^127 outside 1/200 of measured (Planck/proton)^2"
 
+    set ok to expect_equal("the hierarchy-exponent FORM is unique (forced_unique)" and int_to_string(hierarchy_exponent_form_is_unique()) and "1")
+
     display "=== done ==="
     return 0

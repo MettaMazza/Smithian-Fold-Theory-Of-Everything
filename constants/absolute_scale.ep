@@ -47,6 +47,7 @@ import "../foundation/counted_numbers.ep"
 import "../foundation/exact_integers.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The deepest covering depth d_up = 7. Forced two ways: by the covering count of
@@ -84,3 +85,35 @@ define hierarchy_exponent returning Fraction:
 define planck_to_proton_squared returning ExactInteger:
     set base to exact_integer_from_number(binary_count())
     return exact_integer_power(base and massive_states())
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique (forced_unique)
+# ----------------------------------------------------------------------------
+#  The hierarchy exponent is the massive-state count scaled by the gravitational
+#  coupling: massive_states * coupling. Among admissible forms over the forced
+#  ingredients {massive_states 127, coupling 1/2}, only the product reproduces
+#  127/2. forced_unique halts if any other admissible form coincides.
+define hierarchy_exponent_form_is_unique returning Int:
+    set total to 0
+    # canonical: massive_states * coupling = 127/2
+    set states_a to fraction_from_whole_number(massive_states())
+    set form_a to fraction_multiply(states_a and gravitational_coupling())
+    set total to count_form_match(total and form_a and hierarchy_exponent())
+    # massive_states / coupling = 254
+    set states_b to fraction_from_whole_number(massive_states())
+    set form_b to fraction_divide(states_b and gravitational_coupling())
+    set total to count_form_match(total and form_b and hierarchy_exponent())
+    # massive_states + coupling
+    set states_c to fraction_from_whole_number(massive_states())
+    set form_c to fraction_add(states_c and gravitational_coupling())
+    set total to count_form_match(total and form_c and hierarchy_exponent())
+    # massive_states - coupling
+    set states_d to fraction_from_whole_number(massive_states())
+    set form_d to fraction_subtract(states_d and gravitational_coupling())
+    set total to count_form_match(total and form_d and hierarchy_exponent())
+    # coupling / massive_states
+    set states_e to fraction_from_whole_number(massive_states())
+    set form_e to fraction_divide(gravitational_coupling() and states_e)
+    set total to count_form_match(total and form_e and hierarchy_exponent())
+    return forbid_form_selection("the hierarchy exponent form" and total)

@@ -28,6 +28,7 @@
 # ============================================================================
 
 import "../foundation/structural_counts.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The mediator count of a colour-sector: the sector squared, less one.
@@ -74,3 +75,43 @@ define electromagnetic_field_source returning Int:
 # carriers (binary, two), totalling three -- the colour count.
 define strong_field_source returning Int:
     return 1 + binary_count()
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique (forced_unique)
+# ----------------------------------------------------------------------------
+#  The gluon count is the adjoint dimension sector^2 - 1. Among the natural count
+#  formulas over the forced sector (colour 3) -- sector^2 +/- 1, sector^2, the two
+#  ladder products, 2*sector +/- 1 -- only sector^2 - 1 reproduces the eight
+#  gluons. forced_unique halts if any other formula coincides.
+define gluon_count_form_is_unique returning Int:
+    set sector to strong_sector()
+    set total to 0
+    # canonical: sector^2 - 1 = 8 (the adjoint dimension)
+    set sq_a to whole_power(sector and 2)
+    set cand_a to fraction_from_whole_number(sq_a - 1)
+    set total to count_form_match(total and cand_a and fraction_from_whole_number(gluon_count()))
+    # sector^2 + 1
+    set sq_b to whole_power(sector and 2)
+    set cand_b to fraction_from_whole_number(sq_b + 1)
+    set total to count_form_match(total and cand_b and fraction_from_whole_number(gluon_count()))
+    # sector^2
+    set cand_c to fraction_from_whole_number(whole_power(sector and 2))
+    set total to count_form_match(total and cand_c and fraction_from_whole_number(gluon_count()))
+    # sector * (sector - 1)
+    set sector_minus to sector - 1
+    set cand_d to fraction_from_whole_number(sector * sector_minus)
+    set total to count_form_match(total and cand_d and fraction_from_whole_number(gluon_count()))
+    # sector * (sector + 1)
+    set sector_plus to sector + 1
+    set cand_e to fraction_from_whole_number(sector * sector_plus)
+    set total to count_form_match(total and cand_e and fraction_from_whole_number(gluon_count()))
+    # 2 * sector - 1
+    set twice_minus to 2 * sector - 1
+    set cand_f to fraction_from_whole_number(twice_minus)
+    set total to count_form_match(total and cand_f and fraction_from_whole_number(gluon_count()))
+    # 2 * sector + 1
+    set twice_plus to 2 * sector + 1
+    set cand_g to fraction_from_whole_number(twice_plus)
+    set total to count_form_match(total and cand_g and fraction_from_whole_number(gluon_count()))
+    return forbid_form_selection("the gluon count form (adjoint dimension)" and total)

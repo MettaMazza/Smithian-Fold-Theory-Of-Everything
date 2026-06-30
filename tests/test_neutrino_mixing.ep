@@ -33,5 +33,7 @@ define main:
     set ok to expect_equal("solar       1/3 = 0.3333 (measured ~0.3070)" and fraction_to_decimal(solar_mixing() and 4) and "0.3333")
     set ok to expect_equal("reactor    1/48 = 0.0208 (measured ~0.0220)" and fraction_to_decimal(reactor_mixing() and 4) and "0.0208")
 
+    set ok to expect_equal("the reactor FORM (atm*solar)/N is unique (forced_unique)" and int_to_string(reactor_form_is_unique()) and "1")
+
     display "=== done ==="
     return 0

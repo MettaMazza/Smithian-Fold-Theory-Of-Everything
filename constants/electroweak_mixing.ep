@@ -33,6 +33,7 @@
 
 import "../foundation/structural_counts.ep"
 import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The unified coupling: one over the binary count, 1/2 -- the fold's balance point.
@@ -56,6 +57,44 @@ define mixing_partition returning Fraction:
     set lower to sin_squared_mixing()
     set upper to cos_squared_mixing()
     return fraction_add(lower and upper)
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique (forced_unique)
+# ----------------------------------------------------------------------------
+#  cos^2 is the PARTITION complement of sin^2: One - sin^2. Among admissible forms
+#  over the forced ingredients {sin^2 = 1/4, the One, binary}, only One - sin^2
+#  reproduces 3/4. forced_unique halts if any other admissible form coincides.
+define cos_squared_form_is_unique returning Int:
+    set total to 0
+    # canonical: One - sin^2 = 3/4
+    set one_a to fraction_from_whole_number(1)
+    set form_a to fraction_subtract(one_a and sin_squared_mixing())
+    set total to count_form_match(total and form_a and cos_squared_mixing())
+    # One + sin^2 = 5/4
+    set one_b to fraction_from_whole_number(1)
+    set form_b to fraction_add(one_b and sin_squared_mixing())
+    set total to count_form_match(total and form_b and cos_squared_mixing())
+    # One - binary*sin^2 = 1/2
+    set one_c to fraction_from_whole_number(1)
+    set binary_c to fraction_from_whole_number(binary_count())
+    set scaled_c to fraction_multiply(binary_c and sin_squared_mixing())
+    set form_c to fraction_subtract(one_c and scaled_c)
+    set total to count_form_match(total and form_c and cos_squared_mixing())
+    # binary * sin^2 = 1/2
+    set binary_d to fraction_from_whole_number(binary_count())
+    set form_d to fraction_multiply(binary_d and sin_squared_mixing())
+    set total to count_form_match(total and form_d and cos_squared_mixing())
+    # One - sin^2/binary = 7/8
+    set binary_e to fraction_from_whole_number(binary_count())
+    set scaled_e to fraction_divide(sin_squared_mixing() and binary_e)
+    set one_e to fraction_from_whole_number(1)
+    set form_e to fraction_subtract(one_e and scaled_e)
+    set total to count_form_match(total and form_e and cos_squared_mixing())
+    # sin^2 itself = 1/4
+    set form_f to sin_squared_mixing()
+    set total to count_form_match(total and form_f and cos_squared_mixing())
+    return forbid_form_selection("the electroweak cos-squared partition form" and total)
 
 
 # Fold a fraction once: double it (with a separate twin) and cast out whole Ones.

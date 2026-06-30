@@ -33,6 +33,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
+import "../foundation/form_enforcement.ep"
 
 
 # The generational volume: the colour count raised to itself, twenty-seven.
@@ -108,3 +109,48 @@ define dark_to_baryon_ratio_second_order returning Fraction:
 define dark_to_baryon_ratio_second_order_decimal with places as Int returning Str:
     set value to dark_to_baryon_ratio_second_order()
     return fraction_to_decimal(value and places)
+
+
+# ----------------------------------------------------------------------------
+#  The assembled FORM is unique (forced_unique)
+# ----------------------------------------------------------------------------
+#  The ratio is dark over baryon = volume / depth. Among the six distinct pairwise
+#  ratios of the forced counts {volume 27, depth 5, total 32}, only volume/depth
+#  reproduces the dark-to-baryon ratio. forced_unique halts if any other coincides.
+
+define db_volume_fraction returning Fraction:
+    return fraction_from_whole_number(generational_volume())
+
+define db_depth_fraction returning Fraction:
+    return fraction_from_whole_number(generational_covering_depth())
+
+define db_total_fraction returning Fraction:
+    return fraction_from_whole_number(total_binary_volume())
+
+define dark_to_baryon_form_is_unique returning Int:
+    set total to 0
+    # canonical: volume / depth = 27/5
+    set v_one to db_volume_fraction()
+    set ratio_one to fraction_divide(v_one and db_depth_fraction())
+    set total to count_form_match(total and ratio_one and dark_to_baryon_ratio())
+    # depth / volume
+    set d_two to db_depth_fraction()
+    set ratio_two to fraction_divide(d_two and db_volume_fraction())
+    set total to count_form_match(total and ratio_two and dark_to_baryon_ratio())
+    # volume / total
+    set v_three to db_volume_fraction()
+    set ratio_three to fraction_divide(v_three and db_total_fraction())
+    set total to count_form_match(total and ratio_three and dark_to_baryon_ratio())
+    # depth / total
+    set d_four to db_depth_fraction()
+    set ratio_four to fraction_divide(d_four and db_total_fraction())
+    set total to count_form_match(total and ratio_four and dark_to_baryon_ratio())
+    # total / volume
+    set t_five to db_total_fraction()
+    set ratio_five to fraction_divide(t_five and db_volume_fraction())
+    set total to count_form_match(total and ratio_five and dark_to_baryon_ratio())
+    # total / depth
+    set t_six to db_total_fraction()
+    set ratio_six to fraction_divide(t_six and db_depth_fraction())
+    set total to count_form_match(total and ratio_six and dark_to_baryon_ratio())
+    return forbid_form_selection("the dark-to-baryon ratio form" and total)

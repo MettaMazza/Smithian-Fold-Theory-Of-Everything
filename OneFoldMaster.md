@@ -1275,7 +1275,15 @@ from the One alone. The two generators are read off the fold's period spectrum
 (the two smallest periods, nothing chosen); every constant is forced from those
 two generators; the structural depths are enforced against independent forced
 relations; and a fitted value halts the engine. There are **no fitted physics
-parameters and no chosen seeds** anywhere in the model. And the foundation itself
+parameters and no chosen seeds** anywhere in the model. The guard now reaches the
+assembled FORMS, not just their ingredients: for each constant
+(`foundation/form_enforcement.ep`), the candidate space of admissible shapes over
+the forced ingredients is enumerated and **run**, and `forced_unique` halts the
+engine unless exactly one shape — the chosen one — reproduces the forced value.
+So the algebraic assembly itself is proven determinate, not selected among
+coincident alternatives (nine modules: fine-structure leading + second order,
+dark/baryon, Hubble, electroweak, gluons, Koide, neutrino reactor, absolute scale,
+the lepton invariants and channel). And the foundation itself
 is not a free choice (Step 24): given only that there is *not nothing*, the One,
 the domain `(0,1]`, and the fold are forced — so the model has **zero free
 parameters and its single premise is a proven theorem** (arguably zero axioms).

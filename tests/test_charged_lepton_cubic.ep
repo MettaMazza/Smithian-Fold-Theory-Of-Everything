@@ -35,5 +35,8 @@ define main:
     else:
         display "  FAIL  neutral channel uniqueness not enforced"
 
+    set ok to expect_equal("the e2 invariant FORM is unique (forced_unique)" and int_to_string(second_invariant_form_is_unique()) and "1")
+    set ok to expect_equal("the leading e3 invariant FORM is unique (forced_unique)" and int_to_string(leading_third_invariant_form_is_unique()) and "1")
+
     display "=== done ==="
     return 0

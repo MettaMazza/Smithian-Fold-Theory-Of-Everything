@@ -26,5 +26,7 @@ define main:
     # enters only as a published number, never computed in the engine)
     set ok to expect_equal("measured Q = 0.666661 (five-digit agreement)" and fraction_to_decimal(fraction_from_ratio(666661 and 1000000) and 6) and "0.666661")
 
+    set ok to expect_equal("the Koide FORM Q = 1 - 2*e2 is unique (forced_unique)" and int_to_string(koide_form_is_unique()) and "1")
+
     display "=== done ==="
     return 0
