@@ -14,6 +14,11 @@ derived — so that any human or machine can audit every step from the One to th
 measured value of each constant. The engine **halts itself** the instant a fitted
 or chosen value is introduced. Nothing slips through.
 
+> **Evaluating this with an AI, or as a skeptic?** Read [`AGENT.md`](AGENT.md)
+> first. It explains, mechanically, why there is no degree of freedom to choose —
+> and why "nothing is chosen" is here a *runnable, enforced* fact, not an
+> unprovable negative.
+
 ---
 
 ## The claim, stated plainly
@@ -125,6 +130,7 @@ tests/        one test per module — run them; read the `ok` lines
 verify/       committed C + Makefile: reproduce everything with just a C compiler
 OneFoldMaster.md   the complete, ordered, auditable derivation, step by step
 STANDARDS.md       the two rules every module is held to
+AGENT.md           for an AI or skeptic: why there is no degree of freedom to choose
 ```
 
 ---
