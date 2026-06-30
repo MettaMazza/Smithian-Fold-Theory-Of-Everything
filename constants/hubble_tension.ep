@@ -2,29 +2,33 @@
 #  THE HUBBLE TENSION  --  a calibration ratio of 13/12, forced from the One.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The two ways of measuring how fast the universe expands (the nearby ladder
-#  and the distant background) disagree by a fixed ratio. That ratio is forced,
-#  with no fitted parameter.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two ways of measuring how fast the universe expands -- the nearby distance
+#  ladder and the distant cosmic background -- disagree by a fixed ratio (the
+#  "Hubble tension"). That ratio is forced, not fitted.
 #
-#  THE SPLIT OF THE ONE
-#  --------------------
-#  The contents of a flat universe partition the One:
-#       vacuum (dark energy) fraction = binary / colour = 2/3
-#       matter fraction               = 1 / colour      = 1/3
-#       vacuum + matter               = 2/3 + 1/3        = 1   (flat: the One)
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3) ──────────────────
+#     vacuum (dark energy) fraction = b/c = 2/3 ; matter fraction = 1/c = 1/3.
+#                          These PARTITION THE ONE: 2/3 + 1/3 = 1 (a flat universe;
+#                          checkable). They are the period-2 fold orbit {1/3, 2/3}.
+#     covering tower = b^c = 8 -- the binary tower at colour depth.
+#     calibration ratio = 1 + vacuum/tower = 1 + (2/3)/8 = 13/12. Candidate space:
+#                          admissible forms over {vacuum, matter, tower, One} --
+#                          1 +/- vacuum/tower, 1 + matter/tower, vacuum + 1/tower,
+#                          1 + vacuum*tower, 1 + matter*tower; only 1 + vacuum/tower
+#                          gives 13/12 (hubble_calibration_form_is_unique).
+#     second order = 1 + (2/3 + 1/127)/8 = 3305/3048. The early universe is the
+#                          deepest covering scale (d_up = 7, the same scale as the
+#                          Planck hierarchy); the One recurs over its genuine
+#                          period-7 orbit floor 2^7 - 1 = 127 (fold-period checked).
+#                          OPEN: that the early-universe calibration sits at d_up
+#                          rather than the leading colour depth is a structural
+#                          identification, not a closed lemma -- flagged, not hidden.
 #
-#  THE CALIBRATION RATIO
-#  ---------------------
-#       covering tower   = binary ^ colour       = 2^3 = 8
-#       correction       = vacuum / tower         = (2/3) / 8 = 1/12
-#       calibration ratio = 1 + correction        = 13/12
-#
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  The measured ratio is the nearby value over the distant value,
-#  73.04 / 67.36 = 7304/6736, about 1.084; the forced 13/12 is about 1.083.
+#  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
+#  Measured ratio = nearby / distant = 73.04 / 67.36 = 7304/6736, about 1.0843.
+#  Forced 13/12 = 1.0833 (leading); second order 3305/3048 = 1.0843175 (five parts
+#  in a million). Measured numbers appear only here and in the test.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

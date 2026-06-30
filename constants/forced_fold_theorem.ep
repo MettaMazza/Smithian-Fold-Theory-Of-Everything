@@ -2,42 +2,40 @@
 #  THE FOLD IS FORCED  --  a machine-checked uniqueness theorem.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Step 24 derived everything DOWNSTREAM of the fold. This step closes the gap
-#  above it: it proves, by running the candidates, that the fold itself is the
-#  unique operation a zero-parameter theory could have. Not "given the fold..." --
-#  the fold is forced.
+#  This is the TOP of the spine: read it first. It proves the fold itself is forced
+#  (the_axiom_is_a_theorem then derives the One from it; every constant follows).
 #
-#  THEOREM (Forced Operation)
-#  --------------------------
-#  Among all parameter-free self-maps of the domain (0,1] of least size that
-#  GENERATE (produce recurrent, expanding dynamics), the fold cast_out(x+x) is
-#  unique.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The last apparent freedom in a theory of everything is "but you still picked the
+#  starting operation." This step removes it: among the operations a zero-parameter
+#  theory could have, the fold cast_out(x+x) is the unique one -- not chosen, forced.
 #
-#  WHY THIS IS PROVABLE (the key)
-#  ------------------------------
-#  Build maps from only the variable x and the One, with +, guarded -, *, and
-#  cast_out, and NO other literal. Then (Lemma 1) every constant you can build is
-#  a positive integer, and cast_out sends every positive integer to the One -- so
-#  no fractional free parameter is even EXPRESSIBLE. The candidate space is
-#  therefore DISCRETE and finite at each size, not a continuum: you can list it.
+#  ── DERIVATION ─ (check every line; built and RUN by the engine below) ───────
+#  Theorem: among parameter-free self-maps of (0,1] of least size that GENERATE,
+#  the fold is unique. Why it is provable (the key): build maps from only x and the
+#  One with +, guarded -, *, cast_out and NO other literal; then every constant you
+#  can build is a positive integer and cast_out collapses each to the One -- so no
+#  continuous free parameter is even EXPRESSIBLE, and the candidate space is DISCRETE
+#  and listable. The three lemmas, each run:
+#   Lemma 1 (normal form) -- closed terms are integers, collapsed to the One:
+#                          cast_out(2..7) = 1 (run here).
+#   Lemma 2 (enumeration) -- the size-<=2 self-maps are exactly four: identity x,
+#                          square x*x, the constant One, the fold cast_out(x+x).
+#                          (Raw x+x exceeds the One, so closure is what makes size 2.)
+#   Lemma 3 (separation)  -- RUN each: only the fold GENERATES (identity is static,
+#                          the constant collapses, the square contracts to the
+#                          forbidden zero). forced_unique halts if ever two generate.
+#  "Generates" is tested operationally: non-injective (two points share an image --
+#  the expansion behind entropy) AND recurrent with period > 1 (a generic interior
+#  point returns -- it explores rather than dying). The fold alone is both.
+#  OPEN (stated, not hidden): the engine runs the dynamical separation and enforces
+#  uniqueness; the size-<=2 completeness of Lemma 2 is a finite combinatorial proof
+#  encoded as the candidate list, and "generates" is the operational proxy above,
+#  not a full topological-entropy computation.
 #
-#   Lemma 1 (normal form)  -- closed terms are integers; cast_out collapses them
-#                             all to the One. Checked here: cast_out(2..7) = 1.
-#   Lemma 2 (enumeration)  -- the parameter-free self-maps of size <= 2 are exactly
-#                             four: identity x, square x*x, the constant One, and
-#                             the fold cast_out(x+x). (Raw x+x is not a self-map --
-#                             it exceeds the One -- so closure is what makes size 2.)
-#   Lemma 3 (separation)   -- run each: only the fold GENERATES. Identity is static,
-#                             the constant collapses to a point, the square contracts
-#                             to the forbidden zero. The engine confirms exactly one
-#                             generator, and forced_unique halts if ever two do.
-#
-#  "Generates" is tested operationally, on actual orbits: a map generates iff it is
-#  non-injective (two points share an image -- the expansion that makes entropy)
-#  AND recurrent with period above one (a generic interior point returns to itself
-#  -- it explores rather than dying). The fold alone is both.
+#  ── CHECK ─ (no measurement; this is a structural theorem about the operation) ─
+#  Nothing to compare to nature here -- the result is that the model's one operation
+#  could not have been otherwise. The test runs all four candidates and the guard.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

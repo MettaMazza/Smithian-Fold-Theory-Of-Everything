@@ -2,27 +2,24 @@
 #  THE CP-VIOLATING PHASE  --  forced to be maximal.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
 #  The universe treats matter and antimatter differently; the size of that
-#  difference is set by a CP-violating phase. The fold forces that phase to sit at
-#  the ONE point of maximal violation -- it is not small, not zero, but maximal.
+#  difference is a CP-violating phase. The fold forces it to be MAXIMAL -- not zero,
+#  not small.
 #
-#  WHY MAXIMAL
-#  -----------
-#  The phase position is the fold's SELF-ANTIPODAL point, the half-One 1/2 = the
-#  unique value at maximal separation from both ends of the domain. It is forced
-#  the same way the atmospheric neutrino angle is:
-#       fold(1/2) = the One           (it folds exactly back to unison)
-#       One - 1/2 = 1/2               (it is its own antipode -- maximal separation)
-#  No other value in the domain does both, so the phase is forced to 1/2, i.e. to
-#  maximal CP violation (sin of the phase = 1).
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The phase position is the fold's SELF-ANTIPODAL point, the half-One 1/2 -- the
+#  unique value at maximal separation from both ends of the domain. Forced the same
+#  way as the atmospheric neutrino angle:
+#     fold(1/2) = the One       (it folds back to unison -- checkable).
+#     One - 1/2 = 1/2           (it is its own antipode -- maximal separation).
+#  No other domain value does both, so the phase is forced to 1/2 -- maximal CP
+#  violation (the sine of the phase is 1).
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
 #  The measured neutrino CP phase sits near three-quarters of a turn (about 1.5*pi,
-#  the maximal-violation point), and the quark sector also violates CP -- both
-#  consistent with the forced prediction that the phase is maximal, not zero.
+#  the maximal point), and the quark sector also violates CP -- both consistent
+#  with the forced prediction of a maximal, nonzero phase.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

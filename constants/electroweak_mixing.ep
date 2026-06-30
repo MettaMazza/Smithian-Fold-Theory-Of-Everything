@@ -2,33 +2,31 @@
 #  THE ELECTROWEAK MIXING ANGLE  --  the two preimages of the critical coupling.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The electroweak mixing angle (the Weinberg angle) splits one unified coupling
-#  into two channels. The split is forced, with no fitted parameter.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The weak and electromagnetic forces are two faces of one electroweak force; the
+#  "mixing angle" (Weinberg angle) sets how the unified coupling splits between
+#  them. The split is forced, not measured-in.
 #
-#  THE CRITICAL COUPLING AND ITS TWO PREIMAGES
-#  -------------------------------------------
-#  The unified coupling is the fold's own balance point, g = 1 / binary = 1/2 --
-#  the value that folds to the One and is its own antipode. Under the fold (which
-#  doubles), exactly two values fold to g: the lower preimage and the upper.
-#       unified coupling = 1 / binary       = 1/2
-#       lower preimage   = 1 / binary^2     = 1/4   (this is sin^2 of the angle)
-#       upper preimage   = 1 - lower         = 3/4   (this is cos^2 of the angle)
-#  The two preimages PARTITION THE ONE:  1/4 + 3/4 = 1, and each folds back to
-#  the coupling -- fold(1/4) = 1/2 and fold(3/4) = 1/2.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#     unified coupling g = 1/b = 1/2 -- the fold's balance point: the unique value
+#                          that folds to the One and is its own antipode (checkable:
+#                          fold(1/2) = 1, 1 - 1/2 = 1/2).
+#     The fold doubles, so exactly TWO values fold to g; they are its preimages:
+#       sin^2(theta_W) = lower preimage = 1/b^2 = 1/4 (below 1/2).
+#       cos^2(theta_W) = upper preimage = 1 - 1/4 = 3/4 (above 1/2). Candidate space
+#                          for cos^2 over {sin^2, One, b}: {One - sin^2, One + sin^2,
+#                          One - b*sin^2, b*sin^2, One - sin^2/b, sin^2}; only
+#                          One - sin^2 gives 3/4 (cos_squared_form_is_unique).
+#     The two preimages PARTITION THE ONE (1/4 + 3/4 = 1) and each folds back to g.
+#     Running to measurement: the mixing runs with covering level k as
+#                          sin^2(k) = (k+2)^2 / (4(k+1)^2 + (k+2)^2) -- the neutral
+#                          coupling stays at 1/2 while the charged one fills in as
+#                          (k+1)/(k+2). It starts at 1/2 (k=0) and decreases.
 #
-#  THE RUNNING, TO THE MEASURED VALUE (second order, forced)
-#  ---------------------------------------------------------
-#  The leading 1/4 is not the end. The mixing RUNS with the covering level k: the
-#  charged coupling fills in as c_k = (k+1)/(k+2) while the neutral coupling stays
-#  flat at n = 1/2, and the mixing is
-#       sin^2(theta_W) at level k = n^2 / (c_k^2 + n^2)
-#                                 = (k+2)^2 / (4(k+1)^2 + (k+2)^2).
-#  At the bare level (k = 0) this is 1/2; it decreases monotonically with k. The
-#  forced running curve CROSSES the measured Z-scale value 0.23113 between level
-#  nine (121/521 = 0.2322) and level ten (36/157 = 0.2293) -- so the measured
-#  value is reached by the forced running, not fitted to.
+#  ── CHECK ─ (measurement; comparison only -- the measured value lives in the test)
+#  The forced running curve CROSSES the measured Z-scale mixing 0.23113 between
+#  level nine (121/521 = 0.2322) and level ten (36/157 = 0.2293) -- reached by the
+#  forced curve, not fitted. The measured 0.23113 appears only in the test.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

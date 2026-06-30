@@ -2,30 +2,23 @@
 #  THE ARROW OF TIME  --  why time runs one way, forced.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Time has a direction: the past is fixed, the future open, and entropy grows.
-#  This is forced by the fold being two-to-one -- it loses information at every
-#  step and so cannot be run backwards uniquely.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Time has a direction: the past is fixed, the future open, entropy grows. This is
+#  forced by the fold losing information at every step, so it cannot run backward.
 #
-#  THE IRREVERSIBILITY
-#  -------------------
-#  Two distinct values fold to the SAME image:
-#       fold(1/4) = 1/2   and   fold(3/4) = 1/2.
-#  Given the result 1/2 you cannot recover which value it came from -- one binary
-#  choice is lost. The fold is non-injective, so it has no unique inverse: it runs
-#  forward, never uniquely backward. That is the arrow.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#     irreversibility: two distinct values fold to the SAME image -- fold(1/4) = 1/2
+#                          and fold(3/4) = 1/2 (checkable). Given 1/2 you cannot
+#                          recover which it came from; the fold is non-injective, so
+#                          it has no unique inverse. It runs forward, never uniquely
+#                          backward. That is the arrow.
+#     entropy rate: the fold is two-to-one and 2 = 2^1, so each step loses exactly
+#                          ONE bit (the count of doublings to reach b). Strictly
+#                          positive, which fixes the forward direction.
 #
-#  THE ENTROPY RATE
-#  ----------------
-#  The fold is binary (two-to-one), and binary = 2 = 2^1, so each step loses
-#  exactly ONE bit -- the Kolmogorov-Sinai entropy is 1 bit per step, strictly
-#  positive. A positive entropy rate fixes the forward direction of time.
-#
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  The second law of thermodynamics: entropy increases, and the increase sets the
-#  direction of time -- the forced positive 1-bit-per-step rate.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The second law: entropy increases, and that increase sets the direction of time
+#  -- the forced positive one-bit-per-step rate.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

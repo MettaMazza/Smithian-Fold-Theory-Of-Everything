@@ -2,27 +2,22 @@
 #  PARITY VIOLATION  --  why the universe is left-handed, forced.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The weak force treats left and right differently -- it couples to only one
-#  handedness. This parity violation is forced by the fold, with no fitted
-#  parameter: it comes from the fold being two-to-one with two-handed preimages.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The weak force is left-handed -- it couples to only one handedness. This parity
+#  violation is forced by the fold being two-to-one with two-handed preimages.
 #
-#  THE TWO-HANDED FIBRE
-#  --------------------
-#  Every value has exactly two preimages under the fold, and they sit on opposite
-#  sides of the half-One. For the displaced vacuum (the half-One 1/2):
-#       lower preimage = image / binary       = 1/4   (below 1/2 -- left hand)
-#       upper preimage = (image + 1) / binary = 3/4   (above 1/2 -- right hand)
-#  Both fold back to 1/2, but they have OPPOSITE handedness. A force that couples
-#  to only the lower hand -- the weak force does -- therefore violates parity. The
-#  universe is a southpaw.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold doubles, so every value has exactly two preimages, on opposite sides of
+#  the half-One. For the displaced vacuum 1/2:
+#     lower preimage = image / b       = 1/4 -- below 1/2 (left hand).
+#     upper preimage = (image + 1) / b = 3/4 -- above 1/2 (right hand).
+#  Both fold back to 1/2 (checkable), but they have OPPOSITE handedness (one below,
+#  one above 1/2). A force coupling to only one hand -- the weak force -- therefore
+#  violates parity. There is no third option: the fibre has exactly two hands.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  Parity violation is real and maximal in the weak sector (Wu's experiment, 1957):
-#  only left-handed particles feel the charged weak force -- exactly the forced
-#  one-handed coupling.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Parity violation is real and maximal in the weak sector (Wu, 1957): only
+#  left-handed particles feel the charged weak force -- the forced one-handed coupling.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

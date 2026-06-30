@@ -2,29 +2,26 @@
 #  THREE OF EVERYTHING  --  why three dimensions, three generations, three colours.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Three is not a coincidence repeated across physics. The number of spatial
-#  dimensions, the number of fermion generations, and the number of strong-force
-#  colours are the SAME forced count -- the colour count three -- each reached by
-#  an independent route, with no fitted parameter.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Three keeps appearing -- three spatial dimensions, three fermion generations,
+#  three strong-force colours. It is not coincidence: they are the SAME forced
+#  count, reached three independent ways.
 #
-#  THE THREE ROUTES TO THREE
-#  -------------------------
-#   colour      = the fold period of 1/7                        = 3  (the base)
-#   dimensions  = the unique integer in the stability window
-#                 (binary, binary^2) = (2, 4)                    = 3
-#       (a binding potential needs d > binary; stable orbits need d < binary^2;
-#        exactly one integer satisfies both, and it is three.)
-#   generations = the size of the tripling fold's fibre
-#                 (the preimages of 2/3 under tripling)          = 3
-#  Each is cross-checked to equal the colour count through forced_to_be, so any
-#  disagreement halts the engine.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#     colour = 3 -- the fold period of 1/7 (the base count, from structural_counts).
+#     spatial dimension = 3 -- the UNIQUE integer in the stability window
+#                          (b, b^2) = (2, 4): a binding potential needs d > b, stable
+#                          orbits need d < b^2, and exactly one integer (3) satisfies
+#                          both (the engine counts the window = 1, then takes it).
+#                          Cross-checked = colour (forced_to_be).
+#     generations = 3 -- the size of the tripling fold's fibre: the preimages of 2/3
+#                          under tripling are 2/9, 5/9, 8/9, three of them, each
+#                          verified to fold back to 2/3. Cross-checked = colour.
+#  Each route is cross-checked equal to the colour count; disagreement halts.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  Measured: space is three-dimensional; there are three fermion generations (the
-#  Z-boson invisible width); quarks carry three colours. All three.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Space is three-dimensional; there are three fermion generations (the Z-boson
+#  invisible width); quarks carry three colours. All three -- exact counts.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

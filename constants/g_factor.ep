@@ -2,27 +2,20 @@
 #  THE GYROMAGNETIC RATIO  --  the Dirac g-factor of 2, forced.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
 #  A point electron's magnetic strength relative to its spin -- the g-factor -- is
-#  almost exactly 2. That value is forced, with no fitted parameter: it is the
-#  inverse of the fold's critical coupling.
+#  almost exactly 2 (the Dirac value). It is forced: the inverse of the fold's
+#  critical coupling.
 #
-#  THE DIRAC VALUE
-#  ---------------
-#  Electromagnetism couples at the CRITICAL COUPLING -- the half-One, the fold's
-#  self-antipodal balance point, g_em = 1/binary = 1/2 (the same 1/2 that is the
-#  unified electroweak coupling and the maximal-CP point). The gyromagnetic ratio
-#  is its inverse:
-#       g = 1 / g_em = 1 / (1/2) = 2 = binary.
-#  The Dirac value 2 is the binary count itself.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#     critical coupling g_em = 1/b = 1/2 -- the half-One, the fold's self-antipodal
+#                          balance point (the same 1/2 as the electroweak coupling).
+#     g-factor = 1/g_em = 1/(1/2) = 2 = b. The Dirac value is the binary count.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  The measured electron g-factor is about 2.00232 -- the forced 2 plus a tiny
-#  "anomaly" 0.00232, which is the quantum (QED) correction of order alpha/(2*pi).
-#  That correction needs pi, an irrational, so it is never formed here; the forced
-#  Dirac value is exactly 2, and the anomaly is noted only for comparison.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured electron g-factor about 2.00232 = the forced 2 plus a tiny anomaly
+#  0.00232, the QED correction of order alpha/(2*pi). That correction needs the
+#  irrational pi, so it is never formed here; the forced Dirac value is exactly 2.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

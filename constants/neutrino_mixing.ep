@@ -2,30 +2,29 @@
 #  THE NEUTRINO MIXING ANGLES (PMNS)  --  forced fold separations.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Neutrinos of one kind turn into another as they travel; how strongly is set by
-#  three mixing angles. All three are forced from the two generators and the fold,
-#  with no fitted parameter -- they are the fold's own separations.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Neutrinos change identity as they travel; three "mixing angles" set how
+#  strongly. All three are forced -- they are the fold's own separations -- and the
+#  smallest, long suspected of being zero, is forced nonzero.
 #
-#  THE THREE ANGLES, ALL FORCED
-#  ----------------------------
-#     atmospheric  sin^2(theta23) = 1 / binary = 1/2
-#         the HAND separation: 1/2 is the fold's self-antipodal point -- it folds
-#         to the One, and the One less it is itself. No other value does this.
-#     solar        sin^2(theta12) = 1 / colour = 1/3
-#         the TRIPLING separation: 1/3 is the value below 1/2 that returns to
-#         itself under take-of-the-fold, take(One, fold(1/3)) = 1/3.
-#     reactor      sin^2(theta13) = (sin^2(theta23) * sin^2(theta12)) / N = 1/48
-#         the two large angles divided by the lepton sector tower
-#         N = binary^colour = 8. This is the small angle, forced nonzero.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#     atmospheric sin^2(theta23) = 1/b = 1/2 -- the HAND separation. 1/2 is the
+#                          fold's self-antipodal point: it folds to the One AND the
+#                          One less it is itself. No other domain value does both
+#                          (the engine proves both -- atmospheric_fold, _antipode).
+#     solar sin^2(theta12) = 1/c = 1/3 -- the TRIPLING separation: the value below
+#                          1/2 that returns under take-of-the-fold,
+#                          take(One, fold(1/3)) = 1/3 (proved -- solar_take_of_fold).
+#     reactor sin^2(theta13) = (atmospheric * solar) / N = 1/48, where N = b^c = 8
+#                          is the lepton sector tower. Candidate space over
+#                          {atmospheric, solar, N}: {(a*s)/N, (a*s)*N, a*s,
+#                          (a+s)/N, a/(s*N), s/(a*N)}; only (a*s)/N gives 1/48
+#                          (reactor_form_is_unique). Forced NONZERO.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  Measured: sin^2(theta23) ~ 0.545, sin^2(theta12) ~ 0.307, sin^2(theta13) ~
-#  0.022. The forced 1/2, 1/3, 1/48 (= 0.5, 0.333, 0.0208) agree to within about
-#  a tenth -- and the reactor angle, long thought it might be zero, is forced
-#  nonzero at 1/48. (Checked in the test.)
+#  ── CHECK ─ (measurement; comparison only -- measured values live in the test) ─
+#  Measured ~0.545, ~0.307, ~0.022. Forced 1/2, 1/3, 1/48 (= 0.5, 0.333, 0.0208)
+#  agree to within about a tenth -- the angles are themselves measured loosely.
+#  The reactor angle is forced nonzero at 1/48, matching its nonzero measurement.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

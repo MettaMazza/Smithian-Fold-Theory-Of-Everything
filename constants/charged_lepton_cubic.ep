@@ -1,43 +1,37 @@
 # ============================================================================
-#  THE CHARGED-LEPTON CUBIC  --  forced from the colour count, exactly.
+#  THE CHARGED-LEPTON CUBIC
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The three charged leptons (electron, muon, tau) are the three balance points
-#  of a single cubic, and that cubic is fixed entirely by the colour count, with
-#  no fitted parameter and nothing chosen. The cubic is
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The electron, muon, and tau are the same particle in three "generations" of
+#  ever larger mass. Their masses are not three free numbers: they are the three
+#  roots of a single cubic whose coefficients are forced by the colour count.
 #
-#       x^3  -  x^2  +  e2 * x  -  e3   =   0
+#  ── DERIVATION ─ (check every line; uses ONLY the colour count c = 3) ────────
+#  The cubic is  x^3 - x^2 + e2*x - e3 = 0.  Its three roots are irrational, so
+#  they are NOT solved here (solving needs chosen brackets and an iteration count
+#  -- parameters this engine forbids). What is forced and exact is the cubic's
+#  coefficients, which ARE the symmetric functions of the roots (Vieta). Each:
+#     sum of roots  = 1     -- the roots partition the One (no loss). The x^2
+#                             coefficient; forced by the partition, not chosen.
+#     e2 = 1/(2c) = 1/6     -- the pairwise-product sum. Candidate space over c:
+#                             {1/(2c), 1/c, 1/c^2, 1/(2c-1), 1/(2c+1), 2/c}; only
+#                             1/(2c) gives 1/6 (second_invariant_form_is_unique).
+#     e3 (leading) = 1/(2c^5 - 1) = 1/485 -- the product of the roots. Candidate
+#                             space {1/(2c^5-1), 1/(2c^5+1), 1/(2c^5), 1/(c^5-1),
+#                             1/c^5}; only 1/(2c^5-1) gives 1/485
+#                             (leading_third_invariant_form_is_unique).
+#     e3 (sharpened) = 1/(2c^5 - 1 - 1/c) = 3/1454 -- the denominator is lowered by
+#                             the NEUTRAL CHANNEL, 1/c. Candidate space = the
+#                             channel counts {2, 3, 4}: channel 2 -> 2/969, channel
+#                             4 -> 4/1939, only channel = c -> 3/1454. forced_unique
+#                             halts if any other channel also lands (neutral_channel_is_forced).
 #
-#  Its three roots are irrational, so they are NOT computed here -- solving for
-#  them would mean choosing brackets and an iteration count, which are
-#  parameters, and this engine has none. What IS forced and exact is the cubic
-#  itself: its coefficients ARE the symmetric functions of the three roots
-#  (Vieta), so the forced content is stated directly as those exact invariants.
-#
-#  THE THREE INVARIANTS, ALL FORCED FROM THE COLOUR COUNT c
-#  -------------------------------------------------------
-#     sum of the roots            = 1            (the One: a no-loss partition)
-#     sum of the pairwise products = e2 = 1/(2c)  = 1/6
-#     product of the roots         = e3
-#
-#  THE THIRD INVARIANT, TO TWO ORDERS (like the fine-structure constant)
-#  ---------------------------------------------------------------------
-#     leading:    e3 = 1 / (2c^5 - 1)        = 1/485
-#     sharpened:  e3 = 1 / (2c^5 - 1 - 1/c)  = 3/1454
-#  The sharpening is the NEUTRAL-CHANNEL CORRECTION: the denominator is lowered
-#  by one over the colour count (the neutral channel, 1/c). It is forced, not
-#  chosen -- the channel is 1/c because the count is the colour count. Putting a
-#  different channel in its place gives a different invariant (1/2 -> 2/969,
-#  1/4 -> 4/1939), so only the colour channel produces 3/1454.
-#
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  The roots squared are the charged-lepton mass shares; their ratios are the
-#  measured muon/electron (about 206.77) and tau/muon (about 16.82). The
-#  sharpened third invariant is what brings these into agreement -- the leading
-#  1/485 gives muon/electron about 207.1, the sharpened 3/1454 about 206.75.
+#  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
+#  The roots squared are the lepton mass shares; their ratios (muon/electron about
+#  206.77, tau/muon about 16.82) are irrational, so they live only on this side.
+#  The sharpened e3 = 3/1454 brings muon/electron to about 206.75 (the leading
+#  1/485 gives about 207.1). The measured ratios enter only here and in the test.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

@@ -2,28 +2,24 @@
 #  THE UNCERTAINTY PRINCIPLE  --  why measurement has a floor, forced.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  You cannot pin down a thing's position and its frequency (momentum) both at
-#  once -- sharpening one blurs the other. This is forced by the fold's
-#  discreteness, with no fitted parameter: it is a counting bound.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  You cannot pin down a thing's position and its frequency (momentum) at once --
+#  sharpening one blurs the other. This is forced by the fold's discreteness: a
+#  counting bound.
 #
-#  THE COUNT BOUND
-#  ---------------
-#  At covering depth k there are N = binary^k states, shared between position and
-#  frequency (they are fold-conjugate). The number of cells a state occupies in
-#  position (its position support) times the number in frequency cannot fall below
-#  the total:
-#       position support  *  frequency support  >=  N = binary^k.
-#  Localize fully in position (support 1) and the frequency support is forced to
-#  the whole N. At the minimum-uncertainty state the product EQUALS N exactly:
-#  e.g. at depth 3, support 2 in position * support 4 in frequency = 8 = 2^3.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2) ─────────────────────────
+#  At covering depth k there are N = b^k states, shared between position and
+#  frequency (they are fold-conjugate).
+#     position support * frequency support >= N = b^k -- the count bound. Localize
+#                          fully in position (support 1) and the frequency support
+#                          is forced to the whole N.
+#     at the minimum-uncertainty state the product EQUALS N: e.g. at depth 3,
+#                          support 2 in position * support 4 in frequency = 8 = 2^3.
+#  The product cannot be made smaller than N -- that is the floor.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  This is the discrete form of Heisenberg's principle: the position-momentum
-#  support product is bounded below, so no state is sharp in both -- exactly the
-#  observed floor on simultaneous measurement.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The discrete form of Heisenberg's principle: the position-momentum support
+#  product is bounded below, so no state is sharp in both -- the observed floor.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

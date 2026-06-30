@@ -2,44 +2,33 @@
 #  THE ABSOLUTE SCALE  --  the proton-to-Planck hierarchy, forced from the One.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The vast gap between the mass of a proton and the Planck mass -- the largest
-#  pure-number ratio in physics, about 10^19 -- is forced by the deepest covering
-#  of the One, with no fitted parameter.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The gap between a proton's mass and the Planck mass is the largest pure number
+#  in physics (about 10^19). Why so vast? It is forced by the deepest covering of
+#  the One -- the same depth-7 scale the fine structure and Hubble tension use.
 #
-#  THE COUNTS, ALL FORCED FROM THE GENERATORS
-#  ------------------------------------------
-#     deepest covering depth d_up = cover(colour^(colour+1)) = 7
-#         the same absolute scale the fine structure and the Hubble tension use;
-#         cross-checked to equal colour + (colour + 1), so it is forced two ways.
-#     Fock count   = binary ^ d_up        = 2^7 = 128
-#         (the full preimage tree of the One at the deepest depth)
-#     massive states = Fock count - One   = 128 - 1 = 127
-#         (every state but the One itself carries mass)
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#     d_up = 7 -- the deepest covering depth, cover(c^(c+1) = 81). Cross-checked
+#                          = c + (c+1); forced two ways (forced_to_be).
+#     Fock count = b^d_up = 128 -- the full preimage tree of the One at that depth.
+#     massive states = Fock - One = 127 -- every state but the One carries mass.
+#     gravitational coupling = 1/b = 1/2 -- gravity couples at the half-One, the
+#                          self-antipodal balance point (the same critical coupling
+#                          as electroweak).
+#     hierarchy exponent = massive_states * coupling = 127 * (1/2) = 127/2.
+#                          Candidate space over {massive_states, coupling}:
+#                          {states*coupling, states/coupling, states+coupling,
+#                          states-coupling, coupling/states}; only the product gives
+#                          127/2 (hierarchy_exponent_form_is_unique). So the scale
+#                          ratio is Planck/proton = 2^(127/2).
+#     Staying exact: 2^(127/2) is irrational (a square root) and so is NEVER formed.
+#                          Its SQUARE is exact: (Planck/proton)^2 = 2^127, a whole
+#                          number built by doubling. All comparison is done squared.
 #
-#  THE HIERARCHY
-#  -------------
-#  Gravity couples at the half-One -- the fold's self-antipodal balance point,
-#  g = 1/binary = 1/2 (the same critical coupling as the electroweak unified
-#  coupling). The hierarchy exponent is the massive-state count scaled by that
-#  coupling:
-#       hierarchy exponent = massive states * g = 127 * (1/2) = 127/2
-#  so the scale ratio is  Planck / proton = 2^(127/2).
-#
-#  STAYING EXACT (no irrational ever formed)
-#  -----------------------------------------
-#  2^(127/2) is irrational, so it is NEVER built as a value -- that would mean a
-#  square root, which is forbidden. Its SQUARE is exact and whole:
-#       (Planck / proton)^2 = 2^127,
-#  an exact integer the engine forms by doubling. The comparison to measurement
-#  is done squared, so the root never appears.
-#
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
+#  ── CHECK ─ (measurement; comparison only -- masses live only in the test) ───
 #  Measured proton mass ~ 1.67262192e-27 kg, Planck mass ~ 2.176434e-8 kg, so the
-#  measured (Planck/proton)^2 ~ 1.6932e38, against the forced 2^127 ~ 1.7014e38 --
-#  agreement to about a quarter of a percent on the ratio. (Checked in the test.)
+#  measured (Planck/proton)^2 ~ 1.6932e38 against the forced 2^127 ~ 1.7014e38 --
+#  about a quarter of a percent on the ratio. The masses appear only in the test.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

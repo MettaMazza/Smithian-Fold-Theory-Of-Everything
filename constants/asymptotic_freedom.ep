@@ -2,27 +2,23 @@
 #  ASYMPTOTIC FREEDOM  --  why the strong force grows with distance, forced.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  The strong force gets STRONGER at longer range (confinement) and weaker at
-#  short range (asymptotic freedom), while electromagnetism does neither -- its
-#  strength is flat. This difference is forced, with no fitted parameter: it comes
-#  from whether the force's carrier itself carries charge.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The strong force gets STRONGER at long range (confinement) and weaker at short
+#  range (asymptotic freedom), while electromagnetism stays flat. The difference is
+#  forced -- it comes from whether the carrier itself carries charge.
 #
-#  THE RUNNING
-#  -----------
-#  The bare matter charge is the half-One, M = 1/binary = 1/2. A carrier feeds the
-#  field at range level k only if it carries charge q. The effective coupling is
-#       g_eff(k) = (M + k*q) / M.
-#  Strong force: the gluon carries colour charge, q = the One = 1, so
-#       g_eff(k) = (1/2 + k)/(1/2) = 1 + 2k   ->   1, 3, 5, 7, ...
-#  growing with range, slope exactly binary = 2 (the fold's doubling).
-#  Electromagnetism: the photon carries NO charge, q = nothing, so
-#       g_eff(k) = M/M = 1   for every k -- flat, it does not run.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2) ─────────────────────────
+#  Bare matter charge M = 1/b = 1/2. A carrier feeds the field at range level k only
+#  if it carries charge q, so the effective coupling is g_eff(k) = (M + k*q)/M.
+#     STRONG: the gluon carries colour, q = the One = 1, so g_eff(k) = (1/2 + k)/(1/2)
+#                          = 1 + 2k -> 1, 3, 5, 7, ... growing, slope exactly b = 2.
+#     EM: the photon carries no charge, q = nothing, so g_eff(k) = M/M = 1 for every
+#                          k -- flat, it does not run.
+#  The only difference is the carrier's charge: charged -> runs; neutral -> flat.
 #
-#  This is the forced content behind confinement and asymptotic freedom: the
-#  non-Abelian coupling runs because its carrier is charged; the Abelian one does
-#  not because its carrier is neutral.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The observed behaviour: the strong coupling runs (confinement and asymptotic
+#  freedom), the electromagnetic one does not. A structural match, not a number.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

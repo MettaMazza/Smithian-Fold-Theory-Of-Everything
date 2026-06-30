@@ -2,27 +2,23 @@
 #  SPIN AND STATISTICS  --  fermions and bosons from the fold.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Matter comes in two kinds: fermions (half-integer spin, which exclude one
-#  another) and bosons (integer spin, which pile up). The split is forced by the
-#  fold's two-to-one structure, with no fitted parameter.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Matter comes in two kinds: fermions (half-integer spin, which exclude) and
+#  bosons (integer spin, which pile up). The split is forced by the fold being
+#  two-to-one.
 #
-#  THE TWO KINDS
-#  -------------
-#  The boson is the whole -- the One itself, symmetric, one turn returns it.
-#  The fermion is the HALF-One, 1/2 -- the non-trivial preimage of the One:
-#       fold(1/2) = 1            a single fermion folds to the boson (unison)
-#       1/2 + 1/2 = 1            two fermions sum to a boson -- half-spins pair up
-#  The fermion is half a turn from unison, so it needs TWO turns to come back to
-#  itself (the 720-degree spinor), while the boson needs one. That is exactly the
-#  half-integer/integer spin distinction.
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#     boson = the whole, the One -- symmetric, one turn returns it.
+#     fermion = the HALF-One 1/2 -- the non-trivial preimage of the One:
+#       fold(1/2) = 1     a single fermion folds to the boson (checkable).
+#       1/2 + 1/2 = 1     two fermions sum to a boson -- half-spins pair up.
+#     The fermion is half a turn from unison, so it needs TWO turns to return (the
+#     720-degree spinor) while the boson needs one -- exactly the half-integer /
+#     integer spin distinction. The two-to-one fold admits no third kind.
 #
-#  COMPARISON (measurement side, never used in the derivation)
-#  -----------------------------------------------------------
-#  Half-integer-spin particles are fermions (Pauli exclusion -- the structure of
-#  atoms); integer-spin particles are bosons (lasers, condensates). The two-to-one
-#  fold gives exactly these two, no third kind.
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Half-integer spin -> fermions (Pauli exclusion, the structure of atoms);
+#  integer spin -> bosons (lasers, condensates). Exactly these two are observed.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

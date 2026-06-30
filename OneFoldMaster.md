@@ -38,6 +38,45 @@ piece is constructed afresh and shown to reproduce the known result exactly.
    the One — and builds everything else from it by two permitted moves. Nothing
    is smuggled in.
 
+### How to read a module (three separated voices)
+
+Every constant module is split into three clearly marked blocks, so a skeptic can
+read only the parts they need and verify, ignoring the rest:
+
+- **WHY** — the physical significance. *Skip this entirely if you only want to
+  verify.* It never carries a forcing step.
+- **DERIVATION** — the forcing. Every line is checkable, and it uses **only values
+  already derived earlier in the spine** — no forward references. For each value it
+  states, in plain words, what forces it *and* what alternatives were ruled out; and
+  where a form is assembled, it names the candidate space the form was forced from.
+- **CHECK** — the comparison to measurement. Measured numbers appear here (and in
+  the tests) **only** — never inside a derivation.
+
+Anywhere the reader would have to *accept* a claim instead of *checking* it is
+either turned into a stated step or marked **OPEN** in plain sight.
+
+### The spine — the dependency order, read top to bottom
+
+Nothing below uses anything not already above it:
+
+1. **The fold is forced** (`forced_fold_theorem`) — the operation a zero-parameter
+   theory may use could be no other than `cast_out(x+x)`.
+2. **The One follows** (`the_axiom_is_a_theorem`) — given only "there is not
+   nothing", the One, the domain `(0,1]`, and the fold are forced. *(Foundation —
+   in the numbered steps below these are presented after the arithmetic they use.)*
+3. **Exact arithmetic** — unlimited whole numbers, then exact fractions (the tools
+   every later step computes with).
+4. **The One and the two moves** — fold and take, on the domain `(0,1]`.
+5. **The two generators** — `b = 2` (period of 1/3), `c = 3` (period of 1/7),
+   counted from the fold's own spectrum, plus the enforcement that halts on any
+   un-forced value.
+6. **Each constant**, in turn, each using only `b`, `c`, the fold, and constants
+   already derived: fine structure → lepton cubic → dark/baryon → Hubble → gluons →
+   electroweak → absolute scale → neutrino mixing → Koide (uses the lepton cubic) →
+   W/Z mass (uses electroweak) → cosmic budget (uses Hubble + dark/baryon) → the
+   structural laws (three-of-everything, g-factor, parity, arrow of time, CP phase,
+   spin/statistics, uncertainty, asymptotic freedom).
+
 ---
 
 ## 2. How to run and check everything yourself
@@ -1139,6 +1178,12 @@ and the axiom is a theorem.
 ---
 
 ### Step 25 — The fold is forced (machine-checked uniqueness)
+
+> **Reading order:** this and Step 24 are the **logical top of the spine** (see the
+> spine map in the intro): they prove the fold and the One themselves. They carry
+> the high step numbers only because they were *built* last. A cold reader auditing
+> in dependency order reads Step 25, then Step 24, then the arithmetic, then the
+> generators, then the constants.
 
 **File:** `constants/forced_fold_theorem.ep`
 

@@ -2,27 +2,24 @@
 #  THE AXIOM IS A THEOREM  --  the One and the fold are forced, not assumed.
 # ============================================================================
 #
-#  WHAT THIS IS
-#  ------------
-#  Everything in this recreation is forced from "the One and its fold." This step
-#  shows that the starting point is not a free choice but a THEOREM: given only
-#  that there is not nothing, the One, the domain (0,1], and the fold are forced.
-#  So the model has zero free parameters AND, arguably, zero axioms -- its one
-#  premise proves itself.
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Everything here is forced from "the One and its fold." This step shows the
+#  starting point is not a free choice but a THEOREM: given only that there is not
+#  nothing, the One, the domain (0,1], and the fold are forced. Zero free parameters
+#  AND, arguably, zero axioms -- the one premise proves itself.
 #
-#  THE CHAIN
-#  ---------
+#  ── DERIVATION ─ (check every line; the only input is "there is not nothing") ─
 #   1. NOT NOTHING. Zero is forbidden -- a value must lie in (0,1]. (The fold layer
-#      halts on zero; nothing in the model is ever the empty value.)
-#   2. THE DISPLACED GROUND. Since the ground cannot be zero, it is the unique
-#      self-antipodal point, the half-One 1/2: the One less it is itself, and it
-#      sits at maximal distance from both ends.
-#   3. THE ONE IS REACHED AND FIXED. The displaced ground folds up to the One:
-#      fold(1/2) = 1; and the One is the fold's own fixed point: fold(1) = 1. The
-#      One is the unique unison the fold preserves -- not posited, but forced as
-#      the value the ground rises to and the fold holds still.
-#  Hence "the One and its fold" is the only consistent foundation -- a proven
-#  theorem, machine-checked here, not an assumption.
+#      halts on zero; here the ground is checked strictly positive.)
+#   2. THE DISPLACED GROUND, SOLVED. The ground cannot be zero, and it must return
+#      to unison under the fold, so it is the unique value whose double is the One:
+#      x + x = One gives x = One/b = 1/2 (division has a unique quotient -- no other
+#      value works). Equivalently, it is its own antipode (One - 1/2 = 1/2).
+#   3. THE ONE IS REACHED AND FIXED. The ground folds up to the One (fold(1/2) = 1),
+#      and the One is the fold's own fixed point (fold(1) = 1) -- the unique unison.
+#  Hence "the One and its fold" is the only consistent foundation, machine-checked.
+#  (That the fold ITSELF is the unique operation is proved separately in
+#  forced_fold_theorem -- read that first if you want the chain from the very top.)
 # ============================================================================
 
 import "../foundation/structural_counts.ep"
