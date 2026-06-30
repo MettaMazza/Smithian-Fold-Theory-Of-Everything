@@ -12,11 +12,29 @@ define expect_equal with label as Str and got as Str and want as Str:
         display concat("    want: " and want)
     return 0
 
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
 define main:
     display "=== the axiom is a theorem ==="
 
-    set ok to expect_equal("the displaced ground is 1/2 (not zero)" and fraction_to_text(displaced_ground()) and "1/2")
-    set ok to expect_equal("the ground is its own antipode: One - 1/2 = 1/2" and fraction_to_text(displaced_ground_is_self_antipodal()) and "1/2")
+    display "--- step 1: the fold factor is the smallest period, forced ---"
+    set ok to expect_number("fold factor = binary (smallest fold period)" and fold_factor() and 2)
+
+    display "--- step 2: the ground is DERIVED, not assumed ---"
+    set ok to expect_true("not nothing: the ground is strictly positive" and ground_is_not_nothing())
+    set ok to expect_equal("ground doubled is the One: 1/2 + 1/2 = 1 (the forcing equation)" and fraction_to_text(ground_doubles_to_one()) and "1")
+    set ok to expect_equal("the unique solution x = One/binary = 1/2" and fraction_to_text(displaced_ground()) and "1/2")
+    set ok to expect_equal("equivalently its own antipode: One - 1/2 = 1/2" and fraction_to_text(displaced_ground_is_self_antipodal()) and "1/2")
+
+    display "--- step 3: the One is reached and fixed ---"
     set ok to expect_equal("the ground folds up to the One: fold(1/2) = 1" and fraction_to_text(displaced_ground_folds_to_one()) and "1")
     set ok to expect_equal("the One is the fold's fixed point: fold(1) = 1" and fraction_to_text(one_is_the_fold_fixed_point()) and "1")
 

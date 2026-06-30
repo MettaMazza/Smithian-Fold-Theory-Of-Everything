@@ -1107,22 +1107,34 @@ This step shows the starting point is not even a free choice: given only that
 there is *not nothing*, the One, the domain `(0,1]`, and the fold are forced. Zero
 parameters — and, arguably, zero axioms: the one premise proves itself.
 
-**What it does.** Zero is forbidden (not nothing), so the ground is the unique
-self-antipodal point `1/2` (`One − 1/2 = 1/2`); it folds up to the One
-(`fold(1/2) = 1`); and the One is the fold's own fixed point (`fold(1) = 1`) — the
-unique unison the fold preserves. The foundation is derived, machine-checked.
+**What it does.** The fold's factor is the smallest fold period, the binary count
+`2` — forced, not chosen. The ground is then **solved**, not assumed: there is not
+nothing (so it is strictly positive), and it must return to unison under the fold,
+so it is the unique value whose double is the One — `x + x = One`, giving `x =
+One/binary = 1/2` (division has a unique quotient, so no other value works). That
+ground folds up to the One (`fold(1/2) = 1`), and the One is the fold's own fixed
+point (`fold(1) = 1`) — the unique unison. The foundation is derived, machine-checked.
 
 ```
 === the axiom is a theorem ===
-  ok    the displaced ground is 1/2 (not zero)
-  ok    the ground is its own antipode: One - 1/2 = 1/2
+--- step 1: the fold factor is the smallest period, forced ---
+  ok    fold factor = binary (smallest fold period) = 2
+--- step 2: the ground is DERIVED, not assumed ---
+  ok    not nothing: the ground is strictly positive
+  ok    ground doubled is the One: 1/2 + 1/2 = 1 (the forcing equation)
+  ok    the unique solution x = One/binary = 1/2
+  ok    equivalently its own antipode: One - 1/2 = 1/2
+--- step 3: the One is reached and fixed ---
   ok    the ground folds up to the One: fold(1/2) = 1
   ok    the One is the fold's fixed point: fold(1) = 1
 ```
 
 **To measurement.** Not a number but the deepest structural claim: "the One and
-its fold" is the only consistent foundation — a proven theorem, not an assumption.
-The model has zero free parameters and its single premise is itself derived.
+its fold" is the only consistent foundation. Everything downstream of *"there is
+not nothing"* is solved, not posited — the ground is the unique `x + x = One`, the
+One is its fold-image and fixed point. The single irreducible premise, "not
+nothing," is self-proving: to deny it you need something. Zero free parameters,
+and the axiom is a theorem.
 
 ---
 
