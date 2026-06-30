@@ -30,6 +30,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/the_one_and_the_fold.ep"
 import "../foundation/form_enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The atmospheric angle: sin^2(theta23) = one over the binary count, 1/2.
@@ -131,3 +132,29 @@ define reactor_form_is_unique returning Int:
     set cand_f to fraction_divide(solar_mixing() and denom_f)
     set total to count_form_match(total and cand_f and reactor_mixing())
     return forbid_form_selection("the reactor mixing angle form" and total)
+
+
+# STRONGER: the engine GENERATES every assembly of {atmospheric, solar, sector N}
+# with + - * / and confirms the reactor angle 1/48 is MINIMAL at size two -- no
+# assembly of one operation or less reproduces it. The whole simpler space is
+# searched by a stated grammar. atmospheric = 1/binary, solar = 1/colour,
+# N = binary^colour; the reactor value is 1/(binary*colour*N).
+define reactor_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and 1)
+    set ok to append_list(nums and 1)
+    set ok to append_list(nums and lepton_sector_count())
+    return nums
+
+define reactor_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and binary_count())
+    set ok to append_list(dens and colour_count())
+    set ok to append_list(dens and 1)
+    return dens
+
+define reactor_assembly_is_minimal returning Int:
+    set leaf_nums to reactor_leaf_numerators()
+    set leaf_dens to reactor_leaf_denominators()
+    set target_den to binary_count() * colour_count() * lepton_sector_count()
+    return canonical_assembly_is_minimal("no simpler assembly reaches the reactor angle" and leaf_nums and leaf_dens and 1 and target_den and 2)

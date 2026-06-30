@@ -52,6 +52,7 @@ define main:
         display "  FAIL  running does not cross the measured value between levels 9 and 10"
 
     set ok to expect_equal("the cos^2 partition FORM is unique (forced_unique)" and int_to_string(cos_squared_form_is_unique()) and "1")
+    set ok to expect_equal("no SIMPLER assembly reaches cos^2 (engine-generated, complete)" and int_to_string(cos_squared_assembly_is_minimal()) and "1")
 
     display "=== done ==="
     return 0

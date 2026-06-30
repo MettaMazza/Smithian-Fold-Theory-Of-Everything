@@ -29,6 +29,7 @@ define main:
     set ok to expect_number("strong field source = 3" and strong_field_source() and 3)
 
     set ok to expect_number("the gluon-count FORM is unique (forced_unique)" and gluon_count_form_is_unique() and 1)
+    set ok to expect_number("no SIMPLER assembly reaches the gluon count (engine-generated, complete)" and gluon_assembly_is_minimal() and 1)
 
     display "=== done ==="
     return 0

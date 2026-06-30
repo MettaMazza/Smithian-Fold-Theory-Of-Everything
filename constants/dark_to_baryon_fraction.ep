@@ -35,6 +35,7 @@ import "../foundation/structural_counts.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
 import "../foundation/form_enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The generational volume: the colour count raised to itself, twenty-seven.
@@ -155,3 +156,31 @@ define dark_to_baryon_form_is_unique returning Int:
     set ratio_six to fraction_divide(t_six and db_depth_fraction())
     set total to count_form_match(total and ratio_six and dark_to_baryon_ratio())
     return forbid_form_selection("the dark-to-baryon ratio form" and total)
+
+
+# The forced ingredients of the ratio, as parallel numerator/denominator leaf
+# lists for the enumerator (each is a whole number, so denominator one).
+define dark_to_baryon_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and generational_volume())
+    set ok to append_list(nums and generational_covering_depth())
+    set ok to append_list(nums and total_binary_volume())
+    return nums
+
+define dark_to_baryon_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    return dens
+
+# STRONGER than the hand-listed ratios above: the engine GENERATES every assembly
+# of {volume, depth, total} with + - * / and confirms the ratio is MINIMAL -- no
+# assembly of fewer operations (here, no bare leaf) reproduces 27/5. The whole
+# simpler space is searched by a stated grammar, not a hand-picked list.
+define dark_to_baryon_assembly_is_minimal returning Int:
+    set leaf_nums to dark_to_baryon_leaf_numerators()
+    set leaf_dens to dark_to_baryon_leaf_denominators()
+    set target_num to generational_volume()
+    set target_den to generational_covering_depth()
+    return canonical_assembly_is_minimal("no simpler assembly reaches the dark-to-baryon ratio" and leaf_nums and leaf_dens and target_num and target_den and 1)

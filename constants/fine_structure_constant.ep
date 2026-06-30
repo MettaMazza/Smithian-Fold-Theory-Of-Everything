@@ -35,6 +35,14 @@
 #     level deeper, cov_eff = cov + 1/sub, through the same outer shape, giving
 #     5995462/43751. Candidate space for the refinement: {cov + 1/sub, cov - 1/sub,
 #     cov + 1/cov, cov + sub}; only cov + 1/sub lands (second_order_refinement_is_unique).
+#  OPEN -- the candidate space here is a STATED restricted grammar (the shapes and
+#     corrections listed above), enumerated completely, NOT the full free grammar of
+#     all expressions. The other constants are checked against the full free grammar
+#     by foundation/assembly_enumeration (every assembly up to a size bound,
+#     generated, complete); but this constant's assembled form is ~four operations
+#     deep, where the full free enumeration is too large to run in-engine. So for
+#     1/alpha the completeness is relative to the stated shape grammar, not absolute.
+#     This is flagged, not hidden.
 #
 #  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
 #  Leading 34259/250 = 137.036. Second order 5995462/43751 = 137.035999177, which

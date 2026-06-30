@@ -34,6 +34,7 @@ define main:
     set ok to expect_equal("reactor    1/48 = 0.0208 (measured ~0.0220)" and fraction_to_decimal(reactor_mixing() and 4) and "0.0208")
 
     set ok to expect_equal("the reactor FORM (atm*solar)/N is unique (forced_unique)" and int_to_string(reactor_form_is_unique()) and "1")
+    set ok to expect_equal("no SIMPLER assembly reaches the reactor angle (engine-generated, complete)" and int_to_string(reactor_assembly_is_minimal()) and "1")
 
     display "=== done ==="
     return 0

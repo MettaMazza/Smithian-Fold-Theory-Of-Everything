@@ -32,6 +32,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/the_one_and_the_fold.ep"
 import "../foundation/form_enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The unified coupling: one over the binary count, 1/2 -- the fold's balance point.
@@ -135,3 +136,27 @@ define bare_running_mixing returning Fraction:
 
 # (The measured Z-scale value and the crossing check live in the test, on the
 #  comparison side -- no measured number appears in this forced module.)
+
+
+# STRONGER than the hand-listed cos^2 forms above: the engine GENERATES every
+# assembly of {sin^2, the One} with + - * / and confirms cos^2 = 3/4 is MINIMAL --
+# no bare leaf reproduces it (it genuinely needs an operation). The whole simpler
+# space is searched by a stated grammar. sin^2 = 1/binary^2; cos^2 = (binary^2-1)/binary^2.
+define cos_squared_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and 1)
+    set ok to append_list(nums and 1)
+    return nums
+
+define cos_squared_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and whole_power(binary_count() and 2))
+    set ok to append_list(dens and 1)
+    return dens
+
+define cos_squared_assembly_is_minimal returning Int:
+    set leaf_nums to cos_squared_leaf_numerators()
+    set leaf_dens to cos_squared_leaf_denominators()
+    set binary_squared to whole_power(binary_count() and 2)
+    set target_num to binary_squared - 1
+    return canonical_assembly_is_minimal("no simpler assembly reaches the electroweak cos-squared" and leaf_nums and leaf_dens and target_num and binary_squared and 1)

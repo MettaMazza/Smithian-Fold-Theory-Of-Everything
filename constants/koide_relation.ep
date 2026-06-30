@@ -26,6 +26,7 @@
 
 import "../constants/charged_lepton_cubic.ep"
 import "../foundation/form_enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The sum of the charged-lepton masses: the sum of the squared roots,
@@ -99,3 +100,29 @@ define koide_form_is_unique returning Int:
     set cand_f to fraction_subtract(one_f and three_e2_f)
     set total to count_form_match(total and cand_f and koide_ratio())
     return forbid_form_selection("the Koide ratio form" and total)
+
+
+# STRONGER: the engine GENERATES every assembly of {e2, the One} with + - * / and
+# confirms Q = 2/3 is MINIMAL at size two -- no assembly of one operation or less
+# reproduces it. The whole simpler space is searched by a stated grammar. (Two
+# size-2 trees give 2/3 -- 1-(e2+e2) and (1-e2)-e2 -- but they are the same
+# combination by associativity; same-size shape choice is covered by the named-form
+# guard above.) e2 = 1/(2*colour); Q = (colour-1)/colour.
+define koide_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and 1)
+    set ok to append_list(nums and 1)
+    return nums
+
+define koide_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 2 * colour_count())
+    set ok to append_list(dens and 1)
+    return dens
+
+define koide_assembly_is_minimal returning Int:
+    set leaf_nums to koide_leaf_numerators()
+    set leaf_dens to koide_leaf_denominators()
+    set target_num to colour_count() - 1
+    set target_den to colour_count()
+    return canonical_assembly_is_minimal("no simpler assembly reaches the Koide ratio" and leaf_nums and leaf_dens and target_num and target_den and 2)

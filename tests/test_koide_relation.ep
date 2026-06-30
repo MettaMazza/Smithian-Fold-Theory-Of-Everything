@@ -27,6 +27,7 @@ define main:
     set ok to expect_equal("measured Q = 0.666661 (five-digit agreement)" and fraction_to_decimal(fraction_from_ratio(666661 and 1000000) and 6) and "0.666661")
 
     set ok to expect_equal("the Koide FORM Q = 1 - 2*e2 is unique (forced_unique)" and int_to_string(koide_form_is_unique()) and "1")
+    set ok to expect_equal("no SIMPLER assembly reaches Q (engine-generated, complete)" and int_to_string(koide_assembly_is_minimal()) and "1")
 
     display "=== done ==="
     return 0
