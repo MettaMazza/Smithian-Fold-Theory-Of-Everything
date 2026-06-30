@@ -1,0 +1,56 @@
+# Machine-checks the theorem that the fold is forced: enumerate the size-<=2
+# parameter-free self-maps, run each, and confirm exactly ONE generates -- the
+# fold. forced_unique halts the engine if any rival also qualifies.
+import "../constants/forced_fold_theorem.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the fold is forced (machine-checked) ==="
+
+    display "--- Lemma 1: cast_out collapses every integer to the One ---"
+    set ok to expect_equal("cast_out(2) = 1" and fraction_to_text(cast_out_of_whole_number(2)) and "1")
+    set ok to expect_equal("cast_out(3) = 1" and fraction_to_text(cast_out_of_whole_number(3)) and "1")
+    set ok to expect_equal("cast_out(7) = 1" and fraction_to_text(cast_out_of_whole_number(7)) and "1")
+
+    display "--- Lemma 2: raw doubling is not a self-map (closure forces size 2) ---"
+    set ok to expect_true("x + x exceeds the One at x = 3/4" and raw_doubling_exceeds_one())
+
+    display "--- Lemma 3: run each candidate; only the fold generates ---"
+    set ok to expect_true("identity (tag 1) does NOT generate (static)" and is_false(candidate_generates(1)))
+    set ok to expect_true("square (tag 2) does NOT generate (contracts)" and is_false(candidate_generates(2)))
+    set ok to expect_true("constant (tag 3) does NOT generate (collapses)" and is_false(candidate_generates(3)))
+    set ok to expect_true("fold (tag 4) GENERATES" and candidate_generates(4))
+    set ok to expect_number("fold's return period from 1/7 = 3 (a real cycle)" and candidate_return_period(4) and 3)
+    set ok to expect_number("identity's return period = 1 (static)" and candidate_return_period(1) and 1)
+
+    display "--- Main: exactly one generator, and it is the fold ---"
+    set ok to expect_number("number of generators among the four" and number_of_generators() and 1)
+    set ok to expect_number("the unique generator's tag (4 = the fold)" and unique_generator_tag() and 4)
+    set ok to expect_true("the unique generator IS cast_out(x + x)" and unique_generator_is_the_fold())
+
+    display "=== done ==="
+    return 0
+
+# True when the given Bool is false.
+define is_false with value as Bool returning Bool:
+    if value:
+        return false
+    return true

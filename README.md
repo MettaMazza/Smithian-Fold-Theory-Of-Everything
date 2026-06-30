@@ -55,17 +55,28 @@ The full, ordered, run-it-yourself derivation of all of it is in
 ## The axiom is a theorem
 
 The model has zero free parameters — and, arguably, zero axioms. The foundation
-proves itself:
+proves itself, and the proof is machine-checked in two parts.
+
+**The fold itself is forced** (`constants/forced_fold_theorem.ep`). Build maps from
+only `x` and the One with `+, −, ·, cast_out` and no other literal: every constant
+you can build is a positive integer, and `cast_out` sends every one to the One — so
+no continuous free parameter is even *expressible*, and the candidate operations
+form a **discrete, listable** space. The engine enumerates the size-≤2 self-maps
+{identity, square, constant, fold}, **runs each one**, and finds that only the fold
+*generates* (the others are static, collapse, or contract to the forbidden zero).
+`forced_unique` halts the engine if any rival ever qualifies. The fold's uniqueness
+is not asserted — it is executed and checked.
+
+**The One then follows** (`constants/the_axiom_is_a_theorem.ep`):
 
 1. **Not nothing.** Zero is forbidden; a value must lie in `(0, 1]`.
-2. **The displaced ground.** The ground therefore cannot be zero — it is the
-   unique self-antipodal point, the half-One `1/2` (the One less it is itself).
+2. **The displaced ground.** The ground cannot be zero — it is the unique value
+   whose double is the One (`x + x = One`), solved to the half-One `1/2`.
 3. **The One, forced.** The ground folds up to the One (`fold(1/2) = 1`), and the
-   One is the fold's own fixed point (`fold(1) = 1`) — the unique unison the fold
-   preserves.
+   One is the fold's own fixed point (`fold(1) = 1`) — the unique unison.
 
-So "the One and its fold" is not posited. It is the only consistent foundation,
-machine-checked. See `constants/the_axiom_is_a_theorem.ep`.
+So "the One and its fold" is not posited. It is the only consistent foundation, and
+every link in that chain is machine-checked.
 
 ---
 

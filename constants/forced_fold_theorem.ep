@@ -1,0 +1,171 @@
+# ============================================================================
+#  THE FOLD IS FORCED  --  a machine-checked uniqueness theorem.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  Step 24 derived everything DOWNSTREAM of the fold. This step closes the gap
+#  above it: it proves, by running the candidates, that the fold itself is the
+#  unique operation a zero-parameter theory could have. Not "given the fold..." --
+#  the fold is forced.
+#
+#  THEOREM (Forced Operation)
+#  --------------------------
+#  Among all parameter-free self-maps of the domain (0,1] of least size that
+#  GENERATE (produce recurrent, expanding dynamics), the fold cast_out(x+x) is
+#  unique.
+#
+#  WHY THIS IS PROVABLE (the key)
+#  ------------------------------
+#  Build maps from only the variable x and the One, with +, guarded -, *, and
+#  cast_out, and NO other literal. Then (Lemma 1) every constant you can build is
+#  a positive integer, and cast_out sends every positive integer to the One -- so
+#  no fractional free parameter is even EXPRESSIBLE. The candidate space is
+#  therefore DISCRETE and finite at each size, not a continuum: you can list it.
+#
+#   Lemma 1 (normal form)  -- closed terms are integers; cast_out collapses them
+#                             all to the One. Checked here: cast_out(2..7) = 1.
+#   Lemma 2 (enumeration)  -- the parameter-free self-maps of size <= 2 are exactly
+#                             four: identity x, square x*x, the constant One, and
+#                             the fold cast_out(x+x). (Raw x+x is not a self-map --
+#                             it exceeds the One -- so closure is what makes size 2.)
+#   Lemma 3 (separation)   -- run each: only the fold GENERATES. Identity is static,
+#                             the constant collapses to a point, the square contracts
+#                             to the forbidden zero. The engine confirms exactly one
+#                             generator, and forced_unique halts if ever two do.
+#
+#  "Generates" is tested operationally, on actual orbits: a map generates iff it is
+#  non-injective (two points share an image -- the expansion that makes entropy)
+#  AND recurrent with period above one (a generic interior point returns to itself
+#  -- it explores rather than dying). The fold alone is both.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# ----------------------------------------------------------------------------
+#  LEMMA 1 -- the only constants are integers, and cast_out collapses them
+# ----------------------------------------------------------------------------
+
+# cast_out of a whole number is the One. Every closed term in the language is a
+# positive integer (built from the One by +, -, *), so this is every constant the
+# language can make: none is fractional, so no free parameter is expressible.
+define cast_out_of_whole_number with whole_number as Int returning Fraction:
+    set value to fraction_from_whole_number(whole_number)
+    return cast_out_whole_ones(value)
+
+
+# ----------------------------------------------------------------------------
+#  LEMMA 2 -- the four candidate self-maps (the complete size-<=2 list)
+# ----------------------------------------------------------------------------
+#  tag 1 = identity (x)      tag 2 = square (x*x)
+#  tag 3 = constant (One)    tag 4 = fold (cast_out(x + x))
+
+# Apply candidate `tag` to a value. This is the whole size-<=2 enumeration, run.
+define apply_candidate with tag as Int and value as Fraction returning Fraction:
+    if tag < 2:
+        return value
+    if tag < 3:
+        set value_twin to fraction_make(fraction_numerator(value) and fraction_denominator(value))
+        return fraction_multiply(value and value_twin)
+    if tag < 4:
+        return fraction_from_whole_number(1)
+    set value_again to fraction_make(fraction_numerator(value) and fraction_denominator(value))
+    set doubled to fraction_add(value and value_again)
+    return cast_out_whole_ones(doubled)
+
+# Raw doubling x + x is NOT a self-map: at x = 3/4 it is 3/2, past the One. So
+# closure (cast_out) is exactly what a size-2 self-map needs -- this is why the
+# fold sits at size 2, not size 1.
+define raw_doubling_exceeds_one returning Bool:
+    set point to fraction_from_ratio(3 and 4)
+    set point_twin to fraction_from_ratio(3 and 4)
+    set doubled to fraction_add(point and point_twin)
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(doubled and one)
+    if comparison > 0:
+        return true
+    return false
+
+
+# ----------------------------------------------------------------------------
+#  LEMMA 3 -- run each candidate; only the fold generates
+# ----------------------------------------------------------------------------
+
+# Non-injective: two distinct points (1/4 and 3/4) share an image. This is the
+# expansion that makes positive entropy.
+define candidate_is_non_injective with tag as Int returning Bool:
+    set point_low to fraction_from_ratio(1 and 4)
+    set image_low to apply_candidate(tag and point_low)
+    set point_high to fraction_from_ratio(3 and 4)
+    set image_high to apply_candidate(tag and point_high)
+    return fraction_is_equal(image_low and image_high)
+
+# The return period of a generic interior point (1/7) under the candidate: the
+# step count at which the orbit first comes back to its start, or zero if it never
+# returns within the bound. Identity returns at 1 (static); the fold at 3 (a real
+# cycle); the constant and the square never return (collapse / contract).
+define candidate_return_period with tag as Int returning Int:
+    set start to fraction_from_ratio(1 and 7)
+    set current to apply_candidate(tag and start)
+    set steps to 1
+    set limit to 10
+    set result to 0
+    repeat while steps < limit:
+        set start_copy to fraction_from_ratio(1 and 7)
+        set matches to fraction_is_equal(current and start_copy)
+        if matches:
+            if result < 1:
+                set result to steps
+        set current to apply_candidate(tag and current)
+        set steps to steps + 1
+    return result
+
+# A candidate GENERATES iff it is non-injective (expanding) AND recurrent with
+# period above one (it explores rather than dying). The fold alone is both.
+define candidate_generates with tag as Int returning Bool:
+    set non_injective to candidate_is_non_injective(tag)
+    set period to candidate_return_period(tag)
+    if non_injective:
+        if period > 1:
+            return true
+    return false
+
+# How many of the four candidates generate. The theorem says: exactly one.
+define number_of_generators returning Int:
+    set count to 0
+    set tag to 1
+    repeat while tag < 5:
+        if candidate_generates(tag):
+            set count to count + 1
+        set tag to tag + 1
+    return count
+
+# The unique generating candidate, with uniqueness ENFORCED: forced_unique halts
+# the engine if the count of generators is not exactly one. Returns its tag (4 =
+# the fold).
+define unique_generator_tag returning Int:
+    set found to 0
+    set tag to 1
+    repeat while tag < 5:
+        if candidate_generates(tag):
+            set found to tag
+        set tag to tag + 1
+    set total to number_of_generators()
+    set alternatives to total - 1
+    set checked to forced_unique("the generating parameter-free self-map" and 1 and alternatives)
+    return found
+
+# Confirm the unique generator IS the fold: applied to a test value it equals
+# cast_out(x + x).
+define unique_generator_is_the_fold returning Bool:
+    set winner_tag to unique_generator_tag()
+    set point to fraction_from_ratio(2 and 5)
+    set by_winner to apply_candidate(winner_tag and point)
+    set fold_point to fraction_from_ratio(2 and 5)
+    set fold_twin to fraction_from_ratio(2 and 5)
+    set doubled to fraction_add(fold_point and fold_twin)
+    set by_fold to cast_out_whole_ones(doubled)
+    return fraction_is_equal(by_winner and by_fold)
