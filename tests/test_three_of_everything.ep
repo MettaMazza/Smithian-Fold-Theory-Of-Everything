@@ -1,0 +1,24 @@
+# Confirms the three 3's are forced: spatial dimensions, generations, and colours
+# are the same count, each reached by an independent route (stability window,
+# tripling fibre, fold period).
+import "../constants/three_of_everything.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== three of everything ==="
+
+    set ok to expect_number("colour count (period of 1/7)" and colour_count() and 3)
+    set ok to expect_number("integers in stability window (2,4)" and count_in_stability_window() and 1)
+    set ok to expect_number("spatial dimension (unique stable = colour)" and spatial_dimension() and 3)
+    set ok to expect_number("generation count (tripling fibre = colour)" and generation_count() and 3)
+
+    display "=== done ==="
+    return 0

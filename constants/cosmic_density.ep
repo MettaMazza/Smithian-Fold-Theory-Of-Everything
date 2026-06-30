@@ -1,0 +1,57 @@
+# ============================================================================
+#  THE COSMIC ENERGY BUDGET  --  the four density parameters, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  What the universe is made of -- the fractions of dark energy, total matter,
+#  ordinary (baryonic) matter, and cold dark matter -- is forced from the One,
+#  with no fitted parameter. It is the vacuum/matter split of the Hubble step
+#  crossed with the baryon/dark split of the dark-to-baryon step.
+#
+#  THE BUDGET
+#  ----------
+#     dark energy   Omega_Lambda = vacuum fraction        = binary/colour = 2/3
+#     matter        Omega_matter = matter fraction        = 1/colour      = 1/3
+#       and these partition the One: 2/3 + 1/3 = 1 (a flat universe).
+#     baryon        Omega_baryon = matter * baryon share  = 1/3 * 5/32 = 5/96
+#     cold dark     Omega_cdm    = matter * dark share     = 1/3 * 27/32 = 9/32
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  Measured (Planck): Omega_Lambda ~ 0.689, Omega_matter ~ 0.311, Omega_baryon ~
+#  0.0493, Omega_cdm ~ 0.262. The forced 0.667, 0.333, 0.052, 0.281 agree to a few
+#  percent -- the leading-order energy budget, zero parameters.
+# ============================================================================
+
+import "../constants/hubble_tension.ep"
+import "../constants/dark_to_baryon_fraction.ep"
+
+
+# Dark energy density: the vacuum fraction, 2/3.
+define dark_energy_density returning Fraction:
+    return vacuum_fraction()
+
+# Total matter density: the matter fraction, 1/3.
+define matter_density returning Fraction:
+    return matter_fraction()
+
+# The dark energy and matter partition the One: 2/3 + 1/3 = 1.
+define flat_universe_partition returning Fraction:
+    set dark_energy to dark_energy_density()
+    set matter to matter_density()
+    return fraction_add(dark_energy and matter)
+
+# Baryon density: the matter fraction times the baryon share of matter,
+# 1/3 * 5/32 = 5/96.
+define baryon_density returning Fraction:
+    set matter to matter_density()
+    set baryon_share to baryon_fraction()
+    return fraction_multiply(matter and baryon_share)
+
+# Cold dark matter density: the matter fraction times the dark share of matter,
+# 1/3 * 27/32 = 9/32.
+define cold_dark_matter_density returning Fraction:
+    set matter to matter_density()
+    set dark_share to dark_fraction()
+    return fraction_multiply(matter and dark_share)

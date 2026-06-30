@@ -1,0 +1,65 @@
+# ============================================================================
+#  THE KOIDE RELATION  --  the charged-lepton mass ratio 2/3, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The three charged-lepton masses obey a famous, precise relation discovered by
+#  Koide: the sum of the masses, divided by the square of the sum of their
+#  square-roots, is almost exactly 2/3. Here it is forced exactly -- it falls
+#  straight out of the lepton cubic of Step 6, with no fitted parameter.
+#
+#  HOW IT FALLS OUT OF THE CUBIC
+#  -----------------------------
+#  The charged-lepton masses are the SQUARED roots of the cubic (m_i = x_i^2), so
+#  the square-root of each mass is just the root x_i. Then, by Vieta on the cubic:
+#       sum of sqrt-masses = sum of roots                = 1        (no-loss partition)
+#       sum of masses      = sum of root-squares
+#                          = (sum of roots)^2 - 2*(pairwise sum)
+#                          = 1^2 - 2*(1/6) = 2/3
+#  so the Koide ratio is
+#       Q = (sum of masses) / (sum of sqrt-masses)^2 = (2/3) / 1^2 = 2/3.
+#  Equivalently Q = 1 - 1/colour (since the pairwise sum e2 = 1/(2*colour)): the
+#  ratio is forced straight from the colour count.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  From the measured lepton masses the Koide ratio is about 0.666661 -- against the
+#  forced 2/3 = 0.666666..., agreement to five digits. (The measured value needs a
+#  square root, which is forbidden here, so it enters only as a published number in
+#  the test, never computed in the engine.)
+# ============================================================================
+
+import "../constants/charged_lepton_cubic.ep"
+
+
+# The sum of the charged-lepton masses: the sum of the squared roots,
+# (sum of roots)^2 - 2*(pairwise sum) = 1 - 2*(1/6) = 2/3.
+define sum_of_lepton_masses returning Fraction:
+    set sum_of_roots to no_loss_partition()
+    set sum_of_roots_twin to no_loss_partition()
+    set sum_of_roots_squared to fraction_multiply(sum_of_roots and sum_of_roots_twin)
+    set pairwise_first to second_invariant()
+    set pairwise_second to second_invariant()
+    set twice_pairwise to fraction_add(pairwise_first and pairwise_second)
+    return fraction_subtract(sum_of_roots_squared and twice_pairwise)
+
+# The sum of the square-roots of the masses: the sum of the roots = 1. The roots
+# are positive, so the square-root of each squared root is the root itself.
+define sum_of_root_masses returning Fraction:
+    return no_loss_partition()
+
+# The Koide ratio Q = (sum of masses) / (sum of sqrt-masses)^2 = (2/3) / 1 = 2/3.
+define koide_ratio returning Fraction:
+    set numerator to sum_of_lepton_masses()
+    set sqrt_sum to sum_of_root_masses()
+    set sqrt_sum_twin to sum_of_root_masses()
+    set denominator to fraction_multiply(sqrt_sum and sqrt_sum_twin)
+    return fraction_divide(numerator and denominator)
+
+# The Koide ratio forced straight from the colour count: Q = 1 - 1/colour = 2/3.
+# An independent route to the same value.
+define koide_from_colour returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set inverse_colour to fraction_from_ratio(1 and colour_count())
+    return fraction_subtract(one and inverse_colour)

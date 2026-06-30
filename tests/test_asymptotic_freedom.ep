@@ -1,0 +1,27 @@
+# Confirms asymptotic freedom is forced: the strong coupling grows with range
+# (1, 3, 5, slope 2 = binary), while electromagnetism is flat (1 at every level).
+import "../constants/asymptotic_freedom.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== asymptotic freedom ==="
+
+    set ok to expect_equal("strong coupling at level 0 = 1" and fraction_to_text(strong_coupling_at_level(0)) and "1")
+    set ok to expect_equal("strong coupling at level 1 = 3" and fraction_to_text(strong_coupling_at_level(1)) and "3")
+    set ok to expect_equal("strong coupling at level 2 = 5" and fraction_to_text(strong_coupling_at_level(2)) and "5")
+    set ok to expect_equal("strong coupling grows by 2 (= binary) per level" and fraction_to_text(strong_coupling_growth()) and "2")
+
+    display "--- electromagnetism does not run ---"
+    set ok to expect_equal("EM coupling at level 1 = 1" and fraction_to_text(electromagnetic_coupling_at_level(1)) and "1")
+    set ok to expect_equal("EM coupling at level 5 = 1 (flat)" and fraction_to_text(electromagnetic_coupling_at_level(5)) and "1")
+
+    display "=== done ==="
+    return 0

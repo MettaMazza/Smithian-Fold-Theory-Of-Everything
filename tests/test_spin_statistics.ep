@@ -1,0 +1,23 @@
+# Confirms the fermion/boson split is forced: the boson is the One, the fermion is
+# the half-One 1/2; a single fermion folds to the boson, and two fermions sum to one.
+import "../constants/spin_statistics.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== spin and statistics ==="
+
+    set ok to expect_equal("boson state = the One" and fraction_to_text(boson_state()) and "1")
+    set ok to expect_equal("fermion state = half-One = 1/2" and fraction_to_text(fermion_state()) and "1/2")
+    set ok to expect_equal("a single fermion folds to the boson: fold(1/2) = 1" and fraction_to_text(fermion_folds_to_boson()) and "1")
+    set ok to expect_equal("two fermions make a boson: 1/2 + 1/2 = 1" and fraction_to_text(two_fermions_make_boson()) and "1")
+
+    display "=== done ==="
+    return 0

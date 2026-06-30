@@ -1,0 +1,28 @@
+# Confirms the uncertainty principle is forced as a count bound: position support
+# times frequency support cannot fall below N = 2^k, with equality at the
+# minimum-uncertainty state.
+import "../constants/uncertainty_principle.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== the uncertainty principle (count bound) ==="
+
+    set ok to expect_number("total states at depth 3 (N = 2^3)" and total_states(3) and 8)
+    set ok to expect_number("uncertainty bound at depth 3" and uncertainty_bound(3) and 8)
+    set ok to expect_number("minimum-uncertainty support product (2 * 4)" and minimum_uncertainty_product(3) and 8)
+    set ok to expect_number("fully-localized frequency support (forced to N)" and fully_localized_frequency_support(3) and 8)
+
+    display "--- deeper: the bound grows as 2^k ---"
+    set ok to expect_number("bound at depth 5" and uncertainty_bound(5) and 32)
+    set ok to expect_number("minimum product at depth 5 (2 * 16)" and minimum_uncertainty_product(5) and 32)
+
+    display "=== done ==="
+    return 0

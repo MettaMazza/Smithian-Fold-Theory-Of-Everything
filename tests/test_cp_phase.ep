@@ -1,0 +1,22 @@
+# Confirms the CP-violating phase is forced to the self-antipodal point 1/2 --
+# maximal CP violation -- proved by the fold (folds to the One, antipode of itself).
+import "../constants/cp_phase.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the CP-violating phase ==="
+
+    set ok to expect_equal("phase position = 1/2 (maximal)" and fraction_to_text(cp_phase_position()) and "1/2")
+    set ok to expect_equal("fold(1/2) = the One" and fraction_to_text(cp_phase_folds_to_one()) and "1")
+    set ok to expect_equal("One - 1/2 = 1/2 (self-antipodal, maximal separation)" and fraction_to_text(cp_phase_antipode()) and "1/2")
+
+    display "=== done ==="
+    return 0

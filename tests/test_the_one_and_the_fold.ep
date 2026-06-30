@@ -1,0 +1,66 @@
+# Confirms the One and the two moves behave exactly as the theory requires.
+import "../foundation/the_one_and_the_fold.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the One and the fold ==="
+
+    # The One is the value one, and it derives from itself.
+    set one to the_one()
+    set ok to expect_equal("the One is 1" and fold_value_to_text(one) and "1")
+    set ok to expect_equal("the One's derivation" and one.derivation and "ONE")
+
+    # Folding the One returns the One (doubling and casting out a whole One).
+    set folded_one to fold(one)
+    set ok to expect_equal("fold(ONE) = 1" and fold_value_to_text(folded_one) and "1")
+    set ok to expect_number("period of the One" and fold_period(one and 100) and 1)
+
+    # A third turns into two-thirds and back: a rhythm of period two.
+    set a_third to supposed_value(1 and 3)
+    set folded_third to fold(a_third)
+    set ok to expect_equal("fold(1/3) = 2/3" and fold_value_to_text(folded_third) and "2/3")
+    set folded_twice to fold(folded_third)
+    set ok to expect_equal("fold(fold(1/3)) = 1/3" and fold_value_to_text(folded_twice) and "1/3")
+    set ok to expect_number("period of 1/3" and fold_period(a_third and 100) and 2)
+    set ok to expect_equal("readable derivation of fold(fold(1/3))" and folded_twice.derivation and "fold(fold(supposed(1/3)))")
+
+    # take is the only subtraction: 1 - 1/4 = 3/4, and it is permitted.
+    set a_quarter to supposed_value(1 and 4)
+    set one_minus_quarter to take(one and a_quarter)
+    set ok to expect_equal("take(1, 1/4) = 3/4" and fold_value_to_text(one_minus_quarter) and "3/4")
+    if can_take(one and a_quarter):
+        display "  ok    take(1, 1/4) is permitted"
+    else:
+        display "  FAIL  take(1, 1/4) should be permitted"
+    if can_take(a_quarter and one):
+        display "  FAIL  take(1/4, 1) should be forbidden"
+    else:
+        display "  ok    take(1/4, 1) is forbidden"
+
+    # A fifth has period four under the fold: 1/5 -> 2/5 -> 4/5 -> 3/5 -> 1/5.
+    set a_fifth to supposed_value(1 and 5)
+    set ok to expect_number("period of 1/5" and fold_period(a_fifth and 100) and 4)
+
+    # The beat between two equal rhythms is the One; otherwise it is their gap.
+    # (Note: ErnosPlain forbids aliasing one variable into two arguments of a
+    #  single call, so the two equal rhythms are held in separate variables.)
+    set another_third to supposed_value(1 and 3)
+    set beat_equal to beat_between(a_third and another_third)
+    set ok to expect_equal("beat(1/3, 1/3) = 1" and fold_value_to_text(beat_equal) and "1")
+    set three_quarters to supposed_value(3 and 4)
+    set beat_gap to beat_between(three_quarters and a_quarter)
+    set ok to expect_equal("beat(3/4, 1/4) = 1/2" and fold_value_to_text(beat_gap) and "1/2")
+
+    display "=== done ==="
+    return 0

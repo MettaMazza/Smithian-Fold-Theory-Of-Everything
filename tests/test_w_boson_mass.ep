@@ -1,0 +1,33 @@
+# Confirms the W-to-Z squared mass ratio is the forced cos^2(theta_W) = 3/4, and
+# that the forced running carries it through the measured value 0.7770.
+import "../constants/w_boson_mass.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the W-to-Z boson mass ratio ==="
+
+    set ok to expect_equal("(M_W/M_Z)^2 = cos^2(theta_W) = 3/4" and fraction_to_text(w_to_z_mass_squared()) and "3/4")
+    set ok to expect_equal("bare (M_W/M_Z)^2 = 0.7500" and fraction_to_decimal(w_to_z_mass_squared() and 4) and "0.7500")
+
+    display "--- the forced running carries cos^2 to measurement ---"
+    set ok to expect_equal("cos^2 at level 9  = 400/521 = 0.7677" and fraction_to_text(cos_squared_at_level(9)) and "400/521")
+    set ok to expect_equal("cos^2 at level 13 = 784/1009 = 0.7770" and fraction_to_text(cos_squared_at_level(13)) and "784/1009")
+    set ok to expect_equal("cos^2 at level 13 decimal = 0.7770" and fraction_to_decimal(cos_squared_at_level(13) and 4) and "0.7770")
+
+    display "--- comparison: measured (M_W/M_Z)^2 from the boson masses ---"
+    # M_W = 80.377 GeV, M_Z = 91.1876 GeV ; ratio = 803770/911876 (the 10000s cancel)
+    set ratio to fraction_from_ratio(803770 and 911876)
+    set ratio_twin to fraction_from_ratio(803770 and 911876)
+    set measured_mass_squared to fraction_multiply(ratio and ratio_twin)
+    set ok to expect_equal("measured (M_W/M_Z)^2 = 0.7769" and fraction_to_decimal(measured_mass_squared and 4) and "0.7769")
+
+    display "=== done ==="
+    return 0

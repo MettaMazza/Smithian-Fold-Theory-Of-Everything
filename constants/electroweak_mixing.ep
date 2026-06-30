@@ -1,0 +1,100 @@
+# ============================================================================
+#  THE ELECTROWEAK MIXING ANGLE  --  the two preimages of the critical coupling.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The electroweak mixing angle (the Weinberg angle) splits one unified coupling
+#  into two channels. The split is forced, with no fitted parameter.
+#
+#  THE CRITICAL COUPLING AND ITS TWO PREIMAGES
+#  -------------------------------------------
+#  The unified coupling is the fold's own balance point, g = 1 / binary = 1/2 --
+#  the value that folds to the One and is its own antipode. Under the fold (which
+#  doubles), exactly two values fold to g: the lower preimage and the upper.
+#       unified coupling = 1 / binary       = 1/2
+#       lower preimage   = 1 / binary^2     = 1/4   (this is sin^2 of the angle)
+#       upper preimage   = 1 - lower         = 3/4   (this is cos^2 of the angle)
+#  The two preimages PARTITION THE ONE:  1/4 + 3/4 = 1, and each folds back to
+#  the coupling -- fold(1/4) = 1/2 and fold(3/4) = 1/2.
+#
+#  THE RUNNING, TO THE MEASURED VALUE (second order, forced)
+#  ---------------------------------------------------------
+#  The leading 1/4 is not the end. The mixing RUNS with the covering level k: the
+#  charged coupling fills in as c_k = (k+1)/(k+2) while the neutral coupling stays
+#  flat at n = 1/2, and the mixing is
+#       sin^2(theta_W) at level k = n^2 / (c_k^2 + n^2)
+#                                 = (k+2)^2 / (4(k+1)^2 + (k+2)^2).
+#  At the bare level (k = 0) this is 1/2; it decreases monotonically with k. The
+#  forced running curve CROSSES the measured Z-scale value 0.23113 between level
+#  nine (121/521 = 0.2322) and level ten (36/157 = 0.2293) -- so the measured
+#  value is reached by the forced running, not fitted to.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The unified coupling: one over the binary count, 1/2 -- the fold's balance point.
+define unified_coupling returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The lower preimage of the coupling under the fold: one over binary squared,
+# 1/4 -- the sine-squared of the mixing angle.
+define sin_squared_mixing returning Fraction:
+    set binary_squared to whole_power(binary_count() and 2)
+    return fraction_from_ratio(1 and binary_squared)
+
+# The upper preimage: the One less the lower, 3/4 -- the cosine-squared.
+define cos_squared_mixing returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set lower to sin_squared_mixing()
+    return fraction_subtract(one and lower)
+
+# The two preimages partition the One: sin^2 + cos^2 = 1.
+define mixing_partition returning Fraction:
+    set lower to sin_squared_mixing()
+    set upper to cos_squared_mixing()
+    return fraction_add(lower and upper)
+
+
+# Fold a fraction once: double it (with a separate twin) and cast out whole Ones.
+# Used to confirm each preimage folds back to the unified coupling.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lower preimage folds to the unified coupling: fold(1/4) = 1/2.
+define lower_preimage_folds_to_coupling returning Fraction:
+    set lower to sin_squared_mixing()
+    return fold_fraction(lower)
+
+# The upper preimage folds to the unified coupling: fold(3/4) = 1/2.
+define upper_preimage_folds_to_coupling returning Fraction:
+    set upper to cos_squared_mixing()
+    return fold_fraction(upper)
+
+
+# ----------------------------------------------------------------------------
+#  The running mixing, to the measured value
+# ----------------------------------------------------------------------------
+
+# The mixing at covering level k, forced from the level alone:
+#     sin^2(theta_W)_k = (k+2)^2 / (4(k+1)^2 + (k+2)^2),
+# the neutral coupling 1/2 squared over the charged coupling (k+1)/(k+2) squared
+# plus the neutral squared. At k = 0 it is 1/2; it decreases as k grows.
+define weak_mixing_at_level with level as Int returning Fraction:
+    set level_plus_one to level + 1
+    set level_plus_two to level + 2
+    set numerator to whole_power(level_plus_two and 2)
+    set charged_part to 4 * whole_power(level_plus_one and 2)
+    set denominator to charged_part + whole_power(level_plus_two and 2)
+    return fraction_from_ratio(numerator and denominator)
+
+# The bare mixing, the running curve at level zero: 1/2.
+define bare_running_mixing returning Fraction:
+    return weak_mixing_at_level(0)
+
+# (The measured Z-scale value and the crossing check live in the test, on the
+#  comparison side -- no measured number appears in this forced module.)

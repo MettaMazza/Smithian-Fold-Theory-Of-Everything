@@ -1,0 +1,52 @@
+# ============================================================================
+#  THE UNCERTAINTY PRINCIPLE  --  why measurement has a floor, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  You cannot pin down a thing's position and its frequency (momentum) both at
+#  once -- sharpening one blurs the other. This is forced by the fold's
+#  discreteness, with no fitted parameter: it is a counting bound.
+#
+#  THE COUNT BOUND
+#  ---------------
+#  At covering depth k there are N = binary^k states, shared between position and
+#  frequency (they are fold-conjugate). The number of cells a state occupies in
+#  position (its position support) times the number in frequency cannot fall below
+#  the total:
+#       position support  *  frequency support  >=  N = binary^k.
+#  Localize fully in position (support 1) and the frequency support is forced to
+#  the whole N. At the minimum-uncertainty state the product EQUALS N exactly:
+#  e.g. at depth 3, support 2 in position * support 4 in frequency = 8 = 2^3.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  This is the discrete form of Heisenberg's principle: the position-momentum
+#  support product is bounded below, so no state is sharp in both -- exactly the
+#  observed floor on simultaneous measurement.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+
+
+# The total number of states at covering depth k: binary^k.
+define total_states with depth as Int returning Int:
+    return whole_power(binary_count() and depth)
+
+# The uncertainty bound: the product of position and frequency supports cannot
+# fall below the total state count. This returns that floor, N = binary^k.
+define uncertainty_bound with depth as Int returning Int:
+    return total_states(depth)
+
+# A minimum-uncertainty state at depth k: position support binary, frequency
+# support binary^(k-1). Their product equals the bound exactly.
+define minimum_uncertainty_product with depth as Int returning Int:
+    set position_support to binary_count()
+    set frequency_support to whole_power(binary_count() and (depth - 1))
+    return position_support * frequency_support
+
+# Fully localized in position (support one), the frequency support is forced to
+# the whole state count -- maximal spread. The product still equals the bound.
+define fully_localized_frequency_support with depth as Int returning Int:
+    return total_states(depth)

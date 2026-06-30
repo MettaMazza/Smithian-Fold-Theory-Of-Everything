@@ -1,0 +1,28 @@
+# Confirms the Dirac g-factor is forced to exactly 2 -- the inverse of the fold's
+# critical coupling 1/2, equal to the binary count.
+import "../constants/g_factor.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the gyromagnetic ratio (g-factor) ==="
+
+    set ok to expect_equal("critical coupling g_em = 1/2" and fraction_to_text(critical_coupling()) and "1/2")
+    set ok to expect_equal("g-factor = 1/(1/2) = 2" and fraction_to_text(bare_g_factor()) and "2")
+    set ok to expect_number("g-factor = binary count" and bare_g_factor_is_binary() and 2)
+
+    display "--- comparison ---"
+    set ok to expect_equal("forced g = 2.000 (measured ~2.00232, anomaly is QED)" and fraction_to_decimal(bare_g_factor() and 3) and "2.000")
+
+    display "=== done ==="
+    return 0

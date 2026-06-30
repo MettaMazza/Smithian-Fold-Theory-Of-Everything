@@ -1,0 +1,32 @@
+# Confirms the gauge mediator counts are forced from the colour count: eight
+# gluons (3^2 - 1), and the ladder 24 and 48 -- all integers, nothing chosen.
+import "../constants/gauge_mediator_counts.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got == want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== the gauge mediator counts ==="
+
+    # the strong sector and its eight gluons
+    set ok to expect_number("strong sector = 3" and strong_sector() and 3)
+    set ok to expect_number("gluons = 3^2 - 1 = 8" and gluon_count() and 8)
+
+    # the ladder of forces, same p^2 - 1 form
+    set ok to expect_number("next sector = 5" and next_sector() and 5)
+    set ok to expect_number("next mediators = 5^2 - 1 = 24" and next_sector_mediator_count() and 24)
+    set ok to expect_number("third sector = 7" and third_sector() and 7)
+    set ok to expect_number("third mediators = 7^2 - 1 = 48" and third_sector_mediator_count() and 48)
+
+    # the source counts: why the strong force self-couples
+    set ok to expect_number("electromagnetic field source = 1" and electromagnetic_field_source() and 1)
+    set ok to expect_number("strong field source = 3" and strong_field_source() and 3)
+
+    display "=== done ==="
+    return 0

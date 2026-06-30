@@ -1,0 +1,76 @@
+# ============================================================================
+#  THE GAUGE MEDIATOR COUNTS  --  eight gluons, forced from the colour count.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The strong force is carried by exactly eight gluons. A naive count of three
+#  colours times three anti-colours gives nine; the eighth-and-no-ninth is
+#  forced. The mediator count of a colour-p sector is p^2 - 1 (the p^2
+#  colour/anti-colour pairs, less the one colourless combination that does not
+#  mediate). For the colour-three strong sector that is 3^2 - 1 = 8.
+#
+#  THE LADDER OF FORCES (same form, forced from the generators)
+#  ------------------------------------------------------------
+#     strong sector = colour                  = 3  ->  3^2 - 1 = 8   (gluons)
+#     next sector   = binary + colour          = 5  ->  5^2 - 1 = 24  (a new force)
+#     third sector  = colour + (colour + 1)    = 7  ->  7^2 - 1 = 48  (a new force)
+#  The same p^2 - 1 across the sectors at 3, 5, 7 -- nothing chosen.
+#
+#  WHY THE STRONG FORCE SELF-COUPLES AND CONFINES
+#  ----------------------------------------------
+#  The photon is colourless and does not act on itself, so the source of the
+#  electromagnetic field is just the matter: one. The gluon carries the colour
+#  it mediates and so acts on itself; the source of the strong field is the
+#  matter (one) plus the self-sourcing carriers (binary, two), totalling three --
+#  the colour count. That self-coupling is why the strong field ropes into a
+#  confining tube instead of spreading.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+
+
+# The mediator count of a colour-sector: the sector squared, less one.
+define mediator_count with sector as Int returning Int:
+    set pairs to whole_power(sector and 2)
+    return pairs - 1
+
+
+# --- the three sectors of the ladder, forced from the generators ------------
+
+# The strong sector is the colour count, three.
+define strong_sector returning Int:
+    return colour_count()
+
+# The eight gluons: the strong sector squared, less one -- 3^2 - 1 = 8.
+define gluon_count returning Int:
+    return mediator_count(strong_sector())
+
+# The next sector, binary plus colour, five.
+define next_sector returning Int:
+    return binary_count() + colour_count()
+
+# Its mediators: 5^2 - 1 = 24 (a new force of the corpus).
+define next_sector_mediator_count returning Int:
+    return mediator_count(next_sector())
+
+# The third sector, colour plus one more than colour, seven.
+define third_sector returning Int:
+    return colour_count() + (colour_count() + 1)
+
+# Its mediators: 7^2 - 1 = 48 (a new force of the corpus).
+define third_sector_mediator_count returning Int:
+    return mediator_count(third_sector())
+
+
+# --- the source counts: why the strong force self-couples --------------------
+
+# The source of the electromagnetic field: the matter alone, one (the photon
+# is colourless and does not source itself).
+define electromagnetic_field_source returning Int:
+    return 1
+
+# The source of the strong field: the matter (one) plus the self-sourcing
+# carriers (binary, two), totalling three -- the colour count.
+define strong_field_source returning Int:
+    return 1 + binary_count()

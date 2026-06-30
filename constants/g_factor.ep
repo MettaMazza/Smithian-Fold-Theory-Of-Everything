@@ -1,0 +1,46 @@
+# ============================================================================
+#  THE GYROMAGNETIC RATIO  --  the Dirac g-factor of 2, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  A point electron's magnetic strength relative to its spin -- the g-factor -- is
+#  almost exactly 2. That value is forced, with no fitted parameter: it is the
+#  inverse of the fold's critical coupling.
+#
+#  THE DIRAC VALUE
+#  ---------------
+#  Electromagnetism couples at the CRITICAL COUPLING -- the half-One, the fold's
+#  self-antipodal balance point, g_em = 1/binary = 1/2 (the same 1/2 that is the
+#  unified electroweak coupling and the maximal-CP point). The gyromagnetic ratio
+#  is its inverse:
+#       g = 1 / g_em = 1 / (1/2) = 2 = binary.
+#  The Dirac value 2 is the binary count itself.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  The measured electron g-factor is about 2.00232 -- the forced 2 plus a tiny
+#  "anomaly" 0.00232, which is the quantum (QED) correction of order alpha/(2*pi).
+#  That correction needs pi, an irrational, so it is never formed here; the forced
+#  Dirac value is exactly 2, and the anomaly is noted only for comparison.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The critical coupling: the half-One, the fold's self-antipodal balance point,
+# g_em = 1/binary = 1/2.
+define critical_coupling returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The bare gyromagnetic ratio (g-factor): the inverse of the critical coupling,
+# g = 1/(1/2) = 2.
+define bare_g_factor returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set coupling to critical_coupling()
+    return fraction_divide(one and coupling)
+
+# The same value as a whole number: the Dirac g-factor is the binary count, 2.
+define bare_g_factor_is_binary returning Int:
+    return binary_count()

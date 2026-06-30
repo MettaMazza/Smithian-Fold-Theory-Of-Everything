@@ -1,0 +1,74 @@
+# ============================================================================
+#  THE ARROW OF TIME  --  why time runs one way, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  Time has a direction: the past is fixed, the future open, and entropy grows.
+#  This is forced by the fold being two-to-one -- it loses information at every
+#  step and so cannot be run backwards uniquely.
+#
+#  THE IRREVERSIBILITY
+#  -------------------
+#  Two distinct values fold to the SAME image:
+#       fold(1/4) = 1/2   and   fold(3/4) = 1/2.
+#  Given the result 1/2 you cannot recover which value it came from -- one binary
+#  choice is lost. The fold is non-injective, so it has no unique inverse: it runs
+#  forward, never uniquely backward. That is the arrow.
+#
+#  THE ENTROPY RATE
+#  ----------------
+#  The fold is binary (two-to-one), and binary = 2 = 2^1, so each step loses
+#  exactly ONE bit -- the Kolmogorov-Sinai entropy is 1 bit per step, strictly
+#  positive. A positive entropy rate fixes the forward direction of time.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  The second law of thermodynamics: entropy increases, and the increase sets the
+#  direction of time -- the forced positive 1-bit-per-step rate.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lower value 1/4 folds to 1/2.
+define lower_value_folds_to returning Fraction:
+    set lower to fraction_from_ratio(1 and 4)
+    return fold_fraction(lower)
+
+# The upper value 3/4 folds to the SAME 1/2 -- two distinct pasts, one present.
+define upper_value_folds_to returning Fraction:
+    set upper to fraction_from_ratio(3 and 4)
+    return fold_fraction(upper)
+
+# The fold is non-injective: two distinct values give the same image, so the
+# information of which one is lost and the fold has no unique inverse.
+define fold_loses_information returning Bool:
+    set from_lower to lower_value_folds_to()
+    set from_upper to upper_value_folds_to()
+    set images_equal to fraction_is_equal(from_lower and from_upper)
+    set quarter to fraction_from_ratio(1 and 4)
+    set three_quarter to fraction_from_ratio(3 and 4)
+    set sources_differ to fraction_is_equal(quarter and three_quarter)
+    if images_equal:
+        if sources_differ:
+            return false
+        return true
+    return false
+
+# The entropy lost per fold step, in bits: the fold multiplicity is binary = 2 =
+# 2^1, so each step loses exactly one bit. Counted as the doublings to reach binary.
+define entropy_bits_per_step returning Int:
+    set bits to 0
+    set value to 1
+    repeat while value < binary_count():
+        set value to value + value
+        set bits to bits + 1
+    return bits

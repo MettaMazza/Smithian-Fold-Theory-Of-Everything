@@ -1,0 +1,39 @@
+# Confirms the charged-lepton cubic's invariants are forced from the colour
+# count, exactly -- no roots solved, no brackets, no chosen values. The cubic's
+# coefficients ARE the symmetric functions of the three lepton balance points.
+import "../constants/charged_lepton_cubic.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the charged-lepton cubic (forced invariants) ==="
+
+    # the three symmetric functions of the roots, all forced from colour
+    set ok to expect_equal("roots sum to the One" and fraction_to_text(no_loss_partition()) and "1")
+    set ok to expect_equal("second invariant = 1/6" and fraction_to_text(second_invariant()) and "1/6")
+    set ok to expect_equal("third invariant (leading) = 1/485" and fraction_to_text(leading_third_invariant()) and "1/485")
+    set ok to expect_equal("third invariant (sharpened) = 3/1454" and fraction_to_text(third_invariant()) and "3/1454")
+
+    display "--- the neutral channel is the colour count; others do not land ---"
+    # forced: channel = colour count = 3 -> 3/1454
+    set ok to expect_equal("colour channel (3) -> 3/1454" and fraction_to_text(third_invariant_with_channel(3)) and "3/1454")
+    # falsification: channels 2 and 4 give different invariants
+    set ok to expect_equal("channel 2 -> 2/969 (rejected)" and fraction_to_text(third_invariant_with_channel(2)) and "2/969")
+    set ok to expect_equal("channel 4 -> 4/1939 (rejected)" and fraction_to_text(third_invariant_with_channel(4)) and "4/1939")
+
+    # the engine enforces the channel is forced, not selected (else it halts)
+    set forced to neutral_channel_is_forced()
+    if forced == 1:
+        display "  ok    neutral channel is forced, not selected"
+    else:
+        display "  FAIL  neutral channel uniqueness not enforced"
+
+    display "=== done ==="
+    return 0

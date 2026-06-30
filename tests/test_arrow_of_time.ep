@@ -1,0 +1,33 @@
+# Confirms the arrow of time is forced: the fold is non-injective (1/4 and 3/4
+# both fold to 1/2), losing one bit per step, fixing a forward direction.
+import "../constants/arrow_of_time.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the arrow of time ==="
+
+    set ok to expect_equal("fold(1/4) = 1/2" and fraction_to_text(lower_value_folds_to()) and "1/2")
+    set ok to expect_equal("fold(3/4) = 1/2 (same image, distinct source)" and fraction_to_text(upper_value_folds_to()) and "1/2")
+    set ok to expect_true("the fold loses information (non-injective)" and fold_loses_information())
+    set ok to expect_number("entropy lost per step (bits)" and entropy_bits_per_step() and 1)
+
+    display "=== done ==="
+    return 0

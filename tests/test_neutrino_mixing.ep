@@ -1,0 +1,37 @@
+# Confirms the three PMNS neutrino mixing angles are forced fold separations:
+# 1/2, 1/3, and 1/48 -- the last forced nonzero -- and that the fold itself
+# forces the two large ones (1/2 self-antipodal, 1/3 the tripling separation).
+import "../constants/neutrino_mixing.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the neutrino mixing angles (PMNS) ==="
+
+    set ok to expect_equal("atmospheric sin^2(theta23) = 1/2" and fraction_to_text(atmospheric_mixing()) and "1/2")
+    set ok to expect_equal("solar sin^2(theta12) = 1/3" and fraction_to_text(solar_mixing()) and "1/3")
+    set ok to expect_number("lepton sector tower N = 8" and lepton_sector_count() and 8)
+    set ok to expect_equal("reactor sin^2(theta13) = 1/48" and fraction_to_text(reactor_mixing()) and "1/48")
+
+    display "--- the fold forces the two large angles ---"
+    set ok to expect_equal("fold(1/2) = the One" and fraction_to_text(atmospheric_fold()) and "1")
+    set ok to expect_equal("One - 1/2 = 1/2 (self-antipodal)" and fraction_to_text(atmospheric_antipode()) and "1/2")
+    set ok to expect_equal("take(One, fold(1/3)) = 1/3 (tripling)" and fraction_to_text(solar_take_of_fold()) and "1/3")
+
+    display "--- forced angle vs measured (forced is exact; measured for comparison) ---"
+    set ok to expect_equal("atmospheric 1/2 = 0.5000 (measured ~0.5450)" and fraction_to_decimal(atmospheric_mixing() and 4) and "0.5000")
+    set ok to expect_equal("solar       1/3 = 0.3333 (measured ~0.3070)" and fraction_to_decimal(solar_mixing() and 4) and "0.3333")
+    set ok to expect_equal("reactor    1/48 = 0.0208 (measured ~0.0220)" and fraction_to_decimal(reactor_mixing() and 4) and "0.0208")
+
+    display "=== done ==="
+    return 0

@@ -1,0 +1,43 @@
+# Confirms the dark-to-baryon fraction is forced from the covering of the
+# generations -- exact rationals, all from the colour and binary counts.
+import "../constants/dark_to_baryon_fraction.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the dark-to-baryon fraction ==="
+
+    # the counts, forced from colour and binary
+    set ok to expect_number("generational volume = 27" and generational_volume() and 27)
+    set ok to expect_number("covering depth = 5" and generational_covering_depth() and 5)
+    set ok to expect_number("total binary volume = 32" and total_binary_volume() and 32)
+
+    # the two shares, exact
+    set ok to expect_equal("baryon fraction = 5/32" and fraction_to_text(baryon_fraction()) and "5/32")
+    set ok to expect_equal("dark fraction = 27/32" and fraction_to_text(dark_fraction()) and "27/32")
+
+    # they partition the One
+    set ok to expect_equal("baryon + dark = the One" and fraction_to_text(matter_partition()) and "1")
+
+    # the dark-to-baryon ratio (measured about 5.38)
+    set ok to expect_equal("dark-to-baryon = 27/5" and fraction_to_text(dark_to_baryon_ratio()) and "27/5")
+    set ok to expect_equal("dark-to-baryon decimal = 5.4" and fraction_to_decimal(dark_to_baryon_ratio() and 1) and "5.4")
+
+    display "--- second order, to the measured value (5.3643) ---"
+    set ok to expect_number("generational orbit floor = 2^5 - 1 = 31" and generational_orbit_floor() and 31)
+    set ok to expect_number("the floor is a genuine period-5 orbit" and generational_orbit_floor_is_genuine() and 1)
+    set ok to expect_equal("second-order ratio = 279/52" and fraction_to_text(dark_to_baryon_ratio_second_order()) and "279/52")
+    set ok to expect_equal("second-order decimal = 5.3653" and dark_to_baryon_ratio_second_order_decimal(4) and "5.3653")
+
+    display "=== done ==="
+    return 0

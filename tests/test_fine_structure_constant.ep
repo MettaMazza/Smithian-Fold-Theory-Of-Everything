@@ -1,0 +1,39 @@
+# Confirms the inverse fine-structure constant is forced, from counted whole
+# numbers, exactly, at BOTH of its self-similar scales.
+import "../constants/fine_structure_constant.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the fine-structure constant ==="
+
+    # The covering depths are COUNTED, not assumed.
+    set ok to expect_number("down-depth covers 27" and down_depth() and 5)
+    set ok to expect_number("up-depth covers 81" and up_depth() and 7)
+    set ok to expect_number("tower = 2^7" and tower() and 128)
+    set ok to expect_number("covering volume = 250" and covering_volume() and 250)
+    set ok to expect_number("sub-correction scale = 175" and sub_correction_scale() and 175)
+
+    display "--- leading scale ---"
+    set first to inverse_fine_structure_first_order()
+    set ok to expect_equal("1/alpha (first order) exact" and fraction_to_text(first) and "34259/250")
+    set ok to expect_equal("1/alpha (first order) decimal" and inverse_fine_structure_first_order_decimal(3) and "137.036")
+
+    display "--- second, self-similar scale ---"
+    set second to inverse_fine_structure_second_order()
+    set ok to expect_equal("1/alpha (second order) exact" and fraction_to_text(second) and "5995462/43751")
+    # to nine decimal places this equals the measured value 137.035999177
+    set ok to expect_equal("1/alpha (second order) decimal" and inverse_fine_structure_second_order_decimal(9) and "137.035999177")
+
+    display "=== done ==="
+    return 0

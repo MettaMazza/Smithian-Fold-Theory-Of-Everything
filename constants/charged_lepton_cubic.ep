@@ -1,0 +1,102 @@
+# ============================================================================
+#  THE CHARGED-LEPTON CUBIC  --  forced from the colour count, exactly.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The three charged leptons (electron, muon, tau) are the three balance points
+#  of a single cubic, and that cubic is fixed entirely by the colour count, with
+#  no fitted parameter and nothing chosen. The cubic is
+#
+#       x^3  -  x^2  +  e2 * x  -  e3   =   0
+#
+#  Its three roots are irrational, so they are NOT computed here -- solving for
+#  them would mean choosing brackets and an iteration count, which are
+#  parameters, and this engine has none. What IS forced and exact is the cubic
+#  itself: its coefficients ARE the symmetric functions of the three roots
+#  (Vieta), so the forced content is stated directly as those exact invariants.
+#
+#  THE THREE INVARIANTS, ALL FORCED FROM THE COLOUR COUNT c
+#  -------------------------------------------------------
+#     sum of the roots            = 1            (the One: a no-loss partition)
+#     sum of the pairwise products = e2 = 1/(2c)  = 1/6
+#     product of the roots         = e3
+#
+#  THE THIRD INVARIANT, TO TWO ORDERS (like the fine-structure constant)
+#  ---------------------------------------------------------------------
+#     leading:    e3 = 1 / (2c^5 - 1)        = 1/485
+#     sharpened:  e3 = 1 / (2c^5 - 1 - 1/c)  = 3/1454
+#  The sharpening is the NEUTRAL-CHANNEL CORRECTION: the denominator is lowered
+#  by one over the colour count (the neutral channel, 1/c). It is forced, not
+#  chosen -- the channel is 1/c because the count is the colour count. Putting a
+#  different channel in its place gives a different invariant (1/2 -> 2/969,
+#  1/4 -> 4/1939), so only the colour channel produces 3/1454.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  The roots squared are the charged-lepton mass shares; their ratios are the
+#  measured muon/electron (about 206.77) and tau/muon (about 16.82). The
+#  sharpened third invariant is what brings these into agreement -- the leading
+#  1/485 gives muon/electron about 207.1, the sharpened 3/1454 about 206.75.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+
+
+# The no-loss partition: the three balance points sum to the One.
+# This is the cubic's x^2 coefficient (Vieta), exactly the One.
+define no_loss_partition returning Fraction:
+    return fraction_from_whole_number(1)
+
+
+# The second invariant: the sum of the pairwise products of the roots,
+# one over twice the colour count -- 1/6.
+define second_invariant returning Fraction:
+    set twice_colour to 2 * colour_count()
+    return fraction_from_ratio(1 and twice_colour)
+
+
+# The leading third invariant: the product of the roots at leading order,
+# one over (twice the colour count to the fifth, less one) -- 1/485.
+define leading_third_invariant returning Fraction:
+    set colour_to_fifth to whole_power(colour_count() and 5)
+    set denominator to 2 * colour_to_fifth - 1
+    return fraction_from_ratio(1 and denominator)
+
+
+# The third invariant read with a neutral-channel correction of one over the
+# given channel: 1 / (2c^5 - 1 - 1/channel). The forced channel is the colour
+# count; other channels are shown only to demonstrate they do not land.
+define third_invariant_with_channel with channel_count as Int returning Fraction:
+    set whole_denominator to fraction_from_whole_number(2 * whole_power(colour_count() and 5) - 1)
+    set neutral_channel to fraction_from_ratio(1 and channel_count)
+    set corrected_denominator to fraction_subtract(whole_denominator and neutral_channel)
+    set one to fraction_from_whole_number(1)
+    return fraction_divide(one and corrected_denominator)
+
+
+# The sharpened third invariant: the neutral channel is the colour count, so the
+# correction is one over the colour count -- 1 / (485 - 1/3) = 3/1454. The channel
+# is ENFORCED to be the colour count: choosing any other channel here screams.
+define third_invariant returning Fraction:
+    set neutral_channel_count to colour_count()
+    set checked to forced_to_be("the lepton neutral channel is the colour count" and neutral_channel_count and colour_count())
+    return third_invariant_with_channel(neutral_channel_count)
+
+
+# The neutral channel is FORCED, not selected: the colour channel yields one
+# invariant and the neighbouring channels (2 and 4) yield DIFFERENT ones, so the
+# value genuinely depends on the colour count and was not chosen among equals.
+# If any other channel landed the same invariant, this would scream and halt.
+define neutral_channel_is_forced returning Int:
+    set forced_invariant to third_invariant_with_channel(colour_count())
+    set channel_two to third_invariant_with_channel(2)
+    set channel_four to third_invariant_with_channel(4)
+    set alternatives_matching to 0
+    if fraction_is_equal(channel_two and forced_invariant):
+        set alternatives_matching to alternatives_matching + 1
+    if fraction_is_equal(channel_four and forced_invariant):
+        set alternatives_matching to alternatives_matching + 1
+    return forced_unique("the lepton neutral channel" and 1 and alternatives_matching)

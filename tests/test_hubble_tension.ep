@@ -1,0 +1,39 @@
+# Confirms the Hubble calibration ratio 13/12 is forced from the generators,
+# exactly, through a flat partition of the One.
+import "../constants/hubble_tension.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define main:
+    display "=== the Hubble tension ==="
+
+    # the flat partition of the One
+    set ok to expect_equal("vacuum fraction = 2/3" and fraction_to_text(vacuum_fraction()) and "2/3")
+    set ok to expect_equal("matter fraction = 1/3" and fraction_to_text(matter_fraction()) and "1/3")
+    set ok to expect_equal("vacuum + matter = the One" and fraction_to_text(flatness_partition()) and "1")
+
+    # the calibration ratio
+    set ok to expect_number("covering tower = 8" and covering_tower() and 8)
+    set ok to expect_equal("correction = 1/12" and fraction_to_text(calibration_correction()) and "1/12")
+    set ok to expect_equal("calibration ratio = 13/12" and fraction_to_text(hubble_calibration_ratio()) and "13/12")
+    set ok to expect_equal("calibration ratio decimal = 1.083" and fraction_to_decimal(hubble_calibration_ratio() and 3) and "1.083")
+
+    display "--- second order, to the measured value (1.0843230) ---"
+    set ok to expect_number("deepest covering depth d_up = 7" and up_depth() and 7)
+    set ok to expect_number("early orbit floor = 2^7 - 1 = 127" and early_orbit_floor() and 127)
+    set ok to expect_number("the floor is a genuine period-7 orbit" and early_orbit_floor_is_genuine() and 1)
+    set ok to expect_equal("second-order ratio = 3305/3048" and fraction_to_text(hubble_calibration_ratio_second_order()) and "3305/3048")
+    set ok to expect_equal("second-order decimal = 1.0843175" and hubble_calibration_ratio_second_order_decimal(7) and "1.0843175")
+
+    display "=== done ==="
+    return 0

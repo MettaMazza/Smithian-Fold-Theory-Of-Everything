@@ -1,0 +1,93 @@
+# ============================================================================
+#  THREE OF EVERYTHING  --  why three dimensions, three generations, three colours.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  Three is not a coincidence repeated across physics. The number of spatial
+#  dimensions, the number of fermion generations, and the number of strong-force
+#  colours are the SAME forced count -- the colour count three -- each reached by
+#  an independent route, with no fitted parameter.
+#
+#  THE THREE ROUTES TO THREE
+#  -------------------------
+#   colour      = the fold period of 1/7                        = 3  (the base)
+#   dimensions  = the unique integer in the stability window
+#                 (binary, binary^2) = (2, 4)                    = 3
+#       (a binding potential needs d > binary; stable orbits need d < binary^2;
+#        exactly one integer satisfies both, and it is three.)
+#   generations = the size of the tripling fold's fibre
+#                 (the preimages of 2/3 under tripling)          = 3
+#  Each is cross-checked to equal the colour count through forced_to_be, so any
+#  disagreement halts the engine.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  Measured: space is three-dimensional; there are three fermion generations (the
+#  Z-boson invisible width); quarks carry three colours. All three.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# The number of integers strictly inside the stability window (binary, binary^2)
+# = (2, 4). Exactly one (namely three).
+define count_in_stability_window returning Int:
+    set upper to whole_power(binary_count() and 2)
+    set count to 0
+    set candidate to binary_count() + 1
+    repeat while candidate < upper:
+        set count to count + 1
+        set candidate to candidate + 1
+    return count
+
+# The unique integer in the stability window: a binding potential needs the
+# dimension above binary, stable orbits need it below binary squared. Three.
+define stable_dimension returning Int:
+    set upper to whole_power(binary_count() and 2)
+    set found to 0
+    set candidate to binary_count() + 1
+    repeat while candidate < upper:
+        set found to candidate
+        set candidate to candidate + 1
+    return found
+
+# The spatial dimension: the unique stable dimension, forced to equal the colour
+# count (the fold period of 1/7). Three, two independent ways.
+define spatial_dimension returning Int:
+    set by_stability to stable_dimension()
+    set by_colour to colour_count()
+    return forced_to_be("spatial dimension = unique stable dimension = colour" and by_stability and by_colour)
+
+
+# The k-th preimage of 2/3 under the tripling fold: (2/3 + k) / colour.
+define tripling_preimage with index as Int returning Fraction:
+    set target to fraction_from_ratio(2 and colour_count())
+    set shift to fraction_from_whole_number(index)
+    set shifted to fraction_add(target and shift)
+    set colour to fraction_from_whole_number(colour_count())
+    return fraction_divide(shifted and colour)
+
+# True when the k-th preimage genuinely triples-folds back to 2/3.
+define tripling_preimage_is_genuine with index as Int returning Bool:
+    set preimage to tripling_preimage(index)
+    set colour to fraction_from_whole_number(colour_count())
+    set tripled to fraction_multiply(preimage and colour)
+    set folded to cast_out_whole_ones(tripled)
+    set target to fraction_from_ratio(2 and colour_count())
+    return fraction_is_equal(folded and target)
+
+# The generation count: the size of the tripling fold's fibre over 2/3 -- the
+# number of distinct preimages that fold back to it. Forced to equal the colour
+# count. Three.
+define generation_count returning Int:
+    set count to 0
+    set index to 0
+    repeat while index < colour_count():
+        if tripling_preimage_is_genuine(index):
+            set count to count + 1
+        set index to index + 1
+    set checked to forced_to_be("generations = tripling fibre size = colour" and count and colour_count())
+    return count

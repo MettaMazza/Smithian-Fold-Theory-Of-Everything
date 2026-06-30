@@ -1,0 +1,55 @@
+# Confirms the electroweak mixing angle is forced as the two preimages of the
+# critical coupling -- sin^2 = 1/4, cos^2 = 3/4, partitioning the One, each
+# folding back to the unified coupling 1/2.
+import "../constants/electroweak_mixing.ep"
+
+# The measured Z-scale mixing (0.23113) and the crossing check live HERE, on the
+# comparison side -- never inside the forced constant module.
+define measured_z_scale_mixing returning Fraction:
+    return fraction_from_ratio(23113 and 100000)
+
+define running_crosses_measured_between with lower_level as Int and upper_level as Int returning Bool:
+    set at_lower to weak_mixing_at_level(lower_level)
+    set at_upper to weak_mixing_at_level(upper_level)
+    set measured to measured_z_scale_mixing()
+    set above to fraction_compare(at_lower and measured)
+    set below to fraction_compare(at_upper and measured)
+    if above > 0:
+        if below < 0:
+            return true
+    return false
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the electroweak mixing angle ==="
+
+    set ok to expect_equal("unified coupling = 1/2" and fraction_to_text(unified_coupling()) and "1/2")
+    set ok to expect_equal("sin^2 of mixing = 1/4" and fraction_to_text(sin_squared_mixing()) and "1/4")
+    set ok to expect_equal("cos^2 of mixing = 3/4" and fraction_to_text(cos_squared_mixing()) and "3/4")
+    set ok to expect_equal("sin^2 + cos^2 = the One" and fraction_to_text(mixing_partition()) and "1")
+
+    display "--- each preimage folds back to the unified coupling ---"
+    set ok to expect_equal("fold(1/4) = 1/2" and fraction_to_text(lower_preimage_folds_to_coupling()) and "1/2")
+    set ok to expect_equal("fold(3/4) = 1/2" and fraction_to_text(upper_preimage_folds_to_coupling()) and "1/2")
+
+    display "--- the running mixing, to the measured value (0.23113) ---"
+    set ok to expect_equal("bare running mixing = 1/2" and fraction_to_text(bare_running_mixing()) and "1/2")
+    set ok to expect_equal("level 9 mixing = 121/521" and fraction_to_text(weak_mixing_at_level(9)) and "121/521")
+    set ok to expect_equal("level 9 decimal = 0.2322" and fraction_to_decimal(weak_mixing_at_level(9) and 4) and "0.2322")
+    set ok to expect_equal("level 10 mixing = 36/157" and fraction_to_text(weak_mixing_at_level(10)) and "36/157")
+    set ok to expect_equal("level 10 decimal = 0.2292" and fraction_to_decimal(weak_mixing_at_level(10) and 4) and "0.2292")
+    if running_crosses_measured_between(9 and 10):
+        display "  ok    running crosses the measured value between levels 9 and 10"
+    else:
+        display "  FAIL  running does not cross the measured value between levels 9 and 10"
+
+    display "=== done ==="
+    return 0

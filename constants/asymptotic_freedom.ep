@@ -1,0 +1,57 @@
+# ============================================================================
+#  ASYMPTOTIC FREEDOM  --  why the strong force grows with distance, forced.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The strong force gets STRONGER at longer range (confinement) and weaker at
+#  short range (asymptotic freedom), while electromagnetism does neither -- its
+#  strength is flat. This difference is forced, with no fitted parameter: it comes
+#  from whether the force's carrier itself carries charge.
+#
+#  THE RUNNING
+#  -----------
+#  The bare matter charge is the half-One, M = 1/binary = 1/2. A carrier feeds the
+#  field at range level k only if it carries charge q. The effective coupling is
+#       g_eff(k) = (M + k*q) / M.
+#  Strong force: the gluon carries colour charge, q = the One = 1, so
+#       g_eff(k) = (1/2 + k)/(1/2) = 1 + 2k   ->   1, 3, 5, 7, ...
+#  growing with range, slope exactly binary = 2 (the fold's doubling).
+#  Electromagnetism: the photon carries NO charge, q = nothing, so
+#       g_eff(k) = M/M = 1   for every k -- flat, it does not run.
+#
+#  This is the forced content behind confinement and asymptotic freedom: the
+#  non-Abelian coupling runs because its carrier is charged; the Abelian one does
+#  not because its carrier is neutral.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The bare matter charge: the half-One, 1/2.
+define matter_charge returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The strong (non-Abelian) effective coupling at range level k: (M + k)/M, the
+# carrier carrying charge one. Grows with range: 1, 3, 5, 7, ...
+define strong_coupling_at_level with level as Int returning Fraction:
+    set matter to matter_charge()
+    set carrier_charge to fraction_from_whole_number(level)
+    set numerator to fraction_add(matter and carrier_charge)
+    set matter_denominator to matter_charge()
+    return fraction_divide(numerator and matter_denominator)
+
+# The growth of the strong coupling per range level: g_eff(k+1) - g_eff(k) = 2,
+# exactly the binary fold factor.
+define strong_coupling_growth returning Fraction:
+    set higher to strong_coupling_at_level(2)
+    set lower to strong_coupling_at_level(1)
+    return fraction_subtract(higher and lower)
+
+# The electromagnetic (Abelian) effective coupling at range level k: M/M = 1, the
+# carrier carrying no charge. Flat -- it does not run with range.
+define electromagnetic_coupling_at_level with level as Int returning Fraction:
+    set matter to matter_charge()
+    set matter_denominator to matter_charge()
+    return fraction_divide(matter and matter_denominator)

@@ -1,0 +1,60 @@
+# ============================================================================
+#  THE AXIOM IS A THEOREM  --  the One and the fold are forced, not assumed.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  Everything in this recreation is forced from "the One and its fold." This step
+#  shows that the starting point is not a free choice but a THEOREM: given only
+#  that there is not nothing, the One, the domain (0,1], and the fold are forced.
+#  So the model has zero free parameters AND, arguably, zero axioms -- its one
+#  premise proves itself.
+#
+#  THE CHAIN
+#  ---------
+#   1. NOT NOTHING. Zero is forbidden -- a value must lie in (0,1]. (The fold layer
+#      halts on zero; nothing in the model is ever the empty value.)
+#   2. THE DISPLACED GROUND. Since the ground cannot be zero, it is the unique
+#      self-antipodal point, the half-One 1/2: the One less it is itself, and it
+#      sits at maximal distance from both ends.
+#   3. THE ONE IS REACHED AND FIXED. The displaced ground folds up to the One:
+#      fold(1/2) = 1; and the One is the fold's own fixed point: fold(1) = 1. The
+#      One is the unique unison the fold preserves -- not posited, but forced as
+#      the value the ground rises to and the fold holds still.
+#  Hence "the One and its fold" is the only consistent foundation -- a proven
+#  theorem, machine-checked here, not an assumption.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The displaced ground: zero is forbidden, so the ground is the self-antipodal
+# half-One, 1/2 -- not nothing, but the most balanced something.
+define displaced_ground returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The displaced ground is its own antipode: One - 1/2 = 1/2. This is what pins it
+# (the unique value equal to its own complement).
+define displaced_ground_is_self_antipodal returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set ground to displaced_ground()
+    return fraction_subtract(one and ground)
+
+# The displaced ground folds up to the One: fold(1/2) = 1. The ground rises to
+# unison.
+define displaced_ground_folds_to_one returning Fraction:
+    set ground to displaced_ground()
+    return fold_fraction(ground)
+
+# The One is the fold's own fixed point: fold(1) = 1. The unique unison the fold
+# preserves -- the One forced, not assumed.
+define one_is_the_fold_fixed_point returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fold_fraction(one)

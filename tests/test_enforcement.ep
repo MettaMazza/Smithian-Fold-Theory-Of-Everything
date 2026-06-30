@@ -1,0 +1,23 @@
+# Confirms the enforcement lets forced values through unchanged.
+# (The other half -- that a FITTED value halts the engine -- is shown by the
+#  standalone demonstration in OneFoldMaster.md, since it stops the process.)
+import "../foundation/enforcement.ep"
+
+define expect_equal with label as Str and got as Int and want as Int:
+    if got == want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== enforcement (forced values pass) ==="
+    set a to forced_to_be("two forced as two" and 2 and 2)
+    set ok to expect_equal("a value equal to its forced derivation passes through" and a and 2)
+    set b to forced_to_be("five forced as five" and 5 and 5)
+    set ok to expect_equal("another forced value passes through" and b and 5)
+    # a uniquely-forced value (none of the alternatives also satisfy) passes
+    set u to forced_unique("uniquely forced" and 1 and 0)
+    set ok to expect_equal("a uniquely forced value passes through" and u and 1)
+    display "=== done ==="
+    return 0

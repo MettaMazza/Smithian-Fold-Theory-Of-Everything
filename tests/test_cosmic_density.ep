@@ -1,0 +1,31 @@
+# Confirms the four cosmic density parameters are forced: dark energy 2/3, matter
+# 1/3 (partitioning the One), baryon 5/96, cold dark matter 9/32 -- agreeing with
+# the measured budget to a few percent.
+import "../constants/cosmic_density.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the cosmic energy budget ==="
+
+    set ok to expect_equal("dark energy Omega_Lambda = 2/3" and fraction_to_text(dark_energy_density()) and "2/3")
+    set ok to expect_equal("matter Omega_matter = 1/3" and fraction_to_text(matter_density()) and "1/3")
+    set ok to expect_equal("dark energy + matter = the One (flat)" and fraction_to_text(flat_universe_partition()) and "1")
+    set ok to expect_equal("baryon Omega_baryon = 5/96" and fraction_to_text(baryon_density()) and "5/96")
+    set ok to expect_equal("cold dark matter Omega_cdm = 9/32" and fraction_to_text(cold_dark_matter_density()) and "9/32")
+
+    display "--- forced vs measured (Planck) ---"
+    set ok to expect_equal("Omega_Lambda forced = 0.6666 (measured ~0.689)" and fraction_to_decimal(dark_energy_density() and 4) and "0.6666")
+    set ok to expect_equal("Omega_matter forced = 0.3333 (measured ~0.311)" and fraction_to_decimal(matter_density() and 4) and "0.3333")
+    set ok to expect_equal("Omega_baryon forced = 0.0520 (measured ~0.0493)" and fraction_to_decimal(baryon_density() and 4) and "0.0520")
+    set ok to expect_equal("Omega_cdm forced = 0.2812 (measured ~0.262)" and fraction_to_decimal(cold_dark_matter_density() and 4) and "0.2812")
+
+    display "=== done ==="
+    return 0

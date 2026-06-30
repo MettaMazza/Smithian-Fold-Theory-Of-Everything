@@ -1,0 +1,87 @@
+# ============================================================================
+#  THE NEUTRINO MIXING ANGLES (PMNS)  --  forced fold separations.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  Neutrinos of one kind turn into another as they travel; how strongly is set by
+#  three mixing angles. All three are forced from the two generators and the fold,
+#  with no fitted parameter -- they are the fold's own separations.
+#
+#  THE THREE ANGLES, ALL FORCED
+#  ----------------------------
+#     atmospheric  sin^2(theta23) = 1 / binary = 1/2
+#         the HAND separation: 1/2 is the fold's self-antipodal point -- it folds
+#         to the One, and the One less it is itself. No other value does this.
+#     solar        sin^2(theta12) = 1 / colour = 1/3
+#         the TRIPLING separation: 1/3 is the value below 1/2 that returns to
+#         itself under take-of-the-fold, take(One, fold(1/3)) = 1/3.
+#     reactor      sin^2(theta13) = (sin^2(theta23) * sin^2(theta12)) / N = 1/48
+#         the two large angles divided by the lepton sector tower
+#         N = binary^colour = 8. This is the small angle, forced nonzero.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  Measured: sin^2(theta23) ~ 0.545, sin^2(theta12) ~ 0.307, sin^2(theta13) ~
+#  0.022. The forced 1/2, 1/3, 1/48 (= 0.5, 0.333, 0.0208) agree to within about
+#  a tenth -- and the reactor angle, long thought it might be zero, is forced
+#  nonzero at 1/48. (Checked in the test.)
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The atmospheric angle: sin^2(theta23) = one over the binary count, 1/2.
+define atmospheric_mixing returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The solar angle: sin^2(theta12) = one over the colour count, 1/3.
+define solar_mixing returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# The lepton sector tower: the binary count raised to the colour count, 8.
+define lepton_sector_count returning Int:
+    return whole_power(binary_count() and colour_count())
+
+# The reactor angle: the two large angles over the lepton sector tower,
+# (1/2 * 1/3) / 8 = 1/48.
+define reactor_mixing returning Fraction:
+    set atmospheric to atmospheric_mixing()
+    set solar to solar_mixing()
+    set product to fraction_multiply(atmospheric and solar)
+    set sector to fraction_from_whole_number(lepton_sector_count())
+    return fraction_divide(product and sector)
+
+
+# ----------------------------------------------------------------------------
+#  The forcing of the two large angles, from the fold itself
+# ----------------------------------------------------------------------------
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones. The same
+# fold used throughout the model.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The atmospheric value 1/2 folds to the One: fold(1/2) = 1. Half of it is the
+# whole; this is the self-antipodal point, and it forces 1/2.
+define atmospheric_fold returning Fraction:
+    set half to atmospheric_mixing()
+    return fold_fraction(half)
+
+# The One less the atmospheric value is the value itself: 1 - 1/2 = 1/2. The other
+# half of self-antipody.
+define atmospheric_antipode returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set half to atmospheric_mixing()
+    return fraction_subtract(one and half)
+
+# The take of the solar value's fold returns the value: take(One, fold(1/3)) =
+# 1 - 2/3 = 1/3. This is the tripling separation, and it forces 1/3.
+define solar_take_of_fold returning Fraction:
+    set third to solar_mixing()
+    set folded to fold_fraction(third)
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and folded)

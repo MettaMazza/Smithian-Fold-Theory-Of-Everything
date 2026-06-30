@@ -1,0 +1,48 @@
+# Confirms the exact-integer foundation is correct on real Fold-sized numbers.
+import "../foundation/exact_integers.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== exact integers ==="
+
+    # two-to-the-127: the absolute-scale exponent, larger than 64 bits.
+    set two to exact_integer_from_number(2)
+    set absolute_scale to exact_integer_power(two and 127)
+    set ok to expect_equal("2^127" and exact_integer_to_text(absolute_scale) and "170141183460469231731687303715884105728")
+
+    # a clean round-trip across the nine-digit block boundary
+    set ok to expect_equal("1000000007 round-trip" and exact_integer_to_text(exact_integer_from_number(1000000007)) and "1000000007")
+
+    # multiplication: 34259 * 250 = 8564750
+    set top to exact_integer_from_number(34259)
+    set two_fifty to exact_integer_from_number(250)
+    set ok to expect_equal("34259 * 250" and exact_integer_to_text(exact_integer_multiply(top and two_fifty)) and "8564750")
+
+    # subtraction crossing zero: 250 - 34259 = -34009
+    set ok to expect_equal("250 - 34259" and exact_integer_to_text(exact_integer_subtract(two_fifty and top)) and "-34009")
+
+    # opposite signs cancelling exactly
+    set ok to expect_equal("34259 + (-34259)" and exact_integer_to_text(exact_integer_add(top and exact_integer_negate(top))) and "0")
+
+    # a genuinely large product: 2^254
+    set big_square to exact_integer_multiply(absolute_scale and absolute_scale)
+    set ok to expect_equal("2^254" and exact_integer_to_text(big_square) and "28948022309329048855892746252171976963317496166410141009864396001978282409984")
+
+    # division and remainder: 34259 / 250 = 137 remainder 9
+    set outcome to exact_integer_divide(top and two_fifty)
+    set ok to expect_equal("34259 / 250 quotient" and outcome.quotient_digits and "137")
+    set ok to expect_equal("34259 / 250 remainder" and outcome.remainder_digits and "9")
+
+    # greatest common divisor: gcd(8564750, 62500) = 250
+    set ok to expect_equal("gcd(8564750, 62500)" and exact_integer_to_text(exact_integer_greatest_common_divisor(exact_integer_from_number(8564750) and exact_integer_from_number(62500))) and "250")
+
+    display "=== done ==="
+    return 0

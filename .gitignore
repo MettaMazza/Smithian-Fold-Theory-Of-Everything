@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Compiled ErnosPlain output (binaries + generated C live next to sources)
+*_compiled.c
+tests/test_*
+!tests/test_*.ep
+
+# The ErnosPlain language itself is a separate project, kept local for reference
+language/

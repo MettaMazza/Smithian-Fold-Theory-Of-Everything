@@ -1,0 +1,24 @@
+# Confirms the foundation is forced, not assumed: zero is forbidden, so the ground
+# is the self-antipodal 1/2, which folds up to the One; and the One is the fold's
+# own fixed point. The one premise proves itself.
+import "../constants/the_axiom_is_a_theorem.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the axiom is a theorem ==="
+
+    set ok to expect_equal("the displaced ground is 1/2 (not zero)" and fraction_to_text(displaced_ground()) and "1/2")
+    set ok to expect_equal("the ground is its own antipode: One - 1/2 = 1/2" and fraction_to_text(displaced_ground_is_self_antipodal()) and "1/2")
+    set ok to expect_equal("the ground folds up to the One: fold(1/2) = 1" and fraction_to_text(displaced_ground_folds_to_one()) and "1")
+    set ok to expect_equal("the One is the fold's fixed point: fold(1) = 1" and fraction_to_text(one_is_the_fold_fixed_point()) and "1")
+
+    display "=== done ==="
+    return 0

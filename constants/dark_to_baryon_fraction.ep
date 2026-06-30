@@ -1,0 +1,110 @@
+# ============================================================================
+#  THE DARK-TO-BARYON FRACTION  --  forced from the covering of the generations.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  How much of the matter of the universe is dark, and how much is ordinary
+#  (baryonic), is fixed by how the three generations cover the binary tower --
+#  no fitted parameter.
+#
+#  THE COUNTS, ALL FORCED FROM THE GENERATORS
+#  ------------------------------------------
+#     generational volume = colour^colour      = 3^3 = 27
+#         (the three generations over the three spatial directions)
+#     covering depth       = cover(27)          = 5
+#         the smallest binary depth that covers it; cross-checked to equal
+#         binary + colour (2 + 3 = 5), so it is forced two independent ways.
+#     total binary volume  = binary^depth       = 2^5 = 32
+#
+#  THE FRACTIONS
+#  -------------
+#     baryon fraction = depth  / total = 5/32
+#     dark fraction   = volume / total = 27/32
+#     and these two PARTITION THE ONE:  5/32 + 27/32 = 32/32 = 1.
+#     dark-to-baryon ratio = volume / depth = 27/5 = 5.4.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  The measured dark-to-baryon ratio is about 5.38, and the measured baryon
+#  share of matter about 0.157 -- against the forced 27/5 = 5.4 and 5/32 = 0.156.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+
+
+# The generational volume: the colour count raised to itself, twenty-seven.
+define generational_volume returning Int:
+    set colour to colour_count()
+    return whole_power(colour and colour)
+
+# The covering depth of the generational volume: the smallest binary depth that
+# covers it (five), enforced to equal binary + colour (forced two ways).
+define generational_covering_depth returning Int:
+    set by_covering to minimal_binary_cover(generational_volume())
+    set by_relation to binary_count() + colour_count()
+    return forced_to_be("dark/baryon depth = cover(colour^colour) = binary + colour" and by_covering and by_relation)
+
+# The total binary volume at that depth: the binary count raised to the depth,
+# thirty-two.
+define total_binary_volume returning Int:
+    return whole_power(binary_count() and generational_covering_depth())
+
+
+# The baryon (ordinary matter) share of matter: depth over total, 5/32.
+define baryon_fraction returning Fraction:
+    return fraction_from_ratio(generational_covering_depth() and total_binary_volume())
+
+# The dark-matter share of matter: volume over total, 27/32.
+define dark_fraction returning Fraction:
+    return fraction_from_ratio(generational_volume() and total_binary_volume())
+
+# The two shares partition the One: baryon + dark = 1.
+define matter_partition returning Fraction:
+    set baryon to baryon_fraction()
+    set dark to dark_fraction()
+    return fraction_add(baryon and dark)
+
+# The dark-to-baryon ratio: volume over depth, 27/5 = 5.4.
+define dark_to_baryon_ratio returning Fraction:
+    return fraction_from_ratio(generational_volume() and generational_covering_depth())
+
+
+# ----------------------------------------------------------------------------
+#  The second order, to the measured value (forced, self-similar)
+# ----------------------------------------------------------------------------
+#  The covering depth d_down = 5 is itself a position in the fold, and at the next
+#  order the One recurs over its period-orbit floor 2^d_down - 1 = 31 (the unique
+#  denominator whose fold-orbit has period d_down; the tower 2^d_down is
+#  pre-periodic and cannot host it). The depth is read one level deeper:
+#       depth -> 5 + 1/(2^d_down - 1) = 5 + 1/31,
+#  so the ratio is  27 / (5 + 1/31) = 279/52 = 5.3654, against the measured 5.364
+#  -- two parts in ten thousand (the leading 27/5 = 5.4 is seven parts in a thousand).
+
+# The generational orbit floor: 2^d_down - 1 = 31.
+define generational_orbit_floor returning Int:
+    return period_orbit_floor(generational_covering_depth())
+
+# Enforce that the floor is a GENUINE orbit, not the pre-periodic tower: the fold
+# period of one over the floor is exactly d_down.
+define generational_orbit_floor_is_genuine returning Int:
+    set floor to generational_orbit_floor()
+    set its_period to fold_period_of_unit_fraction(floor)
+    set checked to forced_to_be("generational orbit floor has fold-period d_down" and its_period and generational_covering_depth())
+    return 1
+
+# The second-order dark-to-baryon ratio: 27 / (5 + 1/31) = 279/52.
+define dark_to_baryon_ratio_second_order returning Fraction:
+    set checked to generational_orbit_floor_is_genuine()
+    set floor_term to fraction_from_ratio(1 and generational_orbit_floor())
+    set depth_fraction to fraction_from_whole_number(generational_covering_depth())
+    set sharpened_depth to fraction_add(depth_fraction and floor_term)
+    set volume to fraction_from_whole_number(generational_volume())
+    return fraction_divide(volume and sharpened_depth)
+
+# The second-order ratio as a decimal, for reading: 5.3653 (measured 5.3643).
+define dark_to_baryon_ratio_second_order_decimal with places as Int returning Str:
+    set value to dark_to_baryon_ratio_second_order()
+    return fraction_to_decimal(value and places)

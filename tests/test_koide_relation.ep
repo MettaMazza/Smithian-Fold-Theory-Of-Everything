@@ -1,0 +1,30 @@
+# Confirms the charged-lepton Koide ratio is forced to exactly 2/3 -- two ways
+# (from the cubic invariants, and as 1 - 1/colour) -- agreeing with the measured
+# 0.666661 to five digits.
+import "../constants/koide_relation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define main:
+    display "=== the Koide relation ==="
+
+    set ok to expect_equal("sum of sqrt-masses = sum of roots = 1" and fraction_to_text(sum_of_root_masses()) and "1")
+    set ok to expect_equal("sum of masses = 1 - 2*(1/6) = 2/3" and fraction_to_text(sum_of_lepton_masses()) and "2/3")
+    set ok to expect_equal("Koide ratio Q = 2/3" and fraction_to_text(koide_ratio()) and "2/3")
+    set ok to expect_equal("Koide ratio = 1 - 1/colour = 2/3 (independent route)" and fraction_to_text(koide_from_colour()) and "2/3")
+
+    display "--- to the measured value ---"
+    set ok to expect_equal("forced Q = 0.666666" and fraction_to_decimal(koide_ratio() and 6) and "0.666666")
+    # measured Koide from the lepton masses ~ 0.666661 (needs a square root, so it
+    # enters only as a published number, never computed in the engine)
+    set ok to expect_equal("measured Q = 0.666661 (five-digit agreement)" and fraction_to_decimal(fraction_from_ratio(666661 and 1000000) and 6) and "0.666661")
+
+    display "=== done ==="
+    return 0

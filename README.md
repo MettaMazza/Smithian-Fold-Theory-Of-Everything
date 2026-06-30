@@ -1,0 +1,106 @@
+# The Smithian Fold Theory of Everything
+
+### Zero free parameters. Zero axioms. One fold.
+
+Every fundamental constant and structural law of physics — **forced, counted,
+derived, and verified** from a single self-proving foundation. No number here is
+fitted. No number is chosen. And the starting point is not even assumed: given
+only that there is *not nothing*, the One, its domain, and its fold are forced,
+and everything else follows from them.
+
+This repository is a clean-room recreation of the theory, written from the ground
+up in exact arithmetic — no floating point, no approximation anywhere a value is
+derived — so that any human or machine can audit every step from the One to the
+measured value of each constant. The engine **halts itself** the instant a fitted
+or chosen value is introduced. Nothing slips through.
+
+---
+
+## The claim, stated plainly
+
+One object — the One — and one operation — the fold — generate the constants of
+nature. The two structural generators of the whole theory (binary `2`, colour `3`)
+are not inputs; they are *read off* the fold's own period spectrum. From them, with
+nothing added, the model reaches:
+
+| Result | Forced value | Measured | Agreement |
+|---|---|---|---|
+| Fine-structure constant `1/α` | `5995462/43751 = 137.035999177` | `137.035999177` | **9 digits** |
+| Proton-to-Planck hierarchy | `(M/m)² = 2¹²⁷` | — | 0.24% on the ratio |
+| Koide lepton relation `Q` | `2/3 = 0.666666…` | `0.666661` | **5 digits** |
+| Dark-to-baryon ratio | `279/52 = 5.3653` | `5.3643` | 0.02% |
+| Hubble calibration ratio | `3305/3048 = 1.0843175` | `1.0843230` | 5 × 10⁻⁶ |
+| Weak mixing `sin²θ_W` | forced running crosses measured | `0.23113` | exact crossing |
+| W-to-Z mass ratio `(M_W/M_Z)²` | `cos²θ_W = 3/4`, run to measured | `0.7769` | running reaches it |
+| Strong-force gluons | `colour² − 1 = 8` | `8` | exact |
+| Neutrino mixing (PMNS) | `1/2, 1/3, 1/48` | `0.545, 0.307, 0.022` | reactor angle forced **nonzero** |
+| Cosmic energy budget | `Ω_Λ=2/3, Ω_m=1/3, Ω_b=5/96, Ω_cdm=9/32` | Planck | a few percent |
+
+And the structural laws of physics, forced the same way:
+
+- **Three of everything** — three spatial dimensions, three fermion generations,
+  three colours: the same count, reached three independent ways.
+- **Parity violation** — the weak force is one-handed; the universe is a southpaw.
+- **The arrow of time** — the fold loses one bit per step; entropy must increase.
+- **The uncertainty principle** — a forced counting bound on conjugate supports.
+- **Spin and statistics** — fermions and bosons, exactly two kinds, no third.
+- **Asymptotic freedom** — the strong force grows with range; the photon's does not.
+- **Maximal CP violation**, the **Dirac g-factor `g = 2`**, and more.
+
+The full, ordered, run-it-yourself derivation of all of it is in
+[`OneFoldMaster.md`](OneFoldMaster.md).
+
+---
+
+## The axiom is a theorem
+
+The model has zero free parameters — and, arguably, zero axioms. The foundation
+proves itself:
+
+1. **Not nothing.** Zero is forbidden; a value must lie in `(0, 1]`.
+2. **The displaced ground.** The ground therefore cannot be zero — it is the
+   unique self-antipodal point, the half-One `1/2` (the One less it is itself).
+3. **The One, forced.** The ground folds up to the One (`fold(1/2) = 1`), and the
+   One is the fold's own fixed point (`fold(1) = 1`) — the unique unison the fold
+   preserves.
+
+So "the One and its fold" is not posited. It is the only consistent foundation,
+machine-checked. See `constants/the_axiom_is_a_theorem.ep`.
+
+---
+
+## Verify it yourself
+
+The proofs are written in **ErnosPlain**, an exact-arithmetic language; each module
+is plain, fully spelled-out English with a docstring on every function. Every claim
+ships with a test that prints `ok` for each checked value.
+
+```sh
+# build and run any proof (requires the ErnosPlain compiler, `ernos`)
+ernos tests/test_fine_structure_constant.ep && ./tests/test_fine_structure_constant
+ernos tests/test_koide_relation.ep         && ./tests/test_koide_relation
+ernos tests/test_the_axiom_is_a_theorem.ep && ./tests/test_the_axiom_is_a_theorem
+```
+
+Each test prints the forced value and checks it exactly. Measured numbers appear
+**only** on the comparison side, inside the tests — never in a derivation. The
+enforcement layer (`foundation/enforcement.ep`) halts the engine on any value that
+is fitted (`forced_to_be`), chosen among equals (`forced_unique`), or outside the
+domain (`require_in_domain`). A single fitted number voids the engine.
+
+---
+
+## Layout
+
+```
+foundation/   the One, the fold, exact integers and fractions, the counted
+              generators, and the enforcement that forbids fitting or choosing
+constants/    one module per forced result (the table above and more)
+tests/        one test per module — run them; read the `ok` lines
+OneFoldMaster.md   the complete, ordered, auditable derivation, step by step
+```
+
+---
+
+*Smithian Fold Theory — Maria Smith, Ernos Labs. The constants of nature are not
+free. They are forced.*

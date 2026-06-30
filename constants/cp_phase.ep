@@ -1,0 +1,53 @@
+# ============================================================================
+#  THE CP-VIOLATING PHASE  --  forced to be maximal.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The universe treats matter and antimatter differently; the size of that
+#  difference is set by a CP-violating phase. The fold forces that phase to sit at
+#  the ONE point of maximal violation -- it is not small, not zero, but maximal.
+#
+#  WHY MAXIMAL
+#  -----------
+#  The phase position is the fold's SELF-ANTIPODAL point, the half-One 1/2 = the
+#  unique value at maximal separation from both ends of the domain. It is forced
+#  the same way the atmospheric neutrino angle is:
+#       fold(1/2) = the One           (it folds exactly back to unison)
+#       One - 1/2 = 1/2               (it is its own antipode -- maximal separation)
+#  No other value in the domain does both, so the phase is forced to 1/2, i.e. to
+#  maximal CP violation (sin of the phase = 1).
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  The measured neutrino CP phase sits near three-quarters of a turn (about 1.5*pi,
+#  the maximal-violation point), and the quark sector also violates CP -- both
+#  consistent with the forced prediction that the phase is maximal, not zero.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The CP-violating phase position: the self-antipodal half-One, 1/2 -- maximal
+# separation from both domain boundaries, hence maximal CP violation.
+define cp_phase_position returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The phase folds to the One: fold(1/2) = 1. Half of it is the whole.
+define cp_phase_folds_to_one returning Fraction:
+    set phase to cp_phase_position()
+    return fold_fraction(phase)
+
+# The phase is its own antipode: One - 1/2 = 1/2. Maximal separation, the signature
+# of maximal CP violation.
+define cp_phase_antipode returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set phase to cp_phase_position()
+    return fraction_subtract(one and phase)

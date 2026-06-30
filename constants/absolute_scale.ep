@@ -1,0 +1,86 @@
+# ============================================================================
+#  THE ABSOLUTE SCALE  --  the proton-to-Planck hierarchy, forced from the One.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The vast gap between the mass of a proton and the Planck mass -- the largest
+#  pure-number ratio in physics, about 10^19 -- is forced by the deepest covering
+#  of the One, with no fitted parameter.
+#
+#  THE COUNTS, ALL FORCED FROM THE GENERATORS
+#  ------------------------------------------
+#     deepest covering depth d_up = cover(colour^(colour+1)) = 7
+#         the same absolute scale the fine structure and the Hubble tension use;
+#         cross-checked to equal colour + (colour + 1), so it is forced two ways.
+#     Fock count   = binary ^ d_up        = 2^7 = 128
+#         (the full preimage tree of the One at the deepest depth)
+#     massive states = Fock count - One   = 128 - 1 = 127
+#         (every state but the One itself carries mass)
+#
+#  THE HIERARCHY
+#  -------------
+#  Gravity couples at the half-One -- the fold's self-antipodal balance point,
+#  g = 1/binary = 1/2 (the same critical coupling as the electroweak unified
+#  coupling). The hierarchy exponent is the massive-state count scaled by that
+#  coupling:
+#       hierarchy exponent = massive states * g = 127 * (1/2) = 127/2
+#  so the scale ratio is  Planck / proton = 2^(127/2).
+#
+#  STAYING EXACT (no irrational ever formed)
+#  -----------------------------------------
+#  2^(127/2) is irrational, so it is NEVER built as a value -- that would mean a
+#  square root, which is forbidden. Its SQUARE is exact and whole:
+#       (Planck / proton)^2 = 2^127,
+#  an exact integer the engine forms by doubling. The comparison to measurement
+#  is done squared, so the root never appears.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  Measured proton mass ~ 1.67262192e-27 kg, Planck mass ~ 2.176434e-8 kg, so the
+#  measured (Planck/proton)^2 ~ 1.6932e38, against the forced 2^127 ~ 1.7014e38 --
+#  agreement to about a quarter of a percent on the ratio. (Checked in the test.)
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_integers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+
+
+# The deepest covering depth d_up = 7. Forced two ways: by the covering count of
+# colour^(colour+1) = 81, and by the relation colour + (colour + 1); they must
+# agree or the engine halts.
+define up_depth returning Int:
+    set next_volume to whole_power(colour_count() and (colour_count() + 1))
+    set by_covering to minimal_binary_cover(next_volume)
+    set by_relation to colour_count() + (colour_count() + 1)
+    return forced_to_be("deepest covering depth = cover(colour^(colour+1)) = colour+(colour+1)" and by_covering and by_relation)
+
+# The Fock count: the full preimage tower of the One at the deepest depth, 2^7 = 128.
+define fock_count returning Int:
+    return whole_power(binary_count() and up_depth())
+
+# The massive states: the Fock tower less the One itself, 128 - 1 = 127.
+define massive_states returning Int:
+    return fock_count() - 1
+
+# The gravitational coupling: the half-One, the fold's self-antipodal balance
+# point, one over the binary count -- 1/2.
+define gravitational_coupling returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The hierarchy exponent: the massive-state count scaled by the gravitational
+# coupling, 127 * (1/2) = 127/2. The scale ratio is 2 to this power.
+define hierarchy_exponent returning Fraction:
+    set states to fraction_from_whole_number(massive_states())
+    set coupling to gravitational_coupling()
+    return fraction_multiply(states and coupling)
+
+# The squared scale ratio: (Planck/proton)^2 = (2^(127/2))^2 = 2^127, an exact
+# whole number (the squaring removes the irrational root). This is the forced
+# quantity compared against measurement.
+define planck_to_proton_squared returning ExactInteger:
+    set base to exact_integer_from_number(binary_count())
+    return exact_integer_power(base and massive_states())

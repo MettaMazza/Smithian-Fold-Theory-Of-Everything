@@ -1,0 +1,129 @@
+# ============================================================================
+#  THE FINE-STRUCTURE CONSTANT  --  forced from two counted generators.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The inverse of the fine-structure constant, one-over-alpha, built from the
+#  two structural generators of the theory and nothing else, exactly, at both
+#  of its self-similar scales. There are no fitted numbers here and no chosen
+#  exponents: every quantity is forced from the binary count and the colour
+#  count, which are themselves counted from the fold (see structural_counts).
+#
+#  THE ONLY INPUTS
+#  ---------------
+#     b = the binary count = 2   (counted: the fold period of one-third)
+#     c = the colour count = 3   (counted: the fold period of one-seventh)
+#  Everything below is forced from b, c, and the One:
+#     generational volume  = c^c          = 27
+#     next volume          = c^(c+1)       = 81
+#     d_down  = covering depth of c^c      = 5   (cross-checked: equals b + c)
+#     d_up    = covering depth of c^(c+1)  = 7   (cross-checked: equals c + (c+1))
+#     tower   = b^d_up                     = 128
+#     colour^2 = c^b                       = 9
+#     cov     = b * d_down^c               = 250   (the covering volume)
+#     sub     = d_down^b * d_up            = 175   (the self-similar sub-scale)
+#
+#  THE TWO SCALES
+#  --------------
+#     leading:   1/alpha = tower + colour^2 * (cov + 1)/cov        = 34259/250
+#     deeper:    cov is itself covered, so cov_eff = cov + 1/sub,
+#                1/alpha = tower + colour^2 * (cov_eff + 1)/cov_eff = 5995462/43751
+#  The "+ 1" in each correction is the One recurring at that level. The leading
+#  value is 137.036; the deeper value agrees with the measured one-over-alpha to
+#  nine decimal places.
+#
+#  ENFORCEMENT
+#  -----------
+#  The covering depths are produced one way (by counting the covering) and
+#  cross-checked against an independent forced relation through forced_to_be.
+#  If anything were fitted or tampered with, the two would disagree and the
+#  engine would halt. No un-forced number can reach the result.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+
+
+# The generational volume: the colour count raised to itself (twenty-seven).
+define generational_volume returning Int:
+    set c to colour_count()
+    return whole_power(c and c)
+
+# The next covering volume: the colour count raised to one more (eighty-one).
+define next_volume returning Int:
+    set c to colour_count()
+    return whole_power(c and (c + 1))
+
+
+# The down covering depth: the covering depth of the generational volume,
+# enforced to equal the independent forced relation binary + colour.
+define down_depth returning Int:
+    set by_covering to minimal_binary_cover(generational_volume())
+    set by_relation to binary_count() + colour_count()
+    return forced_to_be("down-depth = cover(colour^colour) = binary + colour" and by_covering and by_relation)
+
+# The up covering depth: the covering depth of the next volume, enforced to
+# equal the independent forced relation colour + (colour + one).
+define up_depth returning Int:
+    set by_covering to minimal_binary_cover(next_volume())
+    set by_relation to colour_count() + (colour_count() + 1)
+    return forced_to_be("up-depth = cover(colour^(colour+1)) = colour + (colour+1)" and by_covering and by_relation)
+
+
+# The tower: the binary count raised to the up-depth (one hundred twenty-eight).
+define tower returning Int:
+    return whole_power(binary_count() and up_depth())
+
+# The colour count squared: the colour count raised to the binary count (nine).
+define colour_squared returning Int:
+    return whole_power(colour_count() and binary_count())
+
+# The covering volume: the binary count times the down-depth raised to the
+# colour count (two hundred fifty).
+define covering_volume returning Int:
+    return binary_count() * whole_power(down_depth() and colour_count())
+
+# The self-similar sub-correction scale: the down-depth raised to the binary
+# count, times the up-depth (one hundred seventy-five).
+define sub_correction_scale returning Int:
+    return whole_power(down_depth() and binary_count()) * up_depth()
+
+
+# ----------------------------------------------------------------------------
+#  The forced value at each scale
+# ----------------------------------------------------------------------------
+
+# Leading scale, as the exact ratio (tower*cov + colour^2*(cov+1)) / cov = 34259/250.
+define inverse_fine_structure_first_order returning Fraction:
+    set cov to covering_volume()
+    set numerator to tower() * cov + colour_squared() * (cov + 1)
+    return fraction_from_ratio(numerator and cov)
+
+# Leading scale as a decimal string, for reading: 137.036 .
+define inverse_fine_structure_first_order_decimal with places as Int returning Str:
+    set cov to covering_volume()
+    set numerator to tower() * cov + colour_squared() * (cov + 1)
+    return ratio_to_decimal_text(numerator and cov and places)
+
+
+# Second, self-similar scale. The effective cover is cov_eff = cov + 1/sub =
+# (cov*sub + 1)/sub, so over its top the value is
+#     (tower*effective_top + colour^2*(effective_top + sub)) / effective_top
+# which is the exact ratio 5995462/43751.
+define inverse_fine_structure_second_order returning Fraction:
+    set cov to covering_volume()
+    set sub to sub_correction_scale()
+    set effective_top to cov * sub + 1
+    set numerator to tower() * effective_top + colour_squared() * (effective_top + sub)
+    return fraction_from_ratio(numerator and effective_top)
+
+# Second scale as a decimal string, for reading. To nine places it is
+# 137.035999177 -- the measured value of one-over-alpha to nine places.
+define inverse_fine_structure_second_order_decimal with places as Int returning Str:
+    set cov to covering_volume()
+    set sub to sub_correction_scale()
+    set effective_top to cov * sub + 1
+    set numerator to tower() * effective_top + colour_squared() * (effective_top + sub)
+    return ratio_to_decimal_text(numerator and effective_top and places)

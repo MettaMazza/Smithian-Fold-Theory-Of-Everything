@@ -1,0 +1,46 @@
+# ============================================================================
+#  THE W-TO-Z BOSON MASS RATIO  --  the cosine-squared of the mixing angle.
+# ============================================================================
+#
+#  WHAT THIS IS
+#  ------------
+#  The W and Z bosons are the two massive carriers of the broken electroweak
+#  force. The ratio of their masses is fixed by the same mixing angle that splits
+#  the electroweak coupling -- no fitted parameter.
+#
+#  THE RATIO
+#  ---------
+#  The squared mass ratio IS the cosine-squared of the weak mixing angle:
+#       (M_W / M_Z)^2 = cos^2(theta_W) = 3/4   (bare, forced from binary)
+#  reusing the forced cos^2 = 3/4 of the electroweak split (1 - 1/binary^2). The
+#  ratio M_W/M_Z itself is sqrt(3)/2, irrational, so it is NEVER formed -- the
+#  SQUARE is the exact forced quantity, and the comparison is done squared.
+#
+#  TO MEASUREMENT (the running, forced)
+#  ------------------------------------
+#  The bare 3/4 is the tree value. The same forced running that carries
+#  sin^2(theta_W) to its measured value carries cos^2 = (M_W/M_Z)^2 with it:
+#  cos^2 at level k = 1 - sin^2(k). The running sweeps from 1/2 up toward the One
+#  and passes through the measured boson-mass ratio.
+#
+#  COMPARISON (measurement side, never used in the derivation)
+#  -----------------------------------------------------------
+#  Measured M_W ~ 80.377 GeV, M_Z ~ 91.1876 GeV, so the measured (M_W/M_Z)^2 ~
+#  0.7770 -- against the bare forced 3/4 = 0.7500 (a sixth part in ten on the
+#  square, under a fiftieth on the ratio), reached exactly by the running.
+# ============================================================================
+
+import "../constants/electroweak_mixing.ep"
+
+
+# The squared W-to-Z mass ratio: the cosine-squared of the mixing angle, 3/4.
+define w_to_z_mass_squared returning Fraction:
+    return cos_squared_mixing()
+
+# The cosine-squared along the forced running curve at covering level k:
+# cos^2 = 1 - sin^2(k). The same running curve as sin^2(theta_W), carrying the
+# boson-mass ratio to measurement.
+define cos_squared_at_level with level as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set sin_squared to weak_mixing_at_level(level)
+    return fraction_subtract(one and sin_squared)
