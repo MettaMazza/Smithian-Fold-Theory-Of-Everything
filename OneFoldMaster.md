@@ -1576,6 +1576,30 @@ the closing depth is colour = 3, giving atomic branch weight `1/2³ = 1/8`.
 
 ---
 
+### Step 39 — Self-organisation (order with no outside hand)
+
+**File:** `constants/self_organization.ep`
+
+**What it does.** A self-organised state is one the dynamics *return to* on their own
+— a closed orbit. The fold has one already at the binary scale: `fold(1/3) = 2/3`,
+`fold(2/3) = 1/3` — a period-2 cycle whose length is exactly the fold period of
+`1/3` (the binary generator, Step 27), the two states partitioning the One
+(`1/3 + 2/3 = 1`). Order sustains itself, its period forced to 2.
+
+```
+=== self-organisation ===
+  ok    fold(1/3) = 2/3 (first advances to second)
+  ok    fold(2/3) = 1/3 (second returns to first)
+  ok    orbit partitions the One (1/3 + 2/3 = 1)
+  ok    orbit period (= period(1/3) = binary)
+```
+
+**To measurement.** Self-organising systems settle onto stable cycles without
+external tuning — the forced content is exact: a closed fold-orbit at the binary
+scale, period exactly 2, states summing to the One (an identity, not an estimate).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1677,6 +1701,8 @@ runs):**
   doubles per step (`2^d` copies at depth `d`) — forced copying and growth.
 - Step 38 — the measurement branch weight: binary halving to the colour depth gives
   the atomic branch weight `1 / binary^colour = 1/2³ = 1/8` — an indivisible outcome.
+- Step 39 — self-organisation: the fold's closed binary orbit `1/3 ↔ 2/3` (period
+  exactly 2 = period(1/3), states summing to the One) — order that sustains itself.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

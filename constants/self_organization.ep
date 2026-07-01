@@ -1,0 +1,66 @@
+# ============================================================================
+#  SELF-ORGANISATION  --  why order arises with no outside hand, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Systems left to themselves fall into stable, repeating patterns -- rhythms,
+#  cycles, structure -- with nothing tuning them from outside. For that to be
+#  possible, the underlying dynamics must have closed orbits it settles onto. The
+#  fold has them, and forces the smallest.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A self-organised state is one the dynamics RETURN to on their own -- a closed
+#  orbit, not a fixed input. The fold has such an orbit already at the binary scale:
+#       fold(1/3) = 2/3 ,   fold(2/3) = 1/3 .
+#  The two states map into each other and close after two steps -- a period-2 cycle,
+#  and its length is exactly the fold period of 1/3, which is the binary generator
+#  (Step 27: period(1/3) = order of 2 mod 3 = 2). The pair also partitions the One:
+#  1/3 + 2/3 = 1. So the fold spontaneously sustains a closed, balanced rhythm with
+#  nothing driving it -- order from the operation itself, its period forced to 2.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Self-organising systems settle onto stable cycles (limit cycles / attractors)
+#  without external tuning. The forced content is exact: the fold has a closed orbit
+#  at the binary scale with period exactly 2, the states summing to the One -- the
+#  comparison is an identity, not an approximation.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two states of the orbit.
+define first_state returning Fraction:
+    return fraction_from_ratio(1 and 3)
+
+define second_state returning Fraction:
+    return fraction_from_ratio(2 and 3)
+
+# The fold carries the first state to the second: fold(1/3) = 2/3.
+define first_advances_to_second returning Fraction:
+    return fold_fraction(first_state())
+
+# ...and the second back to the first: fold(2/3) = 1/3. The orbit closes.
+define second_returns_to_first returning Fraction:
+    return fold_fraction(second_state())
+
+# The orbit is closed and balanced: the two states sum to the One.
+define orbit_partitions_one returning Bool:
+    set both to fraction_add(first_state() and second_state())
+    return fraction_is_equal(both and fraction_from_whole_number(1))
+
+# The orbit's period: the fold period of 1/3, which is the binary generator 2.
+# Forced two ways -- as the orbit length and as the counted generator; halts on any
+# mismatch.
+define orbit_period returning Int:
+    set by_orbit to fold_period_of_unit_fraction(3)
+    set by_binary to binary_count()
+    return forced_to_be("self-organisation orbit period = period(1/3) = binary" and by_orbit and by_binary)

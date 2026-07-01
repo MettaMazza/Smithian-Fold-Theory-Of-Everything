@@ -1,0 +1,23 @@
+import "../constants/self_organization.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== self-organisation ==="
+    set ok to expect_equal("fold(1/3) = 2/3 (first advances to second)" and fraction_to_text(first_advances_to_second()) and "2/3")
+    set ok to expect_equal("fold(2/3) = 1/3 (second returns to first)" and fraction_to_text(second_returns_to_first()) and "1/3")
+    set ok to expect_bool("orbit partitions the One (1/3 + 2/3 = 1)" and orbit_partitions_one())
+    set ok to expect_number("orbit period (= period(1/3) = binary)" and orbit_period() and 2)
+    display "=== done ==="
+    return 0

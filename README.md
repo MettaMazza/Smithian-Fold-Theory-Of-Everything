@@ -40,6 +40,10 @@ nothing added, the model reaches:
 | Strong-force gluons | `colour² − 1 = 8` | `8` | exact |
 | Neutrino mixing (PMNS) | `1/2, 1/3, 1/48` | `0.545, 0.307, 0.022` | reactor angle forced **nonzero** |
 | Cosmic energy budget | `Ω_Λ=2/3, Ω_m=1/3, Ω_b=5/96, Ω_cdm=9/32` | Planck | a few percent |
+| Speed of light `c` | `= the One = 1` (exact) | metre *defined* via `c` | light = gravity to **1 part in 10¹⁵** (GW170817) |
+| Dark-energy `w` | `−1` (exact) | `−1.03 ± 0.03` | forced value inside 1σ |
+| Primordial tilt `n_s` | `< 1` (red, forced sign) | `0.9649 ± 0.0042` | **>8σ** below 1, as forced |
+| Strong running slope | `= 2` (exact) vs `0` for EM | QCD asymptotic freedom | exact sign + rational |
 
 And the structural laws of physics, forced the same way:
 
@@ -49,11 +53,19 @@ And the structural laws of physics, forced the same way:
 - **The arrow of time** — the fold loses one bit per step; entropy must increase.
 - **The uncertainty principle** — a forced counting bound on conjugate supports.
 - **Spin and statistics** — fermions and bosons, exactly two kinds, no third.
-- **Asymptotic freedom** — the strong force grows with range; the photon's does not.
-- **Maximal CP violation**, the **Dirac g-factor `g = 2`**, and more.
+- **Asymptotic freedom** — the strong coupling's running slope is *exactly* `2`; the
+  photon's is *exactly* `0` (flat).
+- **The four thermodynamic laws**, **maximal CP violation**, the **Dirac g-factor
+  `g = 2`**, the **Higgs vacuum** displaced to the half-One, and **dark energy** as
+  the fold-invariant One (`w = −1`).
+- **Spacetime is `3 + 1`**, the **eight gluons**, **baryogenesis** (the three
+  Sakharov conditions, each a fold fact), and the **red-tilted inflationary spectrum**.
+- **Life's own structure** — the **genetic code** (`4` bases, triplet codons, `64`
+  codons), **self-replication** (two-to-one covering, doubling per step), and
+  **self-organisation** (closed fold-orbits) — forced from the same One.
 
-The full, ordered, run-it-yourself derivation of all of it is in
-[`OneFoldMaster.md`](OneFoldMaster.md).
+The full, ordered, run-it-yourself derivation of all of it — every step, all 39 test
+suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---
 
