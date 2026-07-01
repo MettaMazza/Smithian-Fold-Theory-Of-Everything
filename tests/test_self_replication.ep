@@ -1,0 +1,26 @@
+import "../constants/self_replication.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== self-replication ==="
+    set ok to expect_bool("template folds to the pattern (1/4 -> 1/2)" and template_folds_to_pattern())
+    set ok to expect_bool("copy folds to the same pattern (3/4 -> 1/2)" and copy_folds_to_pattern())
+    set ok to expect_bool("template + copy partition the One (distinct, sum 1)" and template_and_copy_partition_one())
+    set ok to expect_number("copies at depth 0 = 1" and copies_at_depth(0) and 1)
+    set ok to expect_number("copies at depth 1 = 2" and copies_at_depth(1) and 2)
+    set ok to expect_number("copies at depth 2 = 4" and copies_at_depth(2) and 4)
+    set ok to expect_number("copies at depth 3 = 8" and copies_at_depth(3) and 8)
+    display "=== done ==="
+    return 0

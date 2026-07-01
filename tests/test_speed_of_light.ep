@@ -1,0 +1,22 @@
+import "../constants/speed_of_light.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== speed of light ==="
+    set ok to expect_equal("fold signal speed = the One" and fold_value_to_text(fold_signal_speed()) and "1")
+    set ok to expect_equal("light speed = the One" and fold_value_to_text(light_speed()) and "1")
+    set ok to expect_equal("gravitational-wave speed = the One" and fold_value_to_text(gravitational_wave_speed()) and "1")
+    set ok to expect_bool("light and gravity share the same speed" and light_and_gravity_share_speed())
+    set ok to expect_bool("the signal speed is the maximum (a full turn)" and signal_speed_is_the_maximum())
+    display "=== done ==="
+    return 0

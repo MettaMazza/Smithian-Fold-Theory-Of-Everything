@@ -1,0 +1,74 @@
+# ============================================================================
+#  SELF-REPLICATION  --  why a pattern can copy itself, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Life copies patterns: one template becomes two, two become four. For that to be
+#  possible at all, the underlying structure must let a single state have MORE THAN
+#  ONE source that reproduces it. Where does the copying capacity come from?
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold is two-to-one. A pattern (an image) does not have a unique ancestor --
+#  it has exactly TWO preimages, both of which fold onto it. Take the pattern 1/2:
+#       fold(1/4) = 1/2 ,   fold(3/4) = 1/2 .
+#  So 1/4 (the template) and 3/4 (the copy) are two distinct states that both
+#  produce the same pattern -- a template and its duplicate. Together they partition
+#  the One: 1/4 + 3/4 = 1. That is one pattern held in two copies, exactly.
+#    Run it forward and the copies DOUBLE every step: the preimage tree of any
+#  pattern has binary^d = 2^d members at depth d (each fold-level splits every
+#  ancestor into its two preimages). One becomes two becomes four -- exponential
+#  replication, with the base fixed at the binary generator 2. The copying is the
+#  fold's two-to-one structure, iterated.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Self-replicating systems (from DNA to autocatalytic sets) copy by templating and
+#  grow by doubling generations. The forced content is structural: the fold's
+#  two-to-one covering gives every pattern two reproducing sources and a per-step
+#  doubling -- which is what "a pattern can copy itself" requires.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The pattern being copied.
+define pattern returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The template -- one preimage of the pattern.
+define template returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The copy -- the OTHER preimage of the same pattern.
+define copy returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# The template folds onto the pattern.
+define template_folds_to_pattern returning Bool:
+    return fraction_is_equal(fold_fraction(template()) and pattern())
+
+# The copy folds onto the SAME pattern -- it is a genuine duplicate.
+define copy_folds_to_pattern returning Bool:
+    return fraction_is_equal(fold_fraction(copy()) and pattern())
+
+# Template and copy are distinct states that together partition the One.
+define template_and_copy_partition_one returning Bool:
+    set both to fraction_add(template() and copy())
+    set is_whole to fraction_is_equal(both and fraction_from_whole_number(1))
+    set distinct to fraction_is_equal(template() and copy())
+    if is_whole:
+        if distinct:
+            return false
+        return true
+    return false
+
+# Copies double every generation: at depth d there are binary^d = 2^d of them.
+define copies_at_depth with depth as Int returning Int:
+    return whole_power(binary_count() and depth)

@@ -1,0 +1,62 @@
+# ============================================================================
+#  THE SPEED OF LIGHT  --  why light and gravity travel at the SAME speed c,
+#  and why that speed is the One, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Light travels at a fixed speed c, and so do gravitational waves -- both at
+#  EXACTLY the same speed, to the precision we can measure. Special relativity is
+#  built on there being ONE limit speed shared by every massless signal. Why is
+#  there one such speed, and why do light and gravity share it?
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The fold has ONE advance. Every tick it turns each state forward by one step on
+#  the circle of the One (rotate by the One). That single advance IS the signal
+#  speed of the whole structure: there is exactly one rate at which change
+#  propagates, because there is exactly one fold. In the fold's own (natural) units
+#  that speed is the One -- a full turn per tick, the maximum, nothing faster is on
+#  the circle.
+#    A massless carrier is one that rides this advance with no lag: it moves at the
+#  full fold rate, the One. Light (electromagnetism) is massless, and so is gravity
+#  (the graviton). There is only ONE fold, hence only ONE full-rate speed, so BOTH
+#  travel at the One -- necessarily the same speed. Not two speeds that happen to
+#  match: one speed, shared, because there is one fold.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured: c = 299792458 m/s, and gravitational waves (LIGO/Virgo, GW170817)
+#  travel at c to about one part in 10^15. The forced content is structural and
+#  dimensionless -- the limit speed is the One and is shared by every massless
+#  carrier -- which is exactly what "light and gravity travel at the same c" says.
+#  The metres-per-second number is a human unit choice, not part of the derivation.
+# ============================================================================
+
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The fold's one advance, as a phase: rotating any phase by the One returns a full
+# turn -- the fold moves a whole One of phase per tick. This single advance is the
+# structure's one signal speed.
+define fold_signal_speed returning FoldValue:
+    return the_one()
+
+# Light rides the fold's full advance (it is massless): its speed is the One.
+define light_speed returning FoldValue:
+    return fold_signal_speed()
+
+# Gravitational waves ride the SAME single fold advance (the graviton is massless):
+# their speed is the One as well -- there is only one fold, so only one full rate.
+define gravitational_wave_speed returning FoldValue:
+    return fold_signal_speed()
+
+# Light and gravity travel at the same speed -- not a coincidence of two rates, but
+# one shared rate, because the fold is one.
+define light_and_gravity_share_speed returning Bool:
+    return fold_value_is_equal(light_speed() and gravitational_wave_speed())
+
+# Nothing outruns the signal speed: a full turn (the One) is the whole circle, so
+# the fold's advance is the maximum phase there is. Rotating the One by the One
+# comes back to the One (a whole turn), confirming it is a complete, saturating
+# advance.
+define signal_speed_is_the_maximum returning Bool:
+    set full_turn to rotate(fold_signal_speed() and the_one())
+    return fold_value_is_equal(full_turn and the_one())

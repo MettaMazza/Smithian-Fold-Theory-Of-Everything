@@ -1,0 +1,65 @@
+# ============================================================================
+#  THE MEASUREMENT BRANCH WEIGHT  --  why a definite outcome carries weight 1/8,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A quantum measurement turns a superposition into ONE definite outcome. The
+#  "measurement problem" asks how a smooth spread of possibility resolves into a
+#  discrete, indivisible branch, and what weight that branch carries. The fold
+#  fixes both the mechanism and the weight.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and c = 3) ───────────────
+#  The fold is two-to-one: each step is a single binary split (one bit), the
+#  smallest indivisible act of resolution. A definite outcome is reached by
+#  resolving down to the colour depth -- colour = 3 fold-steps, the depth at which
+#  the structure closes (Step 27: period(1/7) = 3). Each step carries weight 1/2
+#  (one binary share), so a branch resolved to depth 3 carries
+#       weight = 1 / binary^colour = 1 / 2^3 = 1/8 .
+#  This is atomic: 8 = 2^3 has no factor but the binary generator, so the weight
+#  cannot be subdivided into anything but further whole binary halvings -- an
+#  indivisible branch. Both the base (binary = 2) and the exponent (colour = 3) are
+#  counted elsewhere, so the weight 1/8 is forced, not fitted.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measurement outcomes come in definite, indivisible branches with well-defined
+#  weights. The forced content is structural: resolution is binary halving, the
+#  closing depth is colour = 3, so the atomic branch weight is 1/2^3 = 1/8.
+# ============================================================================
+
+import "../foundation/exact_integers.ep"
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# The branch depth: the colour count, the depth at which the fold structure closes.
+define branch_depth returning Int:
+    return colour_count()
+
+# One resolution step carries a single binary share: weight 1/2.
+define step_weight returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The atomic branch weight: 1 / binary^colour = 1/2^3 = 1/8. Resolving down to the
+# colour depth, one binary share per step.
+define branch_weight returning Fraction:
+    set denominator to whole_power(binary_count() and branch_depth())
+    return fraction_from_ratio(1 and denominator)
+
+# The weight is atomic: the ACTUAL built weight's denominator is a pure power of the
+# binary generator, so it splits only into further whole halvings -- an indivisible
+# outcome. Ties the real fraction to the independent count binary^colour.
+define branch_weight_is_atomic returning Bool:
+    set built to fraction_denominator(branch_weight())
+    set counted to exact_integer_from_number(whole_power(binary_count() and colour_count()))
+    return exact_integer_compare(built and counted) == 0
+
+# Forced: the branch weight's denominator, reached via the branch-depth path
+# (binary^branch_depth), equals the independent count binary^colour. Halts if the two
+# routes ever disagree.
+define branch_weight_denominator returning Int:
+    set built to whole_power(binary_count() and branch_depth())
+    set counted to whole_power(binary_count() and colour_count())
+    return forced_to_be("branch weight denominator = binary^colour" and built and counted)

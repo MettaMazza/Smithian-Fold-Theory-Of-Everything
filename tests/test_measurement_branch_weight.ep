@@ -1,0 +1,24 @@
+import "../constants/measurement_branch_weight.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== measurement branch weight ==="
+    set ok to expect_number("branch depth = colour = 3" and branch_depth() and 3)
+    set ok to expect_equal("step weight = 1/2" and fraction_to_text(step_weight()) and "1/2")
+    set ok to expect_equal("branch weight = 1/8" and fraction_to_text(branch_weight()) and "1/8")
+    set ok to expect_bool("branch weight is atomic (denominator = 2^3)" and branch_weight_is_atomic())
+    set ok to expect_number("forced denominator = binary^colour = 8" and branch_weight_denominator() and 8)
+    display "=== done ==="
+    return 0

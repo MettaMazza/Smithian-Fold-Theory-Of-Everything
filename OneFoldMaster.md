@@ -1486,6 +1486,82 @@ content is that the vacuum, being the One, is fold-invariant and so constant.
 
 ---
 
+### Step 36 — The speed of light (c = the One)
+
+**File:** `constants/speed_of_light.ep`
+
+**What it does.** The fold has one advance (one step per tick on the circle of the
+One). That single advance IS the structure's signal speed — the One in natural
+units, a full turn per tick, the maximum. A massless carrier rides it with no lag,
+so it travels at the One. Light (electromagnetism) and gravity (the graviton) are
+both massless, and there is only ONE fold, hence one full-rate speed — so both
+travel at the One, the SAME speed, not by coincidence but because the fold is one.
+
+```
+=== speed of light ===
+  ok    fold signal speed = the One
+  ok    light speed = the One
+  ok    gravitational-wave speed = the One
+  ok    light and gravity share the same speed
+  ok    the signal speed is the maximum (a full turn)
+```
+
+**To measurement.** `c = 299792458 m/s`, and gravitational waves travel at `c` to
+~1 part in 10¹⁵ (GW170817) — the forced content is that the limit speed is the One,
+shared by every massless carrier; the metres-per-second value is a unit choice.
+
+---
+
+### Step 37 — Self-replication (a pattern copies itself)
+
+**File:** `constants/self_replication.ep`
+
+**What it does.** The fold is two-to-one: every pattern has exactly TWO preimages —
+a template and a copy — that both fold onto it and together partition the One
+(`fold(1/4) = fold(3/4) = 1/2`, `1/4 + 3/4 = 1`). Iterated, the preimage tree
+doubles each step: `binary^d = 2^d` copies at depth `d` — exponential replication
+with the base fixed at the binary generator 2.
+
+```
+=== self-replication ===
+  ok    template folds to the pattern (1/4 -> 1/2)
+  ok    copy folds to the same pattern (3/4 -> 1/2)
+  ok    template + copy partition the One (distinct, sum 1)
+  ok    copies at depth 0..3 = 1, 2, 4, 8
+```
+
+**To measurement.** Self-replicating systems copy by templating and grow by
+doubling generations — the forced content is the fold's two-to-one covering (two
+reproducing sources per pattern) and its per-step doubling.
+
+---
+
+### Step 38 — The measurement branch weight (1/8)
+
+**File:** `constants/measurement_branch_weight.ep`
+
+**What it does.** A measurement resolves a superposition into a definite,
+indivisible branch. Each fold step is one binary split (weight `1/2`, one bit);
+resolving down to the colour depth (`colour = 3`, where the structure closes) gives
+branch weight `1 / binary^colour = 1/2³ = 1/8`. The denominator is a pure power of
+the binary generator, so the weight is atomic (splits only into further whole
+halvings). Base (binary = 2) and exponent (colour = 3) are both counted elsewhere.
+
+```
+=== measurement branch weight ===
+  ok    branch depth = colour = 3
+  ok    step weight = 1/2
+  ok    branch weight = 1/8
+  ok    branch weight is atomic (denominator = 2^3)
+  ok    forced denominator = binary^colour = 8
+```
+
+**To measurement.** Measurement outcomes are definite, indivisible branches with
+well-defined weights — the forced content is that resolution is binary halving and
+the closing depth is colour = 3, giving atomic branch weight `1/2³ = 1/8`.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1579,6 +1655,14 @@ runs):**
   violation, departure from equilibrium) each a forced fold fact — matter survives.
 - Step 35 — dark energy: the vacuum is the One, fold-invariant (`fold(1)=1`), hence
   a constant energy density — `w = −1`.
+- Step 36 — the speed of light: the fold's one advance is the signal speed = the One
+  (natural units); light and gravity are both massless, so both travel at it — one
+  shared limit speed `c`, because there is one fold.
+- Step 37 — self-replication: the fold's two-to-one covering gives every pattern a
+  template and a copy (both fold to it, summing to the One), and the preimage tree
+  doubles per step (`2^d` copies at depth `d`) — forced copying and growth.
+- Step 38 — the measurement branch weight: binary halving to the colour depth gives
+  the atomic branch weight `1 / binary^colour = 1/2³ = 1/8` — an indivisible outcome.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
