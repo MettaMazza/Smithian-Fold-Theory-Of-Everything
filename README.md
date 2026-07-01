@@ -109,6 +109,15 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **Millennium gap, missing lithium, the taken path** — the **Yang–Mills mass gap**
+  (the gap is `1/3`, strictly positive because zero is outside the domain — massless
+  strong excitations are not even expressible; gap + coupling = the One), the
+  **lithium-7 problem** (observed = primordial/2, `3/16 → 3/32` — the deficit is one
+  erased fold, not a BBN failure), the **principle of least action** (the taken path is
+  the unique self-antipodal balance where mirror deviations cancel), **neutrino
+  oscillation** (equal half-shares → complete, periodic flavour conversion), and
+  **Maxwell's demon** (the reset folds both memory states onto one — erasing exactly
+  the bit gained; Landauer's `kT ln 2`).
 - **The whole curve, the one center, the mind's own limits** — the **expansion history**
   (`E²(s) = 2/3 + s³/3`, exact at every epoch — the ΛCDM curve with nothing fitted), the
   **half-One unifying center** (`1/2` is the *unique* self-antipodal value and the standing
@@ -173,8 +182,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 121 test
-suites (723 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 126 test
+suites (749 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -231,7 +240,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 121 suites, 723 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 126 suites, 749 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

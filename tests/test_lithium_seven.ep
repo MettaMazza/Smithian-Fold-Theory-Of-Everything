@@ -1,0 +1,21 @@
+import "../constants/lithium_seven.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the lithium-7 problem (the deficit is one fold) ==="
+    set ok to expect_equal("primordial Li-7 share = 3/16" and fraction_to_text(primordial_lithium()) and "3/16")
+    set ok to expect_equal("stellar depletion = one fold = 1/2" and fraction_to_text(depletion_factor()) and "1/2")
+    set ok to expect_equal("observed surface share = 3/32" and fraction_to_text(observed_lithium()) and "3/32")
+    set ok to expect_bool("observed doubled restores primordial (deficit IS the fold)" and observed_doubled_restores_primordial())
+    display "=== done ==="
+    return 0

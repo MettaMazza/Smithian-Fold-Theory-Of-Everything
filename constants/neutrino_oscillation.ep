@@ -1,0 +1,62 @@
+# ============================================================================
+#  NEUTRINO OSCILLATION  --  why flavours convert completely, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Neutrinos change identity in flight: a muon-neutrino leaves, a tau-neutrino
+#  arrives. The discovery (Super-Kamiokande, SNO) proved neutrinos have mass and won
+#  the 2015 Nobel prize. The striking observed fact is that the atmospheric conversion
+#  is COMPLETE -- the flavours swap fully, not partially. Forced: the mixing sits at
+#  the equal-share balance.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A propagating neutrino is a superposition of two mass states. The observed flavour
+#  oscillates as the two components slide in phase; the DEPTH of the conversion is set
+#  by the mixing share. The atmospheric sector's share is the self-antipodal balance
+#  1/2 (neutrino_mixing.ep forces sin^2 = 1/2): each mass state carries exactly half
+#  the flavour, and the two half-shares sum to the One (1/2 + 1/2 = 1) -- so at the
+#  swing's peak the conversion is COMPLETE, nothing held back. The balance folds to
+#  unison (fold(1/2) = 1): the swap closes and the cycle repeats -- oscillation, not a
+#  one-way decay. A lopsided share could not empty the original flavour; only the
+#  balance converts fully.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: equal half-shares, complete periodic conversion.
+#  Measured: atmospheric muon-neutrinos show full depth-of-oscillation (sin^2(2theta)
+#  consistent with 1 -- maximal), returning periodically with distance over energy, as
+#  the balance forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The mixing share: each mass state carries half the flavour, 1/2.
+define mixing_share returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The two half-shares sum to the One: conversion at full swing is COMPLETE.
+define conversion_is_complete returning Fraction:
+    set share to mixing_share()
+    return fraction_add(share and share)
+
+# The balance folds to unison: the swap closes and repeats -- an oscillation.
+define swap_closes returning Fraction:
+    return fold_fraction(mixing_share())
+
+# A lopsided share cannot fully convert: its complement differs from it.
+define lopsided_cannot_fully_convert returning Bool:
+    set lopsided to fraction_from_ratio(1 and colour_count())
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and lopsided)
+    set balanced to fraction_is_equal(complement and lopsided)
+    if balanced:
+        return 1 == 0
+    return 1 == 1

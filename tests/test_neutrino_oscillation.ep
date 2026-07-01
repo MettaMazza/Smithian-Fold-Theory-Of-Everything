@@ -1,0 +1,21 @@
+import "../constants/neutrino_oscillation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== neutrino oscillation (complete conversion) ==="
+    set ok to expect_equal("mixing share = 1/2 (each mass state carries half)" and fraction_to_text(mixing_share()) and "1/2")
+    set ok to expect_equal("conversion is COMPLETE (halves sum to the One)" and fraction_to_text(conversion_is_complete()) and "1")
+    set ok to expect_equal("the swap closes (folds to unison) and repeats" and fraction_to_text(swap_closes()) and "1")
+    set ok to expect_bool("a lopsided share cannot fully convert" and lopsided_cannot_fully_convert())
+    display "=== done ==="
+    return 0

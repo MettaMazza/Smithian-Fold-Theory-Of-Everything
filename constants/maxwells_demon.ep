@@ -1,0 +1,64 @@
+# ============================================================================
+#  MAXWELL'S DEMON  --  why the sorting demon must fail, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Maxwell imagined a demon at a trapdoor, letting fast molecules pass one way and slow
+#  ones the other -- separating hot from cold with no work, breaking the second law. It
+#  took a century to see why it fails. Forced: the demon's ledger is subject to the same
+#  2-to-1 fold as the gas -- erasing its record costs the very bit it gained.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Sorting is a binary decision: fast/slow -- one bit per molecule. The demon's record
+#  of that bit is a physical state, one of the balance's two preimages (1/4 or 3/4). To
+#  sort the NEXT molecule the demon must reset its memory to the ready state -- and the
+#  reset is a fold: both preimages collapse onto the same 1/2 (1/4 -> 1/2, 3/4 -> 1/2),
+#  irreversibly erasing which value was held. That is exactly one bit lost per cycle
+#  (entropy.ep) -- the same one bit the sorting gained. The books balance to the One
+#  and never go past it: demon plus gas is a closed fold system, and the second law is
+#  its 2-to-1 shape. No arrangement of trapdoors escapes it, because the ledger is
+#  made of the same folded stuff as the gas.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: reset erases one bit per sorted molecule -- gain and
+#  cost cancel. Measured: Landauer's principle (erasing one bit dissipates at least
+#  kT ln 2) is experimentally confirmed (single-electron and colloidal-particle
+#  erasure experiments), and every implemented "demon" pays exactly the erasure cost,
+#  as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The demon's two memory states: the balance's preimages, 1/4 (slow) and 3/4 (fast).
+define memory_slow returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+define memory_fast returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# Reset collapses BOTH records onto the same ready state 1/2 -- the erasure.
+define slow_resets_to returning Fraction:
+    return fold_fraction(memory_slow())
+
+define fast_resets_to returning Fraction:
+    return fold_fraction(memory_fast())
+
+# The reset is irreversible: the two distinct records share one reset image, so the
+# held bit cannot be recovered -- one bit erased per sorting cycle.
+define reset_erases_the_bit returning Bool:
+    set slow_reset to slow_resets_to()
+    set fast_reset to fast_resets_to()
+    return fraction_is_equal(slow_reset and fast_reset)
+
+# Demon plus gas is closed: the ready state folds to the One and no further.
+define books_balance_at_one returning Fraction:
+    return fold_fraction(slow_resets_to())

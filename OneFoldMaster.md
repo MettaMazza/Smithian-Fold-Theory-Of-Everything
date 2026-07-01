@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-121 suites, 723 forced checks, 0 failures). It needs nothing but a C compiler. Use
+126 suites, 749 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3233,6 +3233,59 @@ reachable — the construction neither wants nor uses a continuum.
 
 ---
 
+### Step 119 — The Yang–Mills mass gap (gap > 0, forced by the domain)
+
+**File:** `constants/yang_mills_mass_gap.ep`
+
+**What it does.** The Millennium question — prove the lightest strong excitation has
+strictly positive mass — has no separate content here: zero is outside the domain, so a
+massless strong excitation is not even *expressible*. The gap sits at the tripling position
+`1/3`, the self-coupling at `2/3`; they form a closed period-2 cycle (`1/3 ↔ 2/3`),
+partition the One, and their balance folds to unison. Gap > 0 is the No-Zero floor wearing
+its strong-sector face (lattice QCD and the ~1.7 GeV glueball agree).
+
+### Step 120 — The lithium-7 problem (the deficit is one fold)
+
+**File:** `constants/lithium_seven.ep`
+
+**What it does.** Primordial Li-7 share `3/16` (colour over the binary hypercube `2⁴`);
+stellar convection drags surface material through the burn — one binary fold, a halving —
+so the observed share is `3/16 · 1/2 = 3/32`, and doubling the observed restores the
+primordial exactly. The famous "missing lithium" is one erased level, not a BBN failure
+(stellar depletion is the standard resolution).
+
+### Step 121 — The principle of least action (the balanced path)
+
+**File:** `constants/least_action.ep`
+
+**What it does.** An extremum is two-sided balance, and the domain has exactly one such
+point: the self-antipodal `1/2`, where a deviation and its mirror carry equal weight and
+cancel — an off-balance point is lopsided and is not taken. The balanced path folds to
+unison; two half-weights carry the whole. Path-integral QM shows the *why*: off-balance
+paths cancel in pairs, the balanced one survives.
+
+### Step 122 — Neutrino oscillation (complete conversion)
+
+**File:** `constants/neutrino_oscillation.ep`
+
+**What it does.** Each mass state carries exactly half the flavour (`1/2`, the forced
+atmospheric balance), the halves sum to the One — so at full swing the conversion is
+**complete** — and the balance folds to unison, closing the swap into a repeating cycle.
+A lopsided share could not empty the original flavour. Measured: full-depth atmospheric
+oscillation (maximal `sin²2θ`), periodic in distance/energy.
+
+### Step 123 — Maxwell's demon (the ledger pays the bit back)
+
+**File:** `constants/maxwells_demon.ep`
+
+**What it does.** The demon's record is one of the balance's two preimages (`1/4`/`3/4`);
+resetting for the next molecule folds **both** onto the same ready state `1/2` — an
+irreversible erasure of exactly the one bit the sorting gained (entropy.ep). Demon plus
+gas is a closed fold system; the books balance at the One. Landauer's `kT ln 2` erasure
+cost is the measured face.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3503,6 +3556,16 @@ runs):**
   One — permanent unconscious processing is orbit structure, not effort shortage.
 - Step 118 — the continuum ladder: rung `1/2^k` reaches unison in `k` folds; the depth-5
   ladder plus its boundary closes exactly to the One — no continuum wanted or used.
+- Step 119 — the Yang–Mills mass gap: the gap is `1/3`, strictly positive because zero is
+  outside the domain — massless is not expressible; gap + coupling (`2/3`) = the One.
+- Step 120 — the lithium-7 problem: observed = primordial/2 (`3/16 → 3/32`) — the deficit
+  is one erased binary fold (stellar depletion), not a BBN failure.
+- Step 121 — least action: the taken path is the unique self-antipodal balance `1/2`
+  where mirror deviations cancel; off-balance paths are lopsided and cancel in pairs.
+- Step 122 — neutrino oscillation: equal half-shares (`1/2 + 1/2 = 1`) make the flavour
+  conversion complete, and the balance folds to unison — a closed, repeating swap.
+- Step 123 — Maxwell's demon: the reset folds both memory states (`1/4`, `3/4`) onto one
+  ready state — erasing exactly the bit gained (Landauer's `kT ln 2`); the books balance.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

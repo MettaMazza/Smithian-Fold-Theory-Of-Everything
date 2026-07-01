@@ -1,0 +1,22 @@
+import "../constants/least_action.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the principle of least action (the balanced path) ==="
+    set ok to expect_equal("the stationary point = 1/2 (self-antipodal)" and fraction_to_text(stationary_point()) and "1/2")
+    set ok to expect_bool("mirror deviations cancel there (stationarity)" and deviations_cancel())
+    set ok to expect_bool("an off-balance point is lopsided (not taken)" and off_balance_is_lopsided())
+    set ok to expect_equal("the balanced path completes (folds to the One)" and fraction_to_text(stationary_path_completes()) and "1")
+    set ok to expect_equal("two half-weights carry the whole" and fraction_to_text(half_weights_sum_to_whole()) and "1")
+    display "=== done ==="
+    return 0

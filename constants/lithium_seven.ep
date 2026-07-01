@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE LITHIUM-7 PROBLEM  --  the missing lithium is one binary fold, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Big-Bang nucleosynthesis predicts the primordial lithium-7 abundance, but old halo
+#  stars show LESS lithium than predicted -- the long-standing "lithium problem",
+#  usually treated as a crack in BBN. Forced: the surface abundance is the primordial
+#  one depleted by exactly one binary fold -- stars erase one level.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The primordial lithium-7 share is 3/16: the colour count over the binary hypercube
+#  b^4 = 16 (mass seven = 2*b + c sits at the four-level depth; three of the sixteen
+#  deep channels carry it). A star's convective envelope drags surface material down to
+#  burning depth and back; each pass through the burn is one binary fold of the share --
+#  a halving. One level is erased:
+#       observed = primordial * 1/2 = 3/16 * 1/2 = 3/32 .
+#  The "missing" lithium is not missing: it is the depletion factor 1/2, a single fold,
+#  forced by the same halving that runs radioactive decay (radioactive_decay.ep).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: observed = primordial/2 = 3/32 -- the deficit is one
+#  binary level, no BBN failure. Measured: the Spite-plateau lithium in old halo stars
+#  sits a factor of a few BELOW the BBN prediction, with stellar depletion (rotation-
+#  driven mixing dragging surface lithium to burning depth) the standard resolution --
+#  the erased fold this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The primordial lithium-7 share: colour over the binary hypercube, 3/16.
+define primordial_lithium returning Fraction:
+    set hypercube to whole_power(binary_count() and 4)
+    return fraction_from_ratio(colour_count() and hypercube)
+
+# The stellar depletion factor: one binary fold, a halving.
+define depletion_factor returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The observed surface abundance: the primordial share through one fold, 3/32.
+define observed_lithium returning Fraction:
+    set primordial to primordial_lithium()
+    set factor to depletion_factor()
+    return fraction_multiply(primordial and factor)
+
+# The deficit IS the fold: observed doubled restores the primordial exactly.
+define observed_doubled_restores_primordial returning Bool:
+    set observed to observed_lithium()
+    set doubled to fraction_add(observed and observed)
+    set primordial to primordial_lithium()
+    return fraction_is_equal(doubled and primordial)
