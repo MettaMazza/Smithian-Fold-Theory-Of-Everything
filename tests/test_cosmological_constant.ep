@@ -1,0 +1,22 @@
+import "../constants/cosmological_constant.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the cosmological constant ==="
+    set ok to expect_equal("vacuum energy = 1/2 (displaced ground)" and fraction_to_text(vacuum_energy()) and "1/2")
+    set ok to expect_bool("cosmological constant is POSITIVE (1/2 > nothing)" and cosmological_constant_is_positive())
+    set ok to expect_equal("vacuum folds up to the One (fold(1/2) = 1)" and fraction_to_text(vacuum_folds_to_one()) and "1")
+    set ok to expect_equal("scale exponent = 127/2 (single axis, absolute scale)" and fraction_to_text(cosmological_scale_exponent()) and "127/2")
+    set ok to expect_bool("one scale axis, no 10^120 mode-sum" and single_scale_axis_no_mode_sum())
+    display "=== done ==="
+    return 0

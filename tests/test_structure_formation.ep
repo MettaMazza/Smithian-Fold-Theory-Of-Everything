@@ -1,0 +1,21 @@
+import "../constants/structure_formation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== structure formation ==="
+    set ok to expect_equal("growth step one: fold(1/4) = 1/2" and fraction_to_text(perturbation_after_one_step()) and "1/2")
+    set ok to expect_equal("growth step two: fold(1/2) = 1" and fraction_to_text(perturbation_after_two_steps()) and "1")
+    set ok to expect_bool("the perturbation GROWS (does not decay)" and perturbation_grows())
+    set ok to expect_bool("the perturbation reaches unison (a structure) in two steps" and perturbation_reaches_unison())
+    display "=== done ==="
+    return 0

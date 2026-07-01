@@ -1,0 +1,62 @@
+# ============================================================================
+#  STRUCTURE FORMATION  --  why tiny early ripples grow into galaxies, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The early universe was almost perfectly smooth -- density varied by only about one
+#  part in 100,000. Yet those faint ripples grew into galaxies, clusters, and the
+#  cosmic web. Something must AMPLIFY small perturbations rather than smoothing them
+#  away. Gravity does it in physics; the fold does it here.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The fold is expansive: below the balance point it DOUBLES a value upward, driving
+#  it toward the One rather than back to nothing. A small early over-density, the
+#  perturbation 1/4, grows under the fold:
+#       fold(1/4) = 1/2 ,   fold(1/2) = 1 .
+#  In two steps the faint ripple has climbed all the way to unison -- the seed has
+#  become a fully formed structure. The fold has no attractor at nothing (zero is
+#  forbidden) and one at the One, so perturbations grow, they do not decay: an
+#  instability, exactly the gravitational one that builds cosmic structure.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured: primordial fluctuations of ~10^-5 (CMB) grew by gravitational
+#  instability into today's galaxies and cosmic web. The forced content is exact: the
+#  fold amplifies a sub-balance perturbation upward to the One (growth, not decay),
+#  which is what turns a smooth early universe into a structured one.
+# ============================================================================
+
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A small early over-density: the perturbation 1/4, below the balance point.
+define perturbation returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# One step of growth: fold(1/4) = 1/2 -- the ripple has doubled upward.
+define perturbation_after_one_step returning Fraction:
+    return fold_fraction(perturbation())
+
+# Two steps of growth: fold(1/2) = 1 -- grown all the way to unison, a structure.
+define perturbation_after_two_steps returning Fraction:
+    set once to perturbation_after_one_step()
+    return fold_fraction(once)
+
+# The perturbation GROWS (does not decay): after one step it is strictly larger than
+# it started -- an instability, the seed of structure.
+define perturbation_grows returning Bool:
+    set start to perturbation()
+    set stepped to perturbation_after_one_step()
+    set order to fraction_compare(stepped and start)
+    if order > 0:
+        return true
+    return false
+
+# The perturbation reaches the One (full structure) in two steps.
+define perturbation_reaches_unison returning Bool:
+    return fraction_is_equal(perturbation_after_two_steps() and fraction_from_whole_number(1))

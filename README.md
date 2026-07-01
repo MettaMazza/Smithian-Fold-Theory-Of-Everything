@@ -61,10 +61,15 @@ And the structural laws of physics, forced the same way:
 - **Spacetime is `3 + 1`**, the **eight gluons**, **baryogenesis** (the three
   Sakharov conditions, each a fold fact), and the **red-tilted inflationary spectrum**.
 - **Life's own structure** — the **genetic code** (`4` bases, triplet codons, `64`
-  codons), **self-replication** (two-to-one covering, doubling per step), and
-  **self-organisation** (closed fold-orbits) — forced from the same One.
+  codons), **self-replication** (two-to-one covering, doubling per step),
+  **self-organisation** (closed fold-orbits), and **protein folding** (a directed
+  descent to one native fixed point — Levinthal's paradox dissolves) — from the One.
+- **Two famous problems dissolve, not solved-by-tuning** — the **cosmological
+  constant** (vacuum forced positive on a single `127/2` scale axis, so the 10¹²⁰
+  mode-sum never arises) and **structure formation** (the fold amplifies tiny
+  perturbations upward to the One — the gravitational instability that builds galaxies).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 39 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 42 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---
