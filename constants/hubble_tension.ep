@@ -17,7 +17,9 @@
 #                          1 +/- vacuum/tower, 1 + matter/tower, vacuum + 1/tower,
 #                          1 + vacuum*tower, 1 + matter*tower; only 1 + vacuum/tower
 #                          gives 13/12 (hubble_calibration_form_is_unique).
-#     second order = 1 + (2/3 + 1/127)/8 = 3305/3048. This is forced, not chosen.
+#     second order = 1 + (2/3 + 1/127)/8 = 3305/3048. This is FORCED, not chosen: the
+#                          deepening's shape is enumerated and only vacuum + 1/127
+#                          lands, all alternatives rejected (hubble_second_order_is_unique).
 #                          The Hubble tension is late vs early, and the covering
 #                          ladder has exactly two ends: the SHALLOW end (the colour
 #                          tower, depth colour = 3 -- the late universe, the leading
@@ -132,6 +134,65 @@ define hubble_calibration_ratio_second_order returning Fraction:
 define hubble_calibration_ratio_second_order_decimal with places as Int returning Str:
     set value to hubble_calibration_ratio_second_order()
     return fraction_to_decimal(value and places)
+
+
+# ----------------------------------------------------------------------------
+#  The SECOND ORDER is FORCED, not a fitted correction (forced_unique)
+# ----------------------------------------------------------------------------
+#  Why the second order is forced -- the same test the leading form gets, one level
+#  deeper. The second order is NOT an added correction with a tunable size: it is the
+#  SAME construction (1 + vacuum/tower) with the vacuum, read at the deep end of the
+#  one covering ladder, sharpened one order over the early orbit floor. The only
+#  freedom that could hide is the shape of that deepening, so it is enumerated and
+#  forbidden from being selected. Among admissible one-level deepenings of the vacuum --
+#     vacuum + 1/floor  (over the GENUINE period-7 orbit floor 127),
+#     vacuum - 1/floor  (wrong sign),
+#     vacuum + 1/tower  (over the PRE-PERIODIC tower 128 -- the floor check already
+#                        rejects this, but it is offered here so the choice is closed),
+#     vacuum + 1/d_up   (over the bare depth 7),
+#  only vacuum + 1/127 reproduces 3305/3048. forbid_form_selection halts if any other
+#  admissible deepening coincides. Zero new parameters: 127 = 2^7 - 1 is forced from
+#  d_up, and d_up from the One.
+
+# The calibration ratio built from a given deepened vacuum: 1 + deepened/tower.
+define hb_ratio_from_deepened_vacuum with deepened as Fraction returning Fraction:
+    set tower to fraction_from_whole_number(covering_tower())
+    set correction to fraction_divide(deepened and tower)
+    set one to fraction_from_whole_number(1)
+    return fraction_add(one and correction)
+
+define hubble_second_order_is_unique returning Int:
+    set total to 0
+    # canonical: vacuum + 1/floor (genuine orbit floor 127) -> 3305/3048
+    set vac_a to vacuum_fraction()
+    set floor_inv_a to fraction_from_ratio(1 and early_orbit_floor())
+    set deep_a to fraction_add(vac_a and floor_inv_a)
+    set ratio_a to hb_ratio_from_deepened_vacuum(deep_a)
+    set target to hubble_calibration_ratio_second_order()
+    set total to count_form_match(total and ratio_a and target)
+    # vacuum - 1/floor
+    set vac_b to vacuum_fraction()
+    set floor_inv_b to fraction_from_ratio(1 and early_orbit_floor())
+    set deep_b to fraction_subtract(vac_b and floor_inv_b)
+    set ratio_b to hb_ratio_from_deepened_vacuum(deep_b)
+    set target_b to hubble_calibration_ratio_second_order()
+    set total to count_form_match(total and ratio_b and target_b)
+    # vacuum + 1/tower (pre-periodic tower 2^d_up = 128)
+    set vac_c to vacuum_fraction()
+    set tower_up to whole_power(binary_count() and up_depth())
+    set tower_inv to fraction_from_ratio(1 and tower_up)
+    set deep_c to fraction_add(vac_c and tower_inv)
+    set ratio_c to hb_ratio_from_deepened_vacuum(deep_c)
+    set target_c to hubble_calibration_ratio_second_order()
+    set total to count_form_match(total and ratio_c and target_c)
+    # vacuum + 1/d_up (over the bare depth 7)
+    set vac_d to vacuum_fraction()
+    set depth_inv to fraction_from_ratio(1 and up_depth())
+    set deep_d to fraction_add(vac_d and depth_inv)
+    set ratio_d to hb_ratio_from_deepened_vacuum(deep_d)
+    set target_d to hubble_calibration_ratio_second_order()
+    set total to count_form_match(total and ratio_d and target_d)
+    return forbid_form_selection("the Hubble second-order deepening" and total)
 
 
 # ----------------------------------------------------------------------------

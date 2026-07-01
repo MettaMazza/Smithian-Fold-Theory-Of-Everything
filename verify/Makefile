@@ -19,8 +19,10 @@ all: $(BINARIES)
 check: all
 	@fail=0; \
 	for b in $(BINARIES); do \
-	  out="$$(./$$b)"; \
-	  if printf '%s\n' "$$out" | grep -q FAIL; then \
+	  out="$$(./$$b)"; rc=$$?; \
+	  if [ $$rc -ne 0 ]; then \
+	    echo "FAIL  $$b (exit $$rc)"; fail=1; \
+	  elif printf '%s\n' "$$out" | grep -q FAIL; then \
 	    echo "FAIL  $$b"; fail=1; \
 	  else \
 	    echo "ok    $$b"; \

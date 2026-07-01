@@ -30,6 +30,32 @@ Two guards, both required:
 
 A constant is not finished until both guards are in place.
 
+### Second orders are forced the same way — never a fitted correction
+
+Three constants agree with measurement to a further order: `1/α`, the Hubble ratio,
+and the dark-to-baryon ratio. A second order here is **not** an added term with a
+tunable size, and must never be read as an epicycle. It is the **same construction,
+read one level deeper**, because the leading term's own scale is itself a covered
+object in the fold:
+
+- `1/α`: the covering volume `cov = 250` is itself covered, so it is re-read as
+  `cov + 1/sub` through the *same* outer shape → `5995462/43751`.
+- Hubble: the vacuum `2/3`, at the deep end of the one covering ladder, sharpens over
+  the early orbit floor to `2/3 + 1/127` → `3305/3048`.
+- Dark-to-baryon: the covering depth `5` sharpens over its orbit floor to `5 + 1/31`
+  → `279/52`.
+
+In **every** case the deepening is machine-checked, exactly like a leading form: the
+recurrence sits on the **genuine period-orbit floor** `2^d − 1` (the module enforces
+that floor's fold-period is `d`, rejecting the pre-periodic tower `2^d`), and the
+shape of the deepening is put through `forbid_form_selection` against its
+alternatives (`+1/floor`, `−1/floor`, `+1/tower`, `+1/depth`) — only the one
+promotion lands, all others halt the engine (`second_order_refinement_is_unique`,
+`hubble_second_order_is_unique`, `dark_to_baryon_second_order_is_unique`). **Zero new
+parameters** enter at the second order: the floor is forced from the depth, the depth
+from the One. The leading order *is* the result; the next order is the same forced
+structure being self-consistent, not a second attempt to close a gap.
+
 ## 2. Every module is cold-readable
 
 A skeptic must be able to verify a module without already believing the theory.

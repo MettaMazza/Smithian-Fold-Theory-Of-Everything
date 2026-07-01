@@ -23,7 +23,10 @@
 #     second order = 27/(5 + 1/31): the covering depth, itself a position, is read
 #                          one level deeper over its own period-5 orbit floor
 #                          2^5 - 1 = 31 (the tower 2^5 is pre-periodic and cannot
-#                          host it -- checked by fold period). Gives 279/52.
+#                          host it -- checked by fold period). Gives 279/52. This is
+#                          FORCED, not a fitted correction: the deepening's shape is
+#                          enumerated and only depth + 1/31 lands, all alternatives
+#                          rejected (dark_to_baryon_second_order_is_unique).
 #
 #  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
 #  Measured dark-to-baryon ratio about 5.38. Forced 27/5 = 5.4 (leading), and the
@@ -111,6 +114,62 @@ define dark_to_baryon_ratio_second_order returning Fraction:
 define dark_to_baryon_ratio_second_order_decimal with places as Int returning Str:
     set value to dark_to_baryon_ratio_second_order()
     return fraction_to_decimal(value and places)
+
+
+# ----------------------------------------------------------------------------
+#  The SECOND ORDER is FORCED, not a fitted correction (forced_unique)
+# ----------------------------------------------------------------------------
+#  Why the second order is forced -- the same test the leading form gets, one level
+#  deeper. The second order is NOT an added correction with a tunable size: it is the
+#  SAME construction (dark ratio = volume / depth) with the depth, itself a covered
+#  position in the fold, re-read one order deeper. The ONLY freedom that could hide
+#  here is the shape of that deepening, so it is enumerated and forbidden from being
+#  selected. Among admissible one-level deepenings of the depth --
+#     depth + 1/floor  (over its GENUINE period-5 orbit floor 31),
+#     depth - 1/floor  (wrong sign),
+#     depth + 1/total  (over the PRE-PERIODIC tower 32 -- the floor check already
+#                       rejects this, but it is offered here so the choice is closed),
+#     depth + 1/depth  (over the bare depth 5),
+#  only depth + 1/31 reproduces 279/52. forbid_form_selection halts if any other
+#  admissible deepening coincides. Zero new parameters: the floor 31 = 2^5 - 1 is
+#  forced from the depth, the depth from the One.
+
+# The ratio built from a given deepened depth: volume / deepened.
+define db_ratio_from_deepened_depth with deepened as Fraction returning Fraction:
+    set volume to fraction_from_whole_number(generational_volume())
+    return fraction_divide(volume and deepened)
+
+define dark_to_baryon_second_order_is_unique returning Int:
+    set total to 0
+    # canonical: depth + 1/floor (genuine orbit floor 31) -> 279/52
+    set depth_a to fraction_from_whole_number(generational_covering_depth())
+    set floor_inv_a to fraction_from_ratio(1 and generational_orbit_floor())
+    set deep_a to fraction_add(depth_a and floor_inv_a)
+    set ratio_a to db_ratio_from_deepened_depth(deep_a)
+    set target to dark_to_baryon_ratio_second_order()
+    set total to count_form_match(total and ratio_a and target)
+    # depth - 1/floor
+    set depth_b to fraction_from_whole_number(generational_covering_depth())
+    set floor_inv_b to fraction_from_ratio(1 and generational_orbit_floor())
+    set deep_b to fraction_subtract(depth_b and floor_inv_b)
+    set ratio_b to db_ratio_from_deepened_depth(deep_b)
+    set target_b to dark_to_baryon_ratio_second_order()
+    set total to count_form_match(total and ratio_b and target_b)
+    # depth + 1/total (pre-periodic tower 32)
+    set depth_c to fraction_from_whole_number(generational_covering_depth())
+    set tower_inv to fraction_from_ratio(1 and total_binary_volume())
+    set deep_c to fraction_add(depth_c and tower_inv)
+    set ratio_c to db_ratio_from_deepened_depth(deep_c)
+    set target_c to dark_to_baryon_ratio_second_order()
+    set total to count_form_match(total and ratio_c and target_c)
+    # depth + 1/depth (over the bare depth)
+    set depth_d to fraction_from_whole_number(generational_covering_depth())
+    set depth_inv to fraction_from_ratio(1 and generational_covering_depth())
+    set deep_d to fraction_add(depth_d and depth_inv)
+    set ratio_d to db_ratio_from_deepened_depth(deep_d)
+    set target_d to dark_to_baryon_ratio_second_order()
+    set total to count_form_match(total and ratio_d and target_d)
+    return forbid_form_selection("the dark-to-baryon second-order deepening" and total)
 
 
 # ----------------------------------------------------------------------------

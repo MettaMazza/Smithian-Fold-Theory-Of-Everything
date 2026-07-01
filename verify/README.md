@@ -6,7 +6,9 @@ This directory lets anyone reproduce every result, two ways.
 
 Each `test_*.c` here is the **self-contained output of the ErnosPlain compiler**
 for one proof: it bundles its own runtime and includes only standard C headers, so
-any C compiler can build it.
+any C compiler can build it. (One line is post-processed — `ep_gc_enabled` is set to
+`0` — to disable the runtime garbage collector; see the note below. Nothing else is
+touched, and no computed value depends on it.)
 
 ```sh
 make check
@@ -36,6 +38,21 @@ Or run a single `.ep` proof directly with the compiler:
 ```sh
 ernos ../tests/test_fine_structure_constant.ep && ../tests/test_fine_structure_constant
 ```
+
+`build_from_source.sh` re-applies the one-line GC-disable after regenerating (each
+proof's `.c` gets `ep_gc_enabled = 0`).
+
+## The garbage-collector note
+
+The runtime's precise collector can free a live-but-unrooted argument temporary in
+the middle of an expression (a heap-use-after-free), which surfaces as spurious
+failures or a segfault. These verifiers are bounded, one-shot programs — ~18 MB peak,
+finishing in a fraction of a second — so simply never collecting is harmless and no
+computed value depends on the GC. That is why the generated C is post-processed to
+set `ep_gc_enabled = 0`. This is a workaround in the emitted proofs only; the proper
+fix is upstream (codegen roots each argument temporary, or the collector
+conservatively scans its own C stack), and `ep_gc_enabled = 0` must **not** become a
+compiler default for real programs.
 
 ## What the proofs establish
 

@@ -842,7 +842,7 @@ typedef struct {
 static EpGCObject* ep_gc_head = NULL;
 static long long ep_gc_count = 0;
 static long long ep_gc_threshold = 4096;
-static int ep_gc_enabled = 1;
+static int ep_gc_enabled = 0;  /* disabled: precise GC freed live unrooted argument temporaries mid-expression (heap-use-after-free) in these bounded one-shot proofs; memory is ~18MB and never collected -- harmless here. Real fix belongs in the compiler codegen (root each arg temporary) -- see build_from_source.sh note. */
 static long long ep_gc_nursery_count = 0;
 static long long ep_gc_nursery_threshold = 512;
 static int ep_gc_minor_count = 0;

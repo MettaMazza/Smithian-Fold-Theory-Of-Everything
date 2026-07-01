@@ -842,7 +842,7 @@ typedef struct {
 static EpGCObject* ep_gc_head = NULL;
 static long long ep_gc_count = 0;
 static long long ep_gc_threshold = 4096;
-static int ep_gc_enabled = 1;
+static int ep_gc_enabled = 0;  /* disabled: GC freed live unrooted temporaries (heap-use-after-free) in these one-shot proofs; see build_from_source.sh */
 static long long ep_gc_nursery_count = 0;
 static long long ep_gc_nursery_threshold = 512;
 static int ep_gc_minor_count = 0;
@@ -4894,6 +4894,8 @@ long long generational_orbit_floor();
 long long generational_orbit_floor_is_genuine();
 long long dark_to_baryon_ratio_second_order();
 long long dark_to_baryon_ratio_second_order_decimal(long long);
+long long db_ratio_from_deepened_depth(long long);
+long long dark_to_baryon_second_order_is_unique();
 long long db_volume_fraction();
 long long db_depth_fraction();
 long long db_total_fraction();
@@ -5024,6 +5026,7 @@ long long _main() {
     ok = expect_equal((long long)"the floor is a genuine period-5 orbit", int_to_string(generational_orbit_floor_is_genuine()), int_to_string(1));
     ok = expect_equal((long long)"second-order ratio = 279/52", fraction_to_text(dark_to_baryon_ratio_second_order()), (long long)"279/52");
     ok = expect_equal((long long)"second-order decimal = 5.3653", dark_to_baryon_ratio_second_order_decimal(4), (long long)"5.3653");
+    ok = expect_equal((long long)"the second-order DEEPENING is unique (forced, not fitted)", int_to_string(dark_to_baryon_second_order_is_unique()), int_to_string(1));
     ok = expect_equal((long long)"the ratio FORM is unique among pairwise ratios (forced_unique)", int_to_string(dark_to_baryon_form_is_unique()), (long long)"1");
     ok = expect_equal((long long)"no SIMPLER assembly reaches the ratio (engine-generated, complete)", int_to_string(dark_to_baryon_assembly_is_minimal()), (long long)"1");
     printf("%s\n", (char*)(long long)"=== done ===");
@@ -5050,12 +5053,12 @@ L_cleanup:
 }
 
 long long generational_covering_depth() {
-    long long by_covering = 0;
     long long by_relation = 0;
+    long long by_covering = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&by_covering);
     ep_gc_push_root(&by_relation);
+    ep_gc_push_root(&by_covering);
 
     ep_gc_maybe_collect();
 
@@ -5134,8 +5137,8 @@ L_cleanup:
 
 long long generational_orbit_floor_is_genuine() {
     long long its_period = 0;
-    long long floor = 0;
     long long checked = 0;
+    long long floor = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&its_period);
@@ -5154,16 +5157,16 @@ L_cleanup:
 }
 
 long long dark_to_baryon_ratio_second_order() {
-    long long floor_term = 0;
+    long long checked = 0;
     long long sharpened_depth = 0;
     long long volume = 0;
-    long long checked = 0;
+    long long floor_term = 0;
     long long depth_fraction = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&floor_term);
     ep_gc_push_root(&sharpened_depth);
     ep_gc_push_root(&volume);
+    ep_gc_push_root(&floor_term);
     ep_gc_push_root(&depth_fraction);
 
     ep_gc_maybe_collect();
@@ -5197,6 +5200,103 @@ L_cleanup:
     return ret_val;
 }
 
+long long db_ratio_from_deepened_depth(long long deepened) {
+    long long volume = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&volume);
+    ep_gc_push_root(&deepened);
+
+    ep_gc_maybe_collect();
+
+    volume = fraction_from_whole_number(generational_volume());
+    ret_val = fraction_divide(volume, deepened);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long dark_to_baryon_second_order_is_unique() {
+    long long depth_a = 0;
+    long long floor_inv_b = 0;
+    long long depth_d = 0;
+    long long deep_a = 0;
+    long long floor_inv_a = 0;
+    long long ratio_c = 0;
+    long long depth_b = 0;
+    long long tower_inv = 0;
+    long long ratio_a = 0;
+    long long target_c = 0;
+    long long target_b = 0;
+    long long deep_c = 0;
+    long long ratio_b = 0;
+    long long target = 0;
+    long long deep_b = 0;
+    long long target_d = 0;
+    long long depth_inv = 0;
+    long long depth_c = 0;
+    long long deep_d = 0;
+    long long ratio_d = 0;
+    long long total = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&depth_a);
+    ep_gc_push_root(&floor_inv_b);
+    ep_gc_push_root(&depth_d);
+    ep_gc_push_root(&deep_a);
+    ep_gc_push_root(&floor_inv_a);
+    ep_gc_push_root(&ratio_c);
+    ep_gc_push_root(&depth_b);
+    ep_gc_push_root(&tower_inv);
+    ep_gc_push_root(&ratio_a);
+    ep_gc_push_root(&target_c);
+    ep_gc_push_root(&target_b);
+    ep_gc_push_root(&deep_c);
+    ep_gc_push_root(&ratio_b);
+    ep_gc_push_root(&target);
+    ep_gc_push_root(&deep_b);
+    ep_gc_push_root(&target_d);
+    ep_gc_push_root(&depth_inv);
+    ep_gc_push_root(&depth_c);
+    ep_gc_push_root(&deep_d);
+    ep_gc_push_root(&ratio_d);
+    ep_gc_push_root(&total);
+
+    ep_gc_maybe_collect();
+
+    total = 0;
+    depth_a = fraction_from_whole_number(generational_covering_depth());
+    floor_inv_a = fraction_from_ratio(1, generational_orbit_floor());
+    deep_a = fraction_add(depth_a, floor_inv_a);
+    ratio_a = db_ratio_from_deepened_depth(deep_a);
+    target = dark_to_baryon_ratio_second_order();
+    total = count_form_match(total, ratio_a, target);
+    depth_b = fraction_from_whole_number(generational_covering_depth());
+    floor_inv_b = fraction_from_ratio(1, generational_orbit_floor());
+    deep_b = fraction_subtract(depth_b, floor_inv_b);
+    ratio_b = db_ratio_from_deepened_depth(deep_b);
+    target_b = dark_to_baryon_ratio_second_order();
+    total = count_form_match(total, ratio_b, target_b);
+    depth_c = fraction_from_whole_number(generational_covering_depth());
+    tower_inv = fraction_from_ratio(1, total_binary_volume());
+    deep_c = fraction_add(depth_c, tower_inv);
+    ratio_c = db_ratio_from_deepened_depth(deep_c);
+    target_c = dark_to_baryon_ratio_second_order();
+    total = count_form_match(total, ratio_c, target_c);
+    depth_d = fraction_from_whole_number(generational_covering_depth());
+    depth_inv = fraction_from_ratio(1, generational_covering_depth());
+    deep_d = fraction_add(depth_d, depth_inv);
+    ratio_d = db_ratio_from_deepened_depth(deep_d);
+    target_d = dark_to_baryon_ratio_second_order();
+    total = count_form_match(total, ratio_d, target_d);
+    ret_val = forbid_form_selection((long long)"the dark-to-baryon second-order deepening", total);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(21);
+    return ret_val;
+}
+
 long long db_volume_fraction() {
     long long ret_val = 0;
 
@@ -5225,34 +5325,34 @@ L_cleanup:
 }
 
 long long dark_to_baryon_form_is_unique() {
-    long long ratio_one = 0;
-    long long ratio_two = 0;
-    long long d_two = 0;
-    long long ratio_four = 0;
-    long long t_six = 0;
-    long long v_one = 0;
-    long long ratio_six = 0;
-    long long ratio_three = 0;
-    long long d_four = 0;
-    long long total = 0;
-    long long ratio_five = 0;
     long long v_three = 0;
+    long long d_four = 0;
     long long t_five = 0;
+    long long t_six = 0;
+    long long ratio_three = 0;
+    long long v_one = 0;
+    long long ratio_one = 0;
+    long long ratio_four = 0;
+    long long ratio_six = 0;
+    long long ratio_five = 0;
+    long long total = 0;
+    long long d_two = 0;
+    long long ratio_two = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&ratio_one);
-    ep_gc_push_root(&ratio_two);
-    ep_gc_push_root(&d_two);
-    ep_gc_push_root(&ratio_four);
-    ep_gc_push_root(&t_six);
-    ep_gc_push_root(&v_one);
-    ep_gc_push_root(&ratio_six);
-    ep_gc_push_root(&ratio_three);
-    ep_gc_push_root(&d_four);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&ratio_five);
     ep_gc_push_root(&v_three);
+    ep_gc_push_root(&d_four);
     ep_gc_push_root(&t_five);
+    ep_gc_push_root(&t_six);
+    ep_gc_push_root(&ratio_three);
+    ep_gc_push_root(&v_one);
+    ep_gc_push_root(&ratio_one);
+    ep_gc_push_root(&ratio_four);
+    ep_gc_push_root(&ratio_six);
+    ep_gc_push_root(&ratio_five);
+    ep_gc_push_root(&total);
+    ep_gc_push_root(&d_two);
+    ep_gc_push_root(&ratio_two);
 
     ep_gc_maybe_collect();
 
@@ -5283,8 +5383,8 @@ L_cleanup:
 }
 
 long long dark_to_baryon_leaf_numerators() {
-    long long nums = 0;
     long long ok = 0;
+    long long nums = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&nums);
@@ -5304,8 +5404,8 @@ L_cleanup:
 }
 
 long long dark_to_baryon_leaf_denominators() {
-    long long dens = 0;
     long long ok = 0;
+    long long dens = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&dens);
@@ -5325,16 +5425,16 @@ L_cleanup:
 }
 
 long long dark_to_baryon_assembly_is_minimal() {
+    long long leaf_dens = 0;
     long long target_den = 0;
     long long leaf_nums = 0;
     long long target_num = 0;
-    long long leaf_dens = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&leaf_dens);
     ep_gc_push_root(&target_den);
     ep_gc_push_root(&leaf_nums);
     ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_dens);
 
     ep_gc_maybe_collect();
 
@@ -5350,9 +5450,9 @@ L_cleanup:
 }
 
 long long smallest_fold_period_above(long long threshold) {
-    long long best = 0;
-    long long n = 0;
     long long period = 0;
+    long long n = 0;
+    long long best = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&n);
@@ -5434,8 +5534,8 @@ L_cleanup:
 }
 
 long long fold_period_of_unit_fraction(long long n) {
-    long long count = 0;
     long long value = 0;
+    long long count = 0;
     long long ret_val = 0;
 
     value = (2 % n);
@@ -5465,8 +5565,8 @@ L_cleanup:
 }
 
 long long ratio_to_decimal_text(long long numerator, long long denominator, long long places) {
-    long long fractional = 0;
     long long place = 0;
+    long long fractional = 0;
     long long whole_part = 0;
     long long remainder = 0;
     long long ret_val = 0;
@@ -5528,16 +5628,16 @@ L_cleanup:
 }
 
 long long fraction_make(long long top, long long bottom) {
-    long long value = 0;
     long long common = 0;
-    long long numerator = 0;
+    long long value = 0;
     long long denominator = 0;
+    long long numerator = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&value);
     ep_gc_push_root(&common);
-    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&value);
     ep_gc_push_root(&denominator);
+    ep_gc_push_root(&numerator);
     ep_gc_push_root(&top);
     ep_gc_push_root(&bottom);
 
@@ -5570,12 +5670,12 @@ L_cleanup:
 }
 
 long long fraction_from_whole_number(long long whole_number) {
-    long long top = 0;
     long long bottom = 0;
+    long long top = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&top);
     ep_gc_push_root(&bottom);
+    ep_gc_push_root(&top);
     ep_gc_push_root(&whole_number);
 
     ep_gc_maybe_collect();
@@ -5590,12 +5690,12 @@ L_cleanup:
 }
 
 long long fraction_from_ratio(long long top, long long bottom) {
-    long long bottom_integer = 0;
     long long top_integer = 0;
+    long long bottom_integer = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&bottom_integer);
     ep_gc_push_root(&top_integer);
+    ep_gc_push_root(&bottom_integer);
     ep_gc_push_root(&top);
     ep_gc_push_root(&bottom);
 
@@ -5611,23 +5711,23 @@ L_cleanup:
 }
 
 long long fraction_add(long long first, long long second) {
-    long long second_top = 0;
     long long second_bottom = 0;
-    long long cross_second = 0;
-    long long first_bottom = 0;
-    long long top = 0;
-    long long cross_first = 0;
+    long long second_top = 0;
     long long bottom = 0;
+    long long first_bottom = 0;
+    long long cross_first = 0;
+    long long top = 0;
+    long long cross_second = 0;
     long long first_top = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&second_top);
     ep_gc_push_root(&second_bottom);
-    ep_gc_push_root(&cross_second);
-    ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&second_top);
     ep_gc_push_root(&bottom);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&cross_second);
     ep_gc_push_root(&first_top);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
@@ -5650,24 +5750,24 @@ L_cleanup:
 }
 
 long long fraction_subtract(long long first, long long second) {
+    long long second_bottom = 0;
     long long second_top = 0;
-    long long cross_second = 0;
-    long long top = 0;
+    long long first_top = 0;
+    long long bottom = 0;
     long long first_bottom = 0;
     long long cross_first = 0;
-    long long second_bottom = 0;
-    long long bottom = 0;
-    long long first_top = 0;
+    long long top = 0;
+    long long cross_second = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&second_bottom);
     ep_gc_push_root(&second_top);
-    ep_gc_push_root(&cross_second);
-    ep_gc_push_root(&top);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&bottom);
     ep_gc_push_root(&first_bottom);
     ep_gc_push_root(&cross_first);
-    ep_gc_push_root(&second_bottom);
-    ep_gc_push_root(&bottom);
-    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&cross_second);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -5691,20 +5791,20 @@ L_cleanup:
 }
 
 long long fraction_multiply(long long first, long long second) {
-    long long first_bottom = 0;
-    long long top = 0;
-    long long first_top = 0;
     long long second_top = 0;
-    long long bottom = 0;
     long long second_bottom = 0;
+    long long top = 0;
+    long long bottom = 0;
+    long long first_top = 0;
+    long long first_bottom = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&first_top);
     ep_gc_push_root(&second_top);
-    ep_gc_push_root(&bottom);
     ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&first_bottom);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -5724,20 +5824,20 @@ L_cleanup:
 }
 
 long long fraction_divide(long long first, long long second) {
-    long long first_top = 0;
-    long long bottom = 0;
-    long long top = 0;
-    long long second_bottom = 0;
     long long second_top = 0;
     long long first_bottom = 0;
+    long long first_top = 0;
+    long long second_bottom = 0;
+    long long top = 0;
+    long long bottom = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&first_top);
-    ep_gc_push_root(&bottom);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&second_bottom);
     ep_gc_push_root(&second_top);
     ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -5757,19 +5857,19 @@ L_cleanup:
 }
 
 long long fraction_compare(long long first, long long second) {
-    long long first_top = 0;
     long long first_bottom = 0;
-    long long second_bottom = 0;
-    long long second_top = 0;
+    long long first_top = 0;
     long long cross_first = 0;
+    long long second_top = 0;
+    long long second_bottom = 0;
     long long cross_second = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&first_top);
     ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&second_bottom);
-    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first_top);
     ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&second_bottom);
     ep_gc_push_root(&cross_second);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
@@ -5823,27 +5923,27 @@ L_cleanup:
 }
 
 long long fraction_to_decimal(long long value, long long places) {
-    long long whole_part_outcome = 0;
-    long long remainder = 0;
-    long long leading_sign = 0;
-    long long top = 0;
-    long long ten = 0;
-    long long fraction_text = 0;
     long long place = 0;
-    long long bottom = 0;
-    long long whole_text = 0;
+    long long remainder = 0;
+    long long fraction_text = 0;
+    long long ten = 0;
     long long step_outcome = 0;
+    long long whole_part_outcome = 0;
+    long long bottom = 0;
+    long long leading_sign = 0;
+    long long whole_text = 0;
+    long long top = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&whole_part_outcome);
     ep_gc_push_root(&remainder);
-    ep_gc_push_root(&leading_sign);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&ten);
     ep_gc_push_root(&fraction_text);
-    ep_gc_push_root(&bottom);
-    ep_gc_push_root(&whole_text);
+    ep_gc_push_root(&ten);
     ep_gc_push_root(&step_outcome);
+    ep_gc_push_root(&whole_part_outcome);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&leading_sign);
+    ep_gc_push_root(&whole_text);
+    ep_gc_push_root(&top);
     ep_gc_push_root(&value);
 
     ep_gc_maybe_collect();
@@ -5875,10 +5975,10 @@ long long fraction_to_decimal(long long value, long long places) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(10);
-    free_struct_DivisionOutcome(whole_part_outcome);
-    whole_part_outcome = 0;
     free_struct_DivisionOutcome(step_outcome);
     step_outcome = 0;
+    free_struct_DivisionOutcome(whole_part_outcome);
+    whole_part_outcome = 0;
     return ret_val;
 }
 
@@ -6004,18 +6104,18 @@ L_cleanup:
 }
 
 long long digits_to_blocks(long long digits) {
-    long long length = 0;
-    long long high = 0;
-    long long blocks = 0;
-    long long added = 0;
     long long chunk = 0;
+    long long high = 0;
+    long long length = 0;
     long long low = 0;
+    long long added = 0;
+    long long blocks = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&high);
-    ep_gc_push_root(&blocks);
     ep_gc_push_root(&chunk);
+    ep_gc_push_root(&high);
     ep_gc_push_root(&low);
+    ep_gc_push_root(&blocks);
     ep_gc_push_root(&digits);
 
     ep_gc_maybe_collect();
@@ -6040,16 +6140,16 @@ L_cleanup:
 }
 
 long long blocks_to_digits(long long blocks) {
-    long long this_block = 0;
-    long long index = 0;
     long long highest_block = 0;
+    long long index = 0;
     long long text = 0;
+    long long this_block = 0;
     long long count = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&this_block);
     ep_gc_push_root(&index);
     ep_gc_push_root(&text);
+    ep_gc_push_root(&this_block);
     ep_gc_push_root(&count);
     ep_gc_push_root(&blocks);
 
@@ -6096,8 +6196,8 @@ L_cleanup:
 
 long long text_to_number(long long text) {
     long long length = 0;
-    long long total = 0;
     long long character_code = 0;
+    long long total = 0;
     long long index = 0;
     long long ret_val = 0;
 
@@ -6122,9 +6222,9 @@ L_cleanup:
 }
 
 long long trim_leading_zero_blocks(long long blocks) {
-    long long count = 0;
     long long highest_block = 0;
     long long removed = 0;
+    long long count = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&count);
@@ -6150,9 +6250,9 @@ L_cleanup:
 }
 
 long long compare_magnitudes(long long first, long long second) {
+    long long first_count = 0;
     long long first_block = 0;
     long long second_block = 0;
-    long long first_count = 0;
     long long second_count = 0;
     long long index = 0;
     long long ret_val = 0;
@@ -6195,22 +6295,22 @@ L_cleanup:
 }
 
 long long add_magnitudes(long long first, long long second) {
-    long long total = 0;
-    long long carry = 0;
-    long long first_count = 0;
-    long long second_count = 0;
     long long added = 0;
-    long long index = 0;
-    long long count = 0;
-    long long first_block = 0;
     long long result = 0;
+    long long second_count = 0;
+    long long count = 0;
+    long long first_count = 0;
+    long long index = 0;
+    long long first_block = 0;
+    long long carry = 0;
     long long second_block = 0;
+    long long total = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&carry);
-    ep_gc_push_root(&index);
     ep_gc_push_root(&result);
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&carry);
+    ep_gc_push_root(&total);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6251,20 +6351,20 @@ L_cleanup:
 }
 
 long long subtract_magnitudes(long long first, long long second) {
-    long long second_block = 0;
     long long second_count = 0;
-    long long first_count = 0;
-    long long first_block = 0;
-    long long borrowed = 0;
     long long difference = 0;
-    long long index = 0;
-    long long added = 0;
     long long result = 0;
+    long long second_block = 0;
+    long long first_count = 0;
+    long long borrowed = 0;
+    long long index = 0;
+    long long first_block = 0;
+    long long added = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&difference);
-    ep_gc_push_root(&index);
     ep_gc_push_root(&result);
+    ep_gc_push_root(&index);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6299,29 +6399,29 @@ L_cleanup:
 }
 
 long long multiply_magnitudes(long long first, long long second) {
+    long long index = 0;
     long long second_block = 0;
+    long long outer = 0;
+    long long position = 0;
+    long long result = 0;
+    long long inner = 0;
     long long running = 0;
-    long long placed = 0;
-    long long total = 0;
     long long added = 0;
+    long long first_block = 0;
+    long long carry = 0;
+    long long total = 0;
     long long second_count = 0;
     long long product = 0;
-    long long outer = 0;
-    long long index = 0;
-    long long first_block = 0;
+    long long placed = 0;
     long long first_count = 0;
-    long long result = 0;
-    long long carry = 0;
-    long long inner = 0;
-    long long position = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&product);
     ep_gc_push_root(&outer);
+    ep_gc_push_root(&position);
     ep_gc_push_root(&result);
     ep_gc_push_root(&inner);
-    ep_gc_push_root(&position);
+    ep_gc_push_root(&total);
+    ep_gc_push_root(&product);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6412,9 +6512,9 @@ L_cleanup:
 }
 
 long long exact_integer_add(long long first, long long second) {
+    long long order = 0;
     long long first_blocks = 0;
     long long second_blocks = 0;
-    long long order = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&first_blocks);
@@ -6470,16 +6570,16 @@ L_cleanup:
 }
 
 long long exact_integer_multiply(long long first, long long second) {
+    long long product_digits = 0;
     long long first_blocks = 0;
     long long product_blocks = 0;
     long long second_blocks = 0;
-    long long product_digits = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&product_digits);
     ep_gc_push_root(&first_blocks);
     ep_gc_push_root(&product_blocks);
     ep_gc_push_root(&second_blocks);
-    ep_gc_push_root(&product_digits);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6505,13 +6605,13 @@ L_cleanup:
 }
 
 long long exact_integer_compare(long long first, long long second) {
-    long long second_blocks = 0;
     long long first_blocks = 0;
     long long magnitude_order = 0;
+    long long second_blocks = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&second_blocks);
     ep_gc_push_root(&first_blocks);
+    ep_gc_push_root(&second_blocks);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6563,43 +6663,43 @@ L_cleanup:
 }
 
 long long exact_integer_divide(long long dividend, long long divisor) {
-    long long dividend_digits = 0;
-    long long quotient_digit = 0;
+    long long to_remove = 0;
     long long this_count = 0;
-    long long quotient_blocks = 0;
-    long long tidy_quotient = 0;
+    long long next_value = 0;
+    long long remainder = 0;
+    long long quotient_digits = 0;
+    long long trial = 0;
     long long index = 0;
+    long long length = 0;
+    long long dividend_digits = 0;
+    long long ten = 0;
     long long digit_text = 0;
     long long next_digit = 0;
-    long long quotient_digits = 0;
-    long long length = 0;
     long long shifted = 0;
-    long long to_remove = 0;
-    long long ten = 0;
-    long long remainder = 0;
-    long long trial = 0;
-    long long outcome = 0;
+    long long quotient_blocks = 0;
     long long next_count = 0;
-    long long next_value = 0;
+    long long tidy_quotient = 0;
+    long long quotient_digit = 0;
+    long long outcome = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&dividend_digits);
-    ep_gc_push_root(&quotient_digit);
+    ep_gc_push_root(&to_remove);
     ep_gc_push_root(&this_count);
-    ep_gc_push_root(&quotient_blocks);
-    ep_gc_push_root(&tidy_quotient);
+    ep_gc_push_root(&next_value);
+    ep_gc_push_root(&remainder);
+    ep_gc_push_root(&quotient_digits);
+    ep_gc_push_root(&trial);
     ep_gc_push_root(&index);
+    ep_gc_push_root(&dividend_digits);
+    ep_gc_push_root(&ten);
     ep_gc_push_root(&digit_text);
     ep_gc_push_root(&next_digit);
-    ep_gc_push_root(&quotient_digits);
     ep_gc_push_root(&shifted);
-    ep_gc_push_root(&to_remove);
-    ep_gc_push_root(&ten);
-    ep_gc_push_root(&remainder);
-    ep_gc_push_root(&trial);
-    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&quotient_blocks);
     ep_gc_push_root(&next_count);
-    ep_gc_push_root(&next_value);
+    ep_gc_push_root(&tidy_quotient);
+    ep_gc_push_root(&quotient_digit);
+    ep_gc_push_root(&outcome);
     ep_gc_push_root(&dividend);
     ep_gc_push_root(&divisor);
 
@@ -6653,14 +6753,14 @@ L_cleanup:
 }
 
 long long exact_integer_divide_exactly(long long dividend, long long divisor) {
+    long long outcome = 0;
     long long absolute_divisor = 0;
     long long absolute_dividend = 0;
-    long long outcome = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&outcome);
     ep_gc_push_root(&absolute_divisor);
     ep_gc_push_root(&absolute_dividend);
-    ep_gc_push_root(&outcome);
     ep_gc_push_root(&dividend);
     ep_gc_push_root(&divisor);
 
@@ -6683,14 +6783,14 @@ L_cleanup:
 }
 
 long long exact_integer_greatest_common_divisor(long long first, long long second) {
-    long long smaller = 0;
-    long long outcome = 0;
     long long larger = 0;
+    long long outcome = 0;
+    long long smaller = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&smaller);
-    ep_gc_push_root(&outcome);
     ep_gc_push_root(&larger);
+    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&smaller);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6867,8 +6967,8 @@ L_cleanup:
 
 long long greatest_common_divisor(long long first, long long second) {
     long long quotient = 0;
-    long long remainder = 0;
     long long x = 0;
+    long long remainder = 0;
     long long y = 0;
     long long ret_val = 0;
 
@@ -6887,19 +6987,19 @@ L_cleanup:
 }
 
 long long append_reduced(long long nums, long long dens, long long raw_num, long long raw_den) {
-    long long num = 0;
-    long long reduced_den = 0;
-    long long divisor = 0;
-    long long reduced_num = 0;
     long long magnitude = 0;
-    long long den = 0;
+    long long reduced_num = 0;
+    long long num = 0;
+    long long divisor = 0;
+    long long reduced_den = 0;
     long long ok = 0;
+    long long den = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&magnitude);
+    ep_gc_push_root(&reduced_num);
     ep_gc_push_root(&num);
     ep_gc_push_root(&reduced_den);
-    ep_gc_push_root(&reduced_num);
-    ep_gc_push_root(&magnitude);
     ep_gc_push_root(&den);
     ep_gc_push_root(&nums);
     ep_gc_push_root(&dens);
@@ -6929,24 +7029,24 @@ L_cleanup:
 }
 
 long long combine_rationals(long long first_nums, long long first_dens, long long second_nums, long long second_dens, long long out_nums, long long out_dens) {
-    long long divisor_is_zero = 0;
-    long long second_size = 0;
-    long long i = 0;
-    long long j = 0;
     long long first_size = 0;
+    long long b = 0;
+    long long second_size = 0;
+    long long divisor_is_zero = 0;
+    long long i = 0;
+    long long ok = 0;
+    long long j = 0;
+    long long a = 0;
     long long c = 0;
     long long d = 0;
-    long long b = 0;
-    long long a = 0;
-    long long ok = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&b);
     ep_gc_push_root(&i);
     ep_gc_push_root(&j);
+    ep_gc_push_root(&a);
     ep_gc_push_root(&c);
     ep_gc_push_root(&d);
-    ep_gc_push_root(&b);
-    ep_gc_push_root(&a);
     ep_gc_push_root(&first_nums);
     ep_gc_push_root(&first_dens);
     ep_gc_push_root(&second_nums);
@@ -6987,20 +7087,20 @@ L_cleanup:
 }
 
 long long count_rational_matches(long long nums, long long dens, long long target_num, long long target_den) {
-    long long denominator_equal = 0;
-    long long total = 0;
-    long long d = 0;
-    long long denominator_gap = 0;
-    long long n = 0;
-    long long numerator_equal = 0;
-    long long size = 0;
     long long i = 0;
+    long long n = 0;
+    long long total = 0;
     long long numerator_gap = 0;
+    long long numerator_equal = 0;
+    long long denominator_gap = 0;
+    long long size = 0;
+    long long denominator_equal = 0;
+    long long d = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&denominator_gap);
     ep_gc_push_root(&i);
     ep_gc_push_root(&numerator_gap);
+    ep_gc_push_root(&denominator_gap);
     ep_gc_push_root(&nums);
     ep_gc_push_root(&dens);
 
@@ -7032,17 +7132,17 @@ L_cleanup:
 
 long long canonical_assembly_is_minimal(long long label, long long leaf_nums, long long leaf_dens, long long target_num, long long target_den, long long canonical_size) {
     long long ok = 0;
-    long long one_dens = 0;
-    long long one_nums = 0;
     long long count_one = 0;
     long long smaller = 0;
-    long long count_zero = 0;
     long long no_simpler = 0;
+    long long count_zero = 0;
+    long long one_nums = 0;
+    long long one_dens = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&one_dens);
-    ep_gc_push_root(&one_nums);
     ep_gc_push_root(&smaller);
+    ep_gc_push_root(&one_nums);
+    ep_gc_push_root(&one_dens);
     ep_gc_push_root(&label);
     ep_gc_push_root(&leaf_nums);
     ep_gc_push_root(&leaf_dens);

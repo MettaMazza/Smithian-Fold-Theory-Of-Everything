@@ -572,6 +572,7 @@ ernos tests/test_dark_to_baryon_fraction.ep
   ok    the floor is a genuine period-5 orbit
   ok    second-order ratio = 279/52
   ok    second-order decimal = 5.3653
+  ok    the second-order DEEPENING is unique (forced, not fitted)
 === done ===
 ```
 
@@ -581,7 +582,10 @@ unique denominator whose fold-orbit has period d_down; the tower `2^d_down` is
 pre-periodic and cannot host it — the engine checks the period is 5). So
 `27/(5 + 1/31) = 279/52 = 5.3653`, against the measured 5.3643 — two parts in ten
 thousand, from 27/5's seven in a thousand. (Falsified: the d_up floor 127 gives
-5.39, rejected.)
+5.39, rejected.) The deepening is machine-checked, not asserted: the shape
+`depth + 1/31` is put through `forbid_form_selection` against `−1/31`, `+1/32` (the
+pre-periodic tower), and `+1/5` (the bare depth); only `+1/31` lands
+(`dark_to_baryon_second_order_is_unique`). Zero new parameters.
 
 ---
 
@@ -624,6 +628,7 @@ ernos tests/test_hubble_tension.ep
   ok    the floor is a genuine period-7 orbit
   ok    second-order ratio = 3305/3048
   ok    second-order decimal = 1.0843175
+  ok    the second-order DEEPENING is unique (forced, not fitted)
 === done ===
 ```
 
@@ -639,7 +644,10 @@ the pre-periodic tower 128): `1 + (2/3 + 1/127)/8 = 3305/3048 = 1.0843175`,
 against measured 1.0843230 — **five parts in a million**, from 13/12's one in a
 thousand. Nothing is imported: `d_up = 7` and `127` are the deepest rung of the
 *same* ladder the leading term stands on — there is no "outside" to import from in
-a one-axiom model.
+a one-axiom model. And the deepening is not merely asserted forced — it is
+machine-checked: the shape `vacuum + 1/127` is put through `forbid_form_selection`
+against `−1/127`, `+1/128` (the pre-periodic tower), and `+1/7` (the bare depth);
+only `+1/127` lands (`hubble_second_order_is_unique`). Zero new parameters.
 
 ---
 

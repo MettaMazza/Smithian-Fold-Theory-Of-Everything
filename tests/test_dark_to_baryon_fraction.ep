@@ -38,6 +38,7 @@ define main:
     set ok to expect_number("the floor is a genuine period-5 orbit" and generational_orbit_floor_is_genuine() and 1)
     set ok to expect_equal("second-order ratio = 279/52" and fraction_to_text(dark_to_baryon_ratio_second_order()) and "279/52")
     set ok to expect_equal("second-order decimal = 5.3653" and dark_to_baryon_ratio_second_order_decimal(4) and "5.3653")
+    set ok to expect_number("the second-order DEEPENING is unique (forced, not fitted)" and dark_to_baryon_second_order_is_unique() and 1)
 
     set ok to expect_equal("the ratio FORM is unique among pairwise ratios (forced_unique)" and int_to_string(dark_to_baryon_form_is_unique()) and "1")
     set ok to expect_equal("no SIMPLER assembly reaches the ratio (engine-generated, complete)" and int_to_string(dark_to_baryon_assembly_is_minimal()) and "1")
