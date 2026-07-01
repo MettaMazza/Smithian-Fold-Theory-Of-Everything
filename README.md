@@ -185,6 +185,7 @@ only), so any `cc`/`gcc`/`clang` builds it. The one-line way to prove the whole 
 ```sh
 make -C verify prove        # THE one command: proves absolutely everything
 make -C verify check        # or: build & run every proof, one ok / FAIL line per suite
+make -C verify online       # cross-check forced values against LIVE-fetched NIST CODATA
 ```
 
 `make prove` runs every proof in a single pass and prints, for each constant and scale:
@@ -194,6 +195,11 @@ counted generators → depths → the constant), and **the external measurement 
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
 CODATA / PDG / Planck measurement` (currently 97 suites, 610 forced checks, 0 failures).
+
+`make online` closes the "you typed the measured numbers in yourself" objection: it
+**derives** the forced values from the two generators (`2`, `3`) and **fetches** the
+measured ones live from NIST's CODATA table — `1/α`, the proton/electron mass ratio,
+and the electron `g` all land on the downloaded values, nothing measured stored locally.
 
 **From the ErnosPlain source.** Install the compiler `ernos`, then either rebuild
 the C (`verify/build_from_source.sh`) or run a proof directly:

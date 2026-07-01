@@ -5,6 +5,7 @@
 #   make            build every proof
 #   make check      build every proof, run it, and report ok / FAIL per suite
 #   make prove      run the unified driver: enumerate EVERY forced value + grand tally
+#   make online     cross-check forced values against LIVE-fetched NIST CODATA
 #   make clean      remove the built binaries
 
 CC ?= cc
@@ -39,7 +40,10 @@ check: all
 prove: all
 	@sh prove_all.sh
 
+online:
+	@python3 online_codata_check.py
+
 clean:
 	rm -f $(BINARIES)
 
-.PHONY: all check prove clean
+.PHONY: all check prove online clean

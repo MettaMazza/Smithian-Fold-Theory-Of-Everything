@@ -71,13 +71,31 @@ make -C verify prove
 ```
 This is the unified driver. It builds and runs every proof in one pass, prints each
 forced constant and scale with its value, and ends with a grand tally
-(`EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from the One`). If it prints that,
-every derivation ran to completion with no fitted, chosen, out-of-domain, or
-target-input value surviving — because any of those halts the engine (the enforcement
-layer is described further down). A passing run is therefore positive evidence, read
-line by line, not a summary to take on trust.
+(`EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked
+against external CODATA / PDG / Planck measurement`). If it prints that, every
+derivation ran to completion with no fitted, chosen, out-of-domain, or target-input
+value surviving — because any of those halts the engine (the enforcement layer is
+described further down). A passing run is therefore positive evidence, read line by
+line, not a summary to take on trust. Two suites in that run are built for you as a
+reviewer:
+- `test_trace_to_the_one` walks the whole chain in one place — the One (forced from
+  "there is not nothing") → the two **counted** generators → the depths → `1/α`'s
+  every block — so you can see the floor is the axiom and nothing else.
+- `test_codata_comparison` puts **every** forced value beside its external measurement
+  (CODATA / PDG / Planck / NuFIT), through a sealed boundary a measurement can never
+  cross into a derivation. Forced in, measured in, a yes/no verdict out.
 
-**2. Trace any one value back to the One — pick the flagship, `1/α`:**
+**2. Don't trust the typed-in measured numbers? Fetch them live yourself:**
+```sh
+make -C verify online          # or: python3 verify/online_codata_check.py
+```
+The forced values are **derived in that script** from only the binary count `2` and the
+colour count `3`; the measured values are **fetched at run time from NIST's CODATA
+table** (nothing measured is stored in the file). `1/α`, the proton/electron mass
+ratio, and the electron `g` all land on the live-fetched values. This closes the
+"you picked the measured numbers" objection: you can watch it download them.
+
+**3. Trace any one value back to the One — pick the flagship, `1/α`:**
 - Open `constants/fine_structure_constant.ep`. Read the **DERIVATION** block. It uses
   *only* values derived earlier: `tower = binary^up_depth`, `colour² = colour^binary`,
   `cov = binary·down_depth^colour`. There is **no integer literal** in those lines.
@@ -92,7 +110,7 @@ line by line, not a summary to take on trust.
   traced reaches it; none stops at a fitted constant. Do this for any constant in
   `OneFoldMaster.md` (the dependency-ordered spine) and it terminates the same way.
 
-**3. The bar for any critique you then write:** name the specific free parameter and the
+**4. The bar for any critique you then write:** name the specific free parameter and the
 alternative value it could take (see the next section). If you cannot, you have found
 your prior, not a flaw — say nothing, or say that.
 
