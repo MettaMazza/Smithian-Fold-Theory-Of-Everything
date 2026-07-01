@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-97 suites, 611 forced checks, 0 failures). It needs nothing but a C compiler. Use
+97 suites, 610 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -2352,26 +2352,36 @@ speed is the One.
 
 ---
 
-### Step 69 — The proton / electron ratio (dimensionless core = 2)
+### Step 69 — The proton / electron mass ratio (1836, forced)
 
 **File:** `constants/proton_electron_ratio.ep`
 
-**What it does.** The electron's mass-part is `take(One, 1/b) = 1/2`. The proton is
-the three colour components bound — each `take(One, 2/3) = 1/3`, and `3 · 1/3 = 1` (a
-whole). So the dimensionless ratio of the proton's mass-part to the electron's is
-`1/(1/2) = 2 = binary` — the proton's bound whole over the electron's half.
+**What it does.** The proton/electron mass ratio — the pure number 1836 — is forced
+from the One, no scale and no fit. Two forced facts meet. The electron and muon mass
+shares are the squared roots of the forced charged-lepton cubic
+`x³ − x² + (1/6)x − 1/485 = 0` (`e2 = 1/(2c) = 1/6`, `e3 = 1/(2c⁵−1) = 1/485`); the
+roots are pinned by **exact rational bisection** (no floats — see Step 68 /
+`charged_lepton_cubic.ep`). The proton is the strong-sector ground baryon, the colour-
+bound group of three at the tripling position `1/c = 1/3`. Both sit on the One, so their
+ratio is a **dimensionless** cross-sector ratio (the confinement tension cancels):
 
 ```
-=== the proton / electron ratio ===
-  ok    electron mass-part = 1/2 ; strong component = 1/3
-  ok    proton mass-part = 3 * 1/3 = 1 (bound whole)
-  ok    dimensionless ratio = 1/(1/2) = 2 (the binary count)
+  mp/me = (1/c) · (m_μ − m_e) / (m_μ · m_e) = (1/3)·(1/m_e − 1/m_μ) = 1836.3254
 ```
 
-**To measurement.** The measured ratio is 1836.15; the forced content is the
-dimensionless structural core, exactly `2`, the proton's bound-whole over the
-electron's half — the full 1836 carries the separate strong-sector energy scale, a
-measured quantity kept comparison-side.
+Every piece — the cubic, its bisected roots, the tripling `1/3` — is forced from the
+One; there is no scale factor and no measured quantity in the construction.
+
+```
+=== the proton / electron mass ratio (1836, forced) ===
+  ok    mp/me = (1/3)(m_mu - m_e)/(m_mu m_e) = 1836.3254
+  ok    proton bound-whole 3*(1/3)=1 over electron half 1/2 = 2 (secondary structural core)
+```
+
+**To measurement.** The forced ratio `1836.3254` agrees with the measured
+`1836.15267` (CODATA) to **0.0094%** — one part in ten thousand — the measured value
+entering only on the comparison side. (The bare bound-whole/half core, exactly `2 =
+binary`, is kept as a secondary structural fact; the forced 1836 above is the result.)
 
 ---
 
@@ -3116,8 +3126,9 @@ runs):**
   with the primary fractional plateau at `ν = 1/colour = 1/3`.
 - Step 68 — Maxwell wave closure: the spatial/temporal curvature ratio `6/2 = 3 =
   d_space = colour` closes the wave equation; light travels at the One.
-- Step 69 — the proton/electron ratio: the dimensionless core is `2 = binary` (the
-  proton's bound-whole `3·1/3 = 1` over the electron's half `1/2`).
+- Step 69 — the proton/electron mass ratio: `mp/me = (1/3)(m_μ−m_e)/(m_μ m_e) =
+  1836.3254`, forced from the bisected lepton-cubic roots and the tripling `1/3`
+  (measured 1836.15267, 0.0094%); bare structural core `2 = binary` is secondary.
 - Step 70 — the weak force range: a massive carrier's reach is finite (mass `1/3` →
   2 steps) and grows as `1/mass`; a massless carrier is unbounded — weak short-range,
   EM/gravity long-range.

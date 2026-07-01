@@ -12,11 +12,13 @@ define expect_bool with label as Str and got as Bool:
         display concat("  FAIL  " and label)
     return 0
 define main:
-    display "=== the proton / electron ratio ==="
-    set ok to expect_equal("electron mass-part = take(One, 1/2) = 1/2" and fraction_to_text(electron_mass_part()) and "1/2")
-    set ok to expect_equal("strong component mass-part = take(One, 2/3) = 1/3" and fraction_to_text(strong_component_mass_part()) and "1/3")
-    set ok to expect_equal("proton mass-part = 3 * 1/3 = 1 (bound whole)" and fraction_to_text(proton_mass_part()) and "1")
-    set ok to expect_equal("dimensionless ratio = 1/(1/2) = 2" and fraction_to_text(proton_electron_dimensionless_ratio()) and "2")
-    set ok to expect_bool("the dimensionless ratio is exactly the binary count" and ratio_is_binary())
+    display "=== the proton / electron mass ratio (1836, forced) ==="
+    # The forced ratio from the exact-bisection lepton-cubic roots (2 roots) and the
+    # tripling 1/3. Landing on 1836.3254 confirms both roots are the genuine roots.
+    set ok to expect_equal("mp/me = (1/3)(m_mu - m_e)/(m_mu m_e) = 1836.3254" and fraction_to_decimal(proton_electron_mass_ratio() and 4) and "1836.3254")
+    display "  (measured 1836.15267 -- agreement 0.0094%, comparison-side only)"
+    # The bare structural core (cheap; no root-finding).
+    set ok to expect_equal("proton bound-whole 3*(1/3)=1 over electron half 1/2 = 2" and fraction_to_text(proton_electron_structural_core()) and "2")
+    set ok to expect_bool("the structural core is exactly the binary count" and core_is_binary())
     display "=== done ==="
     return 0

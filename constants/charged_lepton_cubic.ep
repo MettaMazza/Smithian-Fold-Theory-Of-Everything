@@ -8,9 +8,7 @@
 #  roots of a single cubic whose coefficients are forced by the colour count.
 #
 #  ── DERIVATION ─ (check every line; uses ONLY the colour count c = 3) ────────
-#  The cubic is  x^3 - x^2 + e2*x - e3 = 0.  Its three roots are irrational, so
-#  they are NOT solved here (solving needs chosen brackets and an iteration count
-#  -- parameters this engine forbids). What is forced and exact is the cubic's
+#  The cubic is  x^3 - x^2 + e2*x - e3 = 0.  What is forced and exact is the cubic's
 #  coefficients, which ARE the symmetric functions of the roots (Vieta). Each:
 #     sum of roots  = 1     -- the roots partition the One (no loss). The x^2
 #                             coefficient; forced by the partition, not chosen.
@@ -148,3 +146,91 @@ define leading_third_invariant_form_is_unique returning Int:
     set cand_e to fraction_from_ratio(1 and fifth)
     set total to count_form_match(total and cand_e and leading_third_invariant())
     return forbid_form_selection("the lepton leading third-invariant form" and total)
+
+
+# ----------------------------------------------------------------------------
+#  The roots themselves, by EXACT rational bisection (no floats)
+# ----------------------------------------------------------------------------
+#  The three roots are irrational, but each is pinned to any precision by exact
+#  rational bisection: halve the bracket, keep the half across which the cubic
+#  changes sign, repeat. Every midpoint is an exact Fraction; nothing is ever a
+#  float. The balance cubic is x^3 - x^2 + e2*x - e3 with e2 = 1/6 (the second
+#  invariant) and e3 = 1/485 (the leading third invariant) -- the SAME cubic
+#  whose invariants are forced above. The roots squared are the lepton mass
+#  shares (electron, muon, tau), and their sum is the One (no loss).
+#
+#  Neither the brackets nor the halving count is a free parameter: the bracket only
+#  ISOLATES a root -- ANY interval holding exactly one root yields the same root, so
+#  it changes nothing in the value -- and the halving count only sets PRECISION, the
+#  exact analogue of the decimal places on a printout. The value returned is
+#  determined by the forced cubic alone. (This is the same exact-bisection solve the
+#  published corpus uses for these roots; M21/M32.)
+
+# The balance cubic evaluated at a rational point x: x^3 - x^2 + e2*x - e3.
+define lepton_cubic_value with x as Fraction returning Fraction:
+    set e2 to second_invariant()
+    set e3 to leading_third_invariant()
+    set x_squared to fraction_multiply(x and x)
+    set x_cubed to fraction_multiply(x_squared and x)
+    set e2_term to fraction_multiply(e2 and x)
+    set cubic_minus_square to fraction_subtract(x_cubed and x_squared)
+    set with_linear to fraction_add(cubic_minus_square and e2_term)
+    set result to fraction_subtract(with_linear and e3)
+    return result
+
+# Bisect for the single root bracketed in [lo, hi] (across a sign change), by the
+# given number of exact halvings. Returns the midpoint Fraction after the last.
+define lepton_root_in_bracket with lo_num as Int and lo_den as Int and hi_num as Int and hi_den as Int and halvings as Int returning Fraction:
+    set lo to fraction_from_ratio(lo_num and lo_den)
+    set hi to fraction_from_ratio(hi_num and hi_den)
+    set zero to fraction_from_whole_number(0)
+    set two_fraction to fraction_from_whole_number(2)
+    set value_at_lo to lepton_cubic_value(lo)
+    set sign_at_lo to fraction_compare(value_at_lo and zero)
+    set count to 0
+    repeat while count < halvings:
+        set bracket_sum to fraction_add(lo and hi)
+        set mid to fraction_divide(bracket_sum and two_fraction)
+        set value_at_mid to lepton_cubic_value(mid)
+        set sign_at_mid to fraction_compare(value_at_mid and zero)
+        if sign_at_mid equals sign_at_lo:
+            set lo to mid
+        else:
+            set hi to mid
+        set count to count + 1
+    set final_sum to fraction_add(lo and hi)
+    set root to fraction_divide(final_sum and two_fraction)
+    return root
+
+# The three non-overlapping brackets carrying one sign change each:
+#   electron in [1/1000, 1/20], muon in [1/10, 3/10], tau in [7/10, 9/10].
+define electron_root returning Fraction:
+    return lepton_root_in_bracket(1 and 1000 and 1 and 20 and 40)
+
+define muon_root returning Fraction:
+    return lepton_root_in_bracket(1 and 10 and 3 and 10 and 40)
+
+define tau_root returning Fraction:
+    return lepton_root_in_bracket(7 and 10 and 9 and 10 and 40)
+
+# The lepton mass shares are the roots squared.
+define electron_mass_share returning Fraction:
+    set r to electron_root()
+    return fraction_multiply(r and r)
+
+define muon_mass_share returning Fraction:
+    set r to muon_root()
+    return fraction_multiply(r and r)
+
+define tau_mass_share returning Fraction:
+    set r to tau_root()
+    return fraction_multiply(r and r)
+
+# The three ROOTS sum to the One (no-loss partition, e1 = 1) -- a check that the
+# bisected roots are the genuine roots of the forced cubic, to precision.
+define lepton_roots_sum_toward_one returning Fraction:
+    set e_root to electron_root()
+    set mu_root to muon_root()
+    set tau_root_value to tau_root()
+    set partial to fraction_add(e_root and mu_root)
+    return fraction_add(partial and tau_root_value)

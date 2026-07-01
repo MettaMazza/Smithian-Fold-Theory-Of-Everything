@@ -32,6 +32,7 @@ nothing added, the model reaches:
 |---|---|---|---|
 | Fine-structure constant `1/α` | `5995462/43751 = 137.035999177` | `137.035999177` | **9 digits** |
 | Proton-to-Planck hierarchy | `(M/m)² = 2¹²⁷` | — | 0.24% on the ratio |
+| Proton/electron mass ratio | `(1/3)(m_μ−m_e)/(m_μ m_e) = 1836.3254` | `1836.15267` | 0.0094% |
 | Koide lepton relation `Q` | `2/3 = 0.666666…` | `0.666661` | **5 digits** |
 | Dark-to-baryon ratio | `279/52 = 5.3653` | `5.3643` | 0.02% |
 | Hubble calibration ratio | `3305/3048 = 1.0843175` | `1.0843230` | 5 × 10⁻⁶ |
@@ -102,7 +103,8 @@ And the structural laws of physics, forced the same way:
   the acceleration's Doppler shift), and **radioactive decay** (`1/2^k` per half-life).
 - **Quantization, light, mass** — the **quantum Hall effect** (exact integer plateaus,
   fractional `ν = 1/3`), **Maxwell wave closure** (curl equations close into light at
-  `c`), and the **proton/electron ratio** (dimensionless core `= 2`).
+  `c`), and the **proton/electron mass ratio** (`mp/me = 1836.3254`, forced from the
+  bisected lepton-cubic roots and the tripling `1/3`; 0.0094% from measured).
 - **Range, stability, sound** — the **weak force range** (massive carrier → short
   range; massless → unbounded), **proton stability** (distinct quark/lepton fibres →
   baryon number conserved), and **phonons** (three acoustic branches `= d_space`).
@@ -136,7 +138,7 @@ And the structural laws of physics, forced the same way:
   neutral preserves it).
 
 The full, ordered, run-it-yourself derivation of all of it — every step, all 97 test
-suites (611 forced checks, including the trace-to-the-One and the CODATA comparison) —
+suites (610 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -191,7 +193,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 97 suites, 611 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 97 suites, 610 forced checks, 0 failures).
 
 **From the ErnosPlain source.** Install the compiler `ernos`, then either rebuild
 the C (`verify/build_from_source.sh`) or run a proof directly:

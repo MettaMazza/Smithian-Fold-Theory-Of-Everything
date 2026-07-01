@@ -19,6 +19,7 @@ import "../constants/deceleration_parameter.ep"
 import "../constants/g_factor.ep"
 import "../constants/gauge_mediator_counts.ep"
 import "../constants/three_of_everything.ep"
+import "../constants/proton_electron_ratio.ep"
 import "../foundation/measured_values.ep"
 
 # Compare a forced Fraction to a measured value (num/den), within a tolerance (num/den).
@@ -26,7 +27,7 @@ define against with label as Str and forced as Fraction and m_num as Int and m_d
     set target to measured(label and m_num and m_den)
     set tol to fraction_from_ratio(t_num and t_den)
     set agrees to forced_agrees_with_measured(forced and target and tol)
-    set forced_text to fraction_to_text(forced)
+    set forced_text to fraction_to_decimal(forced and 6)
     if agrees:
         display concat("  ok    " and concat(label and concat(" -- forced " and forced_text)))
     else:
@@ -47,6 +48,7 @@ define main:
     set ok to against("Koide Q vs measured 0.666661" and koide_ratio() and 666661 and 1000000 and 1 and 100000)
     set ok to against("Hubble ratio vs measured 1.084323" and hubble_calibration_ratio_second_order() and 1084323 and 1000000 and 1 and 10000)
     set ok to against("dark/baryon vs measured 5.364" and dark_to_baryon_ratio_second_order() and 5364 and 1000 and 2 and 1000)
+    set ok to against("proton/electron vs CODATA 1836.15267" and proton_electron_mass_ratio() and 183615267 and 100000 and 2 and 10)
 
     display "--- cosmic budget (Planck 2018) ---"
     set ok to against("Omega_Lambda vs measured 0.6889" and dark_energy_density() and 6889 and 10000 and 3 and 100)
