@@ -1,0 +1,17 @@
+import "../constants/cubic_lattice.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define main:
+    display "=== the cubic lattice ==="
+    set ok to expect_number("coordination number = binary * spatial = 6" and coordination_number() and 6)
+    set ok to expect_equal("each neighbour weight = 1/12" and fraction_to_text(neighbour_weight()) and "1/12")
+    set ok to expect_equal("six neighbours sum to the balance point 1/2" and fraction_to_text(neighbour_sum()) and "1/2")
+    set ok to expect_equal("the balance folds up to the One" and fraction_to_text(neighbour_sum_folds_to_one()) and "1")
+    display "=== done ==="
+    return 0

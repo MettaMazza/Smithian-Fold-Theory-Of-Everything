@@ -1,0 +1,60 @@
+# ============================================================================
+#  THE DECELERATION PARAMETER  --  why the universe accelerates, q0 = -1/2, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Whether cosmic expansion speeds up or slows down is captured by one number, the
+#  deceleration parameter q0. A POSITIVE q0 means gravity is winning (slowing down);
+#  a NEGATIVE q0 means expansion is accelerating. The 1998 supernova result -- that
+#  q0 is negative -- won the Nobel Prize. Its value is forced by the cosmic budget.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3) ──────────────────
+#  From the flat partition of the One: vacuum (dark energy) = b/c = 2/3, matter =
+#  1/c = 1/3 (the same budget as the Hubble and cosmic-density steps). Each component
+#  contributes to q0 as (1/2)*Omega*(1 + 3w): matter (w = 0) gives +(1/2)*(1/3) = 1/6,
+#  and the vacuum (w = -1) gives (1/2)*(2/3)*(1 - 3) = -(2/3). So
+#       q0 = matter_half - vacuum = 1/6 - 2/3 = -1/2 .
+#  The magnitude is exactly 1/2, and the SIGN is negative because the vacuum share
+#  (2/3) exceeds the matter-half (1/6): expansion accelerates. Both the magnitude and
+#  the sign are forced by the 2/3-versus-1/3 budget, with no free parameter.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured: q0 is about -0.53 (accelerating) -- the forced value is exactly -1/2,
+#  well within the measurement. The forced content is a definite sign (negative,
+#  accelerating) and an exact magnitude (1/2); the sign is the Nobel-winning
+#  discovery, and here it is forced, not fitted.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The vacuum (dark-energy) share of a flat universe: binary over colour, 2/3.
+define vacuum_fraction returning Fraction:
+    return fraction_from_ratio(binary_count() and colour_count())
+
+# The matter share of a flat universe: one over colour, 1/3.
+define matter_fraction returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# Matter's contribution to q0: half the matter share, (1/2)*(1/3) = 1/6.
+define matter_half returning Fraction:
+    set matter to matter_fraction()
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(matter and half)
+
+# The magnitude of the deceleration parameter: vacuum - matter_half = 2/3 - 1/6 = 1/2.
+define deceleration_magnitude returning Fraction:
+    set vacuum to vacuum_fraction()
+    set m_half to matter_half()
+    return fraction_subtract(vacuum and m_half)
+
+# The universe ACCELERATES: q0 = matter_half - vacuum is negative, because the vacuum
+# share exceeds the matter-half. Returns true when expansion accelerates.
+define universe_accelerates returning Bool:
+    set m_half to matter_half()
+    set vacuum to vacuum_fraction()
+    set order to fraction_compare(m_half and vacuum)
+    if order < 0:
+        return true
+    return false

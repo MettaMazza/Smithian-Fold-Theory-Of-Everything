@@ -1,0 +1,16 @@
+import "../constants/blackbody_radiation.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define main:
+    display "=== blackbody radiation ==="
+    set ok to expect_number("Stefan-Boltzmann exponent = d_space + 1" and stefan_boltzmann_exponent() and 4)
+    set ok to expect_number("exponent forced = spacetime dimensions" and stefan_boltzmann_exponent_forced() and 4)
+    set ok to expect_number("doubling temperature multiplies power by 2^4" and power_ratio_for_doubled_temperature() and 16)
+    display "=== done ==="
+    return 0

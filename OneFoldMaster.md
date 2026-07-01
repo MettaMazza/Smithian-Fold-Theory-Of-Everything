@@ -1759,6 +1759,75 @@ equal packets (`1/4` each) summing to `U0`, each moving at the One.
 
 ---
 
+### Step 46 — The deceleration parameter (the universe accelerates, q₀ = −1/2)
+
+**File:** `constants/deceleration_parameter.ep`
+
+**What it does.** From the flat budget (vacuum `2/3`, matter `1/3`), each component
+contributes `½·Ω·(1+3w)`: matter (`w=0`) gives `+1/6`, vacuum (`w=−1`) gives `−2/3`,
+so `q₀ = 1/6 − 2/3 = −1/2`. The magnitude is exactly `1/2`, and the sign is negative
+— accelerating — because the vacuum share exceeds the matter-half.
+
+```
+=== the deceleration parameter ===
+  ok    vacuum share = 2/3
+  ok    matter share = 1/3
+  ok    matter contribution = 1/6
+  ok    deceleration magnitude |q0| = 1/2
+  ok    the universe ACCELERATES (q0 < 0)
+```
+
+**To measurement.** Measured `q₀ ≈ −0.53` (the Nobel-winning acceleration) — the
+forced value is exactly `−1/2`, a definite negative sign and exact magnitude from the
+`2/3`-vs-`1/3` budget, not fitted.
+
+---
+
+### Step 47 — The cubic lattice (six nearest neighbours, forced by 3D)
+
+**File:** `constants/cubic_lattice.ep`
+
+**What it does.** Each axis contributes two nearest neighbours (forward, back); with
+`d_space = 3` axes the coordination number is `binary · d_space = 6`. The discrete
+Laplacian gives each neighbour weight `1/12`, and the six sum to the balance point
+`1/2` (which folds to the One). The dimension fixes the neighbour *count*, six.
+
+```
+=== the cubic lattice ===
+  ok    coordination number = binary * spatial = 6
+  ok    each neighbour weight = 1/12
+  ok    six neighbours sum to the balance point 1/2
+  ok    the balance folds up to the One
+```
+
+**To measurement.** A simple-cubic lattice has coordination number six, as every
+crystallographer and lattice simulation uses — the forced content is exact: 2 per
+axis × 3 axes = 6, an integer identity.
+
+---
+
+### Step 48 — Blackbody radiation (Stefan–Boltzmann's fourth power)
+
+**File:** `constants/blackbody_radiation.ep`
+
+**What it does.** Thermal radiation's total energy density scales with temperature
+as `T^(d_space+1)`: one power per spatial dimension (mode count) plus one for the
+energy per mode, so in 3D the exponent is `3 + 1 = 4` — exactly the spacetime
+dimension count (Step 32). Forced two ways (`d_space + 1` and the spacetime total).
+
+```
+=== blackbody radiation ===
+  ok    Stefan-Boltzmann exponent = d_space + 1 = 4
+  ok    exponent forced = spacetime dimensions = 4
+  ok    doubling temperature multiplies power by 2^4 = 16
+```
+
+**To measurement.** Stefan–Boltzmann `P ∝ T⁴` is measured to high precision (every
+pyrometer, the CMB spectrum) — the forced content is exact: the exponent is
+`d_space + 1 = 4 =` the spacetime dimension count, an integer identity.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1875,6 +1944,12 @@ runs):**
   coefficient `1/b² = 1/4`, with area (not volume) scaling from the horizon surface.
 - Step 45 — the d'Alembert wave: a disturbance `1/2` splits into two equal
   counter-moving packets `1/4` (conserved, even), each at the One's signal speed.
+- Step 46 — the deceleration parameter: the `2/3`-vs-`1/3` budget forces
+  `q₀ = 1/6 − 2/3 = −1/2` — a negative sign (acceleration) and exact magnitude `1/2`.
+- Step 47 — the cubic lattice: two neighbours per axis over 3 axes force the
+  coordination number `binary · d_space = 6`; the six sum to the balance `1/2`.
+- Step 48 — blackbody radiation: the Stefan–Boltzmann exponent is
+  `d_space + 1 = 4 =` the spacetime dimension count — `P ∝ T⁴`.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

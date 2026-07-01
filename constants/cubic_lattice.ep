@@ -1,0 +1,59 @@
+# ============================================================================
+#  THE CUBIC LATTICE  --  why space has six nearest neighbours, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Discretise space onto a cubic grid -- the way physics is simulated, and the way a
+#  crystal is built -- and each point has a fixed number of nearest neighbours: SIX
+#  in three dimensions. That count sets the discrete Laplacian, the lattice form of
+#  every field equation. It is forced by the dimension count, not chosen.
+#
+#  ── DERIVATION ─ (check every line; uses b = 2 and d_space = 3) ──────────────
+#  On a cubic lattice each axis contributes exactly TWO nearest neighbours -- one
+#  forward, one back. With d_space = 3 axes (Step 32) the coordination number is
+#       coordination = b * d_space = 2 * 3 = 6 .
+#  The discrete Laplacian balances the centre against its neighbours: give each
+#  neighbour weight 1/(b*coordination) = 1/12, and the six neighbours sum to
+#       6 * (1/12) = 1/2 ,
+#  the balance point -- which folds up to the One (fold(1/2) = 1). The sum is the
+#  half-One in ANY dimension (2d neighbours each of weight 1/(4d) sum to 1/2); what
+#  the dimension fixes is the neighbour COUNT, six, forced by b * d_space.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  A simple-cubic lattice has coordination number six, as every crystallographer and
+#  lattice simulation uses. The forced content is exact: 2 neighbours per axis times
+#  3 axes = 6, an integer identity; the neighbour balance is the half-One.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/spacetime_dimensions.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The coordination number: two neighbours per axis, over the three spatial axes,
+# binary * spatial = 2 * 3 = 6.
+define coordination_number returning Int:
+    return binary_count() * spatial_dimensions()
+
+# Each neighbour's weight in the discrete Laplacian: 1/(binary*coordination) = 1/12.
+define neighbour_weight returning Fraction:
+    set denominator to binary_count() * coordination_number()
+    return fraction_from_ratio(1 and denominator)
+
+# The six neighbours sum to the balance point: coordination * weight = 6/12 = 1/2.
+define neighbour_sum returning Fraction:
+    set count to fraction_from_whole_number(coordination_number())
+    set weight to neighbour_weight()
+    return fraction_multiply(count and weight)
+
+# The neighbour balance folds up to the One: fold(1/2) = 1.
+define neighbour_sum_folds_to_one returning Fraction:
+    set sum to neighbour_sum()
+    return fold_fraction(sum)
