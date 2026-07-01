@@ -53,11 +53,17 @@ define copy returning Fraction:
 
 # The template folds onto the pattern.
 define template_folds_to_pattern returning Bool:
-    return fraction_is_equal(fold_fraction(template()) and pattern())
+    set the_template to template()
+    set folded to fold_fraction(the_template)
+    set the_pattern to pattern()
+    return fraction_is_equal(folded and the_pattern)
 
 # The copy folds onto the SAME pattern -- it is a genuine duplicate.
 define copy_folds_to_pattern returning Bool:
-    return fraction_is_equal(fold_fraction(copy()) and pattern())
+    set the_copy to copy()
+    set folded to fold_fraction(the_copy)
+    set the_pattern to pattern()
+    return fraction_is_equal(folded and the_pattern)
 
 # Template and copy are distinct states that together partition the One.
 define template_and_copy_partition_one returning Bool:

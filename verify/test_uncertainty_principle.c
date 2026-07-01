@@ -842,7 +842,7 @@ typedef struct {
 static EpGCObject* ep_gc_head = NULL;
 static long long ep_gc_count = 0;
 static long long ep_gc_threshold = 4096;
-static int ep_gc_enabled = 0;  /* disabled: precise GC freed live unrooted argument temporaries mid-expression (heap-use-after-free) in these bounded one-shot proofs; memory is ~18MB and never collected -- harmless here. Real fix belongs in the compiler codegen (root each arg temporary) -- see build_from_source.sh note. */
+static int ep_gc_enabled = 1;
 static long long ep_gc_nursery_count = 0;
 static long long ep_gc_nursery_threshold = 512;
 static int ep_gc_minor_count = 0;
@@ -1332,7 +1332,11 @@ static void ep_gc_scan_thread_stacks(void) {
     volatile char _top_marker;
     memset(&_regs, 0, sizeof(_regs));
     setjmp(_regs);   /* spill the collector's own registers onto its stack */
-    ep_thread_local_top = (void*)&_top_marker;
+    /* Publish the LOWEST of our own local addresses as this thread's live top, so the
+       scanned range covers both the stack marker and the register-spill buffer whatever
+       order the compiler laid them out (a missed _regs would drop a register-only root). */
+    { char* _a = (char*)(void*)&_top_marker; char* _b = (char*)(void*)&_regs;
+      ep_thread_local_top = (void*)((_a < _b) ? _a : _b); }
     for (int t = 0; t < ep_num_threads; t++) {
         if (!ep_thread_active[t]) continue;
         if (!ep_thread_tops[t]) continue;
@@ -1414,10 +1418,44 @@ static void ep_gc_mark(void) {
     if (ep_gc_scan_channels_major) ep_gc_scan_channels_major();
 }
 
+/* Conservatively scan the CURRENT thread's own live C stack and mark any YOUNG object it
+   finds. This closes a use-after-free on the frequent minor path: a freshly-allocated
+   argument temporary — e.g. the result of g() while f(g() and h()) is still evaluating
+   h() — lives only on the C stack / in registers and is not yet on the precise shadow
+   stack, so a minor collection triggered mid-expression would otherwise free it. Scanning
+   ONLY the collecting thread's own stack is race-free (no cross-thread read) and cheap
+   (one bounded stack, current thread only). Non-pointer words are harmlessly ignored by
+   ep_gc_table_get; only generation-0 objects are marked. The setjmp spills register-held
+   roots onto the stack so the scan can see them. */
+EP_NO_ASAN
+static void ep_gc_scan_own_stack_minor(void) {
+    jmp_buf _regs;
+    volatile char _marker;
+    memset(&_regs, 0, sizeof(_regs));
+    setjmp(_regs);   /* spill callee-saved registers into _regs, on the stack */
+    void* bottom = ep_thread_local_bottom;
+    if (!bottom) return;
+    /* Start at the LOWEST of our own local addresses so the scanned range covers both
+       the current stack top (_marker) and the register-spill buffer (_regs), regardless
+       of how the compiler ordered these locals on the stack. Missing _regs would drop a
+       root held only in a callee-saved register -> a rare use-after-free. */
+    char* a = (char*)(void*)&_marker;
+    char* b = (char*)(void*)&_regs;
+    char* lo = (a < b) ? a : b;
+    void** start = (void**)lo;
+    void** end = (void**)bottom;
+    if (start > end) { void** tmp = start; start = end; end = tmp; }
+    for (void** cur = start; cur < end; cur++) {
+        void* p = *cur;
+        if (p) ep_gc_mark_object_minor(p);
+    }
+}
+
 static void ep_gc_mark_minor(void) {
-    /* No conservative stack scan on minor collections: precise shadow stacks +
-       the write-barrier remembered set cover young objects, and skipping the
-       scan keeps the frequent minor path fast and free of any cross-thread read. */
+    /* Conservatively scan our OWN live C stack first, to catch freshly-allocated argument
+       temporaries (only on the stack / in registers, not yet on the shadow stack) that a
+       minor collection mid-expression would otherwise free. Own-thread only, so race-free. */
+    ep_gc_scan_own_stack_minor();
     for (int t = 0; t < ep_num_threads; t++) {
         if (!ep_thread_active[t]) continue;
         EpThreadGCState* state = ep_thread_gc_states[t];
@@ -4924,8 +4962,8 @@ L_cleanup:
 }
 
 long long minimum_uncertainty_product(long long depth) {
-    long long position_support = 0;
     long long frequency_support = 0;
+    long long position_support = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&depth);
@@ -4956,9 +4994,9 @@ L_cleanup:
 }
 
 long long smallest_fold_period_above(long long threshold) {
-    long long n = 0;
     long long best = 0;
     long long period = 0;
+    long long n = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&n);
@@ -5006,8 +5044,8 @@ L_cleanup:
 }
 
 long long minimal_binary_cover(long long volume) {
-    long long depth = 0;
     long long reach = 0;
+    long long depth = 0;
     long long ret_val = 0;
 
     depth = 1;
@@ -5040,8 +5078,8 @@ L_cleanup:
 }
 
 long long fold_period_of_unit_fraction(long long n) {
-    long long count = 0;
     long long value = 0;
+    long long count = 0;
     long long ret_val = 0;
 
     value = (2 % n);
@@ -5071,8 +5109,8 @@ L_cleanup:
 }
 
 long long ratio_to_decimal_text(long long numerator, long long denominator, long long places) {
-    long long place = 0;
     long long fractional = 0;
+    long long place = 0;
     long long remainder = 0;
     long long whole_part = 0;
     long long ret_val = 0;

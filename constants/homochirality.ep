@@ -54,11 +54,15 @@ define right_hand_target returning Fraction:
 
 # The two hands share one fold target (so neither wins the fold).
 define hands_share_target returning Bool:
-    return fraction_is_equal(left_hand_target() and right_hand_target())
+    set left to left_hand_target()
+    set right to right_hand_target()
+    return fraction_is_equal(left and right)
 
 # The two hands are equidistant from the balance: right - left = 1/2 exactly.
 define hand_separation returning Fraction:
-    return fraction_subtract(right_hand() and left_hand())
+    set right to right_hand()
+    set left to left_hand()
+    return fraction_subtract(right and left)
 
 # The pair is degenerate: the separation is the half-One, split evenly about 1/2.
 define pair_is_degenerate returning Bool:

@@ -35,19 +35,12 @@ done
 # tidy the build artifacts ernos leaves next to the sources
 find tests -type f ! -name '*.ep' -delete
 
-# Post-process: disable the runtime GC in the emitted C. The precise collector frees
-# live-but-unrooted argument temporaries mid-expression (a heap-use-after-free in the
-# runtime), which shows up as spurious FAILs / segfaults. These verifiers are bounded
-# one-shot programs (~18 MB peak, run in a fraction of a second), so never collecting
-# is harmless and no computed value depends on the GC. This is a WORKAROUND applied to
-# the generated C; the proper fix is upstream in the compiler codegen (spill each
-# argument temporary to a rooted local before evaluating a sibling allocating arg) or
-# in the runtime (have the single-threaded collect path conservatively scan its own C
-# stack, as ep_gc_park_if_stopped already does for other threads). Do NOT make
-# ep_gc_enabled=0 a compiler default -- that would wrongly disable GC for every real
-# program. Until the upstream fix lands, regeneration must re-apply this line.
-sed -i.bak 's|^static int ep_gc_enabled = 1;|static int ep_gc_enabled = 0;  /* disabled: GC freed live unrooted temporaries (heap-use-after-free) in these one-shot proofs; see build_from_source.sh */|' verify/test_*.c
-rm -f verify/test_*.c.bak
+# NOTE: the GC-disable post-processing step that used to live here is GONE. The root
+# cause was fixed in the compiler runtime (bundled in ../compiler/): minor collections
+# now conservatively scan the collecting thread's own C stack, so freshly-allocated
+# argument temporaries can no longer be freed mid-expression. The proofs run with the
+# GC ON -- bounded memory (a few MB per suite, where the exact-bisection proofs
+# previously peaked at gigabytes with the GC disabled) and no use-after-free.
 
-echo "Regenerated verify/*.c from the .ep sources (GC disabled for the proofs)."
+echo "Regenerated verify/*.c from the .ep sources (GC on; fixed compiler)."
 echo "Now run: make -C verify check"

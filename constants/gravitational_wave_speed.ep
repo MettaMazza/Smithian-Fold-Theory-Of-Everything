@@ -40,4 +40,6 @@ define gravitational_wave_speed returning Fraction:
 
 # Gravitational waves travel at exactly the speed of light (both are the One).
 define gw_speed_equals_light returning Bool:
-    return fraction_is_equal(gravitational_wave_speed() and causal_speed())
+    set gw to gravitational_wave_speed()
+    set c to causal_speed()
+    return fraction_is_equal(gw and c)

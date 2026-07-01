@@ -46,7 +46,9 @@ define equilibrium_complement returning Fraction:
     return fraction_subtract(one and equilibrium_weight())
 
 define equilibrium_is_self_antipodal returning Bool:
-    return fraction_is_equal(equilibrium_complement() and equilibrium_weight())
+    set complement to equilibrium_complement()
+    set weight to equilibrium_weight()
+    return fraction_is_equal(complement and weight)
 
 # The balance folds to the One (the equilibrium fixed point).
 define equilibrium_folds_to_one returning Fraction:
