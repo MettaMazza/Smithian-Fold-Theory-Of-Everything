@@ -1,0 +1,24 @@
+import "../constants/general_n_body_periodic.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the general n-body problem ==="
+    set ok to expect_equal("body one on the orbit of 1/5" and fraction_to_text(body_one()) and "1/5")
+    set ok to expect_equal("fold(1/5) = 2/5 (first advances to second)" and fraction_to_text(first_advances_to_second()) and "2/5")
+    set ok to expect_equal("fold(2/5) = 4/5 (second advances to third)" and fraction_to_text(second_advances_to_third()) and "4/5")
+    set ok to expect_number("joint recurrence period = period(1/5) = 4" and joint_recurrence_period() and 4)
+    set ok to expect_bool("the configuration closes (returns after the period)" and configuration_returns())
+    display "=== done ==="
+    return 0

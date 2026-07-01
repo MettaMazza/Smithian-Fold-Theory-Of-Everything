@@ -124,9 +124,12 @@ And the structural laws of physics, forced the same way:
 - **Channels, life, cosmos** — the **weak mass ratio** (`1/(m−1)` = the mixing ratio),
   **evolution by descent** (selection sweeps a variant to fixation at the One), and the
   **thermal history** (radiation → matter → dark energy, forced by `4 > 3 > 0`).
+- **Orbits, generations, noise** — the **general n-body problem** (bodies on a fold
+  orbit stay periodic), **generation mass-splitting** (three generations spaced evenly
+  by `1/3`), and the **fluctuation–dissipation theorem** (noise = drag about equilibrium).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 86 test
-suites (536 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
+The full, ordered, run-it-yourself derivation of all of it — every step, all 89 test
+suites (555 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
 in one run with `make -C verify prove`.
 
 ---

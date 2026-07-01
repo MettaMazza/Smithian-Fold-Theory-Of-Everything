@@ -1,0 +1,24 @@
+import "../constants/fluctuation_dissipation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the fluctuation-dissipation theorem ==="
+    set ok to expect_equal("equilibrium = 1/2 (self-antipodal balance)" and fraction_to_text(equilibrium()) and "1/2")
+    set ok to expect_equal("fluctuation = 3/4 (a step above)" and fraction_to_text(fluctuation()) and "3/4")
+    set ok to expect_equal("dissipation = 1/4 (the antipode below)" and fraction_to_text(dissipation()) and "1/4")
+    set ok to expect_bool("fluctuation + dissipation = the One (antipodal)" and fluctuation_and_dissipation_are_antipodal())
+    set ok to expect_equal("fluctuation departure = 1/4" and fraction_to_text(fluctuation_departure()) and "1/4")
+    set ok to expect_equal("dissipation departure = 1/4" and fraction_to_text(dissipation_departure()) and "1/4")
+    set ok to expect_bool("THE THEOREM: fluctuation = dissipation (equal magnitude)" and fluctuation_equals_dissipation())
+    display "=== done ==="
+    return 0

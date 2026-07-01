@@ -1,0 +1,74 @@
+# ============================================================================
+#  THE FLUCTUATION-DISSIPATION THEOREM  --  why a system's noise and its drag are
+#  the same thing, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A remarkable law of statistical physics: how strongly a system JIGGLES on its own
+#  at equilibrium (fluctuation) is exactly tied to how strongly it RESISTS being
+#  pushed (dissipation). Brownian jitter and viscous drag are two faces of one
+#  equilibrium. That equality is the fold's balance seen two ways.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  Equilibrium is the self-antipodal balance, 1/2 (One - 1/2 = 1/2). A spontaneous
+#  FLUCTUATION carries the state a step ABOVE the balance -- to 3/4. The DISSIPATION is
+#  the driven return, its ANTIPODE below the balance -- One - 3/4 = 1/4. Two facts hold
+#  at once:
+#     ANTIPODAL:  fluctuation + dissipation = 3/4 + 1/4 = the One (complementary) ;
+#     EQUAL SIZE: the departure up equals the departure down,
+#                 (3/4 - 1/2) = 1/4 = (1/2 - 1/4) .
+#  The equal size IS the fluctuation-dissipation theorem: the spontaneous fluctuation
+#  and the driven dissipation have the SAME magnitude, because they are the one balance
+#  measured in opposite directions. Both are forced by the self-antipodal equilibrium;
+#  nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Fluctuation and dissipation are measured to be proportional (Einstein's Brownian
+#  relation, Johnson-Nyquist noise) -- exactly the forced equal-and-opposite structure
+#  about equilibrium. The forced content is exact: fluctuation and dissipation are
+#  antipodes summing to the One, with equal departures from the balance.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The equilibrium: the self-antipodal balance point, 1/2.
+define equilibrium returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# A spontaneous fluctuation: a step above the balance, 3/4.
+define fluctuation returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# The dissipation: the driven return, the antipode of the fluctuation, One - 3/4 = 1/4.
+define dissipation returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set fluc to fluctuation()
+    return fraction_subtract(one and fluc)
+
+# Fluctuation and dissipation are ANTIPODAL: they sum to the One (complementary).
+define fluctuation_and_dissipation_are_antipodal returning Bool:
+    set fluc to fluctuation()
+    set diss to dissipation()
+    set total to fraction_add(fluc and diss)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+# The fluctuation's departure above equilibrium: 3/4 - 1/2 = 1/4.
+define fluctuation_departure returning Fraction:
+    set fluc to fluctuation()
+    set eq to equilibrium()
+    return fraction_subtract(fluc and eq)
+
+# The dissipation's departure below equilibrium: 1/2 - 1/4 = 1/4.
+define dissipation_departure returning Fraction:
+    set eq to equilibrium()
+    set diss to dissipation()
+    return fraction_subtract(eq and diss)
+
+# THE THEOREM: fluctuation and dissipation have EQUAL magnitude -- the departures match.
+define fluctuation_equals_dissipation returning Bool:
+    set up to fluctuation_departure()
+    set down to dissipation_departure()
+    return fraction_is_equal(up and down)

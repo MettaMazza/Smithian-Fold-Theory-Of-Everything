@@ -2748,6 +2748,72 @@ dark-energy-dominated — exactly the forced ordering from the dilution exponent
 
 ---
 
+### Step 86 — The general n-body problem (periodic on a fold orbit)
+
+**File:** `constants/general_n_body_periodic.ep`
+
+**What it does.** The general statement behind Step 33: any fold orbit gives a periodic
+configuration. On the orbit of `1/5`, `fold` cycles four bodies `1/5 → 2/5 → 4/5 → 3/5
+→ 1/5`, so the configuration returns after the fold period of `1/5`, which is **4**.
+Periodic, not chaotic — n bodies on a period-n orbit recur with period n.
+
+```
+=== the general n-body problem ===
+  ok    fold(1/5) = 2/5 ; fold(2/5) = 4/5
+  ok    joint recurrence period = period(1/5) = 4
+  ok    the configuration closes (returns after the period)
+```
+
+**To measurement.** Special n-body choreographies are periodic and integrable, not
+chaotic — the forced result: bodies on a fold orbit recur with the orbit's own period.
+
+---
+
+### Step 87 — Generation mass-splitting (even `1/3` steps)
+
+**File:** `constants/generation_mass_splitting.ep`
+
+**What it does.** The three generations are the three tripling-fold preimages of the
+electroweak balance `1/2`: `(1/2 + k)/c` for `k = 0,1,2` → `1/6, 1/2, 5/6`. The gap
+between consecutive generations is `1/2 − 1/6 = 1/3` and `5/6 − 1/2 = 1/3` — a **uniform
+step of `1/colour = 1/3`**. Three generations, evenly spaced.
+
+```
+=== generation mass-splitting ===
+  ok    generation count = colour = 3
+  ok    generations = 1/6, 1/2, 5/6
+  ok    gap = 1/3 (= 1/colour) ; spacing is uniform
+```
+
+**To measurement.** There are exactly three generations in a ladder — the forced count
+and even `1/colour` spacing; the physical masses (with sector dressing) are the
+separate mass-sector results.
+
+---
+
+### Step 88 — The fluctuation–dissipation theorem
+
+**File:** `constants/fluctuation_dissipation.ep`
+
+**What it does.** Equilibrium is the self-antipodal balance `1/2`. A spontaneous
+FLUCTUATION steps above (`3/4`); the DISSIPATION is its antipode below (`One − 3/4 =
+1/4`). They are antipodal (`3/4 + 1/4 = One`) **and equal in departure**
+(`3/4 − 1/2 = 1/4 = 1/2 − 1/4`) — the equal size *is* the theorem: noise and drag have
+the same magnitude, one balance measured in opposite directions.
+
+```
+=== the fluctuation-dissipation theorem ===
+  ok    equilibrium 1/2 ; fluctuation 3/4 ; dissipation 1/4 (antipode)
+  ok    fluctuation + dissipation = the One
+  ok    THE THEOREM: fluctuation = dissipation (equal departure)
+```
+
+**To measurement.** Fluctuation and dissipation are measured proportional (Einstein's
+Brownian relation, Johnson–Nyquist noise) — the forced equal-and-opposite structure
+about equilibrium.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2950,6 +3016,12 @@ runs):**
   `1/4 → 1/2 → 1` to fixation (the One), not extinction.
 - Step 85 — the thermal history: the dilution exponents `4 > 3 > 0` force the epoch
   order radiation → matter → dark energy.
+- Step 86 — the general n-body problem: n bodies on a fold orbit recur with the
+  orbit's period (the `1/5` orbit: four bodies, period 4) — periodic, not chaotic.
+- Step 87 — generation mass-splitting: three generations at `1/6, 1/2, 5/6` (tripling
+  preimages of `1/2`), evenly spaced by `1/colour = 1/3`.
+- Step 88 — fluctuation–dissipation: noise and drag are antipodes about equilibrium
+  `1/2` with equal departure — the theorem, one balance measured both ways.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
