@@ -56,6 +56,28 @@ parameters** enter at the second order: the floor is forced from the depth, the 
 from the One. The leading order *is* the result; the next order is the same forced
 structure being self-consistent, not a second attempt to close a gap.
 
+### Measured values are sealed — a target can never forge a derivation
+
+Forcing is only meaningful if the engine cannot "agree" with a measurement by echoing
+it back. So the measured (target) value is barred from the derivation side —
+**structurally**, not by discipline:
+
+- A measured value is the distinct `Measured` type (`foundation/measured_values.ep`),
+  introduced only through `measured(label, num, den)`. Every derivation primitive
+  speaks `Fraction`, and there is **no** conversion from `Measured` to `Fraction` for
+  derivation use — so handing a target to a forcing is a **compile error** (`expected
+  Fraction, found Measured`); the engine will not build. The one sanctioned use is the
+  comparison boundary `forced_agrees_with_measured(forced, target, tolerance)`, which
+  reads the target only to take a difference and returns a yes/no — the target's number
+  never leaves the boundary.
+- The runtime primitive `forbid_target_input(label, value_is_measured)`
+  (`foundation/enforcement.ep`) states the same law explicitly and **halts** (exit 1)
+  if a value known to carry measured provenance reaches a derivation.
+
+Both are proven to fire: feeding a `Measured` into `fraction_add` fails to compile, and
+`forbid_target_input(_, true)` halts the engine. Measured numbers live only in the
+comparison side and the tests — never in a derivation.
+
 ## 2. Every module is cold-readable
 
 A skeptic must be able to verify a module without already believing the theory.

@@ -134,6 +134,7 @@ Smithian Fold Theory/
     counted_numbers.ep        <- Step 4: covering depth, fold period, decimals
     structural_counts.ep      <- Step 4: the two generators (binary, colour), counted
     enforcement.ep            <- Step 4: forced_to_be -- halts on any un-forced value
+    measured_values.ep        <- the sealed Measured type: a target can never forge a derivation
   constants/                  <- the forced constants, each built from the above
     fine_structure_constant.ep <- Step 5: one-over-alpha at both self-similar scales
     charged_lepton_cubic.ep    <- Step 6: the lepton mass cubic's forced invariants
@@ -389,8 +390,16 @@ makes the law enforce itself.
     searched, or fitted. There is no legitimate selection in the theory.
   - `require_in_domain` (in the fold layer) — zero, negative, or past-the-One
     halts.
-  Together these make "nothing is fitted and nothing is chosen" enforced, not
-  merely intended.
+  - `forbid_target_input` (with the `Measured` type in `measured_values.ep`) — the
+    measured value can never forge a derivation. A measured number is a distinct
+    `Measured` type; the `Fraction`-only derivation primitives cannot consume it, so
+    feeding a target into a forcing is a **compile error** (the engine will not
+    build), with `forbid_target_input` halting at runtime as a backstop. The one
+    sanctioned use of a target is the comparison boundary
+    `forced_agrees_with_measured(forced, target, tolerance)` — forced value in,
+    measured target in, yes/no out; the target never leaks back into a derivation.
+  Together these make "nothing is fitted, nothing is chosen, and no measurement is
+  ever an input" enforced, not merely intended.
 
 **What it proves.** Run `tests/test_enforcement.ep`: forced values pass through
 unchanged. The other half — that a fitted value halts the engine — is shown

@@ -43,6 +43,22 @@ define forbid_selection with reason as Str returning Int:
     return halt_violation(concat("SELECTION is forbidden -- a value was chosen, not forced: " and reason))
 
 
+# Stop the engine if a MEASURED (target) value ever reaches the derivation side.
+# The law is that experimental numbers appear ONLY on the comparison side; a value
+# forced from the One may be CHECKED against a measurement, but a measurement may
+# never be an INPUT to a forcing. This is the runtime guard for that law: pass
+# value_is_measured = true at any point a value known to carry measured provenance is
+# about to feed a derivation, and the engine screams and halts rather than let a
+# target quietly forge its own agreement. (The primary guard is structural: measured
+# values are the separate Measured type in measured_values.ep, which the Fraction-only
+# derivation primitives cannot consume -- the compiler rejects it before this ever
+# runs. This primitive makes the same law explicit and catches it at runtime too.)
+define forbid_target_input with label as Str and value_is_measured as Bool returning Int:
+    if value_is_measured:
+        return halt_violation(concat("TARGET INPUT detected -- a measured value reached a derivation; measurements are comparison-only, never forcing inputs: " and label))
+    return 1
+
+
 # Enforce that a value is FORCED, not selected from among alternatives. The
 # forced candidate must satisfy its structural condition, and NONE of the
 # alternatives may also satisfy it -- otherwise the value was picked from a set

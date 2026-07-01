@@ -1,0 +1,46 @@
+import "../constants/fine_structure_constant.ep"
+import "../foundation/measured_values.ep"
+import "../foundation/enforcement.ep"
+
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and int_to_string(got))))
+    return 0
+
+define main:
+    display "=== measured values: the sealed comparison boundary ==="
+
+    # The forced value, from the One (a Fraction): 1/alpha to second self-similar order.
+    set forced to inverse_fine_structure_second_order()
+
+    # The measured target, SEALED as a Measured -- CODATA 1/alpha = 137.035999177.
+    # This is the only way an experimental number enters the engine, and it cannot be
+    # fed into any derivation (the type checker forbids it); it is comparison-only.
+    set codata to measured("CODATA 1/alpha" and 137035999177 and 1000000000)
+
+    # Compare at the boundary, within one part in a million.
+    set tolerance to fraction_from_ratio(1 and 1000000)
+    set agrees to forced_agrees_with_measured(forced and codata and tolerance)
+    set ok to expect_bool("forced 1/alpha AGREES with sealed CODATA target (< 1e-6)" and agrees)
+
+    # A wrong target must NOT agree -- the boundary really compares.
+    set wrong_target to measured("wrong 1/alpha" and 137 and 1)
+    set disagrees to forced_agrees_with_measured(forced and wrong_target and tolerance)
+    set ok to expect_bool("forced 1/alpha does NOT agree with a wrong target (137)" and (disagrees equals false))
+
+    # The runtime guard passes a value that is NOT a measured input...
+    set ok to expect_number("forbid_target_input passes a forced (non-measured) value" and forbid_target_input("forced value" and false) and 1)
+    # ...and would HALT the engine on a measured value reaching a derivation (see the
+    # sabotage demonstration; calling forbid_target_input(_, true) exits with code 1).
+
+    display "=== done ==="
+    return 0
