@@ -41,10 +41,14 @@ piece is constructed afresh and shown to reproduce the known result exactly.
 ### Prove the whole thing in one run
 
 The fastest path: `make -C verify prove`. The unified top-level driver
-(`verify/prove_all.sh`) builds and runs **every** proof in a single pass, enumerates
-every forced constant and scale with its value, and ends with a grand tally —
-`EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from the One` (currently 83
-suites, 518 forced checks, 0 failures). It needs nothing but a C compiler. Use
+(`verify/prove_all.sh`) builds and runs **every** proof in a single pass and prints,
+for each constant and scale: its forced value, the **trace back to the One**
+(`test_trace_to_the_one`: axiom → counted generators → depths → the constant), and the
+**external measurement it matches** (`test_codata_comparison`: every forced value vs
+CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
+derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
+to the One, and checked against external CODATA / PDG / Planck measurement` (currently
+97 suites, 611 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)

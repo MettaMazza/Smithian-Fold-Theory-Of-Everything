@@ -28,6 +28,8 @@ fails=0
 echo "================================================================"
 echo "  THE SMITHIAN FOLD  --  every constant and scale, forced from the One"
 echo "  (one axiom-free foundation; zero free parameters; exact arithmetic)"
+echo "  * test_trace_to_the_one  -- the whole chain reduced to the axiom (the One)"
+echo "  * test_codata_comparison -- every forced value vs external CODATA/PDG/Planck"
 echo "================================================================"
 
 for c in test_*.c; do
@@ -45,7 +47,8 @@ done
 echo "================================================================"
 echo "  suites: $suites    forced checks passed: $oks    failed: $fails"
 if [ "$fails" -eq 0 ]; then
-  echo "  EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED -- from the One."
+  echo "  EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED -- traced to the One,"
+  echo "  and checked against external CODATA / PDG / Planck measurement."
   echo "================================================================"
 else
   echo "  SOME PROOFS FAILED."

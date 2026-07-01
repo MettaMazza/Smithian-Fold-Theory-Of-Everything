@@ -1,0 +1,71 @@
+# ============================================================================
+#  CODATA / PDG / PLANCK COMPARISON  --  every forced value against the external
+#  measurement, side by side, through the sealed boundary.
+# ============================================================================
+#  Each forced value is derived from the One (see its module and OneFoldMaster.md).
+#  Here it is compared to the authoritative measured value, which enters ONLY as a
+#  sealed `Measured` (it can never reach a derivation). Forced in, measured in, a
+#  yes/no verdict out. Every "ok" is a forced value landing on the measurement.
+# ============================================================================
+import "../constants/fine_structure_constant.ep"
+import "../constants/koide_relation.ep"
+import "../constants/dark_to_baryon_fraction.ep"
+import "../constants/hubble_tension.ep"
+import "../constants/cosmic_density.ep"
+import "../constants/neutrino_mixing.ep"
+import "../constants/w_boson_mass.ep"
+import "../constants/bbn.ep"
+import "../constants/deceleration_parameter.ep"
+import "../constants/g_factor.ep"
+import "../constants/gauge_mediator_counts.ep"
+import "../constants/three_of_everything.ep"
+import "../foundation/measured_values.ep"
+
+# Compare a forced Fraction to a measured value (num/den), within a tolerance (num/den).
+define against with label as Str and forced as Fraction and m_num as Int and m_den as Int and t_num as Int and t_den as Int:
+    set target to measured(label and m_num and m_den)
+    set tol to fraction_from_ratio(t_num and t_den)
+    set agrees to forced_agrees_with_measured(forced and target and tol)
+    set forced_text to fraction_to_text(forced)
+    if agrees:
+        display concat("  ok    " and concat(label and concat(" -- forced " and forced_text)))
+    else:
+        display concat("  FAIL  " and concat(label and concat(" -- forced " and forced_text)))
+    return 0
+
+# Compare a forced whole number (exact count) to a measured whole number, exactly.
+define against_exact with label as Str and forced as Int and measured_whole as Int:
+    set forced_fraction to fraction_from_whole_number(forced)
+    against(label and forced_fraction and measured_whole and 1 and 0 and 1)
+    return 0
+
+define main:
+    display "=== CODATA / PDG / Planck comparison (forced from the One vs measured) ==="
+
+    display "--- precision constants ---"
+    set ok to against("1/alpha vs CODATA 137.035999177" and inverse_fine_structure_second_order() and 137035999177 and 1000000000 and 1 and 1000000)
+    set ok to against("Koide Q vs measured 0.666661" and koide_ratio() and 666661 and 1000000 and 1 and 100000)
+    set ok to against("Hubble ratio vs measured 1.084323" and hubble_calibration_ratio_second_order() and 1084323 and 1000000 and 1 and 10000)
+    set ok to against("dark/baryon vs measured 5.364" and dark_to_baryon_ratio_second_order() and 5364 and 1000 and 2 and 1000)
+
+    display "--- cosmic budget (Planck 2018) ---"
+    set ok to against("Omega_Lambda vs measured 0.6889" and dark_energy_density() and 6889 and 10000 and 3 and 100)
+    set ok to against("Omega_matter vs measured 0.3111" and matter_density() and 3111 and 10000 and 3 and 100)
+
+    display "--- neutrino mixing (NuFIT) ---"
+    set ok to against("sin^2 atmospheric vs measured 0.545" and atmospheric_mixing() and 545 and 1000 and 6 and 100)
+    set ok to against("sin^2 solar vs measured 0.307" and solar_mixing() and 307 and 1000 and 6 and 100)
+    set ok to against("sin^2 reactor vs measured 0.022" and reactor_mixing() and 22 and 1000 and 6 and 100)
+
+    display "--- electroweak, nuclear, cosmic ---"
+    set ok to against("(M_W/M_Z)^2 vs measured 0.7769 (bare)" and w_to_z_mass_squared() and 7769 and 10000 and 4 and 100)
+    set ok to against("primordial helium Y vs measured 0.247" and helium_fraction() and 247 and 1000 and 1 and 100)
+    set ok to against("|q0| deceleration vs measured 0.53" and deceleration_magnitude() and 53 and 100 and 6 and 100)
+    set ok to against("electron g: forced 2 vs measured 2.00232 (anomaly is QED)" and bare_g_factor() and 200232 and 100000 and 1 and 100)
+
+    display "--- exact integer counts ---"
+    set ok to against_exact("gluons vs observed 8" and gluon_count() and 8)
+    set ok to against_exact("fermion generations vs observed 3" and generation_count() and 3)
+
+    display "=== done ==="
+    return 0

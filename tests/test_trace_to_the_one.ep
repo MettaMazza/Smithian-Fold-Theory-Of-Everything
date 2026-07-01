@@ -1,0 +1,53 @@
+# ============================================================================
+#  TRACE TO THE ONE  --  the whole chain in one place: axiom -> generators ->
+#  depths -> a headline constant, every step reducing to the One.
+# ============================================================================
+#  This is the "everything bottoms out at the One" demonstration. It walks the
+#  dependency floor: the One is forced from "there is not nothing"; the two
+#  generators are COUNTED from the fold's own period spectrum; the depths are forced
+#  from the generators; and 1/alpha's every block is built from those -- so the only
+#  irreducible input anywhere is the One.
+# ============================================================================
+import "../constants/the_axiom_is_a_theorem.ep"
+import "../constants/fine_structure_constant.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== trace to the One: every value reduces to the axiom ==="
+
+    display "--- the One (forced from 'there is not nothing', not assumed) ---"
+    set ok to expect_bool("the ground is not nothing (zero forbidden)" and ground_is_not_nothing())
+    set ok to expect_equal("the displaced ground (x with x+x = One) = 1/2" and fraction_to_text(displaced_ground()) and "1/2")
+    set ok to expect_equal("the ground doubles to the One (1/2 + 1/2 = 1)" and fraction_to_text(ground_doubles_to_one()) and "1")
+    set ok to expect_equal("the ground folds up to the One (fold(1/2) = 1)" and fraction_to_text(displaced_ground_folds_to_one()) and "1")
+    set ok to expect_equal("the One is the fold's fixed point (fold(1) = 1)" and fraction_to_text(one_is_the_fold_fixed_point()) and "1")
+
+    display "--- the two generators, COUNTED from the fold's period spectrum ---"
+    set ok to expect_number("binary = fold period of 1/3 = 2" and binary_count() and 2)
+    set ok to expect_number("colour = fold period of 1/7 = 3" and colour_count() and 3)
+
+    display "--- a headline constant, every block from the generators down to the One ---"
+    set ok to expect_number("down-depth = cover(colour^colour) = binary + colour = 5" and down_depth() and 5)
+    set ok to expect_number("up-depth = cover(colour^(colour+1)) = colour + (colour+1) = 7" and up_depth() and 7)
+    set ok to expect_number("tower = binary^up_depth = 128" and tower() and 128)
+    set ok to expect_number("colour^2 = colour^binary = 9" and colour_squared() and 9)
+    set ok to expect_number("covering volume = binary * down_depth^colour = 250" and covering_volume() and 250)
+    set ok to expect_equal("1/alpha (leading) = tower + colour^2*(cov+1)/cov = 34259/250" and fraction_to_text(inverse_fine_structure_first_order()) and "34259/250")
+
+    display "  (floor reached: every value above is built only from the One and its fold)"
+    display "=== done ==="
+    return 0

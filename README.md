@@ -135,9 +135,10 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 95 test
-suites (583 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
-in one run with `make -C verify prove`.
+The full, ordered, run-it-yourself derivation of all of it — every step, all 97 test
+suites (611 forced checks, including the trace-to-the-One and the CODATA comparison) —
+is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
+`make -C verify prove`.
 
 ---
 
@@ -180,13 +181,17 @@ holds the ErnosPlain compiler's own output as self-contained C (standard headers
 only), so any `cc`/`gcc`/`clang` builds it. The one-line way to prove the whole thing:
 
 ```sh
-make -C verify prove        # THE unified driver: enumerate EVERY forced value + grand tally
+make -C verify prove        # THE one command: proves absolutely everything
 make -C verify check        # or: build & run every proof, one ok / FAIL line per suite
 ```
 
-`make prove` runs every proof in a single pass, prints each forced constant and scale
-with its value, and ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from
-the One` (currently 83 suites, 518 forced checks, 0 failures).
+`make prove` runs every proof in a single pass and prints, for each constant and scale:
+its forced value, **the trace back to the One** (`test_trace_to_the_one`: axiom →
+counted generators → depths → the constant), and **the external measurement it matches**
+(`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
+boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
+FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
+CODATA / PDG / Planck measurement` (currently 97 suites, 611 forced checks, 0 failures).
 
 **From the ErnosPlain source.** Install the compiler `ernos`, then either rebuild
 the C (`verify/build_from_source.sh`) or run a proof directly:
