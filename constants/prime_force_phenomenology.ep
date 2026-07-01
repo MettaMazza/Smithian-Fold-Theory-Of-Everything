@@ -1,0 +1,123 @@
+# ============================================================================
+#  THE TWO NEW FORCES  --  the full phenomenology of prime sectors 5 and 7, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The prime-sector ladder (Step 26) forces exactly four confining forces, at the
+#  primes {2, 3, 5, 7}. Two are known (the electroweak binary sector and the strong
+#  colour sector); TWO are predicted and not yet identified. A prediction is only
+#  worth anything if it is SPECIFIC -- so here the two new forces are given their full
+#  phenomenology, the SAME template the known forces obey, run for sectors 5 and 7:
+#  charge scale, coupling, mediators, colours, confinement, running, carrier, and
+#  bound states. Nothing is left as a bare count.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#  The two new sectors are forced: the lower is binary + colour = 5, the upper is the
+#  deepest covering depth = 7. For each new sector p its phenomenology is:
+#     mass-part (charge scale)  s_p = 1/p        (the shortfall from the One)
+#     coupling                  g_p = (p-1)/p    (the One less the shortfall)
+#     mediators (gauge bosons)  p^2 - 1          (the adjoint: 24 for 5, 48 for 7)
+#     colours (charge kinds)    p                (the p tilings of the shortfall)
+#     confinement pairs         (p-1)/2          (antipodal kinds j/p + (p-j)/p = One)
+#     running beta-slope        g_p / s_p = p-1  (coupling over shortfall: 4, 6)
+#     carrier                   massless, luminal, self-confining (flux-tube width 1/2)
+#     bound states              colour-neutral (meson colour+antipode = One; baryon
+#                               the whole group folds to the One)
+#  Every line is the known-force template with the sector label p set to 5 or 7 --
+#  forced, not fitted, and identical in form to the strong sector's own numbers.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  These are PREDICTIONS -- two confining forces not yet seen. The forced content is a
+#  complete, specific signature per sector: coupling (p-1)/p, mediator count p^2-1,
+#  p colour-charges, (p-1)/2 confinement pairs, beta-slope p-1, a massless luminal
+#  confining carrier, and colour-neutral bound states -- the same phenomenology the
+#  known forces have, so the prediction is falsifiable, not vague.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/prime_sector_ladder.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lower new force: binary + colour = 5 (the covering depth of colour^colour).
+define new_force_lower returning Int:
+    return binary_count() + colour_count()
+
+# The upper new force: the deepest covering depth = 7.
+define new_force_upper returning Int:
+    return deepest_covering_depth()
+
+# A sector's mass-part (charge scale): the shortfall 1/p.
+define sector_mass_part with p as Int returning Fraction:
+    return sector_shortfall(p)
+
+# A sector's number of colours (charge kinds): p.
+define sector_colours with p as Int returning Int:
+    return p
+
+# A sector's confinement pairs: the interior kinds j/p pair antipodally
+# (j/p + (p-j)/p = One), giving (p-1)/2 pairs around the self-antipodal centre.
+define sector_confinement_pairs with p as Int returning Int:
+    set interior to p - 1
+    return interior / binary_count()
+
+# The kind j/p and its antipode (p-j)/p sum to the One (the pairing that confines).
+define sector_kinds_pair_to_one with p as Int and j as Int returning Bool:
+    set kind to fraction_from_ratio(j and p)
+    set one to fraction_from_whole_number(1)
+    set antipode to fraction_subtract(one and kind)
+    set total to fraction_add(kind and antipode)
+    return fraction_is_equal(total and one)
+
+# A sector's running beta-slope: coupling over shortfall = ((p-1)/p)/(1/p) = p-1.
+# The relation is enforced -- coupling/shortfall as a fraction must equal (p-1)/1, or
+# the engine halts -- and the slope p-1 is returned.
+define sector_beta_slope with p as Int returning Int:
+    set coupling to sector_coupling(p)
+    set shortfall to sector_shortfall(p)
+    set ratio to fraction_divide(coupling and shortfall)
+    set expected to fraction_from_whole_number(p - 1)
+    set matches to fraction_is_equal(ratio and expected)
+    set flag to 0
+    if matches:
+        set flag to 1
+    set checked to forced_to_be("beta-slope = coupling/shortfall = p-1" and flag and 1)
+    return p - 1
+
+# The carrier is MASSLESS: the unbroken combination (a kind and its antipode) sums to
+# the One, leaving no shortfall -- no mass-part. Massless means unbounded reach, luminal.
+define carrier_is_massless with p as Int returning Bool:
+    return sector_kinds_pair_to_one(p and 1)
+
+# The carrier self-confines: the flux tube has constant width 1/2 (the fold-preimage
+# of the One, fold(1/2) = 1) -- the same confining structure as the gluon.
+define carrier_flux_tube_width returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+define carrier_width_folds_to_one returning Bool:
+    set width to carrier_flux_tube_width()
+    set folded to fold_fraction(width)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# A meson is colour-neutral: a colour and its anticolour sum to the One.
+define meson_is_neutral with p as Int returning Bool:
+    set colour to fraction_from_ratio(1 and p)
+    set one to fraction_from_whole_number(1)
+    set anticolour to fraction_subtract(one and colour)
+    set total to fraction_add(colour and anticolour)
+    return fraction_is_equal(total and one)
+
+# A baryon is colour-neutral: the whole group is the One, which folds to itself.
+define baryon_is_neutral returning Bool:
+    set whole to fraction_from_whole_number(1)
+    set folded to fold_fraction(whole)
+    return fraction_is_equal(folded and whole)

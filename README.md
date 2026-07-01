@@ -113,8 +113,13 @@ And the structural laws of physics, forced the same way:
   of coprime subsystems, `2·3 = 6 > 5` — the tensor product), **catalysis** (a lower
   barrier `bare/b`, catalyst conserved), and **electronegativity** (covalent `1/2` ↔
   ionic `1`).
+- **Two predicted forces, in full** — the prime-sector ladder forces four confining
+  forces at `{2,3,5,7}` (two known, two new); sectors 5 and 7 are given the complete
+  signature — coupling `(p−1)/p`, mediators `p²−1` (`24`, `48`), `p` colours,
+  confinement pairs `(p−1)/2`, beta-slope `p−1`, a massless confining carrier, neutral
+  bound states — falsifiable predictions, not bare counts.
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 79 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 80 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

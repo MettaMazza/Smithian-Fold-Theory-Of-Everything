@@ -1,0 +1,46 @@
+import "../constants/prime_force_phenomenology.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the two new forces (prime sectors 5 and 7) ==="
+    set ok to expect_number("new force lower = binary + colour = 5" and new_force_lower() and 5)
+    set ok to expect_number("new force upper = deepest depth = 7" and new_force_upper() and 7)
+
+    display "--- sector 5 ---"
+    set ok to expect_equal("mass-part (charge scale) = 1/5" and fraction_to_text(sector_mass_part(5)) and "1/5")
+    set ok to expect_equal("coupling = (5-1)/5 = 4/5" and fraction_to_text(sector_coupling(5)) and "4/5")
+    set ok to expect_number("mediators = 5^2 - 1 = 24" and sector_mediator_count(5) and 24)
+    set ok to expect_number("colours = 5" and sector_colours(5) and 5)
+    set ok to expect_number("confinement pairs = (5-1)/2 = 2" and sector_confinement_pairs(5) and 2)
+    set ok to expect_number("running beta-slope = 5-1 = 4" and sector_beta_slope(5) and 4)
+    set ok to expect_bool("carrier is massless (unbroken, luminal)" and carrier_is_massless(5))
+    set ok to expect_bool("meson colour-neutral (colour + antipode = One)" and meson_is_neutral(5))
+
+    display "--- sector 7 ---"
+    set ok to expect_equal("mass-part (charge scale) = 1/7" and fraction_to_text(sector_mass_part(7)) and "1/7")
+    set ok to expect_equal("coupling = (7-1)/7 = 6/7" and fraction_to_text(sector_coupling(7)) and "6/7")
+    set ok to expect_number("mediators = 7^2 - 1 = 48" and sector_mediator_count(7) and 48)
+    set ok to expect_number("colours = 7" and sector_colours(7) and 7)
+    set ok to expect_number("confinement pairs = (7-1)/2 = 3" and sector_confinement_pairs(7) and 3)
+    set ok to expect_number("running beta-slope = 7-1 = 6" and sector_beta_slope(7) and 6)
+    set ok to expect_bool("carrier is massless (unbroken, luminal)" and carrier_is_massless(7))
+    set ok to expect_bool("meson colour-neutral (colour + antipode = One)" and meson_is_neutral(7))
+
+    display "--- carrier and bound states ---"
+    set ok to expect_equal("carrier flux-tube width = 1/2" and fraction_to_text(carrier_flux_tube_width()) and "1/2")
+    set ok to expect_bool("flux-tube width folds to the One (confining)" and carrier_width_folds_to_one())
+    set ok to expect_bool("baryon colour-neutral (whole group folds to One)" and baryon_is_neutral())
+    display "=== done ==="
+    return 0

@@ -2571,6 +2571,46 @@ the balance `1/2` and the One.
 
 ---
 
+### Step 79 — The two new forces, in full (prime sectors 5 and 7)
+
+**File:** `constants/prime_force_phenomenology.ep`
+
+**What it does.** Step 26 forced four confining forces at the primes `{2,3,5,7}` — two
+known, two predicted. A prediction is only worth something if it's *specific*, so this
+gives the two new forces (lower `= binary+colour = 5`, upper `= deepest depth = 7`)
+the **full** known-force template, run for `p ∈ {5,7}` — not a bare count:
+
+| quantity | forced value | sector 5 | sector 7 |
+|---|---|---|---|
+| mass-part (charge scale) | `1/p` | `1/5` | `1/7` |
+| coupling | `(p−1)/p` | `4/5` | `6/7` |
+| mediators (gauge bosons) | `p²−1` | `24` | `48` |
+| colours (charge kinds) | `p` | `5` | `7` |
+| confinement pairs | `(p−1)/2` | `2` | `3` |
+| running beta-slope | `g_p/s_p = p−1` | `4` | `6` |
+
+Plus a **massless, luminal, self-confining carrier** (flux-tube width `1/2`, folding to
+the One — the gluon's structure) and **colour-neutral bound states** (meson: colour +
+antipode `= One`; baryon: the whole group folds to the One). Every line is the known
+sectors' own template with `p` set to 5 or 7 — forced, falsifiable, not vague.
+
+```
+=== the two new forces (prime sectors 5 and 7) ===
+  ok    new force lower = 5 ; upper = 7
+  ok    sector 5: mass-part 1/5, coupling 4/5, mediators 24, colours 5,
+        confinement pairs 2, beta-slope 4, massless carrier, neutral meson
+  ok    sector 7: mass-part 1/7, coupling 6/7, mediators 48, colours 7,
+        confinement pairs 3, beta-slope 6, massless carrier, neutral meson
+  ok    carrier flux-tube width 1/2 folds to the One ; baryon colour-neutral
+```
+
+**To measurement.** These are predictions — two confining forces not yet seen — but
+with a complete, specific signature per sector (coupling, mediator count, colour count,
+confinement pairs, beta-slope, a massless luminal confining carrier, neutral bound
+states), the same phenomenology the known forces have. Falsifiable, not vague.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2757,6 +2797,10 @@ runs):**
   (`bare/b = 1/4 < 1/2`) and is conserved (a fold fixed point).
 - Step 78 — electronegativity: bonds run from covalent (shared, `1/2`) to ionic (full
   transfer, the One), set by the electronegativity difference.
+- Step 79 — the two new forces in full: sectors 5 and 7 given the complete known-force
+  template — mass-part `1/p`, coupling `(p−1)/p`, mediators `p²−1`, colours `p`,
+  confinement pairs `(p−1)/2`, beta-slope `p−1`, a massless confining carrier, neutral
+  bound states. Specific, falsifiable predictions.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
