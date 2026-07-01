@@ -54,12 +54,17 @@ define gravitational_wave_speed returning FoldValue:
 # Light and gravity travel at the same speed -- not a coincidence of two rates, but
 # one shared rate, because the fold is one.
 define light_and_gravity_share_speed returning Bool:
-    return fold_value_is_equal(light_speed() and gravitational_wave_speed())
+    set light to light_speed()
+    set gravity to gravitational_wave_speed()
+    return fold_value_is_equal(light and gravity)
 
 # Nothing outruns the signal speed: a full turn (the One) is the whole circle, so
 # the fold's advance is the maximum phase there is. Rotating the One by the One
 # comes back to the One (a whole turn), confirming it is a complete, saturating
 # advance.
 define signal_speed_is_the_maximum returning Bool:
-    set full_turn to rotate(fold_signal_speed() and the_one())
-    return fold_value_is_equal(full_turn and the_one())
+    set speed to fold_signal_speed()
+    set turn_by to the_one()
+    set full_turn to rotate(speed and turn_by)
+    set one to the_one()
+    return fold_value_is_equal(full_turn and one)

@@ -59,4 +59,6 @@ define perturbation_grows returning Bool:
 
 # The perturbation reaches the One (full structure) in two steps.
 define perturbation_reaches_unison returning Bool:
-    return fraction_is_equal(perturbation_after_two_steps() and fraction_from_whole_number(1))
+    set reached to perturbation_after_two_steps()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(reached and one)

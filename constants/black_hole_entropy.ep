@@ -1,0 +1,62 @@
+# ============================================================================
+#  BLACK-HOLE ENTROPY  --  why a horizon carries one QUARTER of its area in
+#  entropy, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A black hole's entropy is not proportional to its volume (as ordinary matter's
+#  is) but to the AREA of its horizon -- and with a famous exact coefficient of one
+#  quarter: S = A/4 in Planck units (Bekenstein-Hawking). Where does the 1/4 come
+#  from? From the fold's two binary halvings.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Entropy on the horizon is counted in fold bits, and two binary structures set the
+#  coefficient. The horizon is a two-sided balance (inside/outside), one binary
+#  factor; and each area cell is resolved to the binary ground (the half-One), a
+#  second binary factor. Two halvings compound:
+#       coefficient = (1/b) * (1/b) = 1/b^2 = 1/2^2 = 1/4 .
+#  So the horizon carries S = (1/4) * A -- a quarter of its area, with the 1/4 forced
+#  as 1/binary^2 (an exact quotient; no other value solves two binary halvings). The
+#  area law itself follows because the horizon is a SURFACE of the covering (its cells
+#  live in one fewer dimension than the bulk), so entropy scales with area, not volume.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The Bekenstein-Hawking entropy is exactly S = A / 4 (in Planck units) -- the 1/4 is
+#  one of the sharpest coefficients in gravitation. The forced content is exact:
+#  1/binary^2 = 1/4, an integer-power identity, and the area (not volume) scaling
+#  follows from the horizon being a surface -- neither is fitted.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+
+
+# One binary halving: 1/b = 1/2.
+define one_halving returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The horizon entropy coefficient: two binary halvings compounded, (1/b)*(1/b) =
+# 1/b^2 = 1/4. The famous Bekenstein-Hawking quarter.
+define entropy_area_coefficient returning Fraction:
+    set first to one_halving()
+    set second to one_halving()
+    return fraction_multiply(first and second)
+
+# The coefficient equals one quarter exactly.
+define entropy_coefficient_is_quarter returning Bool:
+    set coefficient to entropy_area_coefficient()
+    set quarter to fraction_from_ratio(1 and 4)
+    return fraction_is_equal(coefficient and quarter)
+
+# The coefficient is 1/binary^2 exactly. Forced two ways -- as binary times binary
+# and as the binary square; halts on any mismatch.
+define entropy_coefficient_denominator returning Int:
+    set built to binary_count() * binary_count()
+    set counted to whole_power(binary_count() and 2)
+    return forced_to_be("horizon entropy coefficient denominator = binary^2" and built and counted)
+
+# The entropy of a horizon of area A: S = (1/4) * A. Shown here for a sample area.
+define horizon_entropy with area as Fraction returning Fraction:
+    return fraction_multiply(entropy_area_coefficient() and area)

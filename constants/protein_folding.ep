@@ -59,4 +59,6 @@ define descent_after_two_steps returning Fraction:
 
 # The descent converges to the native state in two steps -- directed, not a search.
 define descent_reaches_native returning Bool:
-    return fraction_is_equal(descent_after_two_steps() and native_state())
+    set reached to descent_after_two_steps()
+    set native to native_state()
+    return fraction_is_equal(reached and native)

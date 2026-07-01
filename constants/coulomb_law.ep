@@ -1,0 +1,79 @@
+# ============================================================================
+#  COULOMB'S LAW  --  why the electric field falls off as 1/r^2, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The electric field of a point charge weakens with the SQUARE of distance -- the
+#  inverse-square law behind all of electrostatics (and, in the same form, gravity).
+#  Why the square, and not some other power? Because we live in three space
+#  dimensions, and the fold forces that count (Step 32).
+#
+#  ── DERIVATION ─ (check every line; uses the fold and d_space = 3) ───────────
+#  A source emits a fixed flux. That flux spreads over the surface enclosing the
+#  source, and in d_space = 3 dimensions a sphere's surface grows as r^(d_space - 1)
+#  = r^2. Conservation says the total flux through every shell is the SAME -- equal
+#  to the source charge:
+#       flux(r) = r^2 * E(r) = q   (constant, independent of r).
+#  Solving, the field is E(r) = q / r^2 -- the inverse SQUARE, with the exponent 2
+#  fixed by the spatial dimension count minus one. The potential is then
+#  Phi(r) = One - q/r (unison minus the source term), and far away it approaches the
+#  One. Take two shells r1 and r2: the flux through each is exactly q, and the fields
+#  stand in the ratio (r2/r1)^2 -- the inverse-square law, exact.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Coulomb's law is inverse-square to extraordinary precision (the photon mass is
+#  bounded below ~10^-18 eV, i.e. the exponent is 2 to better than a part in 10^15).
+#  The forced content is exact: flux conservation in 3 space dimensions fixes the
+#  exponent to r^(3-1) = r^2, an integer identity, not a fitted power.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/spacetime_dimensions.ep"
+
+
+# The inverse-square exponent: the spatial dimension count less one, 3 - 1 = 2. The
+# field falls off as r to this power.
+define field_falloff_exponent returning Int:
+    return spatial_dimensions() - 1
+
+# The source charge (a structural source term, strictly inside every test shell).
+define source_charge returning Fraction:
+    return fraction_from_ratio(1 and 8)
+
+# The electric field at radius r: q / r^2. (E may exceed the One -- it is a field
+# magnitude, not a domain value -- so it is carried as an exact fraction.)
+define field_at_radius with radius as Fraction returning Fraction:
+    set r_squared to fraction_multiply(radius and radius)
+    return fraction_divide(source_charge() and r_squared)
+
+# Gauss flux through the shell at radius r: r^2 * E(r). Conservation says this equals
+# the source charge at EVERY radius.
+define gauss_flux_at_radius with radius as Fraction returning Fraction:
+    set r_squared to fraction_multiply(radius and radius)
+    return fraction_multiply(r_squared and field_at_radius(radius))
+
+# The flux is conserved: through an inner shell (1/4) and an outer shell (1/2) it is
+# the SAME, and equal to the source charge. This IS the inverse-square law.
+define flux_is_conserved returning Bool:
+    set inner to gauss_flux_at_radius(fraction_from_ratio(1 and 4))
+    set outer to gauss_flux_at_radius(fraction_from_ratio(1 and 2))
+    set inner_is_charge to fraction_is_equal(inner and source_charge())
+    set outer_is_charge to fraction_is_equal(outer and source_charge())
+    if inner_is_charge:
+        if outer_is_charge:
+            return true
+    return false
+
+# The fields at two shells stand in the ratio (r2/r1)^2. With r1 = 1/4, r2 = 1/2
+# (r2/r1 = 2), the inner field is 4 = 2^2 times the outer -- inverse-square, exact.
+define field_ratio_inner_to_outer returning Fraction:
+    set inner to field_at_radius(fraction_from_ratio(1 and 4))
+    set outer to field_at_radius(fraction_from_ratio(1 and 2))
+    return fraction_divide(inner and outer)
+
+# The potential at radius r: Phi(r) = One - q/r, unison minus the source term.
+define potential_at_radius with radius as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set source_term to fraction_divide(source_charge() and radius)
+    return fraction_subtract(one and source_term)

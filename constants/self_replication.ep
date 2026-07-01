@@ -61,9 +61,12 @@ define copy_folds_to_pattern returning Bool:
 
 # Template and copy are distinct states that together partition the One.
 define template_and_copy_partition_one returning Bool:
-    set both to fraction_add(template() and copy())
-    set is_whole to fraction_is_equal(both and fraction_from_whole_number(1))
-    set distinct to fraction_is_equal(template() and copy())
+    set the_template to template()
+    set the_copy to copy()
+    set both to fraction_add(the_template and the_copy)
+    set one to fraction_from_whole_number(1)
+    set is_whole to fraction_is_equal(both and one)
+    set distinct to fraction_is_equal(the_template and the_copy)
     if is_whole:
         if distinct:
             return false

@@ -54,8 +54,11 @@ define second_returns_to_first returning Fraction:
 
 # The orbit is closed and balanced: the two states sum to the One.
 define orbit_partitions_one returning Bool:
-    set both to fraction_add(first_state() and second_state())
-    return fraction_is_equal(both and fraction_from_whole_number(1))
+    set first to first_state()
+    set second to second_state()
+    set both to fraction_add(first and second)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(both and one)
 
 # The orbit's period: the fold period of 1/3, which is the binary generator 2.
 # Forced two ways -- as the orbit length and as the counted generator; halts on any

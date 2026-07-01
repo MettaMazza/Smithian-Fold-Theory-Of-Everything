@@ -68,8 +68,13 @@ And the structural laws of physics, forced the same way:
   constant** (vacuum forced positive on a single `127/2` scale axis, so the 10¹²⁰
   mode-sum never arises) and **structure formation** (the fold amplifies tiny
   perturbations upward to the One — the gravitational instability that builds galaxies).
+- **Classical laws, forced the same way** — **Coulomb's inverse-square** law
+  (`E ∝ 1/r²`, the exponent fixed to `d_space − 1 = 2` by flux conservation in three
+  dimensions), the **d'Alembert wave** (any disturbance splits into two equal
+  counter-moving halves at the signal speed), and **black-hole entropy** (the exact
+  Bekenstein–Hawking quarter `S = A/4`, from two binary halvings).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 42 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 45 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

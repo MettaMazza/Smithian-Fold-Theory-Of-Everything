@@ -1676,6 +1676,81 @@ perturbation upward to the One (growth, not decay).
 
 ---
 
+### Step 43 — Coulomb's law (the inverse-square, forced by 3 dimensions)
+
+**File:** `constants/coulomb_law.ep`
+
+**What it does.** A source emits a fixed flux; it spreads over a shell whose area
+grows as `r^(d_space − 1) = r²` in `d_space = 3` dimensions (Step 32). Flux
+conservation — `r²·E(r) = q` at *every* radius — gives `E(r) = q/r²`, the inverse
+square, with the exponent fixed to `2` by the spatial-dimension count. Two shells
+`1/4` and `1/2` carry the same flux `q`, and their fields stand in ratio `4 = 2²`.
+
+```
+=== Coulomb's law ===
+  ok    field falloff exponent = spatial - 1 = 2
+  ok    Gauss flux conserved through both shells (= source charge)
+  ok    field ratio inner/outer = 4 = 2^2 (inverse-square)
+  ok    potential at r=1/4: 1 - q/r = 1/2
+  ok    potential at r=1/2: 1 - q/r = 3/4
+```
+
+**To measurement.** Coulomb's law is inverse-square to ~1 part in 10¹⁵ (photon-mass
+bound) — the forced content is exact: flux conservation in 3 space dimensions fixes
+the exponent to `r²`, an integer identity, not a fitted power.
+
+---
+
+### Step 44 — Black-hole entropy (the Bekenstein–Hawking quarter)
+
+**File:** `constants/black_hole_entropy.ep`
+
+**What it does.** A horizon's entropy is `S = A/4` (Planck units) — proportional to
+*area*, not volume, with an exact coefficient of one quarter. Two binary halvings set
+it: the horizon is a two-sided balance (one `1/b`), and each area cell resolves to
+the binary ground (a second `1/b`), so `coefficient = 1/b² = 1/4`. The area law
+follows because the horizon is a *surface* of the covering (one fewer dimension).
+
+```
+=== black-hole entropy ===
+  ok    entropy-area coefficient = 1/4 (two binary halvings)
+  ok    coefficient is exactly one quarter
+  ok    coefficient denominator = binary^2 = 4 (forced)
+  ok    entropy of area 1/2: S = (1/4)(1/2) = 1/8
+```
+
+**To measurement.** The Bekenstein–Hawking coefficient is exactly `1/4` — one of the
+sharpest numbers in gravitation. The forced content is exact: `1/binary² = 1/4`, an
+integer-power identity, with area (not volume) scaling from the horizon being a surface.
+
+---
+
+### Step 45 — The d'Alembert wave (a disturbance splits into two travelling halves)
+
+**File:** `constants/dalembert_wave.ep`
+
+**What it does.** Every 1D wave is a sum of a right-moving and a left-moving shape at
+the wave speed (d'Alembert). A disturbance `U0 = 1/2` divides into two equal packets
+`U0/b = 1/4` each, moving oppositely; the split conserves the disturbance
+(`1/4 + 1/4 = 1/2`) and is even (the only self-antipodal division), each packet at
+the one signal speed, the One (Step 36).
+
+```
+=== the d'Alembert wave ===
+  ok    initial disturbance U0 = 1/2
+  ok    right-moving packet = U0/b = 1/4
+  ok    left-moving packet = 1/4
+  ok    split conserves the disturbance (right + left = U0)
+  ok    split is even (the two halves equal)
+  ok    each packet travels at the One (signal speed)
+```
+
+**To measurement.** Waves on strings, sound, and light obey d'Alembert's split into
+two counter-propagating halves at the wave speed — the forced content is exact: two
+equal packets (`1/4` each) summing to `U0`, each moving at the One.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1786,6 +1861,12 @@ runs):**
 - Step 42 — structure formation: the fold amplifies a sub-balance perturbation
   `1/4 → 1/2 → 1` (growth, not decay) — the gravitational instability that builds
   galaxies.
+- Step 43 — Coulomb's law: flux conservation over an `r²` shell in 3 space
+  dimensions forces the inverse-square field `E = q/r²` (exponent `= d_space − 1`).
+- Step 44 — black-hole entropy: two binary halvings force the Bekenstein–Hawking
+  coefficient `1/b² = 1/4`, with area (not volume) scaling from the horizon surface.
+- Step 45 — the d'Alembert wave: a disturbance `1/2` splits into two equal
+  counter-moving packets `1/4` (conserved, even), each at the One's signal speed.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

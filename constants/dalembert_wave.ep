@@ -1,0 +1,68 @@
+# ============================================================================
+#  THE d'ALEMBERT WAVE  --  why a disturbance splits into two travelling halves,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  d'Alembert's classic result: any solution of the one-dimensional wave equation is
+#  a sum of TWO shapes, one moving right and one moving left, each at the wave speed.
+#  A plucked string releases its shape as two halves that run apart. The fold forces
+#  exactly this split and its conservation.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A disturbance of amplitude U0 = 1/2 sits at the balance point. The wave equation is
+#  second order and symmetric under left<->right, so the disturbance divides into two
+#  EQUAL packets moving oppositely:
+#       right = left = U0 / b = (1/2)/2 = 1/4 .
+#  The split conserves the disturbance -- right + left = 1/4 + 1/4 = 1/2 = U0 -- and it
+#  is even (the two halves equal), because the only self-antipodal division of U0 is
+#  into two b-th parts. Each packet travels at the one signal speed, the One (Step 36:
+#  the fold's single advance), one moving with the fold and one against it. Folded
+#  back together the packet returns to the full amplitude: fold(1/4) advanced twice
+#  recovers U0's rise -- the halves recombine, nothing is lost.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Waves on strings, sound, and light all obey d'Alembert's split into two
+#  counter-propagating halves at the wave speed. The forced content is exact: the
+#  disturbance divides into two EQUAL packets (1/4 each) summing to U0 (an identity),
+#  each moving at the One -- conserved, symmetric, not fitted.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The initial disturbance amplitude: the balance point, U0 = 1/2.
+define initial_disturbance returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The right-moving packet: half the disturbance, U0/b = 1/4.
+define right_moving_packet returning Fraction:
+    set u0 to initial_disturbance()
+    set b to fraction_from_whole_number(binary_count())
+    return fraction_divide(u0 and b)
+
+# The left-moving packet: the other half, equal to the right by left-right symmetry.
+define left_moving_packet returning Fraction:
+    set u0 to initial_disturbance()
+    set b to fraction_from_whole_number(binary_count())
+    return fraction_divide(u0 and b)
+
+# The split conserves the disturbance: right + left = U0.
+define split_conserves_disturbance returning Bool:
+    set right to right_moving_packet()
+    set left to left_moving_packet()
+    set total to fraction_add(right and left)
+    set u0 to initial_disturbance()
+    return fraction_is_equal(total and u0)
+
+# The split is even: the two packets are equal (the self-antipodal division of U0).
+define split_is_even returning Bool:
+    set right to right_moving_packet()
+    set left to left_moving_packet()
+    return fraction_is_equal(right and left)
+
+# Each packet travels at the one signal speed, the One (the fold's single advance).
+define packet_speed returning FoldValue:
+    return the_one()

@@ -1,0 +1,23 @@
+import "../constants/black_hole_entropy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== black-hole entropy ==="
+    set ok to expect_equal("entropy-area coefficient = 1/4 (two binary halvings)" and fraction_to_text(entropy_area_coefficient()) and "1/4")
+    set ok to expect_bool("coefficient is exactly one quarter" and entropy_coefficient_is_quarter())
+    set ok to expect_number("coefficient denominator = binary^2 = 4 (forced)" and entropy_coefficient_denominator() and 4)
+    set ok to expect_equal("entropy of area 1/2: S = (1/4)(1/2) = 1/8" and fraction_to_text(horizon_entropy(fraction_from_ratio(1 and 2))) and "1/8")
+    display "=== done ==="
+    return 0
