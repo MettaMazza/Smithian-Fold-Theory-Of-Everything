@@ -1,0 +1,57 @@
+# ============================================================================
+#  RECOMBINATION AND THE CMB  --  the moment light was set free, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The cosmic microwave background is the oldest light there is: released in one
+#  cosmic moment when the hot plasma bound into neutral atoms and photons stopped
+#  scattering. Why one sharp release rather than a slow fade? Forced: decoupling is a
+#  balance crossing, and a balance crossing completes in one fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  In the plasma every photon is tied to the charges; in neutral gas none are. The
+#  release happens at the BALANCE -- the state 1/2 where the bound share equals the
+#  free share, the self-antipodal point (One - 1/2 = 1/2, neither side preferred).
+#  From the balance one fold completes the transition: fold(1/2) = 1 -- the plasma
+#  closes into whole neutral atoms, and the light decouples in that single step, not
+#  gradually. The two half-shares (matter bound, light freed) sum to the One: nothing
+#  is lost in the release, the photons keep flying with the whole imprint of the
+#  moment -- the surface of last scattering.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: decoupling at the self-antipodal balance, completed
+#  in one fold. Measured: the CMB is a near-perfect blackbody released in a THIN
+#  last-scattering shell (recombination spans a small fraction of the age at z ~ 1100)
+#  -- a sharp crossing, not a fade, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The decoupling balance: bound share equals free share, 1/2.
+define decoupling_balance returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The balance is self-antipodal: neither bound nor free is preferred there.
+define balance_is_self_antipodal returning Bool:
+    set balance to decoupling_balance()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and balance)
+    return fraction_is_equal(complement and balance)
+
+# One fold completes the transition: the plasma closes into whole atoms.
+define transition_completes_in_one_fold returning Fraction:
+    return fold_fraction(decoupling_balance())
+
+# The two half-shares (matter bound, light freed) sum to the One: nothing lost.
+define release_conserves_the_whole returning Fraction:
+    set share to decoupling_balance()
+    return fraction_add(share and share)

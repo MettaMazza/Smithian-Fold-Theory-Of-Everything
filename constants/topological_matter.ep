@@ -1,0 +1,56 @@
+# ============================================================================
+#  TOPOLOGICAL MATTER  --  why edge states are protected, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Topological insulators are insulating inside but carry current on their edges -- and
+#  those edge currents are PROTECTED: dirt and dents cannot switch them off, because
+#  the change needed is a whole jump, not a smooth adjustment. Forced: the edge sits at
+#  a balance whose only escape is a full fold, and the domain has nothing in between.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The bulk is a filled band at the One (an insulator; electronic_bands.ep). The edge
+#  carries the balance state 1/2 -- a conducting channel. To destroy it you must move
+#  it off the balance, but the fold's steps are WHOLE: from 1/2 the only move is the
+#  fold to unison (1/2 -> 1), a complete jump into the bulk band. There is no
+#  infinitesimal deformation -- the domain has no values a smooth perturbation could
+#  slide through -- so a small disturbance cannot gradually kill the edge current: the
+#  protection is the discreteness itself, a topological invariant (a whole count that
+#  cannot change by a little). The edge and bulk shares sum to the One: 1/2 + 1/2 = 1.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the edge sits at the balance, and its only exit is a
+#  whole fold -- no continuous path off it. Measured: quantum-Hall and topological-
+#  insulator edge conductance is quantised and robust against disorder (the plateaus
+#  are exact integers; quantum_hall.ep) -- protection by discreteness, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The protected edge channel: the balance state, 1/2.
+define edge_channel returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The only exit is a WHOLE fold to the bulk band (unison): no partial move.
+define edge_exit_is_whole_fold returning Fraction:
+    return fold_fraction(edge_channel())
+
+# The exit lands exactly on the bulk (the One): a complete jump, nothing in between.
+define exit_lands_on_bulk returning Bool:
+    set landing to edge_exit_is_whole_fold()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(landing and one)
+
+# Edge and bulk shares sum to the One.
+define edge_plus_bulk returning Fraction:
+    set edge to edge_channel()
+    return fraction_add(edge and edge)

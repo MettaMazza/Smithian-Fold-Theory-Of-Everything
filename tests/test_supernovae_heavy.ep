@@ -1,0 +1,21 @@
+import "../constants/supernovae_heavy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== supernovae (the collapse at the balance) ==="
+    set ok to expect_equal("collapse threshold = 1/2 (support = gravity's claim)" and fraction_to_text(collapse_threshold()) and "1/2")
+    set ok to expect_bool("the threshold is self-antipodal (no margin)" and threshold_is_self_antipodal())
+    set ok to expect_equal("one fold completes the collapse (-> the One)" and fraction_to_text(collapse_completes_in_one_fold()) and "1")
+    set ok to expect_equal("support + claim sum to the One at the threshold" and fraction_to_text(support_plus_claim()) and "1")
+    display "=== done ==="
+    return 0

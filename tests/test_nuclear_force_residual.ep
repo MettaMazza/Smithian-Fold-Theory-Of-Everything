@@ -1,0 +1,22 @@
+import "../constants/nuclear_force_residual.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the nuclear force (a short-range residual) ==="
+    set ok to expect_equal("primary strong coupling = 1/2" and fraction_to_text(primary_coupling()) and "1/2")
+    set ok to expect_equal("nuclear residual = 1/4 (one fold deeper)" and fraction_to_text(nuclear_residual()) and "1/4")
+    set ok to expect_equal("residual folds up to the primary (1/4 -> 1/2)" and fraction_to_text(residual_folds_to_primary()) and "1/2")
+    set ok to expect_equal("second fold reaches unison (1/2 -> 1)" and fraction_to_text(residual_reaches_unison()) and "1")
+    set ok to expect_equal("two residuals make one primary's worth" and fraction_to_text(two_residuals_make_primary()) and "1/2")
+    display "=== done ==="
+    return 0

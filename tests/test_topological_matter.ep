@@ -1,0 +1,21 @@
+import "../constants/topological_matter.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== topological matter (edge protection by discreteness) ==="
+    set ok to expect_equal("protected edge channel = the balance 1/2" and fraction_to_text(edge_channel()) and "1/2")
+    set ok to expect_equal("the only exit is a whole fold (-> the One)" and fraction_to_text(edge_exit_is_whole_fold()) and "1")
+    set ok to expect_bool("the exit lands exactly on the bulk (a complete jump)" and exit_lands_on_bulk())
+    set ok to expect_equal("edge + bulk shares sum to the One" and fraction_to_text(edge_plus_bulk()) and "1")
+    display "=== done ==="
+    return 0

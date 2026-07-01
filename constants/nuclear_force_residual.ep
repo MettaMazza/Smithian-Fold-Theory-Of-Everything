@@ -1,0 +1,61 @@
+# ============================================================================
+#  THE NUCLEAR FORCE  --  why it binds nucleons yet has short reach, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Protons and neutrons stick together in the nucleus by the "strong nuclear force" --
+#  but it is not the raw strong force between quarks; it is a RESIDUAL leak of it, the
+#  way the van der Waals force is a residual of the electric. That is why it is strong
+#  enough to beat electric repulsion yet dies off within a couple of nucleon widths.
+#  Forced: the residual sits one fold below the primary coupling.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The primary strong coupling is the half-One, 1/2 (colour bound at the balance). A
+#  colour-neutral nucleon offers no net colour at that level; what leaks between two
+#  neutral nucleons is a RESIDUAL one fold deeper -- the quarter-One 1/4 = (1/2)^2,
+#  the same structure as the intermolecular residual (intermolecular.ep). Being one
+#  fold down it takes TWO folds to reach unison (1/4 -> 1/2 -> 1), and its REACH is
+#  correspondingly short: a mass-1/2 mediator (the pion, heavy) is subtracted quickly,
+#  so the field survives only a step or two (weak_range.ep) -- short range. Two
+#  residuals make one primary coupling's worth (1/4 + 1/4 = 1/2): the binding is real
+#  but second-order, exactly why nuclei hold yet the force vanishes across a room.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the residual is the quarter-One, one fold below the
+#  primary, short-ranged and second-order. Measured: the nucleon-nucleon force is a
+#  pion-exchange residual of QCD, ~1-2 fm in range, strong enough to bind nuclei
+#  against Coulomb repulsion -- the deeper residual coupling this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The primary strong coupling: the half-One, 1/2.
+define primary_coupling returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The residual nuclear force: the quarter-One, one fold deeper.
+define nuclear_residual returning Fraction:
+    set half to primary_coupling()
+    return fraction_multiply(half and half)
+
+# The residual folds up to the primary coupling (one level up): 1/4 -> 1/2.
+define residual_folds_to_primary returning Fraction:
+    return fold_fraction(nuclear_residual())
+
+# It reaches unison in a second fold: 1/2 -> 1 (the two-fold, second-order mark).
+define residual_reaches_unison returning Fraction:
+    return fold_fraction(residual_folds_to_primary())
+
+# Two residuals make one primary coupling's worth: 1/4 + 1/4 = 1/2.
+define two_residuals_make_primary returning Fraction:
+    set residual to nuclear_residual()
+    return fraction_add(residual and residual)

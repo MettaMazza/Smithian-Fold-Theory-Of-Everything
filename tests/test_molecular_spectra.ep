@@ -1,0 +1,22 @@
+import "../constants/molecular_spectra.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== molecular spectra (deeper fold-levels) ==="
+    set ok to expect_equal("electronic transition = 1/2 (gross level)" and fraction_to_text(electronic_transition()) and "1/2")
+    set ok to expect_equal("molecular transition = 1/4 (one fold deeper)" and fraction_to_text(molecular_transition()) and "1/4")
+    set ok to expect_equal("molecular folds up to electronic (1/4 -> 1/2)" and fraction_to_text(molecular_folds_to_electronic()) and "1/2")
+    set ok to expect_equal("second fold reaches unison (1/2 -> 1)" and fraction_to_text(molecular_reaches_unison()) and "1")
+    set ok to expect_equal("two molecular quanta = one electronic level" and fraction_to_text(two_molecular_make_electronic()) and "1/2")
+    display "=== done ==="
+    return 0

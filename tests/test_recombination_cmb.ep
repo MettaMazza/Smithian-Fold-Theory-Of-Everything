@@ -1,0 +1,21 @@
+import "../constants/recombination_cmb.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== recombination and the CMB (light set free in one fold) ==="
+    set ok to expect_equal("decoupling balance = 1/2" and fraction_to_text(decoupling_balance()) and "1/2")
+    set ok to expect_bool("the balance is self-antipodal (neither side preferred)" and balance_is_self_antipodal())
+    set ok to expect_equal("one fold completes the transition (-> the One)" and fraction_to_text(transition_completes_in_one_fold()) and "1")
+    set ok to expect_equal("the release conserves the whole (halves sum to One)" and fraction_to_text(release_conserves_the_whole()) and "1")
+    display "=== done ==="
+    return 0

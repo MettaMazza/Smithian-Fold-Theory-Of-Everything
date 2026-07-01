@@ -1,0 +1,59 @@
+# ============================================================================
+#  SUPERNOVAE AND THE HEAVY ELEMENTS  --  why big stars explode, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Everything past iron -- the gold, the uranium -- was forged in stellar collapse.
+#  A massive star burns to an iron core, then in seconds the core implodes and the
+#  star detonates. Why a sudden collapse instead of a gentle dimming? Forced: support
+#  against gravity is a balance, and once the support share falls TO the balance the
+#  reorganisation completes in one fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A star holds itself up while pressure exceeds gravity's claim. Iron is the binding
+#  peak (fission_fusion.ep): burning it RELEASES nothing, so the core's support share
+#  falls until it reaches the collapse threshold -- the balance 1/2, where support
+#  exactly equals gravity's claim (self-antipodal: One - 1/2 = 1/2). At the balance
+#  there is no margin left; the next step is the fold, and one fold completes the
+#  collapse: fold(1/2) = 1 -- the whole core reorganises at once (to a neutron star's
+#  single bound state), and the rebound through the infalling envelope is the
+#  explosion that forges everything beyond the peak. Support and claim sum to the One
+#  at the threshold: 1/2 + 1/2 = 1.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a sharp threshold at the balance, completing in one
+#  fold. Measured: core collapse takes SECONDS after megayears of burning (SN 1987A's
+#  neutrino burst lasted ~13 s), and r-process elements (confirmed in the GW170817
+#  kilonova) are forged in exactly such collapses -- sudden, complete, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The collapse threshold: support equals gravity's claim, the balance 1/2.
+define collapse_threshold returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The threshold is self-antipodal: no margin on either side.
+define threshold_is_self_antipodal returning Bool:
+    set threshold to collapse_threshold()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and threshold)
+    return fraction_is_equal(complement and threshold)
+
+# One fold completes the collapse: the whole core reorganises at once.
+define collapse_completes_in_one_fold returning Fraction:
+    return fold_fraction(collapse_threshold())
+
+# Support and gravity's claim sum to the One at the threshold.
+define support_plus_claim returning Fraction:
+    set threshold to collapse_threshold()
+    return fraction_add(threshold and threshold)

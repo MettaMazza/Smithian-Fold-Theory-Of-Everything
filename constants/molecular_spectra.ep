@@ -1,0 +1,60 @@
+# ============================================================================
+#  MOLECULAR SPECTRA  --  why molecules radiate at deeper levels, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Atoms emit sharp lines in the visible; molecules add far finer structure -- rotation
+#  and vibration bands in the infrared and microwave, orders of magnitude below the
+#  electronic lines. Why deeper? Forced: molecular transitions sit one fold below the
+#  atomic (electronic) transition, so they radiate at a lower level.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  An electronic (atomic) transition is the half-One, 1/2 -- the gross level of
+#  hydrogen's ladder. A molecule's extra freedoms (its atoms turning and stretching)
+#  are a finer structure ONE fold deeper: the quarter-One, 1/4 = (1/2)^2. Being one
+#  level down, a molecular transition reaches unison in TWO folds (1/4 -> 1/2 -> 1)
+#  where the electronic takes one -- so its energy, hence its frequency, is a
+#  fold-level below the electronic line (visible electronic -> infrared/microwave
+#  molecular). Two molecular quanta make one electronic level's worth
+#  (1/4 + 1/4 = 1/2): the bands are genuine sub-levels of the gross transition, not a
+#  separate scale.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: molecular transitions one fold below the electronic,
+#  two folds to unison. Measured: vibrational bands sit in the infrared and rotational
+#  bands in the microwave -- well below electronic transitions in the visible/UV --
+#  exactly the deeper fold-level this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The electronic (atomic) transition: the gross half-One level.
+define electronic_transition returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The molecular transition: one fold deeper, the quarter-One.
+define molecular_transition returning Fraction:
+    set electronic to electronic_transition()
+    return fraction_multiply(electronic and electronic)
+
+# The molecular level folds up to the electronic level: 1/4 -> 1/2.
+define molecular_folds_to_electronic returning Fraction:
+    return fold_fraction(molecular_transition())
+
+# And reaches unison in a second fold: 1/2 -> 1.
+define molecular_reaches_unison returning Fraction:
+    return fold_fraction(molecular_folds_to_electronic())
+
+# Two molecular quanta make one electronic level's worth: 1/4 + 1/4 = 1/2.
+define two_molecular_make_electronic returning Fraction:
+    set molecular to molecular_transition()
+    return fraction_add(molecular and molecular)

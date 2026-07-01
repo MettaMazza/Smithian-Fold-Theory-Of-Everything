@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-141 suites, 826 forced checks, 0 failures). It needs nothing but a C compiler. Use
+146 suites, 848 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3444,6 +3444,56 @@ The slowed phase is a whole number of levels below `c`, never a new photon speed
 
 ---
 
+### Step 139 — Recombination and the CMB (light set free in one fold)
+
+**File:** `constants/recombination_cmb.ep`
+
+**What it does.** Decoupling happens at the self-antipodal balance `1/2` (bound share equals
+free share), and from the balance one fold completes it (`1/2 → 1`) — the plasma closes into
+whole neutral atoms and the light decouples in a single step, not a fade. Why the CMB is a
+near-perfect blackbody released in a thin last-scattering shell (`z ≈ 1100`).
+
+### Step 140 — Supernovae and the heavy elements (collapse at the balance)
+
+**File:** `constants/supernovae_heavy.ep`
+
+**What it does.** An iron core (the binding peak — burning it releases nothing) loses support
+until it hits the collapse threshold, the balance `1/2` where support equals gravity's claim.
+No margin left, one fold completes the collapse (`1/2 → 1`) — the whole core reorganises at
+once, and the rebound forges everything past iron. Seconds after megayears (SN 1987A's ~13 s
+neutrino burst; the GW170817 kilonova r-process).
+
+### Step 141 — The nuclear force (a short-range residual)
+
+**File:** `constants/nuclear_force_residual.ep`
+
+**What it does.** The nucleon–nucleon force isn't the raw strong force — it's a **residual**
+one fold below the primary coupling: `1/4 = (1/2)²`, the same structure as the van der Waals
+residual. Two folds to unison (second-order), and a heavy (pion) mediator gives it short
+reach — strong enough to bind nuclei against Coulomb, yet gone within a nucleon width or two.
+
+### Step 142 — Molecular spectra (deeper fold-levels)
+
+**File:** `constants/molecular_spectra.ep`
+
+**What it does.** Electronic (atomic) transitions are the gross `1/2` level; a molecule's
+rotation and vibration are a finer structure one fold deeper (`1/4`), so their lines sit a
+fold-level below the electronic ones — visible/UV electronic → infrared/microwave molecular.
+Two molecular quanta make one electronic level's worth (`1/4 + 1/4 = 1/2`).
+
+### Step 143 — Topological matter (edge protection by discreteness)
+
+**File:** `constants/topological_matter.ep`
+
+**What it does.** The bulk is a filled band at the One (insulator); the edge carries the
+balance `1/2` (a conducting channel). To kill it you must move it off the balance — but the
+fold's steps are **whole**: from `1/2` the only move is the complete jump to the bulk band
+(`1/2 → 1`), and the domain has no values a smooth perturbation could slide through. The
+protection is the discreteness itself — a topological invariant (quantum-Hall/TI edge
+conductance quantised and disorder-robust).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3754,6 +3804,16 @@ runs):**
   fold-level (`1/4 > 0`), so below the gap viscosity is absent, not small.
 - Step 138 — the refractive index: the medium's phase sits two fold-levels below `c`
   and climbs back in exactly two; photons themselves never slow.
+- Step 139 — recombination / the CMB: decoupling at the self-antipodal balance `1/2`
+  completes in one fold — light set free in a thin shell, not a fade.
+- Step 140 — supernovae: the iron core loses support to the balance `1/2`, then one fold
+  completes the collapse at once — the rebound forges everything past iron.
+- Step 141 — the nuclear force: a residual `1/4` one fold below the primary coupling,
+  short-ranged (heavy mediator), second-order — binds nuclei yet dies within a nucleon.
+- Step 142 — molecular spectra: rotation/vibration sit one fold below the electronic
+  `1/2` — infrared/microwave bands below the visible/UV electronic lines.
+- Step 143 — topological matter: the edge carries the balance `1/2`; its only exit is a
+  whole fold to the bulk — protection by discreteness (quantised, disorder-robust).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
