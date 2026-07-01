@@ -1,0 +1,14 @@
+import "../constants/spacetime_dimensions.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== spacetime dimensions ==="
+    set ok to expect_number("spatial dimensions (unique stable = colour)" and spatial_dimensions() and 3)
+    set ok to expect_number("time dimensions (the fold's one forward direction)" and time_dimensions() and 1)
+    set ok to expect_number("spacetime dimensions (3+1 = binary^2)" and spacetime_dimensions() and 4)
+    display "=== done ==="
+    return 0

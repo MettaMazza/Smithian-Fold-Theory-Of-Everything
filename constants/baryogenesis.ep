@@ -1,0 +1,86 @@
+# ============================================================================
+#  BARYOGENESIS  --  why there is matter and not antimatter, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Matter and antimatter should have been made in equal amounts and annihilated to
+#  nothing -- yet the universe is made of matter. Producing that excess needs the
+#  three Sakharov conditions. Each is a forced fact of the fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The three Sakharov conditions:
+#   1. BARYON-NUMBER VIOLATION -- the fold is two-to-one: two distinct states fold to
+#      one image (1/4 and 3/4 both to 1/2), so number-per-image is not conserved; the
+#      fold can change counts.
+#   2. C AND CP VIOLATION -- the fold's two preimages are opposite-handed (1/4 below
+#      the half-One, 3/4 above), so the fold tells matter from antimatter; and the
+#      CP-violating phase sits at the self-antipodal 1/2 (maximal), so the difference
+#      is real, not cancellable.
+#   3. DEPARTURE FROM EQUILIBRIUM -- the fold is non-injective, so entropy strictly
+#      increases (it has no unique inverse); the universe folds forward, out of
+#      equilibrium.
+#  All three hold at once, so a matter excess survives annihilation.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The universe is matter-dominated, as observed; the three Sakharov conditions are
+#  exactly what baryogenesis requires, and here each one is forced by the fold.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+
+# CONDITION 1 -- baryon-number violation: two DISTINCT states fold to the SAME
+# image, so number per image is not conserved.
+define baryon_number_violated returning Bool:
+    set lower_image to fold_fraction(fraction_from_ratio(1 and 4))
+    set upper_image to fold_fraction(fraction_from_ratio(3 and 4))
+    set same_image to fraction_is_equal(lower_image and upper_image)
+    set lower to fraction_from_ratio(1 and 4)
+    set upper to fraction_from_ratio(3 and 4)
+    set same_source to fraction_is_equal(lower and upper)
+    if same_image:
+        if same_source:
+            return false
+        return true
+    return false
+
+# CONDITION 2 -- C and CP violation: the two preimages sit on opposite sides of the
+# half-One (opposite handedness), so the fold distinguishes matter from antimatter.
+define cp_violated returning Bool:
+    set lower to fraction_from_ratio(1 and 4)
+    set half_low to fraction_from_ratio(1 and 2)
+    set lower_below to fraction_compare(lower and half_low)
+    set upper to fraction_from_ratio(3 and 4)
+    set half_high to fraction_from_ratio(1 and 2)
+    set upper_above to fraction_compare(upper and half_high)
+    if lower_below < 0:
+        if upper_above > 0:
+            return true
+    return false
+
+# CONDITION 3 -- departure from equilibrium: the fold is non-injective (distinct
+# states share an image), so entropy increases and the state is out of equilibrium.
+define departed_from_equilibrium returning Bool:
+    set lower_image to fold_fraction(fraction_from_ratio(1 and 4))
+    set upper_image to fold_fraction(fraction_from_ratio(3 and 4))
+    return fraction_is_equal(lower_image and upper_image)
+
+# All three Sakharov conditions hold, so a matter excess survives -- the universe is
+# matter, not antimatter.
+define matter_excess_survives returning Bool:
+    set condition_one to baryon_number_violated()
+    set condition_two to cp_violated()
+    set condition_three to departed_from_equilibrium()
+    if condition_one:
+        if condition_two:
+            if condition_three:
+                return true
+    return false

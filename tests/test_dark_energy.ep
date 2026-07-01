@@ -1,0 +1,20 @@
+import "../constants/dark_energy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== dark energy (w = -1) ==="
+    set ok to expect_equal("vacuum energy = the One" and fraction_to_text(vacuum_energy()) and "1")
+    set ok to expect_equal("fold(1) = 1 (the vacuum is fold-invariant)" and fraction_to_text(vacuum_after_fold()) and "1")
+    set ok to expect_true("vacuum energy density is constant (w = -1)" and vacuum_energy_density_is_constant())
+    display "=== done ==="
+    return 0

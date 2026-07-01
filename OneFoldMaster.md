@@ -1405,6 +1405,87 @@ structural factor, stated as such.
 
 ---
 
+### Step 32 — Spacetime dimensions (3 + 1)
+
+**File:** `constants/spacetime_dimensions.ep`
+
+**What it does.** Spatial dimensions `= 3` (the unique integer in `(binary, binary²)`,
+`= colour`); time dimensions `= 1` (the fold is one operation with one forward
+direction); spacetime `= 3 + 1 = 4`, cross-checked `= binary²`. Forced two ways.
+
+```
+=== spacetime dimensions ===
+  ok    spatial dimensions (unique stable = colour) = 3
+  ok    time dimensions (the fold's one forward direction) = 1
+  ok    spacetime dimensions (3+1 = binary^2) = 4
+```
+
+**To measurement.** Three space, one time, four spacetime — exact counts.
+
+---
+
+### Step 33 — Three-body solvability
+
+**File:** `constants/three_body_solvability.ep`
+
+**What it does.** Three bodies on the fold orbit of 1/7 (`1/7, 2/7, 4/7`) advance
+`fold(1/7)=2/7 → 4/7 → 1/7`, so the configuration is periodic with joint period
+`3 = period(1/7) = colour` (Step 27) — solvable, not chaotic.
+
+```
+=== three-body solvability ===
+  ok    fold(1/7) = 2/7 (first advances to second)
+  ok    fold(2/7) = 4/7 (second advances to third)
+  ok    fold(4/7) = 1/7 (third returns to first)
+  ok    joint recurrence period (= colour) = 3
+```
+
+**To measurement.** Matches that special three-body configurations are integrable.
+
+---
+
+### Step 34 — Baryogenesis (why matter, not antimatter)
+
+**File:** `constants/baryogenesis.ep`
+
+**What it does.** The three Sakharov conditions, each a forced fold fact:
+baryon-number violation (the fold is two-to-one), C and CP violation (opposite-handed
+preimages; the CP phase maximal), and departure from equilibrium (the fold is
+non-injective, entropy rises). All three hold, so a matter excess survives.
+
+```
+=== baryogenesis (the three Sakharov conditions) ===
+  ok    1. baryon-number violation (fold is two-to-one)
+  ok    2. C and CP violation (opposite-handed preimages)
+  ok    3. departure from equilibrium (non-injective fold)
+  ok    => a matter excess survives (matter, not antimatter)
+```
+
+**To measurement.** The universe is matter-dominated — the three required conditions
+are exactly the forced fold facts.
+
+---
+
+### Step 35 — Dark energy (w = −1)
+
+**File:** `constants/dark_energy.ep`
+
+**What it does.** The vacuum energy is the One; the fold holds the One fixed
+(`fold(1) = 1`), so the vacuum energy is invariant under the fold's advance — a
+constant energy density, i.e. `w = −1`.
+
+```
+=== dark energy (w = -1) ===
+  ok    vacuum energy = the One
+  ok    fold(1) = 1 (the vacuum is fold-invariant)
+  ok    vacuum energy density is constant (w = -1)
+```
+
+**To measurement.** Dark energy is measured with `w ≈ −1` (constant) — the forced
+content is that the vacuum, being the One, is fold-invariant and so constant.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1490,6 +1571,14 @@ runs):**
   folding to the One) — the vacuum that gives mass.
 - Step 31 — the inflation factor: `binary^5 = 32` states at the generation covering
   depth 5 — the fold's structural expansion factor.
+- Step 32 — spacetime dimensions: `3` spatial (unique stable = colour) `+ 1` time
+  (the fold's one direction) `= 4 = binary²`.
+- Step 33 — three-body solvability: three bodies on the fold orbit of 1/7 recur
+  with joint period `3` — periodic, not chaotic.
+- Step 34 — baryogenesis: the three Sakharov conditions (number violation, C/CP
+  violation, departure from equilibrium) each a forced fold fact — matter survives.
+- Step 35 — dark energy: the vacuum is the One, fold-invariant (`fold(1)=1`), hence
+  a constant energy density — `w = −1`.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

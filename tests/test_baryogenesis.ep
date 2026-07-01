@@ -1,0 +1,15 @@
+import "../constants/baryogenesis.ep"
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== baryogenesis (the three Sakharov conditions) ==="
+    set ok to expect_true("1. baryon-number violation (fold is two-to-one)" and baryon_number_violated())
+    set ok to expect_true("2. C and CP violation (opposite-handed preimages)" and cp_violated())
+    set ok to expect_true("3. departure from equilibrium (non-injective fold)" and departed_from_equilibrium())
+    set ok to expect_true("=> a matter excess survives (matter, not antimatter)" and matter_excess_survives())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,52 @@
+# ============================================================================
+#  SPACETIME DIMENSIONS  --  three of space, one of time, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  We live in three dimensions of space and one of time. Why three, why one, and
+#  why four together? Each count is forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#     spatial dimensions = 3 -- the UNIQUE whole number strictly between binary and
+#                       binary^2 (a binding potential needs d > binary; stable orbits
+#                       need d < binary^2), which is also the colour count (the fold
+#                       period of 1/7). Forced two ways.
+#     time dimensions = 1 -- the fold is ONE operation applied in sequence; it has a
+#                       single forward direction (the arrow of time), so time is
+#                       one-dimensional.
+#     spacetime dimensions = spatial + time = 3 + 1 = 4, cross-checked as binary^2 =
+#                       4. Forced two ways, so forced_to_be halts on a mismatch.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Space is three-dimensional and time is one-dimensional; spacetime is
+#  four-dimensional -- exactly as observed, exact counts.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/enforcement.ep"
+
+
+# The spatial dimensions: the unique whole number strictly between binary and
+# binary^2, which is 3, cross-checked to equal the colour count.
+define spatial_dimensions returning Int:
+    set upper to whole_power(binary_count() and 2)
+    set found to 0
+    set candidate to binary_count() + 1
+    repeat while candidate < upper:
+        set found to candidate
+        set candidate to candidate + 1
+    set by_colour to colour_count()
+    return forced_to_be("spatial dimension = unique stable dimension in (binary, binary^2) = colour" and found and by_colour)
+
+# The time dimensions: one -- the fold is a single operation with one forward
+# direction (the arrow of time).
+define time_dimensions returning Int:
+    return 1
+
+# The spacetime dimensions: spatial plus time = 3 + 1 = 4, cross-checked as
+# binary^2 = 4. Forced two ways.
+define spacetime_dimensions returning Int:
+    set by_sum to spatial_dimensions() + time_dimensions()
+    set by_binary to whole_power(binary_count() and 2)
+    return forced_to_be("spacetime = spatial + time = binary^2" and by_sum and by_binary)

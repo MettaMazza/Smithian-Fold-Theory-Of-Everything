@@ -1,0 +1,48 @@
+# ============================================================================
+#  DARK ENERGY  --  why the vacuum energy is constant (w = -1), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Dark energy drives the accelerating expansion of the universe, and it behaves as
+#  a CONSTANT energy density: it does not dilute as space grows. This is summarised
+#  as an equation of state w = -1. Why is it constant?
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The vacuum energy is the One -- unison, the whole. The fold advances every state,
+#  but it holds the One FIXED: fold(1) = 1 (the One is the fold's own fixed point).
+#  So as the universe folds forward (expands), the vacuum energy does not change --
+#  it is invariant, hence a constant energy density. A constant energy density is
+#  exactly the equation of state w = -1.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Dark energy is measured with w very close to -1 (a constant density). The forced
+#  content is structural: the vacuum, being the One, is fold-invariant and therefore
+#  constant -- which is what w = -1 says. (Its dark-energy SHARE of the universe,
+#  2/3, is the separate cosmic-budget result.)
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The vacuum energy: the One -- unison, the whole.
+define vacuum_energy returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The vacuum under one fold advance: fold(1) = 1 -- unchanged.
+define vacuum_after_fold returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fold_fraction(one)
+
+# The vacuum energy density is constant: it is the same before and after the fold's
+# advance (the One is fold-invariant). A constant density is w = -1.
+define vacuum_energy_density_is_constant returning Bool:
+    set before to vacuum_energy()
+    set after to vacuum_after_fold()
+    return fraction_is_equal(before and after)

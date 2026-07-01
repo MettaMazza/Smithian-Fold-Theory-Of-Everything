@@ -1,0 +1,17 @@
+import "../constants/three_body_solvability.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define main:
+    display "=== three-body solvability ==="
+    set ok to expect_equal("fold(1/7) = 2/7 (first advances to second)" and fraction_to_text(first_advances_to_second()) and "2/7")
+    set ok to expect_equal("fold(2/7) = 4/7 (second advances to third)" and fraction_to_text(second_advances_to_third()) and "4/7")
+    set ok to expect_equal("fold(4/7) = 1/7 (third returns to first)" and fraction_to_text(third_returns_to_first()) and "1/7")
+    set ok to expect_number("joint recurrence period (= colour)" and joint_recurrence_period() and 3)
+    display "=== done ==="
+    return 0
