@@ -1,0 +1,21 @@
+import "../constants/catalysis.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== catalysis ==="
+    set ok to expect_equal("bare barrier = 1/2 (the balance threshold)" and fraction_to_text(bare_barrier()) and "1/2")
+    set ok to expect_equal("catalysed barrier = 1/4 (a lower path)" and fraction_to_text(catalysed_barrier()) and "1/4")
+    set ok to expect_bool("the catalyst LOWERS the barrier (1/4 < 1/2)" and catalyst_lowers_barrier())
+    set ok to expect_bool("the catalyst is conserved (returns to itself, unconsumed)" and catalyst_returns_to_itself())
+    display "=== done ==="
+    return 0

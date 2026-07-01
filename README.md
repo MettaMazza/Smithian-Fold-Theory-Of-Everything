@@ -109,8 +109,12 @@ And the structural laws of physics, forced the same way:
 - **Handedness, magnets, chips** — **chirality** (two mirror-image handednesses = the
   two preimages), **magnetism** (aligned spins → a net moment, Curie threshold at the
   balance), and **semiconductors** (two carrier types, a balancing p-n junction).
+- **Entanglement and chemistry** — **entanglement** (the joint state is the *product*
+  of coprime subsystems, `2·3 = 6 > 5` — the tensor product), **catalysis** (a lower
+  barrier `bare/b`, catalyst conserved), and **electronegativity** (covalent `1/2` ↔
+  ionic `1`).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 76 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 79 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

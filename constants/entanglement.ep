@@ -1,0 +1,80 @@
+# ============================================================================
+#  ENTANGLEMENT  --  why a joint state holds more than its parts, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two quantum systems can be ENTANGLED: their joint state is not two separate
+#  states but a single shared one, and measuring one instantly fixes the other.
+#  This is possible because the joint state space is the PRODUCT of the parts, not
+#  their sum -- exponentially bigger, with room for correlations the parts alone
+#  cannot hold. That product structure is the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and c = 3) ───────────────
+#  A subsystem is a fold-cycle -- a period. Take the two smallest, the two generators
+#  themselves: binary = 2 and colour = 3. They are COPRIME (share no factor:
+#  gcd(2, 3) = 1). Combined, they do NOT run as two independent little cycles you can
+#  read off separately; they interlock into ONE joint cycle whose period is their least
+#  common multiple, which for coprime periods is the PRODUCT:
+#       joint period = 2 * 3 = 6 .
+#  Six exceeds the sum of the parts (2 + 3 = 5): the joint holds MORE than the two
+#  separately, and that surplus is exactly the entanglement -- correlations that live
+#  only in the joint cycle. Because 2 and 3 are coprime the joint is a single
+#  indivisible cycle (it cannot be split back into an independent 2 and an independent
+#  3), so the two are inseparably correlated. The product structure is forced from the
+#  two generators; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Composite quantum systems live in the tensor PRODUCT of their parts (dimensions
+#  multiply, not add), which is why entangled states exist and violate Bell
+#  inequalities -- exactly the forced structure. The forced content is exact: the
+#  joint period is the product of the two coprime generators, larger than their sum.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# Euclid's greatest common divisor of two whole numbers.
+define whole_gcd with a as Int and b as Int returning Int:
+    set x to a
+    set y to b
+    repeat while y > 0:
+        set remainder to x % y
+        set x to y
+        set y to remainder
+    return x
+
+# The first subsystem's period: the binary generator, 2.
+define subsystem_one_period returning Int:
+    return binary_count()
+
+# The second subsystem's period: the colour generator, 3.
+define subsystem_two_period returning Int:
+    return colour_count()
+
+# The two subsystem periods are coprime (share no factor): gcd(2, 3) = 1.
+define subsystems_are_coprime returning Bool:
+    set a to subsystem_one_period()
+    set b to subsystem_two_period()
+    set common to whole_gcd(a and b)
+    if common == 1:
+        return true
+    return false
+
+# The joint (entangled) period: the least common multiple, which for coprime periods
+# is the product, 2 * 3 = 6 -- the tensor-product structure.
+define joint_period returning Int:
+    set a to subsystem_one_period()
+    set b to subsystem_two_period()
+    set common to whole_gcd(a and b)
+    set product to a * b
+    return product / common
+
+# The joint holds MORE than the parts: the product (6) exceeds the sum (2 + 3 = 5).
+# That surplus is the entanglement.
+define joint_exceeds_the_parts returning Bool:
+    set product to joint_period()
+    set sum_of_parts to subsystem_one_period() + subsystem_two_period()
+    if product > sum_of_parts:
+        return true
+    return false

@@ -1,0 +1,21 @@
+import "../constants/electronegativity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== electronegativity ==="
+    set ok to expect_equal("covalent bond = 1/2 (equal sharing)" and fraction_to_text(covalent_bond()) and "1/2")
+    set ok to expect_equal("ionic bond = the One (full transfer)" and fraction_to_text(ionic_bond()) and "1")
+    set ok to expect_bool("equal atoms share evenly (at the balance 1/2)" and equal_atoms_share_evenly())
+    set ok to expect_bool("bond runs from covalent (shared) to ionic (transferred)" and covalent_below_ionic())
+    display "=== done ==="
+    return 0

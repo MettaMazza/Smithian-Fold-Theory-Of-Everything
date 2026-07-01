@@ -1,0 +1,59 @@
+# ============================================================================
+#  ELECTRONEGATIVITY  --  why bonds run from equal-sharing to full transfer,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  When two atoms bond, they share electrons -- but not always equally. The more
+#  electron-hungry (electronegative) atom pulls the shared pair toward itself. If the
+#  two atoms are alike, the sharing is even (a nonpolar covalent bond); if one wins
+#  completely, the electron is handed over (an ionic bond). The whole covalent-to-ionic
+#  range is the fold's, between the balance and the One.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A bonding electron sits somewhere between the two atoms. When the atoms are EQUALLY
+#  electronegative it sits at the self-antipodal BALANCE, 1/2 -- shared evenly, a
+#  nonpolar covalent bond. As one atom's pull grows, the electron shifts toward it, and
+#  in the limit of a total pull it is transferred all the way -- the whole One belongs
+#  to one atom, an IONIC bond:
+#       covalent (shared)  =  1/2   <   the One  =  ionic (transferred) .
+#  So bond character is a spectrum from the balance 1/2 (equal sharing) to the One
+#  (full transfer), set by the electronegativity DIFFERENCE -- zero difference gives
+#  the balance, maximal difference gives the One. Both ends and the ordering are forced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Bonds range continuously from nonpolar covalent (equal sharing) through polar
+#  covalent to ionic (full transfer), set by the electronegativity difference -- exactly
+#  the forced spectrum. The forced content is the two ends: equal sharing at the balance
+#  1/2, full transfer at the One; the Pauling electronegativity numbers are measured.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# A nonpolar covalent bond (equal electronegativity): the shared electron sits at the
+# balance, 1/2.
+define covalent_bond returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# An ionic bond (maximal difference): the electron is transferred fully -- the whole
+# One belongs to one atom.
+define ionic_bond returning Fraction:
+    return fraction_from_whole_number(1)
+
+# Equal atoms share evenly: the covalent bond sits at the balance point 1/2.
+define equal_atoms_share_evenly returning Bool:
+    set bond to covalent_bond()
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_is_equal(bond and half)
+
+# Bond character runs from covalent (shared) to ionic (transferred): the covalent
+# balance is strictly below the ionic One.
+define covalent_below_ionic returning Bool:
+    set covalent to covalent_bond()
+    set ionic to ionic_bond()
+    set order to fraction_compare(covalent and ionic)
+    if order < 0:
+        return true
+    return false

@@ -1,0 +1,24 @@
+import "../constants/entanglement.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== entanglement ==="
+    set ok to expect_number("subsystem one period = binary = 2" and subsystem_one_period() and 2)
+    set ok to expect_number("subsystem two period = colour = 3" and subsystem_two_period() and 3)
+    set ok to expect_bool("the two subsystems are coprime (gcd = 1)" and subsystems_are_coprime())
+    set ok to expect_number("joint period = product = 2 * 3 = 6 (tensor product)" and joint_period() and 6)
+    set ok to expect_bool("the joint holds MORE than the parts (6 > 2+3=5)" and joint_exceeds_the_parts())
+    display "=== done ==="
+    return 0

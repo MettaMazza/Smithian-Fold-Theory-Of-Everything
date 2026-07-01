@@ -1,0 +1,64 @@
+# ============================================================================
+#  CATALYSIS  --  why a catalyst speeds a reaction without being used up, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A catalyst -- an enzyme, a metal surface -- makes a reaction go faster by opening a
+#  LOWER-energy path over the barrier, and it comes out UNCHANGED, ready to do it
+#  again. Both the lower barrier and the catalyst's own conservation are the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A reaction must cross an activation BARRIER -- the self-antipodal balance point,
+#  1/2 (the threshold between reactants and products). A catalyst opens a lower path:
+#  it splits the crossing into binary steps, so the barrier to clear at once drops by a
+#  factor of the binary count,
+#       catalysed barrier = bare / b = (1/2)/2 = 1/4 < 1/2 = bare barrier ,
+#  a lower hurdle, which is crossed far more easily (a faster reaction). And the
+#  catalyst itself is CONSERVED: it is the One, and the fold holds the One fixed
+#  (fold(1) = 1), so after the reaction the catalyst returns to exactly its own state,
+#  unconsumed. Lower barrier and conserved catalyst are both forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Catalysts lower the activation energy and are recovered unchanged -- exactly the
+#  forced result. The forced content is that the catalysed barrier is below the bare
+#  one, and the catalyst is a fold fixed point (returns to itself); the actual barrier
+#  heights in kJ/mol are measured, per-reaction values.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The bare (uncatalysed) activation barrier: the balance point 1/2.
+define bare_barrier returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The catalysed barrier: the bare barrier split into binary steps, bare / b =
+# (1/2)/2 = 1/4 -- forced from the bare barrier and the binary count, not chosen.
+define catalysed_barrier returning Fraction:
+    set bare to bare_barrier()
+    set binary to fraction_from_whole_number(binary_count())
+    return fraction_divide(bare and binary)
+
+# The catalyst lowers the barrier: the catalysed hurdle is below the bare one.
+define catalyst_lowers_barrier returning Bool:
+    set low to catalysed_barrier()
+    set high to bare_barrier()
+    set order to fraction_compare(low and high)
+    if order < 0:
+        return true
+    return false
+
+# The catalyst is conserved: it is the One, and the fold holds the One fixed
+# (fold(1) = 1), so it returns to its own state, unconsumed.
+define catalyst_returns_to_itself returning Bool:
+    set catalyst to fraction_from_whole_number(1)
+    set after to fold_fraction(catalyst)
+    return fraction_is_equal(after and catalyst)

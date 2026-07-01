@@ -2502,6 +2502,75 @@ types (a state and its antipode) summing to the One at a junction.
 
 ---
 
+### Step 76 — Entanglement (the joint state is the product)
+
+**File:** `constants/entanglement.ep`
+
+**What it does.** Take the two generators as two subsystem periods, `binary = 2` and
+`colour = 3` — **coprime** (`gcd = 1`). Combined, they interlock into one joint cycle
+whose period is their lcm = the **product** `2·3 = 6`, which exceeds the sum
+(`2+3 = 5`). The joint holds *more* than the parts — that surplus is the entanglement,
+and coprimality makes it one indivisible cycle (inseparable, correlated).
+
+```
+=== entanglement ===
+  ok    subsystem periods = binary 2, colour 3 (coprime)
+  ok    joint period = product = 2 * 3 = 6 (tensor product)
+  ok    the joint holds MORE than the parts (6 > 2+3=5)
+```
+
+**To measurement.** Composite quantum systems live in the tensor *product* of their
+parts (dimensions multiply, not add) — why entangled states exist and violate Bell
+inequalities. Forced: the joint period is the product of the two coprime generators,
+larger than their sum.
+
+---
+
+### Step 77 — Catalysis (lower barrier, conserved catalyst)
+
+**File:** `constants/catalysis.ep`
+
+**What it does.** A reaction crosses the balance barrier `1/2`; a catalyst splits the
+crossing into binary steps, so the barrier drops by a factor of the binary count,
+`bare/b = (1/2)/2 = 1/4 < 1/2` — a lower hurdle, faster reaction. And the catalyst is
+conserved: it is the One, held fixed by the fold (`fold(1) = 1`), returning to itself
+unconsumed.
+
+```
+=== catalysis ===
+  ok    bare barrier = 1/2 ; catalysed barrier = bare/b = 1/4
+  ok    the catalyst LOWERS the barrier (1/4 < 1/2)
+  ok    the catalyst is conserved (returns to itself, unconsumed)
+```
+
+**To measurement.** Catalysts lower the activation energy and are recovered unchanged
+— the forced lower barrier (`bare/b`) and the catalyst as a fold fixed point.
+
+---
+
+### Step 78 — Electronegativity (covalent ↔ ionic)
+
+**File:** `constants/electronegativity.ep`
+
+**What it does.** A bonding electron sits between two atoms. Equal pull → the balance
+`1/2` (shared evenly, nonpolar covalent). As one atom's pull grows the electron shifts
+toward it, and total pull transfers it fully — the whole One to one atom (ionic). So
+bond character runs from the balance `1/2` (covalent) to the One (ionic), set by the
+electronegativity difference.
+
+```
+=== electronegativity ===
+  ok    covalent bond = 1/2 (equal sharing)
+  ok    ionic bond = the One (full transfer)
+  ok    equal atoms share evenly ; covalent below ionic
+```
+
+**To measurement.** Bonds range from nonpolar covalent (equal sharing) through polar
+to ionic (full transfer) by the electronegativity difference — the forced two ends,
+the balance `1/2` and the One.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2682,6 +2751,12 @@ runs):**
   opposed cancel (antiferromagnetism); the Curie ordering threshold is the balance `1/2`.
 - Step 75 — semiconductors: two carrier types (electron `1/4`, hole `3/4` = its
   absence), a p-n junction balancing to the One.
+- Step 76 — entanglement: two coprime generator-periods (`2, 3`) interlock into one
+  joint cycle of period `2·3 = 6` (the product > the sum) — the tensor product.
+- Step 77 — catalysis: the catalyst splits the barrier into binary steps
+  (`bare/b = 1/4 < 1/2`) and is conserved (a fold fixed point).
+- Step 78 — electronegativity: bonds run from covalent (shared, `1/2`) to ionic (full
+  transfer, the One), set by the electronegativity difference.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
