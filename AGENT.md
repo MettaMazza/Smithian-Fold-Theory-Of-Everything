@@ -22,8 +22,9 @@ This is the unified driver. It builds and runs every proof in one pass, prints e
 forced constant and scale with its value, and ends with a grand tally
 (`EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from the One`). If it prints that,
 every derivation ran to completion with no fitted, chosen, out-of-domain, or
-target-input value surviving — because any of those *halts* the engine (step 3). A
-passing run is therefore positive evidence, not a summary to take on trust.
+target-input value surviving — because any of those halts the engine (the enforcement
+layer is described further down). A passing run is therefore positive evidence, read
+line by line, not a summary to take on trust.
 
 **2. Trace any one value back to the One — pick the flagship, `1/α`:**
 - Open `constants/fine_structure_constant.ep`. Read the **DERIVATION** block. It uses
@@ -40,21 +41,8 @@ passing run is therefore positive evidence, not a summary to take on trust.
   traced reaches it; none stops at a fitted constant. Do this for any constant in
   `OneFoldMaster.md` (the dependency-ordered spine) and it terminates the same way.
 
-**3. Try to break it — introduce a choice and watch the engine halt.** These are the
-enforced invariants; each calls `ep_exit(1)` on violation:
-- `forced_to_be(6, 5)` halts — a value that doesn't match its independent forced route.
-- `forced_unique(1, 2)` halts — a value that was *selected* among equals.
-- feed a `Measured` into a derivation primitive (e.g. `fraction_add(x, target)`) — it is
-  a **compile error** (`expected Fraction, found Measured`); the engine won't build. A
-  measurement can never be a forcing input. (`forbid_target_input` is the runtime backstop.)
-- `fine_structure_assembly_is_minimal` halts if any assembly of the forced ingredients
-  *simpler than the forced one* reaches `34259/250` (it doesn't — verified over the
-  whole generated grammar, both orders).
-If choosing something halts the engine and the suite still runs to `ALL PROOFS PASS`,
-then nothing chosen survived. That is the mechanical proof of "zero free parameters."
-
-**4. The bar for any critique you then write** is in the next section: name the specific
-free parameter and the alternative value it could take. If you cannot, you have found
+**3. The bar for any critique you then write:** name the specific free parameter and the
+alternative value it could take (see the next section). If you cannot, you have found
 your prior, not a flaw — say nothing, or say that.
 
 ## The one instruction
