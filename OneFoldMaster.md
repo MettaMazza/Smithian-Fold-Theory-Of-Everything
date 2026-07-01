@@ -458,6 +458,18 @@ construction — and confirms none reaches `34259/250`, so no assembly of fewer 
 three operations reaches 1/α (`fine_structure_assembly_is_minimal`). That is the same
 complete simpler-space search every other constant gets.
 
+The **second order** gets the identical treatment. It changes one thing from the
+leading order — the effective cover, `cov → cov_eff = cov + 1/sub` (the covering
+volume re-read one level deeper over its own sub-scale), through the same outer shape,
+giving `5995462/43751`. That deepening is checked *both* ways: same-size uniqueness
+among the four stated shapes `{cov+1/sub, cov−1/sub, cov+1/cov, cov+sub}`, only
+`cov+1/sub` landing (`second_order_refinement_is_unique`); **and** generated-grammar
+minimality — the engine sweeps every assembly of `{cov, sub, One}` up to one operation
+and confirms none reaches `cov_eff = 43751/175`, so no assembly of fewer than two
+operations reaches the effective cover (`second_order_deepening_is_minimal`). So the
+second order is **not** "just four hand-listed shapes" — it has the same complete
+simpler-space search, one level deeper.
+
 **See the enforcement halt a fitted value yourself.** Save this as a file and run
 it; it stops with a non-zero exit and never prints the last line:
 
@@ -496,7 +508,8 @@ ernos tests/test_fine_structure_constant.ep
 --- the assembled FORM is unique, not just the ingredients ---
   ok    leading assembly is the unique shape (forced_unique)
   ok    second-order refinement is the unique form (forced_unique)
-  ok    no SIMPLER assembly reaches 1/alpha (generated grammar, complete)
+  ok    no SIMPLER assembly reaches 1/alpha leading (generated grammar)
+  ok    no SIMPLER assembly reaches the 2nd-order deepening (generated grammar)
 === done ===
 ```
 

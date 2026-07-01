@@ -185,9 +185,14 @@ They are not choices. Here is what each actually is, so you read the modules rig
   and (2) the generated-grammar minimality — the engine sweeps every assembly of the
   forced ingredients `{tower, colour², cov, One}` with `+ − · /` up to two operations
   and confirms none reaches `34259/250`, so no assembly of fewer than three operations
-  reaches 1/α (`fine_structure_assembly_is_minimal`). This is the same complete
-  simpler-space search every other constant gets — there is no longer any check the
-  flagship is exempt from. See `fine_structure_constant.ep`.
+  reaches 1/α (`fine_structure_assembly_is_minimal`). The **second order** gets the
+  identical treatment on the one thing it adds — the deepening `cov → cov_eff =
+  cov + 1/sub`: same-size uniqueness among four shapes (`second_order_refinement_is_unique`)
+  **and** generated-grammar minimality, no assembly of fewer than two operations over
+  `{cov, sub, One}` reaching `cov_eff = 43751/175` (`second_order_deepening_is_minimal`).
+  This is the same complete simpler-space search every other constant gets — there is
+  no longer any check, at either order, the flagship is exempt from. See
+  `fine_structure_constant.ep`.
 - **Structural results** (parity, the arrow of time, spin and statistics, the
   uncertainty bound) are forced predictions matching observed *behaviour*, not
   precision numbers, and are labelled as such — that is a statement about the

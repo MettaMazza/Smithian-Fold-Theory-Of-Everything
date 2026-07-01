@@ -33,8 +33,12 @@
 #     (leading_assembly_is_unique).
 #  Assembled form (SECOND order): cov is itself a covered object, so it is read one
 #     level deeper, cov_eff = cov + 1/sub, through the same outer shape, giving
-#     5995462/43751. Candidate space for the refinement: {cov + 1/sub, cov - 1/sub,
-#     cov + 1/cov, cov + sub}; only cov + 1/sub lands (second_order_refinement_is_unique).
+#     5995462/43751. The deepening is checked BOTH ways, exactly like the leading order:
+#     same-size uniqueness among {cov + 1/sub, cov - 1/sub, cov + 1/cov, cov + sub},
+#     only cov + 1/sub lands (second_order_refinement_is_unique); AND generated-grammar
+#     minimality -- no assembly of fewer than two operations over {cov, sub, One}
+#     reaches cov_eff = 43751/175 (second_order_deepening_is_minimal). Not "just four
+#     shapes": the same complete simpler-space search the leading order gets.
 #  The form is forced two ways, both machine-checked:
 #   (1) SAME-SIZE uniqueness -- among the nine stated structural shapes of the forced
 #       ingredients, only the canonical one reproduces 34259/250 (leading_assembly_is_unique).
@@ -341,3 +345,52 @@ define fine_structure_assembly_is_minimal returning Int:
     set target_num to raw_num / common
     set target_den to raw_den / common
     return canonical_assembly_is_minimal("no assembly of fewer than three operations reaches 1/alpha" and leaf_nums and leaf_dens and target_num and target_den and 3)
+
+
+# ----------------------------------------------------------------------------
+#  The SECOND ORDER gets the same complete treatment (generated-grammar minimality)
+# ----------------------------------------------------------------------------
+#  The second order changes ONE thing from the leading order: the effective cover, from
+#  cov to cov_eff = cov + 1/sub (the covering volume re-read one level deeper over its
+#  own sub-scale). The outer assembly (tower + colour^2*(x+1)/x) is already proven
+#  minimal and same-size unique for x = cov above, so the only new forced content is
+#  the deepening. It is checked BOTH ways, exactly like the leading order:
+#   (1) SAME-SIZE uniqueness -- among the four stated deepening shapes {cov+1/sub,
+#       cov-1/sub, cov+1/cov, cov+sub}, only cov+1/sub lands (second_order_refinement_is_unique).
+#   (2) MINIMALITY over the GENERATED grammar -- the engine generates EVERY assembly of
+#       the deepening ingredients {cov, sub, One} with + - * / up to one operation and
+#       confirms NONE reaches cov_eff = 43751/175, so no assembly of fewer than two
+#       operations reaches the effective cover (second_order_deepening_is_minimal).
+#  So the second order is NOT "just four hand-listed shapes": it has the same
+#  complete simpler-space search the leading order and every other constant get.
+
+# The deepening ingredients of the second order, as parallel leaf lists: the covering
+# volume, the sub-scale, and the recurring One.
+define fs_deepening_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and covering_volume())
+    set ok to append_list(nums and sub_correction_scale())
+    set ok to append_list(nums and 1)
+    return nums
+
+define fs_deepening_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    return dens
+
+# No assembly of fewer than two operations over the deepening ingredients reaches the
+# second-order effective cover cov_eff = cov + 1/sub = (cov*sub + 1)/sub = 43751/175.
+# The target is COMPUTED from the forced blocks, reduced, never a literal.
+define second_order_deepening_is_minimal returning Int:
+    set leaf_nums to fs_deepening_leaf_numerators()
+    set leaf_dens to fs_deepening_leaf_denominators()
+    set cov to covering_volume()
+    set sub to sub_correction_scale()
+    set raw_num to cov * sub + 1
+    set raw_den to sub
+    set common to greatest_common_divisor(raw_num and raw_den)
+    set target_num to raw_num / common
+    set target_den to raw_den / common
+    return canonical_assembly_is_minimal("no simpler assembly reaches the second-order effective cover" and leaf_nums and leaf_dens and target_num and target_den and 2)

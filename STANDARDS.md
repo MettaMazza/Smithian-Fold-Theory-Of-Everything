@@ -19,10 +19,13 @@ Two guards, both required:
   bound — the whole stated grammar, complete by construction — and proves the
   forced value has **no simpler assembly** (minimality: nothing of fewer operations
   reproduces it). `forced_to_be` halts if a simpler assembly exists. This is the
-  hard, complete half, and it is run for **every** constant, including `1/α`: the
-  generator sweeps all assemblies of `{tower, colour², cov, One}` up to two
-  operations and confirms none reaches `34259/250`, so no assembly of fewer than
-  three operations reaches `1/α` (`fine_structure_assembly_is_minimal`).
+  hard, complete half, and it is run for **every** constant, at every order. For
+  `1/α`'s leading value the generator sweeps all assemblies of `{tower, colour², cov,
+  One}` up to two operations and confirms none reaches `34259/250`
+  (`fine_structure_assembly_is_minimal`); for its **second order** it sweeps all
+  assemblies of the deepening ingredients `{cov, sub, One}` up to one operation and
+  confirms none reaches `cov_eff = 43751/175` (`second_order_deepening_is_minimal`).
+  Neither order is checked against a hand-picked list alone.
 - **Named-shape uniqueness (`foundation/form_enforcement.ep`).** `forbid_form_selection`
   halts unless exactly one of the stated same-size structural shapes reproduces the
   value, so the assembly was not selected among coincident equal-size forms.
