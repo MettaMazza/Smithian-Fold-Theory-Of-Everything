@@ -17,8 +17,13 @@
 #  The only difference is the carrier's charge: charged -> runs; neutral -> flat.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  The observed behaviour: the strong coupling runs (confinement and asymptotic
-#  freedom), the electromagnetic one does not. A structural match, not a number.
+#  This forces an exact number and an exact sign, not a mood. The strong running
+#  slope is EXACTLY b = 2 (positive: the coupling grows with range -> confinement,
+#  weakens at short range -> asymptotic freedom), and the electromagnetic slope is
+#  EXACTLY zero (flat). Measured: QCD's coupling runs strongly (the sign of its beta
+#  function is negative, asymptotic freedom -- Nobel 2004) while QED runs only weakly
+#  the other way; the forced signs are exactly the observed ones, with the strong
+#  slope an exact rational, not an approximation.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

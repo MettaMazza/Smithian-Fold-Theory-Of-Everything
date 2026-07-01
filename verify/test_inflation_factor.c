@@ -4669,6 +4669,66 @@ long long ep_get_args(void) {
 }
 
 
+/* User-Defined Structures */
+typedef struct {
+    long long numerator_digits;
+    long long denominator_digits;
+    long long derivation;
+} EpStruct_FoldValue;
+
+void free_struct_FoldValue(long long ptr) {
+    if (ptr == 0) return;
+    /* Skip if already freed (idempotent — prevents double-free with shared refs) */
+    if (!ep_gc_find((void*)ptr)) return;
+    EpStruct_FoldValue* s = (EpStruct_FoldValue*)ptr;
+    ep_gc_unregister(s);
+    free(s);
+}
+
+typedef struct {
+    long long numerator_sign;
+    long long numerator_digits;
+    long long denominator_digits;
+} EpStruct_Fraction;
+
+void free_struct_Fraction(long long ptr) {
+    if (ptr == 0) return;
+    /* Skip if already freed (idempotent — prevents double-free with shared refs) */
+    if (!ep_gc_find((void*)ptr)) return;
+    EpStruct_Fraction* s = (EpStruct_Fraction*)ptr;
+    ep_gc_unregister(s);
+    free(s);
+}
+
+typedef struct {
+    long long sign;
+    long long digits;
+} EpStruct_ExactInteger;
+
+void free_struct_ExactInteger(long long ptr) {
+    if (ptr == 0) return;
+    /* Skip if already freed (idempotent — prevents double-free with shared refs) */
+    if (!ep_gc_find((void*)ptr)) return;
+    EpStruct_ExactInteger* s = (EpStruct_ExactInteger*)ptr;
+    ep_gc_unregister(s);
+    free(s);
+}
+
+typedef struct {
+    long long quotient_digits;
+    long long remainder_digits;
+} EpStruct_DivisionOutcome;
+
+void free_struct_DivisionOutcome(long long ptr) {
+    if (ptr == 0) return;
+    /* Skip if already freed (idempotent — prevents double-free with shared refs) */
+    if (!ep_gc_find((void*)ptr)) return;
+    EpStruct_DivisionOutcome* s = (EpStruct_DivisionOutcome*)ptr;
+    ep_gc_unregister(s);
+    free(s);
+}
+
+
 /* Built-in: string concatenation */
 long long concat(long long a, long long b) {
     const char* sa = (const char*)a;
@@ -4836,7 +4896,12 @@ long long ep_exit(long long);
 
 /* User Function Prototypes */
 long long expect_number(long long, long long, long long);
+long long expect_equal(long long, long long, long long);
+long long expect_bool(long long, long long);
 long long _main();
+long long fold_fraction(long long);
+long long inflation_state_after_fold();
+long long spectrum_is_red_tilted();
 long long inflation_depth();
 long long inflation_expansion_factor();
 long long smallest_fold_period_above(long long);
@@ -4847,6 +4912,62 @@ long long whole_power(long long, long long);
 long long fold_period_of_unit_fraction(long long);
 long long period_orbit_floor(long long);
 long long ratio_to_decimal_text(long long, long long, long long);
+long long require_in_domain(long long);
+long long fold_value_size(long long);
+long long fold_value_from_size(long long, long long);
+long long the_one();
+long long supposed_value(long long, long long);
+long long cast_out_whole_ones(long long);
+long long fold(long long);
+long long can_take(long long, long long);
+long long take(long long, long long);
+long long fold_value_compare(long long, long long);
+long long fold_value_is_equal(long long, long long);
+long long fold_value_to_text(long long);
+long long fold_period(long long, long long);
+long long rotate(long long, long long);
+long long relative_phase(long long, long long);
+long long beat_between(long long, long long);
+long long fraction_numerator(long long);
+long long fraction_denominator(long long);
+long long fraction_make(long long, long long);
+long long fraction_from_whole_number(long long);
+long long fraction_from_ratio(long long, long long);
+long long fraction_add(long long, long long);
+long long fraction_subtract(long long, long long);
+long long fraction_multiply(long long, long long);
+long long fraction_divide(long long, long long);
+long long fraction_compare(long long, long long);
+long long fraction_is_equal(long long, long long);
+long long fraction_to_text(long long);
+long long fraction_to_decimal(long long, long long);
+long long block_size_in_digits();
+long long exact_integer_from_sign_and_digits(long long, long long);
+long long exact_integer_zero();
+long long exact_integer_one();
+long long exact_integer_from_number(long long);
+long long exact_integer_from_messy_digits(long long, long long);
+long long exact_integer_to_text(long long);
+long long digits_to_blocks(long long);
+long long blocks_to_digits(long long);
+long long pad_block_to_nine_digits(long long);
+long long text_to_number(long long);
+long long trim_leading_zero_blocks(long long);
+long long compare_magnitudes(long long, long long);
+long long add_magnitudes(long long, long long);
+long long subtract_magnitudes(long long, long long);
+long long multiply_magnitudes(long long, long long);
+long long exact_integer_negate(long long);
+long long exact_integer_absolute(long long);
+long long exact_integer_is_zero(long long);
+long long exact_integer_add(long long, long long);
+long long exact_integer_subtract(long long, long long);
+long long exact_integer_multiply(long long, long long);
+long long exact_integer_compare(long long, long long);
+long long exact_integer_power(long long, long long);
+long long exact_integer_divide(long long, long long);
+long long exact_integer_divide_exactly(long long, long long);
+long long exact_integer_greatest_common_divisor(long long, long long);
 long long halt_violation(long long);
 long long forbid_selection(long long);
 long long forced_unique(long long, long long, long long);
@@ -4879,11 +5000,53 @@ L_cleanup:
     return ret_val;
 }
 
+long long expect_equal(long long label, long long got, long long want) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+    ep_gc_push_root(&got);
+    ep_gc_push_root(&want);
+
+    ep_gc_maybe_collect();
+
+    if (ep_str_equals(got, want)) {
+    printf("%s\n", (char*)concat((long long)"  ok    ", label));
+    } else {
+    printf("%s\n", (char*)concat((long long)"  FAIL  ", concat(label, concat((long long)" got ", got))));
+    }
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long expect_bool(long long label, long long got) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+
+    ep_gc_maybe_collect();
+
+    if (got) {
+    printf("%s\n", (char*)concat((long long)"  ok    ", label));
+    } else {
+    printf("%s\n", (char*)concat((long long)"  FAIL  ", label));
+    }
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
 long long _main() {
     long long ok = 0;
     long long ret_val = 0;
 
-    printf("%s\n", (char*)(long long)"=== the inflation factor ===");
+    printf("%s\n", (char*)(long long)"=== inflation ===");
+    ok = expect_equal((long long)"fold(3/4) lands at 1/2 (downward advance)", fraction_to_text(inflation_state_after_fold()), (long long)"1/2");
+    ok = expect_bool((long long)"spectrum is RED-tilted (n_s < 1: fold steps downward)", spectrum_is_red_tilted());
     ok = expect_number((long long)"generation covering depth (binary+colour = cover(27))", inflation_depth(), 5);
     ok = expect_number((long long)"inflation expansion factor (2^5 preimages of the One)", inflation_expansion_factor(), 32);
     printf("%s\n", (char*)(long long)"=== done ===");
@@ -4893,15 +5056,69 @@ L_cleanup:
     return ret_val;
 }
 
+long long fold_fraction(long long size) {
+    long long size_again = 0;
+    long long doubled = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&size_again);
+    ep_gc_push_root(&doubled);
+    ep_gc_push_root(&size);
+
+    ep_gc_maybe_collect();
+
+    size_again = fraction_make(fraction_numerator(size), fraction_denominator(size));
+    doubled = fraction_add(size, size_again);
+    ret_val = cast_out_whole_ones(doubled);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long inflation_state_after_fold() {
+    long long ret_val = 0;
+
+    ret_val = fold_fraction(fraction_from_ratio(3, 4));
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long spectrum_is_red_tilted() {
+    long long start = 0;
+    long long order = 0;
+    long long landed = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&start);
+    ep_gc_push_root(&landed);
+
+    ep_gc_maybe_collect();
+
+    start = fraction_from_ratio(3, 4);
+    landed = fold_fraction(fraction_from_ratio(3, 4));
+    order = fraction_compare(landed, start);
+    if (order < 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
 long long inflation_depth() {
     long long generational_volume = 0;
-    long long by_covering = 0;
     long long by_relation = 0;
+    long long by_covering = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&generational_volume);
-    ep_gc_push_root(&by_covering);
     ep_gc_push_root(&by_relation);
+    ep_gc_push_root(&by_covering);
 
     ep_gc_maybe_collect();
 
@@ -4925,9 +5142,9 @@ L_cleanup:
 }
 
 long long smallest_fold_period_above(long long threshold) {
-    long long n = 0;
-    long long best = 0;
     long long period = 0;
+    long long best = 0;
+    long long n = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&n);
@@ -4975,8 +5192,8 @@ L_cleanup:
 }
 
 long long minimal_binary_cover(long long volume) {
-    long long reach = 0;
     long long depth = 0;
+    long long reach = 0;
     long long ret_val = 0;
 
     depth = 1;
@@ -5040,14 +5257,14 @@ L_cleanup:
 }
 
 long long ratio_to_decimal_text(long long numerator, long long denominator, long long places) {
-    long long fractional = 0;
-    long long remainder = 0;
     long long place = 0;
+    long long remainder = 0;
+    long long fractional = 0;
     long long whole_part = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&fractional);
     ep_gc_push_root(&remainder);
+    ep_gc_push_root(&fractional);
     ep_gc_push_root(&whole_part);
     ep_gc_push_root(&denominator);
 
@@ -5071,6 +5288,1623 @@ long long ratio_to_decimal_text(long long numerator, long long denominator, long
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long require_in_domain(long long size) {
+    long long order = 0;
+    long long one = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&one);
+    ep_gc_push_root(&size);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
+    ret_val = halt_violation((long long)"a value was zero; the domain has no zero");
+    goto L_cleanup;
+    }
+    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) < 0) {
+    ret_val = halt_violation((long long)"a value was negative; the domain is the One's interval, greater than zero and at most one");
+    goto L_cleanup;
+    }
+    one = fraction_from_whole_number(1);
+    order = fraction_compare(size, one);
+    if (order > 0) {
+    ret_val = halt_violation((long long)"a value exceeded the One; the domain is greater than zero and at most one");
+    goto L_cleanup;
+    }
+    ret_val = 1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fold_value_size(long long value) {
+    long long numerator = 0;
+    long long denominator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    numerator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->numerator_digits; }));
+    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->denominator_digits; }));
+    ret_val = fraction_make(numerator, denominator);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long fold_value_from_size(long long size, long long derivation) {
+    long long checked = 0;
+    long long value = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&derivation);
+
+    ep_gc_maybe_collect();
+
+    checked = require_in_domain(size);
+    value = ({
+    EpStruct_FoldValue* _s = (EpStruct_FoldValue*)malloc(sizeof(EpStruct_FoldValue));
+    _s->numerator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; });
+    _s->denominator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; });
+    _s->derivation = derivation;
+    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
+    (long long)_s;
+});
+    ret_val = value;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long the_one() {
+    long long one_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&one_size);
+
+    ep_gc_maybe_collect();
+
+    one_size = fraction_from_whole_number(1);
+    ret_val = fold_value_from_size(one_size, (long long)"ONE");
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long supposed_value(long long top, long long bottom) {
+    long long size = 0;
+    long long label = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&label);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+
+    ep_gc_maybe_collect();
+
+    size = fraction_from_ratio(top, bottom);
+    label = concat(concat((long long)"supposed(", fraction_to_text(size)), (long long)")");
+    ret_val = fold_value_from_size(size, label);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long cast_out_whole_ones(long long size) {
+    long long whole_count = 0;
+    long long remainder = 0;
+    long long whole_integer = 0;
+    long long whole_part = 0;
+    long long numerator = 0;
+    long long one_integer = 0;
+    long long denominator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&whole_count);
+    ep_gc_push_root(&remainder);
+    ep_gc_push_root(&whole_integer);
+    ep_gc_push_root(&whole_part);
+    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&one_integer);
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&size);
+
+    ep_gc_maybe_collect();
+
+    numerator = exact_integer_from_sign_and_digits(({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    whole_count = exact_integer_divide(numerator, denominator);
+    whole_integer = exact_integer_from_sign_and_digits(1, ({ long long _fap = whole_count; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; }));
+    one_integer = exact_integer_from_sign_and_digits(1, (long long)"1");
+    whole_part = fraction_make(whole_integer, one_integer);
+    remainder = fraction_subtract(size, whole_part);
+    if (({ long long _fap = remainder; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
+    ret_val = fraction_from_whole_number(1);
+    goto L_cleanup;
+    }
+    ret_val = remainder;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    free_struct_DivisionOutcome(whole_count);
+    whole_count = 0;
+    return ret_val;
+}
+
+long long fold(long long value) {
+    long long trace = 0;
+    long long doubled = 0;
+    long long size_again = 0;
+    long long folded_size = 0;
+    long long size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&doubled);
+    ep_gc_push_root(&size_again);
+    ep_gc_push_root(&folded_size);
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    size = fold_value_size(value);
+    size_again = fold_value_size(value);
+    doubled = fraction_add(size, size_again);
+    folded_size = cast_out_whole_ones(doubled);
+    trace = concat(concat((long long)"fold(", ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(folded_size, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long can_take(long long larger, long long smaller) {
+    long long larger_size = 0;
+    long long smaller_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&larger_size);
+    ep_gc_push_root(&smaller_size);
+    ep_gc_push_root(&larger);
+    ep_gc_push_root(&smaller);
+
+    ep_gc_maybe_collect();
+
+    larger_size = fold_value_size(larger);
+    smaller_size = fold_value_size(smaller);
+    ret_val = fraction_compare(larger_size, smaller_size) > 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_struct_Fraction(larger_size);
+    larger_size = 0;
+    free_struct_Fraction(smaller_size);
+    smaller_size = 0;
+    return ret_val;
+}
+
+long long take(long long larger, long long smaller) {
+    long long difference = 0;
+    long long trace = 0;
+    long long smaller_size = 0;
+    long long larger_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&difference);
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&smaller_size);
+    ep_gc_push_root(&larger_size);
+    ep_gc_push_root(&larger);
+    ep_gc_push_root(&smaller);
+
+    ep_gc_maybe_collect();
+
+    larger_size = fold_value_size(larger);
+    smaller_size = fold_value_size(smaller);
+    difference = fraction_subtract(larger_size, smaller_size);
+    trace = concat(concat(concat(concat((long long)"take(", ({ long long _fap = larger; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = smaller; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(difference, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long fold_value_compare(long long first, long long second) {
+    long long first_size = 0;
+    long long second_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first_size);
+    ep_gc_push_root(&second_size);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_size = fold_value_size(first);
+    second_size = fold_value_size(second);
+    ret_val = fraction_compare(first_size, second_size);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long fold_value_is_equal(long long first, long long second) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    ret_val = fold_value_compare(first, second) == 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fold_value_to_text(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = fraction_to_text(fold_value_size(value));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long fold_period(long long start, long long limit) {
+    long long current = 0;
+    long long count = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&current);
+    ep_gc_push_root(&start);
+
+    ep_gc_maybe_collect();
+
+    current = fold(start);
+    count = 1;
+    while (count <= limit) {
+    if (fold_value_compare(current, start) == 0) {
+    ret_val = count;
+    goto L_cleanup;
+    }
+    current = fold(current);
+    count = (count + 1);
+    }
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long rotate(long long phase, long long step) {
+    long long phase_size = 0;
+    long long sum = 0;
+    long long trace = 0;
+    long long step_size = 0;
+    long long advanced = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&phase_size);
+    ep_gc_push_root(&sum);
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&step_size);
+    ep_gc_push_root(&advanced);
+    ep_gc_push_root(&phase);
+    ep_gc_push_root(&step);
+
+    ep_gc_maybe_collect();
+
+    phase_size = fold_value_size(phase);
+    step_size = fold_value_size(step);
+    sum = fraction_add(phase_size, step_size);
+    advanced = cast_out_whole_ones(sum);
+    trace = concat(concat(concat(concat((long long)"rotate(", ({ long long _fap = phase; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = step; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(advanced, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(7);
+    return ret_val;
+}
+
+long long relative_phase(long long seen, long long vantage) {
+    long long vantage_size = 0;
+    long long gap = 0;
+    long long one = 0;
+    long long the_one_value = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&vantage_size);
+    ep_gc_push_root(&gap);
+    ep_gc_push_root(&one);
+    ep_gc_push_root(&the_one_value);
+    ep_gc_push_root(&seen);
+    ep_gc_push_root(&vantage);
+
+    ep_gc_maybe_collect();
+
+    vantage_size = fold_value_size(vantage);
+    one = fraction_from_whole_number(1);
+    if (fraction_compare(vantage_size, one) == 0) {
+    ret_val = seen;
+    goto L_cleanup;
+    }
+    the_one_value = the_one();
+    gap = take(the_one_value, vantage);
+    ret_val = rotate(seen, gap);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    free_struct_Fraction(vantage_size);
+    vantage_size = 0;
+    free_struct_Fraction(one);
+    one = 0;
+    return ret_val;
+}
+
+long long beat_between(long long first, long long second) {
+    long long order = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    order = fold_value_compare(first, second);
+    if (order == 0) {
+    ret_val = the_one();
+    goto L_cleanup;
+    }
+    if (order > 0) {
+    ret_val = take(first, second);
+    goto L_cleanup;
+    }
+    ret_val = take(second, first);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fraction_numerator(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = exact_integer_from_sign_and_digits(({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long fraction_denominator(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long fraction_make(long long top, long long bottom) {
+    long long numerator = 0;
+    long long denominator = 0;
+    long long common = 0;
+    long long value = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&common);
+    ep_gc_push_root(&value);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+
+    ep_gc_maybe_collect();
+
+    numerator = top;
+    denominator = bottom;
+    if (({ long long _fap = denominator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) < 0) {
+    numerator = exact_integer_from_sign_and_digits((0 - ({ long long _fap = numerator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), ({ long long _fap = numerator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    denominator = exact_integer_from_sign_and_digits((0 - ({ long long _fap = denominator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), ({ long long _fap = denominator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    }
+    common = exact_integer_greatest_common_divisor(numerator, denominator);
+    if (({ long long _fap = common; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) != 0) {
+    numerator = exact_integer_divide_exactly(numerator, common);
+    denominator = exact_integer_divide_exactly(denominator, common);
+    }
+    value = ({
+    EpStruct_Fraction* _s = (EpStruct_Fraction*)malloc(sizeof(EpStruct_Fraction));
+    _s->numerator_sign = ({ long long _fap = numerator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; });
+    _s->numerator_digits = ({ long long _fap = numerator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; });
+    _s->denominator_digits = ({ long long _fap = denominator; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; });
+    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
+    (long long)_s;
+});
+    ret_val = value;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long fraction_from_whole_number(long long whole_number) {
+    long long bottom = 0;
+    long long top = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&whole_number);
+
+    ep_gc_maybe_collect();
+
+    top = exact_integer_from_number(whole_number);
+    bottom = exact_integer_from_sign_and_digits(1, (long long)"1");
+    ret_val = fraction_make(top, bottom);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long fraction_from_ratio(long long top, long long bottom) {
+    long long top_integer = 0;
+    long long bottom_integer = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&top_integer);
+    ep_gc_push_root(&bottom_integer);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+
+    ep_gc_maybe_collect();
+
+    top_integer = exact_integer_from_number(top);
+    bottom_integer = exact_integer_from_number(bottom);
+    ret_val = fraction_make(top_integer, bottom_integer);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long fraction_add(long long first, long long second) {
+    long long second_bottom = 0;
+    long long top = 0;
+    long long cross_second = 0;
+    long long bottom = 0;
+    long long second_top = 0;
+    long long first_top = 0;
+    long long cross_first = 0;
+    long long first_bottom = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&cross_second);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_top = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    first_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    second_top = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    second_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    cross_first = exact_integer_multiply(first_top, second_bottom);
+    cross_second = exact_integer_multiply(second_top, first_bottom);
+    top = exact_integer_add(cross_first, cross_second);
+    bottom = exact_integer_multiply(first_bottom, second_bottom);
+    ret_val = fraction_make(top, bottom);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(10);
+    return ret_val;
+}
+
+long long fraction_subtract(long long first, long long second) {
+    long long bottom = 0;
+    long long first_top = 0;
+    long long cross_first = 0;
+    long long first_bottom = 0;
+    long long second_bottom = 0;
+    long long cross_second = 0;
+    long long top = 0;
+    long long second_top = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&cross_second);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_top = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    first_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    second_top = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    second_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    cross_first = exact_integer_multiply(first_top, second_bottom);
+    cross_second = exact_integer_multiply(second_top, first_bottom);
+    top = exact_integer_add(cross_first, exact_integer_negate(cross_second));
+    bottom = exact_integer_multiply(first_bottom, second_bottom);
+    ret_val = fraction_make(top, bottom);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(10);
+    free_struct_ExactInteger(cross_second);
+    cross_second = 0;
+    return ret_val;
+}
+
+long long fraction_multiply(long long first, long long second) {
+    long long second_bottom = 0;
+    long long first_top = 0;
+    long long first_bottom = 0;
+    long long top = 0;
+    long long bottom = 0;
+    long long second_top = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_top = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    first_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    second_top = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    second_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    top = exact_integer_multiply(first_top, second_top);
+    bottom = exact_integer_multiply(first_bottom, second_bottom);
+    ret_val = fraction_make(top, bottom);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long fraction_divide(long long first, long long second) {
+    long long top = 0;
+    long long first_bottom = 0;
+    long long second_top = 0;
+    long long first_top = 0;
+    long long second_bottom = 0;
+    long long bottom = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_top = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    first_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    second_top = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    second_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    top = exact_integer_multiply(first_top, second_bottom);
+    bottom = exact_integer_multiply(first_bottom, second_top);
+    ret_val = fraction_make(top, bottom);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long fraction_compare(long long first, long long second) {
+    long long second_bottom = 0;
+    long long second_top = 0;
+    long long first_bottom = 0;
+    long long cross_first = 0;
+    long long cross_second = 0;
+    long long first_top = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&cross_second);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_top = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    first_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    second_top = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    second_bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    cross_first = exact_integer_multiply(first_top, second_bottom);
+    cross_second = exact_integer_multiply(second_top, first_bottom);
+    ret_val = exact_integer_compare(cross_first, cross_second);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long fraction_is_equal(long long first, long long second) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    ret_val = fraction_compare(first, second) == 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fraction_to_text(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    if (ep_str_equals(({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }), (long long)"1")) {
+    ret_val = exact_integer_to_text(fraction_numerator(value));
+    goto L_cleanup;
+    }
+    ret_val = concat(concat(exact_integer_to_text(fraction_numerator(value)), (long long)"/"), ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long fraction_to_decimal(long long value, long long places) {
+    long long leading_sign = 0;
+    long long ten = 0;
+    long long place = 0;
+    long long step_outcome = 0;
+    long long remainder = 0;
+    long long top = 0;
+    long long bottom = 0;
+    long long whole_part_outcome = 0;
+    long long fraction_text = 0;
+    long long whole_text = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&leading_sign);
+    ep_gc_push_root(&ten);
+    ep_gc_push_root(&step_outcome);
+    ep_gc_push_root(&remainder);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&whole_part_outcome);
+    ep_gc_push_root(&fraction_text);
+    ep_gc_push_root(&whole_text);
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    leading_sign = (long long)"";
+    if (({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) < 0) {
+    leading_sign = (long long)"-";
+    }
+    top = exact_integer_absolute(fraction_numerator(value));
+    bottom = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    whole_part_outcome = exact_integer_divide(top, bottom);
+    whole_text = ({ long long _fap = whole_part_outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; });
+    remainder = exact_integer_from_sign_and_digits(1, ({ long long _fap = whole_part_outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'remainder_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->remainder_digits; }));
+    ten = exact_integer_from_number(10);
+    fraction_text = (long long)"";
+    place = 0;
+    while (place < places) {
+    remainder = exact_integer_multiply(remainder, ten);
+    step_outcome = exact_integer_divide(remainder, bottom);
+    fraction_text = concat(fraction_text, ({ long long _fap = step_outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; }));
+    remainder = exact_integer_from_sign_and_digits(1, ({ long long _fap = step_outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'remainder_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->remainder_digits; }));
+    place = (place + 1);
+    }
+    if (places > 0) {
+    ret_val = concat(concat(concat(leading_sign, whole_text), (long long)"."), fraction_text);
+    goto L_cleanup;
+    }
+    ret_val = concat(leading_sign, whole_text);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(10);
+    free_struct_DivisionOutcome(step_outcome);
+    step_outcome = 0;
+    free_struct_DivisionOutcome(whole_part_outcome);
+    whole_part_outcome = 0;
+    return ret_val;
+}
+
+long long block_size_in_digits() {
+    long long ret_val = 0;
+
+    ret_val = 1000000000;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long exact_integer_from_sign_and_digits(long long sign, long long digits) {
+    long long chosen_sign = 0;
+    long long value = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&chosen_sign);
+    ep_gc_push_root(&value);
+    ep_gc_push_root(&digits);
+
+    ep_gc_maybe_collect();
+
+    chosen_sign = sign;
+    if (ep_str_equals(digits, (long long)"0")) {
+    chosen_sign = 0;
+    }
+    value = ({
+    EpStruct_ExactInteger* _s = (EpStruct_ExactInteger*)malloc(sizeof(EpStruct_ExactInteger));
+    _s->sign = chosen_sign;
+    _s->digits = digits;
+    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 2; }
+    (long long)_s;
+});
+    ret_val = value;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long exact_integer_zero() {
+    long long ret_val = 0;
+
+    ret_val = exact_integer_from_sign_and_digits(0, (long long)"0");
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long exact_integer_one() {
+    long long ret_val = 0;
+
+    ret_val = exact_integer_from_sign_and_digits(1, (long long)"1");
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long exact_integer_from_number(long long whole_number) {
+    long long sign = 0;
+    long long magnitude = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&sign);
+    ep_gc_push_root(&magnitude);
+
+    ep_gc_maybe_collect();
+
+    sign = 0;
+    magnitude = whole_number;
+    if (whole_number > 0) {
+    sign = 1;
+    }
+    if (whole_number < 0) {
+    sign = -1;
+    magnitude = (0 - whole_number);
+    }
+    ret_val = exact_integer_from_sign_and_digits(sign, int_to_string(magnitude));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long exact_integer_from_messy_digits(long long sign, long long messy_digits) {
+    long long tidy_digits = 0;
+    long long blocks = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&tidy_digits);
+    ep_gc_push_root(&blocks);
+    ep_gc_push_root(&sign);
+    ep_gc_push_root(&messy_digits);
+
+    ep_gc_maybe_collect();
+
+    blocks = digits_to_blocks(messy_digits);
+    tidy_digits = blocks_to_digits(blocks);
+    ret_val = exact_integer_from_sign_and_digits(sign, tidy_digits);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long exact_integer_to_text(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) < 0) {
+    ret_val = concat((long long)"-", ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    goto L_cleanup;
+    }
+    ret_val = ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; });
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long digits_to_blocks(long long digits) {
+    long long high = 0;
+    long long low = 0;
+    long long chunk = 0;
+    long long length = 0;
+    long long blocks = 0;
+    long long added = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&high);
+    ep_gc_push_root(&low);
+    ep_gc_push_root(&chunk);
+    ep_gc_push_root(&blocks);
+    ep_gc_push_root(&digits);
+
+    ep_gc_maybe_collect();
+
+    blocks = create_list();
+    length = string_length((char*)digits);
+    high = length;
+    while (high > 0) {
+    low = (high - 9);
+    if (low < 0) {
+    low = 0;
+    }
+    chunk = (long long)substring((char*)digits, low, (high - low));
+    added = append_list(blocks, text_to_number(chunk));
+    high = low;
+    }
+    ret_val = trim_leading_zero_blocks(blocks);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    return ret_val;
+}
+
+long long blocks_to_digits(long long blocks) {
+    long long index = 0;
+    long long highest_block = 0;
+    long long count = 0;
+    long long this_block = 0;
+    long long text = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&count);
+    ep_gc_push_root(&this_block);
+    ep_gc_push_root(&text);
+    ep_gc_push_root(&blocks);
+
+    ep_gc_maybe_collect();
+
+    count = length_list(blocks);
+    if (count == 0) {
+    ret_val = (long long)"0";
+    goto L_cleanup;
+    }
+    highest_block = get_list(blocks, (count - 1));
+    text = int_to_string(highest_block);
+    index = (count - 2);
+    while (index >= 0) {
+    this_block = get_list(blocks, index);
+    text = concat(text, pad_block_to_nine_digits(this_block));
+    index = (index - 1);
+    }
+    ret_val = text;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    return ret_val;
+}
+
+long long pad_block_to_nine_digits(long long block_value) {
+    long long text = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&text);
+
+    ep_gc_maybe_collect();
+
+    text = int_to_string(block_value);
+    while (string_length((char*)text) < 9) {
+    text = concat((long long)"0", text);
+    }
+    ret_val = text;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long text_to_number(long long text) {
+    long long total = 0;
+    long long character_code = 0;
+    long long index = 0;
+    long long length = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&text);
+
+    ep_gc_maybe_collect();
+
+    total = 0;
+    index = 0;
+    length = string_length((char*)text);
+    while (index < length) {
+    character_code = char_at(text, index);
+    total = ((total * 10) + (character_code - 48));
+    index = (index + 1);
+    }
+    ret_val = total;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long trim_leading_zero_blocks(long long blocks) {
+    long long highest_block = 0;
+    long long count = 0;
+    long long removed = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&count);
+    ep_gc_push_root(&blocks);
+
+    ep_gc_maybe_collect();
+
+    count = length_list(blocks);
+    while (count > 0) {
+    highest_block = get_list(blocks, (count - 1));
+    if (highest_block != 0) {
+    break;
+    }
+    removed = pop_list(blocks);
+    count = (count - 1);
+    }
+    ret_val = blocks;
+    blocks = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long compare_magnitudes(long long first, long long second) {
+    long long first_count = 0;
+    long long second_block = 0;
+    long long index = 0;
+    long long first_block = 0;
+    long long second_count = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_count = length_list(first);
+    second_count = length_list(second);
+    if (first_count > second_count) {
+    ret_val = 1;
+    goto L_cleanup;
+    }
+    if (first_count < second_count) {
+    ret_val = -1;
+    goto L_cleanup;
+    }
+    index = (first_count - 1);
+    while (index >= 0) {
+    first_block = get_list(first, index);
+    second_block = get_list(second, index);
+    if (first_block > second_block) {
+    ret_val = 1;
+    goto L_cleanup;
+    }
+    if (first_block < second_block) {
+    ret_val = -1;
+    goto L_cleanup;
+    }
+    index = (index - 1);
+    }
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long add_magnitudes(long long first, long long second) {
+    long long second_block = 0;
+    long long total = 0;
+    long long first_count = 0;
+    long long second_count = 0;
+    long long result = 0;
+    long long added = 0;
+    long long count = 0;
+    long long carry = 0;
+    long long index = 0;
+    long long first_block = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&total);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&carry);
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    carry = 0;
+    first_count = length_list(first);
+    second_count = length_list(second);
+    count = first_count;
+    if (second_count > first_count) {
+    count = second_count;
+    }
+    index = 0;
+    while (index < count) {
+    first_block = 0;
+    if (index < first_count) {
+    first_block = get_list(first, index);
+    }
+    second_block = 0;
+    if (index < second_count) {
+    second_block = get_list(second, index);
+    }
+    total = ((first_block + second_block) + carry);
+    added = append_list(result, (total % block_size_in_digits()));
+    carry = (total / 1000000000);
+    index = (index + 1);
+    }
+    if (carry > 0) {
+    added = append_list(result, carry);
+    }
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long subtract_magnitudes(long long first, long long second) {
+    long long result = 0;
+    long long first_block = 0;
+    long long second_count = 0;
+    long long second_block = 0;
+    long long added = 0;
+    long long index = 0;
+    long long difference = 0;
+    long long borrowed = 0;
+    long long first_count = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&difference);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    borrowed = 0;
+    first_count = length_list(first);
+    second_count = length_list(second);
+    index = 0;
+    while (index < first_count) {
+    first_block = get_list(first, index);
+    second_block = 0;
+    if (index < second_count) {
+    second_block = get_list(second, index);
+    }
+    difference = ((first_block - second_block) - borrowed);
+    if (difference < 0) {
+    difference = (difference + 1000000000);
+    borrowed = 1;
+    } else {
+    borrowed = 0;
+    }
+    added = append_list(result, difference);
+    index = (index + 1);
+    }
+    ret_val = trim_leading_zero_blocks(result);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    return ret_val;
+}
+
+long long multiply_magnitudes(long long first, long long second) {
+    long long placed = 0;
+    long long running = 0;
+    long long index = 0;
+    long long product = 0;
+    long long outer = 0;
+    long long second_count = 0;
+    long long added = 0;
+    long long position = 0;
+    long long first_count = 0;
+    long long second_block = 0;
+    long long result = 0;
+    long long total = 0;
+    long long inner = 0;
+    long long first_block = 0;
+    long long carry = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&product);
+    ep_gc_push_root(&outer);
+    ep_gc_push_root(&position);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&total);
+    ep_gc_push_root(&inner);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_count = length_list(first);
+    second_count = length_list(second);
+    result = create_list();
+    index = 0;
+    while (index < (first_count + second_count)) {
+    added = append_list(result, 0);
+    index = (index + 1);
+    }
+    outer = 0;
+    while (outer < first_count) {
+    first_block = get_list(first, outer);
+    carry = 0;
+    inner = 0;
+    while (inner < second_count) {
+    second_block = get_list(second, inner);
+    running = get_list(result, (outer + inner));
+    product = (((first_block * second_block) + running) + carry);
+    placed = set_list(result, (outer + inner), (product % block_size_in_digits()));
+    carry = (product / 1000000000);
+    inner = (inner + 1);
+    }
+    position = (outer + second_count);
+    while (carry > 0) {
+    running = get_list(result, position);
+    total = (running + carry);
+    placed = set_list(result, position, (total % block_size_in_digits()));
+    carry = (total / 1000000000);
+    position = (position + 1);
+    }
+    outer = (outer + 1);
+    }
+    ret_val = trim_leading_zero_blocks(result);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long exact_integer_negate(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = exact_integer_from_sign_and_digits((0 - ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long exact_integer_absolute(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) < 0) {
+    ret_val = exact_integer_from_sign_and_digits((0 - ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    goto L_cleanup;
+    }
+    ret_val = value;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long exact_integer_is_zero(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long exact_integer_add(long long first, long long second) {
+    long long second_blocks = 0;
+    long long order = 0;
+    long long first_blocks = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&second_blocks);
+    ep_gc_push_root(&first_blocks);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = second;
+    goto L_cleanup;
+    }
+    if (({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = first;
+    goto L_cleanup;
+    }
+    first_blocks = digits_to_blocks(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    second_blocks = digits_to_blocks(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })) {
+    ret_val = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }), blocks_to_digits(add_magnitudes(first_blocks, second_blocks)));
+    goto L_cleanup;
+    }
+    order = compare_magnitudes(first_blocks, second_blocks);
+    if (order == 0) {
+    ret_val = exact_integer_from_sign_and_digits(0, (long long)"0");
+    goto L_cleanup;
+    }
+    if (order > 0) {
+    ret_val = exact_integer_from_sign_and_digits(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }), blocks_to_digits(subtract_magnitudes(first_blocks, second_blocks)));
+    goto L_cleanup;
+    }
+    ret_val = exact_integer_from_sign_and_digits(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }), blocks_to_digits(subtract_magnitudes(second_blocks, first_blocks)));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long exact_integer_subtract(long long first, long long second) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    ret_val = exact_integer_add(first, exact_integer_negate(second));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long exact_integer_multiply(long long first, long long second) {
+    long long product_digits = 0;
+    long long second_blocks = 0;
+    long long first_blocks = 0;
+    long long product_blocks = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&product_digits);
+    ep_gc_push_root(&second_blocks);
+    ep_gc_push_root(&first_blocks);
+    ep_gc_push_root(&product_blocks);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = exact_integer_from_sign_and_digits(0, (long long)"0");
+    goto L_cleanup;
+    }
+    if (({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = exact_integer_from_sign_and_digits(0, (long long)"0");
+    goto L_cleanup;
+    }
+    first_blocks = digits_to_blocks(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    second_blocks = digits_to_blocks(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    product_blocks = multiply_magnitudes(first_blocks, second_blocks);
+    product_digits = blocks_to_digits(product_blocks);
+    ret_val = exact_integer_from_sign_and_digits((({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) * ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), product_digits);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long exact_integer_compare(long long first, long long second) {
+    long long magnitude_order = 0;
+    long long first_blocks = 0;
+    long long second_blocks = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first_blocks);
+    ep_gc_push_root(&second_blocks);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) < ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })) {
+    ret_val = -1;
+    goto L_cleanup;
+    }
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) > ({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })) {
+    ret_val = 1;
+    goto L_cleanup;
+    }
+    if (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = 0;
+    goto L_cleanup;
+    }
+    first_blocks = digits_to_blocks(({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    second_blocks = digits_to_blocks(({ long long _fap = second; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; }));
+    magnitude_order = compare_magnitudes(first_blocks, second_blocks);
+    ret_val = (({ long long _fap = first; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) * magnitude_order);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long exact_integer_power(long long base, long long exponent) {
+    long long result = 0;
+    long long step = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&base);
+
+    ep_gc_maybe_collect();
+
+    result = exact_integer_from_sign_and_digits(1, (long long)"1");
+    step = 0;
+    while (step < exponent) {
+    result = exact_integer_multiply(result, base);
+    step = (step + 1);
+    }
+    ret_val = result;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long exact_integer_divide(long long dividend, long long divisor) {
+    long long length = 0;
+    long long next_count = 0;
+    long long to_remove = 0;
+    long long quotient_digits = 0;
+    long long quotient_digit = 0;
+    long long remainder = 0;
+    long long quotient_blocks = 0;
+    long long digit_text = 0;
+    long long ten = 0;
+    long long next_value = 0;
+    long long dividend_digits = 0;
+    long long this_count = 0;
+    long long trial = 0;
+    long long tidy_quotient = 0;
+    long long index = 0;
+    long long shifted = 0;
+    long long outcome = 0;
+    long long next_digit = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&next_count);
+    ep_gc_push_root(&to_remove);
+    ep_gc_push_root(&quotient_digits);
+    ep_gc_push_root(&quotient_digit);
+    ep_gc_push_root(&remainder);
+    ep_gc_push_root(&quotient_blocks);
+    ep_gc_push_root(&digit_text);
+    ep_gc_push_root(&ten);
+    ep_gc_push_root(&next_value);
+    ep_gc_push_root(&dividend_digits);
+    ep_gc_push_root(&this_count);
+    ep_gc_push_root(&trial);
+    ep_gc_push_root(&tidy_quotient);
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&shifted);
+    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&next_digit);
+    ep_gc_push_root(&dividend);
+    ep_gc_push_root(&divisor);
+
+    ep_gc_maybe_collect();
+
+    ten = exact_integer_from_number(10);
+    quotient_digits = (long long)"";
+    remainder = exact_integer_from_sign_and_digits(0, (long long)"0");
+    dividend_digits = ({ long long _fap = dividend; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; });
+    length = string_length((char*)dividend_digits);
+    index = 0;
+    while (index < length) {
+    digit_text = (long long)substring((char*)dividend_digits, index, 1);
+    next_digit = text_to_number(digit_text);
+    shifted = exact_integer_multiply(remainder, ten);
+    next_value = exact_integer_from_number(next_digit);
+    remainder = exact_integer_add(shifted, next_value);
+    quotient_digit = 0;
+    while (quotient_digit < 9) {
+    next_count = exact_integer_from_number((quotient_digit + 1));
+    trial = exact_integer_multiply(divisor, next_count);
+    if (exact_integer_compare(trial, remainder) > 0) {
+    break;
+    }
+    quotient_digit = (quotient_digit + 1);
+    }
+    this_count = exact_integer_from_number(quotient_digit);
+    to_remove = exact_integer_multiply(divisor, this_count);
+    remainder = exact_integer_add(remainder, exact_integer_negate(to_remove));
+    quotient_digits = concat(quotient_digits, int_to_string(quotient_digit));
+    index = (index + 1);
+    }
+    quotient_blocks = digits_to_blocks(quotient_digits);
+    tidy_quotient = blocks_to_digits(quotient_blocks);
+    outcome = ({
+    EpStruct_DivisionOutcome* _s = (EpStruct_DivisionOutcome*)malloc(sizeof(EpStruct_DivisionOutcome));
+    _s->quotient_digits = tidy_quotient;
+    _s->remainder_digits = ({ long long _fap = remainder; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'digits' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->digits; });
+    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 2; }
+    (long long)_s;
+});
+    ret_val = outcome;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(19);
+    free_struct_ExactInteger(to_remove);
+    to_remove = 0;
+    free_struct_ExactInteger(trial);
+    trial = 0;
+    return ret_val;
+}
+
+long long exact_integer_divide_exactly(long long dividend, long long divisor) {
+    long long absolute_divisor = 0;
+    long long outcome = 0;
+    long long absolute_dividend = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&absolute_divisor);
+    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&absolute_dividend);
+    ep_gc_push_root(&dividend);
+    ep_gc_push_root(&divisor);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = dividend; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) == 0) {
+    ret_val = exact_integer_from_sign_and_digits(0, (long long)"0");
+    goto L_cleanup;
+    }
+    absolute_dividend = exact_integer_absolute(dividend);
+    absolute_divisor = exact_integer_absolute(divisor);
+    outcome = exact_integer_divide(absolute_dividend, absolute_divisor);
+    ret_val = exact_integer_from_sign_and_digits((({ long long _fap = dividend; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) * ({ long long _fap = divisor; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; })), ({ long long _fap = outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; }));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    free_struct_DivisionOutcome(outcome);
+    outcome = 0;
+    return ret_val;
+}
+
+long long exact_integer_greatest_common_divisor(long long first, long long second) {
+    long long outcome = 0;
+    long long larger = 0;
+    long long smaller = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&larger);
+    ep_gc_push_root(&smaller);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    larger = exact_integer_absolute(first);
+    smaller = exact_integer_absolute(second);
+    while (({ long long _fap = smaller; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; }) != 0) {
+    outcome = exact_integer_divide(larger, smaller);
+    larger = smaller;
+    smaller = exact_integer_from_sign_and_digits(1, ({ long long _fap = outcome; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'remainder_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->remainder_digits; }));
+    }
+    ret_val = larger;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    free_struct_DivisionOutcome(outcome);
+    outcome = 0;
     return ret_val;
 }
 

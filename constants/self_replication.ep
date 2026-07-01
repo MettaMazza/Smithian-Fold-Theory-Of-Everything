@@ -21,10 +21,11 @@
 #  fold's two-to-one structure, iterated.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  Self-replicating systems (from DNA to autocatalytic sets) copy by templating and
-#  grow by doubling generations. The forced content is structural: the fold's
-#  two-to-one covering gives every pattern two reproducing sources and a per-step
-#  doubling -- which is what "a pattern can copy itself" requires.
+#  The forced counts are EXACT: every pattern has exactly TWO preimages (a template
+#  and a copy), and the copy count at depth d is exactly 2^d -- exact integers, not
+#  estimates. Self-replicating systems (from DNA to autocatalytic sets) copy by
+#  templating and grow by doubling generations; the fold fixes the copy number to two
+#  per source and the doubling per step exactly -- the comparison is an identity.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

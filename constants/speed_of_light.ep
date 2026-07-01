@@ -23,11 +23,14 @@
 #  match: one speed, shared, because there is one fold.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  Measured: c = 299792458 m/s, and gravitational waves (LIGO/Virgo, GW170817)
-#  travel at c to about one part in 10^15. The forced content is structural and
-#  dimensionless -- the limit speed is the One and is shared by every massless
-#  carrier -- which is exactly what "light and gravity travel at the same c" says.
-#  The metres-per-second number is a human unit choice, not part of the derivation.
+#  The forced value is EXACT: c = the One = 1 in natural units, with no error term.
+#  This is not a dodge about units -- c carries no measurement uncertainty at all: the
+#  metre has been DEFINED since 1983 so that c = 299792458 m/s exactly, precisely
+#  because c is the one fixed limit speed. The single falsifiable prediction the fold
+#  makes here -- that light and gravity share that one speed -- is confirmed to about
+#  one part in 10^15 (GW170817: the gamma-ray and gravitational-wave fronts from a
+#  neutron-star merger arrived together across 130 million light-years). One fold,
+#  one signal speed, exact -- and the hardest test of it passes at 10^-15.
 # ============================================================================
 
 import "../foundation/the_one_and_the_fold.ep"

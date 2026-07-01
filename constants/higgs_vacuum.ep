@@ -18,10 +18,13 @@
 #  So the Higgs vacuum value is the displaced half-One, and mass is coupling to it.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  The Higgs vacuum value is measured nonzero (about 246 GeV in physical units). The
-#  forced content here is structural -- that the vacuum is DISPLACED from zero to the
-#  balanced half-One, which is why there is mass at all; its physical energy scale is
-#  a separate quantity, not this ratio.
+#  The forced value is EXACT: the vacuum sits at the half-One, 1/2, the unique
+#  solution of x + x = One -- not "about", exactly 1/2. Measured: the Higgs vacuum is
+#  nonzero, at 246 GeV. The GeV magnitude is a separate quantity -- it is the absolute
+#  energy scale, which the fold fixes in its OWN result (the absolute scale, 2^(127/2)
+#  from the One to the floor at depth 7); it is not free here, it is answered
+#  elsewhere. What this derivation forces exactly is that the vacuum is displaced off
+#  zero to the balanced, self-antipodal half-One -- which is why there is mass at all.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

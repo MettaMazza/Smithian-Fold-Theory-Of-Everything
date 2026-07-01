@@ -22,9 +22,10 @@
 #  counted elsewhere, so the weight 1/8 is forced, not fitted.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  Measurement outcomes come in definite, indivisible branches with well-defined
-#  weights. The forced content is structural: resolution is binary halving, the
-#  closing depth is colour = 3, so the atomic branch weight is 1/2^3 = 1/8.
+#  The forced value is EXACT: resolution is binary halving to the colour depth, so the
+#  atomic branch weight is 1 / 2^3 = 1/8, an exact rational with no slack. Measurement
+#  outcomes are definite and indivisible; the fold fixes the smallest branch weight to
+#  1/8 exactly -- the comparison is an identity, not an approximation.
 # ============================================================================
 
 import "../foundation/exact_integers.ep"

@@ -11,9 +11,25 @@ define expect_number with label as Str and got as Int and want as Int:
         display concat("    want: " and int_to_string(want))
     return 0
 
-define main:
-    display "=== the inflation factor ==="
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
 
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== inflation ==="
+
+    set ok to expect_equal("fold(3/4) lands at 1/2 (downward advance)" and fraction_to_text(inflation_state_after_fold()) and "1/2")
+    set ok to expect_bool("spectrum is RED-tilted (n_s < 1: fold steps downward)" and spectrum_is_red_tilted())
     set ok to expect_number("generation covering depth (binary+colour = cover(27))" and inflation_depth() and 5)
     set ok to expect_number("inflation expansion factor (2^5 preimages of the One)" and inflation_expansion_factor() and 32)
 

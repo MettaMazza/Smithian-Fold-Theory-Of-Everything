@@ -15,10 +15,12 @@
 #  exactly the equation of state w = -1.
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  Dark energy is measured with w very close to -1 (a constant density). The forced
-#  content is structural: the vacuum, being the One, is fold-invariant and therefore
-#  constant -- which is what w = -1 says. (Its dark-energy SHARE of the universe,
-#  2/3, is the separate cosmic-budget result.)
+#  The fold forces w = -1 EXACTLY -- the vacuum is the One, held fixed by the fold
+#  (fold(1) = 1), so its density does not dilute, and a non-diluting density is w = -1
+#  with no slack. Measured (Planck 2018): w = -1.03 +/- 0.03, which contains the
+#  forced -1 comfortably within one standard deviation. The uncertainty here is the
+#  telescope's, not the derivation's: the prediction is the exact integer -1. (Its
+#  dark-energy SHARE of the universe, 2/3, is the separate cosmic-budget result.)
 # ============================================================================
 
 import "../foundation/structural_counts.ep"

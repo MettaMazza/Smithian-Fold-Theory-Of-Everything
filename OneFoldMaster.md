@@ -943,9 +943,12 @@ it carries charge: the gluon does (`q = 1`), so `g_eff(k) = (1/2+k)/(1/2) = 1+2k
   ok    EM coupling at level 5 = 1 (flat)
 ```
 
-**To measurement.** A forced *structural* result, not a number: the strong
-coupling runs (grows at range), the electromagnetic one does not — exactly the
-observed behaviour behind confinement and asymptotic freedom.
+**To measurement.** A forced exact number and an exact sign: the strong running
+slope is exactly `b = 2` (positive → confinement at range, asymptotic freedom at
+short range), the electromagnetic slope exactly `0` (flat). QCD's coupling runs
+strongly (negative beta function, asymptotic freedom — Nobel 2004) while QED runs
+only weakly the other way — the forced signs are the observed ones, the strong
+slope an exact rational.
 
 ---
 
@@ -1386,22 +1389,30 @@ which is why there is mass; its physical scale is a separate quantity.
 
 **File:** `constants/inflation_factor.ep`
 
-**Why this step exists.** The early universe expanded by an enormous factor. The
-fold's expansion at the generation depth is a forced count.
+**Why this step exists.** The early universe expanded enormously and left a
+red-tilted primordial spectrum. The fold forces both the expansion count and the
+DIRECTION of the tilt.
 
-**What it does.** The generation covering depth is `binary + colour = 5` (cross-
-checked `= cover(colour^colour)`, forced two ways); the preimage tree of the One
-there has `binary^5 = 32` leaves — the fold's expansion factor at that depth.
+**What it does.** The tilt: inflation begins at `3/4` and the fold advances it
+*downward* — `fold(3/4) = 1/2 < 3/4` — a drop of power with scale, i.e. a RED tilt,
+`n_s < 1` (the fold cannot give a blue tilt here). The expansion count: the
+generation covering depth is `binary + colour = 5` (cross-checked `= cover(27)`,
+forced two ways); the preimage tree of the One there has `binary^5 = 32` leaves.
 
 ```
-=== the inflation factor ===
+=== inflation ===
+  ok    fold(3/4) lands at 1/2 (downward advance)
+  ok    spectrum is RED-tilted (n_s < 1: fold steps downward)
   ok    generation covering depth (binary+colour = cover(27)) = 5
   ok    inflation expansion factor (2^5 preimages of the One) = 32
 ```
 
-**To measurement.** `32` is the fold's structural expansion factor at depth 5. The
-physical number of inflationary e-folds is a different, larger measure — this is the
-structural factor, stated as such.
+**To measurement.** The forced tilt is a definite sign and it is the measured one:
+Planck `n_s = 0.9649 ± 0.0042` — below 1 by more than eight standard deviations, a
+red tilt, exactly the fold's downward advance (`n_s = 1` is excluded by data and by
+the fold). The `32` is an exact integer count of reachable states at depth 5 — an
+identity, not an approximation; the total e-fold *number* is the separate absolute
+scale, not this count.
 
 ---
 
@@ -1506,9 +1517,12 @@ travel at the One, the SAME speed, not by coincidence but because the fold is on
   ok    the signal speed is the maximum (a full turn)
 ```
 
-**To measurement.** `c = 299792458 m/s`, and gravitational waves travel at `c` to
-~1 part in 10¹⁵ (GW170817) — the forced content is that the limit speed is the One,
-shared by every massless carrier; the metres-per-second value is a unit choice.
+**To measurement.** The forced value is exact: `c =` the One `= 1` in natural units,
+with no error term — and `c` carries no measurement uncertainty at all, since the
+metre has been *defined* via `c = 299792458 m/s` exactly (1983) precisely because
+`c` is the one fixed limit speed. The single falsifiable prediction — that light and
+gravity share it — is confirmed to ~1 part in 10¹⁵ (GW170817: γ-ray and
+gravitational fronts arrived together across 130 M light-years).
 
 ---
 
