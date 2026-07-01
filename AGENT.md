@@ -25,7 +25,7 @@ whole Ones). From these, with **zero free parameters**, the theory forces the
 fundamental constants and reproduces their measured values. There is no fitting and
 no choosing anywhere in a derivation; measured numbers appear only on the
 comparison side. And the starting point is itself a *theorem*, not a posit (below),
-so the count of axioms is arguably zero.
+so the count of axioms is zero.
 
 ## Why "chosen" has nowhere to hide — the four places a choice could live, each closed
 

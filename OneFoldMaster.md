@@ -828,10 +828,11 @@ angle is the two large ones over the lepton sector tower `N = binary^colour = 8`
   ok    reactor    1/48 = 0.0208 (measured ~0.0220)
 ```
 
-**To measurement.** The forced `1/2`, `1/3`, `1/48` agree with the measured
-`0.545`, `0.307`, `0.022` to within about a tenth — looser than the precision
-constants (mixing angles are themselves measured less sharply), but forced exactly
-with zero parameters, and the reactor angle is forced **nonzero** at `1/48`.
+**To measurement.** The forced `sin²` angles are exact: `1/2, 1/3, 1/48` (`0.5,
+0.3333, 0.0208`); measured (NuFIT) `0.545 ± 0.021`, `0.307 ± 0.013`, `0.0220 ±
+0.0007` — each ~2σ, a zero-parameter set within a tenth, no tighter forced order
+claimed. The reactor angle is forced **nonzero** at `1/48`, matching its nonzero
+measurement.
 
 ---
 
@@ -932,8 +933,10 @@ vacuum/matter split of Step 9 crossed with the baryon/dark split of Step 7.
   ok    Omega_cdm forced = 0.2812 (measured ~0.262)
 ```
 
-**To measurement.** The forced budget agrees with the measured Planck values to a
-few percent — the leading-order energy budget of the universe, zero parameters.
+**To measurement.** The forced budget is exact (`2/3, 1/3, 5/96, 9/32`); measured
+(Planck 2018) `0.6889 ± 0.0056`, `0.3111 ± 0.0056`, `0.0493 ± 0.0006`, `0.2607 ±
+0.0055` — each within about three percent, a zero-parameter budget, with no tighter
+forced order claimed.
 
 ---
 
@@ -1164,7 +1167,7 @@ these two, no third.
 **Why this step exists.** Everything here is forced from "the One and its fold."
 This step shows the starting point is not even a free choice: given only that
 there is *not nothing*, the One, the domain `(0,1]`, and the fold are forced. Zero
-parameters — and, arguably, zero axioms: the one premise proves itself.
+parameters — and zero axioms: the one premise proves itself.
 
 **What it does.** The fold's factor is the smallest fold period, the binary count
 `2` — forced, not chosen. The ground is then **solved**, not assumed: there is not
@@ -2401,7 +2404,7 @@ runs):**
   fermions and bosons.
 - Step 24 — the axiom is a theorem: given only "not nothing", the One, the domain
   `(0,1]`, and the fold are forced — zero parameters, and the single premise
-  proves itself (arguably zero axioms).
+  proves itself (zero axioms).
 - Step 26 — the prime-sector ladder: the force-sectors are exactly the primes
   `{2,3,5,7}`, bounded by the deepest covering depth 7 (11 is beyond) — four forces,
   two of them (5, 7) forced predictions; mediators `p²−1` = 3, 8, 24, 48.
@@ -2520,7 +2523,7 @@ dark/baryon, Hubble, electroweak, gluons, Koide, neutrino reactor, absolute scal
 the lepton invariants and channel). And the foundation itself
 is not a free choice (Step 24): given only that there is *not nothing*, the One,
 the domain `(0,1]`, and the fold are forced — so the model has **zero free
-parameters and its single premise is a proven theorem** (arguably zero axioms).
+parameters and its single premise is a proven theorem** (zero axioms).
 The only literals left are implementation-only — the base ten of decimal notation
 and the nine-digit working block of the arbitrary-size arithmetic, and the "scan
 far enough" limit on the period spectrum (any limit past `1/7` gives the same two

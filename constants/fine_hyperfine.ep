@@ -15,7 +15,8 @@
 #  correction costs one factor of the coupling, and there are binary = 2 of them -- so
 #  the fine splitting is smaller than the gross ladder by alpha^b = alpha^2:
 #       fine / gross  =  1 / (1/alpha)^2 .
-#  With the forced 1/alpha = 34259/250 that ratio is about 5.3 x 10^-5 -- the observed
+#  With the forced 1/alpha = 34259/250 that ratio is EXACTLY 62500/1173679081 (a
+#  decimal reading of 5.3 x 10^-5) -- the observed
 #  order of fine structure. HYPERFINE structure is finer still: it carries the SAME
 #  two coupling powers and, in addition, the nuclear magnetic moment, so it sits below
 #  the fine scale, not beside it. The suppression EXPONENT, binary = 2, is forced; the

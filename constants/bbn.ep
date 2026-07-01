@@ -12,8 +12,8 @@
 #  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3) ──────────────────
 #  When the weak reactions freeze out, the neutron-to-proton ratio settles at the
 #  deepest fold scale: r = n/p = 1/d_up = 1/7, where d_up = 7 is the deepest covering
-#  depth (cover(colour^(colour+1)) = colour + (colour+1), forced two ways). Essentially
-#  every neutron is then captured into helium-4 (two neutrons, two protons), so the
+#  depth (cover(colour^(colour+1)) = colour + (colour+1), forced two ways). The
+#  surviving neutrons are then locked into helium-4 (two neutrons, two protons), so the
 #  helium mass fraction is
 #       Y = 2r / (1 + r) = 2(1/7) / (8/7) = 2/8 = 1/4 = 1/b^2 .
 #  A quarter -- exactly one over the binary squared. Both the freeze-out ratio (over

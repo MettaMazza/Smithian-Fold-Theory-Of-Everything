@@ -39,7 +39,7 @@ nothing added, the model reaches:
 | W-to-Z mass ratio `(M_W/M_Z)²` | `cos²θ_W = 3/4`, run to measured | `0.7769` | running reaches it |
 | Strong-force gluons | `colour² − 1 = 8` | `8` | exact |
 | Neutrino mixing (PMNS) | `1/2, 1/3, 1/48` | `0.545, 0.307, 0.022` | reactor angle forced **nonzero** |
-| Cosmic energy budget | `Ω_Λ=2/3, Ω_m=1/3, Ω_b=5/96, Ω_cdm=9/32` | Planck | a few percent |
+| Cosmic energy budget | `Ω_Λ=2/3, Ω_m=1/3, Ω_b=5/96, Ω_cdm=9/32` | Planck 2018 | within ~3% |
 | Speed of light `c` | `= the One = 1` (exact) | metre *defined* via `c` | light = gravity to **1 part in 10¹⁵** (GW170817) |
 | Dark-energy `w` | `−1` (exact) | `−1.03 ± 0.03` | forced value inside 1σ |
 | Primordial tilt `n_s` | `< 1` (red, forced sign) | `0.9649 ± 0.0042` | **>8σ** below 1, as forced |
@@ -111,8 +111,8 @@ suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ## The axiom is a theorem
 
-The model has zero free parameters — and, arguably, zero axioms. The foundation
-proves itself, and the proof is machine-checked in two parts.
+The model has zero free parameters — and zero axioms. The foundation proves itself,
+and the proof is machine-checked in two parts.
 
 **The fold itself is forced** (`constants/forced_fold_theorem.ep`). Build maps from
 only `x` and the One with `+, −, ·, cast_out` and no other literal: every constant
