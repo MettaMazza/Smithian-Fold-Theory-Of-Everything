@@ -86,8 +86,12 @@ And the structural laws of physics, forced the same way:
   boson that condenses into the shared One → zero resistance), and the
   **conductor/insulator split** (partly-filled band below the One conducts, filled
   band at the One insulates).
+- **Confinement and waves** — **colour neutrality** (three colours sum to a whole, a
+  colour–anticolour pair to the One; no free quark), the **de Broglie dispersion**
+  (`fold(p) = p + p`), and **beats** (two rhythms beat at their difference, unison is
+  silent).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 55 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 58 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

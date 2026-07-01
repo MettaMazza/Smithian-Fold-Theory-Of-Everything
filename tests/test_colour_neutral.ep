@@ -1,0 +1,24 @@
+import "../constants/colour_neutral.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== colour neutrality (confinement) ==="
+    set ok to expect_equal("colour charge 0 = 1/3" and fraction_to_text(colour_charge(0)) and "1/3")
+    set ok to expect_equal("colour charge 1 = 2/3" and fraction_to_text(colour_charge(1)) and "2/3")
+    set ok to expect_equal("colour charge 2 = 1 (3/3)" and fraction_to_text(colour_charge(2)) and "1")
+    set ok to expect_equal("baryon colour sum = 2 (a whole)" and fraction_to_text(baryon_colour_sum()) and "2")
+    set ok to expect_bool("a baryon (three colours) is colour-neutral" and baryon_is_neutral())
+    set ok to expect_equal("anticolour of 1/3 = 2/3" and fraction_to_text(anticolour_of_first()) and "2/3")
+    set ok to expect_bool("a meson (colour + anticolour) is colour-neutral" and meson_is_neutral())
+    display "=== done ==="
+    return 0

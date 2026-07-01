@@ -1,0 +1,70 @@
+# ============================================================================
+#  COLOUR NEUTRALITY  --  why quarks are only ever seen in threes (or as a
+#  quark-antiquark pair), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A free quark has never been seen. Quarks come bound into COLOUR-NEUTRAL hadrons:
+#  three quarks of the three different colours (a baryon, like the proton), or a
+#  quark and an antiquark of colour and anticolour (a meson). Why exactly three, and
+#  why must the colour balance? Both are forced by the colour count.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY c = 3 and the fold) ────────────
+#  The three colours are the three PREIMAGES of the One under the tripling fold: the
+#  values (1 + k)/c for k = 0, 1, 2 -- that is 1/3, 2/3, and 3/3 = 1. Each tripled and
+#  cast down returns to the One (they are its three-fold fibre). A BARYON is the whole
+#  group of all three colours; their charges sum to
+#       1/3 + 2/3 + 3/3 = 6/3 = 2 ,
+#  a WHOLE number of Ones, which casts out to the One -- colour-neutral. A MESON is a
+#  colour and its ANTIPODE (the anticolour, One - colour): 1/3 + 2/3 = 1, the One --
+#  neutral too. So the only colour-balanced combinations are the full set of three
+#  (baryon) or a colour-anticolour pair (meson); a lone colour is not a whole, so a
+#  free quark cannot stand. The three is the colour count; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Every observed hadron is either three quarks (baryon) or quark-antiquark (meson),
+#  and always colour-neutral; no free quark exists (confinement). The forced content
+#  is exact: three colours sum to a whole (neutral), a colour-anticolour pair sums to
+#  the One, an integer identity -- not a fit.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The k-th colour charge: (1 + k)/colour. For k = 0,1,2 these are 1/3, 2/3, 3/3.
+define colour_charge with k as Int returning Fraction:
+    set top to 1 + k
+    return fraction_from_ratio(top and colour_count())
+
+# The baryon colour sum: all three colours added, 1/3 + 2/3 + 3/3 = 2.
+define baryon_colour_sum returning Fraction:
+    set first to colour_charge(0)
+    set second to colour_charge(1)
+    set third to colour_charge(2)
+    set partial to fraction_add(first and second)
+    return fraction_add(partial and third)
+
+# The baryon is colour-neutral: its colour sum is a whole number of Ones, which casts
+# out to the One.
+define baryon_is_neutral returning Bool:
+    set total to baryon_colour_sum()
+    set cast to cast_out_whole_ones(total)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(cast and one)
+
+# A meson: a colour and its antipode (anticolour = One - colour). Take the first
+# colour 1/3; its anticolour is 2/3.
+define anticolour_of_first returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set colour to colour_charge(0)
+    return fraction_subtract(one and colour)
+
+# The meson is colour-neutral: colour + anticolour = 1/3 + 2/3 = the One.
+define meson_is_neutral returning Bool:
+    set colour to colour_charge(0)
+    set anti to anticolour_of_first()
+    set total to fraction_add(colour and anti)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)

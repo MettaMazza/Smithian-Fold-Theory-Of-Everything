@@ -1,0 +1,64 @@
+# ============================================================================
+#  FREE-PARTICLE DISPERSION  --  why a free particle's phase advances with its
+#  momentum (de Broglie), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A free quantum particle is a wave whose phase winds forward as it moves -- the de
+#  Broglie relation, the seed of all wave mechanics. The "dispersion relation" ties
+#  how fast the phase turns to the particle's momentum. In the fold, that tie is the
+#  fold itself: the kinetic term is momentum DOUBLED.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A particle has a momentum p (a phase step) and a running phase. Advancing the phase
+#  by the KINETIC dispersion means advancing it by fold(p) -- the fold's doubling of
+#  the momentum. But doubling is exactly two momentum steps: rotating by p and then by
+#  p again is the same as rotating by fold(p),
+#       rotate(phase, fold(p)) = rotate(phase, p + p) ,
+#  because fold(p) = cast_out(p + p) is what the fold computes. So the dispersion is
+#  forced to be the fold of the momentum -- the phase winds forward at twice the
+#  momentum step -- with the two routes (one kinetic term vs two momentum additions)
+#  agreeing exactly. Nothing is chosen; the dispersion is the fold.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Free particles obey a dispersion relation tying phase advance to momentum (de
+#  Broglie, confirmed in every electron-diffraction experiment). The forced content
+#  is exact: the kinetic dispersion equals momentum doubled, so the two ways of
+#  stepping the phase coincide -- an identity, not a fit.
+# ============================================================================
+
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The particle's momentum, as a phase step: 1/4.
+define momentum returning FoldValue:
+    return supposed_value(1 and 4)
+
+# The running phase of the wave: 1/3.
+define phase returning FoldValue:
+    return supposed_value(1 and 3)
+
+# The kinetic dispersion: the fold (doubling) of the momentum, fold(1/4) = 1/2.
+define kinetic_dispersion returning FoldValue:
+    set p to momentum()
+    return fold(p)
+
+# Momentum applied twice: rotating by p and then by p again, 1/4 + 1/4 = 1/2. Two
+# distinct momentum values are built so neither aliases the other.
+define momentum_doubled returning FoldValue:
+    set p_first to momentum()
+    set p_second to momentum()
+    return rotate(p_first and p_second)
+
+# The dispersion is forced to be momentum doubled: fold(p) = p + p.
+define dispersion_equals_two_steps returning Bool:
+    set kinetic to kinetic_dispersion()
+    set doubled to momentum_doubled()
+    return fold_value_is_equal(kinetic and doubled)
+
+# The phase after one kinetic step: rotate the phase by the dispersion,
+# 1/3 + 1/2 = 5/6.
+define phase_after_step returning FoldValue:
+    set the_phase to phase()
+    set step to kinetic_dispersion()
+    return rotate(the_phase and step)

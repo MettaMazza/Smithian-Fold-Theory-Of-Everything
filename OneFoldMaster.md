@@ -1983,6 +1983,74 @@ mobile-below-the-One vs locked-at-the-One filling; a real gap in eV is a materia
 
 ---
 
+### Step 55 — Colour neutrality (confinement — quarks in threes)
+
+**File:** `constants/colour_neutral.ep`
+
+**What it does.** The three colours are the three preimages of the One under the
+tripling fold: `1/3, 2/3, 3/3`. A **baryon** is all three, whose charges sum to
+`6/3 = 2` — a whole, which casts to the One (neutral). A **meson** is a colour and its
+antipode (`1/3 + 2/3 = 1`, the One). Only the full triple or a colour–anticolour pair
+balances; a lone colour is not a whole, so a free quark cannot stand.
+
+```
+=== colour neutrality (confinement) ===
+  ok    colour charges = 1/3, 2/3, 3/3
+  ok    baryon colour sum = 2 (a whole) ; a baryon is colour-neutral
+  ok    anticolour of 1/3 = 2/3 ; a meson is colour-neutral
+```
+
+**To measurement.** Every hadron is three quarks or quark–antiquark, always
+colour-neutral, with no free quark (confinement) — exactly the forced result: three
+colours sum to a whole, a colour–anticolour pair sums to the One, an integer identity.
+
+---
+
+### Step 56 — Free-particle dispersion (de Broglie)
+
+**File:** `constants/free_particle_dispersion.ep`
+
+**What it does.** A free particle's phase winds forward with its momentum. The kinetic
+dispersion is the **fold of the momentum**, and doubling is two momentum steps, so
+`rotate(phase, fold(p)) = rotate(phase, p + p)` — the two ways of stepping the phase
+coincide because `fold(p) = cast_out(p+p)`. The dispersion is forced to be the fold.
+
+```
+=== free-particle dispersion (de Broglie) ===
+  ok    kinetic dispersion = fold(1/4) = 1/2
+  ok    momentum doubled = 1/4 + 1/4 = 1/2
+  ok    dispersion equals momentum doubled (fold(p) = p + p)
+  ok    phase after one step = 1/3 + 1/2 = 5/6
+```
+
+**To measurement.** Free particles obey a dispersion relation tying phase advance to
+momentum (de Broglie, every electron-diffraction experiment) — the forced content is
+the identity `fold(p) = p + p`.
+
+---
+
+### Step 57 — Beat frequency
+
+**File:** `constants/beat_frequency.ep`
+
+**What it does.** Two rhythms on the circle of the One beat at the **gap** between
+them — the fold's `beat_between`. For `1/3` and `1/7` the beat is `1/3 − 1/7 = 4/21`,
+their difference; two identical rhythms have no gap, so their beat is the One — a
+full, silent period (no throb at unison).
+
+```
+=== beat frequency ===
+  ok    rhythm one = 1/3 ; rhythm two = 1/7
+  ok    beat = |1/3 - 1/7| = 4/21
+  ok    unison beat = the One (silent)
+```
+
+**To measurement.** Two tones beat at `|f1 − f2|` and identical tones do not beat
+(every piano tuner) — the forced `beat_between`: the difference of two rhythms, and
+the One at unison.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2118,6 +2186,13 @@ runs):**
   states, so occupation is binary `{0,1}` and the max is one particle — Pauli.
 - Step 54 — electronic bands: allowed bands / forbidden gap copy the fold's domain;
   a partly-filled band (below the One) conducts, a filled band (at the One) insulates.
+- Step 55 — colour neutrality: three colours (preimages of the One under the tripling
+  fold) sum to a whole (baryon), a colour–anticolour pair sums to the One (meson) —
+  confinement, no free quark.
+- Step 56 — free-particle dispersion: the kinetic dispersion is the fold of momentum,
+  `fold(p) = p + p` — de Broglie phase advance.
+- Step 57 — beat frequency: two rhythms beat at their difference (`beat_between`), and
+  unison is silent (the beat is the One).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

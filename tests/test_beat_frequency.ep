@@ -1,0 +1,22 @@
+import "../constants/beat_frequency.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== beat frequency ==="
+    set ok to expect_equal("rhythm one = 1/3" and fold_value_to_text(rhythm_one()) and "1/3")
+    set ok to expect_equal("rhythm two = 1/7" and fold_value_to_text(rhythm_two()) and "1/7")
+    set ok to expect_equal("beat = |1/3 - 1/7| = 4/21" and fold_value_to_text(beat()) and "4/21")
+    set ok to expect_equal("unison beat = the One (silent)" and fold_value_to_text(silent_beat()) and "1")
+    set ok to expect_bool("two identical rhythms are silent (beat = One)" and unison_is_silent())
+    display "=== done ==="
+    return 0

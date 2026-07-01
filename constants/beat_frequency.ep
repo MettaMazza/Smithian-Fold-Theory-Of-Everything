@@ -1,0 +1,54 @@
+# ============================================================================
+#  BEAT FREQUENCY  --  why two close tones throb at their difference, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Play two notes slightly out of tune and you hear a slow throb -- a "beat" -- at the
+#  DIFFERENCE of their frequencies. Piano tuners use it; it is how any two rhythms
+#  interfere. And two rhythms in perfect unison produce no beat at all. Both are the
+#  fold's beat between two phases.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  Two rhythms sit at two points on the circle of the One. The beat between them is
+#  the GAP -- the fold's beat_between, the distance from one to the other taken in the
+#  order that keeps the subtraction legal. For rhythms 1/3 and 1/7 the beat is
+#       beat(1/3, 1/7) = 1/3 - 1/7 = 4/21 ,
+#  their difference, exactly. And two IDENTICAL rhythms have no gap: their beat is the
+#  One -- a full, silent period, no throb. So the beat frequency is forced to be the
+#  difference of the two rhythms, and unison is forced to be silent; neither is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Two tones f1 and f2 beat at |f1 - f2|, and identical tones do not beat -- exactly
+#  the forced result. The forced content is the fold's beat_between: the difference of
+#  two rhythms, and the One (silence) at unison; an exact identity, not a fit.
+# ============================================================================
+
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The first rhythm: 1/3.
+define rhythm_one returning FoldValue:
+    return supposed_value(1 and 3)
+
+# The second rhythm: 1/7.
+define rhythm_two returning FoldValue:
+    return supposed_value(1 and 7)
+
+# The beat between the two rhythms: their difference, beat(1/3, 1/7) = 4/21.
+define beat returning FoldValue:
+    set first to rhythm_one()
+    set second to rhythm_two()
+    return beat_between(first and second)
+
+# Two identical rhythms have no gap: their beat is the One -- a full, silent period.
+# Two distinct copies of 1/3 are built so neither aliases the other.
+define silent_beat returning FoldValue:
+    set first to rhythm_one()
+    set second to rhythm_one()
+    return beat_between(first and second)
+
+# Unison is silent: the beat of a rhythm with itself is the One.
+define unison_is_silent returning Bool:
+    set quiet to silent_beat()
+    set one to the_one()
+    return fold_value_is_equal(quiet and one)
