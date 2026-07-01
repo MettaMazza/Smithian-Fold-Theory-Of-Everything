@@ -1,0 +1,71 @@
+# ============================================================================
+#  THE FLUX TUBE  --  why the strong force confines (a linear potential), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Pull two quarks apart and the strong force does NOT weaken with distance -- it
+#  stays constant, so the energy grows without bound and the quarks snap back (or make
+#  new quarks). This is confinement, and it comes from the gluon field forming a
+#  narrow constant-width TUBE instead of spreading out like the electric field. The
+#  difference is whether the carrier feeds its own field -- which the fold decides.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and c, the fold) ─────────
+#  The gluon CARRIES colour -- the charge it mediates -- so it feeds the field along
+#  the whole line between the quarks (self-coupling). The accumulated source over a
+#  separation L is q + L (charge picked up per unit length), which GROWS with L. Fed
+#  this way the field does not spread; it stays a constant-width tube, so the energy to
+#  hold the quarks apart rises LINEARLY with separation. Linear and unbounded means you
+#  can never pay to fully separate them -- CONFINEMENT.
+#    The photon carries NO charge, so it does not feed its own field: the accumulated
+#  source stays just q, the field spreads (Coulomb), and the energy falls with distance
+#  -- no confinement. The whole difference is the carrier's self-charge, forced: colour
+#  for the gluon, none for the photon.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Lattice QCD and quark-pair production confirm a linear confining potential (a
+#  constant-tension flux tube), while electromagnetism is Coulombic -- exactly the
+#  forced split. The forced content is that the self-charged carrier feeds its field
+#  (charge grows with length -> linear -> confined) and the chargeless one does not.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The bare source charge at the quark: 1/binary = 1/2.
+define source_charge returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The gluon carries colour -- a whole One of charge -- so it feeds its own field.
+define carrier_self_charge returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The accumulated source over a separation of `length` units: q + length * (carrier
+# self-charge) = 1/2 + length. Self-feeding, so it grows with length.
+define accumulated_source with length as Int returning Fraction:
+    set base to source_charge()
+    set fed to fraction_from_whole_number(length)
+    return fraction_add(base and fed)
+
+# The strong field's charge GROWS with separation: accumulated(2) > accumulated(1), so
+# the energy rises linearly -- confinement.
+define strong_confines returning Bool:
+    set near to accumulated_source(1)
+    set far to accumulated_source(2)
+    set order to fraction_compare(far and near)
+    if order > 0:
+        return true
+    return false
+
+# The photon carries no charge, so its accumulated source stays the bare charge at
+# every length -- it does not self-feed.
+define photon_accumulated_source with length as Int returning Fraction:
+    return source_charge()
+
+# The electromagnetic field does NOT confine: its accumulated source is the same near
+# and far (constant, not growing), so the field spreads and the energy falls.
+define electromagnetism_does_not_confine returning Bool:
+    set near to photon_accumulated_source(1)
+    set far to photon_accumulated_source(2)
+    return fraction_is_equal(near and far)

@@ -1,0 +1,23 @@
+import "../constants/cosmic_dilution_exponents.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== cosmic dilution exponents ==="
+    set ok to expect_number("matter exponent = d_space = 3 (a^-3)" and matter_dilution_exponent() and 3)
+    set ok to expect_number("radiation exponent = d_space + 1 = spacetime = 4 (a^-4)" and radiation_dilution_exponent() and 4)
+    set ok to expect_number("vacuum exponent = 0 (a^0, non-diluting)" and vacuum_dilution_exponent() and 0)
+    set ok to expect_bool("radiation thins faster than matter (4 > 3)" and radiation_thins_faster_than_matter())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,26 @@
+import "../constants/hydrogen_spectrum.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the hydrogen spectrum ==="
+    set ok to expect_number("ladder exponent = binary = 2 (1/n^2)" and ladder_exponent() and 2)
+    set ok to expect_equal("level n=1 = 1" and fraction_to_text(energy_level(1)) and "1")
+    set ok to expect_equal("level n=2 = 1/4" and fraction_to_text(energy_level(2)) and "1/4")
+    set ok to expect_equal("level n=3 = 1/9" and fraction_to_text(energy_level(3)) and "1/9")
+    set ok to expect_equal("Lyman-alpha (2->1) = 3/4" and fraction_to_text(lyman_alpha()) and "3/4")
+    set ok to expect_equal("Balmer-alpha (3->2) = 5/36" and fraction_to_text(balmer_alpha()) and "5/36")
+    set ok to expect_bool("levels descend toward ionization (the forbidden zero)" and levels_descend_toward_ionization())
+    display "=== done ==="
+    return 0

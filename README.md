@@ -93,8 +93,12 @@ And the structural laws of physics, forced the same way:
 - **Cosmos and atom** — **primordial helium** (`Y = 1/4` from `n/p = 1/7`),
   **gravitational time dilation** (`A = 1 − r_s/r`, stopping at the horizon's forbidden
   zero), and **fine/hyperfine structure** (`α²` suppression, exponent forced to 2).
+- **Expansion, spectra, confinement** — the **cosmic dilution exponents**
+  (matter `a⁻³`, radiation `a⁻⁴`, dark energy `a⁰`), the **hydrogen `1/n²` ladder**
+  (Rydberg lines as exact rationals), and the **flux tube** (the gluon self-feeds →
+  linear confinement; the photon does not).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 61 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 64 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

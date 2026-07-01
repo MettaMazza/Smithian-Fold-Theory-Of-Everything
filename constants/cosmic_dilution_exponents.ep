@@ -1,0 +1,57 @@
+# ============================================================================
+#  COSMIC DILUTION EXPONENTS  --  why matter thins as a^-3, radiation as a^-4,
+#  and dark energy not at all, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  As the universe expands (scale factor a), its contents thin out at DIFFERENT
+#  rates, and those rates decide the whole history -- radiation-dominated, then
+#  matter, then dark energy. Matter dilutes as a^-3, radiation as a^-4, and dark
+#  energy not at all (a^0). The three exponents are forced by the dimension count.
+#
+#  ── DERIVATION ─ (check every line; uses d_space = 3 and the fold) ───────────
+#  MATTER is a fixed number of particles spread through a growing volume, and volume
+#  grows as a^(d_space). With d_space = 3 (Step 32), the density falls as a^-3: the
+#  exponent is the spatial dimension count.
+#  RADIATION dilutes by that same volume factor AND loses one more power to redshift
+#  (each photon's wavelength stretches with a), so its exponent is d_space + 1 = 4 --
+#  the SPACETIME dimension count (forced two ways: d_space + 1 and the spacetime total).
+#  DARK ENERGY is the vacuum, the One, and the fold holds the One fixed (fold(1) = 1),
+#  so it does not dilute at all: its exponent is 0 (a^0, constant). The three
+#  exponents -- 3, 4, 0 -- are forced by the dimensions and the fold-invariance of the
+#  One; none is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Cosmology uses exactly these: matter a^-3, radiation a^-4, dark energy a^0 -- the
+#  scalings behind the radiation-to-matter-to-dark-energy timeline. The forced content
+#  is exact integer exponents: 3 = d_space, 4 = spacetime, 0 = non-diluting.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+import "../constants/spacetime_dimensions.ep"
+
+
+# Matter dilutes as a^-(d_space): the exponent is the spatial dimension count, 3.
+define matter_dilution_exponent returning Int:
+    return spatial_dimensions()
+
+# Radiation dilutes as a^-(d_space + 1): volume plus one power for redshift, 4 -- the
+# spacetime dimension count. Forced two ways (d_space + 1 and the spacetime total).
+define radiation_dilution_exponent returning Int:
+    set by_volume_plus_redshift to spatial_dimensions() + 1
+    set by_spacetime to spacetime_dimensions()
+    return forced_to_be("radiation exponent = d_space + 1 = spacetime dimensions" and by_volume_plus_redshift and by_spacetime)
+
+# Dark energy (the vacuum, the One) does not dilute: its exponent is 0 (a^0, constant),
+# because the fold holds the One fixed.
+define vacuum_dilution_exponent returning Int:
+    return spatial_dimensions() - spatial_dimensions()
+
+# Radiation thins faster than matter: its exponent is strictly larger (4 > 3).
+define radiation_thins_faster_than_matter returning Bool:
+    set radiation to radiation_dilution_exponent()
+    set matter to matter_dilution_exponent()
+    if radiation > matter:
+        return true
+    return false

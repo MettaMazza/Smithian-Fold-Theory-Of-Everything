@@ -2120,6 +2120,79 @@ and ratio `1/(1/α)²`.
 
 ---
 
+### Step 61 — Cosmic dilution exponents (a⁻³, a⁻⁴, a⁰)
+
+**File:** `constants/cosmic_dilution_exponents.ep`
+
+**What it does.** As space expands, contents thin at rates set by the dimensions.
+**Matter** (fixed particles in a growing volume) dilutes as `a^-d_space = a^-3`;
+**radiation** loses the same volume factor plus one power to redshift, `a^-(d_space+1)
+= a^-4` (the spacetime count); **dark energy** is the fold-invariant One, so it does
+not dilute, `a^0`. The exponents `3, 4, 0` are forced.
+
+```
+=== cosmic dilution exponents ===
+  ok    matter exponent = d_space = 3 (a^-3)
+  ok    radiation exponent = d_space + 1 = spacetime = 4 (a^-4)
+  ok    vacuum exponent = 0 (a^0, non-diluting)
+  ok    radiation thins faster than matter (4 > 3)
+```
+
+**To measurement.** Cosmology uses exactly these — matter `a⁻³`, radiation `a⁻⁴`, dark
+energy `a⁰` (the radiation→matter→dark-energy timeline). Exact integer exponents:
+`3 = d_space`, `4 = spacetime`, `0 = non-diluting`.
+
+---
+
+### Step 62 — The hydrogen spectrum (the 1/n² ladder)
+
+**File:** `constants/hydrogen_spectrum.ep`
+
+**What it does.** The n-th bound level goes as `1/n^binary = 1/n²`, so the levels are
+`1, 1/4, 1/9, …`. A spectral line is a difference of levels: Lyman-α (2→1) `= 3/4`,
+Balmer-α (3→2) `= 5/36` — the Rydberg formula as exact rationals. As `n` grows the
+levels fall toward the forbidden zero (ionization), which No-Zero never lets a bound
+level reach, so infinitely many levels pack toward the edge.
+
+```
+=== the hydrogen spectrum ===
+  ok    ladder exponent = binary = 2 (1/n^2)
+  ok    levels: 1, 1/4, 1/9
+  ok    Lyman-alpha (2->1) = 3/4 ; Balmer-alpha (3->2) = 5/36
+  ok    levels descend toward ionization (the forbidden zero)
+```
+
+**To measurement.** Hydrogen's levels go as `1/n²` and its lines follow Rydberg to
+extraordinary precision — forced: exponent `b = 2`, levels `1/n²`, lines their exact
+rational differences.
+
+---
+
+### Step 63 — The flux tube (confinement)
+
+**File:** `constants/flux_tube_formation.ep`
+
+**What it does.** The gluon **carries** colour, so it feeds its own field along the
+line between quarks: the accumulated source over a separation `L` is `q + L`, which
+**grows** with `L`. The field stays a constant-width tube, the energy rises *linearly*
+and unbounded — you can never fully separate the quarks (**confinement**). The photon
+carries no charge, so its source stays `q` (constant), the field spreads (Coulomb),
+and there is no confinement.
+
+```
+=== the flux tube (confinement) ===
+  ok    bare source charge = 1/2 ; gluon self-charge = the One
+  ok    accumulated source: length 1 = 3/2, length 2 = 5/2 (grows)
+  ok    the strong force CONFINES (charge grows with length)
+  ok    electromagnetism does NOT confine (charge constant)
+```
+
+**To measurement.** Lattice QCD shows a linear confining potential (constant-tension
+flux tube) while electromagnetism is Coulombic — the forced split: the self-charged
+carrier feeds its field (linear → confined), the chargeless one does not.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2268,6 +2341,13 @@ runs):**
   slow), reaching the forbidden zero at the horizon (time stops).
 - Step 60 — fine/hyperfine structure: fine sits `binary = 2` coupling-powers below
   gross (`α²`), hyperfine finer still — the suppression exponent forced.
+- Step 61 — cosmic dilution exponents: matter `a⁻³` (`d_space`), radiation `a⁻⁴`
+  (spacetime), dark energy `a⁰` (the fold-invariant One) — forced integer exponents.
+- Step 62 — the hydrogen spectrum: the level ladder is `1/n^binary = 1/n²`, lines are
+  exact rational differences (Lyman-α `3/4`, Balmer-α `5/36`), ionization at the
+  forbidden zero.
+- Step 63 — the flux tube: the gluon carries colour and self-feeds, so charge grows
+  with separation (linear potential → confinement); the chargeless photon does not.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

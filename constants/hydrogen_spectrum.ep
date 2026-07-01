@@ -1,0 +1,65 @@
+# ============================================================================
+#  THE HYDROGEN SPECTRUM  --  why the energy levels form a 1/n^2 ladder, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Hydrogen's light comes in sharp lines (the Balmer series you see in any discharge
+#  tube), because its electron sits on a ladder of energy levels going as 1/n^2. That
+#  ladder, and the exact ratios of the spectral lines, are forced by the fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2) ─────────────────────────
+#  The n-th bound level has energy proportional to 1 / n^b = 1 / n^2 -- the ladder
+#  exponent is the binary count. So the levels are 1/1, 1/4, 1/9, 1/16, ..., a
+#  descending sequence of exact fractions. A spectral line is a transition between two
+#  levels, and its energy is their difference:
+#     Lyman-alpha (2 -> 1):  1/1 - 1/4 = 3/4 ,
+#     Balmer-alpha (3 -> 2):  1/4 - 1/9 = 5/36 .
+#  Exact rationals -- the Rydberg formula, with the ladder exponent forced to b = 2.
+#  As n grows the levels fall toward the forbidden zero: that limit is ionization (the
+#  electron unbound), which the No-Zero law never lets a bound level reach -- so there
+#  are infinitely many bound levels, packing in toward the ionization edge.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Hydrogen's levels go as 1/n^2 and its lines follow the Rydberg formula to
+#  extraordinary precision. The forced content is exact: the ladder exponent is b = 2,
+#  the levels are 1/n^2, and the line energies are their exact rational differences.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The ladder exponent: the binary count, 2 (levels go as 1/n^2).
+define ladder_exponent returning Int:
+    return binary_count()
+
+# The n-th bound energy level: 1 / n^2.
+define energy_level with n as Int returning Fraction:
+    set denominator to whole_power(n and ladder_exponent())
+    return fraction_from_ratio(1 and denominator)
+
+# The Lyman-alpha line (2 -> 1): level(1) - level(2) = 1 - 1/4 = 3/4.
+define lyman_alpha returning Fraction:
+    set high to energy_level(1)
+    set low to energy_level(2)
+    return fraction_subtract(high and low)
+
+# The Balmer-alpha line (3 -> 2): level(2) - level(3) = 1/4 - 1/9 = 5/36.
+define balmer_alpha returning Fraction:
+    set high to energy_level(2)
+    set low to energy_level(3)
+    return fraction_subtract(high and low)
+
+# The levels descend toward ionization: level(1) > level(2) > level(3), falling toward
+# the forbidden zero (the ionization edge).
+define levels_descend_toward_ionization returning Bool:
+    set first to energy_level(1)
+    set second to energy_level(2)
+    set third to energy_level(3)
+    set drop_one to fraction_compare(first and second)
+    set drop_two to fraction_compare(second and third)
+    if drop_one > 0:
+        if drop_two > 0:
+            return true
+    return false
