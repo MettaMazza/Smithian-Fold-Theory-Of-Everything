@@ -1,0 +1,61 @@
+# ============================================================================
+#  THE EXPANSION HISTORY  --  the Friedmann curve E^2(z), forced and exact.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Cosmology's workhorse is the expansion rate as a function of redshift: how fast
+#  the universe grew at every epoch. The standard model writes it as
+#  E^2(z) = Omega_vac + Omega_m (1+z)^3 and FITS the Omegas. Here nothing is fitted:
+#  the budget is the forced 2/3 : 1/3 split, so the whole curve is exact rationals.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY c = 3 and the forced budget) ────
+#  The energy budget today is vacuum 2/3 and matter 1/3 (cosmic_density.ep) -- they
+#  partition the One (flatness: 2/3 + 1/3 = 1). Vacuum does not dilute; matter dilutes
+#  with the volume, growing back as the cube of the stretch factor s = 1 + z looking
+#  back. So the squared expansion rate at stretch s is
+#       E^2(s) = 2/3 + (1/3) * s^3 ,
+#  an EXACT rational at every epoch:
+#       today   (s = 1):  E^2 = 2/3 + 1/3        = 1      (normalised -- flatness),
+#       s = 2:            E^2 = 2/3 + 8/3        = 10/3,
+#       s = 3:            E^2 = 2/3 + 27/3       = 29/3 .
+#  Every value falls out of the forced split and the forced cube (three spatial
+#  dimensions) -- no parameter anywhere.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced curve is E^2(s) = 2/3 + s^3/3, exact. Measured: the flat LambdaCDM
+#  expansion history fit by supernovae, BAO, and the CMB is E^2(z) =
+#  Omega_L + Omega_m (1+z)^3 with Omega_L ~ 0.69, Omega_m ~ 0.31 -- the same curve at
+#  the forced 2/3 : 1/3, which matches that fit to a few percent at every redshift.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The forced budget: vacuum (colour-1)/colour = 2/3, matter 1/colour = 1/3.
+define expansion_vacuum_share returning Fraction:
+    return fraction_from_ratio(colour_count() - 1 and colour_count())
+
+define expansion_matter_share returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# Flatness: the two shares partition the One.
+define shares_partition_one returning Fraction:
+    set vac to expansion_vacuum_share()
+    set mat to expansion_matter_share()
+    return fraction_add(vac and mat)
+
+# The squared expansion rate at stretch factor s = 1 + z:
+#   E^2(s) = vacuum + matter * s^3  (matter grows back as the cube -- three dimensions).
+define expansion_rate_squared with stretch as Int returning Fraction:
+    set cube to whole_power(stretch and colour_count())
+    set cube_fraction to fraction_from_whole_number(cube)
+    set mat to expansion_matter_share()
+    set matter_term to fraction_multiply(mat and cube_fraction)
+    set vac to expansion_vacuum_share()
+    return fraction_add(vac and matter_term)
+
+# Today (s = 1): E^2 = 1 exactly (the normalisation IS flatness, not a fit).
+define expansion_rate_today returning Fraction:
+    return expansion_rate_squared(1)

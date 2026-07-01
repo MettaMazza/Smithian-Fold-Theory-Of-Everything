@@ -1,0 +1,76 @@
+# ============================================================================
+#  THE INTROSPECTION LIMIT  --  why a mind cannot fully read itself, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  You cannot observe all of your own processing: something always runs beneath
+#  awareness (the "unconscious"), and no amount of looking inward exhausts it. This is
+#  usually treated as a psychological curiosity. Forced: it is orbit structure -- a
+#  closed cycle that never reaches unison cannot be integrated into the whole, no
+#  matter how many steps it is given. (This is also why determinism FEELS like
+#  freedom: the system cannot pre-read its own next state -- see the arrow modules.)
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Integration into awareness is reaching the One (unison). A process on the period-2
+#  cycle {1/3, 2/3} never gets there: fold(1/3) = 2/3, fold(2/3) = 1/3, and so on
+#  forever -- the orbit is CLOSED, it revisits itself and never touches the One. So a
+#  cycling process is structurally barred from full integration: it can be part of the
+#  whole (1/3 + 2/3 = One -- the conscious and the unintegrated together make the
+#  complete system) without ever being fully seen from inside. The limit is not a
+#  shortage of effort or steps; it is the orbit's shape.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the 1/3 orbit has period 2 and never reaches unison
+#  (checked step by step), while the pair sums to the One. Observed: unconscious
+#  processing is real and permanent (masked priming, blindsight, implicit memory) --
+#  no introspective effort makes all of it visible, as the closed orbit forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The unintegrated process: the cycling state 1/3.
+define unintegrated_state returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# Fold the state a given number of times.
+define fold_times with size as Fraction and count as Int returning Fraction:
+    set current to size
+    set step to 0
+    repeat while step < count:
+        set current to fold_fraction(current)
+        set step to step + 1
+    return current
+
+# The orbit never reaches unison: check every step up to the given horizon.
+define never_reaches_unison_within with horizon as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set current to unintegrated_state()
+    set step to 0
+    set reached to 0
+    repeat while step < horizon:
+        set current to fold_fraction(current)
+        if fraction_is_equal(current and one):
+            set reached to 1
+        set step to step + 1
+    return reached == 0
+
+# The orbit is closed with period 2: two folds return the start.
+define orbit_returns_in_two returning Bool:
+    set start to unintegrated_state()
+    set after_two to fold_times(start and 2)
+    return fraction_is_equal(after_two and start)
+
+# The unintegrated state and its fold together make the whole: 1/3 + 2/3 = One.
+define cycle_completes_the_whole returning Fraction:
+    set state to unintegrated_state()
+    set partner to fold_fraction(state)
+    return fraction_add(state and partner)

@@ -1,0 +1,17 @@
+import "../constants/expansion_history.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the expansion history (the Friedmann curve, exact) ==="
+    set ok to expect_equal("vacuum share = 2/3" and fraction_to_text(expansion_vacuum_share()) and "2/3")
+    set ok to expect_equal("matter share = 1/3" and fraction_to_text(expansion_matter_share()) and "1/3")
+    set ok to expect_equal("flatness: shares partition the One" and fraction_to_text(shares_partition_one()) and "1")
+    set ok to expect_equal("E^2 today (s=1) = 1 (normalisation IS flatness)" and fraction_to_text(expansion_rate_today()) and "1")
+    set ok to expect_equal("E^2 at s=2 = 2/3 + 8/3 = 10/3" and fraction_to_text(expansion_rate_squared(2)) and "10/3")
+    set ok to expect_equal("E^2 at s=3 = 2/3 + 27/3 = 29/3" and fraction_to_text(expansion_rate_squared(3)) and "29/3")
+    display "=== done ==="
+    return 0

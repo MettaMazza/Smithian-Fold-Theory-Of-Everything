@@ -1,0 +1,23 @@
+import "../constants/continuum_ladder.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the continuum ladder (discrete rungs do everything) ==="
+    set ok to expect_equal("rung 5 = 1/32" and fraction_to_text(ladder_rung(5)) and "1/32")
+    set ok to expect_bool("rung 1 reaches unison in 1 fold" and rung_reaches_unison_in(1))
+    set ok to expect_bool("rung 3 reaches unison in 3 folds" and rung_reaches_unison_in(3))
+    set ok to expect_bool("rung 5 reaches unison in 5 folds" and rung_reaches_unison_in(5))
+    set ok to expect_equal("ladder to down-depth 5 sums to 31/32" and fraction_to_text(ladder_sum_to_down_depth()) and "31/32")
+    set ok to expect_equal("plus the boundary rung = the One, exactly" and fraction_to_text(ladder_plus_boundary()) and "1")
+    display "=== done ==="
+    return 0

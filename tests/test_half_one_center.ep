@@ -1,0 +1,24 @@
+import "../constants/half_one_center.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the half-One unifying center (one point, every sector) ==="
+    set ok to expect_equal("the center = 1/2" and fraction_to_text(unifying_center()) and "1/2")
+    set ok to expect_bool("the center is self-antipodal" and is_self_antipodal(unifying_center()))
+    set ok to expect_bool("standing mode of the colour sector (m=3)" and center_is_standing_in(3))
+    set ok to expect_bool("standing mode of the down-depth sector (m=5)" and center_is_standing_in(5))
+    set ok to expect_bool("standing mode of the up-period sector (m=7)" and center_is_standing_in(7))
+    set ok to expect_equal("the binary fold carries it UP to unison" and fraction_to_text(binary_carries_center_to_one()) and "1")
+    set ok to expect_equal("uniquely self-antipodal (alternatives all fail; guard armed)" and int_to_string(center_is_uniquely_self_antipodal()) and "1")
+    display "=== done ==="
+    return 0

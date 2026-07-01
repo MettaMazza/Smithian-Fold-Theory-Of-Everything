@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-116 suites, 693 forced checks, 0 failures). It needs nothing but a C compiler. Use
+121 suites, 723 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3183,6 +3183,56 @@ site ladder; their squares are the charged-lepton mass shares. Where the three g
 
 ---
 
+### Step 114 — The expansion history (the Friedmann curve, exact)
+
+**File:** `constants/expansion_history.ep`
+
+**What it does.** The forced `2/3 : 1/3` budget makes the whole expansion curve exact:
+`E²(s) = 2/3 + s³/3` at stretch `s = 1+z` (matter grows back as the cube — three
+dimensions). Today `E² = 1` exactly (the normalisation *is* flatness, not a fit); `s=2`
+gives `10/3`; `s=3` gives `29/3`. The same curve ΛCDM fits with `Ω_Λ ≈ 0.69, Ω_m ≈ 0.31`,
+here with nothing fitted.
+
+### Step 115 — The half-One unifying center (one point, every sector)
+
+**File:** `constants/half_one_center.ep`
+
+**What it does.** Why `1/2` recurs everywhere — the vacuum, critical couplings, the CP
+position, the zero-point floor: it is the **unique** self-antipodal value (`1−x = x`;
+candidates `1/3, 2/3, 1/4, 3/4` all fail, `forced_unique` armed) and the shared standing
+mode of every odd sector (`m = 3, 5, 7` all hold it fixed) while the binary fold carries it
+up to unison. One structural object, seen in many guises.
+
+### Step 116 — The binding problem (two streams, one experience)
+
+**File:** `constants/binding_problem.ep`
+
+**What it does.** Two processes sharing one rhythm are the period-2 states `1/3 ↔ 2/3`
+(each folds to the other). Together they partition the One (`1/3 + 2/3 = 1`), lock at
+their balance `1/2`, and the balance folds to unison — one bound whole. The measured
+counterpart is phase synchrony (gamma-band locking) when contents bind into one object.
+
+### Step 117 — The introspection limit (a mind cannot fully read itself)
+
+**File:** `constants/introspection_limit.ep`
+
+**What it does.** Integration into awareness is reaching the One; a process on the closed
+period-2 orbit `{1/3, 2/3}` **never** gets there (checked step by step) — yet with its
+partner it completes the whole (`1/3 + 2/3 = 1`). Permanent unconscious processing is
+orbit structure, not effort shortage — and it is why determinism feels like freedom: the
+system cannot pre-read its own next state.
+
+### Step 118 — The continuum ladder (discrete rungs do everything)
+
+**File:** `constants/continuum_ladder.ep`
+
+**What it does.** Rung `k` of the dyadic ladder (`1/2^k`) reaches unison in exactly `k`
+folds; the ladder to the forced down-depth 5 sums to `31/32`, and the boundary rung closes
+it exactly: `31/32 + 1/32 = 1`. Finitely many rungs, exact closure, every rung finitely
+reachable — the construction neither wants nor uses a continuum.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3443,6 +3493,16 @@ runs):**
   below the `1/2` bond — weaker, second-order (two folds to unison).
 - Step 113 — the generation ladder: the three generations sit at the colour-fold preimages
   of the vacuum `1/2` — `1/6, 1/2, 5/6` — on a `binary·colour = 6` site ladder.
+- Step 114 — the expansion history: `E²(s) = 2/3 + s³/3`, exact at every epoch (`1`,
+  `10/3`, `29/3` at `s = 1, 2, 3`) — the ΛCDM curve with nothing fitted.
+- Step 115 — the half-One unifying center: `1/2` is the unique self-antipodal value and
+  the standing mode of every odd sector (3, 5, 7) — one object seen everywhere.
+- Step 116 — the binding problem: the period-2 pair `1/3 ↔ 2/3` partitions the One and
+  locks at `1/2`, which folds to unison — two streams, one experience.
+- Step 117 — the introspection limit: the closed `{1/3, 2/3}` orbit never reaches the
+  One — permanent unconscious processing is orbit structure, not effort shortage.
+- Step 118 — the continuum ladder: rung `1/2^k` reaches unison in `k` folds; the depth-5
+  ladder plus its boundary closes exactly to the One — no continuum wanted or used.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

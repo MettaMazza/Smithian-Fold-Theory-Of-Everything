@@ -1,0 +1,74 @@
+# ============================================================================
+#  THE CONTINUUM LADDER  --  the discrete ladder does everything, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Physics habitually assumes a continuum -- infinitely many values between any two.
+#  The fold needs none of it: the dyadic ladder 1/2, 1/4, 1/8, ... reaches unison from
+#  every rung in finitely many steps, and the WHOLE ladder sums exactly to the One.
+#  Nothing between the rungs is ever needed; the continuum was the bug, not the
+#  feature. (The lattice already reproduces continuum answers exactly -- see
+#  continuum_limit.ep; this is the ladder-side of the same fact.)
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Rung k of the ladder is 1/2^k. Each rung reaches unison in exactly k folds
+#  (1/2^k doubles k times to 1 -- see computability_halting.ep for the halting read).
+#  Down to depth d = 5 (the forced down-depth), the rungs sum telescopically:
+#       1/2 + 1/4 + 1/8 + 1/16 + 1/32  =  31/32 ,
+#  and adding the boundary rung ONCE more closes the whole exactly:
+#       31/32 + 1/32 = One .
+#  Finitely many discrete rungs, exact closure, every rung finitely reachable --
+#  nothing in the construction wants or uses a continuum.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: each rung 1/2^k folds to unison in k steps, and the
+#  depth-5 ladder plus its boundary is exactly the One. Observed: every measured
+#  quantity in physics is recorded at finite resolution -- no experiment has ever
+#  produced, or needed, a continuum value -- consistent with the ladder carrying
+#  everything.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Rung k of the ladder: 1/2^k.
+define ladder_rung with k as Int returning Fraction:
+    set denominator to whole_power(binary_count() and k)
+    return fraction_from_ratio(1 and denominator)
+
+# A rung reaches unison in exactly its own depth of folds.
+define rung_reaches_unison_in with k as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set current to ladder_rung(k)
+    set step to 0
+    repeat while step < k:
+        set current to fold_fraction(current)
+        set step to step + 1
+    return fraction_is_equal(current and one)
+
+# The ladder summed to the forced down-depth d = 5: 1/2 + ... + 1/32 = 31/32.
+define ladder_sum_to_down_depth returning Fraction:
+    set depth to binary_count() + colour_count()
+    set total to ladder_rung(1)
+    set k to 2
+    repeat while k <= depth:
+        set rung to ladder_rung(k)
+        set total to fraction_add(total and rung)
+        set k to k + 1
+    return total
+
+# The boundary rung closes the whole exactly: 31/32 + 1/32 = One.
+define ladder_plus_boundary returning Fraction:
+    set partial to ladder_sum_to_down_depth()
+    set depth to binary_count() + colour_count()
+    set boundary to ladder_rung(depth)
+    return fraction_add(partial and boundary)

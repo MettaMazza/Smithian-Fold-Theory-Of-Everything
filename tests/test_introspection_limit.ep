@@ -1,0 +1,21 @@
+import "../constants/introspection_limit.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the introspection limit (a mind cannot fully read itself) ==="
+    set ok to expect_equal("the unintegrated state = 1/3" and fraction_to_text(unintegrated_state()) and "1/3")
+    set ok to expect_bool("its orbit NEVER reaches unison (horizon 12)" and never_reaches_unison_within(12))
+    set ok to expect_bool("the orbit is closed with period 2" and orbit_returns_in_two())
+    set ok to expect_equal("conscious + unintegrated = the whole (1/3 + 2/3 = 1)" and fraction_to_text(cycle_completes_the_whole()) and "1")
+    display "=== done ==="
+    return 0
