@@ -1,0 +1,61 @@
+# ============================================================================
+#  THE LORENTZ FORCE  --  why motion trims the electric force, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A moving charge feels less net push than a static one: the magnetic force is not a
+#  second force but the motion-correction to the electric one -- the faster the charge,
+#  the larger the trim. Forced: the correction subtracts the squared-speed share of the
+#  electric force, a pure take.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY exact fractions and c = 1) ─────
+#  In fold units the causal speed is 1 and a charge moves at beta < 1. The electric
+#  force on it is fe; the MAGNETIC piece is the part of fe claimed by the motion --
+#  fe scaled by the squared speed, fe * beta^2 -- and the net force is the take:
+#       F = take(fe, fe * beta^2) = fe * (1 - beta^2) .
+#  Exact consequences: at rest (beta -> 0) the trim vanishes and F = fe (electrostatics
+#  recovered); the two pieces PARTITION the electric force, F + fe*beta^2 = fe (nothing
+#  lost, the magnetic part is exactly what motion claims); with fe = 1/4 and beta = 1/2
+#  the net is F = 1/4 * 3/4 = 3/16 exactly. Electricity and magnetism are one force
+#  read at two speeds -- the same unification Maxwell wrote and relativity explained.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: F = fe(1 - beta^2), the magnetic trim growing as the
+#  squared speed. Measured: the force between parallel current-carrying wires, the
+#  cyclotron orbit, and the Hall effect all follow qE + qv x B -- whose magnitude on a
+#  co-moving charge is exactly this motion-trimmed electric force.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The electric force on the test charge: fe = 1/4.
+define electric_force returning Fraction:
+    set four to binary_count() * binary_count()
+    return fraction_from_ratio(1 and four)
+
+# The test speed: beta = 1/2 (half the causal speed).
+define test_speed returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The magnetic piece: the motion's claim, fe * beta^2.
+define magnetic_piece returning Fraction:
+    set fe to electric_force()
+    set beta to test_speed()
+    set beta_squared to fraction_multiply(beta and beta)
+    return fraction_multiply(fe and beta_squared)
+
+# The net Lorentz force: the take, F = fe - fe*beta^2 = fe(1 - beta^2).
+define lorentz_force returning Fraction:
+    set fe to electric_force()
+    set trim to magnetic_piece()
+    return fraction_subtract(fe and trim)
+
+# The pieces partition the electric force: F + fe*beta^2 = fe (nothing lost).
+define pieces_partition_electric returning Bool:
+    set net to lorentz_force()
+    set trim to magnetic_piece()
+    set total to fraction_add(net and trim)
+    set fe to electric_force()
+    return fraction_is_equal(total and fe)

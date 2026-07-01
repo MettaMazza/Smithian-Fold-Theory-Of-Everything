@@ -1,0 +1,20 @@
+import "../constants/quasicrystals.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== quasicrystals (order without a lattice) ==="
+    set ok to expect_equal("phi(5) = 4 (> the binary bound 2)" and int_to_string(five_fold_totient()) and "4")
+    set ok to expect_bool("five-fold PERIODIC order is forbidden (no lattice)" and five_fold_lattice_is_forbidden())
+    set ok to expect_bool("yet the five-fold HOLDS the balance (a standing mode)" and five_fold_holds_the_balance())
+    display "=== done ==="
+    return 0

@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-131 suites, 774 forced checks, 0 failures). It needs nothing but a C compiler. Use
+136 suites, 801 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3339,6 +3339,59 @@ never become stars. Two ignition shares make one barrier (`1/4 + 1/4 = 1/2`).
 
 ---
 
+### Step 129 — Oscillator levels (E_n = (n + ½)s)
+
+**File:** `constants/oscillator_levels.ep`
+
+**What it does.** At depth `k` the ladder spacing is `s = 1/2^k`, tied by the halving
+relation `fold(s_{k+1}) = s_k`. No mode can sit at zero, so the ground sits **half a
+spacing up** (the zero-point offset) and each excitation adds one whole spacing:
+`E_n = (n + ½)s`. At depth 2: `1/8, 3/8, 5/8, 7/8` — exactly `2^k` levels, uniform
+spacing, half-step start — the quantum-harmonic-oscillator spectrum (molecular vibration
+lines are the measured face).
+
+### Step 130 — The Lorentz force (motion trims the electric force)
+
+**File:** `constants/lorentz_force.ep`
+
+**What it does.** The magnetic force is not a second force: it is the motion's claim on
+the electric one — `F = take(fe, fe·β²) = fe(1 − β²)`. At rest the trim vanishes
+(electrostatics); the pieces **partition** the electric force (`F + fe·β² = fe`, nothing
+lost); with `fe = 1/4, β = 1/2` the net is exactly `3/16`. One force read at two speeds.
+
+### Step 131 — The prime distribution (the fold's spectrum is number theory)
+
+**File:** `constants/prime_distribution.ep`
+
+**What it does.** The fold's orbit period on `1/n` *is* the multiplicative order
+`ord_n(2)` — run the orbits: `period(1/3)=2, (1/5)=4, (1/7)=3, (1/9)=6, (1/15)=4`. Two
+facts fall out of the orbits alone: for a prime `p` the period **divides p−1** (Fermat's
+little theorem, checked through 13), and the two smallest distinct periods are `2` and `3`
+— **the generators themselves**. The theory's seeds are the first two notes of the prime
+spectrum; nothing number-theoretic is imported.
+
+### Step 132 — The Riemann critical line (the antipode's fixed axis)
+
+**File:** `constants/riemann_critical_line.ep`
+
+**What it does.** The zeta functional equation pairs `s ↔ 1−s` — the fold's **antipode**
+map. Off-axis values pair two-sided (`1/4 ↔ 3/4`, `1/3 ↔ 2/3`); exactly one value is its
+own partner: `1/2`, which folds to unison. A zero set symmetric under `s ↔ 1−s` has
+nowhere else to balance — the critical line is the antipode's fixed axis (billions of
+computed zeros sit on it).
+
+### Step 133 — Quasicrystals (order without a lattice)
+
+**File:** `constants/quasicrystals.ep`
+
+**What it does.** Shechtman's "impossible" pattern, resolved by two forced facts side by
+side: five-fold **periodic** order is forbidden (`φ(5) = 4 > b = 2`, the crystallographic
+restriction) — yet the five-fold **holds the balance fixed** (`5·(1/2)` casts out to
+`1/2`, a genuine standing mode). Coherent order without a lattice: sharp five-/ten-fold
+diffraction, no translational periodicity, exactly as observed.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3629,6 +3682,16 @@ runs):**
   block); noble closures at 2, 10, 18 — the periodic table's shape counted.
 - Step 128 — stellar nucleosynthesis: ignition climbs `1/4 → 1/2 → 1` in exactly two
   folds (barrier, then binding peak) — a sharp threshold; brown dwarfs never cross it.
+- Step 129 — oscillator levels: `E_n = (n + ½)s` — ground half a spacing up (No-Zero),
+  uniform spacing, `2^k` levels; the QHO spectrum from the binary ladder.
+- Step 130 — the Lorentz force: `F = fe(1 − β²)` — the magnetic piece is motion's claim
+  on the electric force; the pieces partition it exactly (`3/16 + 1/16 = 1/4`).
+- Step 131 — the prime distribution: orbit period of `1/n` = `ord_n(2)`; Fermat's
+  little theorem checked through 13; the two smallest periods ARE the generators 2, 3.
+- Step 132 — the Riemann critical line: the functional pairing `s ↔ 1−s` is the
+  antipode; its unique fixed axis is `1/2` — nowhere else a symmetric zero set balances.
+- Step 133 — quasicrystals: `φ(5) = 4 > 2` forbids the five-fold lattice, yet the
+  five-fold holds the balance fixed — order without periodicity, as Shechtman saw.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

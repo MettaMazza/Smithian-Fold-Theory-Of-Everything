@@ -1,0 +1,24 @@
+import "../constants/prime_distribution.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the prime distribution (the fold's spectrum is number theory) ==="
+    set ok to expect_equal("period(1/3) = ord_3(2) = 2" and int_to_string(orbit_period(3)) and "2")
+    set ok to expect_equal("period(1/5) = 4" and int_to_string(orbit_period(5)) and "4")
+    set ok to expect_equal("period(1/7) = 3" and int_to_string(orbit_period(7)) and "3")
+    set ok to expect_equal("period(1/9) = 6" and int_to_string(orbit_period(9)) and "6")
+    set ok to expect_equal("period(1/15) = 4" and int_to_string(orbit_period(15)) and "4")
+    set ok to expect_bool("Fermat: the period divides p-1 through p = 13" and fermat_holds_through_thirteen())
+    set ok to expect_bool("the two smallest periods ARE the generators 2 and 3" and smallest_periods_are_the_generators())
+    display "=== done ==="
+    return 0

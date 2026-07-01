@@ -1,0 +1,58 @@
+# ============================================================================
+#  QUASICRYSTALS  --  the impossible order that is not a lattice, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Shechtman's 1982 diffraction pattern showed ten-fold symmetry -- "impossible",
+#  because the crystallographic restriction forbids five-fold PERIODIC order (it cost
+#  him years of ridicule and won the 2011 Nobel prize). The resolution is forced: the
+#  five-sector cannot make a lattice, but it can still HOLD a mode -- order without
+#  periodicity.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Two forced facts, side by side:
+#    * Five-fold PERIODIC order is forbidden: a rotation order n fits a lattice only
+#      when Euler's totient phi(n) <= b = 2 (crystalline_order.ep), and phi(5) = 4 > 2.
+#      No five-fold lattice exists -- that is the restriction Shechtman seemed to break.
+#    * Yet the five-sector still HOLDS a mode: the five-fold map fixes the balance,
+#      5 * (1/2) casts out to 1/2 (a genuine standing mode -- the same standing modes
+#      that appear in five_fold_standing_modes.ep). A held mode is long-range ORDER:
+#      sharp diffraction, definite symmetry.
+#  So five-fold order exists exactly as observed: coherent (a standing mode) but not
+#  periodic (no lattice) -- a quasicrystal. Nothing was impossible; only the assumption
+#  that order means lattice.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: phi(5) = 4 > 2 (no five-fold lattice) AND the five-fold
+#  holds the balance fixed (order regardless). Measured: quasicrystals show sharp
+#  five-/ten-fold diffraction spots with no translational periodicity -- held order
+#  without a lattice, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/crystalline_order.ep"
+
+
+# The five-fold map: multiply by five, cast out whole Ones.
+define five_fold with size as Fraction returning Fraction:
+    set five to fraction_from_whole_number(binary_count() + colour_count())
+    set scaled to fraction_multiply(size and five)
+    return cast_out_whole_ones(scaled)
+
+# Five-fold periodic order is forbidden: phi(5) = 4 exceeds the binary bound.
+define five_fold_totient returning Int:
+    return euler_totient(binary_count() + colour_count())
+
+define five_fold_lattice_is_forbidden returning Bool:
+    set allowed to rotation_is_crystallographic(binary_count() + colour_count())
+    if allowed:
+        return 1 == 0
+    return 1 == 1
+
+# Yet the five-sector holds the balance: 5 * (1/2) casts out to 1/2 -- a standing mode.
+define five_fold_holds_the_balance returning Bool:
+    set balance to fraction_from_ratio(1 and binary_count())
+    set held to five_fold(balance)
+    return fraction_is_equal(held and balance)

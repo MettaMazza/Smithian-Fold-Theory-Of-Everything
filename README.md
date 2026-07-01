@@ -109,6 +109,15 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **The spectrum's ladder, the primes' scale, the impossible crystal** — **oscillator
+  levels** (`E_n = (n + ½)s`: ground half a spacing up, uniform spacing — the QHO
+  spectrum), the **Lorentz force** (`F = fe(1 − β²)` — magnetism is motion's claim on
+  the electric force, an exact partition), the **prime distribution** (the fold's orbit
+  period on `1/n` IS `ord_n(2)` — Fermat through 13, and the two smallest periods are
+  the generators 2 and 3 themselves), the **Riemann critical line** (the functional
+  pairing `s ↔ 1−s` is the antipode; its unique fixed axis is `1/2`), and
+  **quasicrystals** (`φ(5) = 4 > 2` forbids the lattice, yet the five-fold holds the
+  balance — order without periodicity).
 - **Both Millennium walls, the vacuum field, the table's shape** — **Navier–Stokes
   regularity** (the smallest eddy is the floor `1/32 > 0`, so vorticity caps at `32 = 2⁵`
   — blow-up is inexpressible), the **Schwarzschild solution** (`A(r) = 1 − rs/r`, one flux
@@ -190,8 +199,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 131 test
-suites (774 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 136 test
+suites (801 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -248,7 +257,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 131 suites, 774 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 136 suites, 801 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

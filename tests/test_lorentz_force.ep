@@ -1,0 +1,22 @@
+import "../constants/lorentz_force.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Lorentz force (motion trims the electric force) ==="
+    set ok to expect_equal("electric force fe = 1/4" and fraction_to_text(electric_force()) and "1/4")
+    set ok to expect_equal("test speed beta = 1/2" and fraction_to_text(test_speed()) and "1/2")
+    set ok to expect_equal("magnetic piece = fe*beta^2 = 1/16" and fraction_to_text(magnetic_piece()) and "1/16")
+    set ok to expect_equal("net Lorentz force = fe(1 - beta^2) = 3/16" and fraction_to_text(lorentz_force()) and "3/16")
+    set ok to expect_bool("net + magnetic = electric (partition, nothing lost)" and pieces_partition_electric())
+    display "=== done ==="
+    return 0

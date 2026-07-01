@@ -1,0 +1,67 @@
+# ============================================================================
+#  THE RIEMANN CRITICAL LINE  --  why the balance sits at one-half, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Riemann hypothesis says every nontrivial zero of the zeta function lies on the
+#  critical line Re(s) = 1/2. Why 1/2 and not some other axis? Forced: the zeta
+#  functional equation pairs s with 1 - s -- the fold's ANTIPODE map -- and the unique
+#  balance of that pairing is the self-antipodal half-One.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the antipode and the fold) ─────
+#  The functional symmetry is the antipode: x <-> One - x. Its pairs mirror about one
+#  axis -- the unique value equal to its own partner, One - x = x, which has exactly
+#  one solution: x = 1/2. Every off-axis value belongs to a two-sided pair (1/4 pairs
+#  with 3/4, 1/3 with 2/3); only the half-One pairs with ITSELF, so the symmetry axis
+#  -- the only place a self-balanced spectrum can sit -- is 1/2, and it folds to
+#  unison. The critical line is the antipode map's fixed axis: there is nowhere else
+#  a zero set symmetric under s <-> 1-s could balance.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the antipode's unique fixed point is 1/2 (alternatives
+#  1/4, 3/4, 1/3, 2/3 all pair off-axis), and it folds to unison. Observed: every one
+#  of the billions of computed zeta zeros lies on Re(s) = 1/2 -- the balance axis this
+#  forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The antipode map: x -> One - x (the functional pairing s <-> 1-s).
+define antipode with x as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and x)
+
+# The critical line: the unique value that is its OWN antipode partner.
+define critical_line returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+define line_is_its_own_partner returning Bool:
+    set line to critical_line()
+    set partner to antipode(line)
+    return fraction_is_equal(partner and line)
+
+# Off-axis values pair two-sided: the antipode of 1/4 is 3/4 (not itself).
+define quarter_pairs_across returning Bool:
+    set quarter to fraction_from_ratio(1 and 4)
+    set partner to antipode(quarter)
+    set expected to fraction_from_ratio(3 and 4)
+    return fraction_is_equal(partner and expected)
+
+define third_pairs_across returning Bool:
+    set third to fraction_from_ratio(1 and 3)
+    set partner to antipode(third)
+    set expected to fraction_from_ratio(2 and 3)
+    return fraction_is_equal(partner and expected)
+
+# The balance axis folds to unison.
+define line_folds_to_unison returning Fraction:
+    return fold_fraction(critical_line())

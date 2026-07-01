@@ -1,0 +1,71 @@
+# ============================================================================
+#  OSCILLATOR LEVELS  --  the quantum harmonic spectrum E_n = (n + 1/2)s, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The quantum harmonic oscillator underlies everything that vibrates -- phonons,
+#  photons, field modes. Its spectrum has two famous features: the levels are EVENLY
+#  spaced, and the ladder starts half a step up (the zero-point offset). Both are
+#  forced by the binary ladder.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  At depth k the ladder spacing is s = 1/2^k, tied one level down by the halving
+#  relation fold(s_{k+1}) = s_k (each spacing doubles up to the previous). A mode
+#  cannot sit at zero (No-Zero), so the ground sits HALF a spacing up -- the zero-point
+#  offset s/2 = s_{k+1} (zero_point_energy.ep) -- and each excitation adds one whole
+#  spacing:
+#       E_n = (n + 1/2) * s .
+#  At depth k = 2 (s = 1/4): E = 1/8, 3/8, 5/8, 7/8 -- exactly 2^k = 4 levels fill the
+#  domain, the spacing is UNIFORM (each step exactly 1/4), and the ground is s/2 = 1/8.
+#  Even spacing, half-step start, a full binary count of levels: the QHO spectrum.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: E_n = (n + 1/2)s with uniform spacing and ground s/2.
+#  Measured: molecular vibration spectra show evenly spaced lines with a half-quantum
+#  zero-point offset (seen in isotope shifts and cold-molecule spectroscopy) -- the
+#  ladder this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The ladder spacing at depth k: s = 1/2^k.
+define spacing_at_depth with k as Int returning Fraction:
+    set volume to whole_power(binary_count() and k)
+    return fraction_from_ratio(1 and volume)
+
+# The halving relation ties the depths: fold(s_{k+1}) = s_k.
+define halving_relation_holds with k as Int returning Bool:
+    set deeper to spacing_at_depth(k + 1)
+    set folded to fold_fraction(deeper)
+    set here to spacing_at_depth(k)
+    return fraction_is_equal(folded and here)
+
+# Level n at depth k: E_n = (n + 1/2) * s = (2n + 1) * s_{k+1}.
+define oscillator_level with n as Int and k as Int returning Fraction:
+    set half_spacing to spacing_at_depth(k + 1)
+    set odd_count to fraction_from_whole_number(2 * n + 1)
+    return fraction_multiply(odd_count and half_spacing)
+
+# The ground state is half a spacing up -- the zero-point offset.
+define ground_is_half_spacing with k as Int returning Bool:
+    set ground to oscillator_level(0 and k)
+    set half_spacing to spacing_at_depth(k + 1)
+    return fraction_is_equal(ground and half_spacing)
+
+# The spacing is uniform: E_{n+1} - E_n = s exactly, for any n.
+define spacing_is_uniform_at with n as Int and k as Int returning Bool:
+    set here to oscillator_level(n and k)
+    set next_level to oscillator_level(n + 1 and k)
+    set gap to fraction_subtract(next_level and here)
+    set s to spacing_at_depth(k)
+    return fraction_is_equal(gap and s)

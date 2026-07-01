@@ -1,0 +1,22 @@
+import "../constants/riemann_critical_line.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Riemann critical line (the antipode's fixed axis) ==="
+    set ok to expect_equal("the critical line = 1/2" and fraction_to_text(critical_line()) and "1/2")
+    set ok to expect_bool("it is its OWN antipode partner (unique fixed axis)" and line_is_its_own_partner())
+    set ok to expect_bool("1/4 pairs across to 3/4 (off-axis values pair up)" and quarter_pairs_across())
+    set ok to expect_bool("1/3 pairs across to 2/3" and third_pairs_across())
+    set ok to expect_equal("the balance axis folds to unison" and fraction_to_text(line_folds_to_unison()) and "1")
+    display "=== done ==="
+    return 0

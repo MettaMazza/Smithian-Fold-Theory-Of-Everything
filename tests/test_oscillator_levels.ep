@@ -1,0 +1,24 @@
+import "../constants/oscillator_levels.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== oscillator levels (E_n = (n + 1/2)s) ==="
+    set ok to expect_equal("spacing at depth 2 = 1/4" and fraction_to_text(spacing_at_depth(2)) and "1/4")
+    set ok to expect_bool("halving relation: fold(s_3) = s_2" and halving_relation_holds(2))
+    set ok to expect_equal("ground level = 1/8 (half a spacing up)" and fraction_to_text(oscillator_level(0 and 2)) and "1/8")
+    set ok to expect_bool("the ground IS the zero-point half-spacing" and ground_is_half_spacing(2))
+    set ok to expect_equal("levels 1/8, 3/8, 5/8, 7/8: level 3 = 7/8" and fraction_to_text(oscillator_level(3 and 2)) and "7/8")
+    set ok to expect_bool("uniform spacing between levels 0 and 1" and spacing_is_uniform_at(0 and 2))
+    set ok to expect_bool("uniform spacing between levels 2 and 3" and spacing_is_uniform_at(2 and 2))
+    display "=== done ==="
+    return 0
