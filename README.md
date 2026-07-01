@@ -215,12 +215,21 @@ CODATA / PDG / Planck measurement` (currently 106 suites, 650 forced checks, 0 f
 measured ones live from NIST's CODATA table — `1/α`, the proton/electron mass ratio,
 and the electron `g` all land on the downloaded values, nothing measured stored locally.
 
-**From the ErnosPlain source.** Install the compiler `ernos`, then either rebuild
-the C (`verify/build_from_source.sh`) or run a proof directly:
+**From the ErnosPlain source — the compiler is bundled.** The ErnosPlain compiler
+`ernos` (a small, dependency-free Rust crate, MIT-licensed) is included in
+[`compiler/`](compiler/) so you can compile **and edit** the `.ep` sources yourself.
+Build it once, then either rebuild the C (`verify/build_from_source.sh`) or run a proof
+directly:
 
 ```sh
-ernos tests/test_fine_structure_constant.ep && ./tests/test_fine_structure_constant
+cargo build --release --manifest-path compiler/Cargo.toml   # builds compiler/target/release/ernos
+compiler/target/release/ernos tests/test_fine_structure_constant.ep
+./tests/test_fine_structure_constant
 ```
+
+(The compiler also lives in its own repo,
+[`MettaMazza/ernos-programming-language`](https://github.com/MettaMazza/ernos-programming-language);
+the copy here is bundled so the theory and the language that expresses it travel together.)
 
 Each test prints the forced value and checks it exactly. Measured numbers appear
 **only** on the comparison side, inside the tests — never in a derivation, and that is
