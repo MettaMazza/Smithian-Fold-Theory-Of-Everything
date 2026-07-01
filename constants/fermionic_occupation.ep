@@ -1,0 +1,61 @@
+# ============================================================================
+#  FERMIONIC OCCUPATION  --  why a quantum state holds at most one fermion
+#  (Pauli exclusion), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Pauli exclusion principle -- no two identical fermions in the same state -- is
+#  why atoms have shells, why matter is rigid, why chemistry exists. A fermion mode is
+#  either EMPTY or OCCUPIED, never doubly filled. That two-valuedness is the fold's
+#  two-to-one map exactly.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold is two-to-one: any state has exactly TWO preimages. Read those two
+#  preimages as the two occupation numbers of a mode -- EMPTY and OCCUPIED. So the
+#  occupation of a fermion mode takes exactly binary = 2 values, {0, 1}, and the most
+#  particles a mode can hold is ONE (the OCCUPIED preimage): a second identical
+#  fermion would need a third preimage, and the fold has only two. That bound of one
+#  IS Pauli exclusion. (A boson is the other case -- it may share the One's single
+#  ground without limit; see superconductivity -- but a fermion mode is capped at the
+#  two-valued fold.)
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Fermion modes are measured to hold occupation 0 or 1 only (Fermi-Dirac statistics,
+#  atomic shell filling). The forced content is exact: the fold's two preimages give
+#  exactly two occupation values and a maximum of one particle per mode -- Pauli, as
+#  an integer identity, not a fit.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two occupation states of a fermion mode = the fold's two preimages = binary = 2.
+define occupation_state_count returning Int:
+    return binary_count()
+
+# The maximum particles in a fermion mode: one (the OCCUPIED preimage). Pauli.
+define max_particles_per_mode returning Int:
+    return occupation_state_count() - 1
+
+# The two preimages of a target, read as EMPTY and OCCUPIED. The empty mode: the
+# lower preimage of the balance point, 1/4. Both fold to the same image.
+define empty_occupation returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define occupied_occupation returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# Both occupation states fold to the SAME image (they are the two preimages of one
+# mode): fold(1/4) = fold(3/4) = 1/2.
+define occupations_share_one_mode returning Bool:
+    set empty_image to fold_fraction(empty_occupation())
+    set occupied_image to fold_fraction(occupied_occupation())
+    return fraction_is_equal(empty_image and occupied_image)

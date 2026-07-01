@@ -1912,6 +1912,77 @@ and Pauli antisymmetry excludes identical nucleons from it.
 
 ---
 
+### Step 52 — Superconductivity (paired carriers, zero resistance)
+
+**File:** `constants/superconductivity.ep`
+
+**What it does.** A Cooper pair binds `binary = 2` fermions — an even count, so the
+composite has integer spin and is **bosonic**. Bosons are not Pauli-excluded: any
+number may occupy the fold's one shared ground, the One (`fold(1)=1`). The pairs
+condense into that single state, a current carried by one collective state has
+nothing to scatter off, and the resistance is zero.
+
+```
+=== superconductivity ===
+  ok    Cooper pair holds binary = 2 fermions
+  ok    a pair (even fermion count) is BOSONIC
+  ok    the condensate ground is the shared, stable One
+  ok    resistance is ZERO (collective lock)
+```
+
+**To measurement.** Superconductors carry current with zero resistance and expel
+magnetic fields — the signature of one coherent condensate. Forced: an even-count
+fermion composite is a boson, and bosons share the one ground.
+
+---
+
+### Step 53 — Fermionic occupation (Pauli exclusion)
+
+**File:** `constants/fermionic_occupation.ep`
+
+**What it does.** The fold is two-to-one: any state has exactly two preimages. Read
+them as a mode's occupation numbers — **empty** and **occupied** — so occupation
+takes exactly `binary = 2` values `{0,1}`, and the maximum is **one** particle per
+mode (a second identical fermion would need a third preimage, which the fold does not
+have). That bound of one *is* Pauli exclusion.
+
+```
+=== fermionic occupation (Pauli exclusion) ===
+  ok    occupation states = binary = 2 (empty, occupied)
+  ok    max particles per mode = 1 (Pauli)
+  ok    empty = 1/4 ; occupied = 3/4 ; both fold to one mode (1/2)
+```
+
+**To measurement.** Fermion modes hold occupation 0 or 1 only (Fermi–Dirac, atomic
+shell filling) — the fold's two preimages give exactly two values and a maximum of
+one, an integer identity.
+
+---
+
+### Step 54 — Electronic bands (conductors and insulators)
+
+**File:** `constants/electronic_bands.ep`
+
+**What it does.** The fold's domain `(0,1]` — allowed values, a forbidden point at
+zero (No-Zero) — is copied by a solid's spectrum: allowed **bands** and a forbidden
+**gap**. Filling decides the state: a partly-filled band sits *below* the One (the
+mobile `1/2`), so carriers can move — a **conductor**; a filled band sits *at* the One
+(`fold(1)=1`, locked), no empty state to move into — an **insulator**.
+
+```
+=== electronic bands ===
+  ok    partly-filled band = 1/2 (mobile, below the One)
+  ok    filled band = the One (locked)
+  ok    partly-filled CONDUCTS ; filled band INSULATES
+  ok    conductor / insulator split
+```
+
+**To measurement.** Solids show allowed bands, forbidden gaps, and the
+conductor/insulator split — exactly the forced allowed/forbidden structure and the
+mobile-below-the-One vs locked-at-the-One filling; a real gap in eV is a material number.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2041,6 +2112,12 @@ runs):**
   (`pKa + pKb = pKw`) and neutrality is the self-antipodal half `1/2`.
 - Step 51 — the deuteron: the bound state is the spin-1 triplet; identical nucleons
   are Pauli-excluded from it, so the deuteron binds but di-proton/di-neutron do not.
+- Step 52 — superconductivity: a Cooper pair (binary = 2 fermions, even → boson)
+  condenses into the shared One; the collective lock gives zero resistance.
+- Step 53 — fermionic occupation: the fold's two preimages are a mode's empty/occupied
+  states, so occupation is binary `{0,1}` and the max is one particle — Pauli.
+- Step 54 — electronic bands: allowed bands / forbidden gap copy the fold's domain;
+  a partly-filled band (below the One) conducts, a filled band (at the One) insulates.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

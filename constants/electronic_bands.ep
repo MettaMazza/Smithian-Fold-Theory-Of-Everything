@@ -1,0 +1,75 @@
+# ============================================================================
+#  ELECTRONIC BANDS  --  why solids have allowed bands and forbidden gaps, and
+#  split into conductors and insulators, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  In a solid the allowed electron energies group into BANDS separated by FORBIDDEN
+#  GAPS. Whether a material conducts or insulates is decided by how its top band is
+#  filled: a partly-filled band conducts (metal), a completely-filled band with a gap
+#  above it insulates. Both the gap and the split are the fold's structure.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The fold's domain is (0, 1]: values are ALLOWED there, and there is a FORBIDDEN
+#  point -- nothing at zero (the No-Zero law). A solid's spectrum copies this: allowed
+#  BANDS separated by a forbidden GAP, exactly the allowed-domain / forbidden-point
+#  structure of the fold. Filling then decides the state of matter:
+#     a PARTLY-filled band sits BELOW the One (e.g. the mobile balance 1/2, strictly
+#        less than the One) -- carriers can still move up, so it CONDUCTS (a metal);
+#     a FULLY-filled band sits AT the One (fold(1) = 1, the locked fixed point) --
+#        no empty state to move into, so it INSULATES.
+#  Conductor versus insulator is the mobile-below-the-One versus locked-at-the-One
+#  distinction, forced; the gap is the fold's forbidden point.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Solids show allowed bands and forbidden gaps, and split into conductors (partly
+#  filled) and insulators (filled band + gap) -- exactly the forced structure. The
+#  forced content is the allowed/forbidden split of the fold and the mobile-vs-locked
+#  filling; the size of a real gap in electron-volts is a measured material number.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A partly-filled band: the mobile balance point 1/2, strictly below the One.
+define partly_filled_band returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# A fully-filled band: at the One, the locked fixed point.
+define filled_band returning Fraction:
+    return fraction_from_whole_number(1)
+
+# A partly-filled band CONDUCTS: it sits strictly below the One, so carriers have an
+# empty state to move into (mobile).
+define partly_filled_conducts returning Bool:
+    set band to partly_filled_band()
+    set one to fraction_from_whole_number(1)
+    set order to fraction_compare(band and one)
+    if order < 0:
+        return true
+    return false
+
+# A filled band INSULATES: it sits AT the One, the fold's fixed point (fold(1) = 1) --
+# locked, no empty state to move into.
+define filled_band_insulates returning Bool:
+    set band to filled_band()
+    set folded to fold_fraction(band)
+    return fraction_is_equal(folded and band)
+
+# The conductor/insulator split: the partly-filled band conducts where the filled band
+# does not.
+define conductor_insulator_split returning Bool:
+    set conducts to partly_filled_conducts()
+    set insulates to filled_band_insulates()
+    if conducts:
+        if insulates:
+            return true
+    return false

@@ -1,0 +1,22 @@
+import "../constants/electronic_bands.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== electronic bands ==="
+    set ok to expect_equal("partly-filled band = 1/2 (mobile, below the One)" and fraction_to_text(partly_filled_band()) and "1/2")
+    set ok to expect_equal("filled band = the One (locked)" and fraction_to_text(filled_band()) and "1")
+    set ok to expect_bool("a partly-filled band CONDUCTS (below the One)" and partly_filled_conducts())
+    set ok to expect_bool("a filled band INSULATES (locked at the One)" and filled_band_insulates())
+    set ok to expect_bool("conductor / insulator split" and conductor_insulator_split())
+    display "=== done ==="
+    return 0

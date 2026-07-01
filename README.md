@@ -81,8 +81,13 @@ And the structural laws of physics, forced the same way:
   6-fold symmetry; 5-fold forbidden, forced by `φ(n) ≤ 2`), the **acid–base conjugate
   partition** (`pKa + pKb = pKw`, neutrality at the self-antipodal half), and the
   **deuteron** (bound spin-1 triplet; Pauli forbids the di-proton and di-neutron).
+- **Quantum matter** — **Pauli exclusion** (a mode's two preimages give occupation
+  `{0,1}`, max one fermion), **superconductivity** (a Cooper pair is an even-count
+  boson that condenses into the shared One → zero resistance), and the
+  **conductor/insulator split** (partly-filled band below the One conducts, filled
+  band at the One insulates).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 52 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 55 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

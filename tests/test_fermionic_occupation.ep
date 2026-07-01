@@ -1,0 +1,24 @@
+import "../constants/fermionic_occupation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== fermionic occupation (Pauli exclusion) ==="
+    set ok to expect_number("occupation states = binary = 2 (empty, occupied)" and occupation_state_count() and 2)
+    set ok to expect_number("max particles per mode = 1 (Pauli)" and max_particles_per_mode() and 1)
+    set ok to expect_equal("empty occupation = 1/4" and fraction_to_text(empty_occupation()) and "1/4")
+    set ok to expect_equal("occupied occupation = 3/4" and fraction_to_text(occupied_occupation()) and "3/4")
+    set ok to expect_bool("both occupations are preimages of one mode (fold to 1/2)" and occupations_share_one_mode())
+    display "=== done ==="
+    return 0

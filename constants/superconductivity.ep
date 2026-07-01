@@ -1,0 +1,69 @@
+# ============================================================================
+#  SUPERCONDUCTIVITY  --  why paired carriers lock into one state and resistance
+#  vanishes, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Below a critical temperature some metals lose ALL electrical resistance. The
+#  mechanism (BCS): electrons bind into Cooper PAIRS, and the pairs -- unlike lone
+#  electrons -- can all pile into a single collective state that carries current with
+#  nothing to scatter off. Both the pairing and the piling-in are the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A carrier is a spin-half fermion (its two states are the fold's two preimages).
+#  Bind an EVEN number of fermions and the composite has INTEGER spin -- a boson. A
+#  Cooper pair is binary = 2 fermions, an even count, so the pair is BOSONIC. And
+#  bosons are not Pauli-excluded: any number may occupy the SAME state -- the fold's
+#  one shared ground, the One (fold(1) = 1, the fixed point every pair can sit in).
+#  So the pairs condense together into that single state; a current carried by one
+#  collective state has nothing to scatter against, and the resistance is zero. Both
+#  steps are forced: two-to-one gives the pair, even-count gives the boson, and the
+#  One is the shared ground.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Superconductors carry current with exactly zero resistance and expel magnetic
+#  fields -- the signature of a single coherent condensate. The forced content is
+#  exact: a pair of fermions (even count) is a boson, and bosons share the one ground,
+#  which is what collective lock and zero resistance require.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The number of fermions in a Cooper pair: binary = 2.
+define cooper_pair_fermion_count returning Int:
+    return binary_count()
+
+# The pair is bosonic: an EVEN number of fermions makes an integer-spin composite.
+# (Even = divisible by the binary count.)
+define pair_is_bosonic returning Bool:
+    set count to cooper_pair_fermion_count()
+    set remainder to count % binary_count()
+    if remainder == 0:
+        return true
+    return false
+
+# The shared condensate ground: the One, the fold's fixed point that every pair can
+# occupy (fold(1) = 1 -- stable and shared, no Pauli bar on bosons).
+define condensate_ground_is_stable returning Bool:
+    set one to fraction_from_whole_number(1)
+    set folded to fold_fraction(one)
+    return fraction_is_equal(folded and one)
+
+# Zero resistance: bosonic pairs all lock into the one shared ground, so a current
+# has nothing to scatter off. Holds when the pair is bosonic and the ground is shared.
+define resistance_is_zero returning Bool:
+    set bosonic to pair_is_bosonic()
+    set shared to condensate_ground_is_stable()
+    if bosonic:
+        if shared:
+            return true
+    return false

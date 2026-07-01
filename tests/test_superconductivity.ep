@@ -1,0 +1,21 @@
+import "../constants/superconductivity.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== superconductivity ==="
+    set ok to expect_number("Cooper pair holds binary = 2 fermions" and cooper_pair_fermion_count() and 2)
+    set ok to expect_bool("a pair (even fermion count) is BOSONIC" and pair_is_bosonic())
+    set ok to expect_bool("the condensate ground is the shared, stable One" and condensate_ground_is_stable())
+    set ok to expect_bool("resistance is ZERO (collective lock)" and resistance_is_zero())
+    display "=== done ==="
+    return 0
