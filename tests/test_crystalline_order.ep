@@ -1,0 +1,27 @@
+import "../constants/crystalline_order.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== crystalline order (the crystallographic restriction) ==="
+    set ok to expect_number("phi(5) = 4 (exceeds the binary bound)" and euler_totient(5) and 4)
+    set ok to expect_number("phi(6) = 2 (meets the binary bound)" and euler_totient(6) and 2)
+    set ok to expect_bool("3-fold is crystallographic" and rotation_is_crystallographic(3))
+    set ok to expect_bool("4-fold is crystallographic" and rotation_is_crystallographic(4))
+    set ok to expect_bool("6-fold is crystallographic" and rotation_is_crystallographic(6))
+    set ok to expect_bool("5-fold is FORBIDDEN (quasicrystal)" and (rotation_is_crystallographic(5) equals false))
+    set ok to expect_bool("7-fold is FORBIDDEN" and (rotation_is_crystallographic(7) equals false))
+    set ok to expect_number("allowed rotation orders: exactly five {1,2,3,4,6}" and allowed_rotation_order_count() and 5)
+    display "=== done ==="
+    return 0

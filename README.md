@@ -77,8 +77,12 @@ And the structural laws of physics, forced the same way:
   **Stefan–Boltzmann** (`P ∝ T⁴`, the exponent `= d_space + 1 = 4`).
 - **The universe accelerates** — the deceleration parameter is forced to `q₀ = −1/2`
   (a negative sign, exact magnitude) by the `2/3`-vs-`1/3` cosmic budget.
+- **Matter and chemistry** — the **crystallographic restriction** (only 2-, 3-, 4-,
+  6-fold symmetry; 5-fold forbidden, forced by `φ(n) ≤ 2`), the **acid–base conjugate
+  partition** (`pKa + pKb = pKw`, neutrality at the self-antipodal half), and the
+  **deuteron** (bound spin-1 triplet; Pauli forbids the di-proton and di-neutron).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 48 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 52 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

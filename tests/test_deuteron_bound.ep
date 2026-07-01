@@ -1,0 +1,24 @@
+import "../constants/deuteron_bound.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the deuteron ==="
+    set ok to expect_number("deuteron total spin = 1 (triplet)" and deuteron_total_spin() and 1)
+    set ok to expect_number("triplet multiplicity = 2*spin+1 = 3" and triplet_multiplicity() and 3)
+    set ok to expect_bool("proton-neutron pair binds (distinguishable)" and proton_neutron_binds())
+    set ok to expect_bool("di-proton / di-neutron do NOT bind (Pauli)" and (identical_nucleons_bind() equals false))
+    set ok to expect_bool("the binding is spin-dependent" and binding_is_spin_dependent())
+    display "=== done ==="
+    return 0

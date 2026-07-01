@@ -1,0 +1,76 @@
+# ============================================================================
+#  CRYSTALLINE ORDER  --  why crystals allow only 2-, 3-, 4-, and 6-fold
+#  symmetry (and never 5-fold), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A crystal is a lattice that repeats. Its rotational symmetry cannot be anything:
+#  the "crystallographic restriction" says only 1-, 2-, 3-, 4-, and 6-fold rotations
+#  are possible -- FIVE orders -- and 5-fold is forbidden. (When a 5-fold "crystal"
+#  was found in 1982 it needed a new name, the quasicrystal, and a Nobel Prize.) The
+#  allowed set is forced by the fold's binary count.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and whole numbers) ───────
+#  An n-fold rotation of a lattice is an integer matrix, so its trace is a whole
+#  number. That trace is 2*cos(2*pi/n) -- the sum of a primitive n-th root of unity
+#  and its conjugate. Such a sum is a rational whole number only when the n-th root's
+#  degree is small enough: exactly when Euler's totient phi(n) -- the count of
+#  numbers below n sharing no factor with n -- is at most the binary count:
+#       n is crystallographic  <=>  phi(n) <= b = 2 .
+#  Compute phi and this admits exactly {1, 2, 3, 4, 6}: phi(1)=1, phi(2)=1, phi(3)=2,
+#  phi(4)=2, phi(6)=2, all <= 2 -- while phi(5)=4 and phi(7)=6 and everything beyond
+#  exceed 2 and are forbidden. Five orders survive; 5-fold is the smallest excluded.
+#  Nothing is chosen: the bound is the binary count, and phi is pure counting.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Every crystal in nature shows 2-, 3-, 4-, or 6-fold symmetry and never 5-fold --
+#  exactly the forced set. The forced content is exact integer counting: phi(n) <= 2
+#  admits precisely those five orders, and forbids the fifth, an identity not a fit.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+
+
+# Euclid's algorithm: the greatest common divisor of two whole numbers.
+define whole_gcd with a as Int and b as Int returning Int:
+    set x to a
+    set y to b
+    repeat while y != 0:
+        set remainder to x % y
+        set x to y
+        set y to remainder
+    return x
+
+# Euler's totient phi(n): how many of 1..n share no factor with n.
+define euler_totient with n as Int returning Int:
+    set count to 0
+    set k to 1
+    repeat while k <= n:
+        set common to whole_gcd(k and n)
+        if common == 1:
+            set count to count + 1
+        set k to k + 1
+    return count
+
+# An n-fold rotation is crystallographic exactly when phi(n) <= the binary count.
+define rotation_is_crystallographic with n as Int returning Bool:
+    set totient to euler_totient(n)
+    set bound to binary_count()
+    if totient <= bound:
+        return true
+    return false
+
+# The number of allowed rotation orders: scan up to the generational volume
+# colour^colour = 27 (far past where the totient bound can ever be met again) and
+# count those with phi(n) <= binary. Exactly five: {1, 2, 3, 4, 6}.
+define allowed_rotation_order_count returning Int:
+    set count to 0
+    set limit to whole_power(colour_count() and colour_count())
+    set n to 1
+    repeat while n <= limit:
+        set ok to rotation_is_crystallographic(n)
+        if ok:
+            set count to count + 1
+        set n to n + 1
+    return count

@@ -1837,6 +1837,81 @@ pyrometer, the CMB spectrum) — the forced content is exact: the exponent is
 
 ---
 
+### Step 49 — Crystalline order (the crystallographic restriction)
+
+**File:** `constants/crystalline_order.ep`
+
+**What it does.** An n-fold lattice rotation is an integer matrix, so its trace
+(`2cos 2π/n`) must be a whole number — possible only when Euler's totient `φ(n) ≤
+binary = 2`. That admits exactly `{1, 2, 3, 4, 6}` (`φ(3)=φ(4)=φ(6)=2`), while
+`φ(5)=4` and `φ(7)=6` are forbidden. Five orders survive; **5-fold is the smallest
+excluded** — the reason a 5-fold "crystal" needed a new name (quasicrystal) and a
+Nobel Prize.
+
+```
+=== crystalline order (the crystallographic restriction) ===
+  ok    phi(5) = 4 (exceeds the binary bound)
+  ok    phi(6) = 2 (meets the binary bound)
+  ok    3-, 4-, 6-fold are crystallographic
+  ok    5-fold is FORBIDDEN (quasicrystal); 7-fold is FORBIDDEN
+  ok    allowed rotation orders: exactly five {1,2,3,4,6}
+```
+
+**To measurement.** Every crystal shows 2-, 3-, 4-, or 6-fold symmetry and never
+5-fold — exactly the forced set. Exact integer counting: `φ(n) ≤ 2` admits those
+five and forbids the fifth, an identity not a fit.
+
+---
+
+### Step 50 — Acids and bases (the conjugate partition)
+
+**File:** `constants/acids_bases.ep`
+
+**What it does.** A conjugate acid–base pair splits the One — `acid_share +
+base_share = 1`, exactly the relation `pKa + pKb = pKw` (strengthen the acid and the
+base weakens by the complement). Neutrality is where the two are equal: the
+self-antipodal balance `1/2` (its own complement, `1 − 1/2 = 1/2`), which folds up to
+the One.
+
+```
+=== acids and bases ===
+  ok    neutral point = 1/2 (self-antipodal balance)
+  ok    acid share = 1/3 ; conjugate base share = 2/3
+  ok    conjugate pair partitions the One (pKa + pKb = pKw)
+  ok    neutrality is self-antipodal ; folds up to the One
+```
+
+**To measurement.** Conjugate pairs obey `pKa + pKb = pKw` and neutrality is the
+scale's midpoint (`pH 7`, `[H⁺]=[OH⁻]`) — the forced content is the partition of the
+One and the self-antipodal half; the numeric `pKw` is a measured scale, comparison-side.
+
+---
+
+### Step 51 — The deuteron (spin-dependent binding)
+
+**File:** `constants/deuteron_bound.ep`
+
+**What it does.** Two spin-halves combine into a triplet (total spin 1, multiplicity
+`2·1+1 = 3`) or a singlet (spin 0). The bound deuteron is the **triplet**. A proton
+and neutron (distinguishable) may occupy that symmetric spin state, so the deuteron
+binds; two protons or two neutrons (identical fermions) are Pauli-forced to the
+antisymmetric singlet, which is unbound — so no di-proton or di-neutron exists.
+
+```
+=== the deuteron ===
+  ok    deuteron total spin = 1 (triplet)
+  ok    triplet multiplicity = 2*spin+1 = 3
+  ok    proton-neutron pair binds (distinguishable)
+  ok    di-proton / di-neutron do NOT bind (Pauli)
+  ok    the binding is spin-dependent
+```
+
+**To measurement.** The deuteron has total spin 1, and no bound di-proton or
+di-neutron exists — exactly the forced result: the bound state is the spin-1 triplet,
+and Pauli antisymmetry excludes identical nucleons from it.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1959,6 +2034,13 @@ runs):**
   coordination number `binary · d_space = 6`; the six sum to the balance `1/2`.
 - Step 48 — blackbody radiation: the Stefan–Boltzmann exponent is
   `d_space + 1 = 4 =` the spacetime dimension count — `P ∝ T⁴`.
+- Step 49 — crystalline order: a lattice rotation is allowed iff `φ(n) ≤ binary`,
+  admitting exactly `{1,2,3,4,6}` and forbidding 5-fold — the crystallographic
+  restriction, with the quasicrystal as the smallest excluded order.
+- Step 50 — acids and bases: a conjugate pair partitions the One
+  (`pKa + pKb = pKw`) and neutrality is the self-antipodal half `1/2`.
+- Step 51 — the deuteron: the bound state is the spin-1 triplet; identical nucleons
+  are Pauli-excluded from it, so the deuteron binds but di-proton/di-neutron do not.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

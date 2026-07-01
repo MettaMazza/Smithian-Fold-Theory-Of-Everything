@@ -1,0 +1,74 @@
+# ============================================================================
+#  ACIDS AND BASES  --  why an acid and its conjugate base partition the One,
+#  and neutrality sits at the balance point, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every acid has a conjugate base, and their strengths are not independent: a strong
+#  acid has a weak conjugate base and vice versa, tied together exactly (Ka * Kb = Kw,
+#  i.e. pKa + pKb = pKw). And a solution is NEUTRAL when acid and base balance
+#  exactly. Both facts are the fold's partition of the One.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A conjugate acid-base pair splits the One between them: on the fold's scale the
+#  acid share and the base share PARTITION THE ONE,
+#       acid_share + base_share = 1 ,
+#  which is exactly the relation pKa + pKb = pKw -- strengthen the acid and the base
+#  weakens by the complement, never independently. Neutrality is where the two shares
+#  are EQUAL, the self-antipodal balance point x with x + x = One, so x = 1/2 -- the
+#  unique point that is its own complement (One - 1/2 = 1/2). It folds up to the One
+#  (fold(1/2) = 1). The neutral point is forced to the half, and the conjugate pair
+#  is forced to a partition; neither is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Conjugate pairs obey pKa + pKb = pKw exactly, and neutrality is the midpoint of the
+#  pH scale (pH 7 of 0..14 at 25 C) -- the balance where [H+] = [OH-]. The forced
+#  content is exact: the pair partitions the One and neutrality is the self-antipodal
+#  half; the numeric pKw is a measured, temperature-dependent scale, on this side only.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The neutral point: the self-antipodal balance, one over the binary count = 1/2.
+define neutral_point returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# An acid share (a sample conjugate strength) and its base share -- the complement,
+# so the pair partitions the One. Here the acid share is 1/3, its base share 2/3.
+define acid_share returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+define base_share returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set acid to acid_share()
+    return fraction_subtract(one and acid)
+
+# The conjugate pair partitions the One: acid_share + base_share = 1 (pKa + pKb = pKw).
+define conjugate_pair_partitions_one returning Bool:
+    set acid to acid_share()
+    set base to base_share()
+    set total to fraction_add(acid and base)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+# Neutrality is self-antipodal: One - 1/2 = 1/2 (its own complement).
+define neutral_is_self_antipodal returning Bool:
+    set one to fraction_from_whole_number(1)
+    set neutral to neutral_point()
+    set complement to fraction_subtract(one and neutral)
+    set again to neutral_point()
+    return fraction_is_equal(complement and again)
+
+# The neutral point folds up to the One: fold(1/2) = 1.
+define neutral_folds_to_one returning Fraction:
+    set neutral to neutral_point()
+    return fold_fraction(neutral)

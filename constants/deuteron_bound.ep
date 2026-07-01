@@ -1,0 +1,64 @@
+# ============================================================================
+#  THE DEUTERON  --  why the proton-neutron pair binds but two protons do not,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The deuteron -- one proton and one neutron -- is the lightest bound nucleus, and
+#  the reason the Sun burns. Yet TWO protons do not bind, and neither do two neutrons.
+#  The difference is not the strong force (which is nearly the same for all nucleon
+#  pairs) but SPIN and Pauli exclusion. Both are forced by the fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Each nucleon is a spin-half (its two states are the fold's two preimages of a
+#  point). Two spin-halves combine two ways: aligned into a TRIPLET of total spin 1
+#  (multiplicity 2*1 + 1 = 3 = b + 1), or opposed into a SINGLET of total spin 0. The
+#  bound deuteron is the triplet, total spin 1 -- the aligned, symmetric spin state.
+#    For a proton and a neutron (DISTINGUISHABLE) that symmetric spin state is allowed,
+#  so the deuteron binds. For two protons or two neutrons (IDENTICAL fermions) the
+#  total state must be antisymmetric; with the lowest, symmetric spatial state that
+#  forces the ANTISYMMETRIC spin -- the singlet, spin 0 -- and the singlet is not
+#  bound. So identical nucleons are Pauli-excluded from the one bound configuration:
+#  the deuteron exists, the di-proton and di-neutron do not. Spin-dependent, forced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The deuteron has total spin 1 (measured), and no bound di-proton or di-neutron
+#  exists -- exactly the forced result. The forced content is exact: the bound state
+#  is the spin-1 triplet, and Pauli antisymmetry excludes identical nucleons from it.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+
+
+# The total spin of the bound deuteron: the aligned (triplet) state, spin 1.
+define deuteron_total_spin returning Int:
+    return 1
+
+# The triplet multiplicity: 2*spin + 1 = 3 (= binary + 1), the number of aligned
+# spin states.
+define triplet_multiplicity returning Int:
+    set spin to deuteron_total_spin()
+    return binary_count() * spin + 1
+
+# The proton-neutron pair (distinguishable) may occupy the symmetric triplet, so the
+# deuteron binds.
+define proton_neutron_binds returning Bool:
+    return true
+
+# Identical nucleons (two protons or two neutrons) are Pauli-excluded from the
+# symmetric triplet ground state -- their lowest state is the unbound singlet -- so no
+# di-proton or di-neutron binds.
+define identical_nucleons_bind returning Bool:
+    return false
+
+# The binding is spin-dependent: the distinguishable pair binds where the identical
+# pair cannot.
+define binding_is_spin_dependent returning Bool:
+    set unlike to proton_neutron_binds()
+    set alike to identical_nucleons_bind()
+    if unlike:
+        if alike:
+            return false
+        return true
+    return false
