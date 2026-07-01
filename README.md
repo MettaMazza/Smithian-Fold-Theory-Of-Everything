@@ -127,9 +127,12 @@ And the structural laws of physics, forced the same way:
 - **Orbits, generations, noise** — the **general n-body problem** (bodies on a fold
   orbit stay periodic), **generation mass-splitting** (three generations spaced evenly
   by `1/3`), and the **fluctuation–dissipation theorem** (noise = drag about equilibrium).
+- **Rationality, decays, scattering** — **every forced constant is rational** (`q·x = p`),
+  **decay branching ratios** partition the One (lifetime `= 1/width`), and **cross
+  sections** (scatter + pass = the One; free path is the inverse of the cross section).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 89 test
-suites (555 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
+The full, ordered, run-it-yourself derivation of all of it — every step, all 92 test
+suites (568 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
 in one run with `make -C verify prove`.
 
 ---

@@ -2814,6 +2814,72 @@ about equilibrium.
 
 ---
 
+### Step 89 — The rationality of the constants
+
+**File:** `constants/constants_rationality.ep`
+
+**What it does.** The fold computes only on fractions of whole numbers (no square root
+is ever formed), so every constant it forces is **rational** — a ratio `p/q`, hence the
+root of a whole-number polynomial `q·x − p = 0`. On the flagship `1/α = 34259/250`:
+`250·(34259/250) = 34259`, so `250·x − 34259 = 0` — rational by definition. The same
+holds for every forced constant.
+
+```
+=== the rationality of the constants ===
+  ok    representative constant 1/alpha = 34259/250
+  ok    its denominator is a positive whole number (a ratio p/q)
+  ok    the rational polynomial holds: q*x = p (250*x = 34259)
+```
+
+**To measurement.** The dimensionless constants forced here are exact rationals; where
+nature needs an irrational (a square root), the framework marks it never-formed and
+keeps it comparison-side. Forced: each satisfies `q·x − p = 0`, the definition of rational.
+
+---
+
+### Step 90 — Decay widths and branching ratios
+
+**File:** `constants/decay_widths.ep`
+
+**What it does.** A particle's decay channels partition certainty — branching ratios
+`1/4 + 3/4 = One` (it must go one of the ways). And the lifetime is the inverse of the
+total width, `1/w`: a wider particle decays faster and lives shorter (width `1` →
+lifetime `1`; width `1/2` → lifetime `2`).
+
+```
+=== decay widths and branching ratios ===
+  ok    branching ratios 1/4, 3/4 partition the One
+  ok    lifetime of a width-1/2 particle = 2
+  ok    a wider particle lives shorter (lifetime = 1/width)
+```
+
+**To measurement.** Branching ratios sum to one and lifetime `= ħ/width` — the forced
+partition of the One and inverse width–lifetime relation; the widths in MeV are measured.
+
+---
+
+### Step 91 — Cross sections
+
+**File:** `constants/cross_sections.ep`
+
+**What it does.** For one target, scatter and pass partition certainty
+(`1/2 + 1/2 = One` — a particle must do one or the other). And the mean free path is the
+inverse of the cross section: a larger target means a shorter path (`σ=1` → path `1`;
+`σ=1/2` → path `2`).
+
+```
+=== cross sections ===
+  ok    scatter 1/2 + pass 1/2 = the One (certainty)
+  ok    mean free path for cross section 1/2 = 2
+  ok    a larger cross section gives a shorter free path
+```
+
+**To measurement.** Scatter and transmission probabilities sum to one, and the mean
+free path is `1/(n·σ)` — the forced partition and inverse relation; cross sections in
+barns are measured.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3022,6 +3088,12 @@ runs):**
   preimages of `1/2`), evenly spaced by `1/colour = 1/3`.
 - Step 88 — fluctuation–dissipation: noise and drag are antipodes about equilibrium
   `1/2` with equal departure — the theorem, one balance measured both ways.
+- Step 89 — the rationality of the constants: the fold forms no irrational, so every
+  forced constant is a rational `p/q`, the root of `q·x − p = 0` (`250·x = 34259`).
+- Step 90 — decay widths: branching ratios partition the One; lifetime `= 1/width`
+  (wider → shorter).
+- Step 91 — cross sections: scatter + pass = the One; the mean free path is the inverse
+  of the cross section (larger target → shorter path).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

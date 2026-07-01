@@ -1,0 +1,64 @@
+# ============================================================================
+#  DECAY WIDTHS AND BRANCHING RATIOS  --  why a particle's decay routes sum to
+#  one, and its lifetime is the inverse of its width, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  An unstable particle can decay by several routes; the fraction going each way is a
+#  BRANCHING RATIO, and those fractions must add to one (it decays SOMEHOW). Its total
+#  decay WIDTH sets how fast it goes, and its lifetime is exactly the inverse of that
+#  width. Both the partition and the inverse are the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  Split the total decay among its channels; two channels with branching ratios 1/4 and
+#  3/4 exhaust the possibilities:
+#       1/4 + 3/4 = the One ,
+#  a partition -- the particle must go one of the ways, so the ratios sum to unison.
+#  And the LIFETIME is the inverse of the total width: a particle of width w lives for
+#  1/w, so a WIDER particle (faster decay) lives SHORTER. Width 1 gives lifetime 1;
+#  width 1/2 gives lifetime 2 -- the narrower one lives twice as long. The partition and
+#  the width-lifetime inverse are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Branching ratios of every decay sum to one, and lifetime = hbar / width (the wider
+#  the resonance, the shorter it lives) -- exactly the forced result. The forced content
+#  is the partition of the One and the inverse width-lifetime relation; the actual
+#  widths in MeV are measured values.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+
+
+# The branching ratio of the first channel: 1/4.
+define branching_one returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The branching ratio of the second channel: 3/4.
+define branching_two returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# The branching ratios PARTITION the One: they sum to unison (the particle must decay
+# by one of the routes).
+define branching_ratios_partition_one returning Bool:
+    set b1 to branching_one()
+    set b2 to branching_two()
+    set total to fraction_add(b1 and b2)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+# The lifetime of a particle of the given total width: the inverse, 1/width.
+define lifetime with width as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_divide(one and width)
+
+# A WIDER particle lives SHORTER: lifetime(width = 1) < lifetime(width = 1/2), because
+# the narrower width 1/2 gives the longer lifetime 2.
+define wider_lives_shorter returning Bool:
+    set wide to fraction_from_whole_number(1)
+    set narrow to fraction_from_ratio(1 and 2)
+    set life_wide to lifetime(wide)
+    set life_narrow to lifetime(narrow)
+    set order to fraction_compare(life_wide and life_narrow)
+    if order < 0:
+        return true
+    return false

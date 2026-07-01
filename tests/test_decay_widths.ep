@@ -1,0 +1,22 @@
+import "../constants/decay_widths.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== decay widths and branching ratios ==="
+    set ok to expect_equal("branching ratio one = 1/4" and fraction_to_text(branching_one()) and "1/4")
+    set ok to expect_equal("branching ratio two = 3/4" and fraction_to_text(branching_two()) and "3/4")
+    set ok to expect_bool("the branching ratios partition the One (sum = 1)" and branching_ratios_partition_one())
+    set ok to expect_equal("lifetime of a width-1/2 particle = 2" and fraction_to_text(lifetime(fraction_from_ratio(1 and 2))) and "2")
+    set ok to expect_bool("a wider particle lives shorter (lifetime = 1/width)" and wider_lives_shorter())
+    display "=== done ==="
+    return 0

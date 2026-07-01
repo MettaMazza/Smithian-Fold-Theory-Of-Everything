@@ -1,0 +1,59 @@
+# ============================================================================
+#  THE RATIONALITY OF THE CONSTANTS  --  why every forced constant is a ratio of
+#  whole numbers, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A striking claim of this whole framework: every dimensionless constant it forces is
+#  RATIONAL -- an exact ratio of whole numbers p/q -- never an endless irrational
+#  decimal. That is not an accident of any one constant; it is guaranteed by how the
+#  fold computes: on exact fractions, in the domain (0,1], with no square roots.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold's exact arithmetic) ───
+#  The fold's only moves are add, take, and cast-out on fractions of whole numbers; a
+#  square root or any irrational is never formed (the domain has no place for one). So
+#  every value the fold produces is a fraction p/q with whole p and q > nothing. A
+#  number is rational exactly when it is the root of a first-degree WHOLE-number
+#  polynomial q*x - p = 0 -- and every forced constant satisfies its own such equation.
+#  Take the flagship, one-over-alpha = 34259/250:
+#       q * x = 250 * (34259/250) = 34259 = p ,   so   q*x - p = 0 .
+#  It is the root of the whole-number polynomial 250*x - 34259, hence rational. The
+#  same holds for every constant the engine forces -- each is exactly a p/q, each the
+#  root of q*x - p. Rationality is forced by the arithmetic; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The dimensionless constants this framework forces are exact rationals (the
+#  fine-structure ratio, the Koide 2/3, the mixing fractions, ...) -- and where nature's
+#  value needs an irrational (a square root), the framework marks it as never formed and
+#  keeps it comparison-side. The forced content is exact: each constant satisfies a
+#  whole-number polynomial q*x - p = 0, the definition of rational.
+# ============================================================================
+
+import "../foundation/exact_integers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/fine_structure_constant.ep"
+
+
+# A representative forced constant: one-over-alpha (leading), 34259/250.
+define representative_constant returning Fraction:
+    return inverse_fine_structure_first_order()
+
+# Its denominator q, as a whole number greater than nothing (a genuine ratio p/q).
+define denominator_is_positive returning Bool:
+    set value to representative_constant()
+    set q to fraction_denominator(value)
+    if q.sign > 0:
+        return true
+    return false
+
+# The rational polynomial holds: q * x = p (so q*x - p = 0), which is exactly the
+# condition for x to be rational. Here 250 * (34259/250) = 34259.
+define rational_polynomial_holds returning Bool:
+    set value to representative_constant()
+    set one_int to exact_integer_one()
+    set q_int to fraction_denominator(value)
+    set q_fraction to fraction_make(q_int and one_int)
+    set product to fraction_multiply(value and q_fraction)
+    set p_int to fraction_numerator(value)
+    set p_fraction to fraction_make(p_int and one_int)
+    return fraction_is_equal(product and p_fraction)

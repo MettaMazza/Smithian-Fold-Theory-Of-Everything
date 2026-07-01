@@ -1,0 +1,22 @@
+import "../constants/cross_sections.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== cross sections ==="
+    set ok to expect_equal("scatter probability = 1/2" and fraction_to_text(scatter_probability()) and "1/2")
+    set ok to expect_equal("pass-through probability = 1/2 (antipode)" and fraction_to_text(pass_probability()) and "1/2")
+    set ok to expect_bool("scatter or pass is certain (sum = the One)" and scatter_or_pass_is_certain())
+    set ok to expect_equal("mean free path for cross section 1/2 = 2" and fraction_to_text(mean_free_path(fraction_from_ratio(1 and 2))) and "2")
+    set ok to expect_bool("a larger cross section gives a shorter free path" and larger_cross_section_shorter_path())
+    display "=== done ==="
+    return 0

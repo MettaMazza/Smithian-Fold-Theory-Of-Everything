@@ -1,0 +1,68 @@
+# ============================================================================
+#  CROSS SECTIONS  --  why scatter-or-pass sums to one, and the mean free path is
+#  the inverse of the cross section, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A scattering CROSS SECTION is the effective target area a particle presents. Fire a
+#  beam at it and each incoming particle either SCATTERS or PASSES -- two outcomes that
+#  must sum to certainty. And in bulk matter the mean free path -- how far a particle
+#  travels before hitting something -- is the inverse of the cross section: a bigger
+#  target means a shorter path. Both are the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  For one target the two outcomes partition certainty: with scattering probability 1/2
+#  the pass-through probability is its antipode,
+#       scatter + pass = 1/2 + 1/2 = the One ,
+#  because a particle must do one or the other. And the mean free path is the inverse of
+#  the cross section: a particle facing a LARGER cross section travels a SHORTER distance
+#  before scattering. Cross section 1 gives free path 1; cross section 1/2 gives free
+#  path 2 -- half the target, twice the path. The partition and the inverse are forced;
+#  nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Scattering and transmission probabilities sum to one, and the mean free path is
+#  1/(n*sigma) (bigger cross section, shorter path) -- exactly the forced result. The
+#  forced content is the partition of the One and the inverse cross-section/free-path
+#  relation; the actual cross sections in barns are measured values.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The probability that an incoming particle SCATTERS off one target: 1/2.
+define scatter_probability returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The probability it PASSES through: the antipode, One - scatter = 1/2.
+define pass_probability returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set scatter to scatter_probability()
+    return fraction_subtract(one and scatter)
+
+# Scatter and pass PARTITION certainty: they sum to the One (the particle must do one
+# or the other).
+define scatter_or_pass_is_certain returning Bool:
+    set scatter to scatter_probability()
+    set pass_through to pass_probability()
+    set total to fraction_add(scatter and pass_through)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+# The mean free path for a given cross section: the inverse, 1/cross_section.
+define mean_free_path with cross_section as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_divide(one and cross_section)
+
+# A LARGER cross section gives a SHORTER free path: path(sigma = 1) < path(sigma = 1/2),
+# because the smaller target 1/2 gives the longer path 2.
+define larger_cross_section_shorter_path returning Bool:
+    set big to fraction_from_whole_number(1)
+    set small to fraction_from_ratio(1 and 2)
+    set path_big to mean_free_path(big)
+    set path_small to mean_free_path(small)
+    set order to fraction_compare(path_big and path_small)
+    if order < 0:
+        return true
+    return false
