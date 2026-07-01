@@ -103,8 +103,11 @@ And the structural laws of physics, forced the same way:
 - **Quantization, light, mass** — the **quantum Hall effect** (exact integer plateaus,
   fractional `ν = 1/3`), **Maxwell wave closure** (curl equations close into light at
   `c`), and the **proton/electron ratio** (dimensionless core `= 2`).
+- **Range, stability, sound** — the **weak force range** (massive carrier → short
+  range; massless → unbounded), **proton stability** (distinct quark/lepton fibres →
+  baryon number conserved), and **phonons** (three acoustic branches `= d_space`).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 70 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 73 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

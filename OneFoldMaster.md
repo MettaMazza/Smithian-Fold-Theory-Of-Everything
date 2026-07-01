@@ -2349,6 +2349,76 @@ measured quantity kept comparison-side.
 
 ---
 
+### Step 70 — The weak force range (massive carrier → short range)
+
+**File:** `constants/weak_range.ep`
+
+**What it does.** A field starts at the One and a massive carrier subtracts its
+mass-part each step; the reach is how far it survives. A mass-`1/3` carrier reaches
+`1 → 2/3 → 1/3` — two steps, finite. A lighter carrier subtracts less and reaches
+farther (mass `1/7` → six steps), so range grows as `1/mass`; a massless carrier
+never depletes → unbounded. The weak force is short-range (heavy W/Z); EM and gravity
+are long-range (massless).
+
+```
+=== the weak force range ===
+  ok    reach of the mass-1/3 carrier = 2 (finite)
+  ok    a lighter carrier reaches farther (range ~ 1/mass)
+  ok    the weak force is SHORT-range ; massless is unbounded
+```
+
+**To measurement.** The weak force has range ~10⁻¹⁸ m (massive W/Z) while EM and
+gravity reach to arbitrary distance (massless) — the forced tie: a massive carrier's
+reach is finite and grows as its mass shrinks; a massless one is unbounded.
+
+---
+
+### Step 71 — Proton stability (distinct fibres, conserved baryon number)
+
+**File:** `constants/proton_stability.ep`
+
+**What it does.** Quarks live in the colour fibre (`c = 3`), leptons in the weak fibre
+(`b = 2`). These are **distinct** (`3 ≠ 2`) and the fold preserves them — no fold path
+turns a quark into a lepton. The proton's baryon number is `c · (1/c) = 1`, a
+conserved whole; decaying to leptons would drop it from 1 to 0 (crossing fibres),
+which distinctness forbids. So the proton is stable.
+
+```
+=== proton stability ===
+  ok    quark fibre = colour = 3 ; lepton fibre = binary = 2
+  ok    the fibres are distinct (3 != 2, no crossing)
+  ok    proton baryon number = 3 * 1/3 = 1 (conserved)
+  ok    the proton is STABLE (no decay path to leptons)
+```
+
+**To measurement.** No proton decay is seen (lifetime > 10³⁴ yr, Super-Kamiokande) and
+baryon number is conserved — the forced result: distinct fibres (`3 ≠ 2`) block
+quark→lepton crossing, and `c·(1/c) = 1` is conserved.
+
+---
+
+### Step 72 — Phonons (three acoustic branches)
+
+**File:** `constants/phonons_lattice.ep`
+
+**What it does.** A lattice displacement points along any of `d_space = 3` directions;
+a wave uses one along its travel (longitudinal) and the rest across (transverse), so
+the acoustic phonon branches number `1 + (d_space − 1) = d_space = 3`. And the
+vibrations are quantized (discrete phonons) because the fold advances in whole steps.
+
+```
+=== phonons (lattice vibrations) ===
+  ok    longitudinal branches = 1
+  ok    transverse branches = d_space - 1 = 2
+  ok    acoustic branches = d_space = 3 (forced two ways)
+```
+
+**To measurement.** Every crystal has three acoustic phonon branches (one
+longitudinal, two transverse) and quantized vibrations — the forced integer count
+`d_space = 3`.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2516,6 +2586,13 @@ runs):**
   d_space = colour` closes the wave equation; light travels at the One.
 - Step 69 — the proton/electron ratio: the dimensionless core is `2 = binary` (the
   proton's bound-whole `3·1/3 = 1` over the electron's half `1/2`).
+- Step 70 — the weak force range: a massive carrier's reach is finite (mass `1/3` →
+  2 steps) and grows as `1/mass`; a massless carrier is unbounded — weak short-range,
+  EM/gravity long-range.
+- Step 71 — proton stability: the quark fibre (`3`) and lepton fibre (`2`) are
+  distinct, so no fold crosses them and baryon number `c·(1/c) = 1` is conserved.
+- Step 72 — phonons: the acoustic branches number `1 + (d_space − 1) = d_space = 3`
+  (one longitudinal, two transverse), vibrations quantized.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

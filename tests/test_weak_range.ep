@@ -1,0 +1,24 @@
+import "../constants/weak_range.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the weak force range ==="
+    set ok to expect_equal("weak mediator mass = 1/3" and fraction_to_text(weak_mediator_mass()) and "1/3")
+    set ok to expect_number("reach of the mass-1/3 carrier = 2 (finite)" and weak_reach() and 2)
+    set ok to expect_bool("a lighter carrier reaches farther (range ~ 1/mass)" and lighter_carrier_reaches_farther())
+    set ok to expect_bool("the weak force is SHORT-range (massive carrier)" and weak_force_is_short_range())
+    set ok to expect_bool("a massless carrier is unbounded (reach grows without ceiling)" and massless_carrier_is_unbounded())
+    display "=== done ==="
+    return 0

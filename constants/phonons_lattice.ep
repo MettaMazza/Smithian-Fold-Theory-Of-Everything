@@ -1,0 +1,47 @@
+# ============================================================================
+#  PHONONS  --  why lattice vibrations have three acoustic branches, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Sound in a solid is carried by quantized lattice vibrations -- phonons -- and the
+#  vibration spectrum splits into BRANCHES. The lowest, "acoustic" branches (ordinary
+#  sound) come in a fixed number: THREE, one for each way the atoms can be displaced.
+#  That count is the spatial dimension, forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY d_space = 3) ───────────────────
+#  A displacement of the atoms can point along any spatial direction, and there are
+#  d_space = 3 independent directions (Step 32). A wave uses one displacement LONG its
+#  travel (longitudinal) and the rest ACROSS it (transverse):
+#       longitudinal = 1 ,   transverse = d_space - 1 = 2 ,
+#  so the number of acoustic phonon branches (polarisations) is
+#       1 + (d_space - 1) = d_space = 3 .
+#  Three acoustic branches -- one longitudinal, two transverse -- forced by the three
+#  spatial directions. And the vibrations are QUANTIZED (discrete phonons), because the
+#  fold advances in whole steps, not continuously. The count and the quantization are
+#  forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Every crystal has exactly three acoustic phonon branches (one longitudinal, two
+#  transverse), and lattice vibrations are quantized -- exactly the forced result. The
+#  forced content is exact integer counting: the acoustic branch count is d_space = 3.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+import "../constants/spacetime_dimensions.ep"
+
+
+# The one longitudinal polarisation: a displacement along the wave's travel.
+define longitudinal_branches returning Int:
+    return 1
+
+# The transverse polarisations: displacements across the travel, d_space - 1 = 2.
+define transverse_branches returning Int:
+    return spatial_dimensions() - 1
+
+# The number of acoustic phonon branches: longitudinal + transverse = d_space = 3.
+# Forced two ways (the sum, and the spatial dimension count); halts on mismatch.
+define acoustic_branches returning Int:
+    set by_sum to longitudinal_branches() + transverse_branches()
+    set by_dimension to spatial_dimensions()
+    return forced_to_be("acoustic phonon branches = longitudinal + transverse = d_space" and by_sum and by_dimension)

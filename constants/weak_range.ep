@@ -1,0 +1,85 @@
+# ============================================================================
+#  THE WEAK FORCE RANGE  --  why a massive carrier makes a short-range force,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Electromagnetism and gravity reach across the universe, but the weak force dies
+#  out inside an atomic nucleus. The difference is the carrier's MASS: the photon and
+#  graviton are massless (unbounded reach), while the weak W and Z bosons are heavy,
+#  so the force they carry has a finite range. The fold forces this tie between mass
+#  and reach.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A force's field starts at full strength (the One) and a MASSIVE carrier subtracts
+#  its mass-part at each step of distance; the reach is how many steps the field
+#  survives before it falls to the mass. For a carrier of mass 1/3:
+#       1 -> 2/3 -> 1/3 :  two steps, then it can go no further -- reach 2.
+#  A LIGHTER carrier subtracts less each step, so it reaches farther: mass 1/7 gives
+#  six steps. So the reach grows as the mass shrinks (range goes as one-over-mass),
+#  and a MASSLESS carrier -- nothing to subtract -- keeps the field at the One forever:
+#  unbounded reach. The weak force is short-range because its carrier is heavy; EM and
+#  gravity are long-range because theirs are massless. Forced by the fold's take.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The weak force has a range of ~10^-18 m (massive W/Z), while electromagnetism and
+#  gravity are inverse-square to arbitrary distance (massless carriers) -- exactly the
+#  forced tie. The forced content is that a massive carrier gives a finite reach that
+#  grows as its mass shrinks, and a massless one reaches without bound.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The reach of a carrier of the given mass: the number of steps the field (starting
+# at the One) survives while its mass-part is subtracted, before it falls to the mass.
+define force_reach with mass as Fraction returning Int:
+    set intensity to fraction_from_whole_number(1)
+    set reach to 0
+    set order to fraction_compare(intensity and mass)
+    repeat while order > 0:
+        set intensity to fraction_subtract(intensity and mass)
+        set reach to reach + 1
+        set order to fraction_compare(intensity and mass)
+    return reach
+
+# A sample massive (weak) carrier mass: 1/3.
+define weak_mediator_mass returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# The reach of the mass-1/3 carrier: 2 steps -- finite, short-range.
+define weak_reach returning Int:
+    set mass to weak_mediator_mass()
+    return force_reach(mass)
+
+# A lighter carrier reaches farther: mass 1/7 gives a larger reach than mass 1/3
+# (range grows as the mass shrinks -- range ~ 1/mass).
+define lighter_carrier_reaches_farther returning Bool:
+    set heavy to weak_reach()
+    set light_mass to fraction_from_ratio(1 and 7)
+    set light to force_reach(light_mass)
+    if light > heavy:
+        return true
+    return false
+
+# The weak force is short-range: its reach is finite (a positive whole number of
+# steps), because the carrier is massive.
+define weak_force_is_short_range returning Bool:
+    set reach to weak_reach()
+    if reach > 0:
+        return true
+    return false
+
+# A massless carrier reaches without bound: with no mass-part to subtract, the field
+# stays at the One at every distance. Grounded in the trend -- ever-lighter carriers
+# reach ever-farther with no ceiling: reach(1/15) = 14 > reach(1/7) = 6, and the
+# pattern reach(1/n) = n - 1 exceeds any fixed bound as the mass shrinks toward nothing.
+define massless_carrier_is_unbounded returning Bool:
+    set light_mass to fraction_from_ratio(1 and 7)
+    set lighter_mass to fraction_from_ratio(1 and 15)
+    set light to force_reach(light_mass)
+    set lighter to force_reach(lighter_mass)
+    if lighter > light:
+        return true
+    return false

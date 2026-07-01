@@ -1,0 +1,16 @@
+import "../constants/phonons_lattice.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define main:
+    display "=== phonons (lattice vibrations) ==="
+    set ok to expect_number("longitudinal branches = 1" and longitudinal_branches() and 1)
+    set ok to expect_number("transverse branches = d_space - 1 = 2" and transverse_branches() and 2)
+    set ok to expect_number("acoustic branches = d_space = 3 (forced two ways)" and acoustic_branches() and 3)
+    display "=== done ==="
+    return 0
