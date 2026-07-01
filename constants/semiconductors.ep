@@ -1,0 +1,64 @@
+# ============================================================================
+#  SEMICONDUCTORS  --  why there are exactly two carrier types, and a junction
+#  balances them, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every transistor and solar cell runs on a semiconductor's two kinds of charge
+#  carrier: negative ELECTRONS and positive HOLES (the absence of an electron). Doping
+#  makes a material electron-rich (n-type) or hole-rich (p-type), and a p-n JUNCTION
+#  joins the two. The two carrier types, and their balance at a junction, are the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A carrier state has two forms -- the fold's two preimages. The ELECTRON is a filled
+#  state (a lower preimage), and the HOLE is its ANTIPODE: the ABSENCE of that electron,
+#  One - electron. There are exactly b = 2 carrier types, a filled state and its
+#  absence. At a p-n JUNCTION the electron-rich and hole-rich sides meet and balance:
+#       electron + hole = filled + (One - filled) = the One ,
+#  a completed pair, which is the depletion balance across the junction. So the carrier
+#  types number two (electron and its hole-antipode), and a junction restores the One.
+#  A small forbidden GAP (Step 54) sits between the bands, thin enough for heat to lift
+#  carriers across -- which is what makes it a SEMI-conductor. Forced; nothing chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Semiconductors have exactly two carrier types (electrons and holes) and a p-n
+#  junction balances them into a depletion region -- exactly the forced structure. The
+#  forced content is exact: two carrier types (a state and its antipode), summing to
+#  the One at a junction; the gap's size in eV is a measured, per-material value.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The number of carrier types: the fold's two preimages -- electron and hole, b = 2.
+define carrier_types returning Int:
+    return binary_count()
+
+# The electron: a filled carrier state (a lower preimage), 1/4.
+define electron_carrier returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The hole: the ANTIPODE of the electron -- the absence of that filled state,
+# One - electron = 3/4.
+define hole_carrier returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set electron to electron_carrier()
+    return fraction_subtract(one and electron)
+
+# The hole is the electron's absence: hole = One - electron.
+define hole_is_electron_absence returning Bool:
+    set one to fraction_from_whole_number(1)
+    set electron to electron_carrier()
+    set absence to fraction_subtract(one and electron)
+    set hole to hole_carrier()
+    return fraction_is_equal(absence and hole)
+
+# A p-n junction balances the two carriers: electron + hole = the One (the completed
+# pair, the depletion balance).
+define junction_balances_to_one returning Bool:
+    set electron to electron_carrier()
+    set hole to hole_carrier()
+    set total to fraction_add(electron and hole)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)

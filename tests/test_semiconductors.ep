@@ -1,0 +1,24 @@
+import "../constants/semiconductors.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== semiconductors ==="
+    set ok to expect_number("carrier types = binary = 2 (electron, hole)" and carrier_types() and 2)
+    set ok to expect_equal("electron carrier = 1/4 (filled state)" and fraction_to_text(electron_carrier()) and "1/4")
+    set ok to expect_equal("hole carrier = 3/4 (electron's absence)" and fraction_to_text(hole_carrier()) and "3/4")
+    set ok to expect_bool("the hole is the electron's absence (One - electron)" and hole_is_electron_absence())
+    set ok to expect_bool("a p-n junction balances to the One (electron + hole)" and junction_balances_to_one())
+    display "=== done ==="
+    return 0

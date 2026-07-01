@@ -1,0 +1,24 @@
+import "../constants/chirality.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== chirality ==="
+    set ok to expect_number("chirality count = binary = 2" and chirality_count() and 2)
+    set ok to expect_equal("left-handed = 1/4 (lower preimage)" and fraction_to_text(left_handed()) and "1/4")
+    set ok to expect_equal("right-handed = 3/4 (upper antipode)" and fraction_to_text(right_handed()) and "3/4")
+    set ok to expect_bool("the two chiralities are mirror images (antipodes)" and chiralities_are_antipodes())
+    set ok to expect_bool("both chiralities fold to one image (a particle and its mirror)" and chiralities_share_one_image())
+    display "=== done ==="
+    return 0

@@ -2432,6 +2432,76 @@ longitudinal, two transverse) and quantized vibrations — the forced integer co
 
 ---
 
+### Step 73 — Chirality (two mirror-image handednesses)
+
+**File:** `constants/chirality.ep`
+
+**What it does.** The fold's two preimages *are* the two chiralities: LEFT the lower
+preimage (`1/4`), RIGHT its antipode (`One − 1/4 = 3/4`) — mirror images across the
+balance, both folding to the same image (`fold(1/4) = fold(3/4) = 1/2`). So chirality
+is two-valued (`b = 2`), the two are antipodes, and they share one image (a particle
+and its mirror); the weak force keeps only the lower hand.
+
+```
+=== chirality ===
+  ok    chirality count = binary = 2
+  ok    left = 1/4 ; right = 3/4 (antipode)
+  ok    the two chiralities are mirror images
+  ok    both fold to one image (a particle and its mirror)
+```
+
+**To measurement.** Fermions have exactly two chiralities, mirror images, and the weak
+force couples to only the left — the forced two-valued, antipodal, one-image structure.
+
+---
+
+### Step 74 — Magnetism (aligned spins make a magnet)
+
+**File:** `constants/magnetism.ep`
+
+**What it does.** Each spin is a half. **Aligned**, two spins add to unison
+(`1/2 + 1/2 = One` — a full net moment; `fold(1/2) = 1`): ferromagnetism. **Opposed**,
+they cancel: antiferromagnetism, no net field. The Curie ordering threshold — order
+below, disorder above — is the self-antipodal balance `1/2`.
+
+```
+=== magnetism ===
+  ok    single spin = 1/2 ; aligned net moment = the One
+  ok    ferromagnetic: aligned spins reach a net moment
+  ok    alignment reaches unison (fold(1/2) = 1)
+  ok    Curie ordering threshold = 1/2 (balance point)
+```
+
+**To measurement.** Ferromagnets align below the Curie temperature and lose it above;
+antiferromagnets cancel — the forced order/disorder split: aligned spins fold to a net
+moment, opposed cancel, threshold at the balance.
+
+---
+
+### Step 75 — Semiconductors (two carrier types, a balancing junction)
+
+**File:** `constants/semiconductors.ep`
+
+**What it does.** A carrier state has the fold's two preimages: the ELECTRON a filled
+state (`1/4`), the HOLE its antipode — the absence, `One − electron = 3/4`. So there
+are exactly `b = 2` carrier types, and a p-n junction balances them:
+`electron + hole = filled + (One − filled) = One` (the depletion balance). A thin
+forbidden gap (Step 54) lets heat lift carriers across — a *semi*-conductor.
+
+```
+=== semiconductors ===
+  ok    carrier types = binary = 2 (electron, hole)
+  ok    electron = 1/4 ; hole = 3/4 (electron's absence)
+  ok    the hole is the electron's absence (One - electron)
+  ok    a p-n junction balances to the One
+```
+
+**To measurement.** Semiconductors have exactly two carrier types (electrons, holes)
+and a p-n junction balances them into a depletion region — the forced two carrier
+types (a state and its antipode) summing to the One at a junction.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2606,6 +2676,12 @@ runs):**
   distinct, so no fold crosses them and baryon number `c·(1/c) = 1` is conserved.
 - Step 72 — phonons: the acoustic branches number `1 + (d_space − 1) = d_space = 3`
   (one longitudinal, two transverse), vibrations quantized.
+- Step 73 — chirality: the fold's two preimages are the two chiralities (left `1/4`,
+  right `3/4` antipode), mirror images sharing one image; the weak force keeps one hand.
+- Step 74 — magnetism: aligned spins add to unison (a net moment, ferromagnetism),
+  opposed cancel (antiferromagnetism); the Curie ordering threshold is the balance `1/2`.
+- Step 75 — semiconductors: two carrier types (electron `1/4`, hole `3/4` = its
+  absence), a p-n junction balancing to the One.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

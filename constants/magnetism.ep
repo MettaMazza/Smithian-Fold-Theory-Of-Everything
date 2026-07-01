@@ -1,0 +1,66 @@
+# ============================================================================
+#  MAGNETISM  --  why aligned spins make a magnet, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A magnet is spins pulling together: below a threshold temperature (the Curie point)
+#  the atomic spins ALIGN and their tiny moments add into a bulk magnetic field; above
+#  it, heat randomises them and the magnetism vanishes. Two spins can align (a magnet)
+#  or oppose (no net field). Both, and the threshold between order and disorder, are
+#  the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Each spin is a half (1/2 of the One). ALIGNED, two spins add toward unison:
+#       1/2 + 1/2 = the One -- a full net moment (fold(1/2) = 1, alignment reaches
+#  the One). OPPOSED, one spin sits against the other's antipode and they cancel: the
+#  net moment returns to the balance, no bulk field. So ferromagnetism is spins folding
+#  into unison (a magnet), antiferromagnetism is opposed spins cancelling (no magnet).
+#  The Curie THRESHOLD -- order below, disorder above -- is the self-antipodal balance
+#  point 1/2: at the balance, aligned and disordered are equally weighted; below it
+#  alignment wins. Alignment-to-unison, cancellation, and the 1/2 threshold are forced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Ferromagnets align their spins below the Curie temperature and lose it above;
+#  antiferromagnets cancel -- exactly the forced order/disorder split at a threshold.
+#  The forced content is that aligned spins fold to a net moment (the One), opposed
+#  spins cancel, and the ordering threshold is the balance point; the Curie temperature
+#  in kelvin is a measured, per-material value.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A single spin: a half of the One, 1/2.
+define single_spin returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# Two ALIGNED spins add to unison: 1/2 + 1/2 = the One -- a full net moment.
+define aligned_net_moment returning Fraction:
+    set first to single_spin()
+    set second to single_spin()
+    return fraction_add(first and second)
+
+# Ferromagnetism: aligned spins reach unison (a net moment, a magnet). The aligned
+# sum is the One.
+define is_ferromagnetic returning Bool:
+    set net to aligned_net_moment()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(net and one)
+
+# A single spin folds to unison too (alignment reaches the One): fold(1/2) = 1.
+define alignment_reaches_unison returning Fraction:
+    set spin to single_spin()
+    return fold_fraction(spin)
+
+# The Curie ordering threshold: the self-antipodal balance point 1/2 (order below,
+# disorder above).
+define curie_threshold returning Fraction:
+    return fraction_from_ratio(1 and binary_count())

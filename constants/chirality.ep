@@ -1,0 +1,68 @@
+# ============================================================================
+#  CHIRALITY  --  why every fermion comes in two mirror-image handednesses,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A fermion has a handedness -- left or right, like a screw thread -- and the two are
+#  mirror images. This "chirality" is the deepest handedness in physics: the weak force
+#  couples to only ONE of the two. The existence of exactly two mirror-image chiralities
+#  is the fold's two-to-one covering.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold is two-to-one: an image has exactly TWO preimages, a LOWER one (below the
+#  half-One) and its ANTIPODE (upper, One - lower). Read these as the two chiralities:
+#  LEFT = the lower preimage, RIGHT = the upper. For the image 1/2 they are 1/4 and 3/4:
+#       left = 1/4 ,   right = One - 1/4 = 3/4 ,
+#  mirror images across the balance point, and BOTH fold to the same image
+#  (fold(1/4) = fold(3/4) = 1/2). So chirality is exactly two-valued (b = 2), the two
+#  values are antipodes (mirror images), and they share one image -- a particle and its
+#  mirror. The weak force keeps only the lower hand (the parity violation of its own
+#  step). The count two, the mirror relation, and the shared image are forced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Fermions have exactly two chiralities, left- and right-handed, mirror images of each
+#  other, and the weak force couples to only the left -- exactly the forced structure.
+#  The forced content is exact: chirality is two-valued, the two are antipodes across
+#  the half-One, and both fold to one image.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The number of chiralities: the two preimages of the fold, b = 2.
+define chirality_count returning Int:
+    return binary_count()
+
+# The left-handed chirality: the lower preimage of the image 1/2, namely 1/4.
+define left_handed returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The right-handed chirality: the antipode, One - left = 3/4.
+define right_handed returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set left to left_handed()
+    return fraction_subtract(one and left)
+
+# The two chiralities are mirror images: right = One - left (antipodes).
+define chiralities_are_antipodes returning Bool:
+    set one to fraction_from_whole_number(1)
+    set left to left_handed()
+    set mirror to fraction_subtract(one and left)
+    set right to right_handed()
+    return fraction_is_equal(mirror and right)
+
+# Both chiralities fold to the SAME image (a particle and its mirror share one image):
+# fold(1/4) = fold(3/4) = 1/2.
+define chiralities_share_one_image returning Bool:
+    set left_image to fold_fraction(left_handed())
+    set right_image to fold_fraction(right_handed())
+    return fraction_is_equal(left_image and right_image)

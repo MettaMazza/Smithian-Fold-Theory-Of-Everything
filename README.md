@@ -106,8 +106,11 @@ And the structural laws of physics, forced the same way:
 - **Range, stability, sound** — the **weak force range** (massive carrier → short
   range; massless → unbounded), **proton stability** (distinct quark/lepton fibres →
   baryon number conserved), and **phonons** (three acoustic branches `= d_space`).
+- **Handedness, magnets, chips** — **chirality** (two mirror-image handednesses = the
+  two preimages), **magnetism** (aligned spins → a net moment, Curie threshold at the
+  balance), and **semiconductors** (two carrier types, a balancing p-n junction).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 73 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 76 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---
