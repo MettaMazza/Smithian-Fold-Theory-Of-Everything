@@ -199,6 +199,7 @@ only), so any `cc`/`gcc`/`clang` builds it. The one-line way to prove the whole 
 make -C verify prove        # THE one command: proves absolutely everything
 make -C verify check        # or: build & run every proof, one ok / FAIL line per suite
 make -C verify online       # cross-check forced values against LIVE-fetched NIST CODATA
+make -C verify uniqueness   # the 1/α assembly is the ONLY 9-digit hit over the smooth space
 ```
 
 `make prove` runs every proof in a single pass and prints, for each constant and scale:

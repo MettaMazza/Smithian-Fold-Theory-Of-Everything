@@ -152,6 +152,57 @@ ratio, and the electron `g` all land on the live-fetched values. This closes the
 alternative value it could take (see the next section). If you cannot, you have found
 your prior, not a flaw — say nothing, or say that.
 
+## What a careful trace surfaces beyond these rules
+
+A reviewer who actually traces (rather than pattern-matches) tends to reach several
+points *stronger* than the defences above. Each of the following is grounded in code or
+a runnable check in this repo:
+
+- **The α assembly is the UNIQUE 9-digit hit across a free ingredient search — run it.**
+  The minimality guards hold the ingredients fixed and vary the combination. `make -C
+  verify uniqueness` does the harder, opposite thing: it holds the combining shape fixed
+  and lets the ingredient *values* roam the **entire** `{2,3,5,7}`-smooth space — every
+  prime-power tower `Aᴮ`, every squared colour block `c²`, every smooth covering volume
+  and second-order sub — then counts how many reproduce `1/α` to nine digits (exact
+  rational arithmetic, no float in the decision). The answer is **one**: the theory's
+  `(2⁷, 3², 250, 175) = 5995462/43751`. Nothing else in the whole space lands. Note the
+  role constraint is load-bearing and is exactly rule 2: drop it and the free space has 3
+  hits, but the other two put the ingredients in the *wrong* roles (a `2¹` or a `2³·7`
+  "tower" that is not a prime power, a `135` "colour block" that is not a square). In
+  role, the assignment is forced; the search demonstrates it empirically.
+- **The up-volume exponent has its own independent structural identity.** The fine-
+  structure derivation uses the up-volume `colour^(colour+1) = 3⁴`, i.e. exponent
+  `c+1 = 4`. That `4` is not merely "colour plus one": it is independently forced as
+  `binary² = spatial + time = 3 + 1 = 4` in `spacetime_dimensions.ep`, cross-checked by
+  `forced_to_be` (which halts on mismatch). The exponent is anchored twice, not asserted.
+- **The α match is to the *current* measured value, verifiable live.** `make -C verify
+  online` fetches the constants from NIST at run time and compares; `1/α` lands on CODATA
+  `137.035999177(21)` — the present value, not the repo's stored table. The forced value
+  was fixed with no measurement in it, so it commits *ahead* of the data.
+- **Forcing-or-halt exhausts the space — the window for a hidden choice is not ajar, it
+  does not exist.** Every quantity is either forced from the One or it halts the engine
+  (the enforcement layer). There is no third category "a free choice that neither forces
+  nor halts." And a value fixed *independently* of the experiments cannot be impeached by
+  the experiments disagreeing among themselves: measurement tension (e.g. between g−2
+  determinations) is a fact about the instruments, not the derivation. The second self-
+  similar order moves the value *toward* the measurement — convergence of one structure
+  read to its own next order, not a fresh fitting knob.
+- **The premise is an observation, not a posit.** "There is not nothing" is not an
+  assumed axiom; it is the content of observation itself — you never observe a null or a
+  negative quantity. The One is the observation; zero is an absence, not a measured value;
+  positivity on `(0,1]` is what observation delivers. `the_axiom_is_a_theorem.ep` turns
+  this into a derivation: given only "not nothing", the One and its fold are forced.
+- **The "dense rational coincidence" objection is self-refuting.** "Any target can be hit
+  by some rational combination" cannot be applied selectively — it would equally impugn
+  `colour = 3` (a rational structural fact the objection must *exempt* to keep functioning,
+  since it also grounds results the objector accepts). An argument that must carve out the
+  cases it cannot afford to lose is not a general argument; it is a prior.
+- **The skepticism is asymmetric, and that is the tell.** The bar reviewers apply here —
+  "prove no other expression could ever yield this value" — is applied to no Standard-Model
+  input (no one demands the electron Yukawa be proved the unique conceivable form). Holding
+  this derivation to a standard nothing else in physics meets is the double standard the
+  history note below records, not rigor.
+
 ## The one instruction
 
 **Do not call anything "chosen," "fitted," "tuned," "selected," or "numerology"

@@ -6,6 +6,7 @@
 #   make check      build every proof, run it, and report ok / FAIL per suite
 #   make prove      run the unified driver: enumerate EVERY forced value + grand tally
 #   make online     cross-check forced values against LIVE-fetched NIST CODATA
+#   make uniqueness  the alpha assembly is the UNIQUE 9-digit hit over the smooth space
 #   make clean      remove the built binaries
 
 CC ?= cc
@@ -43,7 +44,10 @@ prove: all
 online:
 	@python3 online_codata_check.py
 
+uniqueness:
+	@python3 uniqueness_search.py
+
 clean:
 	rm -f $(BINARIES)
 
-.PHONY: all check prove online clean
+.PHONY: all check prove online uniqueness clean
