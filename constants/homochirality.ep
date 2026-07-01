@@ -1,0 +1,66 @@
+# ============================================================================
+#  HOMOCHIRALITY  --  why life uses only one hand, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Life is single-handed: every amino acid it builds is left-handed, every sugar
+#  right-handed, though the mirror versions are chemically identical. Why one hand and
+#  not a mix? Forced: the two hands are EXACTLY symmetric, so the choice is a broken
+#  symmetry -- and there is already a forced tie-breaker in the theory.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The two handednesses are the two fold-preimages of the balance: the quarter-One 1/4
+#  and the three-quarter-One 3/4. Both fold to the SAME shared value, the half-One
+#  (1/4 -> 1/2 and 3/4 -> 1/2), and they sit at EQUAL distance from it: 3/4 - 1/4 = 1/2,
+#  split evenly about the balance. So neither hand is preferred on its own -- they are
+#  perfectly degenerate. A perfectly balanced pair cannot select itself; the tie must
+#  be broken from outside. The theory already forces that tie-breaker: parity violation
+#  -- the weak force is one-handed (see parity_violation.ep). A degenerate pair plus a
+#  one-handed bias yields a single global hand: homochirality.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the two hands are equidistant (1/2 apart) from a shared
+#  fold target, hence degenerate, and the tie is broken by the forced parity violation.
+#  Measured: terrestrial life is uniformly left-handed in its amino acids and
+#  right-handed in its sugars, and the weak interaction is observed to be parity-
+#  violating (Wu 1957) -- the one-handed bias this rests on.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The left hand: the quarter-One, 1/4 = 1/(binary^2).
+define left_hand returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# The right hand: the three-quarter-One, 3/4 = colour/(binary^2).
+define right_hand returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# Both hands fold to the shared half-One target.
+define left_hand_target returning Fraction:
+    return fold_fraction(left_hand())
+
+define right_hand_target returning Fraction:
+    return fold_fraction(right_hand())
+
+# The two hands share one fold target (so neither wins the fold).
+define hands_share_target returning Bool:
+    return fraction_is_equal(left_hand_target() and right_hand_target())
+
+# The two hands are equidistant from the balance: right - left = 1/2 exactly.
+define hand_separation returning Fraction:
+    return fraction_subtract(right_hand() and left_hand())
+
+# The pair is degenerate: the separation is the half-One, split evenly about 1/2.
+define pair_is_degenerate returning Bool:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_is_equal(hand_separation() and half)

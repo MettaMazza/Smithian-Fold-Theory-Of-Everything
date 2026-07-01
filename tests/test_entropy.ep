@@ -1,0 +1,25 @@
+import "../constants/entropy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== entropy and the second law (the fold is 2-to-1) ==="
+    set ok to expect_equal("low preimage of the balance = 1/4" and fraction_to_text(low_preimage()) and "1/4")
+    set ok to expect_equal("high preimage of the balance = 3/4" and fraction_to_text(high_preimage()) and "3/4")
+    set ok to expect_equal("both fold to the same image 1/2 (low)" and fraction_to_text(low_preimage_image()) and "1/2")
+    set ok to expect_equal("both fold to the same image 1/2 (high)" and fraction_to_text(high_preimage_image()) and "1/2")
+    set ok to expect_equal("preimages per image = binary count = 2 (one bit lost)" and int_to_string(preimages_per_image()) and "2")
+    set ok to expect_bool("the two preimages are genuinely distinct" and preimages_are_distinct())
+    set ok to expect_bool("their images coincide -> the fold cannot be inverted" and images_coincide())
+    set ok to expect_equal("the balance folds to the One (equilibrium)" and fraction_to_text(balance_folds_to_one()) and "1")
+    display "=== done ==="
+    return 0

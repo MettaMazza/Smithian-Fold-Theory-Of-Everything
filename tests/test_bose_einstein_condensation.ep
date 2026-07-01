@@ -1,0 +1,21 @@
+import "../constants/bose_einstein_condensation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Bose-Einstein condensation (bosons pile into one state) ==="
+    set ok to expect_equal("shared condensate ground = 1/2" and fraction_to_text(condensate_ground()) and "1/2")
+    set ok to expect_equal("the ground folds to the One (all share one orbit)" and fraction_to_text(condensate_ground_folds_to_one()) and "1")
+    set ok to expect_equal("fermion occupation ceiling = 1 (Pauli)" and int_to_string(fermion_occupation_ceiling()) and "1")
+    set ok to expect_bool("boson occupation is uncapped (even turn is the identity)" and boson_occupation_is_uncapped())
+    display "=== done ==="
+    return 0

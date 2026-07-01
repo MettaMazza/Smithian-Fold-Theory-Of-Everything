@@ -1,0 +1,58 @@
+# ============================================================================
+#  THE CANONICAL DISTRIBUTION  --  why equilibrium sits at the balance, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A system in contact with a heat bath settles into equilibrium -- the arrangement
+#  the largest number of microstates agree on. Textbooks weight states by a continuous
+#  exponential e^(-E/kT). The fold reaches the same equilibrium with an EXACT rational
+#  weight and no exponential. Forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Equilibrium is the maximum-count arrangement: the point that the most microstates
+#  share. That is the self-antipodal balance, the half-One 1/2 -- the unique value equal
+#  to its own complement (One - 1/2 = 1/2), so forward and backward carry equal weight
+#  and nothing drifts. Its weight is the exact rational (m-1)/m = 1/2 for the binary
+#  sector (m = 2), a fold ratio -- not a transcendental exponential. The balance folds to
+#  the One (the fixed point, equilibrium reached), and two equal half-One weights sum to
+#  the whole (1/2 + 1/2 = One): a normalised distribution.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: equilibrium sits at the self-antipodal balance with the
+#  rational weight 1/2, no exponential needed. Measured: thermodynamic equilibrium is
+#  the maximum-entropy state and detailed balance holds (equal forward and backward
+#  rates) -- the self-antipodal balance this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The equilibrium weight: the critical coupling (m-1)/m = 1/2 for the binary sector.
+define equilibrium_weight returning Fraction:
+    set m to binary_count()
+    return fraction_from_ratio(m - 1 and m)
+
+# Equilibrium is self-antipodal: One - 1/2 = 1/2 (equal forward and backward weight).
+define equilibrium_complement returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and equilibrium_weight())
+
+define equilibrium_is_self_antipodal returning Bool:
+    return fraction_is_equal(equilibrium_complement() and equilibrium_weight())
+
+# The balance folds to the One (the equilibrium fixed point).
+define equilibrium_folds_to_one returning Fraction:
+    return fold_fraction(equilibrium_weight())
+
+# Two equal weights normalise to the whole (1/2 + 1/2 = One): a proper distribution.
+define weights_normalise_to_one returning Fraction:
+    set w to equilibrium_weight()
+    return fraction_add(w and w)

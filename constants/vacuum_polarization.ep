@@ -1,0 +1,58 @@
+# ============================================================================
+#  VACUUM POLARIZATION  --  why charge runs with distance, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A bare charge sits inside a live vacuum of virtual pairs that line up around it and
+#  partly cancel it. So the charge you measure depends on how close you look: weaker far
+#  away (fully screened), stronger up close. This "running" is why the fine-structure
+#  constant measured at low energy is not the same as the bare short-distance value.
+#  Forced from the fold.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The screened charge sits at the balance, the half-One 1/2: the live vacuum has taken
+#  it halfway down from the bare One. Probe closer and you penetrate the screening cloud
+#  -- the fold carries the value up: 1/2 -> 1, back toward the bare One. So the effective
+#  coupling GROWS as distance shrinks (the running), and the far-away, fully screened
+#  value 1/2 is the smaller one you read at low energy. The two half-One screens sum to
+#  the whole bare charge (1/2 + 1/2 = One): the cloud carries exactly the half the source
+#  shows outside.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content: the observed charge runs -- smaller when screened (far / low
+#  energy), rising toward the bare value up close, the screen folding back to the One.
+#  Measured: the effective 1/alpha runs from about 137 at low energy up to about 128 at
+#  the Z mass -- the vacuum-polarization running this forces (the low-energy 137.036 is
+#  the forced fine-structure value; see fine_structure_constant.ep).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The screened charge seen from outside: the half-One, 1/2 (the vacuum took half).
+define screened_charge returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# Probe closer: the fold carries the screened value up toward the bare One (1/2 -> 1).
+# The effective coupling grows as distance shrinks -- the running.
+define charge_up_close returning Fraction:
+    return fold_fraction(screened_charge())
+
+# The screened (far) value is strictly below the bare One -- the low-energy reading.
+define screened_is_below_bare returning Bool:
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(screened_charge() and one)
+    return comparison < 0
+
+# The screening cloud carries exactly the other half: screened + screen = the One.
+define screen_plus_cloud returning Fraction:
+    set screen to screened_charge()
+    return fraction_add(screen and screen)

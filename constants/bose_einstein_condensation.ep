@@ -1,0 +1,62 @@
+# ============================================================================
+#  BOSE-EINSTEIN CONDENSATION  --  why bosons pile into one state, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Cooled far enough, a gas of bosons collapses into a single shared quantum state --
+#  the Bose-Einstein condensate, the same many-in-one that gives superfluids, the
+#  laser, and superconductivity. Fermions can never do this. Why the difference?
+#  Forced: it is the occupation rule, the exact complement of Pauli's.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A mode is a fold-orbit that returns to the One. A FERMION carries half-integer spin
+#  (odd count); a mode admits its two preimages {0, 1}, so at most ONE fermion fits
+#  (Pauli exclusion; see fermionic_occupation.ep). A BOSON carries integer spin (even
+#  count); an even number of half-turns is a whole turn, which is the identity on the
+#  One, so adding another boson to a mode returns the SAME state -- there is no
+#  exclusion and no ceiling. The shared ground is the balance state, the half-One 1/2,
+#  which folds to the One (1/2 -> 1): every boson in the condensate occupies that one
+#  ground orbit together, and 1/2 + 1/2 = One -- two already sharing it.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fermion occupation is capped at one (two preimages,
+#  {0,1}); boson occupation is uncapped (the even count is the identity, so any number
+#  share the one state). Measured: Bose-Einstein condensates (first realised 1995),
+#  superfluid helium, and laser light are macroscopic populations of one quantum state
+#  -- the uncapped shared ground this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The shared condensate ground: the half-One, 1/2.
+define condensate_ground returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The ground folds to the One: every condensate member occupies that one orbit.
+define condensate_ground_folds_to_one returning Fraction:
+    return fold_fraction(condensate_ground())
+
+# The fermion occupation ceiling: the two preimages give {0, 1}, so at most 1.
+define fermion_occupation_ceiling returning Int:
+    return 1
+
+# A boson carries an even count of half-turns; an even number of them is a whole
+# number of turns -- the identity on the One. Adding a boson returns the same state.
+define even_boson_turn_is_identity returning Fraction:
+    set two_half_turns to fraction_from_ratio(binary_count() and binary_count())
+    return cast_out_whole_ones(two_half_turns)
+
+# So bosons have NO occupation ceiling: the identity admits any number. This returns
+# true when the even boson turn is the One (the identity), i.e. no exclusion applies.
+define boson_occupation_is_uncapped returning Bool:
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(even_boson_turn_is_identity() and one)

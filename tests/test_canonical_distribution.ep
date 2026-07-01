@@ -1,0 +1,21 @@
+import "../constants/canonical_distribution.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the canonical distribution (rational equilibrium, no exponential) ==="
+    set ok to expect_equal("equilibrium weight = (m-1)/m = 1/2 (rational)" and fraction_to_text(equilibrium_weight()) and "1/2")
+    set ok to expect_bool("equilibrium is self-antipodal (One - 1/2 = 1/2)" and equilibrium_is_self_antipodal())
+    set ok to expect_equal("the balance folds to the One (equilibrium fixed point)" and fraction_to_text(equilibrium_folds_to_one()) and "1")
+    set ok to expect_equal("two equal weights normalise to the One" and fraction_to_text(weights_normalise_to_one()) and "1")
+    display "=== done ==="
+    return 0

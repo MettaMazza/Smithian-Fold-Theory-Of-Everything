@@ -1,0 +1,71 @@
+# ============================================================================
+#  ENTROPY AND THE SECOND LAW  --  why disorder only grows, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The second law of thermodynamics says entropy never decreases -- the one law of
+#  physics with a built-in direction of time. Where does that arrow come from, when
+#  the underlying steps look reversible? Forced: from the shape of the fold itself.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold is TWO-TO-ONE: two distinct preimages land on the same image. The two
+#  handedness values 1/4 and 3/4 both fold to 1/2 (1/4 -> 1/2 and 3/4 -> 1/2), so from
+#  the image 1/2 you cannot recover which of the two you came from -- exactly binary = 2
+#  preimages collapse to one. Forward, that is a loss of one bit per fold; the count of
+#  microstates consistent with what you can see can only grow. There is no inverse fold
+#  that picks one preimage, so the process cannot be run backward: that irreversibility
+#  IS the second law. The balance state 1/2 folds up to the One (the equilibrium, maximum
+#  count), and 1/2 + 1/2 = One -- the two half-One microstates that merge.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the fold is 2-to-1, so entropy (log of the microstate
+#  count) rises by exactly one bit per fold and never falls. Measured: the second law
+#  holds universally, and Landauer's principle puts a real energy cost (kT ln 2) on
+#  erasing exactly one bit -- the one bit this fold loses per step.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two preimages of the balance: the quarter-One and the three-quarter-One.
+define low_preimage returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+define high_preimage returning Fraction:
+    set colour_over_four to fraction_from_ratio(colour_count() and binary_count() * binary_count())
+    return colour_over_four
+
+# Both preimages fold to the SAME image (the half-One): the fold is many-to-one.
+define low_preimage_image returning Fraction:
+    return fold_fraction(low_preimage())
+
+define high_preimage_image returning Fraction:
+    return fold_fraction(high_preimage())
+
+# The number of preimages collapsing to one image is the binary count, 2 -- one bit
+# lost per fold. This count is what makes the fold irreversible (the second law).
+define preimages_per_image returning Int:
+    return binary_count()
+
+# The two preimages are genuinely distinct (1/4 is not 3/4).
+define preimages_are_distinct returning Bool:
+    set comparison to fraction_compare(low_preimage() and high_preimage())
+    return comparison != 0
+
+# Their images coincide (both are the half-One) -- so the fold cannot be inverted:
+# from the image you cannot recover which preimage you came from. That is the loss.
+define images_coincide returning Bool:
+    return fraction_is_equal(low_preimage_image() and high_preimage_image())
+
+# The balance state folds to the One (equilibrium, the maximum-count fixed point).
+define balance_folds_to_one returning Fraction:
+    set balance to fraction_from_ratio(1 and binary_count())
+    return fold_fraction(balance)

@@ -1,0 +1,21 @@
+import "../constants/vacuum_polarization.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== vacuum polarization (charge runs with distance) ==="
+    set ok to expect_equal("screened charge (far, low energy) = 1/2" and fraction_to_text(screened_charge()) and "1/2")
+    set ok to expect_equal("probe closer: folds up toward the bare One (1/2 -> 1)" and fraction_to_text(charge_up_close()) and "1")
+    set ok to expect_bool("screened value is below the bare One (the running)" and screened_is_below_bare())
+    set ok to expect_equal("screen + cloud = the One (cloud carries the other half)" and fraction_to_text(screen_plus_cloud()) and "1")
+    display "=== done ==="
+    return 0

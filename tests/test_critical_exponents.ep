@@ -1,0 +1,21 @@
+import "../constants/critical_exponents.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== critical exponents (rational at threshold) ==="
+    set ok to expect_equal("critical threshold = (m-1)/m = 1/2 (self-antipodal)" and fraction_to_text(critical_threshold()) and "1/2")
+    set ok to expect_equal("mean-field order-parameter exponent = 1/m = 1/2 (rational)" and fraction_to_text(order_parameter_exponent()) and "1/2")
+    set ok to expect_bool("the exponent is rational (whole-number denominator)" and exponent_is_rational())
+    set ok to expect_equal("threshold folds to the One (phases merge)" and fraction_to_text(threshold_folds_to_one()) and "1")
+    display "=== done ==="
+    return 0

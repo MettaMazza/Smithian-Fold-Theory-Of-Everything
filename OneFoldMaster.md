@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-100 suites, 621 forced checks, 0 failures). It needs nothing but a C compiler. Use
+106 suites, 650 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3026,6 +3026,66 @@ force, helium that never freezes, and the Lamb shift — the same half-One force
 
 ---
 
+### Step 98 — Entropy and the second law (the fold is 2-to-1)
+
+**File:** `constants/entropy.ep`
+
+**What it does.** The fold is **two-to-one**: the two preimages `1/4` and `3/4` both fold
+to `1/2`, so from the image you cannot recover which you came from — exactly `binary = 2`
+microstates collapse to one, one bit lost per fold. There is no inverse fold to pick a
+preimage, so the process cannot run backward — and that irreversibility *is* the second
+law. The measured counterpart: Landauer's `kT ln 2` cost to erase exactly one bit.
+
+### Step 99 — Homochirality (why life uses one hand)
+
+**File:** `constants/homochirality.ep`
+
+**What it does.** The two handednesses are the fold-preimages `1/4` and `3/4`; both fold
+to the shared `1/2` and sit *equidistant* from it (`3/4 − 1/4 = 1/2`), so the pair is
+perfectly degenerate — neither hand wins on its own. The tie is broken by the theory's
+already-forced **parity violation** (the weak force is one-handed). Degenerate pair +
+one-handed bias = a single global hand. Life is uniformly left-amino / right-sugar.
+
+### Step 100 — Bose–Einstein condensation (bosons pile into one state)
+
+**File:** `constants/bose_einstein_condensation.ep`
+
+**What it does.** A fermion (half-integer spin) admits the two preimages `{0,1}` — max one
+(Pauli). A boson (integer spin) is an even count of half-turns = a whole turn = the
+identity on the One, so adding another returns the *same* state: no ceiling. Any number
+share the ground `1/2 → 1`. The uncapped shared ground is the condensate — realised 1995,
+and behind superfluids and the laser.
+
+### Step 101 — Vacuum polarization (charge runs with distance)
+
+**File:** `constants/vacuum_polarization.ep`
+
+**What it does.** The screened charge sits at `1/2` (the live vacuum took half); probe
+closer and the fold carries it up toward the bare One (`1/2 → 1`), so the effective
+coupling **grows** as distance shrinks — the running. The far, fully-screened value is the
+smaller one you read at low energy. Measured: effective `1/α` runs from ~137 at low energy
+up to ~128 at the Z mass; the low-energy `137.036` is the forced fine-structure value.
+
+### Step 102 — The canonical distribution (rational equilibrium, no exponential)
+
+**File:** `constants/canonical_distribution.ep`
+
+**What it does.** Equilibrium is the maximum-count arrangement: the self-antipodal balance
+`(m−1)/m = 1/2`, the unique value equal to its own complement (`1 − 1/2 = 1/2`), so forward
+and backward carry equal weight (detailed balance). The weight is an exact **rational** fold
+ratio — no transcendental `e^(−E/kT)` — and two half-One weights normalise to the One.
+
+### Step 103 — Critical exponents (rational at threshold)
+
+**File:** `constants/critical_exponents.ep`
+
+**What it does.** The transition is the self-antipodal threshold `(m−1)/m = 1/2` where the
+two phases merge; the mean-field order-parameter exponent is the reciprocal sector count
+`1/m = 1/2` (the square-root vanishing) — a **rational** fold ratio, not the irrational
+exponents a continuum gives. These are exactly the Landau mean-field values.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3254,6 +3314,18 @@ runs):**
   in two folds (`1/4 → 1/2 → 1`), one fold deeper than the fine structure.
 - Step 97 — zero-point energy: the vacuum floor is the half-One `1/2` (the `(1/2)` in
   `(1/2)hf`), self-antipodal, folding to a full quantum.
+- Step 98 — entropy / the second law: the fold is 2-to-1 (`1/4` and `3/4` both fold to
+  `1/2`), so one bit is lost per fold and it cannot run backward — the arrow of time.
+- Step 99 — homochirality: the two hands `1/4`, `3/4` are degenerate (both fold to
+  `1/2`, `3/4 − 1/4 = 1/2`); the tie is broken by the forced parity violation.
+- Step 100 — Bose–Einstein condensation: a boson's even turn is the identity, so
+  occupation is uncapped (vs the fermion's `{0,1}`) — any number share the ground.
+- Step 101 — vacuum polarization: the screened charge `1/2` folds up toward the bare
+  One as you probe closer — the running that makes measured `1/α` scale-dependent.
+- Step 102 — the canonical distribution: equilibrium at the self-antipodal balance
+  `(m−1)/m = 1/2`, an exact rational weight (detailed balance), no exponential.
+- Step 103 — critical exponents: threshold `1/2` and mean-field exponent `1/m = 1/2`,
+  rational fold ratios (the Landau values), not the continuum's irrationals.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
