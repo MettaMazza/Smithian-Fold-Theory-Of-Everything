@@ -1,0 +1,21 @@
+import "../constants/charge_multiplicity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== charge multiplicity (internal states = the fold's fibre size) ==="
+    set ok to expect_equal("binary fold fibre = 2 states (charge sign, weak doublet)" and int_to_string(charge_states()) and "2")
+    set ok to expect_equal("colour fold fibre = 3 states (the three colours)" and int_to_string(colour_states()) and "3")
+    set ok to expect_bool("the binary fibre size is the binary multiplicity" and fibre_size_is_multiplicity(binary_count()))
+    set ok to expect_bool("the colour fibre size is the colour multiplicity" and fibre_size_is_multiplicity(colour_count()))
+    display "=== done ==="
+    return 0

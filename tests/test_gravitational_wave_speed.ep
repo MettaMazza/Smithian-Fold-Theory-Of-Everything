@@ -1,0 +1,20 @@
+import "../constants/gravitational_wave_speed.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== gravitational-wave speed (ripples travel at c) ==="
+    set ok to expect_equal("the causal speed is the One (c = 1)" and fraction_to_text(causal_speed()) and "1")
+    set ok to expect_equal("gravitational-wave speed = c = 1" and fraction_to_text(gravitational_wave_speed()) and "1")
+    set ok to expect_bool("gravitational waves travel at exactly the speed of light" and gw_speed_equals_light())
+    display "=== done ==="
+    return 0

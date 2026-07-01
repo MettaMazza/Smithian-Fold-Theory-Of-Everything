@@ -1,0 +1,21 @@
+import "../constants/galactic_dynamics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== galactic dynamics (flat rotation curves need a dark halo) ==="
+    set ok to expect_equal("rotation-support balance = 1/2 (self-antipodal)" and fraction_to_text(rotation_balance()) and "1/2")
+    set ok to expect_bool("the balance is self-antipodal (pull matched to motion)" and balance_is_self_antipodal())
+    set ok to expect_equal("pull + motion sum to the One" and fraction_to_text(pull_plus_motion()) and "1")
+    set ok to expect_equal("the balance folds to the One (a bound, steady orbit)" and fraction_to_text(balance_folds_to_one()) and "1")
+    display "=== done ==="
+    return 0

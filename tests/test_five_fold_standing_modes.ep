@@ -1,0 +1,22 @@
+import "../constants/five_fold_standing_modes.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== five-fold standing modes (a second route to three generations) ==="
+    set ok to expect_equal("the down-depth fold is m = binary + colour = 5" and int_to_string(down_depth_fold()) and "5")
+    set ok to expect_equal("the five-fold has exactly 3 interior standing modes" and int_to_string(five_fold_standing_mode_count()) and "3")
+    set ok to expect_equal("that count = the colour/generation count = 3" and int_to_string(colour_count()) and "3")
+    set ok to expect_equal("the two-fold has none" and int_to_string(two_fold_standing_mode_count()) and "0")
+    set ok to expect_bool("the half-One is the central standing mode" and half_is_a_standing_mode())
+    display "=== done ==="
+    return 0

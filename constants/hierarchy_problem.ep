@@ -1,0 +1,67 @@
+# ============================================================================
+#  THE HIERARCHY PROBLEM  --  why the weak scale sits far below Planck, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The electroweak scale is about 10^-17 of the Planck scale. In the usual account the
+#  Higgs mass gets quantum kicks of order the Planck scale and must be tuned to one part
+#  in 10^32 to stay light -- the "naturalness" problem, taken as a deep flaw needing new
+#  particles. Forced: it is not a flaw at all. Scales are discrete rungs, so there is
+#  nothing continuous to tune.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Every scale is a level of the binary covering tower, and each level is one fold -- a
+#  factor of exactly binary = 2 (see absolute_scale.ep). So the ratio between any two
+#  scales is 1 / 2^N for a WHOLE number N: the ladder is discrete, with no rung between
+#  the rungs. The electroweak-to-Planck ratio is therefore 1 / 2^N for an integer N fixed
+#  by which rung the weak scale sits on -- not a continuous cancellation. Because N is a
+#  whole number, no quantum correction can nudge the scale off its rung and there is no
+#  fine-tuning to perform: the naturalness problem cannot even be stated. (An exponent
+#  splits as a sum of rungs, e.g. N = 20 + 20 + 16, a self-consistency of the tower, not
+#  a new choice.)
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is the DISCRETENESS -- ratios are 1/2^N, whole N, so nothing is
+#  fine-tuned. The specific rung is read against the data (comparison-side): the level
+#  N = 56 puts the ratio at 1/2^56 ~ 1.4 x 10^-17, matching the observed electroweak-to-
+#  Planck ratio ~10^-17. The resolution (discrete rungs, no tuning) is forced; which rung
+#  the weak scale occupies is the measured input, not a derived one.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# Each tower level is one fold: a factor of binary = 2. The ladder is discrete.
+define tower_step_factor returning Int:
+    return binary_count()
+
+# The scale ratio at depth N is 1 / 2^N (a discrete rung, whole N).
+define scale_ratio_at_depth with depth as Int returning Fraction:
+    return fraction_from_ratio(1 and whole_power(binary_count() and depth))
+
+# The electroweak-to-Planck rung, read against the measured ~10^-17 (comparison-side).
+define electroweak_planck_depth returning Int:
+    return 56
+
+# The forced electroweak-to-Planck ratio at that rung: 1 / 2^56.
+define electroweak_planck_ratio returning Fraction:
+    return scale_ratio_at_depth(electroweak_planck_depth())
+
+# Tower self-consistency: 2^56 = 2^20 * 2^20 * 2^16 (the rung splits into rungs).
+define depth_splits_into_rungs returning Bool:
+    set whole to whole_power(binary_count() and electroweak_planck_depth())
+    set part_a to whole_power(binary_count() and 20)
+    set part_b to whole_power(binary_count() and 16)
+    set product to part_a * part_a * part_b
+    return whole == product
+
+# The ladder is discrete: adjacent rungs are exactly a factor of binary apart, with
+# nothing between them -- 2 * (1/2^N) = 1/2^(N-1). No continuous knob, so no fine-tuning.
+define rungs_are_factor_two_apart returning Bool:
+    set here to scale_ratio_at_depth(electroweak_planck_depth())
+    set up_one to scale_ratio_at_depth(electroweak_planck_depth() - 1)
+    set factor to fraction_from_whole_number(binary_count())
+    set doubled to fraction_multiply(here and factor)
+    return fraction_is_equal(doubled and up_one)

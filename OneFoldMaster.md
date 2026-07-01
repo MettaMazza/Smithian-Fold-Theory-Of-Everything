@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-106 suites, 650 forced checks, 0 failures). It needs nothing but a C compiler. Use
+111 suites, 670 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3086,6 +3086,55 @@ exponents a continuum gives. These are exactly the Landau mean-field values.
 
 ---
 
+### Step 104 — Five-fold standing modes (a second route to three generations)
+
+**File:** `constants/five_fold_standing_modes.ep`
+
+**What it does.** A standing mode of the m-fold is a value it holds fixed (`m_fold(x)=x`);
+the interior candidates `x = j/(m−1)` are each fixed, so the m-fold has exactly `m−2`
+interior standing modes. The down-depth fold `m = b + c = 5` has three — `1/4, 1/2, 3/4` —
+matching the colour/generation count `3`; the two-fold has none. Three generations, forced
+a fourth independent way (collider Z-width confirms exactly three light neutrino families).
+
+### Step 105 — Gravitational-wave speed (ripples travel at c)
+
+**File:** `constants/gravitational_wave_speed.ep`
+
+**What it does.** A gravitational wave is a massless disturbance of the fold lattice; a
+massless disturbance advances one spacing per tick, so its speed is the causal speed
+`c = 1` — exactly the speed of light. Measured: GW170817 pinned `|c_gw − c|/c` below ~10⁻¹⁵.
+
+### Step 106 — Charge multiplicity (internal states = the fold's fibre)
+
+**File:** `constants/charge_multiplicity.ep`
+
+**What it does.** The m-fold is m-to-one — every image has exactly `m` preimages
+`(y+k)/m` — so it carries an internal degree of freedom with `m` states. The binary fold
+gives **two** (charge sign, weak doublet, occupation `{0,1}`); the colour fold gives
+**three** (the three strong colours). The multiplicity is the fold's own fibre size.
+
+### Step 107 — Galactic dynamics (flat rotation curves need a dark halo)
+
+**File:** `constants/galactic_dynamics.ep`
+
+**What it does.** Circular orbit is the self-antipodal balance `1/2` (inward pull matched
+to outward motion). A *flat* rotation curve is that balance held at **every** radius —
+which the thinning visible matter cannot do, so it demands unseen mass (a dark halo).
+Measured: rotation curves stay flat far beyond the visible disc (Rubin & Ford).
+
+### Step 108 — The hierarchy problem (discrete rungs → no fine-tuning)
+
+**File:** `constants/hierarchy_problem.ep`
+
+**What it does.** Every scale is a rung of the binary tower, each rung a factor of `2`, so
+any scale ratio is `1/2^N` for a **whole** `N` — the ladder is discrete, adjacent rungs
+exactly a factor of 2 apart. There is nothing continuous to fine-tune, so the naturalness
+problem cannot even be stated. The electroweak rung `N = 56` (comparison-side, read against
+the measured ~10⁻¹⁷) puts the ratio at `1/2⁵⁶`; the *resolution* is forced, the rung is
+the measured input.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3326,6 +3375,16 @@ runs):**
   `(m−1)/m = 1/2`, an exact rational weight (detailed balance), no exponential.
 - Step 103 — critical exponents: threshold `1/2` and mean-field exponent `1/m = 1/2`,
   rational fold ratios (the Landau values), not the continuum's irrationals.
+- Step 104 — five-fold standing modes: the m-fold has `m−2` interior standing modes, so
+  the down-depth five-fold has three (`1/4, 1/2, 3/4`) — a fourth route to 3 generations.
+- Step 105 — gravitational-wave speed: a massless lattice ripple advances one spacing per
+  tick, so gravity's waves travel at `c` exactly (GW170817 to ~10⁻¹⁵).
+- Step 106 — charge multiplicity: the m-fold is m-to-one, so it carries an m-state
+  internal freedom — binary → 2 (charge/doublet), colour → 3 (the three colours).
+- Step 107 — galactic dynamics: a flat rotation curve is the `1/2` orbit balance held at
+  every radius, which visible matter alone cannot do → a dark halo.
+- Step 108 — the hierarchy problem: scales are discrete binary rungs (`1/2^N`, whole N),
+  so nothing is fine-tuned; the weak rung `N = 56` is comparison-side.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

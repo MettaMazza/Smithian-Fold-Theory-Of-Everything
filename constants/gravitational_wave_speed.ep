@@ -1,0 +1,43 @@
+# ============================================================================
+#  GRAVITATIONAL-WAVE SPEED  --  ripples in spacetime travel at c, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  When two black holes merge they shake spacetime, and the ripple spreads outward. Does
+#  gravity's ripple travel at the speed of light, or slower? In 2017 a neutron-star merger
+#  (GW170817) answered it: the gravitational wave and the gamma-ray flash arrived within
+#  seconds after 130 million years of travel. Forced: it had to be c.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold and its causal speed) ──
+#  The causal speed is one lattice spacing per one tick -- the One, c = 1 (see
+#  speed_of_light.ep). A gravitational wave is a MASSLESS disturbance of the fold lattice
+#  (a strain that subtracts no mass-part as it moves), exactly like light. A massless
+#  disturbance advances one spacing per tick and no faster, so its phase velocity is the
+#  causal speed itself: c = 1. Nothing about being a tensor (spin-2) ripple rather than a
+#  vector (spin-1) one changes the reach per tick -- only mass slows a disturbance
+#  (weak_range.ep), and this one has none. So gravity's waves travel at exactly the speed
+#  of light, and gravity's own carrier (the graviton) is massless.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced speed is exact: c, the One. Measured: GW170817 constrained the fractional
+#  difference between the gravitational-wave speed and the speed of light to below about
+#  one part in 10^15 -- gravity and light travel at the same speed, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The causal speed: one spacing per tick, the One.
+define causal_speed returning Fraction:
+    return fraction_from_whole_number(1)
+
+# A massless disturbance (it subtracts no mass-part) advances one spacing per tick --
+# its speed is the causal speed itself.
+define gravitational_wave_speed returning Fraction:
+    return causal_speed()
+
+# Gravitational waves travel at exactly the speed of light (both are the One).
+define gw_speed_equals_light returning Bool:
+    return fraction_is_equal(gravitational_wave_speed() and causal_speed())

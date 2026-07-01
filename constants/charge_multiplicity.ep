@@ -1,0 +1,58 @@
+# ============================================================================
+#  CHARGE MULTIPLICITY  --  why an internal degree of freedom has m states, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Internal quantum numbers come in fixed multiplicities: charge has two signs, colour
+#  has three values, weak isospin two. Where do these counts come from? Forced: each is
+#  the fibre size of a fold -- how many states collapse onto one image.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The m-fold is m-to-ONE: it multiplies by m and casts out whole Ones, so every image y
+#  has exactly m preimages -- the values (y + k)/m for k = 0 .. m-1, each a distinct point
+#  in the domain that the m-fold sends to y. That fibre of m preimages IS an internal
+#  degree of freedom with exactly m states, riding along at every level. The binary fold
+#  (m = b = 2) gives a TWO-state internal freedom -- the two charge signs (particle /
+#  antiparticle), the weak doublet, the fermion occupation {0,1}. The colour fold
+#  (m = c = 3) gives a THREE-state internal freedom -- the three strong colours. The count
+#  is the fold's own multiplicity, nothing added.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced multiplicities are exact: two for the binary fold, three for the colour fold.
+#  Measured: electric charge and weak isospin are two-valued; the strong force has exactly
+#  three colours (confirmed by the hadron spectrum and the R-ratio in e+e- collisions).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The m preimages of a target y under the m-fold: (y + k)/m for k = 0 .. m-1.
+# We count them by construction and confirm each folds back to y.
+define fibre_size with m as Int returning Int:
+    set target to fraction_from_ratio(1 and binary_count())    # a representative image, 1/2
+    set count to 0
+    set k to 0
+    repeat while k < m:
+        set shifted to fraction_add(target and fraction_from_whole_number(k))
+        set preimage to fraction_divide(shifted and fraction_from_whole_number(m))
+        set m_fraction to fraction_from_whole_number(m)
+        set scaled to fraction_multiply(preimage and m_fraction)
+        set folded to cast_out_whole_ones(scaled)
+        if fraction_is_equal(folded and target):
+            set count to count + 1
+        set k to k + 1
+    return count
+
+# The binary fold is 2-to-1: a two-state internal freedom (charge sign, weak doublet).
+define charge_states returning Int:
+    return fibre_size(binary_count())
+
+# The colour fold is 3-to-1: a three-state internal freedom (the three colours).
+define colour_states returning Int:
+    return fibre_size(colour_count())
+
+# The fibre size equals the fold's own multiplicity, m (nothing added).
+define fibre_size_is_multiplicity with m as Int returning Bool:
+    return fibre_size(m) == m

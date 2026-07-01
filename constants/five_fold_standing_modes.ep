@@ -1,0 +1,69 @@
+# ============================================================================
+#  FIVE-FOLD STANDING MODES  --  a second route to three generations, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  There are three generations of matter -- the count already forced three other ways
+#  (three colours, three spatial dimensions, the tripling fibre). Here it falls out a
+#  fourth, independent way: from the standing modes of the down-depth fold. Four roads,
+#  one number.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A standing mode of the m-fold is a value it holds fixed: x with m_fold(x) = x, where
+#  m_fold multiplies by m and casts out whole Ones. The interior candidates are the even
+#  divisions x = j/(m-1) for j = 1 .. m-2. Each one IS fixed -- m*(j/(m-1)) = j + j/(m-1),
+#  and casting out the whole j leaves j/(m-1) = x -- so the m-fold has exactly m-2 interior
+#  standing modes. The down-depth fold is m = b + c = 5 (the forced down-depth, the cover
+#  of colour^colour). Its standing modes are 1/4, 1/2, 3/4 -- exactly THREE, matching the
+#  colour count c = 3. The fundamental two-fold (m = 2) has m-2 = 0: no interior standing
+#  mode, so no generation structure there. Three generations, forced again.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced count is exact: three interior standing modes of the five-fold, matching the
+#  three observed generations of quarks and leptons (e/mu/tau; u,c,t / d,s,b). Collider
+#  data (the Z width) confirms exactly three light neutrino generations.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The m-fold: multiply a value by m and cast out whole Ones.
+define m_fold with size as Fraction and m as Int returning Fraction:
+    set m_fraction to fraction_from_whole_number(m)
+    set scaled to fraction_multiply(size and m_fraction)
+    return cast_out_whole_ones(scaled)
+
+# A value is a standing mode of the m-fold when the m-fold holds it fixed.
+define is_standing_mode with size as Fraction and m as Int returning Bool:
+    return fraction_is_equal(m_fold(size and m) and size)
+
+# Count the interior standing modes x = j/(m-1), j = 1 .. m-2.
+define count_standing_modes with m as Int returning Int:
+    set span to m - 1
+    set count to 0
+    set j to 1
+    repeat while j < span:
+        set x to fraction_from_ratio(j and span)
+        if is_standing_mode(x and m):
+            set count to count + 1
+        set j to j + 1
+    return count
+
+# The down-depth fold, m = binary + colour = 5.
+define down_depth_fold returning Int:
+    return binary_count() + colour_count()
+
+# The five-fold has exactly three interior standing modes = the colour/generation count.
+define five_fold_standing_mode_count returning Int:
+    return count_standing_modes(down_depth_fold())
+
+# The fundamental two-fold has none.
+define two_fold_standing_mode_count returning Int:
+    return count_standing_modes(binary_count())
+
+# The half-One is one of the three (the central standing mode).
+define half_is_a_standing_mode returning Bool:
+    set half to fraction_from_ratio(1 and binary_count())
+    return is_standing_mode(half and down_depth_fold())

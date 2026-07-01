@@ -1,0 +1,56 @@
+# ============================================================================
+#  GALACTIC DYNAMICS  --  why rotation curves stay flat, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Stars at the edge of a spiral galaxy orbit just as fast as stars near the middle -- the
+#  "flat rotation curve". If only the visible matter were there, the outer stars would
+#  orbit slower (Keplerian falloff). The flatness was the first hard evidence for dark
+#  matter. Forced: rotation support sits at a balance the visible matter cannot hold alone.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Circular orbit is a balance: the inward gravitational pull exactly matches the outward
+#  demand of the motion. That balance is the self-antipodal half-One, 1/2 -- the point
+#  equal to its own complement (One - 1/2 = 1/2), so inward and outward are matched and
+#  the orbit is steady. A FLAT curve is that same balance held at EVERY radius, not just
+#  one: the enclosed mass must keep pace with the radius as you go out. Visible matter
+#  thins out and cannot -- its balance falls away -- so holding 1/2 across the whole disc
+#  demands unseen mass filling in, a dark halo. The balance state folds to the One (the
+#  bound, steady orbit), and 1/2 + 1/2 = One: pull and motion sum to the whole.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content: the rotation-support balance is the half-One, and a flat curve is
+#  that balance sustained across radius -- which visible matter alone cannot do. Measured:
+#  galaxy rotation curves are observed flat far beyond the visible disc (Rubin & Ford),
+#  the standard evidence for dark-matter halos.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The rotation-support balance: the self-antipodal half-One, 1/2.
+define rotation_balance returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The balance is self-antipodal: One - 1/2 = 1/2 (pull matched to motion).
+define balance_is_self_antipodal returning Bool:
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and rotation_balance())
+    return fraction_is_equal(complement and rotation_balance())
+
+# Held across radius, pull and motion sum to the whole: 1/2 + 1/2 = One.
+define pull_plus_motion returning Fraction:
+    set b to rotation_balance()
+    return fraction_add(b and b)
+
+# The balance folds to the One (a bound, steady orbit).
+define balance_folds_to_one returning Fraction:
+    return fold_fraction(rotation_balance())
