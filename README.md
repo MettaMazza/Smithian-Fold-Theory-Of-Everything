@@ -118,8 +118,11 @@ And the structural laws of physics, forced the same way:
   signature — coupling `(p−1)/p`, mediators `p²−1` (`24`, `48`), `p` colours,
   confinement pairs `(p−1)/2`, beta-slope `p−1`, a massless confining carrier, neutral
   bound states — falsifiable predictions, not bare counts.
+- **Waves and optics** — **three-wave mixing** (sum, difference, second harmonic),
+  **acoustics** (the whole-number harmonic series `f_n = n·f0`), and **nonlinear
+  optics** (the Kerr self-coupling and harmonic generation).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 80 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 83 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

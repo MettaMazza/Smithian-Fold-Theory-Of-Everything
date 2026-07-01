@@ -1,0 +1,54 @@
+# ============================================================================
+#  ACOUSTICS  --  why a string or pipe sounds in whole-number harmonics, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Pluck a string or blow a pipe and it sounds not one frequency but a HARMONIC
+#  SERIES: the fundamental and its whole-number multiples (2x, 3x, ...), the overtones
+#  that give an instrument its timbre. Only integer multiples fit; the rest cancel.
+#  That whole-number ladder is the fold's.
+#
+#  ── DERIVATION ─ (check every line; uses the fold) ───────────────────────────
+#  Sound travels at a fixed speed -- the signal speed, the One (the fold's single
+#  advance, Step 36) -- so a wave that fits a fixed length must close on itself after a
+#  whole number of half-wavelengths. Only WHOLE-number multiples of the fundamental
+#  f0 fit; a fractional multiple leaves the ends unmatched and cancels. So the allowed
+#  tones are
+#       f_n = n * f0 ,   n = 1, 2, 3, ... ,
+#  the harmonic series -- each overtone an exact whole multiple of the fundamental
+#  (for f0 = 1/6: 1/6, 2/6 = 1/3, 3/6 = 1/2, ...). The whole-number ladder and the
+#  fixed speed are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Strings and pipes ring in a harmonic series of whole-number overtones, and sound
+#  travels at a fixed speed in a medium -- exactly the forced result. The forced
+#  content is exact: the n-th harmonic is n times the fundamental, an integer identity;
+#  the speed of sound in metres per second is a measured, per-medium value.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The signal speed sound rides: the One (the fold's single advance).
+define sound_signal_speed returning FoldValue:
+    return the_one()
+
+# The fundamental frequency f0: 1/6 (a base tone kept inside the domain).
+define fundamental returning Fraction:
+    return fraction_from_ratio(1 and 6)
+
+# The n-th harmonic: n times the fundamental, f_n = n * f0.
+define harmonic with n as Int returning Fraction:
+    set n_fraction to fraction_from_whole_number(n)
+    set f0 to fundamental()
+    return fraction_multiply(n_fraction and f0)
+
+# The n-th harmonic is a WHOLE multiple of the fundamental: dividing it back by the
+# fundamental returns exactly n (checked at n = 3: (3 * 1/6) / (1/6) = 3).
+define nth_harmonic_is_whole_multiple with n as Int returning Bool:
+    set f_n to harmonic(n)
+    set f0 to fundamental()
+    set ratio to fraction_divide(f_n and f0)
+    set n_fraction to fraction_from_whole_number(n)
+    return fraction_is_equal(ratio and n_fraction)

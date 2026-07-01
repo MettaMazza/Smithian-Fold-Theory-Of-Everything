@@ -1,0 +1,16 @@
+import "../constants/three_wave_mixing.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== three-wave mixing ==="
+    set ok to expect_equal("input one f1 = 1/3" and fraction_to_text(input_one()) and "1/3")
+    set ok to expect_equal("input two f2 = 1/4" and fraction_to_text(input_two()) and "1/4")
+    set ok to expect_equal("sum frequency f1 + f2 = 7/12" and fraction_to_text(sum_frequency()) and "7/12")
+    set ok to expect_equal("difference frequency f1 - f2 = 1/12" and fraction_to_text(difference_frequency()) and "1/12")
+    set ok to expect_equal("second harmonic of f2 = 1/2 (f2 doubled)" and fraction_to_text(second_harmonic()) and "1/2")
+    display "=== done ==="
+    return 0

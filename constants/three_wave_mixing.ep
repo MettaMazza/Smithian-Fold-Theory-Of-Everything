@@ -1,0 +1,60 @@
+# ============================================================================
+#  THREE-WAVE MIXING  --  why two waves in a nonlinear medium make their sum,
+#  difference, and doubling, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Shine two laser beams into the right crystal and out come NEW colours: the SUM of
+#  the two frequencies, their DIFFERENCE, and the DOUBLING (second harmonic) of each.
+#  This three-wave mixing is how green laser pointers and frequency combs are made.
+#  All three new frequencies are the fold's own add, take, and double.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  Take two input waves, f1 = 1/3 and f2 = 1/4. A nonlinear medium combines them by
+#  the fold's operations:
+#     SUM frequency        = f1 + f2         = 1/3 + 1/4 = 7/12 ,
+#     DIFFERENCE frequency = f1 - f2 (beat)  = 1/3 - 1/4 = 1/12 ,
+#     SECOND HARMONIC of f2 = f2 doubled = fold-double = 1/4 + 1/4 = 1/2 .
+#  The sum is the fold's add, the difference is its take (the beat), and the second
+#  harmonic is its double -- three new frequencies, each an exact fold operation on the
+#  inputs. Nothing is chosen; the mixing IS the fold's arithmetic.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Nonlinear crystals produce sum-, difference-, and second-harmonic frequencies from
+#  two inputs, to the exact arithmetic combinations -- exactly the forced result. The
+#  forced content is exact: sum = add, difference = take, second harmonic = double.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once (double, cast out whole Ones) -- the second harmonic operation.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The first input wave: f1 = 1/3.
+define input_one returning Fraction:
+    return fraction_from_ratio(1 and 3)
+
+# The second input wave: f2 = 1/4.
+define input_two returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The SUM frequency: f1 + f2 = 7/12.
+define sum_frequency returning Fraction:
+    set f1 to input_one()
+    set f2 to input_two()
+    return fraction_add(f1 and f2)
+
+# The DIFFERENCE frequency (the beat): f1 - f2 = 1/12.
+define difference_frequency returning Fraction:
+    set f1 to input_one()
+    set f2 to input_two()
+    return fraction_subtract(f1 and f2)
+
+# The SECOND HARMONIC of f2: f2 doubled = 1/4 + 1/4 = 1/2.
+define second_harmonic returning Fraction:
+    return fold_fraction(input_two())

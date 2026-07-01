@@ -1,0 +1,68 @@
+# ============================================================================
+#  NONLINEAR OPTICS  --  why an intense wave bends its own medium and makes
+#  harmonics, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  At low intensity light passes through glass unchanged (LINEAR). At high intensity
+#  it changes the medium and so acts on ITSELF -- the Kerr effect: a strong beam shifts
+#  its own phase and generates HARMONICS (multiples of its frequency). This
+#  self-action, absent for weak light, is the fold's own self-coupling.
+#
+#  ── DERIVATION ─ (check every line; uses the fold) ───────────────────────────
+#  A LINEAR response is proportional to the field: doubling the field doubles the
+#  response, nothing new. A NONLINEAR (Kerr) response adds a self-coupling -- the field
+#  feeds back on itself, which is the FOLD (double-and-wrap). A strong field 3/4
+#  self-couples and folds down to the balance:
+#       fold(3/4) = 1/2 ,
+#  a genuine self-action (its own phase shifted), which a weak, linear field does not
+#  have. And the self-coupling generates HARMONICS: the third harmonic of a wave f is
+#  3*f (the odd Kerr harmonic) -- for f = 1/6, third harmonic = 3 * 1/6 = 1/2. So the
+#  Kerr medium self-modulates and makes new whole-multiple frequencies; the linear one
+#  does neither. Self-coupling and harmonic generation are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Intense light self-focuses and self-phase-modulates (the Kerr effect) and generates
+#  harmonics; weak light does not -- exactly the forced split. The forced content is
+#  that the nonlinear response is the fold's self-coupling and that harmonics are whole
+#  multiples of the input frequency.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once (double, cast out whole Ones) -- the self-coupling operation.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A strong field: 3/4.
+define strong_field returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# The Kerr self-action: the strong field self-couples and folds down to the balance,
+# fold(3/4) = 1/2 -- it acts on its own phase.
+define kerr_self_action returning Fraction:
+    return fold_fraction(strong_field())
+
+# The self-action is real (the field is shifted): the folded field differs from the
+# original (a weak, linear field would be unchanged).
+define kerr_shifts_the_field returning Bool:
+    set before to strong_field()
+    set after to kerr_self_action()
+    set same to fraction_is_equal(before and after)
+    if same:
+        return false
+    return true
+
+# The input wave for harmonic generation: f = 1/6.
+define input_wave returning Fraction:
+    return fraction_from_ratio(1 and 6)
+
+# The third harmonic (the odd Kerr harmonic): 3 * f = 3 * 1/6 = 1/2.
+define third_harmonic returning Fraction:
+    set three to fraction_from_whole_number(3)
+    set f to input_wave()
+    return fraction_multiply(three and f)

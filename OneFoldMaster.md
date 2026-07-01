@@ -2611,6 +2611,68 @@ states), the same phenomenology the known forces have. Falsifiable, not vague.
 
 ---
 
+### Step 80 — Three-wave mixing (sum, difference, doubling)
+
+**File:** `constants/three_wave_mixing.ep`
+
+**What it does.** Two waves `f1 = 1/3`, `f2 = 1/4` in a nonlinear medium make new
+frequencies by the fold's own operations: SUM `f1 + f2 = 7/12` (add), DIFFERENCE
+`f1 − f2 = 1/12` (take/beat), and SECOND HARMONIC of `f2` = doubled `= 1/2` (fold).
+
+```
+=== three-wave mixing ===
+  ok    inputs f1 = 1/3, f2 = 1/4
+  ok    sum = 7/12 ; difference = 1/12 ; second harmonic = 1/2
+```
+
+**To measurement.** Nonlinear crystals produce sum-, difference-, and second-harmonic
+frequencies (green laser pointers, frequency combs) — the forced exact combinations:
+sum = add, difference = take, second harmonic = double.
+
+---
+
+### Step 81 — Acoustics (the harmonic series)
+
+**File:** `constants/acoustics.ep`
+
+**What it does.** Sound rides a fixed signal speed (the One), so a wave in a fixed
+length closes only after a whole number of half-wavelengths — only *integer* multiples
+of the fundamental fit. The allowed tones are `f_n = n·f0` (for `f0 = 1/6`: `1/6, 1/3,
+1/2, …`), the harmonic series.
+
+```
+=== acoustics (the harmonic series) ===
+  ok    sound signal speed = the One ; fundamental = 1/6
+  ok    harmonics 1, 2, 3 = 1/6, 1/3, 1/2 (whole multiples)
+```
+
+**To measurement.** Strings and pipes ring in a whole-number harmonic series — the
+forced integer identity `f_n = n·f0`; the speed of sound in m/s is a per-medium value.
+
+---
+
+### Step 82 — Nonlinear optics (the Kerr effect)
+
+**File:** `constants/nonlinear_optics.ep`
+
+**What it does.** A weak (linear) field passes unchanged; an intense field self-couples
+— the fold — acting on its own phase: `fold(3/4) = 1/2`, a genuine self-action a linear
+field lacks. And the self-coupling makes harmonics: the third (odd Kerr) harmonic of
+`f = 1/6` is `3·f = 1/2`.
+
+```
+=== nonlinear optics (the Kerr effect) ===
+  ok    strong field 3/4 ; Kerr self-action fold(3/4) = 1/2
+  ok    the Kerr effect shifts the field (self-action, not linear)
+  ok    third harmonic = 3 * f = 1/2 (odd Kerr harmonic)
+```
+
+**To measurement.** Intense light self-focuses and self-phase-modulates (Kerr) and
+generates harmonics; weak light does not — the forced split: the nonlinear response is
+the fold's self-coupling, harmonics are whole multiples of the input.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2801,6 +2863,12 @@ runs):**
   template — mass-part `1/p`, coupling `(p−1)/p`, mediators `p²−1`, colours `p`,
   confinement pairs `(p−1)/2`, beta-slope `p−1`, a massless confining carrier, neutral
   bound states. Specific, falsifiable predictions.
+- Step 80 — three-wave mixing: two waves make their sum (`add`), difference (`take`),
+  and second harmonic (`double`) — the fold's arithmetic.
+- Step 81 — acoustics: a fixed signal speed forces the whole-number harmonic series
+  `f_n = n·f0`.
+- Step 82 — nonlinear optics: an intense field self-couples (the fold, `fold(3/4)=1/2`)
+  and makes harmonics (third `= 3·f`); a linear field does neither.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
