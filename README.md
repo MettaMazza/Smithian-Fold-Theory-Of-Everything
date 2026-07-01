@@ -163,11 +163,16 @@ verify everything **two ways** (see [`verify/`](verify/)):
 
 **With nothing but a C compiler — no ErnosPlain needed.** The `verify/` directory
 holds the ErnosPlain compiler's own output as self-contained C (standard headers
-only), so any `cc`/`gcc`/`clang` builds it:
+only), so any `cc`/`gcc`/`clang` builds it. The one-line way to prove the whole thing:
 
 ```sh
-make -C verify check        # builds and runs every proof; prints ALL PROOFS PASS
+make -C verify prove        # THE unified driver: enumerate EVERY forced value + grand tally
+make -C verify check        # or: build & run every proof, one ok / FAIL line per suite
 ```
+
+`make prove` runs every proof in a single pass, prints each forced constant and scale
+with its value, and ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from
+the One` (currently 83 suites, 518 forced checks, 0 failures).
 
 **From the ErnosPlain source.** Install the compiler `ernos`, then either rebuild
 the C (`verify/build_from_source.sh`) or run a proof directly:

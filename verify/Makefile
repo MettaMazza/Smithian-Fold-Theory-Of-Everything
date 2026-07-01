@@ -3,7 +3,8 @@
 # compiler for one proof; it includes its own runtime and uses only standard headers.
 #
 #   make            build every proof
-#   make check      build every proof, run it, and report ok / FAIL
+#   make check      build every proof, run it, and report ok / FAIL per suite
+#   make prove      run the unified driver: enumerate EVERY forced value + grand tally
 #   make clean      remove the built binaries
 
 CC ?= cc
@@ -35,7 +36,10 @@ check: all
 	  echo "SOME PROOFS FAILED"; exit 1; \
 	fi
 
+prove: all
+	@sh prove_all.sh
+
 clean:
 	rm -f $(BINARIES)
 
-.PHONY: all check clean
+.PHONY: all check prove clean

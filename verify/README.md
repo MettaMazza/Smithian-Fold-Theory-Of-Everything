@@ -11,12 +11,16 @@ any C compiler can build it. (One line is post-processed — `ep_gc_enabled` is 
 touched, and no computed value depends on it.)
 
 ```sh
-make check
+make prove      # THE unified driver: enumerate every forced value + a grand tally
+make check      # or: build & run every proof, one ok / FAIL line per suite
 ```
 
-This builds every proof and runs it, printing `ok` for each and `ALL PROOFS PASS`
-at the end (or `FAIL` if any check does not hold). You need nothing but `cc`/`gcc`
-or `clang` and `make`.
+`make prove` runs the top-level driver (`prove_all.sh`): it builds and runs every
+proof in one pass, prints each forced constant and scale with its value, and ends with
+a grand tally — `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from the One`.
+`make check` is the terser per-suite `ok`/`ALL PROOFS PASS` form. Each proof is its own
+self-contained compilation unit, so running them together is exactly running them one
+by one — no cross-module clash. You need nothing but `cc`/`gcc` or `clang` and `make`.
 
 Each proof prints, line by line, the forced value it computed and whether it
 matches — so you are checking the derivations themselves, not taking a summary on

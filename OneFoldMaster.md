@@ -38,6 +38,15 @@ piece is constructed afresh and shown to reproduce the known result exactly.
    the One — and builds everything else from it by two permitted moves. Nothing
    is smuggled in.
 
+### Prove the whole thing in one run
+
+The fastest path: `make -C verify prove`. The unified top-level driver
+(`verify/prove_all.sh`) builds and runs **every** proof in a single pass, enumerates
+every forced constant and scale with its value, and ends with a grand tally —
+`EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — from the One` (currently 83
+suites, 518 forced checks, 0 failures). It needs nothing but a C compiler. Use
+`make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
+
 ### How to read a module (three separated voices)
 
 Every constant module is split into three clearly marked blocks, so a skeptic can
