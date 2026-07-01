@@ -1,0 +1,73 @@
+# ============================================================================
+#  RELATIVISTIC VELOCITY COMPOSITION  --  why speeds never add past c, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Fire a bullet forward from a moving train and the ground speed is NOT the naive sum:
+#  velocities compose as w = (u + v)/(1 + uv/c^2), and nothing composes past the speed
+#  of light. Forced: the causal speed is the One, the domain's ceiling, and the
+#  composition rule is the unique way addition respects that ceiling.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY exact fractions and c = 1) ─────
+#  In fold units the causal speed is c = 1 (speed_of_light.ep). Naive addition u + v
+#  can leave the domain (1/2 + 2/3 > 1) -- impossible, since no signal outruns the
+#  causal speed. The composition that respects the ceiling divides the naive sum by
+#  the overlap term:
+#       w = (u + v) / (1 + u*v) .
+#  Exact consequences, all checkable:
+#     * the One is a FIXED POINT: compose(1, v) = (1+v)/(1+v) = 1 -- light composed
+#       with anything is still light, the invariance of c;
+#     * sublight stays sublight: compose(1/2, 1/2) = 4/5 < 1, compose(1/2, 2/3) =
+#       (7/6)/(4/3) = 7/8 < 1 -- the ceiling is never crossed;
+#     * small speeds nearly add: compose(1/10, 1/10) = (1/5)/(101/100) = 20/101,
+#       just under the naive 1/5 -- Galileo recovered at low speed.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: c is the composition's fixed point and the ceiling is
+#  never crossed. Measured: Fizeau's moving-water experiment and every accelerator
+#  (electrons at 0.9999...c never reaching c) confirm the composition law, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The causal speed: the One.
+define causal_ceiling returning Fraction:
+    return fraction_from_whole_number(1)
+
+# Relativistic composition: w = (u + v) / (1 + u*v), with c = 1.
+define compose_speeds with u as Fraction and v as Fraction returning Fraction:
+    set naive_sum to fraction_add(u and v)
+    set overlap to fraction_multiply(u and v)
+    set one to fraction_from_whole_number(1)
+    set divisor to fraction_add(one and overlap)
+    return fraction_divide(naive_sum and divisor)
+
+# Light composed with anything is still light: compose(1, v) = 1.
+define light_is_fixed_point returning Bool:
+    set c to causal_ceiling()
+    set v to fraction_from_ratio(1 and 2)
+    set composed to compose_speeds(c and v)
+    return fraction_is_equal(composed and c)
+
+# Sublight composed with sublight stays strictly below the ceiling.
+define sublight_stays_sublight returning Bool:
+    set u to fraction_from_ratio(1 and 2)
+    set v to fraction_from_ratio(2 and 3)
+    set composed to compose_speeds(u and v)
+    set c to causal_ceiling()
+    set comparison to fraction_compare(composed and c)
+    return comparison < 0
+
+# The half-half composition lands at exactly 4/5.
+define half_with_half returning Fraction:
+    set u to fraction_from_ratio(1 and 2)
+    set v to fraction_from_ratio(1 and 2)
+    return compose_speeds(u and v)
+
+# Small speeds nearly add (Galileo recovered): 1/10 with 1/10 = 20/101, just under 1/5.
+define tenth_with_tenth returning Fraction:
+    set u to fraction_from_ratio(1 and 10)
+    set v to fraction_from_ratio(1 and 10)
+    return compose_speeds(u and v)

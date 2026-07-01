@@ -1,0 +1,24 @@
+import "../constants/shell_capacities.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== electron shell capacities (2, 8, 18, 32) ==="
+    set ok to expect_equal("shell 1 holds b*1^2 = 2" and int_to_string(first_shell()) and "2")
+    set ok to expect_equal("shell 2 holds b*2^2 = 8" and int_to_string(second_shell()) and "8")
+    set ok to expect_equal("shell 3 holds b*3^2 = 18" and int_to_string(third_shell()) and "18")
+    set ok to expect_equal("shell 4 holds b*4^2 = 32" and int_to_string(fourth_shell()) and "32")
+    set ok to expect_equal("helium closes at 2" and int_to_string(helium_closure()) and "2")
+    set ok to expect_equal("neon closes at 10" and int_to_string(neon_closure()) and "10")
+    set ok to expect_equal("argon closes at 18 (neon + one octet)" and int_to_string(argon_closure()) and "18")
+    display "=== done ==="
+    return 0

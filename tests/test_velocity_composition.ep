@@ -1,0 +1,21 @@
+import "../constants/velocity_composition.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== relativistic velocity composition ==="
+    set ok to expect_bool("light is the fixed point: compose(1, v) = 1" and light_is_fixed_point())
+    set ok to expect_bool("sublight stays sublight (1/2 with 2/3 < 1)" and sublight_stays_sublight())
+    set ok to expect_equal("compose(1/2, 1/2) = 4/5 (not 1)" and fraction_to_text(half_with_half()) and "4/5")
+    set ok to expect_equal("compose(1/10, 1/10) = 20/101 (Galileo recovered)" and fraction_to_text(tenth_with_tenth()) and "20/101")
+    display "=== done ==="
+    return 0

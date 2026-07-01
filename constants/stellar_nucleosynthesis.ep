@@ -1,0 +1,58 @@
+# ============================================================================
+#  STELLAR NUCLEOSYNTHESIS  --  why stars ignite and forge the elements, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every element heavier than lithium was cooked inside a star: gravity squeezes
+#  hydrogen until fusion ignites, and the burn climbs the periodic table. Why does
+#  ignition take a definite threshold, and why does the burn then run to completion?
+#  Forced: ignition starts two folds below unison and must cross the barrier level.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The Coulomb barrier between two nuclei is the balance level 1/2 (the same 1/2
+#  barrier as fission_fusion.ep). A star's core at ignition sits ONE fold below the
+#  barrier -- the quarter-One, 1/4 = (1/2)^2, two folds below unison. The burn is the
+#  climb:
+#       1/4  ->  1/2  ->  1 :
+#  the first fold crosses the Coulomb barrier (gravitational compression doubles the
+#  share), the second completes the fusion to the binding peak, the One (helium and
+#  beyond -- the same peak both fusion and fission fold toward). Exactly TWO folds:
+#  ignition is a two-stage threshold, not a gradual glow -- which is why a star either
+#  ignites fully or not at all (and why brown dwarfs, stuck below the first fold,
+#  never become stars). Two ignition shares make one barrier: 1/4 + 1/4 = 1/2.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: ignition at 1/4, barrier at 1/2, completion at the
+#  One, in two folds. Measured: stellar ignition has a sharp mass threshold (~0.08
+#  solar masses -- below it, brown dwarfs never ignite), and the burn then runs the
+#  binding ladder to the iron peak -- the forced two-stage climb.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The ignition share: the quarter-One, two folds below unison.
+define ignition_share returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# First fold: ignition crosses the Coulomb barrier (1/4 -> 1/2).
+define ignition_crosses_barrier returning Fraction:
+    return fold_fraction(ignition_share())
+
+# Second fold: the burn completes to the binding peak, the One (1/2 -> 1).
+define burn_completes returning Fraction:
+    return fold_fraction(ignition_crosses_barrier())
+
+# Two ignition shares make one barrier: 1/4 + 1/4 = 1/2.
+define two_shares_make_the_barrier returning Fraction:
+    set share to ignition_share()
+    return fraction_add(share and share)

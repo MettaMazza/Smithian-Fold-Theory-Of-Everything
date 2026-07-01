@@ -1,0 +1,20 @@
+import "../constants/navier_stokes_regularity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Navier-Stokes regularity (no blow-up) ==="
+    set ok to expect_equal("lattice floor = 1/32 (depth b+c = 5)" and fraction_to_text(lattice_floor()) and "1/32")
+    set ok to expect_bool("the floor is strictly positive (no sub-floor eddy)" and floor_is_strictly_positive())
+    set ok to expect_equal("max vorticity = c/floor = 32 (guard vs 2^5 armed)" and int_to_string(max_vorticity()) and "32")
+    display "=== done ==="
+    return 0

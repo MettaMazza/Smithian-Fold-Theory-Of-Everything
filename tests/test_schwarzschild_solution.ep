@@ -1,0 +1,26 @@
+import "../constants/schwarzschild_solution.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Schwarzschild solution (conserved flux) ==="
+    set ok to expect_equal("source rs = 1/4" and fraction_to_text(source_strength()) and "1/4")
+    set r_half to fraction_from_ratio(1 and 2)
+    set ok to expect_equal("field at r=1/2: A = 1/2" and fraction_to_text(field_at(r_half)) and "1/2")
+    set r_one to fraction_from_whole_number(1)
+    set ok to expect_equal("field at r=1: A = 3/4" and fraction_to_text(field_at(r_one)) and "3/4")
+    set ok to expect_equal("flux over pair (1/2, 1) = 1/4" and fraction_to_text(flux_first_pair()) and "1/4")
+    set ok to expect_equal("flux over pair (1/2, 3/4) = 1/4" and fraction_to_text(flux_second_pair()) and "1/4")
+    set ok to expect_bool("flux is CONSERVED (same across pairs)" and flux_is_conserved())
+    set ok to expect_bool("the flux constant equals the source mass" and flux_equals_source())
+    display "=== done ==="
+    return 0

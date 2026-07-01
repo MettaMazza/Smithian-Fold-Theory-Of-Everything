@@ -1,0 +1,66 @@
+# ============================================================================
+#  ELECTRON SHELL CAPACITIES  --  why the shells hold 2, 8, 18, 32, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The periodic table's whole shape comes from four numbers: the electron shells hold
+#  at most 2, 8, 18, 32. Chemistry memorises them; the fold counts them: each level's
+#  capacity is the binary spin fibre times the level's squared count.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the level tower) ─────
+#  Two forced counts multiply:
+#    * Level n of the hydrogen ladder carries n^2 states (the 1/n^2 ladder's degeneracy
+#      -- level n is an n-by-n block of sublevels; hydrogen_spectrum.ep).
+#    * Every state carries the binary SPIN fibre -- the fold's two preimages, at most
+#      one fermion each (fermionic_occupation.ep, charge_multiplicity.ep) -- a factor
+#      of exactly b = 2.
+#  So the capacity of shell n is
+#       capacity(n) = b * n^2  =  2, 8, 18, 32  for n = 1, 2, 3, 4 ,
+#  and the running totals close the noble gases: 2 (helium), 2+8 = 10 (neon),
+#  10+8 = 18 (argon). No number is put in by hand: b is the counted binary generator
+#  and n^2 is the ladder's own block size.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced capacities are exact: 2, 8, 18, 32 -- precisely the observed shell
+#  maxima (K, L, M, N shells), with the noble-gas closures at 2, 10, 18 (He, Ne, Ar).
+#  The measured periodic table's row structure is these counts, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The capacity of shell n: the binary spin fibre times the level's n^2 states.
+define shell_capacity with n as Int returning Int:
+    set squared to whole_power(n and 2)
+    return binary_count() * squared
+
+# The first four shells: 2, 8, 18, 32.
+define first_shell returning Int:
+    return shell_capacity(1)
+
+define second_shell returning Int:
+    return shell_capacity(2)
+
+define third_shell returning Int:
+    return shell_capacity(3)
+
+define fourth_shell returning Int:
+    return shell_capacity(4)
+
+# The noble-gas closures: running totals 2 (He), 10 (Ne), 18 (Ar).
+define helium_closure returning Int:
+    return shell_capacity(1)
+
+define neon_closure returning Int:
+    return shell_capacity(1) + shell_capacity(2)
+
+# The octet: the s+p block, size shell_capacity(2) = 8. The third row fills its octet
+# before the 18-shell's d-block opens (the d states defer one row), so argon closes at
+# neon + one octet = 18 -- the familiar rule-of-eight is the n=2 block size recurring.
+define octet returning Int:
+    return shell_capacity(2)
+
+define argon_closure returning Int:
+    return neon_closure() + octet()

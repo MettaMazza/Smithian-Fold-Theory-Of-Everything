@@ -1,0 +1,76 @@
+# ============================================================================
+#  THE SCHWARZSCHILD SOLUTION  --  the vacuum field around a mass, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Outside any spherical mass, general relativity has exactly one static vacuum field
+#  -- the Schwarzschild solution, the metric behind planetary orbits, light bending,
+#  and black holes. Its time component is A(r) = 1 - rs/r. Forced: that form is the
+#  unique one whose flux through every sphere is the same constant -- the source mass.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the take and exact fractions) ───
+#  The field at radius r is the One less the source's claim at that distance:
+#       A(r) = take(One, rs/r) = 1 - rs/r ,
+#  the same forced form as gravitational time dilation. Vacuum means NO source between
+#  spheres, so what flows through one sphere flows through every sphere -- the flux
+#       flux(r1, r2) = (A(r2) - A(r1)) / (1/r1 - 1/r2)
+#  must be the SAME constant for every pair of radii, and that constant IS the source:
+#  with rs = 1/4, the pair (1/2, 1) gives (3/4 - 1/2)/(2 - 1) = 1/4, and the pair
+#  (1/2, 3/4) gives (2/3 - 1/2)/(2 - 4/3) = 1/4 -- equal, and equal to rs. One
+#  constant across all spheres, matching the mass: the conserved-flux vacuum field.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: A(r) = 1 - rs/r with flux constant = rs across every
+#  sphere pair. Measured: Mercury's perihelion, solar light-bending, Shapiro delay,
+#  GPS corrections, and the EHT black-hole images are all this one field, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The source strength (Schwarzschild radius in domain units): rs = 1/4.
+define source_strength returning Fraction:
+    set four to binary_count() * binary_count()
+    return fraction_from_ratio(1 and four)
+
+# The field at radius r: A(r) = 1 - rs/r (the take of the source's claim).
+define field_at with radius as Fraction returning Fraction:
+    set rs to source_strength()
+    set claim to fraction_divide(rs and radius)
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and claim)
+
+# The flux between two spheres: (A(r2) - A(r1)) / (1/r1 - 1/r2).
+define flux_between with r1 as Fraction and r2 as Fraction returning Fraction:
+    set field_two to field_at(r2)
+    set field_one to field_at(r1)
+    set field_difference to fraction_subtract(field_two and field_one)
+    set one to fraction_from_whole_number(1)
+    set inverse_one to fraction_divide(one and r1)
+    set inverse_two to fraction_divide(one and r2)
+    set inverse_difference to fraction_subtract(inverse_one and inverse_two)
+    return fraction_divide(field_difference and inverse_difference)
+
+# The flux across the first sphere pair (1/2, 1).
+define flux_first_pair returning Fraction:
+    set r1 to fraction_from_ratio(1 and 2)
+    set r2 to fraction_from_whole_number(1)
+    return flux_between(r1 and r2)
+
+# The flux across a second, different pair (1/2, 3/4).
+define flux_second_pair returning Fraction:
+    set r1 to fraction_from_ratio(1 and 2)
+    set r2 to fraction_from_ratio(3 and 4)
+    return flux_between(r1 and r2)
+
+# Conserved flux: both pairs give the SAME constant, and it equals the source.
+define flux_is_conserved returning Bool:
+    set first to flux_first_pair()
+    set second to flux_second_pair()
+    return fraction_is_equal(first and second)
+
+define flux_equals_source returning Bool:
+    set flux to flux_first_pair()
+    set rs to source_strength()
+    return fraction_is_equal(flux and rs)

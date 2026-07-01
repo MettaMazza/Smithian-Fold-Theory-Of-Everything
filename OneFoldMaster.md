@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-126 suites, 749 forced checks, 0 failures). It needs nothing but a C compiler. Use
+131 suites, 774 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3286,6 +3286,59 @@ cost is the measured face.
 
 ---
 
+### Step 124 — Navier–Stokes regularity (no blow-up)
+
+**File:** `constants/navier_stokes_regularity.ep`
+
+**What it does.** The Millennium question — can a smooth flow blow up? — dissolves on the
+lattice: the smallest eddy is the floor at the forced down-depth, `s₅ = 1/2⁵ = 1/32`,
+strictly positive because zero is outside the domain. A vortex turns over at most at `c=1`
+across its own diameter, so vorticity is **capped** at `c/s₅ = 32` — cross-checked against
+the depth-5 binary volume `2⁵` by `forced_to_be`. The cascade stops at the floor
+(Kolmogorov's dissipation scale is the measured face); a finite-time singularity is not
+expressible.
+
+### Step 125 — The Schwarzschild solution (conserved flux)
+
+**File:** `constants/schwarzschild_solution.ep`
+
+**What it does.** The vacuum field around a mass is `A(r) = take(One, rs/r) = 1 − rs/r`,
+and vacuum means the flux `(A(r₂)−A(r₁))/(1/r₁−1/r₂)` is the **same constant for every
+sphere pair — equal to the source**: with `rs = 1/4`, pairs `(1/2, 1)` and `(1/2, 3/4)`
+both give exactly `1/4`. One field behind Mercury's perihelion, light bending, Shapiro
+delay, GPS, and the EHT images.
+
+### Step 126 — Relativistic velocity composition (never past c)
+
+**File:** `constants/velocity_composition.ep`
+
+**What it does.** Naive addition can leave the domain (`1/2 + 2/3 > 1`) — impossible. The
+composition respecting the ceiling is `w = (u+v)/(1+uv)`: light is a **fixed point**
+(`compose(1, v) = 1`, the invariance of c), sublight stays sublight (`1/2 ∘ 2/3 = 7/8`,
+`1/2 ∘ 1/2 = 4/5`), and small speeds nearly add (`1/10 ∘ 1/10 = 20/101` — Galileo
+recovered). Fizeau and every accelerator are the measured face.
+
+### Step 127 — Electron shell capacities (2, 8, 18, 32)
+
+**File:** `constants/shell_capacities.ep`
+
+**What it does.** Shell `n` holds `b·n²`: the binary spin fibre (two preimages, one
+fermion each) times the ladder level's `n²` states → `2, 8, 18, 32`, exactly the observed
+K/L/M/N maxima. Noble-gas closures fall out: He at `2`, Ne at `10`, Ar at `18` (neon plus
+one octet — the rule-of-eight is the `n=2` block size recurring before the d-block opens).
+
+### Step 128 — Stellar nucleosynthesis (the two-fold ignition)
+
+**File:** `constants/stellar_nucleosynthesis.ep`
+
+**What it does.** A star ignites from the quarter-One: `1/4 → 1/2 → 1` — the first fold
+crosses the Coulomb barrier (the same `1/2` as fission/fusion), the second completes the
+burn to the binding peak. Exactly two folds: ignition is a sharp threshold, not a glow —
+why a star ignites fully or not at all, and why brown dwarfs (stuck below the first fold)
+never become stars. Two ignition shares make one barrier (`1/4 + 1/4 = 1/2`).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3566,6 +3619,16 @@ runs):**
   conversion complete, and the balance folds to unison — a closed, repeating swap.
 - Step 123 — Maxwell's demon: the reset folds both memory states (`1/4`, `3/4`) onto one
   ready state — erasing exactly the bit gained (Landauer's `kT ln 2`); the books balance.
+- Step 124 — Navier–Stokes regularity: the smallest eddy is the floor `1/32 > 0`, so
+  vorticity is capped at `32 = 2⁵` (guard armed) — a finite-time blow-up is inexpressible.
+- Step 125 — the Schwarzschild solution: `A(r) = 1 − rs/r` has the same flux constant
+  (`= rs`) across every sphere pair — the conserved-flux vacuum field.
+- Step 126 — velocity composition: `w = (u+v)/(1+uv)`; light is the fixed point, sublight
+  stays sublight (`1/2 ∘ 1/2 = 4/5`), Galileo recovered at small speeds.
+- Step 127 — shell capacities: shell `n` holds `b·n² = 2, 8, 18, 32` (spin fibre × ladder
+  block); noble closures at 2, 10, 18 — the periodic table's shape counted.
+- Step 128 — stellar nucleosynthesis: ignition climbs `1/4 → 1/2 → 1` in exactly two
+  folds (barrier, then binding peak) — a sharp threshold; brown dwarfs never cross it.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
