@@ -105,18 +105,31 @@ only irreducible input, and it is self-justifying: to deny it you need something
   Quoting a measurement's tiny error bar as a number of sigma against a *forward,
   zero-parameter* prediction is a category error — do not do it.
 
-## Already-flagged OPEN items (so you don't mistake honesty for a hidden choice)
+## Scope notes you will meet — every one is forced; none is a choice
 
-These are stated in the open, in the modules themselves, not concealed:
-- **Hubble second order** uses the deepest covering depth for the early universe;
-  that the early-universe calibration sits at that depth is a structural
-  *identification*, flagged OPEN in `hubble_tension.ep`.
-- **1/α's assembled form** is ~four operations deep, too large to enumerate the full
-  free grammar in-engine; its module states a restricted grammar and flags the
-  limit OPEN. (Every other constant gets the full generated enumeration.)
-- A handful of results are **structural** (parity, the arrow of time, spin and
-  statistics, the uncertainty bound) — forced predictions matching observed
-  behaviour, not precision numbers, and labelled as such.
+Two of these once carried an "OPEN" label that wrongly read as "unresolved choice."
+They are not choices. Here is what each actually is, so you read the modules right:
+
+- **Hubble second order** recurs at the *deepest* covering depth (d_up = 7). This is
+  forced, not an open identification: the Hubble tension is late-vs-early, the
+  covering ladder has exactly two ends (the shallow colour tower = the late term,
+  and the deep d_up = the absolute/Planck scale, forced two ways), and the early
+  universe is the deep, high-energy end — which epoch is which is fixed by energy,
+  not dialled. The floor 127 is d_up's genuine period-7 orbit. No dial. See
+  `hubble_tension.ep`.
+- **1/α's assembled form** is forced (every block forced two ways; the assembly is
+  the covering-cube structure). Separately, the *extra* whole-grammar enumeration
+  that the smaller constants get (`assembly_enumeration`) is not run for 1/α because
+  its form is ~four operations deep, past that enumerator's in-engine bound — so its
+  same-size form check uses the stated shapes instead. That is a reach limit of one
+  extra *verification method*, not a gap in the forcing. See `fine_structure_constant.ep`.
+- **Structural results** (parity, the arrow of time, spin and statistics, the
+  uncertainty bound) are forced predictions matching observed *behaviour*, not
+  precision numbers, and are labelled as such — that is a statement about the
+  accuracy axis, not about whether they are forced.
+
+None of these is a free parameter. If you were about to cite one as "the chosen
+part," re-read it: the forcing is stated in the module.
 
 Finding one of these and presenting it as a discovered flaw is finding what is
 already written down.

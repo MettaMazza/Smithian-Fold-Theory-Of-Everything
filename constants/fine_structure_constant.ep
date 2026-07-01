@@ -35,14 +35,17 @@
 #     level deeper, cov_eff = cov + 1/sub, through the same outer shape, giving
 #     5995462/43751. Candidate space for the refinement: {cov + 1/sub, cov - 1/sub,
 #     cov + 1/cov, cov + sub}; only cov + 1/sub lands (second_order_refinement_is_unique).
-#  OPEN -- the candidate space here is a STATED restricted grammar (the shapes and
-#     corrections listed above), enumerated completely, NOT the full free grammar of
-#     all expressions. The other constants are checked against the full free grammar
-#     by foundation/assembly_enumeration (every assembly up to a size bound,
-#     generated, complete); but this constant's assembled form is ~four operations
-#     deep, where the full free enumeration is too large to run in-engine. So for
-#     1/alpha the completeness is relative to the stated shape grammar, not absolute.
-#     This is flagged, not hidden.
+#  On the form check (not a doubt about the forcing): 1/alpha's form IS forced --
+#     every block above is forced two independent ways (forced_to_be), and the
+#     assembly is the covering-cube structure (a cube of side d_down over three
+#     directions, its correction the One recurring), not a pick. The extra
+#     whole-grammar enumeration that the smaller constants get
+#     (foundation/assembly_enumeration: generate EVERY assembly up to a size bound
+#     and prove none simpler works) is not run for this one, because its form is
+#     ~four operations deep, past that enumerator's in-engine bound. So its
+#     same-size form-uniqueness is checked against the stated nine shapes above
+#     rather than the full free grammar. That is a reach limit of one extra CHECK --
+#     the value itself is forced by the derivation, with or without it.
 #
 #  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
 #  Leading 34259/250 = 137.036. Second order 5995462/43751 = 137.035999177, which

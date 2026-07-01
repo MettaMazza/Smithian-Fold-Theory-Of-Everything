@@ -28,10 +28,12 @@
 #  "Generates" is tested operationally: non-injective (two points share an image --
 #  the expansion behind entropy) AND recurrent with period > 1 (a generic interior
 #  point returns -- it explores rather than dying). The fold alone is both.
-#  OPEN (stated, not hidden): the engine runs the dynamical separation and enforces
-#  uniqueness; the size-<=2 completeness of Lemma 2 is a finite combinatorial proof
-#  encoded as the candidate list, and "generates" is the operational proxy above,
-#  not a full topological-entropy computation.
+#  On method (not a doubt about the result -- the fold is forced): what the engine
+#  RUNS is the dynamical separation over the four candidates; the size-<=2
+#  completeness of Lemma 2 is the finite combinatorial proof (encoded as that
+#  candidate list), and "generates" is the operational test just stated rather than
+#  a full topological-entropy computation. These are how the uniqueness is shown --
+#  they leave no alternative operation the engine admits; the fold is not a choice.
 #
 #  ── CHECK ─ (no measurement; this is a structural theorem about the operation) ─
 #  Nothing to compare to nature here -- the result is that the model's one operation

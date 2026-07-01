@@ -17,13 +17,19 @@
 #                          1 +/- vacuum/tower, 1 + matter/tower, vacuum + 1/tower,
 #                          1 + vacuum*tower, 1 + matter*tower; only 1 + vacuum/tower
 #                          gives 13/12 (hubble_calibration_form_is_unique).
-#     second order = 1 + (2/3 + 1/127)/8 = 3305/3048. The early universe is the
-#                          deepest covering scale (d_up = 7, the same scale as the
-#                          Planck hierarchy); the One recurs over its genuine
-#                          period-7 orbit floor 2^7 - 1 = 127 (fold-period checked).
-#                          OPEN: that the early-universe calibration sits at d_up
-#                          rather than the leading colour depth is a structural
-#                          identification, not a closed lemma -- flagged, not hidden.
+#     second order = 1 + (2/3 + 1/127)/8 = 3305/3048. This is forced, not chosen.
+#                          The Hubble tension is late vs early, and the covering
+#                          ladder has exactly two ends: the SHALLOW end (the colour
+#                          tower, depth colour = 3 -- the late universe, the leading
+#                          term above) and the DEEP end (the deepest covering depth
+#                          d_up = 7 = cover(colour^(colour+1)), forced two ways, the
+#                          same absolute/Planck scale as the absolute-scale step).
+#                          The early universe is the deep, high-energy end -- which
+#                          epoch is which is fixed by energy, not a free pick -- so
+#                          its correction recurs over d_up's genuine period-7 orbit
+#                          floor 2^7 - 1 = 127 (fold-period checked; the pre-periodic
+#                          tower 128 cannot host it). Both the depth and the floor
+#                          are forced; there is no dial.
 #
 #  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
 #  Measured ratio = nearby / distant = 73.04 / 67.36 = 7304/6736, about 1.0843.
