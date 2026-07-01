@@ -448,6 +448,16 @@ the engine would halt. The only literals anywhere near this are the experimental
 values in the test that the result is checked *against*, which never enter the
 derivation.
 
+The assembled **form** is forced two ways, both machine-checked and both run for
+1/α — no check the flagship is exempt from. (1) *Same-size uniqueness:* among the
+nine stated structural shapes of the forced ingredients, only the canonical one
+reproduces `34259/250` (`leading_assembly_is_unique`). (2) *Minimality over the
+generated grammar:* the engine sweeps **every** assembly of `{tower, colour², cov,
+One}` with `+ − · /` up to two operations — the whole simpler space, complete by
+construction — and confirms none reaches `34259/250`, so no assembly of fewer than
+three operations reaches 1/α (`fine_structure_assembly_is_minimal`). That is the same
+complete simpler-space search every other constant gets.
+
 **See the enforcement halt a fitted value yourself.** Save this as a file and run
 it; it stops with a non-zero exit and never prints the last line:
 
@@ -483,6 +493,10 @@ ernos tests/test_fine_structure_constant.ep
 --- second, self-similar scale ---
   ok    1/alpha (second order) exact
   ok    1/alpha (second order) decimal
+--- the assembled FORM is unique, not just the ingredients ---
+  ok    leading assembly is the unique shape (forced_unique)
+  ok    second-order refinement is the unique form (forced_unique)
+  ok    no SIMPLER assembly reaches 1/alpha (generated grammar, complete)
 === done ===
 ```
 

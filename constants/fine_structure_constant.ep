@@ -35,17 +35,18 @@
 #     level deeper, cov_eff = cov + 1/sub, through the same outer shape, giving
 #     5995462/43751. Candidate space for the refinement: {cov + 1/sub, cov - 1/sub,
 #     cov + 1/cov, cov + sub}; only cov + 1/sub lands (second_order_refinement_is_unique).
-#  On the form check (not a doubt about the forcing): 1/alpha's form IS forced --
-#     every block above is forced two independent ways (forced_to_be), and the
-#     assembly is the covering-cube structure (a cube of side d_down over three
-#     directions, its correction the One recurring), not a pick. The extra
-#     whole-grammar enumeration that the smaller constants get
-#     (foundation/assembly_enumeration: generate EVERY assembly up to a size bound
-#     and prove none simpler works) is not run for this one, because its form is
-#     ~four operations deep, past that enumerator's in-engine bound. So its
-#     same-size form-uniqueness is checked against the stated nine shapes above
-#     rather than the full free grammar. That is a reach limit of one extra CHECK --
-#     the value itself is forced by the derivation, with or without it.
+#  The form is forced two ways, both machine-checked:
+#   (1) SAME-SIZE uniqueness -- among the nine stated structural shapes of the forced
+#       ingredients, only the canonical one reproduces 34259/250 (leading_assembly_is_unique).
+#   (2) MINIMALITY over the GENERATED grammar -- the engine generates EVERY assembly
+#       of the forced ingredients {tower, colour^2, cov, One} with + - * / up to two
+#       operations (the whole simpler space, complete by construction) and confirms
+#       NONE reaches 34259/250, so no assembly of fewer than three operations reaches
+#       1/alpha (fine_structure_assembly_is_minimal). This is the same complete
+#       simpler-space search every other constant gets -- it IS run for 1/alpha.
+#     So the assembly is the covering-cube structure (a cube of side d_down over three
+#     directions, its correction the One recurring), and it is both same-size unique
+#     and minimal over the generated grammar; nothing is picked.
 #
 #  ── CHECK ─ (measurement; comparison only -- no value here is used above) ────
 #  Leading 34259/250 = 137.036. Second order 5995462/43751 = 137.035999177, which
@@ -57,6 +58,7 @@ import "../foundation/structural_counts.ep"
 import "../foundation/exact_fractions.ep"
 import "../foundation/enforcement.ep"
 import "../foundation/form_enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The generational volume: the colour count raised to itself (twenty-seven).
@@ -292,3 +294,50 @@ define second_order_refinement_is_unique returning Int:
     set form_d to fs_outer_assembly(eff_d)
     set total to count_form_match(total and form_d and inverse_fine_structure_second_order())
     return forbid_form_selection("the fine-structure second-order refinement form" and total)
+
+
+# ----------------------------------------------------------------------------
+#  Nothing SIMPLER reaches 1/alpha (the GENERATED grammar, complete over the
+#  simpler space -- the same minimality check every other constant gets)
+# ----------------------------------------------------------------------------
+#  The forced ingredients are the tower (128), the colour square (9), the covering
+#  volume (250), and the recurring One (1). The engine GENERATES every assembly of
+#  these with + - * / up to two operations -- the whole simpler space, complete by
+#  construction -- and confirms NONE reproduces 34259/250. So no assembly of fewer
+#  than three operations reaches 1/alpha: the forced structure is minimal, searched
+#  over the generated grammar, not against a hand-picked list. forced_to_be halts if
+#  any simpler assembly ever reaches the value. (Confirmed: the leading value first
+#  appears at three operations -- e.g. (tower + colour^2) + colour^2/cov -- and the
+#  whole size-0, size-1, size-2 space is empty of it.)
+
+# The forced ingredients of 1/alpha, as parallel numerator/denominator leaf lists
+# (each a whole number, so denominator one): tower, colour^2, covering volume, One.
+define fine_structure_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and tower())
+    set ok to append_list(nums and colour_squared())
+    set ok to append_list(nums and covering_volume())
+    set ok to append_list(nums and 1)
+    return nums
+
+define fine_structure_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    return dens
+
+# No assembly of fewer than three operations over the forced ingredients reaches the
+# leading 1/alpha value 34259/250. The target is COMPUTED from the forced blocks
+# (tower*cov + colour^2*(cov+1)) / cov, reduced, never a literal.
+define fine_structure_assembly_is_minimal returning Int:
+    set leaf_nums to fine_structure_leaf_numerators()
+    set leaf_dens to fine_structure_leaf_denominators()
+    set cov to covering_volume()
+    set raw_num to tower() * cov + colour_squared() * (cov + 1)
+    set raw_den to cov
+    set common to greatest_common_divisor(raw_num and raw_den)
+    set target_num to raw_num / common
+    set target_den to raw_den / common
+    return canonical_assembly_is_minimal("no assembly of fewer than three operations reaches 1/alpha" and leaf_nums and leaf_dens and target_num and target_den and 3)

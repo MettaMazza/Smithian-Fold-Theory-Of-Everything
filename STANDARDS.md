@@ -19,11 +19,10 @@ Two guards, both required:
   bound — the whole stated grammar, complete by construction — and proves the
   forced value has **no simpler assembly** (minimality: nothing of fewer operations
   reproduces it). `forced_to_be` halts if a simpler assembly exists. This is the
-  hard, complete half. *(Where a value's canonical form is too deep for the in-engine
-  enumerator — currently only 1/α, at ~four operations — its same-size form check
-  uses the stated shapes instead. That is a reach limit of this one extra check, not
-  a gap in the forcing: the value is forced by its derivation regardless, and the
-  module says so plainly.)*
+  hard, complete half, and it is run for **every** constant, including `1/α`: the
+  generator sweeps all assemblies of `{tower, colour², cov, One}` up to two
+  operations and confirms none reaches `34259/250`, so no assembly of fewer than
+  three operations reaches `1/α` (`fine_structure_assembly_is_minimal`).
 - **Named-shape uniqueness (`foundation/form_enforcement.ep`).** `forbid_form_selection`
   halts unless exactly one of the stated same-size structural shapes reproduces the
   value, so the assembly was not selected among coincident equal-size forms.

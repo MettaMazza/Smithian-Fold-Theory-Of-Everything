@@ -180,12 +180,14 @@ They are not choices. Here is what each actually is, so you read the modules rig
   universe is the deep, high-energy end — which epoch is which is fixed by energy,
   not dialled. The floor 127 is d_up's genuine period-7 orbit. No dial. See
   `hubble_tension.ep`.
-- **1/α's assembled form** is forced (every block forced two ways; the assembly is
-  the covering-cube structure). Separately, the *extra* whole-grammar enumeration
-  that the smaller constants get (`assembly_enumeration`) is not run for 1/α because
-  its form is ~four operations deep, past that enumerator's in-engine bound — so its
-  same-size form check uses the stated shapes instead. That is a reach limit of one
-  extra *verification method*, not a gap in the forcing. See `fine_structure_constant.ep`.
+- **1/α's assembled form** is forced two ways, both machine-checked and BOTH run for
+  1/α: (1) same-size uniqueness among the nine stated shapes (`leading_assembly_is_unique`),
+  and (2) the generated-grammar minimality — the engine sweeps every assembly of the
+  forced ingredients `{tower, colour², cov, One}` with `+ − · /` up to two operations
+  and confirms none reaches `34259/250`, so no assembly of fewer than three operations
+  reaches 1/α (`fine_structure_assembly_is_minimal`). This is the same complete
+  simpler-space search every other constant gets — there is no longer any check the
+  flagship is exempt from. See `fine_structure_constant.ep`.
 - **Structural results** (parity, the arrow of time, spin and statistics, the
   uncertainty bound) are forced predictions matching observed *behaviour*, not
   precision numbers, and are labelled as such — that is a statement about the

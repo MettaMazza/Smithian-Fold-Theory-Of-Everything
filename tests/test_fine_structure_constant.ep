@@ -38,6 +38,7 @@ define main:
     display "--- the assembled FORM is unique, not just the ingredients ---"
     set ok to expect_number("leading assembly is the unique shape (forced_unique)" and leading_assembly_is_unique() and 1)
     set ok to expect_number("second-order refinement is the unique form (forced_unique)" and second_order_refinement_is_unique() and 1)
+    set ok to expect_number("no SIMPLER assembly reaches 1/alpha (generated grammar, complete)" and fine_structure_assembly_is_minimal() and 1)
 
     display "=== done ==="
     return 0
