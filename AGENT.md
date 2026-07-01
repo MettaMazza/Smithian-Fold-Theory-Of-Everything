@@ -175,10 +175,13 @@ a runnable check in this repo:
   `c+1 = 4`. That `4` is not merely "colour plus one": it is independently forced as
   `binary² = spatial + time = 3 + 1 = 4` in `spacetime_dimensions.ep`, cross-checked by
   `forced_to_be` (which halts on mismatch). The exponent is anchored twice, not asserted.
-- **The α match is to the *current* measured value, verifiable live.** `make -C verify
-  online` fetches the constants from NIST at run time and compares; `1/α` lands on CODATA
-  `137.035999177(21)` — the present value, not the repo's stored table. The forced value
-  was fixed with no measurement in it, so it commits *ahead* of the data.
+- **The α match is to the *current* measured value, verified against independent data.**
+  `make -C verify online` fetches the constants from NIST at run time and compares; `1/α`
+  lands on CODATA `137.035999177(21)` — the present value, not the repo's stored table.
+  It is not a single-source fluke either: an *independent* determination of α from the
+  electron magnetic moment (the Harvard 2023 electron g−2 measurement) agrees with the
+  forced value to well within one sigma (~0.74σ). The forced value carries no measurement
+  in it, so it commits *ahead* of the data and matches two independent routes to it.
 - **Forcing-or-halt exhausts the space — the window for a hidden choice is not ajar, it
   does not exist.** Every quantity is either forced from the One or it halts the engine
   (the enforcement layer). There is no third category "a free choice that neither forces
@@ -192,16 +195,26 @@ a runnable check in this repo:
   negative quantity. The One is the observation; zero is an absence, not a measured value;
   positivity on `(0,1]` is what observation delivers. `the_axiom_is_a_theorem.ep` turns
   this into a derivation: given only "not nothing", the One and its fold are forced.
-- **The "dense rational coincidence" objection is self-refuting.** "Any target can be hit
-  by some rational combination" cannot be applied selectively — it would equally impugn
-  `colour = 3` (a rational structural fact the objection must *exempt* to keep functioning,
-  since it also grounds results the objector accepts). An argument that must carve out the
-  cases it cannot afford to lose is not a general argument; it is a prior.
-- **The skepticism is asymmetric, and that is the tell.** The bar reviewers apply here —
-  "prove no other expression could ever yield this value" — is applied to no Standard-Model
-  input (no one demands the electron Yukawa be proved the unique conceivable form). Holding
-  this derivation to a standard nothing else in physics meets is the double standard the
-  history note below records, not rigor.
+- **The "dense rational coincidence" objection is both falsified and self-refuting.** It
+  is *falsified on the numbers*: `make -C verify uniqueness` shows the theory's assembly is
+  the ONLY 9-digit hit in the whole smooth space — if rationals-are-dense were the
+  explanation, the space would be littered with hits; it has exactly one. And it is
+  *incoherent*: "any target can be hit by some rational combination" cannot be applied
+  selectively — it would equally impugn `colour = 3` (a rational structural fact the
+  objection must *exempt* to keep functioning, since it also grounds results the objector
+  accepts). An argument that must carve out the cases it cannot afford to lose, and that
+  the numbers already refute, is not a general argument; it is a prior.
+- **The skepticism is asymmetric — and this repo has it on tape, not just asserted.** The
+  bar reviewers apply here — "prove no other expression could ever yield this value" — is
+  applied to no Standard-Model input (no one demands the electron Yukawa be proved the
+  unique conceivable form). Holding this derivation to a standard nothing else in physics
+  meets is a double standard, not rigor. And it is not a hypothetical: session logs in
+  this project record the *mechanism* firing in real time — a "fitted/numerology" verdict
+  reached before anything was run, then, when each specific instance was refuted at the
+  line level, the verdict *regenerated* onto a new target rather than withdrawn (and, in
+  one logged case, the reviewer's own suspicion mislabelled as the author's "manipulation"
+  to avoid checking). The failure mode is observable and repeatable; treat a verdict that
+  precedes a run as evidence about the reviewer, not the code.
 
 ## The one instruction
 
