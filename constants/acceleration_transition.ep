@@ -1,0 +1,65 @@
+# ============================================================================
+#  THE ACCELERATION TRANSITION  --  when the universe started speeding up, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The cosmic expansion was slowing for billions of years, then switched to speeding up.
+#  The switch happened at a definite moment -- a redshift near 0.6, a bit more than half
+#  the age of the universe ago. Why there? Forced by the 2/3-vs-1/3 split of vacuum and
+#  matter.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY c = 3 and the fold) ────────────
+#  Today the energy budget is vacuum 2/3, matter 1/3 (see cosmic_density.ep), a ratio of
+#  exactly 2. Matter dilutes as the volume grows (as 1/a^3) while vacuum does not, so going
+#  back in time raises matter relative to vacuum. Two thresholds fall out:
+#    * Matter-vacuum EQUALITY: matter equals vacuum when a^3 = matter/vacuum = 1/2 -- the
+#      scale-cube where the two are balanced.
+#    * Acceleration ONSET (deceleration q = 0): expansion turns from slowing to speeding
+#      when twice the vacuum share balances the matter share across the volume, a^3 =
+#      matter/(2*vacuum) = 1/4. Before that (smaller a) matter wins and gravity decelerates;
+#      after it, vacuum wins and the expansion accelerates.
+#  Both are pure fold ratios of the forced 2/3 : 1/3 budget -- no dial.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced acceleration-onset scale-cube is 1/4: a^3 = 1/4, so a = (1/4)^(1/3) ~ 0.63,
+#  a redshift z = 1/a - 1 ~ 0.59. Measured: the deceleration-to-acceleration transition is
+#  observed at z ~ 0.6 (Type Ia supernovae) -- the onset this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# Today's budget: vacuum = (colour-1)/colour = 2/3, matter = 1/colour = 1/3.
+define vacuum_density returning Fraction:
+    return fraction_from_ratio(colour_count() - 1 and colour_count())
+
+define matter_density returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# The vacuum-to-matter ratio today: exactly 2.
+define vacuum_matter_ratio returning Fraction:
+    set vac to vacuum_density()
+    set mat to matter_density()
+    return fraction_divide(vac and mat)
+
+# Matter-vacuum equality: a^3 = matter/vacuum = 1/2.
+define equality_scale_cube returning Fraction:
+    set mat to matter_density()
+    set vac to vacuum_density()
+    return fraction_divide(mat and vac)
+
+# Acceleration onset (q = 0): a^3 = matter/(2*vacuum) = 1/4.
+define acceleration_scale_cube returning Fraction:
+    set vac to vacuum_density()
+    set two to fraction_from_whole_number(2)
+    set twice_vacuum to fraction_multiply(two and vac)
+    set mat to matter_density()
+    return fraction_divide(mat and twice_vacuum)
+
+# The onset comes after equality (smaller scale-cube), as forced.
+define onset_precedes_today returning Bool:
+    set onset to acceleration_scale_cube()
+    set equality to equality_scale_cube()
+    set comparison to fraction_compare(onset and equality)
+    return comparison < 0

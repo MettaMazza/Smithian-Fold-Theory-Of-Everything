@@ -109,6 +109,14 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **Cosmic onset, spreading, coherence, bonds, ladder** — the **acceleration transition**
+  (the `2/3:1/3` budget puts `q=0` at `a³ = 1/4` → `z ≈ 0.6`, the observed switch to
+  speeding up), the **coupled lattice** (update weights `1/2, 1/4, 1/4` sum to One → presence
+  conserved; a bump's centre relaxes to `3/8`), the **laser** (gain=loss threshold `1/2`,
+  above which a boson runaway locks every photon into one coherent mode), **intermolecular
+  forces** (the van der Waals residual `1/4 = (1/2)²`, one fold below the bond), and the
+  **generation ladder** (the three generations sit at the colour-fold preimages of the
+  vacuum, `1/6, 1/2, 5/6`).
 - **Generations, gravity, galaxies, hierarchy** — a **fourth route to three generations**
   (the down-depth five-fold has exactly three interior standing modes `1/4, 1/2, 3/4`),
   **gravitational-wave speed** (a massless lattice ripple travels at `c`; GW170817 to
@@ -157,8 +165,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 111 test
-suites (670 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 116 test
+suites (693 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -215,7 +223,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 111 suites, 670 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 116 suites, 693 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

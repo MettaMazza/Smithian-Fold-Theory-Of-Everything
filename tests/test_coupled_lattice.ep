@@ -1,0 +1,15 @@
+import "../constants/coupled_lattice.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the coupled lattice (presence spreads and is conserved) ==="
+    set ok to expect_equal("self-share weight = 1/2" and fraction_to_text(self_weight()) and "1/2")
+    set ok to expect_equal("neighbour-share weight = 1/4" and fraction_to_text(neighbour_weight()) and "1/4")
+    set ok to expect_equal("weights sum to One (presence conserved)" and fraction_to_text(weights_sum()) and "1")
+    set ok to expect_equal("symmetric bump centre relaxes to 3/8" and fraction_to_text(next_centre()) and "3/8")
+    display "=== done ==="
+    return 0

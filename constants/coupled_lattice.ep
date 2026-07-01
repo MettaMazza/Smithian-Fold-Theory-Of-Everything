@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE COUPLED LATTICE  --  how presence spreads and is conserved, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Waves, heat, and quantum amplitude all spread across space by the same local rule:
+#  each point updates from itself and its neighbours, and the total is conserved (nothing
+#  created or destroyed). On the fold lattice that update rule is forced -- and it keeps
+#  the whole exactly One.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A site shares itself with its two neighbours by halving: it keeps half its presence and
+#  passes a quarter to each side -- weights 1/2 (self), 1/4 (left), 1/4 (right). Those
+#  weights sum to 1/2 + 1/4 + 1/4 = One, so every unit a site holds is fully re-distributed:
+#  presence is CONSERVED, never lost to the No-Zero floor and never manufactured. For a
+#  symmetric bump {left, centre, right} = {1/4, 1/2, 1/4}, the centre's next value is
+#       next = (1/2)*(1/2) + (1/4)*(1/4) + (1/4)*(1/4) = 1/4 + 1/8 = 3/8,
+#  the bump spreading outward while the total across the three sites stays exactly One.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the update weights sum to One (conservation), and the
+#  symmetric bump's centre relaxes to 3/8 as it spreads. Measured: this is the discrete
+#  Laplacian / diffusion-and-wave kernel that governs heat flow, wave propagation, and the
+#  continuity of probability -- conservative, local, spreading, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The self-share weight: one half.
+define self_weight returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The neighbour-share weight: one quarter (half of a half).
+define neighbour_weight returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# The weights sum to One -- presence is conserved (self + left + right = 1).
+define weights_sum returning Fraction:
+    set nb to neighbour_weight()
+    set left_plus_right to fraction_add(nb and nb)
+    set self to self_weight()
+    return fraction_add(self and left_plus_right)
+
+# The centre's next value for a symmetric bump {1/4, 1/2, 1/4}:
+#   self_weight*centre + neighbour_weight*left + neighbour_weight*right = 3/8.
+define next_centre returning Fraction:
+    set centre to fraction_from_ratio(1 and binary_count())
+    set neighbour to fraction_from_ratio(1 and binary_count() * binary_count())
+    set from_self to fraction_multiply(self_weight() and centre)
+    set from_left to fraction_multiply(neighbour_weight() and neighbour)
+    set from_right to fraction_multiply(neighbour_weight() and neighbour)
+    set sides to fraction_add(from_left and from_right)
+    return fraction_add(from_self and sides)

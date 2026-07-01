@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE LASER  --  why light above threshold turns coherent, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A lamp emits a jumble of independent waves; a laser emits one coherent wave, every
+#  photon marching in step. The switch happens sharply at a "threshold" -- pump hard
+#  enough and the light suddenly organises. Why the threshold, and why one shared mode?
+#  Forced: it is the balance point, and photons are bosons.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Lasing is a race between gain (stimulated emission adding photons to a mode) and loss
+#  (photons leaking out). The threshold is the balance where gain equals loss -- the
+#  self-antipodal half-One, 1/2 (the value equal to its own complement, One - 1/2 = 1/2).
+#  Below it loss wins and the light stays incoherent; at 1/2 the mode breaks even; above
+#  it gain wins and stimulated emission runs away. Because a photon is a boson (its even
+#  turn is the identity, no occupation ceiling -- see bose_einstein_condensation.ep), the
+#  runaway pours every new photon into the SAME mode: the threshold folds up to the One,
+#  the single shared coherent state. One mode, all in step.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a sharp gain-equals-loss threshold at the half-One, above
+#  which one shared mode dominates. Measured: real lasers show a sharp threshold and, above
+#  it, coherent single-mode output -- the balance and the shared boson mode this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lasing threshold: gain equals loss at the self-antipodal half-One, 1/2.
+define lasing_threshold returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The threshold is self-antipodal: One - 1/2 = 1/2 (gain balances loss exactly).
+define threshold_is_balanced returning Bool:
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and lasing_threshold())
+    return fraction_is_equal(complement and lasing_threshold())
+
+# Above threshold the mode folds up to the One -- the single shared coherent state.
+define threshold_folds_to_one returning Fraction:
+    return fold_fraction(lasing_threshold())
+
+# Gain and loss sum to the whole at threshold: 1/2 + 1/2 = One.
+define gain_plus_loss returning Fraction:
+    set t to lasing_threshold()
+    return fraction_add(t and t)

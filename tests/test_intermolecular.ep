@@ -1,0 +1,16 @@
+import "../constants/intermolecular.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== intermolecular forces (a residual, one fold deeper) ==="
+    set ok to expect_equal("primary bond = 1/2" and fraction_to_text(primary_bond()) and "1/2")
+    set ok to expect_equal("intermolecular residual = 1/4 = (1/2)^2" and fraction_to_text(intermolecular_residual()) and "1/4")
+    set ok to expect_equal("residual folds up to the bond level (1/4 -> 1/2)" and fraction_to_text(residual_folds_to_bond()) and "1/2")
+    set ok to expect_equal("two residuals make a bond (1/4 + 1/4 = 1/2)" and fraction_to_text(two_residuals_make_a_bond()) and "1/2")
+    set ok to expect_equal("it reaches unison in two folds (second-order mark)" and fraction_to_text(residual_reaches_unison()) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,59 @@
+# ============================================================================
+#  INTERMOLECULAR FORCES  --  why molecules attract weakly, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Neutral molecules with no net charge still attract each other faintly -- the van der
+#  Waals force that lets gases condense, geckos climb glass, and proteins fold. It is much
+#  weaker than a chemical bond. Why weaker, and by how much? Forced: it is a RESIDUAL, one
+#  fold deeper than the bond.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A primary chemical bond is the half-One coupling, 1/2 (the shared-electron balance). A
+#  neutral molecule has no charge to offer at that level; what remains is a RESIDUAL -- a
+#  fleeting induced imbalance that couples one level deeper, at the quarter-One,
+#  1/4 = (1/2)^2. So the intermolecular coupling is 1/4, half the strength of the primary
+#  1/2 bond: two of them make a whole bond's worth (1/4 + 1/4 = 1/2). Being one fold
+#  deeper, it returns to unison in TWO folds (1/4 -> 1/2 -> 1) where the bond takes one --
+#  the mark of a second-order, residual effect, exactly like the Lamb shift sits below the
+#  gross spectrum.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the residual coupling is the quarter-One, one fold below
+#  the half-One bond, so intermolecular forces are markedly weaker than covalent bonds.
+#  Measured: van der Waals energies (a few kJ/mol) are roughly an order below covalent
+#  bond energies (hundreds of kJ/mol) -- the deeper, residual coupling this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The primary bond coupling: the half-One, 1/2.
+define primary_bond returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The intermolecular residual: the quarter-One, 1/4 = (1/2)^2 (one fold deeper).
+define intermolecular_residual returning Fraction:
+    set half to primary_bond()
+    return fraction_multiply(half and half)
+
+# The residual is one fold below the bond: fold(1/4) = 1/2 (it rises to the bond level).
+define residual_folds_to_bond returning Fraction:
+    return fold_fraction(intermolecular_residual())
+
+# Two residuals make one bond's worth: 1/4 + 1/4 = 1/2.
+define two_residuals_make_a_bond returning Fraction:
+    set r to intermolecular_residual()
+    return fraction_add(r and r)
+
+# It takes two folds to reach unison (residual -> bond -> One), the second-order mark.
+define residual_reaches_unison returning Fraction:
+    return fold_fraction(residual_folds_to_bond())

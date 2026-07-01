@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-111 suites, 670 forced checks, 0 failures). It needs nothing but a C compiler. Use
+116 suites, 693 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3135,6 +3135,54 @@ the measured input.
 
 ---
 
+### Step 109 — The acceleration transition (when the universe sped up)
+
+**File:** `constants/acceleration_transition.ep`
+
+**What it does.** Today's budget is vacuum `2/3`, matter `1/3` (ratio exactly `2`). Matter
+dilutes as `1/a³` while vacuum does not, so two thresholds fall out: matter–vacuum equality
+at `a³ = matter/vacuum = 1/2`, and acceleration onset (`q = 0`) at `a³ = matter/(2·vacuum) =
+1/4`. Before that, gravity decelerates; after, vacuum accelerates. Forced `a³ = 1/4` →
+`z ≈ 0.59`, matching the observed deceleration-to-acceleration transition at `z ≈ 0.6` (SNe Ia).
+
+### Step 110 — The coupled lattice (presence spreads and is conserved)
+
+**File:** `constants/coupled_lattice.ep`
+
+**What it does.** A site keeps half its presence and passes a quarter to each neighbour —
+weights `1/2, 1/4, 1/4` that **sum to One**, so presence is conserved (never lost to the
+No-Zero floor, never manufactured). A symmetric bump `{1/4, 1/2, 1/4}` relaxes its centre to
+`3/8` as it spreads — the conservative, local diffusion/wave kernel (the discrete Laplacian).
+
+### Step 111 — The laser (light above threshold turns coherent)
+
+**File:** `constants/laser.ep`
+
+**What it does.** Lasing is gain vs loss; the threshold is the self-antipodal balance `1/2`
+(gain equals loss). Below it the light stays incoherent; above it stimulated emission runs
+away, and because a photon is a boson (uncapped occupation), the runaway pours every photon
+into the **same** mode — the threshold folds up to the One, one shared coherent state.
+
+### Step 112 — Intermolecular forces (a residual, one fold deeper)
+
+**File:** `constants/intermolecular.ep`
+
+**What it does.** A primary bond is the half-One `1/2`. A neutral molecule offers nothing at
+that level; what remains is a **residual** one fold deeper — the quarter-One `1/4 = (1/2)²` —
+so van der Waals coupling is markedly weaker than a covalent bond (two residuals `= 1/2`, one
+bond's worth) and takes two folds to reach unison, the second-order mark.
+
+### Step 113 — The generation ladder (three sites = the vacuum's colour preimages)
+
+**File:** `constants/generation_ladder.ep`
+
+**What it does.** The colour fold is 3-to-one, so the displaced vacuum `1/2` has exactly
+three preimages — `(1/2 + k)/3` for `k = 0,1,2` = `1/6, 1/2, 5/6`. Those are the three
+generation sites (three because the colour fibre is three), on a uniform `binary·colour = 6`
+site ladder; their squares are the charged-lepton mass shares. Where the three generations sit.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3385,6 +3433,16 @@ runs):**
   every radius, which visible matter alone cannot do → a dark halo.
 - Step 108 — the hierarchy problem: scales are discrete binary rungs (`1/2^N`, whole N),
   so nothing is fine-tuned; the weak rung `N = 56` is comparison-side.
+- Step 109 — the acceleration transition: the `2/3 : 1/3` budget puts acceleration onset
+  (`q=0`) at `a³ = matter/(2·vacuum) = 1/4` → `z ≈ 0.6`, the observed transition.
+- Step 110 — the coupled lattice: the update weights `1/2, 1/4, 1/4` sum to One (presence
+  conserved); a symmetric bump's centre relaxes to `3/8` — the discrete Laplacian.
+- Step 111 — the laser: gain=loss threshold at `1/2`; above it a boson runaway pours every
+  photon into the One shared mode (coherent single-mode output).
+- Step 112 — intermolecular forces: the van der Waals residual is `1/4 = (1/2)²`, one fold
+  below the `1/2` bond — weaker, second-order (two folds to unison).
+- Step 113 — the generation ladder: the three generations sit at the colour-fold preimages
+  of the vacuum `1/2` — `1/6, 1/2, 5/6` — on a `binary·colour = 6` site ladder.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
