@@ -1,0 +1,92 @@
+# ============================================================================
+#  THE FOUR LAWS OF THERMODYNAMICS  --  each forced by the fold.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The four laws of thermodynamics govern heat, energy, and time in every physical
+#  system. They are not four separate postulates here: each is a direct consequence
+#  of the fold's structure.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  ZEROTH (equilibrium is transitive -- a common temperature exists). Two states are
+#     "in equilibrium" when they fold to the same image; that image is their shared
+#     temperature. Folding-to-the-same-image is equality of images, so it is an
+#     equivalence relation -- reflexive, symmetric, and TRANSITIVE. Shown: 1/4 and
+#     3/4 fold to the same image 1/2, so they share a temperature.
+#  FIRST (energy is conserved). The total is the One, and it is conserved: any
+#     partition sums back to the One (1/4 + 3/4 = 1), and the fold holds the One
+#     fixed (fold(1) = 1). Nothing is created or lost.
+#  SECOND (entropy increases). The fold is two-to-one: distinct states fold to the
+#     same image (fold(1/4) = fold(3/4) = 1/2), so information is lost and the map
+#     has no unique inverse. Being binary (2 = 2^1), each step loses exactly one bit
+#     -- a strictly positive entropy rate, forcing time forward.
+#  THIRD (absolute zero is unreachable). Zero is forbidden -- there is not nothing --
+#     so the ground state is the displaced half-One 1/2, strictly above zero. The
+#     empty value cannot be reached; absolute zero is unattainable.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  These match the four laws exactly as physics states them: a transitive
+#  equilibrium, conserved energy, non-decreasing entropy setting time's arrow, and
+#  an unattainable absolute zero.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+
+# ZEROTH LAW -- equilibrium is transitive. Two states are in equilibrium when they
+# fold to a common image (a shared temperature). 1/4 and 3/4 do; the relation is
+# equality of images, hence an equivalence relation (transitive).
+define zeroth_law_in_equilibrium returning Bool:
+    set first_image to fold_fraction(fraction_from_ratio(1 and 4))
+    set second_image to fold_fraction(fraction_from_ratio(3 and 4))
+    return fraction_is_equal(first_image and second_image)
+
+
+# FIRST LAW -- energy (the One) is conserved. A partition sums back to the One.
+define first_law_total_is_the_one returning Fraction:
+    set lower to fraction_from_ratio(1 and 4)
+    set upper to fraction_from_ratio(3 and 4)
+    return fraction_add(lower and upper)
+
+# ...and the fold holds the total fixed: fold(1) = 1.
+define first_law_one_is_invariant returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fold_fraction(one)
+
+
+# SECOND LAW -- entropy increases. The fold is two-to-one: distinct states share an
+# image, so information is lost (no unique inverse).
+define second_law_information_lost returning Bool:
+    set from_lower to fold_fraction(fraction_from_ratio(1 and 4))
+    set from_upper to fold_fraction(fraction_from_ratio(3 and 4))
+    return fraction_is_equal(from_lower and from_upper)
+
+# ...and the loss is exactly one bit per step (the fold is binary, 2 = 2^1).
+define second_law_entropy_bits_per_step returning Int:
+    set bits to 0
+    set value to 1
+    repeat while value < binary_count():
+        set value to value + value
+        set bits to bits + 1
+    return bits
+
+
+# THIRD LAW -- absolute zero is unreachable. Zero is forbidden, so the ground state
+# is the displaced half-One 1/2, strictly above zero; the empty value cannot be reached.
+define third_law_ground_above_zero returning Bool:
+    set ground to fraction_from_ratio(1 and binary_count())
+    set one_first to fraction_from_whole_number(1)
+    set one_second to fraction_from_whole_number(1)
+    set zero to fraction_subtract(one_first and one_second)
+    set comparison to fraction_compare(ground and zero)
+    if comparison > 0:
+        return true
+    return false

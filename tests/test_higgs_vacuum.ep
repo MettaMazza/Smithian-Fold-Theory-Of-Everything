@@ -1,0 +1,31 @@
+# Confirms the Higgs vacuum is forced: the displaced half-One 1/2 -- nonzero, its own
+# antipode, folding to the One -- the vacuum that gives mass.
+import "../constants/higgs_vacuum.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the Higgs vacuum ==="
+
+    set ok to expect_equal("vacuum value = displaced half-One = 1/2" and fraction_to_text(higgs_vacuum_value()) and "1/2")
+    set ok to expect_equal("the forcing equation: 1/2 + 1/2 = the One" and fraction_to_text(vacuum_doubles_to_one()) and "1")
+    set ok to expect_true("the vacuum is strictly nonzero (not the empty value)" and vacuum_is_nonzero())
+    set ok to expect_equal("the vacuum is its own antipode: One - 1/2 = 1/2" and fraction_to_text(vacuum_is_self_antipodal()) and "1/2")
+    set ok to expect_equal("the vacuum folds up to the One: fold(1/2) = 1" and fraction_to_text(vacuum_folds_to_one()) and "1")
+
+    display "=== done ==="
+    return 0

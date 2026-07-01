@@ -1,0 +1,70 @@
+# ============================================================================
+#  THE HIGGS VACUUM  --  why the vacuum is not empty, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Particles have mass because the vacuum is not empty: the Higgs field sits at a
+#  nonzero value everywhere (its "vacuum expectation value"), and things get mass by
+#  coupling to it. Why is the vacuum nonzero at all, and why there? Forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Zero is forbidden -- there is not nothing -- so the vacuum cannot sit at the empty
+#  value. It must return to unison under the fold, so it is the unique value whose
+#  double is the One: x + x = One gives x = One/binary = 1/2 (a unique quotient, so
+#  no other value works). This displaced ground is:
+#     strictly positive (not the empty value) -- the vacuum is genuinely nonzero;
+#     its own antipode (One - 1/2 = 1/2) -- the balanced, symmetric ground;
+#     a fold-preimage of the One (fold(1/2) = 1) -- it rises to unison.
+#  So the Higgs vacuum value is the displaced half-One, and mass is coupling to it.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The Higgs vacuum value is measured nonzero (about 246 GeV in physical units). The
+#  forced content here is structural -- that the vacuum is DISPLACED from zero to the
+#  balanced half-One, which is why there is mass at all; its physical energy scale is
+#  a separate quantity, not this ratio.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The Higgs vacuum value: the displaced ground, the unique value whose double is the
+# One, x = One/binary = 1/2. Solved, not assumed.
+define higgs_vacuum_value returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set binary to fraction_from_whole_number(binary_count())
+    return fraction_divide(one and binary)
+
+# The equation that forces it: the vacuum doubled is the One, 1/2 + 1/2 = 1.
+define vacuum_doubles_to_one returning Fraction:
+    set first to higgs_vacuum_value()
+    set second to higgs_vacuum_value()
+    return fraction_add(first and second)
+
+# The vacuum is strictly above zero -- genuinely nonzero, not the empty value.
+define vacuum_is_nonzero returning Bool:
+    set vacuum to higgs_vacuum_value()
+    set one_first to fraction_from_whole_number(1)
+    set one_second to fraction_from_whole_number(1)
+    set zero to fraction_subtract(one_first and one_second)
+    set comparison to fraction_compare(vacuum and zero)
+    if comparison > 0:
+        return true
+    return false
+
+# The vacuum is its own antipode: One - 1/2 = 1/2 (the balanced ground).
+define vacuum_is_self_antipodal returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set vacuum to higgs_vacuum_value()
+    return fraction_subtract(one and vacuum)
+
+# The vacuum folds up to the One: fold(1/2) = 1.
+define vacuum_folds_to_one returning Fraction:
+    set vacuum to higgs_vacuum_value()
+    return fold_fraction(vacuum)

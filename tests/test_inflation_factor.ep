@@ -1,0 +1,21 @@
+# Confirms the fold's inflation factor: the generation covering depth is 5 (forced
+# two ways) and the preimage tree of the One there has 2^5 = 32 leaves.
+import "../constants/inflation_factor.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== the inflation factor ==="
+
+    set ok to expect_number("generation covering depth (binary+colour = cover(27))" and inflation_depth() and 5)
+    set ok to expect_number("inflation expansion factor (2^5 preimages of the One)" and inflation_expansion_factor() and 32)
+
+    display "=== done ==="
+    return 0

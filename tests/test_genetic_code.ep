@@ -1,0 +1,22 @@
+# Confirms the genetic code's counts are forced: 4 bases (binary^2), triplet codons
+# (colour), 64 codons (4^3 = binary^(binary*colour)).
+import "../constants/genetic_code.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== the genetic code ==="
+
+    set ok to expect_number("nucleotide bases (a two-bit choice, binary^2)" and nucleotide_base_count() and 4)
+    set ok to expect_number("codon length (a triplet, colour)" and codon_length() and 3)
+    set ok to expect_number("codons = 4^3 = binary^(binary*colour) (forced two ways)" and codon_count() and 64)
+
+    display "=== done ==="
+    return 0

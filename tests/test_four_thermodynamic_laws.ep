@@ -1,0 +1,43 @@
+# Confirms each of the four laws of thermodynamics is forced by the fold: a
+# transitive equilibrium, conserved energy (the One), non-decreasing entropy, and
+# an unreachable absolute zero.
+import "../constants/four_thermodynamic_laws.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the four laws of thermodynamics ==="
+
+    display "--- zeroth: equilibrium is transitive (a shared temperature) ---"
+    set ok to expect_true("1/4 and 3/4 fold to a common image (in equilibrium)" and zeroth_law_in_equilibrium())
+
+    display "--- first: energy (the One) is conserved ---"
+    set ok to expect_equal("a partition sums back to the One (1/4 + 3/4 = 1)" and fraction_to_text(first_law_total_is_the_one()) and "1")
+    set ok to expect_equal("the fold holds the One fixed: fold(1) = 1" and fraction_to_text(first_law_one_is_invariant()) and "1")
+
+    display "--- second: entropy increases ---"
+    set ok to expect_true("distinct states share an image (information is lost)" and second_law_information_lost())
+    set ok to expect_number("entropy lost per step (bits)" and second_law_entropy_bits_per_step() and 1)
+
+    display "--- third: absolute zero is unreachable ---"
+    set ok to expect_true("the ground state 1/2 is strictly above zero" and third_law_ground_above_zero())
+
+    display "=== done ==="
+    return 0

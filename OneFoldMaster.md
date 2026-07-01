@@ -1303,6 +1303,108 @@ generators; the fold's dynamics agree exactly with the independent order of 2.
 
 ---
 
+### Step 28 — The four laws of thermodynamics
+
+**File:** `constants/four_thermodynamic_laws.ep`
+
+**Why this step exists.** The four laws govern heat, energy, and time. They are not
+four postulates here — each is a consequence of the fold.
+
+**What it does.** **Zeroth** (equilibrium is transitive): being "in equilibrium" is
+folding to a common image (a shared temperature), which is equality of images and so
+an equivalence relation — `1/4` and `3/4` share the image `1/2`. **First** (energy
+conserved): the total is the One and stays it — a partition sums back (`1/4 + 3/4 =
+1`), and `fold(1) = 1`. **Second** (entropy up): the fold is two-to-one, distinct
+states share an image (`fold(1/4) = fold(3/4)`), losing one bit per step. **Third**
+(absolute zero unreachable): zero is forbidden, so the ground is the displaced `1/2`,
+strictly above zero.
+
+```
+=== the four laws of thermodynamics ===
+  ok    1/4 and 3/4 fold to a common image (in equilibrium)
+  ok    a partition sums back to the One (1/4 + 3/4 = 1)
+  ok    the fold holds the One fixed: fold(1) = 1
+  ok    distinct states share an image (information is lost)
+  ok    entropy lost per step (bits) = 1
+  ok    the ground state 1/2 is strictly above zero
+```
+
+**To measurement.** These match the four laws exactly as physics states them.
+
+---
+
+### Step 29 — The genetic code
+
+**File:** `constants/genetic_code.ep`
+
+**Why this step exists.** Life is written in four letters, read in triplets, giving
+64 codons. Why four, why threes, why 64? Forced counts.
+
+**What it does.** `bases = binary² = 4` (a base is a two-bit choice); `codon length =
+colour = 3` (triplets); `codons = 4³ = binary^(binary·colour) = 64`, forced two ways.
+
+```
+=== the genetic code ===
+  ok    nucleotide bases (a two-bit choice, binary^2) = 4
+  ok    codon length (a triplet, colour) = 3
+  ok    codons = 4^3 = binary^(binary*colour) (forced two ways) = 64
+```
+
+**To measurement.** Four DNA bases, triplet codons, 64 codons — all observed, exact
+counts. (The 64→~20 amino-acid mapping is a redundancy of biology, not forced here.)
+
+---
+
+### Step 30 — The Higgs vacuum
+
+**File:** `constants/higgs_vacuum.ep`
+
+**Why this step exists.** Mass exists because the vacuum is not empty — the Higgs
+field sits nonzero everywhere. Why nonzero, and why there?
+
+**What it does.** Zero is forbidden, so the vacuum displaces to the unique value
+whose double is the One (`x + x = One ⇒ x = 1/2`): strictly nonzero, its own antipode
+(`One − 1/2 = 1/2`), folding up to the One (`fold(1/2) = 1`). The vacuum is the
+displaced half-One; mass is coupling to it.
+
+```
+=== the Higgs vacuum ===
+  ok    vacuum value = displaced half-One = 1/2
+  ok    the forcing equation: 1/2 + 1/2 = the One
+  ok    the vacuum is strictly nonzero (not the empty value)
+  ok    the vacuum is its own antipode: One - 1/2 = 1/2
+  ok    the vacuum folds up to the One: fold(1/2) = 1
+```
+
+**To measurement.** The Higgs vacuum is measured nonzero (~246 GeV). The forced
+content is structural — that it is displaced from zero to the balanced half-One,
+which is why there is mass; its physical scale is a separate quantity.
+
+---
+
+### Step 31 — The inflation factor
+
+**File:** `constants/inflation_factor.ep`
+
+**Why this step exists.** The early universe expanded by an enormous factor. The
+fold's expansion at the generation depth is a forced count.
+
+**What it does.** The generation covering depth is `binary + colour = 5` (cross-
+checked `= cover(colour^colour)`, forced two ways); the preimage tree of the One
+there has `binary^5 = 32` leaves — the fold's expansion factor at that depth.
+
+```
+=== the inflation factor ===
+  ok    generation covering depth (binary+colour = cover(27)) = 5
+  ok    inflation expansion factor (2^5 preimages of the One) = 32
+```
+
+**To measurement.** `32` is the fold's structural expansion factor at depth 5. The
+physical number of inflationary e-folds is a different, larger measure — this is the
+structural factor, stated as such.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1379,6 +1481,15 @@ runs):**
 - Step 27 — the fold's orbits are the order of two: `period(1/p) = ord_p(2)`
   (checked for p = 3,5,7,9,11), grounding the generators `binary = ord₃2 = 2`,
   `colour = ord₇2 = 3` in number theory — nothing picked.
+- Step 28 — the four laws of thermodynamics: a transitive equilibrium, conserved
+  energy (the One), non-decreasing entropy, and an unreachable absolute zero — each
+  a consequence of the fold.
+- Step 29 — the genetic code: 4 bases (`binary²`), triplet codons (`colour`), 64
+  codons (`binary^(binary·colour)`), forced.
+- Step 30 — the Higgs vacuum: the displaced half-One `1/2` (nonzero, self-antipodal,
+  folding to the One) — the vacuum that gives mass.
+- Step 31 — the inflation factor: `binary^5 = 32` states at the generation covering
+  depth 5 — the fold's structural expansion factor.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

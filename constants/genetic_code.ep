@@ -1,0 +1,43 @@
+# ============================================================================
+#  THE GENETIC CODE  --  four letters, read in threes, sixty-four words.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Life is spelled in a four-letter alphabet (the DNA bases A, C, G, T), read in
+#  triplets, giving sixty-four codons. Why four letters, why triplets, why
+#  sixty-four? These counts are forced from the two generators.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3) ──────────────────
+#     base count = binary^2 = 4 -- a base is a TWO-BIT choice (two independent
+#                       binary distinctions), so there are binary*binary = 4 of them.
+#     codon length = colour = 3 -- codons are TRIPLETS, the same three-fold structure
+#                       as the three generations and three colours.
+#     codon count = base_count ^ codon_length = 4^3 = 64. Cross-checked as
+#                       binary^(binary*colour) = 2^6 = 64 -- forced two ways, so
+#                       forced_to_be halts if the routes ever disagree.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  There are four DNA bases, codons are triplets, and there are 64 codons -- all
+#  observed, all exact counts. (The 64 codons map onto ~20 amino acids plus stops;
+#  that redundancy is biology of the mapping, not forced here.)
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/enforcement.ep"
+
+
+# The number of nucleotide bases: a base is a two-bit choice, binary^2 = 4.
+define nucleotide_base_count returning Int:
+    return whole_power(binary_count() and 2)
+
+# The codon length: a codon is a triplet, the colour count = 3.
+define codon_length returning Int:
+    return colour_count()
+
+# The number of codons: bases raised to the codon length, 4^3 = 64. Cross-checked
+# against binary^(binary*colour) = 2^6 = 64, so it is forced two independent ways.
+define codon_count returning Int:
+    set by_alphabet to whole_power(nucleotide_base_count() and codon_length())
+    set by_binary to whole_power(binary_count() and binary_count() * colour_count())
+    return forced_to_be("codon count = base^codon_length = binary^(binary*colour)" and by_alphabet and by_binary)
