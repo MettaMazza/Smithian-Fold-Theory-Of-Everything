@@ -1340,7 +1340,12 @@ static void ep_gc_scan_thread_stacks(void) {
     for (int t = 0; t < ep_num_threads; t++) {
         if (!ep_thread_active[t]) continue;
         if (!ep_thread_tops[t]) continue;
-        void** start = (void**)*ep_thread_tops[t];
+        /* The published top comes from a char local, so it may not be pointer-aligned;
+           mask DOWN to 8 bytes. Aligning down only widens the conservative window by a
+           few harmless bytes — aligning up could skip the slot holding a live root.
+           Unaligned void** dereferences are UB and produce a skewed scan window on
+           strict platforms (caught by valgrind on Linux). */
+        void** start = (void**)((uintptr_t)*ep_thread_tops[t] & ~(uintptr_t)7);
         void** end = (void**)ep_thread_bottoms[t];
         if (!start || !end) continue;
         if (start > end) { void** tmp = start; start = end; end = tmp; }
@@ -1442,7 +1447,11 @@ static void ep_gc_scan_own_stack_minor(void) {
     char* a = (char*)(void*)&_marker;
     char* b = (char*)(void*)&_regs;
     char* lo = (a < b) ? a : b;
-    void** start = (void**)lo;
+    /* lo comes from a char local, so it may not be pointer-aligned; mask DOWN to 8
+       bytes. Aligning down only widens the conservative window by a few harmless
+       bytes — aligning up could skip the slot holding a live root. Unaligned void**
+       dereferences are UB and skew the scan window on strict platforms (valgrind). */
+    void** start = (void**)((uintptr_t)lo & ~(uintptr_t)7);
     void** end = (void**)bottom;
     if (start > end) { void** tmp = start; start = end; end = tmp; }
     for (void** cur = start; cur < end; cur++) {
@@ -4932,14 +4941,14 @@ L_cleanup:
 }
 
 long long spatial_dimensions() {
-    long long upper = 0;
-    long long found = 0;
-    long long candidate = 0;
     long long by_colour = 0;
+    long long candidate = 0;
+    long long found = 0;
+    long long upper = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&found);
     ep_gc_push_root(&by_colour);
+    ep_gc_push_root(&found);
 
     ep_gc_maybe_collect();
 
@@ -4987,9 +4996,9 @@ L_cleanup:
 }
 
 long long smallest_fold_period_above(long long threshold) {
+    long long best = 0;
     long long n = 0;
     long long period = 0;
-    long long best = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&n);
@@ -5071,8 +5080,8 @@ L_cleanup:
 }
 
 long long fold_period_of_unit_fraction(long long n) {
-    long long value = 0;
     long long count = 0;
+    long long value = 0;
     long long ret_val = 0;
 
     value = (2 % n);
@@ -5102,15 +5111,15 @@ L_cleanup:
 }
 
 long long ratio_to_decimal_text(long long numerator, long long denominator, long long places) {
+    long long fractional = 0;
+    long long place = 0;
     long long remainder = 0;
     long long whole_part = 0;
-    long long place = 0;
-    long long fractional = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&fractional);
     ep_gc_push_root(&remainder);
     ep_gc_push_root(&whole_part);
-    ep_gc_push_root(&fractional);
     ep_gc_push_root(&denominator);
 
     ep_gc_maybe_collect();
