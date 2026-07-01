@@ -1,0 +1,37 @@
+# Confirms the fold's orbit period on 1/p equals the multiplicative order of 2 mod p
+# (checked independently for p = 3, 5, 7, 9, 11), and that the two generators are
+# the first two values of this order (binary = ord_3 2 = 2, colour = ord_7 2 = 3).
+import "../constants/fold_orbit_order.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define main:
+    display "=== the fold's orbits are the order of two ==="
+
+    display "--- order of 2 mod p, computed by plain arithmetic ---"
+    set ok to expect_number("order of 2 mod 3" and multiplicative_order_of_two(3) and 2)
+    set ok to expect_number("order of 2 mod 5" and multiplicative_order_of_two(5) and 4)
+    set ok to expect_number("order of 2 mod 7" and multiplicative_order_of_two(7) and 3)
+    set ok to expect_number("order of 2 mod 9" and multiplicative_order_of_two(9) and 6)
+    set ok to expect_number("order of 2 mod 11" and multiplicative_order_of_two(11) and 10)
+
+    display "--- the fold-orbit period matches the order (forced_to_be halts otherwise) ---"
+    set ok to expect_number("period(1/3) = order (both routes agree)" and fold_period_matches_order(3) and 2)
+    set ok to expect_number("period(1/5) = order" and fold_period_matches_order(5) and 4)
+    set ok to expect_number("period(1/7) = order" and fold_period_matches_order(7) and 3)
+    set ok to expect_number("period(1/9) = order" and fold_period_matches_order(9) and 6)
+    set ok to expect_number("period(1/11) = order" and fold_period_matches_order(11) and 10)
+
+    display "--- the two generators are the first two values of this order ---"
+    set ok to expect_number("binary = order of 2 mod 3" and binary_is_order_of_two_mod_three() and 2)
+    set ok to expect_number("colour = order of 2 mod 7" and colour_is_order_of_two_mod_seven() and 3)
+
+    display "=== done ==="
+    return 0

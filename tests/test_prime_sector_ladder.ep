@@ -1,0 +1,46 @@
+# Confirms the prime-sector ladder: exactly four sectors {2,3,5,7} bounded by the
+# deepest covering depth 7 (the next prime, 11, is beyond it); each is a confining
+# force by one criterion (partition + carry); mediators p^2-1 give 3, 8, 24, 48.
+import "../constants/prime_sector_ladder.ep"
+
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the prime-sector ladder ==="
+
+    set ok to expect_number("deepest covering depth (the ceiling)" and deepest_covering_depth() and 7)
+    set ok to expect_number("number of prime sectors {2,3,5,7}" and prime_sector_count() and 4)
+    set ok to expect_number("first prime beyond the ceiling (no fifth sector)" and first_prime_beyond_ceiling() and 11)
+
+    display "--- each sector confines by one criterion (partition + carry) ---"
+    set ok to expect_true("sector 2: partition holds" and sector_partition_holds(2))
+    set ok to expect_true("sector 2: carry closes" and sector_carry_closes(2))
+    set ok to expect_true("sector 3: partition holds" and sector_partition_holds(3))
+    set ok to expect_true("sector 3: carry closes" and sector_carry_closes(3))
+    set ok to expect_true("sector 5 (new): partition holds" and sector_partition_holds(5))
+    set ok to expect_true("sector 5 (new): carry closes" and sector_carry_closes(5))
+    set ok to expect_true("sector 7 (new): partition holds" and sector_partition_holds(7))
+    set ok to expect_true("sector 7 (new): carry closes" and sector_carry_closes(7))
+
+    display "--- mediator counts p^2 - 1 ---"
+    set ok to expect_number("sector 2 mediators" and sector_mediator_count(2) and 3)
+    set ok to expect_number("sector 3 mediators (gluons)" and sector_mediator_count(3) and 8)
+    set ok to expect_number("sector 5 mediators (new force)" and sector_mediator_count(5) and 24)
+    set ok to expect_number("sector 7 mediators (new force)" and sector_mediator_count(7) and 48)
+
+    display "=== done ==="
+    return 0

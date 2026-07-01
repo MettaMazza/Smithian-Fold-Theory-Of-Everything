@@ -1240,6 +1240,69 @@ foundation — the One, the domain, and the fold — is forced and machine-verif
 
 ---
 
+### Step 26 — The prime-sector ladder (how many forces, and two that are new)
+
+**File:** `constants/prime_sector_ladder.ep`
+
+**Why this step exists.** Each fundamental force is a "sector" — a charge in `p`
+kinds that binds because the kinds tile back to unison. The theory forces which
+sectors exist and how many.
+
+**What it does.** A sector's label `p` must be **prime** (a composite shortfall
+factors and cannot carry-close as one sector) and at or below the **deepest
+covering depth `= 7`** (forced two ways). The primes from 2 to 7 are exactly
+`{2, 3, 5, 7}` (each checked in code) — **four** sectors; the next prime, 11, is
+beyond 7, so there is no fifth. Each is a confining force by one criterion:
+partition `(p−1)/p + 1/p = 1` and carry `(1/p)·p = 1`; mediators `p²−1` give
+`3, 8, 24, 48`. Sectors 2 and 3 are the known forces; **5 and 7 are forced
+predictions** — new confining forces not yet identified.
+
+```
+=== the prime-sector ladder ===
+  ok    deepest covering depth (the ceiling) = 7
+  ok    number of prime sectors {2,3,5,7} = 4
+  ok    first prime beyond the ceiling (no fifth sector) = 11
+  ...  (partition + carry hold for sectors 2, 3, 5, 7)
+  ok    sector 3 mediators (gluons) = 8
+  ok    sector 5 mediators (new force) = 24
+  ok    sector 7 mediators (new force) = 48
+```
+
+**To measurement.** The observed forces sit at the low sectors; the count being
+small and closed matches the absence of an endless tower of forces. Sectors 5 and
+7 are predictions awaiting experiment.
+
+---
+
+### Step 27 — The fold's orbits are the order of two
+
+**File:** `constants/fold_orbit_order.ep`
+
+**Why this step exists.** This is the arithmetic *underneath* the two generators.
+The fold is doubling; its orbit on `1/p` cycles, and the cycle length is a
+classical number-theory quantity — so the generators are read off the primes, not
+picked.
+
+**What it does.** Because the fold sends `x → 2x mod 1`, the orbit of `1/p` returns
+after exactly as many steps as it takes `2^k` to leave remainder 1 on division by
+`p` — i.e. the **multiplicative order of 2 mod p**. Both sides are computed
+independently and checked equal for `p = 3, 5, 7, 9, 11` (`forced_to_be` halts on
+any mismatch). The generators are the first two values: `binary = ord₃2 = 2`,
+`colour = ord₇2 = 3`.
+
+```
+=== the fold's orbits are the order of two ===
+  ok    order of 2 mod 3 = 2   ...   order of 2 mod 11 = 10
+  ok    period(1/7) = order = 3   (fold and arithmetic agree)
+  ok    binary = order of 2 mod 3 = 2
+  ok    colour = order of 2 mod 7 = 3
+```
+
+**To measurement.** Nothing to measure — this is the arithmetic that grounds the
+generators; the fold's dynamics agree exactly with the independent order of 2.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -1310,6 +1373,12 @@ runs):**
 - Step 24 — the axiom is a theorem: given only "not nothing", the One, the domain
   `(0,1]`, and the fold are forced — zero parameters, and the single premise
   proves itself (arguably zero axioms).
+- Step 26 — the prime-sector ladder: the force-sectors are exactly the primes
+  `{2,3,5,7}`, bounded by the deepest covering depth 7 (11 is beyond) — four forces,
+  two of them (5, 7) forced predictions; mediators `p²−1` = 3, 8, 24, 48.
+- Step 27 — the fold's orbits are the order of two: `period(1/p) = ord_p(2)`
+  (checked for p = 3,5,7,9,11), grounding the generators `binary = ord₃2 = 2`,
+  `colour = ord₇2 = 3` in number theory — nothing picked.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
