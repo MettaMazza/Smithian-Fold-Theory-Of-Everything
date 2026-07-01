@@ -2193,6 +2193,75 @@ carrier feeds its field (linear → confined), the chargeless one does not.
 
 ---
 
+### Step 64 — Fission and fusion (one peak of stability)
+
+**File:** `constants/fission_fusion.ep`
+
+**What it does.** The peak of binding is the most-bound state — the fold's fixed
+point, the One. A less-bound nucleus sits below it and folds *up* toward it: a light
+one at `1/4` climbs `1/4 → 1/2 → 1` (fusion), and a heavy one gains binding the same
+way shedding toward the peak (fission). Both directions move toward the one maximum,
+releasing the binding gained; the reaction crosses the `1/2` balance (Coulomb barrier).
+
+```
+=== fission and fusion ===
+  ok    peak of stability = the One (max binding)
+  ok    light nucleus = 1/4 ; fusion reaches the peak
+  ok    binding increases toward the peak (energy released)
+  ok    reaction barrier = 1/2 (Coulomb barrier)
+```
+
+**To measurement.** Binding per nucleon rises to a single maximum (iron) and falls
+either side; fusion below and fission above both release energy — the forced
+single-peak (the One), the climb toward it, and the `1/2` barrier.
+
+---
+
+### Step 65 — The equivalence principle (gravitational redshift)
+
+**File:** `constants/equivalence_redshift.ep`
+
+**What it does.** With `g = 1/4`, `h = 1` (`c = 1`), the gravitational redshift over
+the height is `z = g·h = 1/4`; the *same* setup as acceleration gives an acquired
+speed `v = g·h` and Doppler shift `z = v = 1/4`. The two are identical —
+`z_gravity = g·h = z_doppler` — which is the equivalence principle. In the weak field
+the redshift folds linearly in height, `fold(g·h) = fold(g)·h`.
+
+```
+=== the equivalence principle (redshift) ===
+  ok    gravitational redshift z = g*h = 1/4
+  ok    Doppler shift z_doppler = v = 1/4
+  ok    EQUIVALENCE: gravitational redshift = acceleration Doppler shift
+  ok    weak-field redshift folds linearly in height
+```
+
+**To measurement.** Gravitational redshift equals the equivalent acceleration's
+Doppler shift (Pound–Rebka, to 1%) — the forced identity `z_gravity = g·h = z_doppler`.
+
+---
+
+### Step 66 — Radioactive decay (halving each half-life)
+
+**File:** `constants/radioactive_decay.ep`
+
+**What it does.** A half-life is one fold step, and the fold is two-to-one, so the
+surviving fraction after `k` half-lives is `1/b^k = 1/2^k`: `1, 1/2, 1/4, 1/8, …`,
+each half-life multiplying the survivors by `1/2`. One bit is lost per half-life (the
+non-injective fold, the arrow of time), and the count never reaches zero (No-Zero).
+
+```
+=== radioactive decay ===
+  ok    remaining after 0..3 half-lives = 1, 1/2, 1/4, 1/8
+  ok    each half-life halves the survivors
+  ok    decay never reaches zero (No-Zero)
+```
+
+**To measurement.** Every radioactive species halves in a fixed half-life
+(exponential decay, carbon dating) — the forced `remaining(k) = 1/2^k`, each a binary
+halving; the half-life in seconds is a measured per-species value.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2348,6 +2417,12 @@ runs):**
   forbidden zero.
 - Step 63 — the flux tube: the gluon carries colour and self-feeds, so charge grows
   with separation (linear potential → confinement); the chargeless photon does not.
+- Step 64 — fission and fusion: the binding peak is the One; both fusion (light) and
+  fission (heavy) fold toward it, releasing energy, across the `1/2` Coulomb barrier.
+- Step 65 — the equivalence principle: gravitational redshift `z = g·h` equals the
+  acceleration's Doppler shift `v = g·h` — gravity and acceleration indistinguishable.
+- Step 66 — radioactive decay: the surviving fraction after `k` half-lives is
+  `1/b^k = 1/2^k`, each half-life a binary halving, never reaching zero.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

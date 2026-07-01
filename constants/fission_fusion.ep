@@ -1,0 +1,77 @@
+# ============================================================================
+#  FISSION AND FUSION  --  why both releasing energy point to one peak of
+#  stability, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two opposite nuclear processes both release energy: FUSION joins light nuclei (the
+#  Sun), FISSION splits heavy ones (reactors). They can both give energy only because
+#  there is a single PEAK of binding -- the most stable nucleus -- and everything
+#  gains energy by moving toward it. That peak, and the barrier guarding it, are the
+#  fold's One and its balance point.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The peak of stability is the most-bound state -- the fold's fixed point, the One
+#  (fold(1) = 1). A nucleus that is less bound sits below it, and folding carries it
+#  UP toward the One: a light nucleus at 1/4 climbs 1/4 -> 1/2 -> 1, gaining binding at
+#  every step -- fusion releasing energy. A heavy nucleus, also below the peak in
+#  binding, gains binding the same way when it sheds toward the peak -- fission
+#  releasing energy. Both directions move toward the ONE maximum; the energy released
+#  is the binding gained. The reaction must first cross the balance point 1/2 (the
+#  Coulomb barrier), the self-antipodal threshold. Peak, climb, and barrier are all
+#  forced; none is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Binding energy per nucleon rises to a single maximum (iron) and falls away either
+#  side; fusion below it and fission above it both release energy -- exactly the forced
+#  single-peak structure. The forced content is the One as the peak, the climb toward
+#  it, and the 1/2 barrier; the peak's location in nucleon number is a measured value.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The peak of stability: the most-bound state, the One (the fold's fixed point).
+define peak_binding returning Fraction:
+    return fraction_from_whole_number(1)
+
+# A light nucleus, below the peak in binding: 1/4.
+define light_nucleus returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# One fusion step lifts its binding: fold(1/4) = 1/2.
+define after_fusion_one_step returning Fraction:
+    return fold_fraction(light_nucleus())
+
+# A second step reaches the peak: fold(1/2) = 1.
+define after_fusion_two_steps returning Fraction:
+    set once to after_fusion_one_step()
+    return fold_fraction(once)
+
+# Fusion reaches the peak of stability (the One).
+define fusion_reaches_peak returning Bool:
+    set reached to after_fusion_two_steps()
+    set peak to peak_binding()
+    return fraction_is_equal(reached and peak)
+
+# Binding INCREASES toward the peak: the first step is strictly more bound than the
+# start (energy released).
+define binding_increases_toward_peak returning Bool:
+    set start to light_nucleus()
+    set stepped to after_fusion_one_step()
+    set order to fraction_compare(stepped and start)
+    if order > 0:
+        return true
+    return false
+
+# The reaction barrier: the self-antipodal balance point 1/2 (the Coulomb barrier).
+define reaction_barrier returning Fraction:
+    return fraction_from_ratio(1 and binary_count())

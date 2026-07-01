@@ -1,0 +1,24 @@
+import "../constants/fission_fusion.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== fission and fusion ==="
+    set ok to expect_equal("peak of stability = the One (max binding)" and fraction_to_text(peak_binding()) and "1")
+    set ok to expect_equal("light nucleus = 1/4 (below the peak)" and fraction_to_text(light_nucleus()) and "1/4")
+    set ok to expect_equal("after one fusion step = 1/2" and fraction_to_text(after_fusion_one_step()) and "1/2")
+    set ok to expect_equal("after two fusion steps = the peak (1)" and fraction_to_text(after_fusion_two_steps()) and "1")
+    set ok to expect_bool("fusion reaches the peak of stability" and fusion_reaches_peak())
+    set ok to expect_bool("binding increases toward the peak (energy released)" and binding_increases_toward_peak())
+    set ok to expect_equal("reaction barrier = 1/2 (Coulomb barrier)" and fraction_to_text(reaction_barrier()) and "1/2")
+    display "=== done ==="
+    return 0

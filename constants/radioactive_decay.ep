@@ -1,0 +1,57 @@
+# ============================================================================
+#  RADIOACTIVE DECAY  --  why an unstable population halves every half-life,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Radioactive atoms decay with a fixed HALF-LIFE: whatever is left halves in each
+#  such period -- a full sample, then a half, then a quarter, an eighth. This
+#  exponential halving (the basis of carbon dating) is the fold's binary halving,
+#  step by step.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The fold is two-to-one: each step is a single binary split, and a half-life is one
+#  such step. So the surviving fraction after k half-lives is
+#       remaining(k) = 1 / b^k = 1 / 2^k :
+#  1, then 1/2, then 1/4, then 1/8, ... Each half-life multiplies the survivors by 1/b:
+#  remaining(k+1) = remaining(k) / 2, exactly a halving. One bit of the population is
+#  lost per half-life (the fold's non-injective step -- the arrow of time), and the
+#  count never reaches zero (No-Zero): decay approaches, but never completes to,
+#  nothing. The halving and its base b = 2 are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Every radioactive species halves in a fixed half-life -- exponential decay, exact
+#  to the count. The forced content is exact: remaining(k) = 1/2^k, each half-life a
+#  binary halving; the physical half-life in seconds is a measured, per-species value.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The surviving fraction after k half-lives: 1 / b^k = 1 / 2^k.
+define remaining_after with half_lives as Int returning Fraction:
+    set denominator to whole_power(binary_count() and half_lives)
+    return fraction_from_ratio(1 and denominator)
+
+# Each half-life halves the survivors: remaining(k+1) = remaining(k) / 2. Checked at
+# k = 1 -> 2 (1/2 halves to 1/4).
+define half_life_halves returning Bool:
+    set before to remaining_after(1)
+    set after to remaining_after(2)
+    set two to fraction_from_whole_number(binary_count())
+    set halved to fraction_divide(before and two)
+    return fraction_is_equal(halved and after)
+
+# Decay never completes to nothing: the surviving fraction stays strictly positive
+# (No-Zero) -- even after many half-lives it is a small positive fraction, not zero.
+define never_reaches_zero returning Bool:
+    set remaining to remaining_after(10)
+    set one_first to fraction_from_whole_number(1)
+    set one_second to fraction_from_whole_number(1)
+    set zero to fraction_subtract(one_first and one_second)
+    set order to fraction_compare(remaining and zero)
+    if order > 0:
+        return true
+    return false

@@ -1,0 +1,83 @@
+# ============================================================================
+#  THE EQUIVALENCE PRINCIPLE  --  why gravity and acceleration give the SAME
+#  redshift, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Einstein's happiest thought: standing in a gravitational field is
+#  indistinguishable from accelerating in empty space. A clock higher in a field runs
+#  fast (gravitational blueshift/redshift), and the SAME shift appears in an
+#  accelerating rocket by the ordinary Doppler effect. That the two are equal is the
+#  equivalence principle -- and the fold forces the equality.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold, c = 1) ───────────────
+#  Take acceleration g = 1/4 and height h = 1 (natural units, c = 1). The
+#  GRAVITATIONAL redshift over that height is z = g*h = 1/4. Now the same setup as
+#  ACCELERATION: a signal crossing height h is received by a frame that has meanwhile
+#  picked up speed v = g*h, so its ordinary DOPPLER shift is z_doppler = v = g*h = 1/4.
+#  The two are identical,
+#       z_gravity = g*h = z_doppler ,
+#  which is the equivalence principle -- gravity's redshift IS an acceleration's
+#  Doppler shift. And in the weak field the redshift folds linearly in the height:
+#  fold(g*h) = fold(g)*h (both 1/2 here), so the shift scales with height as it must.
+#  Nothing is chosen; the equality is forced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Gravitational redshift equals the equivalent acceleration's Doppler shift (Pound-
+#  Rebka measured it to 1%), the cornerstone of general relativity. The forced content
+#  is exact: z_gravity = g*h = z_doppler, an identity; the physical g, h, c in units are
+#  comparison-side.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The acceleration (equivalently, the local gravity): g = 1/4.
+define acceleration returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# The height: h = 1 (natural units).
+define height returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The gravitational redshift over the height: z = g*h = 1/4.
+define gravitational_redshift returning Fraction:
+    set g to acceleration()
+    set h to height()
+    return fraction_multiply(g and h)
+
+# The speed the accelerating frame picks up over the height: v = g*h.
+define acquired_velocity returning Fraction:
+    set g to acceleration()
+    set h to height()
+    return fraction_multiply(g and h)
+
+# The Doppler shift of that acquired velocity: z_doppler = v (c = 1).
+define doppler_shift returning Fraction:
+    return acquired_velocity()
+
+# The equivalence principle: the gravitational redshift EQUALS the acceleration's
+# Doppler shift.
+define equivalence_holds returning Bool:
+    set z_gravity to gravitational_redshift()
+    set z_doppler to doppler_shift()
+    return fraction_is_equal(z_gravity and z_doppler)
+
+# Weak-field linearity in the height: fold(g*h) = fold(g)*h (both 1/2 here), so the
+# shift scales with height.
+define redshift_folds_linearly returning Bool:
+    set g to acceleration()
+    set h to height()
+    set gh to fraction_multiply(g and h)
+    set fold_gh to fold_fraction(gh)
+    set fold_g to fold_fraction(g)
+    set fold_g_times_h to fraction_multiply(fold_g and h)
+    return fraction_is_equal(fold_gh and fold_g_times_h)

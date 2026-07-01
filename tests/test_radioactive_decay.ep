@@ -1,0 +1,23 @@
+import "../constants/radioactive_decay.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== radioactive decay ==="
+    set ok to expect_equal("remaining after 0 half-lives = 1" and fraction_to_text(remaining_after(0)) and "1")
+    set ok to expect_equal("remaining after 1 half-life = 1/2" and fraction_to_text(remaining_after(1)) and "1/2")
+    set ok to expect_equal("remaining after 2 half-lives = 1/4" and fraction_to_text(remaining_after(2)) and "1/4")
+    set ok to expect_equal("remaining after 3 half-lives = 1/8" and fraction_to_text(remaining_after(3)) and "1/8")
+    set ok to expect_bool("each half-life halves the survivors" and half_life_halves())
+    set ok to expect_bool("decay never reaches zero (No-Zero)" and never_reaches_zero())
+    display "=== done ==="
+    return 0

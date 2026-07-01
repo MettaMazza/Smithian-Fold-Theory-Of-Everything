@@ -97,8 +97,11 @@ And the structural laws of physics, forced the same way:
   (matter `a⁻³`, radiation `a⁻⁴`, dark energy `a⁰`), the **hydrogen `1/n²` ladder**
   (Rydberg lines as exact rationals), and the **flux tube** (the gluon self-feeds →
   linear confinement; the photon does not).
+- **Nuclei and relativity** — **fission and fusion** (one binding peak, the One; both
+  release energy toward it), the **equivalence principle** (gravitational redshift =
+  the acceleration's Doppler shift), and **radioactive decay** (`1/2^k` per half-life).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 64 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 67 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

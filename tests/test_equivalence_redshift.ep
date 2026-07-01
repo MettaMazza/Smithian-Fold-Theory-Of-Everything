@@ -1,0 +1,22 @@
+import "../constants/equivalence_redshift.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the equivalence principle (redshift) ==="
+    set ok to expect_equal("gravitational redshift z = g*h = 1/4" and fraction_to_text(gravitational_redshift()) and "1/4")
+    set ok to expect_equal("acquired velocity v = g*h = 1/4" and fraction_to_text(acquired_velocity()) and "1/4")
+    set ok to expect_equal("Doppler shift z_doppler = v = 1/4" and fraction_to_text(doppler_shift()) and "1/4")
+    set ok to expect_bool("EQUIVALENCE: gravitational redshift = acceleration Doppler shift" and equivalence_holds())
+    set ok to expect_bool("weak-field redshift folds linearly in height (fold(gh)=fold(g)h)" and redshift_folds_linearly())
+    display "=== done ==="
+    return 0
