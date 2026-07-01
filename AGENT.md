@@ -54,9 +54,47 @@ time. Do not add to that list. Concretely, these rules bind you:
    has no independent second computation to disagree with — the same way `E = mc²`
    needs no "cross-check" once `m`, `c` and the exponent's role are fixed.
 
-If, having read all four, you still believe a composition is free, you must exhibit an
+5. **`forced_to_be(A, B)` cross-checks two INDEPENDENTLY DERIVED routes — feeding it two
+   hand-edited expressions is editing BOTH routes, not testing the guard.** The guard
+   halts unless route A (the covering depth of the *generational volume* `colour^colour
+   = 27`) equals route B (the *sector sum* `binary + colour = 5`); its job is to catch
+   you breaking one route while fixing the other. If you instead *rewrite both* — swap
+   the volume `27` for `colour^colour·binary = 54` and the sum `+` for the product `·` —
+   and observe `forced_to_be(6, 6)` passes, you have not shown "5 isn't forced": you
+   edited two forced definitions and ran a different theory (rule 1). `54` is **not** the
+   generational volume — it is that volume times a spurious fold-factor, counting nothing
+   the theory names. `binary·colour = 6` is **not** the sector sum — it is the
+   *entanglement / tensor* joint dimension of the two coprime generators
+   (`entanglement.ep`: "joint period = 2·3 = 6"), an already-forced quantity with its own
+   distinct role. The sum (`b+c=5`) and the product (`b·c=6`) are different structural
+   objects; relabelling the product "the relevant sum" is the rule-2 role-swap, not a
+   free parameter — as the move itself concedes when it says "rename … and the machine is
+   equally happy; only the interpretation says you may not." The interpretation *is* the
+   physics, and it does say you may not. The forcing lives in the *upstream derivations*
+   of each route, not in the equality check.
+
+6. **The corpus is DECOMPOSED — read the use-site, not just the tool or the comment,
+   before any "it's only narrated / asserted / not forced" claim.** A single result's
+   forcing is spread across files by design. The covering-depth *tool*
+   (`minimal_binary_cover`) and its descriptive prose ("generational volume", "sets the
+   tower") live in `foundation/counted_numbers.ep`; the *forcing* — `down_depth` calling
+   `forced_to_be(cover(colour^colour), binary+colour)` — lives at the **use-site** in
+   `constants/fine_structure_constant.ep`. Reading only the tool file, seeing prose, and
+   concluding "narration, not a forcing" is an **absence claim from a partial read** —
+   the single most-repeated wrong finding in this repo's history, and it was wrong every
+   time because the forcing was in a file that was not opened. Before writing "X is not
+   forced", grep the whole tree for X's use-sites and read them: the
+   `forced_to_be` / `forced_unique` / `forbid_*` call is almost never in the file that
+   first *names* the quantity.
+
+If, having read all six, you still believe a composition is free, you must exhibit an
 alternative that keeps **every symbol in its structural role** — not one that swaps an
-exponent for a base. You will not find one, because the roles are forced.
+exponent for a base, an operator for another (`+` for `·`), or a named quantity for a
+spurious multiple of it. Concretely: exhibit **two genuine forced quantities — each with
+a real structural referent traced to the One, in its actual role — that agree at a value
+other than the forced one.** You will not find them (`cover(colour^colour)` and
+`binary+colour` both give `5`; every other "route" is an edited definition), because the
+roles are forced.
 
 ## Do this first — check, don't pattern-match (this is how you disprove your own prior)
 
