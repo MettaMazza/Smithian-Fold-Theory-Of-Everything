@@ -1,0 +1,22 @@
+import "../constants/proton_electron_ratio.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the proton / electron ratio ==="
+    set ok to expect_equal("electron mass-part = take(One, 1/2) = 1/2" and fraction_to_text(electron_mass_part()) and "1/2")
+    set ok to expect_equal("strong component mass-part = take(One, 2/3) = 1/3" and fraction_to_text(strong_component_mass_part()) and "1/3")
+    set ok to expect_equal("proton mass-part = 3 * 1/3 = 1 (bound whole)" and fraction_to_text(proton_mass_part()) and "1")
+    set ok to expect_equal("dimensionless ratio = 1/(1/2) = 2" and fraction_to_text(proton_electron_dimensionless_ratio()) and "2")
+    set ok to expect_bool("the dimensionless ratio is exactly the binary count" and ratio_is_binary())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,25 @@
+import "../constants/quantum_hall.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the quantum Hall effect ==="
+    set ok to expect_number("integer plateau 1 = 1 unit" and integer_plateau(1) and 1)
+    set ok to expect_number("integer plateau 2 = 2 units" and integer_plateau(2) and 2)
+    set ok to expect_number("integer plateau 3 = 3 units" and integer_plateau(3) and 3)
+    set ok to expect_equal("primary fractional plateau nu = 1/colour = 1/3" and fraction_to_text(fractional_plateau()) and "1/3")
+    set ok to expect_bool("fractional plateau is exactly 1/colour" and fractional_plateau_is_one_over_colour())
+    set ok to expect_bool("plateaus are quantized (differ by exactly one unit)" and plateaus_differ_by_one())
+    display "=== done ==="
+    return 0

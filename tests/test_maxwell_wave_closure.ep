@@ -1,0 +1,17 @@
+import "../constants/maxwell_wave_closure.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define main:
+    display "=== Maxwell wave closure ==="
+    set ok to expect_number("spatial curvature = binary * spatial = 6" and spatial_curvature() and 6)
+    set ok to expect_number("temporal curvature = binary = 2" and temporal_curvature() and 2)
+    set ok to expect_number("curvature ratio = 6/2 = 3 = d_space (= colour)" and curvature_ratio() and 3)
+    set ok to expect_equal("the closed wave travels at the One (c)" and fold_value_to_text(wave_speed()) and "1")
+    display "=== done ==="
+    return 0

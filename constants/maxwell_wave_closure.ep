@@ -1,0 +1,58 @@
+# ============================================================================
+#  MAXWELL WAVE CLOSURE  --  why the electromagnetic field closes into a wave
+#  travelling at c, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Maxwell's great result: a changing electric field makes a magnetic field and vice
+#  versa, and the two curl equations feed each other into a self-propagating WAVE --
+#  light. The wave equation closes, and it fixes the wave's speed to c. Both the
+#  closing and the speed are forced by the fold.
+#
+#  ── DERIVATION ─ (check every line; uses c = 3 and the fold) ─────────────────
+#  Discretise the field on a cubic lattice. The spatial curvature (the Laplacian) sums
+#  a second difference along each axis: b = 2 per axis over d_space = 3 axes, giving
+#  spatial curvature b * d_space = 6 (the cubic lattice's six neighbours, Step 47). The
+#  TEMPORAL curvature is the second difference along the one time axis, b = 2. The wave
+#  equation closes when their ratio is the spatial dimension:
+#       spatial / temporal = 6 / 2 = 3 = d_space ,
+#  which is also the fold period of 1/7 (the colour count). With that ratio the curl
+#  equations become nabla^2 E - (1/c^2) d^2E/dt^2 = 0 -- a wave -- and its signal speed
+#  is the fold's one speed, the One (c, Step 36). Light is that electromagnetic wave.
+#  The ratio and the speed are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Maxwell's equations close into a wave equation whose speed is c, and light is that
+#  wave -- exactly the forced result. The forced content is exact: the spatial-to-
+#  temporal curvature ratio is 3 = d_space = colour, and the wave speed is the One.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/spacetime_dimensions.ep"
+
+
+# The spatial curvature: a second difference (b = 2) along each of d_space = 3 axes,
+# b * d_space = 6 (the cubic lattice's six neighbours).
+define spatial_curvature returning Int:
+    return binary_count() * spatial_dimensions()
+
+# The temporal curvature: the second difference along the one time axis, b = 2.
+define temporal_curvature returning Int:
+    return binary_count()
+
+# The curvature ratio that closes the wave: spatial / temporal = 6 / 2 = 3. Forced to
+# equal the spatial dimension count (and the colour count = period of 1/7); halts on
+# mismatch.
+define curvature_ratio returning Int:
+    set spatial to spatial_curvature()
+    set temporal to temporal_curvature()
+    set ratio to spatial / temporal
+    set by_dimension to spatial_dimensions()
+    return forced_to_be("Maxwell curvature ratio = spatial/temporal = d_space" and ratio and by_dimension)
+
+# The closed wave travels at the fold's one signal speed, the One (c).
+define wave_speed returning FoldValue:
+    return the_one()

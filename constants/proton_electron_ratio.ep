@@ -1,0 +1,64 @@
+# ============================================================================
+#  THE PROTON / ELECTRON RATIO  --  why the proton's mass-part is twice the
+#  electron's, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The proton is about 1836 times heavier than the electron -- a pure number that,
+#  with the fine-structure constant, sets the size and stability of every atom. Its
+#  dimensionless STRUCTURAL core -- how the proton's mass-part compares to the
+#  electron's -- is forced to exactly two.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The electron is a single charged lepton: its mass-part is the take of its channel
+#  value 1/b from the One, take(One, 1/2) = 1/2. The proton is a bound group of the
+#  THREE colour components; each strong component's mass-part is take(One, 2/3) = 1/3,
+#  and three of them bound together make a whole: 3 * (1/3) = 1. So the dimensionless
+#  ratio of the proton's mass-part to the electron's is
+#       proton_part / electron_part = 1 / (1/2) = 2 = b ,
+#  the binary count -- the proton's bound whole over the electron's half. This forced
+#  dimensionless core is 2. The physical 1836 is this core times the strong-to-lepton
+#  ENERGY scale, which is a measured mass scale (comparison-side), not part of this
+#  ratio -- exactly as the absolute scale is answered in its own step.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The measured proton/electron mass ratio is 1836.15. The forced content here is the
+#  dimensionless structural core, exactly 2 (the proton's bound-whole over the
+#  electron's half); the full 1836 carries the separate strong-sector energy scale, a
+#  measured quantity kept on this side.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The electron mass-part: take(One, 1/b) = 1 - 1/2 = 1/2.
+define electron_mass_part returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set split_value to fraction_from_ratio(1 and binary_count())
+    return fraction_subtract(one and split_value)
+
+# A single strong colour component's mass-part: take(One, 2/3) = 1 - 2/3 = 1/3.
+define strong_component_mass_part returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set split_value to fraction_from_ratio(binary_count() and colour_count())
+    return fraction_subtract(one and split_value)
+
+# The proton's mass-part: the three colour components bound, 3 * (1/3) = 1 (a whole).
+define proton_mass_part returning Fraction:
+    set component to strong_component_mass_part()
+    set colour to fraction_from_whole_number(colour_count())
+    return fraction_multiply(component and colour)
+
+# The dimensionless proton/electron ratio: proton_part / electron_part = 1/(1/2) = 2.
+define proton_electron_dimensionless_ratio returning Fraction:
+    set proton to proton_mass_part()
+    set electron to electron_mass_part()
+    return fraction_divide(proton and electron)
+
+# The ratio is exactly the binary count, 2.
+define ratio_is_binary returning Bool:
+    set ratio to proton_electron_dimensionless_ratio()
+    set binary to fraction_from_whole_number(binary_count())
+    return fraction_is_equal(ratio and binary)

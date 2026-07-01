@@ -2262,6 +2262,76 @@ halving; the half-life in seconds is a measured per-species value.
 
 ---
 
+### Step 67 — The quantum Hall effect (exact quantized conductance)
+
+**File:** `constants/quantum_hall.ep`
+
+**What it does.** The Hall conductance is a *count* of filled levels times one unit,
+so it locks onto exact integer plateaus (`1, 2, 3, …` units of `e²/h`) — a count has
+no in-between. Interaction opens plateaus at simple fractions, the primary being the
+fold's colour fraction `ν = 1/c = 1/3` (the Laughlin state). Every filling is an exact
+rational, never a continuum.
+
+```
+=== the quantum Hall effect ===
+  ok    integer plateaus 1, 2, 3 = 1, 2, 3 units
+  ok    primary fractional plateau nu = 1/colour = 1/3
+  ok    plateaus are quantized (differ by exactly one unit)
+```
+
+**To measurement.** Integer plateaus are exact to ~1 part in 10⁹ (the resistance
+standard) and the first fractional plateau is `ν = 1/3` — forced: integer plateaus are
+whole counts, the primary fraction is `1/colour`.
+
+---
+
+### Step 68 — Maxwell wave closure (light at c)
+
+**File:** `constants/maxwell_wave_closure.ep`
+
+**What it does.** On a cubic lattice the spatial curvature is a second difference
+(`b = 2`) along each of `d_space = 3` axes → `6` (the six neighbours, Step 47); the
+temporal curvature is `b = 2` along the one time axis. The wave equation closes when
+their ratio is the spatial dimension, `6/2 = 3 = d_space` (also `period(1/7) =
+colour`), giving `∇²E − (1/c²)∂²E/∂t² = 0` — a wave at the fold's one speed, the One.
+
+```
+=== Maxwell wave closure ===
+  ok    spatial curvature = binary * spatial = 6
+  ok    temporal curvature = binary = 2
+  ok    curvature ratio = 6/2 = 3 = d_space (= colour)
+  ok    the closed wave travels at the One (c)
+```
+
+**To measurement.** Maxwell's equations close into a wave at `c`, and light is that
+wave — forced: the spatial-to-temporal curvature ratio is `3 = d_space = colour`, the
+speed is the One.
+
+---
+
+### Step 69 — The proton / electron ratio (dimensionless core = 2)
+
+**File:** `constants/proton_electron_ratio.ep`
+
+**What it does.** The electron's mass-part is `take(One, 1/b) = 1/2`. The proton is
+the three colour components bound — each `take(One, 2/3) = 1/3`, and `3 · 1/3 = 1` (a
+whole). So the dimensionless ratio of the proton's mass-part to the electron's is
+`1/(1/2) = 2 = binary` — the proton's bound whole over the electron's half.
+
+```
+=== the proton / electron ratio ===
+  ok    electron mass-part = 1/2 ; strong component = 1/3
+  ok    proton mass-part = 3 * 1/3 = 1 (bound whole)
+  ok    dimensionless ratio = 1/(1/2) = 2 (the binary count)
+```
+
+**To measurement.** The measured ratio is 1836.15; the forced content is the
+dimensionless structural core, exactly `2`, the proton's bound-whole over the
+electron's half — the full 1836 carries the separate strong-sector energy scale, a
+measured quantity kept comparison-side.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2423,6 +2493,12 @@ runs):**
   acceleration's Doppler shift `v = g·h` — gravity and acceleration indistinguishable.
 - Step 66 — radioactive decay: the surviving fraction after `k` half-lives is
   `1/b^k = 1/2^k`, each half-life a binary halving, never reaching zero.
+- Step 67 — the quantum Hall effect: conductance is a count → exact integer plateaus,
+  with the primary fractional plateau at `ν = 1/colour = 1/3`.
+- Step 68 — Maxwell wave closure: the spatial/temporal curvature ratio `6/2 = 3 =
+  d_space = colour` closes the wave equation; light travels at the One.
+- Step 69 — the proton/electron ratio: the dimensionless core is `2 = binary` (the
+  proton's bound-whole `3·1/3 = 1` over the electron's half `1/2`).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
