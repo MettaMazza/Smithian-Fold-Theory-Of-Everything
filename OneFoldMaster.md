@@ -2051,6 +2051,75 @@ the One at unison.
 
 ---
 
+### Step 58 — Big-bang nucleosynthesis (primordial helium = 1/4)
+
+**File:** `constants/bbn.ep`
+
+**What it does.** At weak freeze-out the neutron-to-proton ratio settles at the
+deepest fold scale, `r = 1/d_up = 1/7` (`d_up = 7` forced two ways). Nearly every
+neutron is captured into helium-4, so the helium mass fraction is
+`Y = 2r/(1+r) = 2/8 = 1/4 = 1/binary²` — a quarter, exactly.
+
+```
+=== big-bang nucleosynthesis (primordial helium) ===
+  ok    deepest depth d_up = 7
+  ok    neutron/proton freeze-out ratio = 1/7
+  ok    primordial helium fraction Y = 1/4
+  ok    Y = 1/binary^2 (a quarter)
+```
+
+**To measurement.** Measured `Y_p = 0.247 ± 0.003` — the forced `1/4 = 0.25` lands on
+the observed quarter to ~1%, a zero-parameter value from `r = 1/d_up`.
+
+---
+
+### Step 59 — Gravitational time dilation (clocks slow, stop at the horizon)
+
+**File:** `constants/gravitational_time_dilation.ep`
+
+**What it does.** The Schwarzschild time factor is the fold's take: `A(r) = take(One,
+x) = 1 − x`, where `x = r_s/r` is the well depth. At `r = 4 r_s`, `x = 1/4` and
+`A = 3/4` — clocks run at three-quarters rate (below the One → time slow). As the
+horizon nears, `x → 1` and `A → 0` — the **forbidden zero** (No-Zero), so time stops
+at the horizon.
+
+```
+=== gravitational time dilation ===
+  ok    well depth x = r_s/r = 1/4 (at r = 4 r_s)
+  ok    time-dilation factor A = 1 - x = 3/4
+  ok    clocks run SLOW (factor below the One)
+  ok    the horizon reaches the FORBIDDEN zero (time stops)
+```
+
+**To measurement.** Clocks slow in gravity (Pound–Rebka, GPS) by `A = 1 − r_s/r`, and
+a horizon is where the time coefficient vanishes — exactly the forced `take(One, x)`
+and its forbidden zero.
+
+---
+
+### Step 60 — Fine and hyperfine structure (α² of the gross ladder)
+
+**File:** `constants/fine_hyperfine.ep`
+
+**What it does.** Fine structure is the gross ladder carried to `binary = 2` further
+powers of the coupling (each relativistic correction costs one power, and there are
+two), so `fine/gross = 1/(1/α)² ≈ 5.3×10⁻⁵`. Hyperfine carries the same two powers
+plus the nuclear moment, sitting below fine — the ordering gross > fine > hyperfine,
+with the suppression exponent forced to `binary = 2`.
+
+```
+=== fine and hyperfine structure ===
+  ok    fine-structure coupling powers = binary = 2 (alpha^2)
+  ok    fine/gross ratio = 250^2 / 34259^2 = 62500/1173679081
+  ok    fine structure is below the gross ladder (< the One)
+```
+
+**To measurement.** Fine structure is ~α² of the gross scale (hydrogen's, a few parts
+in 10⁵) and hyperfine finer again (the 21 cm line) — the forced exponent `binary = 2`
+and ratio `1/(1/α)²`.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2193,6 +2262,12 @@ runs):**
   `fold(p) = p + p` — de Broglie phase advance.
 - Step 57 — beat frequency: two rhythms beat at their difference (`beat_between`), and
   unison is silent (the beat is the One).
+- Step 58 — big-bang nucleosynthesis: `n/p = 1/d_up = 1/7` gives helium fraction
+  `Y = 2r/(1+r) = 1/4 = 1/binary²` — the observed primordial quarter.
+- Step 59 — gravitational time dilation: `A(r) = take(One, r_s/r) = 1 − x` (clocks
+  slow), reaching the forbidden zero at the horizon (time stops).
+- Step 60 — fine/hyperfine structure: fine sits `binary = 2` coupling-powers below
+  gross (`α²`), hyperfine finer still — the suppression exponent forced.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

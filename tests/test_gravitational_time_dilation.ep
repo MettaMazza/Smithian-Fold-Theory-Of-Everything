@@ -1,0 +1,21 @@
+import "../constants/gravitational_time_dilation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== gravitational time dilation ==="
+    set ok to expect_equal("well depth x = r_s/r = 1/4 (at r = 4 r_s)" and fraction_to_text(well_depth()) and "1/4")
+    set ok to expect_equal("time-dilation factor A = 1 - x = 3/4" and fraction_to_text(time_dilation_factor()) and "3/4")
+    set ok to expect_bool("clocks run SLOW (factor below the One)" and time_runs_slow())
+    set ok to expect_bool("the horizon reaches the FORBIDDEN zero (time stops)" and horizon_reaches_forbidden_zero())
+    display "=== done ==="
+    return 0

@@ -90,8 +90,11 @@ And the structural laws of physics, forced the same way:
   colour–anticolour pair to the One; no free quark), the **de Broglie dispersion**
   (`fold(p) = p + p`), and **beats** (two rhythms beat at their difference, unison is
   silent).
+- **Cosmos and atom** — **primordial helium** (`Y = 1/4` from `n/p = 1/7`),
+  **gravitational time dilation** (`A = 1 − r_s/r`, stopping at the horizon's forbidden
+  zero), and **fine/hyperfine structure** (`α²` suppression, exponent forced to 2).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 58 test
+The full, ordered, run-it-yourself derivation of all of it — every step, all 61 test
 suites — is in [`OneFoldMaster.md`](OneFoldMaster.md).
 
 ---

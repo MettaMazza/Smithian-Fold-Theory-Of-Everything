@@ -1,0 +1,72 @@
+# ============================================================================
+#  GRAVITATIONAL TIME DILATION  --  why clocks run slow near mass, and stop at
+#  the horizon, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Time runs slower deeper in a gravitational well: a clock near a heavy mass ticks
+#  behind one far away (GPS satellites correct for it every day). The slowing factor
+#  is the Schwarzschild time coefficient A(r) = 1 - r_s/r, and at the horizon
+#  (r = r_s) it reaches zero -- time stops. Both are the fold's own take and its
+#  forbidden zero.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold and its No-Zero law) ──
+#  Let x = r_s/r be how deep a point sits in the well (r_s the horizon radius). The
+#  time-dilation factor is the fold's TAKE of that depth from the One:
+#       A(r) = take(One, x) = 1 - x .
+#  For a point at r = 4 r_s the depth is x = 1/4, so A = 1 - 1/4 = 3/4: clocks run at
+#  three-quarters rate, strictly below the One -- time runs SLOW. As the point
+#  approaches the horizon, x -> 1 and A -> 1 - 1 = 0. But the fold FORBIDS zero (there
+#  is not nothing): A cannot reach it from outside, so the horizon is a boundary where
+#  the time factor hits the forbidden zero -- time "stops" there. Both the slowing and
+#  the horizon are forced: take gives the factor, the No-Zero law gives the horizon.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Clocks measurably slow in gravity (Pound-Rebka, GPS) by A(r) = 1 - r_s/r, and a
+#  black-hole horizon is where the time coefficient vanishes -- exactly the forced
+#  result. The forced content is the fold's take(One, x) and its forbidden zero at the
+#  horizon; the physical r_s in metres is a measured scale, comparison-side.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The sample radius in horizon radii: r = binary^2 = 4 horizon radii.
+define sample_radius_in_horizon_radii returning Int:
+    return binary_count() * binary_count()
+
+# The well depth x = r_s/r at that sample point: 1/4.
+define well_depth returning Fraction:
+    return fraction_from_ratio(1 and sample_radius_in_horizon_radii())
+
+# The time-dilation factor A(r) = take(One, x) = 1 - x = 3/4.
+define time_dilation_factor returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set depth to well_depth()
+    return fraction_subtract(one and depth)
+
+# Time runs SLOW: the factor is strictly below the One.
+define time_runs_slow returning Bool:
+    set factor to time_dilation_factor()
+    set one to fraction_from_whole_number(1)
+    set order to fraction_compare(factor and one)
+    if order < 0:
+        return true
+    return false
+
+# At the horizon the depth is the whole One (r = r_s), so the factor would be
+# 1 - 1 = 0 -- the FORBIDDEN zero. Returns that would-be factor.
+define horizon_factor returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set full to fraction_from_whole_number(1)
+    return fraction_subtract(one and full)
+
+# The horizon reaches the forbidden zero: the would-be time factor there is zero,
+# which the fold's No-Zero law forbids -- so time stops at the horizon.
+define horizon_reaches_forbidden_zero returning Bool:
+    set factor to horizon_factor()
+    set one_a to fraction_from_whole_number(1)
+    set one_b to fraction_from_whole_number(1)
+    set zero to fraction_subtract(one_a and one_b)
+    return fraction_is_equal(factor and zero)

@@ -1,0 +1,22 @@
+import "../constants/fine_hyperfine.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== fine and hyperfine structure ==="
+    set ok to expect_number("fine-structure coupling powers = binary = 2 (alpha^2)" and fine_structure_coupling_powers() and 2)
+    set ok to expect_equal("fine/gross ratio = 250^2 / 34259^2 = 62500/1173679081" and fraction_to_text(fine_to_gross_ratio()) and "62500/1173679081")
+    set ok to expect_bool("fine structure is below the gross ladder (< the One)" and fine_is_below_gross())
+    display "=== done ==="
+    return 0

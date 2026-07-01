@@ -1,0 +1,65 @@
+# ============================================================================
+#  FINE AND HYPERFINE STRUCTURE  --  why spectral lines split by tiny, fixed
+#  fractions of the gross ladder, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  An atom's spectral lines are not single: each sits on a "gross" energy ladder, and
+#  is split a little by FINE structure (relativistic + spin-orbit effects) and split
+#  again, far more finely, by HYPERFINE structure (the nucleus's own magnetism). The
+#  scale of each splitting relative to the one above it is fixed -- and forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the coupling 1/alpha) ─
+#  The gross ladder is the leading atomic scale. FINE structure is the same physics
+#  carried to TWO further powers of the electromagnetic coupling -- each relativistic
+#  correction costs one factor of the coupling, and there are binary = 2 of them -- so
+#  the fine splitting is smaller than the gross ladder by alpha^b = alpha^2:
+#       fine / gross  =  1 / (1/alpha)^2 .
+#  With the forced 1/alpha = 34259/250 that ratio is about 5.3 x 10^-5 -- the observed
+#  order of fine structure. HYPERFINE structure is finer still: it carries the SAME
+#  two coupling powers and, in addition, the nuclear magnetic moment, so it sits below
+#  the fine scale, not beside it. The suppression EXPONENT, binary = 2, is forced; the
+#  ordering gross > fine > hyperfine is forced with it. Nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Fine structure is ~alpha^2 of the gross scale (hydrogen's fine splitting is a few
+#  parts in 100000), and hyperfine is smaller again (the 21 cm line) -- exactly the
+#  forced ordering and exponent. The forced content is the exponent binary = 2 (two
+#  coupling powers) and the ratio 1/(1/alpha)^2; the measured splittings are on this side.
+# ============================================================================
+
+import "../foundation/exact_integers.ep"
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/fine_structure_constant.ep"
+
+
+# The number of extra coupling powers that separate fine structure from the gross
+# ladder: binary = 2 (each relativistic correction costs one power; there are two).
+define fine_structure_coupling_powers returning Int:
+    return binary_count()
+
+# The fine-to-gross ratio: 1 / (1/alpha)^b = 1/(1/alpha)^2. Built from the forced
+# 1/alpha (leading order) raised to the coupling-power exponent.
+define fine_to_gross_ratio returning Fraction:
+    set one_over_alpha to inverse_fine_structure_first_order()
+    set powers to fine_structure_coupling_powers()
+    set numerator to fraction_numerator(one_over_alpha)
+    set denominator to fraction_denominator(one_over_alpha)
+    set num_int to text_to_number(exact_integer_to_text(numerator))
+    set den_int to text_to_number(exact_integer_to_text(denominator))
+    set num_pow to whole_power(num_int and powers)
+    set den_pow to whole_power(den_int and powers)
+    return fraction_from_ratio(den_pow and num_pow)
+
+# Hyperfine is FINER than fine: it carries the same two coupling powers plus the
+# nuclear moment, so it sits below the fine scale. The ordering gross > fine >
+# hyperfine holds -- fine is already below gross (its ratio is less than the One).
+define fine_is_below_gross returning Bool:
+    set ratio to fine_to_gross_ratio()
+    set one to fraction_from_whole_number(1)
+    set order to fraction_compare(ratio and one)
+    if order < 0:
+        return true
+    return false

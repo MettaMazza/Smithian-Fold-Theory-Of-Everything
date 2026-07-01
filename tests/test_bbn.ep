@@ -1,0 +1,23 @@
+import "../constants/bbn.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== big-bang nucleosynthesis (primordial helium) ==="
+    set ok to expect_number("deepest depth d_up = 7" and up_depth() and 7)
+    set ok to expect_equal("neutron/proton freeze-out ratio = 1/7" and fraction_to_text(freeze_out_ratio()) and "1/7")
+    set ok to expect_equal("primordial helium fraction Y = 1/4" and fraction_to_text(helium_fraction()) and "1/4")
+    set ok to expect_bool("Y = 1/binary^2 (a quarter)" and helium_is_one_over_binary_squared())
+    display "=== done ==="
+    return 0
