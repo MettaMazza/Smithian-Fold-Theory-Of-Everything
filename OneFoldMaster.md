@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-136 suites, 801 forced checks, 0 failures). It needs nothing but a C compiler. Use
+141 suites, 826 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3392,6 +3392,58 @@ diffraction, no translational periodicity, exactly as observed.
 
 ---
 
+### Step 134 — Newton's law (the inverse-square field from flux)
+
+**File:** `constants/newton_law.ep`
+
+**What it does.** The potential is `Φ(r) = take(One, ms/r) = 1 − ms/r` (the weak-field face
+of Schwarzschild), the field `g(r) = ms/r²`, and Gauss's law is the exact statement
+`r²·g(r) = ms` — the **same constant at every radius, equal to the source** (checked at
+`r = 1/2` and `r = 1` with `ms = 1/4`). The inverse square is flux conservation in the
+three forced dimensions, the same counting that pins Coulomb's exponent.
+
+### Step 135 — Quadrupole radiation (the first unfrozen moment)
+
+**File:** `constants/quadrupole_radiation.ep`
+
+**What it does.** Mass conservation freezes the monopole; momentum conservation freezes the
+dipole (the linear trajectory `1,2,3,4` has all-equal first differences — uniform motion is
+silent). The cubic drive `1,8,27,64` has second differences `12 ≠ 18` — the acceleration
+itself changes, and that first unfrozen moment radiates. Why gravitational waves start at
+the quadrupole (Hulse–Taylor and every LIGO event match it; no monopole/dipole gravitational
+radiation has ever been seen).
+
+### Step 136 — The Minkowski interval (spacetime's causal ruler)
+
+**File:** `constants/minkowski_interval.ep`
+
+**What it does.** The interval is the take of the spatial claim from the temporal whole:
+`ds² = take((c dt)², dx²)`. With `dx = 3/5`: `ds² = 16/25` exactly, proper time `ds = 4/5`
+— the 3-4-5 triangle as a causal triple, closing back to the whole tick. The take's domain
+guard *is* the light cone: at `dx = c dt` the remainder would be zero, which the domain
+forbids — massive worldlines approach the cone, only the massless live on it.
+
+### Step 137 — Superfluidity (flow without loss)
+
+**File:** `constants/superfluidity.ep`
+
+**What it does.** The flowing condensate is the balance `1/2` moving as **one** fold-orbit
+(folds to unison). Friction needs something smaller to lose to — but the first available
+loss is a whole fold-level (`gap = 1/2 − 1/4 = 1/4`, strictly positive), and below the gap
+nothing exists to lose. Viscosity is not small; it is *absent* — persistent helium currents
+circulate for years (Landau's gap criterion is the measured face).
+
+### Step 138 — The refractive index (light slowed by fold-levels)
+
+**File:** `constants/refractive_index.ep`
+
+**What it does.** No photon ever slows — between exchanges every photon moves at `c`. The
+medium's *phase* sits two fold-levels below the vacuum (`1/4 = (1/2)²`, each
+absorption/re-emission one level) and climbs back in exactly two folds (`1/4 → 1/2 → 1`).
+The slowed phase is a whole number of levels below `c`, never a new photon speed.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3692,6 +3744,16 @@ runs):**
   antipode; its unique fixed axis is `1/2` — nowhere else a symmetric zero set balances.
 - Step 133 — quasicrystals: `φ(5) = 4 > 2` forbids the five-fold lattice, yet the
   five-fold holds the balance fixed — order without periodicity, as Shechtman saw.
+- Step 134 — Newton's law: `Φ = 1 − ms/r`, `g = ms/r²`, and `r²g = ms` at every radius —
+  Gauss's flux conservation pins the inverse square in the three forced dimensions.
+- Step 135 — quadrupole radiation: uniform motion has equal first differences (silent);
+  the cubic drive's second differences differ (`12 ≠ 18`) — the first unfrozen moment.
+- Step 136 — the Minkowski interval: `ds² = take((c dt)², dx²)`; `dx = 3/5 → ds = 4/5`
+  (the 3-4-5 causal triple); the take's domain guard IS the light cone.
+- Step 137 — superfluidity: the condensate moves as one; the first loss is a whole
+  fold-level (`1/4 > 0`), so below the gap viscosity is absent, not small.
+- Step 138 — the refractive index: the medium's phase sits two fold-levels below `c`
+  and climbs back in exactly two; photons themselves never slow.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE REFRACTIVE INDEX  --  why light slows inside matter, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Light in glass travels slower than light in vacuum -- the refractive index n is the
+#  ratio, and Snell's law of bending follows from it. But no photon ever slows: each
+#  one always moves at c. Forced: the medium's phase runs levels below the vacuum
+#  speed because absorption-and-re-emission costs folds.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  In vacuum the phase advances at the causal speed, the One. Inside matter each
+#  wavefront is absorbed and re-emitted by the medium's charges; every such exchange
+#  is a fold-level of delay. A dense medium's phase state sits TWO levels below the
+#  vacuum: the quarter-One 1/4 = (1/2)^2, and it takes exactly two folds to climb back
+#  to the free speed (1/4 -> 1/2 -> 1). The phase share and its twin sum to the level
+#  above (1/4 + 1/4 = 1/2): the slowed phase is a whole number of fold-levels below c,
+#  never a new speed for the photon itself -- between the exchanges every photon still
+#  moves at the One.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the phase state two folds below the vacuum, climbing
+#  back in exactly two. Measured: refractive indices slow the PHASE (n ~ 1.3-2 for
+#  common media) while single photons between scatterings always propagate at c --
+#  the fold-delay picture, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The dense medium's phase state: two levels below the vacuum, 1/4.
+define phase_state returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# One exchange repaid: 1/4 -> 1/2.
+define first_climb returning Fraction:
+    return fold_fraction(phase_state())
+
+# The second exchange restores the free speed: 1/2 -> 1 (the One, c).
+define second_climb_restores_c returning Fraction:
+    return fold_fraction(first_climb())
+
+# The phase share and its twin sum to the level above: 1/4 + 1/4 = 1/2.
+define shares_sum_to_level_above returning Fraction:
+    set state to phase_state()
+    return fraction_add(state and state)

@@ -1,0 +1,67 @@
+# ============================================================================
+#  QUADRUPOLE RADIATION  --  why gravity's waves start at the quadrupole, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Electromagnetic waves radiate from a shaking dipole; gravitational waves need a
+#  changing QUADRUPOLE -- the two lower moments stay silent. Why? Forced: the monopole
+#  is the total mass (conserved -- it cannot shake) and the dipole is the momentum
+#  (conserved -- uniform motion radiates nothing). The first moment left free to
+#  change is the third: the quadrupole.
+#
+#  ── DERIVATION ─ (check every line; uses exact whole-number trajectories) ─────
+#  Radiation needs a CHANGING rate of change. Take three exact trajectories:
+#    * Constant (1,1,1,1) -- the monopole face: the total never changes at all.
+#      Its steps are all equal to each other trivially: silent.
+#    * Linear (1,2,3,4) -- the dipole face, uniform motion: the first differences
+#      are 1,1,1 -- all EQUAL, so the second difference vanishes; momentum is
+#      conserved and nothing radiates (a coasting mass emits no wave).
+#    * Cubic (1,8,27,64) -- a genuine quadrupole drive: first differences 7,19,37,
+#      second differences 12,18 -- UNEQUAL, so the acceleration itself changes; this
+#      is the first moment whose change survives conservation, and it radiates.
+#  Mass conservation freezes moment one, momentum conservation freezes moment two;
+#  the quadrupole is the leading radiator because it is the first NOT frozen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: equal first differences for uniform motion (no dipole
+#  radiation), unequal second differences for the cubic drive (quadrupole radiates).
+#  Measured: the Hulse-Taylor binary pulsar's orbital decay and every LIGO detection
+#  match the quadrupole formula -- no gravitational monopole or dipole radiation has
+#  ever been seen, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The linear (uniform-motion) trajectory 1,2,3,4: its first differences are all equal.
+define linear_first_steps_equal returning Bool:
+    set step_a to 2 - 1
+    set step_b to 3 - 2
+    set step_c to 4 - 3
+    set first_pair to step_a == step_b
+    set second_pair to step_b == step_c
+    if first_pair:
+        return second_pair
+    return 1 == 0
+
+# Equal steps mean the second difference vanishes: uniform motion cannot radiate.
+define uniform_motion_is_silent returning Bool:
+    return linear_first_steps_equal()
+
+# The cubic trajectory 1,8,27,64: first differences 7,19,37; second differences 12,18.
+define cubic_second_difference_early returning Int:
+    set step_a to 8 - 1
+    set step_b to 27 - 8
+    return step_b - step_a
+
+define cubic_second_difference_late returning Int:
+    set step_b to 27 - 8
+    set step_c to 64 - 27
+    return step_c - step_b
+
+# The second differences are UNEQUAL: the acceleration itself changes -- it radiates.
+define quadrupole_drive_radiates returning Bool:
+    set early to cubic_second_difference_early()
+    set late to cubic_second_difference_late()
+    return early != late

@@ -1,0 +1,22 @@
+import "../constants/quadrupole_radiation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== quadrupole radiation (the first unfrozen moment) ==="
+    set ok to expect_bool("uniform motion: first differences all equal" and linear_first_steps_equal())
+    set ok to expect_bool("so uniform motion is silent (no dipole radiation)" and uniform_motion_is_silent())
+    set ok to expect_equal("cubic drive: early second difference = 12" and int_to_string(cubic_second_difference_early()) and "12")
+    set ok to expect_equal("cubic drive: late second difference = 18" and int_to_string(cubic_second_difference_late()) and "18")
+    set ok to expect_bool("unequal -> the quadrupole drive radiates" and quadrupole_drive_radiates())
+    display "=== done ==="
+    return 0

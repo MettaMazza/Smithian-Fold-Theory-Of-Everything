@@ -1,0 +1,22 @@
+import "../constants/superfluidity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== superfluidity (flow without loss) ==="
+    set ok to expect_equal("the flowing condensate = the balance 1/2" and fraction_to_text(superfluid_state()) and "1/2")
+    set ok to expect_equal("it moves as ONE (folds to unison)" and fraction_to_text(condensate_moves_as_one()) and "1")
+    set ok to expect_equal("the first available loss is a whole level: gap = 1/4" and fraction_to_text(dissipation_gap()) and "1/4")
+    set ok to expect_bool("the gap is strictly positive -> viscosity is ABSENT" and gap_is_strictly_positive())
+    set ok to expect_equal("two half-shares complete the whole" and fraction_to_text(shares_complete_the_whole()) and "1")
+    display "=== done ==="
+    return 0

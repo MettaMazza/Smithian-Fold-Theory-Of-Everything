@@ -1,0 +1,70 @@
+# ============================================================================
+#  THE MINKOWSKI INTERVAL  --  spacetime's causal ruler, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Relativity replaces separate space and time distances with ONE invariant: the
+#  interval ds^2 = (c dt)^2 - dx^2. Its sign is the causal structure -- positive means
+#  reachable (timelike), the boundary is the light cone. Forced: the interval is the
+#  take of the spatial claim from the temporal whole.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the take and exact fractions) ───
+#  A tick of causal time is the whole, (c dt)^2 with c = 1. A spatial excursion dx
+#  claims its square from that whole; what remains is the interval:
+#       ds^2 = take((c dt)^2, dx^2) = (c dt)^2 - dx^2 .
+#  With dt = 1 and dx = 3/5: ds^2 = 1 - 9/25 = 16/25 -- exactly, and its square root
+#  is rational: ds = 4/5. The 3-4-5 right triangle IS a causal triple: (3/5)^2 +
+#  (4/5)^2 = 1 -- space claimed, proper time kept, summing back to the whole tick.
+#  The take's own domain guard is the light cone: at dx = c dt the remainder would be
+#  zero, which the domain forbids -- a massive worldline can approach the cone but
+#  never lie on it; only the massless live there (speed_of_light.ep).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: ds^2 = 16/25 for the 3/5 excursion, and claimed space
+#  plus kept proper-time squares restore the whole. Measured: time dilation of muons,
+#  GPS clock corrections, and every accelerator confirm the invariant interval.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The temporal whole: one causal tick squared, (c dt)^2 = 1.
+define temporal_whole returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The spatial excursion: dx = 3/5 of the causal reach.
+define spatial_excursion returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() + colour_count())
+
+# The interval: ds^2 = take((c dt)^2, dx^2) = 1 - 9/25 = 16/25.
+define interval_squared returning Fraction:
+    set whole to temporal_whole()
+    set dx to spatial_excursion()
+    set dx_squared to fraction_multiply(dx and dx)
+    return fraction_subtract(whole and dx_squared)
+
+# The interval is timelike: strictly positive (inside the cone).
+define interval_is_timelike returning Bool:
+    set ds_squared to interval_squared()
+    return ds_squared.numerator_sign > 0
+
+# The causal triple closes: dx^2 + ds^2 = the whole tick (3-4-5 exactly).
+define triple_closes returning Bool:
+    set dx to spatial_excursion()
+    set dx_squared to fraction_multiply(dx and dx)
+    set ds_squared to interval_squared()
+    set total to fraction_add(dx_squared and ds_squared)
+    set whole to temporal_whole()
+    return fraction_is_equal(total and whole)
+
+# The kept proper time is rational: ds = 4/5 (its square is 16/25).
+define proper_time_kept returning Fraction:
+    set four_fifths to fraction_from_ratio(4 and binary_count() + colour_count())
+    return four_fifths
+
+define proper_time_squares_to_interval returning Bool:
+    set ds to proper_time_kept()
+    set ds_squared to fraction_multiply(ds and ds)
+    set interval to interval_squared()
+    return fraction_is_equal(ds_squared and interval)

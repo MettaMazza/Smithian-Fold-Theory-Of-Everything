@@ -1,0 +1,21 @@
+import "../constants/refractive_index.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the refractive index (light slowed by fold-levels) ==="
+    set ok to expect_equal("dense-medium phase state = 1/4 (two levels below c)" and fraction_to_text(phase_state()) and "1/4")
+    set ok to expect_equal("one exchange repaid: 1/4 -> 1/2" and fraction_to_text(first_climb()) and "1/2")
+    set ok to expect_equal("second exchange restores c: 1/2 -> 1" and fraction_to_text(second_climb_restores_c()) and "1")
+    set ok to expect_equal("share + twin = the level above (1/2)" and fraction_to_text(shares_sum_to_level_above()) and "1/2")
+    display "=== done ==="
+    return 0

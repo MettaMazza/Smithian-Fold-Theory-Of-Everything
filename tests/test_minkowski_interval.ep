@@ -1,0 +1,22 @@
+import "../constants/minkowski_interval.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Minkowski interval (spacetime's causal ruler) ==="
+    set ok to expect_equal("spatial excursion dx = 3/5" and fraction_to_text(spatial_excursion()) and "3/5")
+    set ok to expect_equal("interval ds^2 = 1 - 9/25 = 16/25" and fraction_to_text(interval_squared()) and "16/25")
+    set ok to expect_bool("the interval is timelike (inside the cone)" and interval_is_timelike())
+    set ok to expect_bool("the 3-4-5 causal triple closes to the whole tick" and triple_closes())
+    set ok to expect_bool("kept proper time ds = 4/5 squares to the interval" and proper_time_squares_to_interval())
+    display "=== done ==="
+    return 0

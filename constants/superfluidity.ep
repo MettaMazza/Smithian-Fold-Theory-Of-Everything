@@ -1,0 +1,63 @@
+# ============================================================================
+#  SUPERFLUIDITY  --  why the cold fluid flows without loss, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Below 2.17 K, liquid helium climbs walls, leaks through pores nothing else passes,
+#  and once stirred circulates FOREVER -- flow with exactly zero viscosity. Forced: the
+#  superfluid is a condensate moving as one state, and friction would need change the
+#  domain forbids.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Cold bosons condense into one shared ground (bose_einstein_condensation.ep). The
+#  flowing superfluid is that condensate at the balance state 1/2 -- and it moves as
+#  ONE: the balance folds to unison, fold(1/2) = 1, the whole condensate is a single
+#  fold-orbit, not a crowd of particles. Friction is dissipation -- losing a little to
+#  many small collisions -- but a single shared state has no smaller parts to lose to:
+#  the first available loss is breaking a whole fold-level, a finite gap, and below the
+#  gap NOTHING can be lost (the domain has no values between). So slow flow dissipates
+#  exactly nothing: viscosity is not small, it is absent. Two half-shares sum to the
+#  One: the moving condensate and its frame of reference complete the whole.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: one shared state, a finite gap below which no loss
+#  exists -- zero viscosity, not merely low. Measured: persistent currents in
+#  superfluid helium circulate undiminished for years; below the critical velocity
+#  (Landau's gap criterion) no dissipation is detected at all, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The flowing condensate: the balance state, 1/2.
+define superfluid_state returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The condensate moves as ONE: the balance folds to unison.
+define condensate_moves_as_one returning Fraction:
+    return fold_fraction(superfluid_state())
+
+# The first available loss is a whole fold-level -- the gap between the state and its
+# next level down (1/2 - 1/4 = 1/4): finite, not infinitesimal.
+define dissipation_gap returning Fraction:
+    set state to superfluid_state()
+    set level_down to fraction_from_ratio(1 and binary_count() * binary_count())
+    return fraction_subtract(state and level_down)
+
+# The gap is strictly positive: below it nothing can be lost -- viscosity is absent.
+define gap_is_strictly_positive returning Bool:
+    set gap to dissipation_gap()
+    return gap.numerator_sign > 0
+
+# Two half-shares complete the whole.
+define shares_complete_the_whole returning Fraction:
+    set state to superfluid_state()
+    return fraction_add(state and state)

@@ -1,0 +1,25 @@
+import "../constants/newton_law.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Newton's law (the inverse-square field from flux) ==="
+    set ok to expect_equal("source ms = 1/4" and fraction_to_text(gravity_source()) and "1/4")
+    set r_half to fraction_from_ratio(1 and 2)
+    set ok to expect_equal("potential at r=1/2: Phi = 1/2" and fraction_to_text(potential_at(r_half)) and "1/2")
+    set ok to expect_equal("field at r=1/2: g = ms/r^2 = 1" and fraction_to_text(field_at(r_half)) and "1")
+    set r_one to fraction_from_whole_number(1)
+    set ok to expect_equal("field at r=1: g = 1/4" and fraction_to_text(field_at(r_one)) and "1/4")
+    set ok to expect_bool("Gauss: the flux is the same at every radius" and flux_is_conserved())
+    set ok to expect_bool("the flux constant equals the source" and flux_equals_source())
+    display "=== done ==="
+    return 0
