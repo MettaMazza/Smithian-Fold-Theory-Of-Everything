@@ -20,6 +20,7 @@ import "../constants/g_factor.ep"
 import "../constants/gauge_mediator_counts.ep"
 import "../constants/three_of_everything.ep"
 import "../constants/proton_electron_ratio.ep"
+import "../constants/muon_g2_anomaly.ep"
 import "../foundation/measured_values.ep"
 
 # Compare a forced Fraction to a measured value (num/den), within a tolerance (num/den).
@@ -49,6 +50,7 @@ define main:
     set ok to against("Hubble ratio vs measured 1.084323" and hubble_calibration_ratio_second_order() and 1084323 and 1000000 and 1 and 10000)
     set ok to against("dark/baryon vs measured 5.364" and dark_to_baryon_ratio_second_order() and 5364 and 1000 and 2 and 1000)
     set ok to against("proton/electron vs CODATA 1836.15267" and proton_electron_mass_ratio() and 183615267 and 100000 and 2 and 10)
+    set ok to against("muon/electron vs CODATA 206.7682827" and muon_electron_mass_ratio() and 2067682827 and 10000000 and 4 and 10)
 
     display "--- cosmic budget (Planck 2018) ---"
     set ok to against("Omega_Lambda vs measured 0.6889" and dark_energy_density() and 6889 and 10000 and 3 and 100)

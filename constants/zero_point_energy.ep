@@ -1,0 +1,47 @@
+# ============================================================================
+#  ZERO-POINT ENERGY  --  why the vacuum is never still, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Even at absolute zero, a quantum oscillator keeps a residual energy -- the zero-point
+#  energy, half a quantum (E = (1/2) h f). The vacuum is never perfectly still. Why is
+#  the floor nonzero, and why exactly a half? Forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Zero is forbidden -- there is not nothing -- so the ground cannot sit at the empty
+#  value. The lowest it can sit is the value whose double is the One: x + x = One gives
+#  x = One/binary = 1/2, the half-One. So the zero-point floor is the half-One, exactly
+#  the 1/2 in E = (1/2) h f. It is:
+#     strictly positive (not empty) -- the vacuum genuinely fluctuates;
+#     its own antipode (One - 1/2 = 1/2) -- the balanced, self-antipodal ground;
+#     a fold-preimage of the One (fold(1/2) = 1) -- it rises to a full quantum.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced floor is EXACT: 1/2, the half-quantum. Measured: the oscillator ground
+#  state carries (1/2) h f (observed in the Casimir force, the residual lattice motion
+#  of helium that never freezes, and the Lamb shift) -- the same half-One this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The zero-point floor: the half-One, 1/2 = One/binary -- the (1/2) in (1/2) h f.
+define zero_point_floor returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The floor is self-antipodal: floor + floor = One (so it folds to unison).
+define floor_plus_floor returning Fraction:
+    set floor to zero_point_floor()
+    return fraction_add(floor and floor)
+
+# The floor rises to a full quantum in one fold: fold(1/2) = 1.
+define zero_point_floor_folds_to_unison returning Fraction:
+    return fold_fraction(zero_point_floor())

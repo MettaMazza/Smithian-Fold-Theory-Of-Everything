@@ -1,0 +1,14 @@
+import "../constants/muon_g2_anomaly.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the muon g-2 anomaly (the muon is the sharp probe) ==="
+    set ok to expect_equal("bare Dirac g = binary count = 2" and int_to_string(muon_bare_g_factor()) and "2")
+    set ok to expect_equal("forced m_mu/m_e = 207.0 (leading cubic; measured 206.768, 0.16%)" and fraction_to_decimal(muon_electron_mass_ratio() and 1) and "207.0")
+    set ok to expect_equal("sensitivity (m_mu/m_e)^2 = 42886 (muon out-probes electron)" and fraction_to_decimal(anomaly_sensitivity_ratio() and 0) and "42886")
+    display "=== done ==="
+    return 0

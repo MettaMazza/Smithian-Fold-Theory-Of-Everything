@@ -1,0 +1,47 @@
+# ============================================================================
+#  THE MUON g-2 ANOMALY  --  why the muon is the sharp probe, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every charged lepton's magnetic moment departs a little from the Dirac value g = 2;
+#  the departure is the "anomaly". The muon's anomaly is the famous precision test of
+#  the Standard Model. Why the MUON and not the electron? Because a lepton's sensitivity
+#  to a mass-scale contribution grows as the square of its mass -- forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the forced lepton roots) ──
+#  Two forced facts:
+#    * The bare gyromagnetic ratio is g = 2 = the binary count -- the fold's two
+#      preimages of the One (the Dirac value; see g_factor.ep).
+#    * The muon and electron mass shares are the squared roots of the forced charged-
+#      lepton cubic (charged_lepton_cubic.ep), so their ratio m_mu/m_e is forced.
+#  A contribution to the anomaly that couples through a mass scale enters as (mass)^2,
+#  so the muon's excess over the electron's scales as (m_mu/m_e)^2 -- about 43000. The
+#  muon is that many times more sensitive; that is why it is the probe.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced mass ratio m_mu/m_e is 207.09 (leading cubic); measured 206.768 (CODATA),
+#  agreement 0.16%. The bare g is exactly 2; the measured 2.002331841 differs by the
+#  anomaly (the tiny QED/mass-scale part). The forced sensitivity ratio (m_mu/m_e)^2 is
+#  42886 -- the factor by which the muon out-probes the electron.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/charged_lepton_cubic.ep"
+
+
+# The bare Dirac g-factor: the binary count, 2 (the fold's two preimages of the One).
+define muon_bare_g_factor returning Int:
+    return binary_count()
+
+# The forced lepton mass ratio m_mu/m_e = (muon share)/(electron share).
+define muon_electron_mass_ratio returning Fraction:
+    set electron to electron_mass_share()
+    set muon to muon_mass_share()
+    return fraction_divide(muon and electron)
+
+# The anomaly-sensitivity ratio: (m_mu/m_e)^2 -- the muon's excess over the electron's
+# for a mass-scale contribution to the magnetic moment.
+define anomaly_sensitivity_ratio returning Fraction:
+    set mue to muon_electron_mass_ratio()
+    return fraction_multiply(mue and mue)

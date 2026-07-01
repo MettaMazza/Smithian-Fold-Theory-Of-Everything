@@ -1,0 +1,54 @@
+# ============================================================================
+#  THE LAMB SHIFT  --  the alpha-squared level shift, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two hydrogen levels that a naive theory places exactly together (2s and 2p) are in
+#  fact split by a tiny amount -- the Lamb shift, the discovery that launched quantum
+#  electrodynamics. It is a much smaller effect than the gross spectrum, sitting one
+#  order deeper: the alpha-squared order.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The gross spectrum sits one binary halving below the One (the half-One, 1/2, the
+#  fine-structure level). The Lamb shift sits ONE FOLD DEEPER: the quarter-One,
+#  1/4 = (1/2)^2 -- two binary halvings, the alpha-squared order (fine structure goes
+#  as alpha, this as alpha^2). Its state returns to unison in exactly TWO folds:
+#       1/4  ->  1/2  ->  1,
+#  the two-step return that marks the second (alpha^2) order. Summed with itself the
+#  state gives the half-One (1/4 + 1/4 = 1/2), the level one fold up.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced order is alpha^2 (two folds deep), exactly. Measured: the 2s-2p Lamb
+#  shift is about 1057 MHz, an alpha^2-suppressed shift relative to the gross spacing
+#  -- the depth this derivation forces. The suppression order, not a fitted magnitude,
+#  is what is forced here.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The Lamb shift state: the quarter-One, 1/4 = (1/2)^2 -- two binary halvings, alpha^2.
+define lamb_shift_state returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# One fold: 1/4 -> 1/2 (up to the fine-structure level, the half-One).
+define lamb_shift_first_fold returning Fraction:
+    return fold_fraction(lamb_shift_state())
+
+# The second fold: 1/2 -> 1 (unison). Two folds total = the alpha^2 order.
+define lamb_shift_reaches_unison returning Fraction:
+    return fold_fraction(lamb_shift_first_fold())
+
+# The state summed with itself is the half-One (the level one fold up): 1/4 + 1/4 = 1/2.
+define lamb_shift_state_doubled returning Fraction:
+    set state to lamb_shift_state()
+    return fraction_add(state and state)

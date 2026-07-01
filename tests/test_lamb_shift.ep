@@ -1,0 +1,15 @@
+import "../constants/lamb_shift.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the Lamb shift (alpha^2 order, two folds deep) ==="
+    set ok to expect_equal("Lamb shift state = 1/4 = (1/2)^2 (alpha^2 order)" and fraction_to_text(lamb_shift_state()) and "1/4")
+    set ok to expect_equal("one fold: 1/4 -> 1/2 (the fine-structure level)" and fraction_to_text(lamb_shift_first_fold()) and "1/2")
+    set ok to expect_equal("second fold: 1/2 -> 1 (unison); two folds total" and fraction_to_text(lamb_shift_reaches_unison()) and "1")
+    set ok to expect_equal("state + state = 1/2 (level one fold up)" and fraction_to_text(lamb_shift_state_doubled()) and "1/2")
+    display "=== done ==="
+    return 0

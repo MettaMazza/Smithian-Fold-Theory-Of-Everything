@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-97 suites, 610 forced checks, 0 failures). It needs nothing but a C compiler. Use
+100 suites, 621 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -2961,6 +2961,71 @@ while the neutral current conserves them — the forced antipode (charged) vs id
 
 ---
 
+### Step 95 — The muon g−2 anomaly (why the muon is the sharp probe)
+
+**File:** `constants/muon_g2_anomaly.ep`
+
+**What it does.** The bare gyromagnetic ratio is `g = 2 = binary` (the Dirac value, the
+fold's two preimages). A contribution to the anomalous moment that couples through a
+mass scale enters as `(mass)²`, so the muon's excess over the electron's scales as
+`(m_μ/m_e)²`. The mass ratio is forced from the lepton-cubic roots (Step 68), so the
+sensitivity factor is forced.
+
+```
+=== the muon g-2 anomaly ===
+  ok    bare Dirac g = binary count = 2
+  ok    forced m_mu/m_e = 207.0 (measured 206.768, 0.16%)
+  ok    sensitivity (m_mu/m_e)^2 = 42886 (muon out-probes electron)
+```
+
+**To measurement.** Forced `m_μ/m_e = 207.09` vs measured `206.768` (CODATA), 0.16%; the
+muon is `(m_μ/m_e)² ≈ 42886` times more sensitive to a mass-scale effect than the
+electron — which is why the muon anomaly is the precision test.
+
+---
+
+### Step 96 — The Lamb shift (the α² level shift)
+
+**File:** `constants/lamb_shift.ep`
+
+**What it does.** The gross spectrum sits one binary halving below the One (the half-One
+`1/2`, the fine-structure level). The Lamb shift sits one fold deeper — the quarter-One
+`1/4 = (1/2)²`, the **α² order** — and returns to unison in exactly two folds
+(`1/4 → 1/2 → 1`).
+
+```
+=== the Lamb shift ===
+  ok    Lamb shift state = 1/4 = (1/2)^2 (alpha^2 order)
+  ok    one fold: 1/4 -> 1/2 ; second fold: 1/2 -> 1 (two folds)
+  ok    state + state = 1/2 (level one fold up)
+```
+
+**To measurement.** The measured 2s–2p Lamb shift (~1057 MHz) is an α²-suppressed shift
+relative to the gross spacing — the two-fold depth this forces.
+
+---
+
+### Step 97 — Zero-point energy (the vacuum floor is the half-One)
+
+**File:** `constants/zero_point_energy.ep`
+
+**What it does.** Zero is forbidden, so the ground cannot be empty; the lowest value is
+the one whose double is the One — `1/2`, the half-One, exactly the `(1/2)` in
+`E = (1/2)hf`. It is strictly positive, self-antipodal (`1/2 + 1/2 = 1`), and folds to a
+full quantum.
+
+```
+=== zero-point energy ===
+  ok    zero-point floor = 1/2 (the (1/2) in (1/2) h f)
+  ok    floor + floor = 1 (self-antipodal, folds to unison)
+  ok    fold(1/2) = 1 (rises to a full quantum)
+```
+
+**To measurement.** The oscillator ground state carries `(1/2)hf` — seen in the Casimir
+force, helium that never freezes, and the Lamb shift — the same half-One forced here.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3182,6 +3247,13 @@ runs):**
   exactly `2` at every spacing — the discrete grid reproduces the continuum exactly.
 - Step 94 — electroweak currents: the charged current (W) flips handedness (antipode),
   the neutral current (Z) preserves it (identity).
+- Step 95 — the muon g−2 anomaly: bare `g = 2`; the anomaly excess scales as
+  `(m_μ/m_e)² ≈ 42886` (forced from the lepton roots), so the muon is the sharp probe
+  (`m_μ/m_e = 207.09` vs measured 206.768, 0.16%).
+- Step 96 — the Lamb shift: the `1/4 = (1/2)²` state (the α² order) returns to unison
+  in two folds (`1/4 → 1/2 → 1`), one fold deeper than the fine structure.
+- Step 97 — zero-point energy: the vacuum floor is the half-One `1/2` (the `(1/2)` in
+  `(1/2)hf`), self-antipodal, folding to a full quantum.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

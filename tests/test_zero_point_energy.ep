@@ -1,0 +1,14 @@
+import "../constants/zero_point_energy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== zero-point energy (the vacuum floor is the half-One) ==="
+    set ok to expect_equal("zero-point floor = 1/2 (the (1/2) in (1/2) h f)" and fraction_to_text(zero_point_floor()) and "1/2")
+    set ok to expect_equal("floor + floor = 1 (self-antipodal, folds to unison)" and fraction_to_text(floor_plus_floor()) and "1")
+    set ok to expect_equal("fold(1/2) = 1 (rises to a full quantum)" and fraction_to_text(zero_point_floor_folds_to_unison()) and "1")
+    display "=== done ==="
+    return 0

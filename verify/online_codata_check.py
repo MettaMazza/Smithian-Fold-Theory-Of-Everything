@@ -51,6 +51,22 @@ def forced_proton_electron():
     me, mmu = x1 * x1, x2 * x2
     return F(1, COLOUR) * (mmu - me) / (mmu * me)
 
+def forced_muon_electron():
+    """m_mu/m_e = (muon share)/(electron share) from the forced lepton-cubic roots."""
+    e2 = F(1, BINARY * COLOUR)
+    e3 = F(1, BINARY * COLOUR ** 5 - 1)
+    def f(x): return x**3 - x**2 + e2 * x - e3
+    def bisect(lo, hi, n=60):
+        lo, hi = F(lo), F(hi); s = f(lo) > 0
+        for _ in range(n):
+            m = (lo + hi) / 2
+            if (f(m) > 0) == s: lo = m
+            else: hi = m
+        return (lo + hi) / 2
+    x1 = bisect(F(1, 1000), F(1, 20))
+    x2 = bisect(F(1, 10), F(3, 10))
+    return (x2 * x2) / (x1 * x1)
+
 def forced_electron_g():
     """Bare Dirac g = 2 -- the fold's two preimages of the One."""
     return F(BINARY)
@@ -84,6 +100,7 @@ def main():
     rows = [
         ("1/alpha (inverse fine-structure)", forced_inverse_alpha(), "inverse fine-structure constant", 1e-6),
         ("proton / electron mass ratio",     forced_proton_electron(), "proton-electron mass ratio",     1e-2),
+        ("muon / electron mass ratio",       forced_muon_electron(),   "muon-electron mass ratio",       1e-2),
         ("electron g (magnitude)",           forced_electron_g(),      "electron g factor",              1e-2),
     ]
     print("=" * 78)

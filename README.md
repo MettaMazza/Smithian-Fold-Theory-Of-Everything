@@ -105,6 +105,10 @@ And the structural laws of physics, forced the same way:
   fractional `ν = 1/3`), **Maxwell wave closure** (curl equations close into light at
   `c`), and the **proton/electron mass ratio** (`mp/me = 1836.3254`, forced from the
   bisected lepton-cubic roots and the tripling `1/3`; 0.0094% from measured).
+- **QED corrections and the vacuum** — the **muon g−2 anomaly** (bare `g = 2`;
+  sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
+  **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
+  **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
 - **Range, stability, sound** — the **weak force range** (massive carrier → short
   range; massless → unbounded), **proton stability** (distinct quark/lepton fibres →
   baryon number conserved), and **phonons** (three acoustic branches `= d_space`).
@@ -137,8 +141,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 97 test
-suites (610 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 100 test
+suites (621 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -194,7 +198,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 97 suites, 610 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 100 suites, 621 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

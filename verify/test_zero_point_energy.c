@@ -4728,21 +4728,6 @@ void free_struct_FoldValue(long long ptr) {
     free(s);
 }
 
-typedef struct {
-    long long label;
-    long long numerator;
-    long long denominator;
-} EpStruct_Measured;
-
-void free_struct_Measured(long long ptr) {
-    if (ptr == 0) return;
-    /* Skip if already freed (idempotent — prevents double-free with shared refs) */
-    if (!ep_gc_find((void*)ptr)) return;
-    EpStruct_Measured* s = (EpStruct_Measured*)ptr;
-    ep_gc_unregister(s);
-    free(s);
-}
-
 
 /* Built-in: string concatenation */
 long long concat(long long a, long long b) {
@@ -4910,39 +4895,12 @@ long long ep_exit(long long);
 
 
 /* User Function Prototypes */
-long long against(long long, long long, long long, long long, long long, long long);
-long long against_exact(long long, long long, long long);
+long long expect_equal(long long, long long, long long);
 long long _main();
-long long generational_volume();
-long long next_volume();
-long long down_depth();
-long long up_depth();
-long long tower();
-long long colour_squared();
-long long covering_volume();
-long long sub_correction_scale();
-long long inverse_fine_structure_first_order();
-long long inverse_fine_structure_first_order_decimal(long long);
-long long inverse_fine_structure_second_order();
-long long inverse_fine_structure_second_order_decimal(long long);
-long long fs_tower_fraction();
-long long fs_colour_square_fraction();
-long long fs_dilation_up();
-long long fs_dilation_down();
-long long fs_covering_inverse();
-long long leading_assembly_is_unique();
-long long fs_outer_assembly(long long);
-long long fs_effective_cover_up();
-long long fs_effective_cover_down();
-long long fs_effective_cover_self();
-long long fs_effective_cover_additive();
-long long second_order_refinement_is_unique();
-long long fine_structure_leaf_numerators();
-long long fine_structure_leaf_denominators();
-long long fine_structure_assembly_is_minimal();
-long long fs_deepening_leaf_numerators();
-long long fs_deepening_leaf_denominators();
-long long second_order_deepening_is_minimal();
+long long fold_fraction(long long);
+long long zero_point_floor();
+long long floor_plus_floor();
+long long zero_point_floor_folds_to_unison();
 long long smallest_fold_period_above(long long);
 long long binary_count();
 long long colour_count();
@@ -4991,77 +4949,6 @@ long long exact_integer_power(long long, long long);
 long long exact_integer_divide(long long, long long);
 long long exact_integer_divide_exactly(long long, long long);
 long long exact_integer_greatest_common_divisor(long long, long long);
-long long halt_violation(long long);
-long long forbid_selection(long long);
-long long forbid_target_input(long long, long long);
-long long forced_unique(long long, long long, long long);
-long long forced_to_be(long long, long long, long long);
-long long count_form_match(long long, long long, long long);
-long long forbid_form_selection(long long, long long);
-long long absolute_whole(long long);
-long long whole_is_zero(long long);
-long long greatest_common_divisor(long long, long long);
-long long append_reduced(long long, long long, long long, long long);
-long long combine_rationals(long long, long long, long long, long long, long long, long long);
-long long count_rational_matches(long long, long long, long long, long long);
-long long canonical_assembly_is_minimal(long long, long long, long long, long long, long long, long long);
-long long sum_of_lepton_masses();
-long long sum_of_root_masses();
-long long koide_ratio();
-long long koide_from_colour();
-long long koide_form_is_unique();
-long long koide_leaf_numerators();
-long long koide_leaf_denominators();
-long long koide_assembly_is_minimal();
-long long no_loss_partition();
-long long second_invariant();
-long long leading_third_invariant();
-long long third_invariant_with_channel(long long);
-long long third_invariant();
-long long neutral_channel_is_forced();
-long long second_invariant_form_is_unique();
-long long leading_third_invariant_form_is_unique();
-long long lepton_cubic_value(long long);
-long long lepton_root_in_bracket(long long, long long, long long, long long, long long);
-long long electron_root();
-long long muon_root();
-long long tau_root();
-long long electron_mass_share();
-long long muon_mass_share();
-long long tau_mass_share();
-long long lepton_roots_sum_toward_one();
-long long generational_covering_depth();
-long long total_binary_volume();
-long long baryon_fraction();
-long long dark_fraction();
-long long matter_partition();
-long long dark_to_baryon_ratio();
-long long generational_orbit_floor();
-long long generational_orbit_floor_is_genuine();
-long long dark_to_baryon_ratio_second_order();
-long long dark_to_baryon_ratio_second_order_decimal(long long);
-long long db_ratio_from_deepened_depth(long long);
-long long dark_to_baryon_second_order_is_unique();
-long long db_volume_fraction();
-long long db_depth_fraction();
-long long db_total_fraction();
-long long dark_to_baryon_form_is_unique();
-long long dark_to_baryon_leaf_numerators();
-long long dark_to_baryon_leaf_denominators();
-long long dark_to_baryon_assembly_is_minimal();
-long long vacuum_fraction();
-long long matter_fraction();
-long long flatness_partition();
-long long covering_tower();
-long long calibration_correction();
-long long hubble_calibration_ratio();
-long long early_orbit_floor();
-long long early_orbit_floor_is_genuine();
-long long hubble_calibration_ratio_second_order();
-long long hubble_calibration_ratio_second_order_decimal(long long);
-long long hb_ratio_from_deepened_vacuum(long long);
-long long hubble_second_order_is_unique();
-long long hubble_calibration_form_is_unique();
 long long require_in_domain(long long);
 long long fold_value_size(long long);
 long long fold_value_from_size(long long, long long);
@@ -5078,140 +4965,34 @@ long long fold_period(long long, long long);
 long long rotate(long long, long long);
 long long relative_phase(long long, long long);
 long long beat_between(long long, long long);
-long long dark_energy_density();
-long long matter_density();
-long long flat_universe_partition();
-long long baryon_density();
-long long cold_dark_matter_density();
-long long atmospheric_mixing();
-long long solar_mixing();
-long long lepton_sector_count();
-long long reactor_mixing();
-long long fold_fraction(long long);
-long long atmospheric_fold();
-long long atmospheric_antipode();
-long long solar_take_of_fold();
-long long reactor_form_is_unique();
-long long reactor_leaf_numerators();
-long long reactor_leaf_denominators();
-long long reactor_assembly_is_minimal();
-long long w_to_z_mass_squared();
-long long cos_squared_at_level(long long);
-long long unified_coupling();
-long long sin_squared_mixing();
-long long cos_squared_mixing();
-long long mixing_partition();
-long long cos_squared_form_is_unique();
-long long lower_preimage_folds_to_coupling();
-long long upper_preimage_folds_to_coupling();
-long long weak_mixing_at_level(long long);
-long long bare_running_mixing();
-long long cos_squared_leaf_numerators();
-long long cos_squared_leaf_denominators();
-long long cos_squared_assembly_is_minimal();
-long long freeze_out_ratio();
-long long helium_fraction();
-long long helium_is_one_over_binary_squared();
-long long matter_half();
-long long deceleration_magnitude();
-long long universe_accelerates();
-long long critical_coupling();
-long long bare_g_factor();
-long long bare_g_factor_is_binary();
-long long mediator_count(long long);
-long long strong_sector();
-long long gluon_count();
-long long next_sector();
-long long next_sector_mediator_count();
-long long third_sector();
-long long third_sector_mediator_count();
-long long electromagnetic_field_source();
-long long strong_field_source();
-long long gluon_count_form_is_unique();
-long long gluon_leaf_numerators();
-long long gluon_leaf_denominators();
-long long gluon_assembly_is_minimal();
-long long count_in_stability_window();
-long long stable_dimension();
-long long spatial_dimension();
-long long tripling_preimage(long long);
-long long tripling_preimage_is_genuine(long long);
-long long generation_count();
-long long proton_electron_mass_ratio();
-long long electron_mass_part();
-long long strong_component_mass_part();
-long long proton_mass_part();
-long long proton_electron_structural_core();
-long long core_is_binary();
-long long muon_bare_g_factor();
-long long muon_electron_mass_ratio();
-long long anomaly_sensitivity_ratio();
-long long measured(long long, long long, long long);
-long long forced_agrees_with_measured(long long, long long, long long);
+long long halt_violation(long long);
+long long forbid_selection(long long);
+long long forbid_target_input(long long, long long);
+long long forced_unique(long long, long long, long long);
+long long forced_to_be(long long, long long, long long);
 
 
 
 /* Thread Spawn Wrappers */
 
-long long against(long long label, long long forced, long long m_num, long long m_den, long long t_num, long long t_den) {
-    long long target = 0;
-    long long forced_text = 0;
-    long long tol = 0;
-    long long agrees = 0;
+long long expect_equal(long long label, long long got, long long want) {
     long long ret_val = 0;
 
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&forced_text);
-    ep_gc_push_root(&tol);
     ep_gc_push_root(&label);
-    ep_gc_push_root(&forced);
-    ep_gc_push_root(&m_num);
-    ep_gc_push_root(&m_den);
-    ep_gc_push_root(&t_num);
-    ep_gc_push_root(&t_den);
+    ep_gc_push_root(&got);
+    ep_gc_push_root(&want);
 
     ep_gc_maybe_collect();
 
-    target = ({
-    EpStruct_Measured* _s = (EpStruct_Measured*)malloc(sizeof(EpStruct_Measured));
-    _s->label = label;
-    _s->numerator = m_num;
-    _s->denominator = m_den;
-    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
-    (long long)_s;
-});
-    tol = fraction_from_ratio(t_num, t_den);
-    agrees = forced_agrees_with_measured(forced, target, tol);
-    forced_text = fraction_to_decimal(forced, 6);
-    if (agrees) {
-    printf("%s\n", (char*)concat((long long)"  ok    ", concat(label, concat((long long)" -- forced ", forced_text))));
+    if (ep_str_equals(got, want)) {
+    printf("%s\n", (char*)concat((long long)"  ok    ", label));
     } else {
-    printf("%s\n", (char*)concat((long long)"  FAIL  ", concat(label, concat((long long)" -- forced ", forced_text))));
+    printf("%s\n", (char*)concat((long long)"  FAIL  ", concat(label, concat((long long)" got ", got))));
     }
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(9);
-    return ret_val;
-}
-
-long long against_exact(long long label, long long forced, long long measured_whole) {
-    long long forced_fraction = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&forced_fraction);
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&forced);
-    ep_gc_push_root(&measured_whole);
-
-    ep_gc_maybe_collect();
-
-    forced_fraction = fraction_from_whole_number(forced);
-    against(label, forced_fraction, measured_whole, 1, 0, 1);
-    ret_val = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
+    ep_gc_pop_roots(3);
     return ret_val;
 }
 
@@ -5219,29 +5000,10 @@ long long _main() {
     long long ok = 0;
     long long ret_val = 0;
 
-    printf("%s\n", (char*)(long long)"=== CODATA / PDG / Planck comparison (forced from the One vs measured) ===");
-    printf("%s\n", (char*)(long long)"--- precision constants ---");
-    ok = against((long long)"1/alpha vs CODATA 137.035999177", inverse_fine_structure_second_order(), 137035999177, 1000000000, 1, 1000000);
-    ok = against((long long)"Koide Q vs measured 0.666661", koide_ratio(), 666661, 1000000, 1, 100000);
-    ok = against((long long)"Hubble ratio vs measured 1.084323", hubble_calibration_ratio_second_order(), 1084323, 1000000, 1, 10000);
-    ok = against((long long)"dark/baryon vs measured 5.364", dark_to_baryon_ratio_second_order(), 5364, 1000, 2, 1000);
-    ok = against((long long)"proton/electron vs CODATA 1836.15267", proton_electron_mass_ratio(), 183615267, 100000, 2, 10);
-    ok = against((long long)"muon/electron vs CODATA 206.7682827", muon_electron_mass_ratio(), 2067682827, 10000000, 4, 10);
-    printf("%s\n", (char*)(long long)"--- cosmic budget (Planck 2018) ---");
-    ok = against((long long)"Omega_Lambda vs measured 0.6889", dark_energy_density(), 6889, 10000, 3, 100);
-    ok = against((long long)"Omega_matter vs measured 0.3111", matter_density(), 3111, 10000, 3, 100);
-    printf("%s\n", (char*)(long long)"--- neutrino mixing (NuFIT) ---");
-    ok = against((long long)"sin^2 atmospheric vs measured 0.545", atmospheric_mixing(), 545, 1000, 6, 100);
-    ok = against((long long)"sin^2 solar vs measured 0.307", solar_mixing(), 307, 1000, 6, 100);
-    ok = against((long long)"sin^2 reactor vs measured 0.022", reactor_mixing(), 22, 1000, 6, 100);
-    printf("%s\n", (char*)(long long)"--- electroweak, nuclear, cosmic ---");
-    ok = against((long long)"(M_W/M_Z)^2 vs measured 0.7769 (bare)", w_to_z_mass_squared(), 7769, 10000, 4, 100);
-    ok = against((long long)"primordial helium Y vs measured 0.247", helium_fraction(), 247, 1000, 1, 100);
-    ok = against((long long)"|q0| deceleration vs measured 0.53", deceleration_magnitude(), 53, 100, 6, 100);
-    ok = against((long long)"electron g: forced 2 vs measured 2.00232 (anomaly is QED)", bare_g_factor(), 200232, 100000, 1, 100);
-    printf("%s\n", (char*)(long long)"--- exact integer counts ---");
-    ok = against_exact((long long)"gluons vs observed 8", gluon_count(), 8);
-    ok = against_exact((long long)"fermion generations vs observed 3", generation_count(), 3);
+    printf("%s\n", (char*)(long long)"=== zero-point energy (the vacuum floor is the half-One) ===");
+    ok = expect_equal((long long)"zero-point floor = 1/2 (the (1/2) in (1/2) h f)", fraction_to_text(zero_point_floor()), (long long)"1/2");
+    ok = expect_equal((long long)"floor + floor = 1 (self-antipodal, folds to unison)", fraction_to_text(floor_plus_floor()), (long long)"1");
+    ok = expect_equal((long long)"fold(1/2) = 1 (rises to a full quantum)", fraction_to_text(zero_point_floor_folds_to_unison()), (long long)"1");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
@@ -5249,699 +5011,64 @@ L_cleanup:
     return ret_val;
 }
 
-long long generational_volume() {
-    long long c = 0;
+long long fold_fraction(long long size) {
+    long long size_again = 0;
+    long long doubled = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&c);
+    ep_gc_push_root(&size_again);
+    ep_gc_push_root(&doubled);
+    ep_gc_push_root(&size);
 
     ep_gc_maybe_collect();
 
-    c = smallest_fold_period_above(binary_count());
-    ret_val = whole_power(c, c);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long next_volume() {
-    long long c = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&c);
-
-    ep_gc_maybe_collect();
-
-    c = smallest_fold_period_above(binary_count());
-    ret_val = whole_power(c, (c + 1));
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long down_depth() {
-    long long by_covering = 0;
-    long long by_relation = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&by_covering);
-    ep_gc_push_root(&by_relation);
-
-    ep_gc_maybe_collect();
-
-    by_covering = minimal_binary_cover(generational_volume());
-    by_relation = (smallest_fold_period_above(1) + smallest_fold_period_above(binary_count()));
-    ret_val = forced_to_be((long long)"down-depth = cover(colour^colour) = binary + colour", by_covering, by_relation);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long up_depth() {
-    long long by_covering = 0;
-    long long by_relation = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&by_covering);
-    ep_gc_push_root(&by_relation);
-
-    ep_gc_maybe_collect();
-
-    by_covering = minimal_binary_cover(next_volume());
-    by_relation = (smallest_fold_period_above(binary_count()) + (smallest_fold_period_above(binary_count()) + 1));
-    ret_val = forced_to_be((long long)"up-depth = cover(colour^(colour+1)) = colour + (colour+1)", by_covering, by_relation);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long tower() {
-    long long ret_val = 0;
-
-    ret_val = whole_power(binary_count(), up_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long colour_squared() {
-    long long ret_val = 0;
-
-    ret_val = whole_power(colour_count(), binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long covering_volume() {
-    long long ret_val = 0;
-
-    ret_val = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long sub_correction_scale() {
-    long long ret_val = 0;
-
-    ret_val = (whole_power(down_depth(), binary_count()) * up_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long inverse_fine_structure_first_order() {
-    long long numerator = 0;
-    long long cov = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&cov);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    numerator = ((whole_power(binary_count(), up_depth()) * cov) + (whole_power(colour_count(), binary_count()) * (cov + 1)));
-    ret_val = fraction_from_ratio(numerator, cov);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long inverse_fine_structure_first_order_decimal(long long places) {
-    long long cov = 0;
-    long long numerator = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&places);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    numerator = ((whole_power(binary_count(), up_depth()) * cov) + (whole_power(colour_count(), binary_count()) * (cov + 1)));
-    ret_val = ratio_to_decimal_text(numerator, cov, places);
+    size_again = fraction_make(fraction_numerator(size), fraction_denominator(size));
+    doubled = fraction_add(size, size_again);
+    ret_val = cast_out_whole_ones(doubled);
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
     return ret_val;
 }
 
-long long inverse_fine_structure_second_order() {
-    long long cov = 0;
-    long long sub = 0;
-    long long numerator = 0;
-    long long effective_top = 0;
+long long zero_point_floor() {
     long long ret_val = 0;
 
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&effective_top);
+    ret_val = fraction_from_ratio(1, binary_count());
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long floor_plus_floor() {
+    long long floor = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&floor);
 
     ep_gc_maybe_collect();
 
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    sub = (whole_power(down_depth(), binary_count()) * up_depth());
-    effective_top = ((cov * sub) + 1);
-    numerator = ((whole_power(binary_count(), up_depth()) * effective_top) + (whole_power(colour_count(), binary_count()) * (effective_top + sub)));
-    ret_val = fraction_from_ratio(numerator, effective_top);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long inverse_fine_structure_second_order_decimal(long long places) {
-    long long sub = 0;
-    long long cov = 0;
-    long long effective_top = 0;
-    long long numerator = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&effective_top);
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&places);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    sub = (whole_power(down_depth(), binary_count()) * up_depth());
-    effective_top = ((cov * sub) + 1);
-    numerator = ((whole_power(binary_count(), up_depth()) * effective_top) + (whole_power(colour_count(), binary_count()) * (effective_top + sub)));
-    ret_val = ratio_to_decimal_text(numerator, effective_top, places);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long fs_tower_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(tower());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long fs_colour_square_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(colour_squared());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long fs_dilation_up() {
-    long long cov = 0;
-    long long cov_plus = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-    ep_gc_push_root(&cov_plus);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    cov_plus = (cov + 1);
-    ret_val = fraction_from_ratio(cov_plus, cov);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fs_dilation_down() {
-    long long cov = 0;
-    long long cov_minus = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-    ep_gc_push_root(&cov_minus);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    cov_minus = (cov - 1);
-    ret_val = fraction_from_ratio(cov_minus, cov);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fs_covering_inverse() {
-    long long cov = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-
-    ep_gc_maybe_collect();
-
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    ret_val = fraction_from_ratio(1, cov);
+    floor = fraction_from_ratio(1, binary_count());
+    ret_val = fraction_add(floor, floor);
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(1);
     return ret_val;
 }
 
-long long leading_assembly_is_unique() {
-    long long term_six = 0;
-    long long tw_seven = 0;
-    long long tw = 0;
-    long long tw_eight = 0;
-    long long tw_four = 0;
-    long long tw_nine = 0;
-    long long tw_three = 0;
-    long long tw_five = 0;
-    long long col_two = 0;
-    long long tw_six = 0;
-    long long term_five = 0;
-    long long shape_six = 0;
-    long long shape_eight = 0;
-    long long sum_four = 0;
-    long long shape_nine = 0;
-    long long sum_three = 0;
-    long long col_nine = 0;
-    long long term_two = 0;
-    long long shape_five = 0;
-    long long sum_eight = 0;
-    long long term = 0;
-    long long total = 0;
-    long long prod_seven = 0;
-    long long col = 0;
-    long long tw_two = 0;
-    long long shape_seven = 0;
-    long long shape_two = 0;
-    long long shape_four = 0;
-    long long shape_three = 0;
-    long long shape_one = 0;
-    long long term_nine = 0;
+long long zero_point_floor_folds_to_unison() {
     long long ret_val = 0;
 
-    ep_gc_push_root(&term_six);
-    ep_gc_push_root(&tw_seven);
-    ep_gc_push_root(&tw);
-    ep_gc_push_root(&tw_eight);
-    ep_gc_push_root(&tw_four);
-    ep_gc_push_root(&tw_nine);
-    ep_gc_push_root(&tw_three);
-    ep_gc_push_root(&tw_five);
-    ep_gc_push_root(&col_two);
-    ep_gc_push_root(&tw_six);
-    ep_gc_push_root(&term_five);
-    ep_gc_push_root(&shape_six);
-    ep_gc_push_root(&shape_eight);
-    ep_gc_push_root(&sum_four);
-    ep_gc_push_root(&shape_nine);
-    ep_gc_push_root(&sum_three);
-    ep_gc_push_root(&col_nine);
-    ep_gc_push_root(&term_two);
-    ep_gc_push_root(&shape_five);
-    ep_gc_push_root(&sum_eight);
-    ep_gc_push_root(&term);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&prod_seven);
-    ep_gc_push_root(&col);
-    ep_gc_push_root(&tw_two);
-    ep_gc_push_root(&shape_seven);
-    ep_gc_push_root(&shape_two);
-    ep_gc_push_root(&shape_four);
-    ep_gc_push_root(&shape_three);
-    ep_gc_push_root(&shape_one);
-    ep_gc_push_root(&term_nine);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    col = fraction_from_whole_number(colour_squared());
-    term = fraction_multiply(col, fs_dilation_up());
-    tw = fraction_from_whole_number(tower());
-    shape_one = fraction_add(tw, term);
-    total = count_form_match(total, shape_one, inverse_fine_structure_first_order());
-    col_two = fraction_from_whole_number(colour_squared());
-    term_two = fraction_multiply(col_two, fs_dilation_down());
-    tw_two = fraction_from_whole_number(tower());
-    shape_two = fraction_add(tw_two, term_two);
-    total = count_form_match(total, shape_two, inverse_fine_structure_first_order());
-    tw_three = fraction_from_whole_number(tower());
-    sum_three = fraction_add(tw_three, fs_colour_square_fraction());
-    shape_three = fraction_add(sum_three, fs_covering_inverse());
-    total = count_form_match(total, shape_three, inverse_fine_structure_first_order());
-    tw_four = fraction_from_whole_number(tower());
-    sum_four = fraction_add(tw_four, fs_colour_square_fraction());
-    shape_four = fraction_subtract(sum_four, fs_covering_inverse());
-    total = count_form_match(total, shape_four, inverse_fine_structure_first_order());
-    tw_five = fraction_from_whole_number(tower());
-    term_five = fraction_multiply(tw_five, fs_dilation_up());
-    shape_five = fraction_add(term_five, fs_colour_square_fraction());
-    total = count_form_match(total, shape_five, inverse_fine_structure_first_order());
-    tw_six = fraction_from_whole_number(tower());
-    term_six = fraction_multiply(tw_six, fs_dilation_down());
-    shape_six = fraction_add(term_six, fs_colour_square_fraction());
-    total = count_form_match(total, shape_six, inverse_fine_structure_first_order());
-    tw_seven = fraction_from_whole_number(tower());
-    prod_seven = fraction_multiply(tw_seven, fs_colour_square_fraction());
-    shape_seven = fraction_multiply(prod_seven, fs_dilation_up());
-    total = count_form_match(total, shape_seven, inverse_fine_structure_first_order());
-    tw_eight = fraction_from_whole_number(tower());
-    sum_eight = fraction_add(tw_eight, fs_colour_square_fraction());
-    shape_eight = fraction_multiply(sum_eight, fs_dilation_up());
-    total = count_form_match(total, shape_eight, inverse_fine_structure_first_order());
-    col_nine = fraction_from_whole_number(colour_squared());
-    term_nine = fraction_multiply(col_nine, fs_covering_inverse());
-    tw_nine = fraction_from_whole_number(tower());
-    shape_nine = fraction_add(tw_nine, term_nine);
-    total = count_form_match(total, shape_nine, inverse_fine_structure_first_order());
-    ret_val = forbid_form_selection((long long)"the fine-structure leading assembly shape", total);
+    ret_val = fold_fraction(zero_point_floor());
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(31);
-    return ret_val;
-}
-
-long long fs_outer_assembly(long long cov_eff) {
-    long long col = 0;
-    long long cov_eff_plus = 0;
-    long long tw = 0;
-    long long term = 0;
-    long long dilation = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&col);
-    ep_gc_push_root(&cov_eff_plus);
-    ep_gc_push_root(&tw);
-    ep_gc_push_root(&term);
-    ep_gc_push_root(&dilation);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&cov_eff);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    cov_eff_plus = fraction_add(cov_eff, one);
-    dilation = fraction_divide(cov_eff_plus, cov_eff);
-    col = fraction_from_whole_number(colour_squared());
-    term = fraction_multiply(col, dilation);
-    tw = fraction_from_whole_number(tower());
-    ret_val = fraction_add(tw, term);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(7);
-    return ret_val;
-}
-
-long long fs_effective_cover_up() {
-    long long cov = 0;
-    long long sub_inverse = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-    ep_gc_push_root(&sub_inverse);
-
-    ep_gc_maybe_collect();
-
-    cov = fraction_from_whole_number(covering_volume());
-    sub_inverse = fraction_from_ratio(1, sub_correction_scale());
-    ret_val = fraction_add(cov, sub_inverse);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fs_effective_cover_down() {
-    long long sub_inverse = 0;
-    long long cov = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&sub_inverse);
-    ep_gc_push_root(&cov);
-
-    ep_gc_maybe_collect();
-
-    cov = fraction_from_whole_number(covering_volume());
-    sub_inverse = fraction_from_ratio(1, sub_correction_scale());
-    ret_val = fraction_subtract(cov, sub_inverse);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fs_effective_cover_self() {
-    long long cov_inverse = 0;
-    long long cov = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov_inverse);
-    ep_gc_push_root(&cov);
-
-    ep_gc_maybe_collect();
-
-    cov = fraction_from_whole_number(covering_volume());
-    cov_inverse = fraction_from_ratio(1, covering_volume());
-    ret_val = fraction_add(cov, cov_inverse);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fs_effective_cover_additive() {
-    long long cov = 0;
-    long long sub_whole = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cov);
-    ep_gc_push_root(&sub_whole);
-
-    ep_gc_maybe_collect();
-
-    cov = fraction_from_whole_number(covering_volume());
-    sub_whole = fraction_from_whole_number(sub_correction_scale());
-    ret_val = fraction_add(cov, sub_whole);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long second_order_refinement_is_unique() {
-    long long eff_d = 0;
-    long long total = 0;
-    long long form_a = 0;
-    long long eff_a = 0;
-    long long eff_c = 0;
-    long long eff_b = 0;
-    long long form_b = 0;
-    long long form_c = 0;
-    long long form_d = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&eff_d);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&form_a);
-    ep_gc_push_root(&eff_a);
-    ep_gc_push_root(&eff_c);
-    ep_gc_push_root(&eff_b);
-    ep_gc_push_root(&form_b);
-    ep_gc_push_root(&form_c);
-    ep_gc_push_root(&form_d);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    eff_a = fs_effective_cover_up();
-    form_a = fs_outer_assembly(eff_a);
-    total = count_form_match(total, form_a, inverse_fine_structure_second_order());
-    eff_b = fs_effective_cover_down();
-    form_b = fs_outer_assembly(eff_b);
-    total = count_form_match(total, form_b, inverse_fine_structure_second_order());
-    eff_c = fs_effective_cover_self();
-    form_c = fs_outer_assembly(eff_c);
-    total = count_form_match(total, form_c, inverse_fine_structure_second_order());
-    eff_d = fs_effective_cover_additive();
-    form_d = fs_outer_assembly(eff_d);
-    total = count_form_match(total, form_d, inverse_fine_structure_second_order());
-    ret_val = forbid_form_selection((long long)"the fine-structure second-order refinement form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(9);
-    return ret_val;
-}
-
-long long fine_structure_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, tower());
-    ok = append_list(nums, colour_squared());
-    ok = append_list(nums, covering_volume());
-    ok = append_list(nums, 1);
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long fine_structure_leaf_denominators() {
-    long long dens = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long fine_structure_assembly_is_minimal() {
-    long long common = 0;
-    long long target_num = 0;
-    long long raw_num = 0;
-    long long leaf_nums = 0;
-    long long raw_den = 0;
-    long long leaf_dens = 0;
-    long long cov = 0;
-    long long target_den = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&raw_num);
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&raw_den);
-    ep_gc_push_root(&leaf_dens);
-    ep_gc_push_root(&target_den);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = fine_structure_leaf_numerators();
-    leaf_dens = fine_structure_leaf_denominators();
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    raw_num = ((whole_power(binary_count(), up_depth()) * cov) + (whole_power(colour_count(), binary_count()) * (cov + 1)));
-    raw_den = cov;
-    common = greatest_common_divisor(raw_num, raw_den);
-    target_num = (raw_num / common);
-    target_den = (raw_den / common);
-    ret_val = canonical_assembly_is_minimal((long long)"no assembly of fewer than three operations reaches 1/alpha", leaf_nums, leaf_dens, target_num, target_den, 3);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long fs_deepening_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, covering_volume());
-    ok = append_list(nums, sub_correction_scale());
-    ok = append_list(nums, 1);
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long fs_deepening_leaf_denominators() {
-    long long dens = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long second_order_deepening_is_minimal() {
-    long long sub = 0;
-    long long common = 0;
-    long long leaf_nums = 0;
-    long long raw_num = 0;
-    long long target_den = 0;
-    long long raw_den = 0;
-    long long target_num = 0;
-    long long cov = 0;
-    long long leaf_dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&raw_num);
-    ep_gc_push_root(&target_den);
-    ep_gc_push_root(&raw_den);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_dens);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = fs_deepening_leaf_numerators();
-    leaf_dens = fs_deepening_leaf_denominators();
-    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
-    sub = (whole_power(down_depth(), binary_count()) * up_depth());
-    raw_num = ((cov * sub) + 1);
-    raw_den = sub;
-    common = greatest_common_divisor(raw_num, raw_den);
-    target_num = (raw_num / common);
-    target_den = (raw_den / common);
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the second-order effective cover", leaf_nums, leaf_dens, target_num, target_den, 2);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
     return ret_val;
 }
 
 long long smallest_fold_period_above(long long threshold) {
+    long long period = 0;
     long long best = 0;
     long long n = 0;
-    long long period = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&n);
@@ -5989,8 +5116,8 @@ L_cleanup:
 }
 
 long long minimal_binary_cover(long long volume) {
-    long long depth = 0;
     long long reach = 0;
+    long long depth = 0;
     long long ret_val = 0;
 
     depth = 1;
@@ -6023,8 +5150,8 @@ L_cleanup:
 }
 
 long long fold_period_of_unit_fraction(long long n) {
-    long long count = 0;
     long long value = 0;
+    long long count = 0;
     long long ret_val = 0;
 
     value = (2 % n);
@@ -6054,15 +5181,15 @@ L_cleanup:
 }
 
 long long ratio_to_decimal_text(long long numerator, long long denominator, long long places) {
-    long long fractional = 0;
     long long place = 0;
-    long long whole_part = 0;
     long long remainder = 0;
+    long long whole_part = 0;
+    long long fractional = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&fractional);
-    ep_gc_push_root(&whole_part);
     ep_gc_push_root(&remainder);
+    ep_gc_push_root(&whole_part);
+    ep_gc_push_root(&fractional);
     ep_gc_push_root(&denominator);
 
     ep_gc_maybe_collect();
@@ -6117,16 +5244,16 @@ L_cleanup:
 }
 
 long long fraction_make(long long top, long long bottom) {
+    long long numerator = 0;
     long long common = 0;
     long long denominator = 0;
     long long value = 0;
-    long long numerator = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&numerator);
     ep_gc_push_root(&common);
     ep_gc_push_root(&denominator);
     ep_gc_push_root(&value);
-    ep_gc_push_root(&numerator);
     ep_gc_push_root(&top);
     ep_gc_push_root(&bottom);
 
@@ -6200,24 +5327,24 @@ L_cleanup:
 }
 
 long long fraction_add(long long first, long long second) {
-    long long first_bottom = 0;
-    long long cross_first = 0;
-    long long bottom = 0;
-    long long second_bottom = 0;
     long long first_top = 0;
-    long long second_top = 0;
     long long cross_second = 0;
     long long top = 0;
+    long long first_bottom = 0;
+    long long second_top = 0;
+    long long second_bottom = 0;
+    long long cross_first = 0;
+    long long bottom = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&cross_first);
-    ep_gc_push_root(&bottom);
-    ep_gc_push_root(&second_bottom);
     ep_gc_push_root(&first_top);
-    ep_gc_push_root(&second_top);
     ep_gc_push_root(&cross_second);
     ep_gc_push_root(&top);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&bottom);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6239,23 +5366,23 @@ L_cleanup:
 }
 
 long long fraction_subtract(long long first, long long second) {
-    long long top = 0;
-    long long second_top = 0;
     long long cross_second = 0;
-    long long first_bottom = 0;
-    long long bottom = 0;
-    long long first_top = 0;
     long long second_bottom = 0;
+    long long first_top = 0;
+    long long second_top = 0;
+    long long top = 0;
+    long long bottom = 0;
+    long long first_bottom = 0;
     long long cross_first = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&second_top);
     ep_gc_push_root(&cross_second);
-    ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&bottom);
-    ep_gc_push_root(&first_top);
     ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&first_top);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&first_bottom);
     ep_gc_push_root(&cross_first);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
@@ -6281,18 +5408,18 @@ L_cleanup:
 
 long long fraction_multiply(long long first, long long second) {
     long long first_top = 0;
+    long long first_bottom = 0;
+    long long top = 0;
     long long second_top = 0;
     long long second_bottom = 0;
-    long long top = 0;
-    long long first_bottom = 0;
     long long bottom = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&first_top);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&top);
     ep_gc_push_root(&second_top);
     ep_gc_push_root(&second_bottom);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&first_bottom);
     ep_gc_push_root(&bottom);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
@@ -6313,20 +5440,20 @@ L_cleanup:
 }
 
 long long fraction_divide(long long first, long long second) {
-    long long second_bottom = 0;
     long long first_top = 0;
-    long long second_top = 0;
-    long long top = 0;
-    long long bottom = 0;
     long long first_bottom = 0;
+    long long top = 0;
+    long long second_bottom = 0;
+    long long bottom = 0;
+    long long second_top = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&second_bottom);
     ep_gc_push_root(&first_top);
-    ep_gc_push_root(&second_top);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&bottom);
     ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&bottom);
+    ep_gc_push_root(&second_top);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6346,20 +5473,20 @@ L_cleanup:
 }
 
 long long fraction_compare(long long first, long long second) {
-    long long second_bottom = 0;
-    long long cross_second = 0;
-    long long first_bottom = 0;
-    long long second_top = 0;
     long long first_top = 0;
     long long cross_first = 0;
+    long long first_bottom = 0;
+    long long second_top = 0;
+    long long second_bottom = 0;
+    long long cross_second = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&second_bottom);
-    ep_gc_push_root(&cross_second);
-    ep_gc_push_root(&first_bottom);
-    ep_gc_push_root(&second_top);
     ep_gc_push_root(&first_top);
     ep_gc_push_root(&cross_first);
+    ep_gc_push_root(&first_bottom);
+    ep_gc_push_root(&second_top);
+    ep_gc_push_root(&second_bottom);
+    ep_gc_push_root(&cross_second);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6412,27 +5539,27 @@ L_cleanup:
 }
 
 long long fraction_to_decimal(long long value, long long places) {
-    long long ten = 0;
-    long long whole_text = 0;
-    long long leading_sign = 0;
-    long long fraction_text = 0;
-    long long place = 0;
-    long long step_outcome = 0;
-    long long bottom = 0;
     long long remainder = 0;
     long long whole_part_outcome = 0;
+    long long bottom = 0;
     long long top = 0;
+    long long place = 0;
+    long long ten = 0;
+    long long leading_sign = 0;
+    long long step_outcome = 0;
+    long long fraction_text = 0;
+    long long whole_text = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&ten);
-    ep_gc_push_root(&whole_text);
-    ep_gc_push_root(&leading_sign);
-    ep_gc_push_root(&fraction_text);
-    ep_gc_push_root(&step_outcome);
-    ep_gc_push_root(&bottom);
     ep_gc_push_root(&remainder);
     ep_gc_push_root(&whole_part_outcome);
+    ep_gc_push_root(&bottom);
     ep_gc_push_root(&top);
+    ep_gc_push_root(&ten);
+    ep_gc_push_root(&leading_sign);
+    ep_gc_push_root(&step_outcome);
+    ep_gc_push_root(&fraction_text);
+    ep_gc_push_root(&whole_text);
     ep_gc_push_root(&value);
 
     ep_gc_maybe_collect();
@@ -6464,10 +5591,10 @@ long long fraction_to_decimal(long long value, long long places) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(10);
-    free_struct_DivisionOutcome(step_outcome);
-    step_outcome = 0;
     free_struct_DivisionOutcome(whole_part_outcome);
     whole_part_outcome = 0;
+    free_struct_DivisionOutcome(step_outcome);
+    step_outcome = 0;
     return ret_val;
 }
 
@@ -6481,12 +5608,12 @@ L_cleanup:
 }
 
 long long exact_integer_from_sign_and_digits(long long sign, long long digits) {
-    long long value = 0;
     long long chosen_sign = 0;
+    long long value = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&value);
     ep_gc_push_root(&chosen_sign);
+    ep_gc_push_root(&value);
     ep_gc_push_root(&digits);
 
     ep_gc_maybe_collect();
@@ -6528,12 +5655,12 @@ L_cleanup:
 }
 
 long long exact_integer_from_number(long long whole_number) {
-    long long magnitude = 0;
     long long sign = 0;
+    long long magnitude = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&magnitude);
     ep_gc_push_root(&sign);
+    ep_gc_push_root(&magnitude);
 
     ep_gc_maybe_collect();
 
@@ -6554,12 +5681,12 @@ L_cleanup:
 }
 
 long long exact_integer_from_messy_digits(long long sign, long long messy_digits) {
-    long long tidy_digits = 0;
     long long blocks = 0;
+    long long tidy_digits = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&tidy_digits);
     ep_gc_push_root(&blocks);
+    ep_gc_push_root(&tidy_digits);
     ep_gc_push_root(&sign);
     ep_gc_push_root(&messy_digits);
 
@@ -6594,17 +5721,17 @@ L_cleanup:
 
 long long digits_to_blocks(long long digits) {
     long long chunk = 0;
-    long long blocks = 0;
-    long long length = 0;
     long long added = 0;
-    long long high = 0;
+    long long length = 0;
     long long low = 0;
+    long long high = 0;
+    long long blocks = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&chunk);
-    ep_gc_push_root(&blocks);
-    ep_gc_push_root(&high);
     ep_gc_push_root(&low);
+    ep_gc_push_root(&high);
+    ep_gc_push_root(&blocks);
     ep_gc_push_root(&digits);
 
     ep_gc_maybe_collect();
@@ -6629,15 +5756,15 @@ L_cleanup:
 }
 
 long long blocks_to_digits(long long blocks) {
-    long long this_block = 0;
     long long index = 0;
-    long long count = 0;
+    long long this_block = 0;
     long long highest_block = 0;
+    long long count = 0;
     long long text = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&this_block);
     ep_gc_push_root(&index);
+    ep_gc_push_root(&this_block);
     ep_gc_push_root(&count);
     ep_gc_push_root(&text);
     ep_gc_push_root(&blocks);
@@ -6685,9 +5812,9 @@ L_cleanup:
 
 long long text_to_number(long long text) {
     long long index = 0;
-    long long total = 0;
-    long long character_code = 0;
     long long length = 0;
+    long long character_code = 0;
+    long long total = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&index);
@@ -6711,9 +5838,9 @@ L_cleanup:
 }
 
 long long trim_leading_zero_blocks(long long blocks) {
-    long long removed = 0;
     long long count = 0;
     long long highest_block = 0;
+    long long removed = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&count);
@@ -6740,10 +5867,10 @@ L_cleanup:
 
 long long compare_magnitudes(long long first, long long second) {
     long long first_count = 0;
-    long long index = 0;
     long long second_block = 0;
-    long long second_count = 0;
     long long first_block = 0;
+    long long index = 0;
+    long long second_count = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&index);
@@ -6784,22 +5911,22 @@ L_cleanup:
 }
 
 long long add_magnitudes(long long first, long long second) {
-    long long carry = 0;
-    long long first_block = 0;
-    long long second_block = 0;
-    long long index = 0;
-    long long result = 0;
-    long long first_count = 0;
     long long second_count = 0;
     long long total = 0;
-    long long added = 0;
     long long count = 0;
+    long long carry = 0;
+    long long index = 0;
+    long long result = 0;
+    long long first_block = 0;
+    long long first_count = 0;
+    long long second_block = 0;
+    long long added = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&total);
     ep_gc_push_root(&carry);
     ep_gc_push_root(&index);
     ep_gc_push_root(&result);
-    ep_gc_push_root(&total);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -6840,19 +5967,19 @@ L_cleanup:
 }
 
 long long subtract_magnitudes(long long first, long long second) {
-    long long result = 0;
+    long long added = 0;
+    long long second_block = 0;
     long long first_count = 0;
     long long index = 0;
-    long long difference = 0;
+    long long result = 0;
     long long borrowed = 0;
     long long second_count = 0;
-    long long second_block = 0;
     long long first_block = 0;
-    long long added = 0;
+    long long difference = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&result);
     ep_gc_push_root(&index);
+    ep_gc_push_root(&result);
     ep_gc_push_root(&difference);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
@@ -6888,29 +6015,29 @@ L_cleanup:
 }
 
 long long multiply_magnitudes(long long first, long long second) {
+    long long outer = 0;
+    long long second_count = 0;
+    long long first_count = 0;
+    long long result = 0;
+    long long running = 0;
+    long long added = 0;
+    long long placed = 0;
+    long long inner = 0;
+    long long position = 0;
+    long long index = 0;
+    long long total = 0;
+    long long first_block = 0;
+    long long second_block = 0;
     long long carry = 0;
     long long product = 0;
-    long long added = 0;
-    long long index = 0;
-    long long first_count = 0;
-    long long inner = 0;
-    long long first_block = 0;
-    long long second_count = 0;
-    long long result = 0;
-    long long total = 0;
-    long long running = 0;
-    long long second_block = 0;
-    long long placed = 0;
-    long long position = 0;
-    long long outer = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&product);
-    ep_gc_push_root(&inner);
-    ep_gc_push_root(&result);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&position);
     ep_gc_push_root(&outer);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&inner);
+    ep_gc_push_root(&position);
+    ep_gc_push_root(&total);
+    ep_gc_push_root(&product);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -7001,8 +6128,8 @@ L_cleanup:
 }
 
 long long exact_integer_add(long long first, long long second) {
-    long long order = 0;
     long long first_blocks = 0;
+    long long order = 0;
     long long second_blocks = 0;
     long long ret_val = 0;
 
@@ -7059,16 +6186,16 @@ L_cleanup:
 }
 
 long long exact_integer_multiply(long long first, long long second) {
-    long long product_blocks = 0;
-    long long second_blocks = 0;
     long long product_digits = 0;
     long long first_blocks = 0;
+    long long product_blocks = 0;
+    long long second_blocks = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&product_blocks);
-    ep_gc_push_root(&second_blocks);
     ep_gc_push_root(&product_digits);
     ep_gc_push_root(&first_blocks);
+    ep_gc_push_root(&product_blocks);
+    ep_gc_push_root(&second_blocks);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -7095,8 +6222,8 @@ L_cleanup:
 
 long long exact_integer_compare(long long first, long long second) {
     long long first_blocks = 0;
-    long long magnitude_order = 0;
     long long second_blocks = 0;
+    long long magnitude_order = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&first_blocks);
@@ -7152,43 +6279,43 @@ L_cleanup:
 }
 
 long long exact_integer_divide(long long dividend, long long divisor) {
-    long long outcome = 0;
     long long quotient_digits = 0;
-    long long this_count = 0;
-    long long tidy_quotient = 0;
     long long next_digit = 0;
-    long long remainder = 0;
-    long long ten = 0;
-    long long dividend_digits = 0;
-    long long quotient_blocks = 0;
-    long long next_value = 0;
-    long long index = 0;
-    long long shifted = 0;
-    long long quotient_digit = 0;
+    long long tidy_quotient = 0;
     long long next_count = 0;
     long long trial = 0;
+    long long ten = 0;
+    long long this_count = 0;
     long long length = 0;
+    long long quotient_digit = 0;
+    long long next_value = 0;
     long long to_remove = 0;
+    long long index = 0;
+    long long dividend_digits = 0;
+    long long remainder = 0;
     long long digit_text = 0;
+    long long shifted = 0;
+    long long outcome = 0;
+    long long quotient_blocks = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&outcome);
     ep_gc_push_root(&quotient_digits);
-    ep_gc_push_root(&this_count);
-    ep_gc_push_root(&tidy_quotient);
     ep_gc_push_root(&next_digit);
-    ep_gc_push_root(&remainder);
-    ep_gc_push_root(&ten);
-    ep_gc_push_root(&dividend_digits);
-    ep_gc_push_root(&quotient_blocks);
-    ep_gc_push_root(&next_value);
-    ep_gc_push_root(&index);
-    ep_gc_push_root(&shifted);
-    ep_gc_push_root(&quotient_digit);
+    ep_gc_push_root(&tidy_quotient);
     ep_gc_push_root(&next_count);
     ep_gc_push_root(&trial);
+    ep_gc_push_root(&ten);
+    ep_gc_push_root(&this_count);
+    ep_gc_push_root(&quotient_digit);
+    ep_gc_push_root(&next_value);
     ep_gc_push_root(&to_remove);
+    ep_gc_push_root(&index);
+    ep_gc_push_root(&dividend_digits);
+    ep_gc_push_root(&remainder);
     ep_gc_push_root(&digit_text);
+    ep_gc_push_root(&shifted);
+    ep_gc_push_root(&outcome);
+    ep_gc_push_root(&quotient_blocks);
     ep_gc_push_root(&dividend);
     ep_gc_push_root(&divisor);
 
@@ -7242,14 +6369,14 @@ L_cleanup:
 }
 
 long long exact_integer_divide_exactly(long long dividend, long long divisor) {
-    long long outcome = 0;
-    long long absolute_dividend = 0;
     long long absolute_divisor = 0;
+    long long absolute_dividend = 0;
+    long long outcome = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&outcome);
-    ep_gc_push_root(&absolute_dividend);
     ep_gc_push_root(&absolute_divisor);
+    ep_gc_push_root(&absolute_dividend);
+    ep_gc_push_root(&outcome);
     ep_gc_push_root(&dividend);
     ep_gc_push_root(&divisor);
 
@@ -7272,14 +6399,14 @@ L_cleanup:
 }
 
 long long exact_integer_greatest_common_divisor(long long first, long long second) {
-    long long smaller = 0;
     long long larger = 0;
     long long outcome = 0;
+    long long smaller = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&smaller);
     ep_gc_push_root(&larger);
     ep_gc_push_root(&outcome);
+    ep_gc_push_root(&smaller);
     ep_gc_push_root(&first);
     ep_gc_push_root(&second);
 
@@ -7298,6 +6425,410 @@ L_cleanup:
     ep_gc_pop_roots(5);
     free_struct_DivisionOutcome(outcome);
     outcome = 0;
+    return ret_val;
+}
+
+long long require_in_domain(long long size) {
+    long long one = 0;
+    long long order = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&one);
+    ep_gc_push_root(&size);
+
+    ep_gc_maybe_collect();
+
+    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
+    ret_val = halt_violation((long long)"a value was zero; the domain has no zero");
+    goto L_cleanup;
+    }
+    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) < 0) {
+    ret_val = halt_violation((long long)"a value was negative; the domain is the One's interval, greater than zero and at most one");
+    goto L_cleanup;
+    }
+    one = fraction_from_whole_number(1);
+    order = fraction_compare(size, one);
+    if (order > 0) {
+    ret_val = halt_violation((long long)"a value exceeded the One; the domain is greater than zero and at most one");
+    goto L_cleanup;
+    }
+    ret_val = 1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fold_value_size(long long value) {
+    long long denominator = 0;
+    long long numerator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    numerator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->numerator_digits; }));
+    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->denominator_digits; }));
+    ret_val = fraction_make(numerator, denominator);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long fold_value_from_size(long long size, long long derivation) {
+    long long value = 0;
+    long long checked = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&derivation);
+
+    ep_gc_maybe_collect();
+
+    checked = require_in_domain(size);
+    value = ({
+    EpStruct_FoldValue* _s = (EpStruct_FoldValue*)malloc(sizeof(EpStruct_FoldValue));
+    _s->numerator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; });
+    _s->denominator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; });
+    _s->derivation = derivation;
+    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
+    (long long)_s;
+});
+    ret_val = value;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long the_one() {
+    long long one_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&one_size);
+
+    ep_gc_maybe_collect();
+
+    one_size = fraction_from_whole_number(1);
+    ret_val = fold_value_from_size(one_size, (long long)"ONE");
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long supposed_value(long long top, long long bottom) {
+    long long label = 0;
+    long long size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&top);
+    ep_gc_push_root(&bottom);
+
+    ep_gc_maybe_collect();
+
+    size = fraction_from_ratio(top, bottom);
+    label = concat(concat((long long)"supposed(", fraction_to_text(size)), (long long)")");
+    ret_val = fold_value_from_size(size, label);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long cast_out_whole_ones(long long size) {
+    long long numerator = 0;
+    long long denominator = 0;
+    long long whole_integer = 0;
+    long long whole_count = 0;
+    long long one_integer = 0;
+    long long whole_part = 0;
+    long long remainder = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&numerator);
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&whole_integer);
+    ep_gc_push_root(&whole_count);
+    ep_gc_push_root(&one_integer);
+    ep_gc_push_root(&whole_part);
+    ep_gc_push_root(&remainder);
+    ep_gc_push_root(&size);
+
+    ep_gc_maybe_collect();
+
+    numerator = exact_integer_from_sign_and_digits(({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    whole_count = exact_integer_divide(numerator, denominator);
+    whole_integer = exact_integer_from_sign_and_digits(1, ({ long long _fap = whole_count; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; }));
+    one_integer = exact_integer_from_sign_and_digits(1, (long long)"1");
+    whole_part = fraction_make(whole_integer, one_integer);
+    remainder = fraction_subtract(size, whole_part);
+    if (({ long long _fap = remainder; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
+    ret_val = fraction_from_whole_number(1);
+    goto L_cleanup;
+    }
+    ret_val = remainder;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    free_struct_DivisionOutcome(whole_count);
+    whole_count = 0;
+    return ret_val;
+}
+
+long long fold(long long value) {
+    long long doubled = 0;
+    long long size_again = 0;
+    long long folded_size = 0;
+    long long trace = 0;
+    long long size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&doubled);
+    ep_gc_push_root(&size_again);
+    ep_gc_push_root(&folded_size);
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&size);
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    size = fold_value_size(value);
+    size_again = fold_value_size(value);
+    doubled = fraction_add(size, size_again);
+    folded_size = cast_out_whole_ones(doubled);
+    trace = concat(concat((long long)"fold(", ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(folded_size, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long can_take(long long larger, long long smaller) {
+    long long smaller_size = 0;
+    long long larger_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&smaller_size);
+    ep_gc_push_root(&larger_size);
+    ep_gc_push_root(&larger);
+    ep_gc_push_root(&smaller);
+
+    ep_gc_maybe_collect();
+
+    larger_size = fold_value_size(larger);
+    smaller_size = fold_value_size(smaller);
+    ret_val = fraction_compare(larger_size, smaller_size) > 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_struct_Fraction(smaller_size);
+    smaller_size = 0;
+    free_struct_Fraction(larger_size);
+    larger_size = 0;
+    return ret_val;
+}
+
+long long take(long long larger, long long smaller) {
+    long long trace = 0;
+    long long larger_size = 0;
+    long long smaller_size = 0;
+    long long difference = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&larger_size);
+    ep_gc_push_root(&smaller_size);
+    ep_gc_push_root(&difference);
+    ep_gc_push_root(&larger);
+    ep_gc_push_root(&smaller);
+
+    ep_gc_maybe_collect();
+
+    larger_size = fold_value_size(larger);
+    smaller_size = fold_value_size(smaller);
+    difference = fraction_subtract(larger_size, smaller_size);
+    trace = concat(concat(concat(concat((long long)"take(", ({ long long _fap = larger; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = smaller; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(difference, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long fold_value_compare(long long first, long long second) {
+    long long first_size = 0;
+    long long second_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first_size);
+    ep_gc_push_root(&second_size);
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    first_size = fold_value_size(first);
+    second_size = fold_value_size(second);
+    ret_val = fraction_compare(first_size, second_size);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long fold_value_is_equal(long long first, long long second) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    ret_val = fold_value_compare(first, second) == 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long fold_value_to_text(long long value) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&value);
+
+    ep_gc_maybe_collect();
+
+    ret_val = fraction_to_text(fold_value_size(value));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long fold_period(long long start, long long limit) {
+    long long current = 0;
+    long long count = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&current);
+    ep_gc_push_root(&start);
+
+    ep_gc_maybe_collect();
+
+    current = fold(start);
+    count = 1;
+    while (count <= limit) {
+    if (fold_value_compare(current, start) == 0) {
+    ret_val = count;
+    goto L_cleanup;
+    }
+    current = fold(current);
+    count = (count + 1);
+    }
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long rotate(long long phase, long long step) {
+    long long advanced = 0;
+    long long trace = 0;
+    long long phase_size = 0;
+    long long step_size = 0;
+    long long sum = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&advanced);
+    ep_gc_push_root(&trace);
+    ep_gc_push_root(&phase_size);
+    ep_gc_push_root(&step_size);
+    ep_gc_push_root(&sum);
+    ep_gc_push_root(&phase);
+    ep_gc_push_root(&step);
+
+    ep_gc_maybe_collect();
+
+    phase_size = fold_value_size(phase);
+    step_size = fold_value_size(step);
+    sum = fraction_add(phase_size, step_size);
+    advanced = cast_out_whole_ones(sum);
+    trace = concat(concat(concat(concat((long long)"rotate(", ({ long long _fap = phase; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = step; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
+    ret_val = fold_value_from_size(advanced, trace);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(7);
+    return ret_val;
+}
+
+long long relative_phase(long long seen, long long vantage) {
+    long long the_one_value = 0;
+    long long one = 0;
+    long long gap = 0;
+    long long vantage_size = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&the_one_value);
+    ep_gc_push_root(&one);
+    ep_gc_push_root(&gap);
+    ep_gc_push_root(&vantage_size);
+    ep_gc_push_root(&seen);
+    ep_gc_push_root(&vantage);
+
+    ep_gc_maybe_collect();
+
+    vantage_size = fold_value_size(vantage);
+    one = fraction_from_whole_number(1);
+    if (fraction_compare(vantage_size, one) == 0) {
+    ret_val = seen;
+    goto L_cleanup;
+    }
+    the_one_value = the_one();
+    gap = take(the_one_value, vantage);
+    ret_val = rotate(seen, gap);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    free_struct_Fraction(one);
+    one = 0;
+    free_struct_Fraction(vantage_size);
+    vantage_size = 0;
+    return ret_val;
+}
+
+long long beat_between(long long first, long long second) {
+    long long order = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&first);
+    ep_gc_push_root(&second);
+
+    ep_gc_maybe_collect();
+
+    order = fold_value_compare(first, second);
+    if (order == 0) {
+    ret_val = the_one();
+    goto L_cleanup;
+    }
+    if (order > 0) {
+    ret_val = take(first, second);
+    goto L_cleanup;
+    }
+    ret_val = take(second, first);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
     return ret_val;
 }
 
@@ -7403,3480 +6934,6 @@ long long forced_to_be(long long label, long long derived, long long independent
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long count_form_match(long long running_total, long long candidate, long long target) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&candidate);
-    ep_gc_push_root(&target);
-
-    ep_gc_maybe_collect();
-
-    if (fraction_compare(candidate, target) == 0) {
-    ret_val = (running_total + 1);
-    goto L_cleanup;
-    }
-    ret_val = running_total;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long forbid_form_selection(long long label, long long total_matching) {
-    long long alternatives = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&alternatives);
-    ep_gc_push_root(&label);
-
-    ep_gc_maybe_collect();
-
-    alternatives = (total_matching - 1);
-    ret_val = forced_unique(label, 1, alternatives);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long absolute_whole(long long value) {
-    long long ret_val = 0;
-
-    if (value < 0) {
-    ret_val = (0 - value);
-    goto L_cleanup;
-    }
-    ret_val = value;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long whole_is_zero(long long value) {
-    long long minus_one = 0;
-    long long ret_val = 0;
-
-    minus_one = -1;
-    if (value > minus_one) {
-    if (value < 1) {
-    ret_val = 1LL;
-    goto L_cleanup;
-    }
-    }
-    ret_val = 0LL;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long greatest_common_divisor(long long first, long long second) {
-    long long y = 0;
-    long long x = 0;
-    long long quotient = 0;
-    long long remainder = 0;
-    long long ret_val = 0;
-
-    x = first;
-    y = second;
-    while (y > 0) {
-    quotient = (x / y);
-    remainder = (x - (quotient * y));
-    x = y;
-    y = remainder;
-    }
-    ret_val = x;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long append_reduced(long long nums, long long dens, long long raw_num, long long raw_den) {
-    long long reduced_num = 0;
-    long long num = 0;
-    long long den = 0;
-    long long magnitude = 0;
-    long long divisor = 0;
-    long long ok = 0;
-    long long reduced_den = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&reduced_num);
-    ep_gc_push_root(&num);
-    ep_gc_push_root(&den);
-    ep_gc_push_root(&magnitude);
-    ep_gc_push_root(&reduced_den);
-    ep_gc_push_root(&nums);
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    num = raw_num;
-    den = raw_den;
-    if (den < 0) {
-    num = (0 - raw_num);
-    den = (0 - raw_den);
-    }
-    magnitude = absolute_whole(num);
-    divisor = greatest_common_divisor(magnitude, den);
-    if (divisor < 1) {
-    divisor = 1;
-    }
-    reduced_num = (num / divisor);
-    reduced_den = (den / divisor);
-    ok = append_list(nums, reduced_num);
-    ok = append_list(dens, reduced_den);
-    ret_val = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(7);
-    return ret_val;
-}
-
-long long combine_rationals(long long first_nums, long long first_dens, long long second_nums, long long second_dens, long long out_nums, long long out_dens) {
-    long long a = 0;
-    long long i = 0;
-    long long divisor_is_zero = 0;
-    long long ok = 0;
-    long long first_size = 0;
-    long long j = 0;
-    long long c = 0;
-    long long b = 0;
-    long long d = 0;
-    long long second_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&a);
-    ep_gc_push_root(&i);
-    ep_gc_push_root(&j);
-    ep_gc_push_root(&c);
-    ep_gc_push_root(&b);
-    ep_gc_push_root(&d);
-    ep_gc_push_root(&first_nums);
-    ep_gc_push_root(&first_dens);
-    ep_gc_push_root(&second_nums);
-    ep_gc_push_root(&second_dens);
-    ep_gc_push_root(&out_nums);
-    ep_gc_push_root(&out_dens);
-
-    ep_gc_maybe_collect();
-
-    first_size = length_list(first_nums);
-    second_size = length_list(second_nums);
-    i = 0;
-    while (i < first_size) {
-    a = get_list(first_nums, i);
-    b = get_list(first_dens, i);
-    j = 0;
-    while (j < second_size) {
-    c = get_list(second_nums, j);
-    d = get_list(second_dens, j);
-    ok = append_reduced(out_nums, out_dens, ((a * d) + (c * b)), (b * d));
-    ok = append_reduced(out_nums, out_dens, ((a * d) - (c * b)), (b * d));
-    ok = append_reduced(out_nums, out_dens, (a * c), (b * d));
-    divisor_is_zero = whole_is_zero(c);
-    if (divisor_is_zero) {
-    ok = 0;
-    } else {
-    ok = append_reduced(out_nums, out_dens, (a * d), (b * c));
-    }
-    j = (j + 1);
-    }
-    i = (i + 1);
-    }
-    ret_val = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(12);
-    return ret_val;
-}
-
-long long count_rational_matches(long long nums, long long dens, long long target_num, long long target_den) {
-    long long numerator_gap = 0;
-    long long d = 0;
-    long long denominator_equal = 0;
-    long long size = 0;
-    long long i = 0;
-    long long numerator_equal = 0;
-    long long denominator_gap = 0;
-    long long total = 0;
-    long long n = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&numerator_gap);
-    ep_gc_push_root(&i);
-    ep_gc_push_root(&denominator_gap);
-    ep_gc_push_root(&nums);
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    size = length_list(nums);
-    i = 0;
-    while (i < size) {
-    n = get_list(nums, i);
-    numerator_gap = (n - target_num);
-    numerator_equal = whole_is_zero(numerator_gap);
-    if (numerator_equal) {
-    d = get_list(dens, i);
-    denominator_gap = (d - target_den);
-    denominator_equal = whole_is_zero(denominator_gap);
-    if (denominator_equal) {
-    total = (total + 1);
-    }
-    }
-    i = (i + 1);
-    }
-    ret_val = total;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    return ret_val;
-}
-
-long long canonical_assembly_is_minimal(long long label, long long leaf_nums, long long leaf_dens, long long target_num, long long target_den, long long canonical_size) {
-    long long s2_dens = 0;
-    long long s1_dens = 0;
-    long long ok = 0;
-    long long count_one = 0;
-    long long count_zero = 0;
-    long long no_simpler = 0;
-    long long count_two = 0;
-    long long smaller = 0;
-    long long s2_nums = 0;
-    long long s1_nums = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&s2_dens);
-    ep_gc_push_root(&s1_dens);
-    ep_gc_push_root(&smaller);
-    ep_gc_push_root(&s2_nums);
-    ep_gc_push_root(&s1_nums);
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&leaf_dens);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&target_den);
-
-    ep_gc_maybe_collect();
-
-    count_zero = count_rational_matches(leaf_nums, leaf_dens, target_num, target_den);
-    smaller = count_zero;
-    s1_nums = create_list();
-    s1_dens = create_list();
-    if (canonical_size > 1) {
-    ok = combine_rationals(leaf_nums, leaf_dens, leaf_nums, leaf_dens, s1_nums, s1_dens);
-    count_one = count_rational_matches(s1_nums, s1_dens, target_num, target_den);
-    smaller = (smaller + count_one);
-    }
-    if (canonical_size > 2) {
-    s2_nums = create_list();
-    s2_dens = create_list();
-    ok = combine_rationals(leaf_nums, leaf_dens, s1_nums, s1_dens, s2_nums, s2_dens);
-    ok = combine_rationals(s1_nums, s1_dens, leaf_nums, leaf_dens, s2_nums, s2_dens);
-    count_two = count_rational_matches(s2_nums, s2_dens, target_num, target_den);
-    smaller = (smaller + count_two);
-    }
-    no_simpler = forced_to_be(label, smaller, 0);
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(10);
-    return ret_val;
-}
-
-long long sum_of_lepton_masses() {
-    long long sum_of_roots_twin = 0;
-    long long pairwise_second = 0;
-    long long sum_of_roots_squared = 0;
-    long long pairwise_first = 0;
-    long long sum_of_roots = 0;
-    long long twice_pairwise = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&sum_of_roots_twin);
-    ep_gc_push_root(&pairwise_second);
-    ep_gc_push_root(&sum_of_roots_squared);
-    ep_gc_push_root(&pairwise_first);
-    ep_gc_push_root(&sum_of_roots);
-    ep_gc_push_root(&twice_pairwise);
-
-    ep_gc_maybe_collect();
-
-    sum_of_roots = fraction_from_whole_number(1);
-    sum_of_roots_twin = fraction_from_whole_number(1);
-    sum_of_roots_squared = fraction_multiply(sum_of_roots, sum_of_roots_twin);
-    pairwise_first = second_invariant();
-    pairwise_second = second_invariant();
-    twice_pairwise = fraction_add(pairwise_first, pairwise_second);
-    ret_val = fraction_subtract(sum_of_roots_squared, twice_pairwise);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long sum_of_root_masses() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long koide_ratio() {
-    long long numerator = 0;
-    long long denominator = 0;
-    long long sqrt_sum = 0;
-    long long sqrt_sum_twin = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&denominator);
-    ep_gc_push_root(&sqrt_sum);
-    ep_gc_push_root(&sqrt_sum_twin);
-
-    ep_gc_maybe_collect();
-
-    numerator = sum_of_lepton_masses();
-    sqrt_sum = fraction_from_whole_number(1);
-    sqrt_sum_twin = fraction_from_whole_number(1);
-    denominator = fraction_multiply(sqrt_sum, sqrt_sum_twin);
-    ret_val = fraction_divide(numerator, denominator);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long koide_from_colour() {
-    long long one = 0;
-    long long inverse_colour = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&inverse_colour);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    inverse_colour = fraction_from_ratio(1, colour_count());
-    ret_val = fraction_subtract(one, inverse_colour);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long koide_form_is_unique() {
-    long long e2_a = 0;
-    long long two_e2_a = 0;
-    long long total = 0;
-    long long cand_c = 0;
-    long long three_e2_f = 0;
-    long long cand_b = 0;
-    long long cand_e = 0;
-    long long one_b = 0;
-    long long one_f = 0;
-    long long e2_d = 0;
-    long long cand_f = 0;
-    long long e2_c = 0;
-    long long e2_f = 0;
-    long long cand_a = 0;
-    long long two_e2_c = 0;
-    long long one_c = 0;
-    long long two_e2_f = 0;
-    long long one_a = 0;
-    long long cand_d = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&e2_a);
-    ep_gc_push_root(&two_e2_a);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&cand_c);
-    ep_gc_push_root(&three_e2_f);
-    ep_gc_push_root(&cand_b);
-    ep_gc_push_root(&cand_e);
-    ep_gc_push_root(&one_b);
-    ep_gc_push_root(&one_f);
-    ep_gc_push_root(&e2_d);
-    ep_gc_push_root(&cand_f);
-    ep_gc_push_root(&e2_c);
-    ep_gc_push_root(&e2_f);
-    ep_gc_push_root(&cand_a);
-    ep_gc_push_root(&two_e2_c);
-    ep_gc_push_root(&one_c);
-    ep_gc_push_root(&two_e2_f);
-    ep_gc_push_root(&one_a);
-    ep_gc_push_root(&cand_d);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    one_a = fraction_from_whole_number(1);
-    e2_a = second_invariant();
-    two_e2_a = fraction_add(e2_a, second_invariant());
-    cand_a = fraction_subtract(one_a, two_e2_a);
-    total = count_form_match(total, cand_a, koide_ratio());
-    one_b = fraction_from_whole_number(1);
-    cand_b = fraction_subtract(one_b, second_invariant());
-    total = count_form_match(total, cand_b, koide_ratio());
-    one_c = fraction_from_whole_number(1);
-    e2_c = second_invariant();
-    two_e2_c = fraction_add(e2_c, second_invariant());
-    cand_c = fraction_add(one_c, two_e2_c);
-    total = count_form_match(total, cand_c, koide_ratio());
-    e2_d = second_invariant();
-    cand_d = fraction_add(e2_d, second_invariant());
-    total = count_form_match(total, cand_d, koide_ratio());
-    cand_e = second_invariant();
-    total = count_form_match(total, cand_e, koide_ratio());
-    one_f = fraction_from_whole_number(1);
-    e2_f = second_invariant();
-    two_e2_f = fraction_add(e2_f, second_invariant());
-    three_e2_f = fraction_add(two_e2_f, second_invariant());
-    cand_f = fraction_subtract(one_f, three_e2_f);
-    total = count_form_match(total, cand_f, koide_ratio());
-    ret_val = forbid_form_selection((long long)"the Koide ratio form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(19);
-    return ret_val;
-}
-
-long long koide_leaf_numerators() {
-    long long ok = 0;
-    long long nums = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, 1);
-    ok = append_list(nums, 1);
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long koide_leaf_denominators() {
-    long long dens = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, (2 * colour_count()));
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long koide_assembly_is_minimal() {
-    long long target_den = 0;
-    long long leaf_dens = 0;
-    long long target_num = 0;
-    long long leaf_nums = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&target_den);
-    ep_gc_push_root(&leaf_dens);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_nums);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = koide_leaf_numerators();
-    leaf_dens = koide_leaf_denominators();
-    target_num = (smallest_fold_period_above(binary_count()) - 1);
-    target_den = smallest_fold_period_above(binary_count());
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the Koide ratio", leaf_nums, leaf_dens, target_num, target_den, 2);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long no_loss_partition() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long second_invariant() {
-    long long twice_colour = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&twice_colour);
-
-    ep_gc_maybe_collect();
-
-    twice_colour = (2 * smallest_fold_period_above(binary_count()));
-    ret_val = fraction_from_ratio(1, twice_colour);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long leading_third_invariant() {
-    long long denominator = 0;
-    long long colour_to_fifth = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&denominator);
-
-    ep_gc_maybe_collect();
-
-    colour_to_fifth = whole_power(colour_count(), 5);
-    denominator = ((2 * colour_to_fifth) - 1);
-    ret_val = fraction_from_ratio(1, denominator);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long third_invariant_with_channel(long long channel_count) {
-    long long corrected_denominator = 0;
-    long long whole_denominator = 0;
-    long long one = 0;
-    long long neutral_channel = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&corrected_denominator);
-    ep_gc_push_root(&whole_denominator);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&neutral_channel);
-    ep_gc_push_root(&channel_count);
-
-    ep_gc_maybe_collect();
-
-    whole_denominator = fraction_from_whole_number(((2 * whole_power(colour_count(), 5)) - 1));
-    neutral_channel = fraction_from_ratio(1, channel_count);
-    corrected_denominator = fraction_subtract(whole_denominator, neutral_channel);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_divide(one, corrected_denominator);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    return ret_val;
-}
-
-long long third_invariant() {
-    long long neutral_channel_count = 0;
-    long long checked = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&neutral_channel_count);
-
-    ep_gc_maybe_collect();
-
-    neutral_channel_count = smallest_fold_period_above(binary_count());
-    checked = forced_to_be((long long)"the lepton neutral channel is the colour count", neutral_channel_count, colour_count());
-    ret_val = third_invariant_with_channel(neutral_channel_count);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long neutral_channel_is_forced() {
-    long long alternatives_matching = 0;
-    long long channel_four = 0;
-    long long channel_two = 0;
-    long long forced_invariant = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&alternatives_matching);
-    ep_gc_push_root(&channel_four);
-    ep_gc_push_root(&channel_two);
-    ep_gc_push_root(&forced_invariant);
-
-    ep_gc_maybe_collect();
-
-    forced_invariant = third_invariant_with_channel(colour_count());
-    channel_two = third_invariant_with_channel(2);
-    channel_four = third_invariant_with_channel(4);
-    alternatives_matching = 0;
-    if (fraction_compare(channel_two, forced_invariant) == 0) {
-    alternatives_matching = (alternatives_matching + 1);
-    }
-    if (fraction_compare(channel_four, forced_invariant) == 0) {
-    alternatives_matching = (alternatives_matching + 1);
-    }
-    ret_val = forced_unique((long long)"the lepton neutral channel", 1, alternatives_matching);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    free_struct_Fraction(channel_four);
-    channel_four = 0;
-    free_struct_Fraction(channel_two);
-    channel_two = 0;
-    free_struct_Fraction(forced_invariant);
-    forced_invariant = 0;
-    return ret_val;
-}
-
-long long second_invariant_form_is_unique() {
-    long long cand_c = 0;
-    long long cand_e = 0;
-    long long cand_f = 0;
-    long long total = 0;
-    long long cand_a = 0;
-    long long cand_b = 0;
-    long long cand_d = 0;
-    long long colour = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cand_c);
-    ep_gc_push_root(&cand_e);
-    ep_gc_push_root(&cand_f);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&cand_a);
-    ep_gc_push_root(&cand_b);
-    ep_gc_push_root(&cand_d);
-    ep_gc_push_root(&colour);
-
-    ep_gc_maybe_collect();
-
-    colour = smallest_fold_period_above(binary_count());
-    total = 0;
-    cand_a = fraction_from_ratio(1, (2 * colour));
-    total = count_form_match(total, cand_a, second_invariant());
-    cand_b = fraction_from_ratio(1, colour);
-    total = count_form_match(total, cand_b, second_invariant());
-    cand_c = fraction_from_ratio(1, whole_power(colour, 2));
-    total = count_form_match(total, cand_c, second_invariant());
-    cand_d = fraction_from_ratio(1, ((2 * colour) - 1));
-    total = count_form_match(total, cand_d, second_invariant());
-    cand_e = fraction_from_ratio(1, ((2 * colour) + 1));
-    total = count_form_match(total, cand_e, second_invariant());
-    cand_f = fraction_from_ratio(2, colour);
-    total = count_form_match(total, cand_f, second_invariant());
-    ret_val = forbid_form_selection((long long)"the lepton second-invariant form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(8);
-    return ret_val;
-}
-
-long long leading_third_invariant_form_is_unique() {
-    long long cand_c = 0;
-    long long total = 0;
-    long long cand_d = 0;
-    long long cand_e = 0;
-    long long fifth = 0;
-    long long cand_a = 0;
-    long long cand_b = 0;
-    long long colour = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cand_c);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&cand_d);
-    ep_gc_push_root(&cand_e);
-    ep_gc_push_root(&fifth);
-    ep_gc_push_root(&cand_a);
-    ep_gc_push_root(&cand_b);
-    ep_gc_push_root(&colour);
-
-    ep_gc_maybe_collect();
-
-    colour = smallest_fold_period_above(binary_count());
-    fifth = whole_power(colour, 5);
-    total = 0;
-    cand_a = fraction_from_ratio(1, ((2 * fifth) - 1));
-    total = count_form_match(total, cand_a, leading_third_invariant());
-    cand_b = fraction_from_ratio(1, ((2 * fifth) + 1));
-    total = count_form_match(total, cand_b, leading_third_invariant());
-    cand_c = fraction_from_ratio(1, (2 * fifth));
-    total = count_form_match(total, cand_c, leading_third_invariant());
-    cand_d = fraction_from_ratio(1, (fifth - 1));
-    total = count_form_match(total, cand_d, leading_third_invariant());
-    cand_e = fraction_from_ratio(1, fifth);
-    total = count_form_match(total, cand_e, leading_third_invariant());
-    ret_val = forbid_form_selection((long long)"the lepton leading third-invariant form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(8);
-    return ret_val;
-}
-
-long long lepton_cubic_value(long long x) {
-    long long e3 = 0;
-    long long x_squared = 0;
-    long long e2 = 0;
-    long long cubic_minus_square = 0;
-    long long e2_term = 0;
-    long long with_linear = 0;
-    long long x_cubed = 0;
-    long long result = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&e3);
-    ep_gc_push_root(&x_squared);
-    ep_gc_push_root(&e2);
-    ep_gc_push_root(&cubic_minus_square);
-    ep_gc_push_root(&e2_term);
-    ep_gc_push_root(&with_linear);
-    ep_gc_push_root(&x_cubed);
-    ep_gc_push_root(&result);
-    ep_gc_push_root(&x);
-
-    ep_gc_maybe_collect();
-
-    e2 = second_invariant();
-    e3 = leading_third_invariant();
-    x_squared = fraction_multiply(x, x);
-    x_cubed = fraction_multiply(x_squared, x);
-    e2_term = fraction_multiply(e2, x);
-    cubic_minus_square = fraction_subtract(x_cubed, x_squared);
-    with_linear = fraction_add(cubic_minus_square, e2_term);
-    result = fraction_subtract(with_linear, e3);
-    ret_val = result;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(9);
-    return ret_val;
-}
-
-long long lepton_root_in_bracket(long long lo_num, long long lo_den, long long hi_num, long long hi_den, long long halvings) {
-    long long hi = 0;
-    long long sign_at_lo = 0;
-    long long sign_at_mid = 0;
-    long long zero = 0;
-    long long two_fraction = 0;
-    long long bracket_sum = 0;
-    long long final_sum = 0;
-    long long root = 0;
-    long long value_at_mid = 0;
-    long long lo = 0;
-    long long count = 0;
-    long long value_at_lo = 0;
-    long long mid = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&hi);
-    ep_gc_push_root(&zero);
-    ep_gc_push_root(&two_fraction);
-    ep_gc_push_root(&bracket_sum);
-    ep_gc_push_root(&final_sum);
-    ep_gc_push_root(&root);
-    ep_gc_push_root(&value_at_mid);
-    ep_gc_push_root(&lo);
-    ep_gc_push_root(&value_at_lo);
-    ep_gc_push_root(&mid);
-    ep_gc_push_root(&lo_num);
-    ep_gc_push_root(&lo_den);
-    ep_gc_push_root(&hi_num);
-    ep_gc_push_root(&hi_den);
-
-    ep_gc_maybe_collect();
-
-    lo = fraction_from_ratio(lo_num, lo_den);
-    hi = fraction_from_ratio(hi_num, hi_den);
-    zero = fraction_from_whole_number(0);
-    two_fraction = fraction_from_whole_number(2);
-    value_at_lo = lepton_cubic_value(lo);
-    sign_at_lo = fraction_compare(value_at_lo, zero);
-    count = 0;
-    while (count < halvings) {
-    bracket_sum = fraction_add(lo, hi);
-    mid = fraction_divide(bracket_sum, two_fraction);
-    value_at_mid = lepton_cubic_value(mid);
-    sign_at_mid = fraction_compare(value_at_mid, zero);
-    if (sign_at_mid == sign_at_lo) {
-    lo = mid;
-    } else {
-    hi = mid;
-    }
-    count = (count + 1);
-    }
-    final_sum = fraction_add(lo, hi);
-    root = fraction_divide(final_sum, two_fraction);
-    ret_val = root;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(14);
-    return ret_val;
-}
-
-long long electron_root() {
-    long long ret_val = 0;
-
-    ret_val = lepton_root_in_bracket(1, 1000, 1, 20, 40);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long muon_root() {
-    long long ret_val = 0;
-
-    ret_val = lepton_root_in_bracket(1, 10, 3, 10, 40);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long tau_root() {
-    long long ret_val = 0;
-
-    ret_val = lepton_root_in_bracket(7, 10, 9, 10, 40);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long electron_mass_share() {
-    long long r = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&r);
-
-    ep_gc_maybe_collect();
-
-    r = lepton_root_in_bracket(1, 1000, 1, 20, 40);
-    ret_val = fraction_multiply(r, r);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long muon_mass_share() {
-    long long r = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&r);
-
-    ep_gc_maybe_collect();
-
-    r = lepton_root_in_bracket(1, 10, 3, 10, 40);
-    ret_val = fraction_multiply(r, r);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long tau_mass_share() {
-    long long r = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&r);
-
-    ep_gc_maybe_collect();
-
-    r = lepton_root_in_bracket(7, 10, 9, 10, 40);
-    ret_val = fraction_multiply(r, r);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long lepton_roots_sum_toward_one() {
-    long long partial = 0;
-    long long e_root = 0;
-    long long tau_root_value = 0;
-    long long mu_root = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&partial);
-    ep_gc_push_root(&e_root);
-    ep_gc_push_root(&tau_root_value);
-    ep_gc_push_root(&mu_root);
-
-    ep_gc_maybe_collect();
-
-    e_root = lepton_root_in_bracket(1, 1000, 1, 20, 40);
-    mu_root = lepton_root_in_bracket(1, 10, 3, 10, 40);
-    tau_root_value = lepton_root_in_bracket(7, 10, 9, 10, 40);
-    partial = fraction_add(e_root, mu_root);
-    ret_val = fraction_add(partial, tau_root_value);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long generational_covering_depth() {
-    long long by_covering = 0;
-    long long by_relation = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&by_covering);
-    ep_gc_push_root(&by_relation);
-
-    ep_gc_maybe_collect();
-
-    by_covering = minimal_binary_cover(generational_volume());
-    by_relation = (smallest_fold_period_above(1) + smallest_fold_period_above(binary_count()));
-    ret_val = forced_to_be((long long)"dark/baryon depth = cover(colour^colour) = binary + colour", by_covering, by_relation);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long total_binary_volume() {
-    long long ret_val = 0;
-
-    ret_val = whole_power(binary_count(), generational_covering_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long baryon_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(generational_covering_depth(), total_binary_volume());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long dark_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(generational_volume(), total_binary_volume());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long matter_partition() {
-    long long dark = 0;
-    long long baryon = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dark);
-    ep_gc_push_root(&baryon);
-
-    ep_gc_maybe_collect();
-
-    baryon = fraction_from_ratio(generational_covering_depth(), total_binary_volume());
-    dark = fraction_from_ratio(generational_volume(), total_binary_volume());
-    ret_val = fraction_add(baryon, dark);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long dark_to_baryon_ratio() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(generational_volume(), generational_covering_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long generational_orbit_floor() {
-    long long ret_val = 0;
-
-    ret_val = (whole_power(2, generational_covering_depth()) - 1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long generational_orbit_floor_is_genuine() {
-    long long checked = 0;
-    long long its_period = 0;
-    long long floor = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&its_period);
-    ep_gc_push_root(&floor);
-
-    ep_gc_maybe_collect();
-
-    floor = (whole_power(2, generational_covering_depth()) - 1);
-    its_period = fold_period_of_unit_fraction(floor);
-    checked = forced_to_be((long long)"generational orbit floor has fold-period d_down", its_period, generational_covering_depth());
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long dark_to_baryon_ratio_second_order() {
-    long long floor_term = 0;
-    long long volume = 0;
-    long long checked = 0;
-    long long sharpened_depth = 0;
-    long long depth_fraction = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&floor_term);
-    ep_gc_push_root(&volume);
-    ep_gc_push_root(&sharpened_depth);
-    ep_gc_push_root(&depth_fraction);
-
-    ep_gc_maybe_collect();
-
-    checked = generational_orbit_floor_is_genuine();
-    floor_term = fraction_from_ratio(1, generational_orbit_floor());
-    depth_fraction = fraction_from_whole_number(generational_covering_depth());
-    sharpened_depth = fraction_add(depth_fraction, floor_term);
-    volume = fraction_from_whole_number(generational_volume());
-    ret_val = fraction_divide(volume, sharpened_depth);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long dark_to_baryon_ratio_second_order_decimal(long long places) {
-    long long value = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&value);
-    ep_gc_push_root(&places);
-
-    ep_gc_maybe_collect();
-
-    value = dark_to_baryon_ratio_second_order();
-    ret_val = fraction_to_decimal(value, places);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long db_ratio_from_deepened_depth(long long deepened) {
-    long long volume = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&volume);
-    ep_gc_push_root(&deepened);
-
-    ep_gc_maybe_collect();
-
-    volume = fraction_from_whole_number(generational_volume());
-    ret_val = fraction_divide(volume, deepened);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long dark_to_baryon_second_order_is_unique() {
-    long long tower_inv = 0;
-    long long ratio_a = 0;
-    long long deep_b = 0;
-    long long target_b = 0;
-    long long ratio_b = 0;
-    long long target_c = 0;
-    long long deep_d = 0;
-    long long total = 0;
-    long long depth_a = 0;
-    long long floor_inv_a = 0;
-    long long ratio_d = 0;
-    long long target_d = 0;
-    long long ratio_c = 0;
-    long long depth_b = 0;
-    long long deep_a = 0;
-    long long depth_c = 0;
-    long long depth_d = 0;
-    long long depth_inv = 0;
-    long long target = 0;
-    long long deep_c = 0;
-    long long floor_inv_b = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&tower_inv);
-    ep_gc_push_root(&ratio_a);
-    ep_gc_push_root(&deep_b);
-    ep_gc_push_root(&target_b);
-    ep_gc_push_root(&ratio_b);
-    ep_gc_push_root(&target_c);
-    ep_gc_push_root(&deep_d);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&depth_a);
-    ep_gc_push_root(&floor_inv_a);
-    ep_gc_push_root(&ratio_d);
-    ep_gc_push_root(&target_d);
-    ep_gc_push_root(&ratio_c);
-    ep_gc_push_root(&depth_b);
-    ep_gc_push_root(&deep_a);
-    ep_gc_push_root(&depth_c);
-    ep_gc_push_root(&depth_d);
-    ep_gc_push_root(&depth_inv);
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&deep_c);
-    ep_gc_push_root(&floor_inv_b);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    depth_a = fraction_from_whole_number(generational_covering_depth());
-    floor_inv_a = fraction_from_ratio(1, generational_orbit_floor());
-    deep_a = fraction_add(depth_a, floor_inv_a);
-    ratio_a = db_ratio_from_deepened_depth(deep_a);
-    target = dark_to_baryon_ratio_second_order();
-    total = count_form_match(total, ratio_a, target);
-    depth_b = fraction_from_whole_number(generational_covering_depth());
-    floor_inv_b = fraction_from_ratio(1, generational_orbit_floor());
-    deep_b = fraction_subtract(depth_b, floor_inv_b);
-    ratio_b = db_ratio_from_deepened_depth(deep_b);
-    target_b = dark_to_baryon_ratio_second_order();
-    total = count_form_match(total, ratio_b, target_b);
-    depth_c = fraction_from_whole_number(generational_covering_depth());
-    tower_inv = fraction_from_ratio(1, total_binary_volume());
-    deep_c = fraction_add(depth_c, tower_inv);
-    ratio_c = db_ratio_from_deepened_depth(deep_c);
-    target_c = dark_to_baryon_ratio_second_order();
-    total = count_form_match(total, ratio_c, target_c);
-    depth_d = fraction_from_whole_number(generational_covering_depth());
-    depth_inv = fraction_from_ratio(1, generational_covering_depth());
-    deep_d = fraction_add(depth_d, depth_inv);
-    ratio_d = db_ratio_from_deepened_depth(deep_d);
-    target_d = dark_to_baryon_ratio_second_order();
-    total = count_form_match(total, ratio_d, target_d);
-    ret_val = forbid_form_selection((long long)"the dark-to-baryon second-order deepening", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(21);
-    return ret_val;
-}
-
-long long db_volume_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(generational_volume());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long db_depth_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(generational_covering_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long db_total_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_whole_number(total_binary_volume());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long dark_to_baryon_form_is_unique() {
-    long long ratio_two = 0;
-    long long ratio_one = 0;
-    long long d_two = 0;
-    long long ratio_three = 0;
-    long long d_four = 0;
-    long long t_five = 0;
-    long long ratio_five = 0;
-    long long ratio_four = 0;
-    long long ratio_six = 0;
-    long long total = 0;
-    long long v_one = 0;
-    long long t_six = 0;
-    long long v_three = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&ratio_two);
-    ep_gc_push_root(&ratio_one);
-    ep_gc_push_root(&d_two);
-    ep_gc_push_root(&ratio_three);
-    ep_gc_push_root(&d_four);
-    ep_gc_push_root(&t_five);
-    ep_gc_push_root(&ratio_five);
-    ep_gc_push_root(&ratio_four);
-    ep_gc_push_root(&ratio_six);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&v_one);
-    ep_gc_push_root(&t_six);
-    ep_gc_push_root(&v_three);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    v_one = fraction_from_whole_number(generational_volume());
-    ratio_one = fraction_divide(v_one, db_depth_fraction());
-    total = count_form_match(total, ratio_one, dark_to_baryon_ratio());
-    d_two = fraction_from_whole_number(generational_covering_depth());
-    ratio_two = fraction_divide(d_two, db_volume_fraction());
-    total = count_form_match(total, ratio_two, dark_to_baryon_ratio());
-    v_three = fraction_from_whole_number(generational_volume());
-    ratio_three = fraction_divide(v_three, db_total_fraction());
-    total = count_form_match(total, ratio_three, dark_to_baryon_ratio());
-    d_four = fraction_from_whole_number(generational_covering_depth());
-    ratio_four = fraction_divide(d_four, db_total_fraction());
-    total = count_form_match(total, ratio_four, dark_to_baryon_ratio());
-    t_five = fraction_from_whole_number(total_binary_volume());
-    ratio_five = fraction_divide(t_five, db_volume_fraction());
-    total = count_form_match(total, ratio_five, dark_to_baryon_ratio());
-    t_six = fraction_from_whole_number(total_binary_volume());
-    ratio_six = fraction_divide(t_six, db_depth_fraction());
-    total = count_form_match(total, ratio_six, dark_to_baryon_ratio());
-    ret_val = forbid_form_selection((long long)"the dark-to-baryon ratio form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(13);
-    return ret_val;
-}
-
-long long dark_to_baryon_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, generational_volume());
-    ok = append_list(nums, generational_covering_depth());
-    ok = append_list(nums, total_binary_volume());
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long dark_to_baryon_leaf_denominators() {
-    long long ok = 0;
-    long long dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long dark_to_baryon_assembly_is_minimal() {
-    long long target_den = 0;
-    long long leaf_nums = 0;
-    long long target_num = 0;
-    long long leaf_dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&target_den);
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_dens);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = dark_to_baryon_leaf_numerators();
-    leaf_dens = dark_to_baryon_leaf_denominators();
-    target_num = generational_volume();
-    target_den = generational_covering_depth();
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the dark-to-baryon ratio", leaf_nums, leaf_dens, target_num, target_den, 1);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long vacuum_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(binary_count(), colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long matter_fraction() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long flatness_partition() {
-    long long matter = 0;
-    long long vacuum = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&matter);
-    ep_gc_push_root(&vacuum);
-
-    ep_gc_maybe_collect();
-
-    vacuum = fraction_from_ratio(binary_count(), colour_count());
-    matter = fraction_from_ratio(1, colour_count());
-    ret_val = fraction_add(vacuum, matter);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long covering_tower() {
-    long long ret_val = 0;
-
-    ret_val = whole_power(binary_count(), colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long calibration_correction() {
-    long long vacuum = 0;
-    long long tower = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&vacuum);
-    ep_gc_push_root(&tower);
-
-    ep_gc_maybe_collect();
-
-    vacuum = fraction_from_ratio(binary_count(), colour_count());
-    tower = fraction_from_whole_number(covering_tower());
-    ret_val = fraction_divide(vacuum, tower);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long hubble_calibration_ratio() {
-    long long one = 0;
-    long long correction = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&correction);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    correction = calibration_correction();
-    ret_val = fraction_add(one, correction);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long early_orbit_floor() {
-    long long ret_val = 0;
-
-    ret_val = (whole_power(2, up_depth()) - 1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long early_orbit_floor_is_genuine() {
-    long long checked = 0;
-    long long floor = 0;
-    long long its_period = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&floor);
-    ep_gc_push_root(&its_period);
-
-    ep_gc_maybe_collect();
-
-    floor = (whole_power(2, up_depth()) - 1);
-    its_period = fold_period_of_unit_fraction(floor);
-    checked = forced_to_be((long long)"early orbit floor has fold-period d_up", its_period, up_depth());
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long hubble_calibration_ratio_second_order() {
-    long long correction = 0;
-    long long one = 0;
-    long long floor_term = 0;
-    long long sharpened_vacuum = 0;
-    long long vacuum = 0;
-    long long tower = 0;
-    long long checked = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&correction);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&floor_term);
-    ep_gc_push_root(&sharpened_vacuum);
-    ep_gc_push_root(&vacuum);
-    ep_gc_push_root(&tower);
-
-    ep_gc_maybe_collect();
-
-    checked = early_orbit_floor_is_genuine();
-    vacuum = fraction_from_ratio(binary_count(), colour_count());
-    floor_term = fraction_from_ratio(1, early_orbit_floor());
-    sharpened_vacuum = fraction_add(vacuum, floor_term);
-    tower = fraction_from_whole_number(covering_tower());
-    correction = fraction_divide(sharpened_vacuum, tower);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_add(one, correction);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long hubble_calibration_ratio_second_order_decimal(long long places) {
-    long long value = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&value);
-    ep_gc_push_root(&places);
-
-    ep_gc_maybe_collect();
-
-    value = hubble_calibration_ratio_second_order();
-    ret_val = fraction_to_decimal(value, places);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long hb_ratio_from_deepened_vacuum(long long deepened) {
-    long long one = 0;
-    long long correction = 0;
-    long long tower = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&correction);
-    ep_gc_push_root(&tower);
-    ep_gc_push_root(&deepened);
-
-    ep_gc_maybe_collect();
-
-    tower = fraction_from_whole_number(covering_tower());
-    correction = fraction_divide(deepened, tower);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_add(one, correction);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long hubble_second_order_is_unique() {
-    long long deep_a = 0;
-    long long total = 0;
-    long long floor_inv_b = 0;
-    long long vac_c = 0;
-    long long depth_inv = 0;
-    long long deep_c = 0;
-    long long target_c = 0;
-    long long ratio_d = 0;
-    long long tower_inv = 0;
-    long long target_d = 0;
-    long long ratio_c = 0;
-    long long ratio_b = 0;
-    long long floor_inv_a = 0;
-    long long target = 0;
-    long long tower_up = 0;
-    long long deep_d = 0;
-    long long deep_b = 0;
-    long long ratio_a = 0;
-    long long vac_a = 0;
-    long long vac_d = 0;
-    long long target_b = 0;
-    long long vac_b = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&deep_a);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&floor_inv_b);
-    ep_gc_push_root(&vac_c);
-    ep_gc_push_root(&depth_inv);
-    ep_gc_push_root(&deep_c);
-    ep_gc_push_root(&target_c);
-    ep_gc_push_root(&ratio_d);
-    ep_gc_push_root(&tower_inv);
-    ep_gc_push_root(&target_d);
-    ep_gc_push_root(&ratio_c);
-    ep_gc_push_root(&ratio_b);
-    ep_gc_push_root(&floor_inv_a);
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&tower_up);
-    ep_gc_push_root(&deep_d);
-    ep_gc_push_root(&deep_b);
-    ep_gc_push_root(&ratio_a);
-    ep_gc_push_root(&vac_a);
-    ep_gc_push_root(&vac_d);
-    ep_gc_push_root(&target_b);
-    ep_gc_push_root(&vac_b);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    vac_a = fraction_from_ratio(binary_count(), colour_count());
-    floor_inv_a = fraction_from_ratio(1, early_orbit_floor());
-    deep_a = fraction_add(vac_a, floor_inv_a);
-    ratio_a = hb_ratio_from_deepened_vacuum(deep_a);
-    target = hubble_calibration_ratio_second_order();
-    total = count_form_match(total, ratio_a, target);
-    vac_b = fraction_from_ratio(binary_count(), colour_count());
-    floor_inv_b = fraction_from_ratio(1, early_orbit_floor());
-    deep_b = fraction_subtract(vac_b, floor_inv_b);
-    ratio_b = hb_ratio_from_deepened_vacuum(deep_b);
-    target_b = hubble_calibration_ratio_second_order();
-    total = count_form_match(total, ratio_b, target_b);
-    vac_c = fraction_from_ratio(binary_count(), colour_count());
-    tower_up = whole_power(binary_count(), up_depth());
-    tower_inv = fraction_from_ratio(1, tower_up);
-    deep_c = fraction_add(vac_c, tower_inv);
-    ratio_c = hb_ratio_from_deepened_vacuum(deep_c);
-    target_c = hubble_calibration_ratio_second_order();
-    total = count_form_match(total, ratio_c, target_c);
-    vac_d = fraction_from_ratio(binary_count(), colour_count());
-    depth_inv = fraction_from_ratio(1, up_depth());
-    deep_d = fraction_add(vac_d, depth_inv);
-    ratio_d = hb_ratio_from_deepened_vacuum(deep_d);
-    target_d = hubble_calibration_ratio_second_order();
-    total = count_form_match(total, ratio_d, target_d);
-    ret_val = forbid_form_selection((long long)"the Hubble second-order deepening", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(22);
-    return ret_val;
-}
-
-long long hubble_calibration_form_is_unique() {
-    long long tower_two = 0;
-    long long tower_three = 0;
-    long long form_five = 0;
-    long long form_three = 0;
-    long long form_two = 0;
-    long long corr_one = 0;
-    long long total = 0;
-    long long form_one = 0;
-    long long one_c = 0;
-    long long prod_five = 0;
-    long long one_b = 0;
-    long long one_a = 0;
-    long long tower_one = 0;
-    long long tower_inv = 0;
-    long long form_four = 0;
-    long long corr_three = 0;
-    long long tower_six = 0;
-    long long form_six = 0;
-    long long one_e = 0;
-    long long corr_two = 0;
-    long long one_f = 0;
-    long long tower_five = 0;
-    long long prod_six = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&tower_two);
-    ep_gc_push_root(&tower_three);
-    ep_gc_push_root(&form_five);
-    ep_gc_push_root(&form_three);
-    ep_gc_push_root(&form_two);
-    ep_gc_push_root(&corr_one);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&form_one);
-    ep_gc_push_root(&one_c);
-    ep_gc_push_root(&prod_five);
-    ep_gc_push_root(&one_b);
-    ep_gc_push_root(&one_a);
-    ep_gc_push_root(&tower_one);
-    ep_gc_push_root(&tower_inv);
-    ep_gc_push_root(&form_four);
-    ep_gc_push_root(&corr_three);
-    ep_gc_push_root(&tower_six);
-    ep_gc_push_root(&form_six);
-    ep_gc_push_root(&one_e);
-    ep_gc_push_root(&corr_two);
-    ep_gc_push_root(&one_f);
-    ep_gc_push_root(&tower_five);
-    ep_gc_push_root(&prod_six);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    tower_one = fraction_from_whole_number(covering_tower());
-    corr_one = fraction_divide(vacuum_fraction(), tower_one);
-    one_a = fraction_from_whole_number(1);
-    form_one = fraction_add(one_a, corr_one);
-    total = count_form_match(total, form_one, hubble_calibration_ratio());
-    tower_two = fraction_from_whole_number(covering_tower());
-    corr_two = fraction_divide(vacuum_fraction(), tower_two);
-    one_b = fraction_from_whole_number(1);
-    form_two = fraction_subtract(one_b, corr_two);
-    total = count_form_match(total, form_two, hubble_calibration_ratio());
-    tower_three = fraction_from_whole_number(covering_tower());
-    corr_three = fraction_divide(matter_fraction(), tower_three);
-    one_c = fraction_from_whole_number(1);
-    form_three = fraction_add(one_c, corr_three);
-    total = count_form_match(total, form_three, hubble_calibration_ratio());
-    tower_inv = fraction_from_ratio(1, covering_tower());
-    form_four = fraction_add(vacuum_fraction(), tower_inv);
-    total = count_form_match(total, form_four, hubble_calibration_ratio());
-    tower_five = fraction_from_whole_number(covering_tower());
-    prod_five = fraction_multiply(vacuum_fraction(), tower_five);
-    one_e = fraction_from_whole_number(1);
-    form_five = fraction_add(one_e, prod_five);
-    total = count_form_match(total, form_five, hubble_calibration_ratio());
-    tower_six = fraction_from_whole_number(covering_tower());
-    prod_six = fraction_multiply(matter_fraction(), tower_six);
-    one_f = fraction_from_whole_number(1);
-    form_six = fraction_add(one_f, prod_six);
-    total = count_form_match(total, form_six, hubble_calibration_ratio());
-    ret_val = forbid_form_selection((long long)"the Hubble calibration ratio form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(23);
-    return ret_val;
-}
-
-long long require_in_domain(long long size) {
-    long long one = 0;
-    long long order = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&size);
-
-    ep_gc_maybe_collect();
-
-    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
-    ret_val = halt_violation((long long)"a value was zero; the domain has no zero");
-    goto L_cleanup;
-    }
-    if (({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) < 0) {
-    ret_val = halt_violation((long long)"a value was negative; the domain is the One's interval, greater than zero and at most one");
-    goto L_cleanup;
-    }
-    one = fraction_from_whole_number(1);
-    order = fraction_compare(size, one);
-    if (order > 0) {
-    ret_val = halt_violation((long long)"a value exceeded the One; the domain is greater than zero and at most one");
-    goto L_cleanup;
-    }
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fold_value_size(long long value) {
-    long long denominator = 0;
-    long long numerator = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&denominator);
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&value);
-
-    ep_gc_maybe_collect();
-
-    numerator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->numerator_digits; }));
-    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->denominator_digits; }));
-    ret_val = fraction_make(numerator, denominator);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long fold_value_from_size(long long size, long long derivation) {
-    long long checked = 0;
-    long long value = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&value);
-    ep_gc_push_root(&size);
-    ep_gc_push_root(&derivation);
-
-    ep_gc_maybe_collect();
-
-    checked = require_in_domain(size);
-    value = ({
-    EpStruct_FoldValue* _s = (EpStruct_FoldValue*)malloc(sizeof(EpStruct_FoldValue));
-    _s->numerator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; });
-    _s->denominator_digits = ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; });
-    _s->derivation = derivation;
-    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
-    (long long)_s;
-});
-    ret_val = value;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long the_one() {
-    long long one_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one_size);
-
-    ep_gc_maybe_collect();
-
-    one_size = fraction_from_whole_number(1);
-    ret_val = fold_value_from_size(one_size, (long long)"ONE");
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long supposed_value(long long top, long long bottom) {
-    long long label = 0;
-    long long size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&size);
-    ep_gc_push_root(&top);
-    ep_gc_push_root(&bottom);
-
-    ep_gc_maybe_collect();
-
-    size = fraction_from_ratio(top, bottom);
-    label = concat(concat((long long)"supposed(", fraction_to_text(size)), (long long)")");
-    ret_val = fold_value_from_size(size, label);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long cast_out_whole_ones(long long size) {
-    long long numerator = 0;
-    long long whole_integer = 0;
-    long long whole_part = 0;
-    long long denominator = 0;
-    long long whole_count = 0;
-    long long one_integer = 0;
-    long long remainder = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&whole_integer);
-    ep_gc_push_root(&whole_part);
-    ep_gc_push_root(&denominator);
-    ep_gc_push_root(&whole_count);
-    ep_gc_push_root(&one_integer);
-    ep_gc_push_root(&remainder);
-    ep_gc_push_root(&size);
-
-    ep_gc_maybe_collect();
-
-    numerator = exact_integer_from_sign_and_digits(({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
-    denominator = exact_integer_from_sign_and_digits(1, ({ long long _fap = size; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
-    whole_count = exact_integer_divide(numerator, denominator);
-    whole_integer = exact_integer_from_sign_and_digits(1, ({ long long _fap = whole_count; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'quotient_digits' on 'DivisionOutcome'\n"); exit(1); } ((EpStruct_DivisionOutcome*)(_fap))->quotient_digits; }));
-    one_integer = exact_integer_from_sign_and_digits(1, (long long)"1");
-    whole_part = fraction_make(whole_integer, one_integer);
-    remainder = fraction_subtract(size, whole_part);
-    if (({ long long _fap = remainder; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) == 0) {
-    ret_val = fraction_from_whole_number(1);
-    goto L_cleanup;
-    }
-    ret_val = remainder;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(8);
-    free_struct_DivisionOutcome(whole_count);
-    whole_count = 0;
-    return ret_val;
-}
-
-long long fold(long long value) {
-    long long size = 0;
-    long long size_again = 0;
-    long long doubled = 0;
-    long long trace = 0;
-    long long folded_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&size);
-    ep_gc_push_root(&size_again);
-    ep_gc_push_root(&doubled);
-    ep_gc_push_root(&trace);
-    ep_gc_push_root(&folded_size);
-    ep_gc_push_root(&value);
-
-    ep_gc_maybe_collect();
-
-    size = fold_value_size(value);
-    size_again = fold_value_size(value);
-    doubled = fraction_add(size, size_again);
-    folded_size = cast_out_whole_ones(doubled);
-    trace = concat(concat((long long)"fold(", ({ long long _fap = value; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
-    ret_val = fold_value_from_size(folded_size, trace);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long can_take(long long larger, long long smaller) {
-    long long larger_size = 0;
-    long long smaller_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&larger_size);
-    ep_gc_push_root(&smaller_size);
-    ep_gc_push_root(&larger);
-    ep_gc_push_root(&smaller);
-
-    ep_gc_maybe_collect();
-
-    larger_size = fold_value_size(larger);
-    smaller_size = fold_value_size(smaller);
-    ret_val = fraction_compare(larger_size, smaller_size) > 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    free_struct_Fraction(larger_size);
-    larger_size = 0;
-    free_struct_Fraction(smaller_size);
-    smaller_size = 0;
-    return ret_val;
-}
-
-long long take(long long larger, long long smaller) {
-    long long difference = 0;
-    long long trace = 0;
-    long long smaller_size = 0;
-    long long larger_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&difference);
-    ep_gc_push_root(&trace);
-    ep_gc_push_root(&smaller_size);
-    ep_gc_push_root(&larger_size);
-    ep_gc_push_root(&larger);
-    ep_gc_push_root(&smaller);
-
-    ep_gc_maybe_collect();
-
-    larger_size = fold_value_size(larger);
-    smaller_size = fold_value_size(smaller);
-    difference = fraction_subtract(larger_size, smaller_size);
-    trace = concat(concat(concat(concat((long long)"take(", ({ long long _fap = larger; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = smaller; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
-    ret_val = fold_value_from_size(difference, trace);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long fold_value_compare(long long first, long long second) {
-    long long first_size = 0;
-    long long second_size = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&first_size);
-    ep_gc_push_root(&second_size);
-    ep_gc_push_root(&first);
-    ep_gc_push_root(&second);
-
-    ep_gc_maybe_collect();
-
-    first_size = fold_value_size(first);
-    second_size = fold_value_size(second);
-    ret_val = fraction_compare(first_size, second_size);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long fold_value_is_equal(long long first, long long second) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&first);
-    ep_gc_push_root(&second);
-
-    ep_gc_maybe_collect();
-
-    ret_val = fold_value_compare(first, second) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long fold_value_to_text(long long value) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&value);
-
-    ep_gc_maybe_collect();
-
-    ret_val = fraction_to_text(fold_value_size(value));
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long fold_period(long long start, long long limit) {
-    long long count = 0;
-    long long current = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&current);
-    ep_gc_push_root(&start);
-
-    ep_gc_maybe_collect();
-
-    current = fold(start);
-    count = 1;
-    while (count <= limit) {
-    if (fold_value_compare(current, start) == 0) {
-    ret_val = count;
-    goto L_cleanup;
-    }
-    current = fold(current);
-    count = (count + 1);
-    }
-    ret_val = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long rotate(long long phase, long long step) {
-    long long trace = 0;
-    long long step_size = 0;
-    long long phase_size = 0;
-    long long sum = 0;
-    long long advanced = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&trace);
-    ep_gc_push_root(&step_size);
-    ep_gc_push_root(&phase_size);
-    ep_gc_push_root(&sum);
-    ep_gc_push_root(&advanced);
-    ep_gc_push_root(&phase);
-    ep_gc_push_root(&step);
-
-    ep_gc_maybe_collect();
-
-    phase_size = fold_value_size(phase);
-    step_size = fold_value_size(step);
-    sum = fraction_add(phase_size, step_size);
-    advanced = cast_out_whole_ones(sum);
-    trace = concat(concat(concat(concat((long long)"rotate(", ({ long long _fap = phase; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)", "), ({ long long _fap = step; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'derivation' on 'FoldValue'\n"); exit(1); } ((EpStruct_FoldValue*)(_fap))->derivation; })), (long long)")");
-    ret_val = fold_value_from_size(advanced, trace);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(7);
-    return ret_val;
-}
-
-long long relative_phase(long long seen, long long vantage) {
-    long long vantage_size = 0;
-    long long the_one_value = 0;
-    long long gap = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&vantage_size);
-    ep_gc_push_root(&the_one_value);
-    ep_gc_push_root(&gap);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&seen);
-    ep_gc_push_root(&vantage);
-
-    ep_gc_maybe_collect();
-
-    vantage_size = fold_value_size(vantage);
-    one = fraction_from_whole_number(1);
-    if (fraction_compare(vantage_size, one) == 0) {
-    ret_val = seen;
-    goto L_cleanup;
-    }
-    the_one_value = the_one();
-    gap = take(the_one_value, vantage);
-    ret_val = rotate(seen, gap);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    free_struct_Fraction(vantage_size);
-    vantage_size = 0;
-    free_struct_Fraction(one);
-    one = 0;
-    return ret_val;
-}
-
-long long beat_between(long long first, long long second) {
-    long long order = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&first);
-    ep_gc_push_root(&second);
-
-    ep_gc_maybe_collect();
-
-    order = fold_value_compare(first, second);
-    if (order == 0) {
-    ret_val = the_one();
-    goto L_cleanup;
-    }
-    if (order > 0) {
-    ret_val = take(first, second);
-    goto L_cleanup;
-    }
-    ret_val = take(second, first);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long dark_energy_density() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(binary_count(), colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long matter_density() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long flat_universe_partition() {
-    long long matter = 0;
-    long long dark_energy = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&matter);
-    ep_gc_push_root(&dark_energy);
-
-    ep_gc_maybe_collect();
-
-    dark_energy = fraction_from_ratio(binary_count(), colour_count());
-    matter = fraction_from_ratio(1, colour_count());
-    ret_val = fraction_add(dark_energy, matter);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long baryon_density() {
-    long long matter = 0;
-    long long baryon_share = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&matter);
-    ep_gc_push_root(&baryon_share);
-
-    ep_gc_maybe_collect();
-
-    matter = fraction_from_ratio(1, colour_count());
-    baryon_share = fraction_from_ratio(generational_covering_depth(), total_binary_volume());
-    ret_val = fraction_multiply(matter, baryon_share);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long cold_dark_matter_density() {
-    long long matter = 0;
-    long long dark_share = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&matter);
-    ep_gc_push_root(&dark_share);
-
-    ep_gc_maybe_collect();
-
-    matter = fraction_from_ratio(1, colour_count());
-    dark_share = fraction_from_ratio(generational_volume(), total_binary_volume());
-    ret_val = fraction_multiply(matter, dark_share);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long atmospheric_mixing() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long solar_mixing() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long lepton_sector_count() {
-    long long ret_val = 0;
-
-    ret_val = whole_power(binary_count(), colour_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long reactor_mixing() {
-    long long product = 0;
-    long long atmospheric = 0;
-    long long solar = 0;
-    long long sector = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&product);
-    ep_gc_push_root(&atmospheric);
-    ep_gc_push_root(&solar);
-    ep_gc_push_root(&sector);
-
-    ep_gc_maybe_collect();
-
-    atmospheric = fraction_from_ratio(1, binary_count());
-    solar = fraction_from_ratio(1, colour_count());
-    product = fraction_multiply(atmospheric, solar);
-    sector = fraction_from_whole_number(lepton_sector_count());
-    ret_val = fraction_divide(product, sector);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long fold_fraction(long long size) {
-    long long doubled = 0;
-    long long size_again = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&doubled);
-    ep_gc_push_root(&size_again);
-    ep_gc_push_root(&size);
-
-    ep_gc_maybe_collect();
-
-    size_again = fraction_make(fraction_numerator(size), fraction_denominator(size));
-    doubled = fraction_add(size, size_again);
-    ret_val = cast_out_whole_ones(doubled);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long atmospheric_fold() {
-    long long half = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&half);
-
-    ep_gc_maybe_collect();
-
-    half = fraction_from_ratio(1, binary_count());
-    ret_val = fold_fraction(half);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long atmospheric_antipode() {
-    long long half = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&half);
-    ep_gc_push_root(&one);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    half = fraction_from_ratio(1, binary_count());
-    ret_val = fraction_subtract(one, half);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long solar_take_of_fold() {
-    long long one = 0;
-    long long third = 0;
-    long long folded = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&third);
-    ep_gc_push_root(&folded);
-
-    ep_gc_maybe_collect();
-
-    third = fraction_from_ratio(1, colour_count());
-    folded = fold_fraction(third);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_subtract(one, folded);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long reactor_form_is_unique() {
-    long long solar_e = 0;
-    long long atm_c = 0;
-    long long sector_f = 0;
-    long long prod_a = 0;
-    long long cand_f = 0;
-    long long sector_d = 0;
-    long long cand_b = 0;
-    long long sum_d = 0;
-    long long denom_f = 0;
-    long long sector_a = 0;
-    long long prod_b = 0;
-    long long atm_b = 0;
-    long long atm_a = 0;
-    long long atm_d = 0;
-    long long sector_e = 0;
-    long long cand_e = 0;
-    long long cand_d = 0;
-    long long denom_e = 0;
-    long long atm_f = 0;
-    long long total = 0;
-    long long cand_a = 0;
-    long long cand_c = 0;
-    long long sector_b = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&solar_e);
-    ep_gc_push_root(&atm_c);
-    ep_gc_push_root(&sector_f);
-    ep_gc_push_root(&prod_a);
-    ep_gc_push_root(&cand_f);
-    ep_gc_push_root(&sector_d);
-    ep_gc_push_root(&cand_b);
-    ep_gc_push_root(&sum_d);
-    ep_gc_push_root(&denom_f);
-    ep_gc_push_root(&sector_a);
-    ep_gc_push_root(&prod_b);
-    ep_gc_push_root(&atm_b);
-    ep_gc_push_root(&atm_a);
-    ep_gc_push_root(&atm_d);
-    ep_gc_push_root(&sector_e);
-    ep_gc_push_root(&cand_e);
-    ep_gc_push_root(&cand_d);
-    ep_gc_push_root(&denom_e);
-    ep_gc_push_root(&atm_f);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&cand_a);
-    ep_gc_push_root(&cand_c);
-    ep_gc_push_root(&sector_b);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    atm_a = fraction_from_ratio(1, binary_count());
-    prod_a = fraction_multiply(atm_a, solar_mixing());
-    sector_a = fraction_from_whole_number(lepton_sector_count());
-    cand_a = fraction_divide(prod_a, sector_a);
-    total = count_form_match(total, cand_a, reactor_mixing());
-    atm_b = fraction_from_ratio(1, binary_count());
-    prod_b = fraction_multiply(atm_b, solar_mixing());
-    sector_b = fraction_from_whole_number(lepton_sector_count());
-    cand_b = fraction_multiply(prod_b, sector_b);
-    total = count_form_match(total, cand_b, reactor_mixing());
-    atm_c = fraction_from_ratio(1, binary_count());
-    cand_c = fraction_multiply(atm_c, solar_mixing());
-    total = count_form_match(total, cand_c, reactor_mixing());
-    atm_d = fraction_from_ratio(1, binary_count());
-    sum_d = fraction_add(atm_d, solar_mixing());
-    sector_d = fraction_from_whole_number(lepton_sector_count());
-    cand_d = fraction_divide(sum_d, sector_d);
-    total = count_form_match(total, cand_d, reactor_mixing());
-    solar_e = fraction_from_ratio(1, colour_count());
-    sector_e = fraction_from_whole_number(lepton_sector_count());
-    denom_e = fraction_multiply(solar_e, sector_e);
-    cand_e = fraction_divide(atmospheric_mixing(), denom_e);
-    total = count_form_match(total, cand_e, reactor_mixing());
-    atm_f = fraction_from_ratio(1, binary_count());
-    sector_f = fraction_from_whole_number(lepton_sector_count());
-    denom_f = fraction_multiply(atm_f, sector_f);
-    cand_f = fraction_divide(solar_mixing(), denom_f);
-    total = count_form_match(total, cand_f, reactor_mixing());
-    ret_val = forbid_form_selection((long long)"the reactor mixing angle form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(23);
-    return ret_val;
-}
-
-long long reactor_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, 1);
-    ok = append_list(nums, 1);
-    ok = append_list(nums, lepton_sector_count());
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long reactor_leaf_denominators() {
-    long long ok = 0;
-    long long dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, binary_count());
-    ok = append_list(dens, colour_count());
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long reactor_assembly_is_minimal() {
-    long long target_den = 0;
-    long long leaf_nums = 0;
-    long long leaf_dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&target_den);
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&leaf_dens);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = reactor_leaf_numerators();
-    leaf_dens = reactor_leaf_denominators();
-    target_den = ((smallest_fold_period_above(1) * smallest_fold_period_above(binary_count())) * whole_power(binary_count(), colour_count()));
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the reactor angle", leaf_nums, leaf_dens, 1, target_den, 2);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long w_to_z_mass_squared() {
-    long long ret_val = 0;
-
-    ret_val = cos_squared_mixing();
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long cos_squared_at_level(long long level) {
-    long long sin_squared = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&sin_squared);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&level);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    sin_squared = weak_mixing_at_level(level);
-    ret_val = fraction_subtract(one, sin_squared);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long unified_coupling() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long sin_squared_mixing() {
-    long long binary_squared = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&binary_squared);
-
-    ep_gc_maybe_collect();
-
-    binary_squared = whole_power(binary_count(), 2);
-    ret_val = fraction_from_ratio(1, binary_squared);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long cos_squared_mixing() {
-    long long lower = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&lower);
-    ep_gc_push_root(&one);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    lower = sin_squared_mixing();
-    ret_val = fraction_subtract(one, lower);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long mixing_partition() {
-    long long upper = 0;
-    long long lower = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&upper);
-    ep_gc_push_root(&lower);
-
-    ep_gc_maybe_collect();
-
-    lower = sin_squared_mixing();
-    upper = cos_squared_mixing();
-    ret_val = fraction_add(lower, upper);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long cos_squared_form_is_unique() {
-    long long form_c = 0;
-    long long form_a = 0;
-    long long one_a = 0;
-    long long one_e = 0;
-    long long binary_e = 0;
-    long long form_f = 0;
-    long long one_c = 0;
-    long long form_e = 0;
-    long long form_b = 0;
-    long long scaled_c = 0;
-    long long binary_d = 0;
-    long long scaled_e = 0;
-    long long binary_c = 0;
-    long long one_b = 0;
-    long long total = 0;
-    long long form_d = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&form_c);
-    ep_gc_push_root(&form_a);
-    ep_gc_push_root(&one_a);
-    ep_gc_push_root(&one_e);
-    ep_gc_push_root(&binary_e);
-    ep_gc_push_root(&form_f);
-    ep_gc_push_root(&one_c);
-    ep_gc_push_root(&form_e);
-    ep_gc_push_root(&form_b);
-    ep_gc_push_root(&scaled_c);
-    ep_gc_push_root(&binary_d);
-    ep_gc_push_root(&scaled_e);
-    ep_gc_push_root(&binary_c);
-    ep_gc_push_root(&one_b);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&form_d);
-
-    ep_gc_maybe_collect();
-
-    total = 0;
-    one_a = fraction_from_whole_number(1);
-    form_a = fraction_subtract(one_a, sin_squared_mixing());
-    total = count_form_match(total, form_a, cos_squared_mixing());
-    one_b = fraction_from_whole_number(1);
-    form_b = fraction_add(one_b, sin_squared_mixing());
-    total = count_form_match(total, form_b, cos_squared_mixing());
-    one_c = fraction_from_whole_number(1);
-    binary_c = fraction_from_whole_number(binary_count());
-    scaled_c = fraction_multiply(binary_c, sin_squared_mixing());
-    form_c = fraction_subtract(one_c, scaled_c);
-    total = count_form_match(total, form_c, cos_squared_mixing());
-    binary_d = fraction_from_whole_number(binary_count());
-    form_d = fraction_multiply(binary_d, sin_squared_mixing());
-    total = count_form_match(total, form_d, cos_squared_mixing());
-    binary_e = fraction_from_whole_number(binary_count());
-    scaled_e = fraction_divide(sin_squared_mixing(), binary_e);
-    one_e = fraction_from_whole_number(1);
-    form_e = fraction_subtract(one_e, scaled_e);
-    total = count_form_match(total, form_e, cos_squared_mixing());
-    form_f = sin_squared_mixing();
-    total = count_form_match(total, form_f, cos_squared_mixing());
-    ret_val = forbid_form_selection((long long)"the electroweak cos-squared partition form", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(16);
-    return ret_val;
-}
-
-long long lower_preimage_folds_to_coupling() {
-    long long lower = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&lower);
-
-    ep_gc_maybe_collect();
-
-    lower = sin_squared_mixing();
-    ret_val = fold_fraction(lower);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long upper_preimage_folds_to_coupling() {
-    long long upper = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&upper);
-
-    ep_gc_maybe_collect();
-
-    upper = cos_squared_mixing();
-    ret_val = fold_fraction(upper);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long weak_mixing_at_level(long long level) {
-    long long numerator = 0;
-    long long charged_part = 0;
-    long long denominator = 0;
-    long long level_plus_one = 0;
-    long long level_plus_two = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&denominator);
-    ep_gc_push_root(&level_plus_one);
-    ep_gc_push_root(&level_plus_two);
-
-    ep_gc_maybe_collect();
-
-    level_plus_one = (level + 1);
-    level_plus_two = (level + 2);
-    numerator = whole_power(level_plus_two, 2);
-    charged_part = (4 * whole_power(level_plus_one, 2));
-    denominator = (charged_part + whole_power(level_plus_two, 2));
-    ret_val = fraction_from_ratio(numerator, denominator);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long bare_running_mixing() {
-    long long ret_val = 0;
-
-    ret_val = weak_mixing_at_level(0);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long cos_squared_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, 1);
-    ok = append_list(nums, 1);
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long cos_squared_leaf_denominators() {
-    long long dens = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, whole_power(binary_count(), 2));
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long cos_squared_assembly_is_minimal() {
-    long long binary_squared = 0;
-    long long leaf_nums = 0;
-    long long target_num = 0;
-    long long leaf_dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&binary_squared);
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_dens);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = cos_squared_leaf_numerators();
-    leaf_dens = cos_squared_leaf_denominators();
-    binary_squared = whole_power(binary_count(), 2);
-    target_num = (binary_squared - 1);
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the electroweak cos-squared", leaf_nums, leaf_dens, target_num, binary_squared, 1);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long freeze_out_ratio() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, up_depth());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long helium_fraction() {
-    long long two_r = 0;
-    long long one_plus_r = 0;
-    long long r = 0;
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&two_r);
-    ep_gc_push_root(&one_plus_r);
-    ep_gc_push_root(&r);
-    ep_gc_push_root(&one);
-
-    ep_gc_maybe_collect();
-
-    two_r = fraction_from_ratio(2, up_depth());
-    r = fraction_from_ratio(1, up_depth());
-    one = fraction_from_whole_number(1);
-    one_plus_r = fraction_add(one, r);
-    ret_val = fraction_divide(two_r, one_plus_r);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long helium_is_one_over_binary_squared() {
-    long long binary_squared = 0;
-    long long quarter = 0;
-    long long y = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&binary_squared);
-    ep_gc_push_root(&quarter);
-    ep_gc_push_root(&y);
-
-    ep_gc_maybe_collect();
-
-    y = helium_fraction();
-    binary_squared = whole_power(binary_count(), 2);
-    quarter = fraction_from_ratio(1, binary_squared);
-    ret_val = fraction_compare(y, quarter) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    free_struct_Fraction(quarter);
-    quarter = 0;
-    free_struct_Fraction(y);
-    y = 0;
-    return ret_val;
-}
-
-long long matter_half() {
-    long long matter = 0;
-    long long half = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&matter);
-    ep_gc_push_root(&half);
-
-    ep_gc_maybe_collect();
-
-    matter = fraction_from_ratio(1, colour_count());
-    half = fraction_from_ratio(1, binary_count());
-    ret_val = fraction_multiply(matter, half);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long deceleration_magnitude() {
-    long long m_half = 0;
-    long long vacuum = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&m_half);
-    ep_gc_push_root(&vacuum);
-
-    ep_gc_maybe_collect();
-
-    vacuum = fraction_from_ratio(binary_count(), colour_count());
-    m_half = matter_half();
-    ret_val = fraction_subtract(vacuum, m_half);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long universe_accelerates() {
-    long long m_half = 0;
-    long long vacuum = 0;
-    long long order = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&m_half);
-    ep_gc_push_root(&vacuum);
-
-    ep_gc_maybe_collect();
-
-    m_half = matter_half();
-    vacuum = fraction_from_ratio(binary_count(), colour_count());
-    order = fraction_compare(m_half, vacuum);
-    if (order < 0) {
-    ret_val = 1LL;
-    goto L_cleanup;
-    }
-    ret_val = 0LL;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long critical_coupling() {
-    long long ret_val = 0;
-
-    ret_val = fraction_from_ratio(1, binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long bare_g_factor() {
-    long long one = 0;
-    long long coupling = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&coupling);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    coupling = fraction_from_ratio(1, binary_count());
-    ret_val = fraction_divide(one, coupling);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long bare_g_factor_is_binary() {
-    long long ret_val = 0;
-
-    ret_val = smallest_fold_period_above(1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long mediator_count(long long sector) {
-    long long pairs = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&sector);
-
-    ep_gc_maybe_collect();
-
-    pairs = whole_power(sector, 2);
-    ret_val = (pairs - 1);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long strong_sector() {
-    long long ret_val = 0;
-
-    ret_val = smallest_fold_period_above(binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long gluon_count() {
-    long long ret_val = 0;
-
-    ret_val = mediator_count(strong_sector());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long next_sector() {
-    long long ret_val = 0;
-
-    ret_val = (smallest_fold_period_above(1) + smallest_fold_period_above(binary_count()));
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long next_sector_mediator_count() {
-    long long ret_val = 0;
-
-    ret_val = mediator_count(next_sector());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long third_sector() {
-    long long ret_val = 0;
-
-    ret_val = (smallest_fold_period_above(binary_count()) + (smallest_fold_period_above(binary_count()) + 1));
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long third_sector_mediator_count() {
-    long long ret_val = 0;
-
-    ret_val = mediator_count(third_sector());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long electromagnetic_field_source() {
-    long long ret_val = 0;
-
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long strong_field_source() {
-    long long ret_val = 0;
-
-    ret_val = (1 + smallest_fold_period_above(1));
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long gluon_count_form_is_unique() {
-    long long cand_c = 0;
-    long long total = 0;
-    long long cand_a = 0;
-    long long cand_d = 0;
-    long long sector_plus = 0;
-    long long sq_b = 0;
-    long long sq_a = 0;
-    long long cand_b = 0;
-    long long cand_e = 0;
-    long long cand_g = 0;
-    long long sector = 0;
-    long long cand_f = 0;
-    long long twice_plus = 0;
-    long long sector_minus = 0;
-    long long twice_minus = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cand_c);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&cand_a);
-    ep_gc_push_root(&cand_d);
-    ep_gc_push_root(&sector_plus);
-    ep_gc_push_root(&sq_b);
-    ep_gc_push_root(&sq_a);
-    ep_gc_push_root(&cand_b);
-    ep_gc_push_root(&cand_e);
-    ep_gc_push_root(&cand_g);
-    ep_gc_push_root(&sector);
-    ep_gc_push_root(&cand_f);
-    ep_gc_push_root(&twice_plus);
-    ep_gc_push_root(&sector_minus);
-    ep_gc_push_root(&twice_minus);
-
-    ep_gc_maybe_collect();
-
-    sector = smallest_fold_period_above(binary_count());
-    total = 0;
-    sq_a = whole_power(sector, 2);
-    cand_a = fraction_from_whole_number((sq_a - 1));
-    total = count_form_match(total, cand_a, fraction_from_whole_number(gluon_count()));
-    sq_b = whole_power(sector, 2);
-    cand_b = fraction_from_whole_number((sq_b + 1));
-    total = count_form_match(total, cand_b, fraction_from_whole_number(gluon_count()));
-    cand_c = fraction_from_whole_number(whole_power(sector, 2));
-    total = count_form_match(total, cand_c, fraction_from_whole_number(gluon_count()));
-    sector_minus = (sector - 1);
-    cand_d = fraction_from_whole_number((sector * sector_minus));
-    total = count_form_match(total, cand_d, fraction_from_whole_number(gluon_count()));
-    sector_plus = (sector + 1);
-    cand_e = fraction_from_whole_number((sector * sector_plus));
-    total = count_form_match(total, cand_e, fraction_from_whole_number(gluon_count()));
-    twice_minus = ((2 * sector) - 1);
-    cand_f = fraction_from_whole_number(twice_minus);
-    total = count_form_match(total, cand_f, fraction_from_whole_number(gluon_count()));
-    twice_plus = ((2 * sector) + 1);
-    cand_g = fraction_from_whole_number(twice_plus);
-    total = count_form_match(total, cand_g, fraction_from_whole_number(gluon_count()));
-    ret_val = forbid_form_selection((long long)"the gluon count form (adjoint dimension)", total);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(15);
-    return ret_val;
-}
-
-long long gluon_leaf_numerators() {
-    long long nums = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&nums);
-
-    ep_gc_maybe_collect();
-
-    nums = create_list();
-    ok = append_list(nums, strong_sector());
-    ok = append_list(nums, 1);
-    ret_val = nums;
-    nums = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long gluon_leaf_denominators() {
-    long long dens = 0;
-    long long ok = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&dens);
-
-    ep_gc_maybe_collect();
-
-    dens = create_list();
-    ok = append_list(dens, 1);
-    ok = append_list(dens, 1);
-    ret_val = dens;
-    dens = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long gluon_assembly_is_minimal() {
-    long long leaf_nums = 0;
-    long long target_num = 0;
-    long long leaf_dens = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&leaf_nums);
-    ep_gc_push_root(&target_num);
-    ep_gc_push_root(&leaf_dens);
-
-    ep_gc_maybe_collect();
-
-    leaf_nums = gluon_leaf_numerators();
-    leaf_dens = gluon_leaf_denominators();
-    target_num = mediator_count(strong_sector());
-    ret_val = canonical_assembly_is_minimal((long long)"no simpler assembly reaches the gluon count", leaf_nums, leaf_dens, target_num, 1, 2);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long count_in_stability_window() {
-    long long count = 0;
-    long long upper = 0;
-    long long candidate = 0;
-    long long ret_val = 0;
-
-    upper = whole_power(binary_count(), 2);
-    count = 0;
-    candidate = (smallest_fold_period_above(1) + 1);
-    while (candidate < upper) {
-    count = (count + 1);
-    candidate = (candidate + 1);
-    }
-    ret_val = count;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long stable_dimension() {
-    long long upper = 0;
-    long long found = 0;
-    long long candidate = 0;
-    long long ret_val = 0;
-
-    upper = whole_power(binary_count(), 2);
-    found = 0;
-    candidate = (smallest_fold_period_above(1) + 1);
-    while (candidate < upper) {
-    found = candidate;
-    candidate = (candidate + 1);
-    }
-    ret_val = found;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long spatial_dimension() {
-    long long by_colour = 0;
-    long long by_stability = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&by_colour);
-    ep_gc_push_root(&by_stability);
-
-    ep_gc_maybe_collect();
-
-    by_stability = stable_dimension();
-    by_colour = smallest_fold_period_above(binary_count());
-    ret_val = forced_to_be((long long)"spatial dimension = unique stable dimension = colour", by_stability, by_colour);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long tripling_preimage(long long index) {
-    long long colour = 0;
-    long long shift = 0;
-    long long shifted = 0;
-    long long target = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&colour);
-    ep_gc_push_root(&shift);
-    ep_gc_push_root(&shifted);
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&index);
-
-    ep_gc_maybe_collect();
-
-    target = fraction_from_ratio(2, colour_count());
-    shift = fraction_from_whole_number(index);
-    shifted = fraction_add(target, shift);
-    colour = fraction_from_whole_number(colour_count());
-    ret_val = fraction_divide(shifted, colour);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    return ret_val;
-}
-
-long long tripling_preimage_is_genuine(long long index) {
-    long long preimage = 0;
-    long long colour = 0;
-    long long target = 0;
-    long long tripled = 0;
-    long long folded = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&preimage);
-    ep_gc_push_root(&colour);
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&tripled);
-    ep_gc_push_root(&folded);
-    ep_gc_push_root(&index);
-
-    ep_gc_maybe_collect();
-
-    preimage = tripling_preimage(index);
-    colour = fraction_from_whole_number(colour_count());
-    tripled = fraction_multiply(preimage, colour);
-    folded = cast_out_whole_ones(tripled);
-    target = fraction_from_ratio(2, colour_count());
-    ret_val = fraction_compare(folded, target) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    free_struct_Fraction(target);
-    target = 0;
-    free_struct_Fraction(folded);
-    folded = 0;
-    return ret_val;
-}
-
-long long generation_count() {
-    long long checked = 0;
-    long long count = 0;
-    long long index = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&count);
-    ep_gc_push_root(&index);
-
-    ep_gc_maybe_collect();
-
-    count = 0;
-    index = 0;
-    while (index < smallest_fold_period_above(binary_count())) {
-    if (tripling_preimage_is_genuine(index)) {
-    count = (count + 1);
-    }
-    index = (index + 1);
-    }
-    checked = forced_to_be((long long)"generations = tripling fibre size = colour", count, colour_count());
-    ret_val = count;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long proton_electron_mass_ratio() {
-    long long muon = 0;
-    long long ratio_core = 0;
-    long long one_over_colour = 0;
-    long long electron = 0;
-    long long product = 0;
-    long long difference = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&muon);
-    ep_gc_push_root(&ratio_core);
-    ep_gc_push_root(&one_over_colour);
-    ep_gc_push_root(&electron);
-    ep_gc_push_root(&product);
-    ep_gc_push_root(&difference);
-
-    ep_gc_maybe_collect();
-
-    electron = electron_mass_share();
-    muon = muon_mass_share();
-    difference = fraction_subtract(muon, electron);
-    product = fraction_multiply(muon, electron);
-    ratio_core = fraction_divide(difference, product);
-    one_over_colour = fraction_from_ratio(1, colour_count());
-    ret_val = fraction_multiply(one_over_colour, ratio_core);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(6);
-    return ret_val;
-}
-
-long long electron_mass_part() {
-    long long one = 0;
-    long long split_value = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&split_value);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    split_value = fraction_from_ratio(1, binary_count());
-    ret_val = fraction_subtract(one, split_value);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long strong_component_mass_part() {
-    long long one = 0;
-    long long split_value = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&split_value);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    split_value = fraction_from_ratio(binary_count(), colour_count());
-    ret_val = fraction_subtract(one, split_value);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long proton_mass_part() {
-    long long colour = 0;
-    long long component = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&colour);
-    ep_gc_push_root(&component);
-
-    ep_gc_maybe_collect();
-
-    component = strong_component_mass_part();
-    colour = fraction_from_whole_number(colour_count());
-    ret_val = fraction_multiply(component, colour);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long proton_electron_structural_core() {
-    long long proton = 0;
-    long long electron = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&proton);
-    ep_gc_push_root(&electron);
-
-    ep_gc_maybe_collect();
-
-    proton = proton_mass_part();
-    electron = electron_mass_part();
-    ret_val = fraction_divide(proton, electron);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long core_is_binary() {
-    long long binary = 0;
-    long long core = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&binary);
-    ep_gc_push_root(&core);
-
-    ep_gc_maybe_collect();
-
-    core = proton_electron_structural_core();
-    binary = fraction_from_whole_number(binary_count());
-    ret_val = fraction_compare(core, binary) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    free_struct_Fraction(binary);
-    binary = 0;
-    free_struct_Fraction(core);
-    core = 0;
-    return ret_val;
-}
-
-long long muon_bare_g_factor() {
-    long long ret_val = 0;
-
-    ret_val = smallest_fold_period_above(1);
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long muon_electron_mass_ratio() {
-    long long muon = 0;
-    long long electron = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&muon);
-    ep_gc_push_root(&electron);
-
-    ep_gc_maybe_collect();
-
-    electron = electron_mass_share();
-    muon = muon_mass_share();
-    ret_val = fraction_divide(muon, electron);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long anomaly_sensitivity_ratio() {
-    long long mue = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&mue);
-
-    ep_gc_maybe_collect();
-
-    mue = muon_electron_mass_ratio();
-    ret_val = fraction_multiply(mue, mue);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long measured(long long label, long long numerator, long long denominator) {
-    long long the_measured = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&the_measured);
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&numerator);
-    ep_gc_push_root(&denominator);
-
-    ep_gc_maybe_collect();
-
-    the_measured = ({
-    EpStruct_Measured* _s = (EpStruct_Measured*)malloc(sizeof(EpStruct_Measured));
-    _s->label = label;
-    _s->numerator = numerator;
-    _s->denominator = denominator;
-    { EpGCObject* _go = ep_gc_register(_s, EP_OBJ_STRUCT); if(_go) _go->num_fields = 3; }
-    (long long)_s;
-});
-    ret_val = the_measured;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(4);
-    return ret_val;
-}
-
-long long forced_agrees_with_measured(long long forced, long long target, long long tolerance) {
-    long long target_fraction = 0;
-    long long order = 0;
-    long long difference = 0;
-    long long within = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&target_fraction);
-    ep_gc_push_root(&difference);
-    ep_gc_push_root(&forced);
-    ep_gc_push_root(&target);
-    ep_gc_push_root(&tolerance);
-
-    ep_gc_maybe_collect();
-
-    target_fraction = fraction_from_ratio(({ long long _fap = target; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator' on 'Measured'\n"); exit(1); } ((EpStruct_Measured*)(_fap))->numerator; }), ({ long long _fap = target; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator' on 'Measured'\n"); exit(1); } ((EpStruct_Measured*)(_fap))->denominator; }));
-    order = fraction_compare(forced, target_fraction);
-    if (order < 0) {
-    difference = fraction_subtract(target_fraction, forced);
-    } else {
-    difference = fraction_subtract(forced, target_fraction);
-    }
-    within = fraction_compare(difference, tolerance);
-    if (within > 0) {
-    ret_val = 0LL;
-    goto L_cleanup;
-    }
-    ret_val = 1LL;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
     return ret_val;
 }
 
