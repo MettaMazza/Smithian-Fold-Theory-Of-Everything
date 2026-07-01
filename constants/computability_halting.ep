@@ -1,0 +1,70 @@
+# ============================================================================
+#  COMPUTABILITY AND HALTING  --  why a bounded computation halts in finite
+#  steps, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A computation is DECIDABLE when it is guaranteed to finish -- to HALT -- in a finite
+#  number of steps. A configuration confined to a bounded depth always does: it folds
+#  up to a definite answer (the One) in exactly as many steps as its depth. Bounded
+#  means halting, and the fold counts the steps.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A configuration at depth k is the state 1/b^k = 1/2^k -- k binary levels below the
+#  One. Each fold lifts it one level (fold(1/2^j) = 1/2^(j-1)), so after exactly k folds
+#  it reaches the One -- a definite answer, HALTED:
+#       1/16 -> 1/8 -> 1/4 -> 1/2 -> 1   (depth 4, halts in 4 steps).
+#  The step count is exactly the depth k, finite -- a bounded configuration decides in
+#  bounded time. And it never reaches the forbidden zero: it halts AT the One, not by
+#  vanishing. Depth-bounded therefore means halting-guaranteed; the step count is forced
+#  to equal the depth. Nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Bounded (finite-state / space-bounded) computations are decidable -- they halt in a
+#  number of steps set by their size -- exactly the forced result. The forced content is
+#  exact: a depth-k configuration reaches the One in exactly k folds, an integer identity.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Fold a fraction a given number of times.
+define fold_repeated with size as Fraction and repetitions as Int returning Fraction:
+    set current to size
+    set count to 0
+    repeat while count < repetitions:
+        set current to fold_fraction(current)
+        set count to count + 1
+    return current
+
+# A bounded configuration at depth k: the state 1/b^k = 1/2^k.
+define bounded_configuration with depth as Int returning Fraction:
+    set denominator to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and denominator)
+
+# A depth-k configuration HALTS (reaches the One) after exactly k folds.
+define halts_after_depth_folds with depth as Int returning Bool:
+    set config to bounded_configuration(depth)
+    set final to fold_repeated(config and depth)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(final and one)
+
+# It has NOT halted a step early: after depth-1 folds it is still below the One.
+define not_halted_one_step_early with depth as Int returning Bool:
+    set config to bounded_configuration(depth)
+    set early to depth - 1
+    set almost to fold_repeated(config and early)
+    set one to fraction_from_whole_number(1)
+    set reached to fraction_is_equal(almost and one)
+    if reached:
+        return false
+    return true

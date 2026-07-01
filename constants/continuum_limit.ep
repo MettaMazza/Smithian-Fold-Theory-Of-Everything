@@ -1,0 +1,74 @@
+# ============================================================================
+#  THE CONTINUUM LIMIT  --  why the discrete lattice reproduces the smooth
+#  curvature exactly, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Physics on a discrete lattice must, as the spacing shrinks, reproduce the smooth
+#  continuum -- otherwise the discreteness would be a defect, not a foundation. The
+#  test is curvature: the lattice second-difference over the squared spacing must equal
+#  the continuum second derivative. For the basic parabola it does so EXACTLY, at every
+#  spacing -- no error to vanish. The fold's grid is faithful.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold's exact arithmetic) ───
+#  Take the simplest curved function, f(x) = x^2, whose continuum curvature (second
+#  derivative) is 2 everywhere. On the lattice, the discrete curvature at a point x with
+#  spacing s is the second difference over the squared spacing:
+#       [ f(x+s) - 2 f(x) + f(x-s) ] / s^2 .
+#  With f(x) = x^2 the numerator is exactly 2 s^2 (the x-terms cancel), so the ratio is
+#       2 s^2 / s^2 = 2 ,
+#  the continuum value -- EXACTLY, for ANY spacing s. Shrink the spacing along the fold
+#  (s = 1/2, 1/4, 1/8, ...): the discrete curvature is 2 at every step, never
+#  approximate. The continuum limit is reached with no error for the quadratic; the
+#  discreteness is exact, not a defect. Nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Lattice discretisations converge to the continuum as the spacing shrinks, and for a
+#  quadratic the second-difference stencil is exact -- exactly the forced result. The
+#  forced content is exact: the lattice curvature of x^2 is 2 at every spacing, matching
+#  the continuum second derivative.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+
+
+# The sample point on the lattice: x = 1/2.
+define sample_point returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The value of f(x) = x^2 at a point.
+define square_at with x as Fraction returning Fraction:
+    set x_again to fraction_make(fraction_numerator(x) and fraction_denominator(x))
+    return fraction_multiply(x and x_again)
+
+# The discrete (lattice) curvature at the sample point with the given spacing:
+# [ f(x+s) - 2 f(x) + f(x-s) ] / s^2. For f = x^2 this is exactly 2.
+define lattice_curvature with spacing as Fraction returning Fraction:
+    set x to sample_point()
+    set x_plus to fraction_add(x and spacing)
+    set x_minus to fraction_subtract(x and spacing)
+    set f_plus to square_at(x_plus)
+    set f_minus to square_at(x_minus)
+    set f_centre to square_at(x)
+    set two_centre to fraction_add(f_centre and f_centre)
+    set outer_sum to fraction_add(f_plus and f_minus)
+    set numerator to fraction_subtract(outer_sum and two_centre)
+    set spacing_again to fraction_make(fraction_numerator(spacing) and fraction_denominator(spacing))
+    set spacing_squared to fraction_multiply(spacing and spacing_again)
+    return fraction_divide(numerator and spacing_squared)
+
+# The continuum curvature of x^2: the second derivative, exactly 2.
+define continuum_curvature returning Fraction:
+    return fraction_from_whole_number(2)
+
+# The lattice curvature equals the continuum value (2) at a spacing of 1/4.
+define lattice_matches_continuum_at_quarter returning Bool:
+    set lattice to lattice_curvature(fraction_from_ratio(1 and 4))
+    set continuum to continuum_curvature()
+    return fraction_is_equal(lattice and continuum)
+
+# ...and at a finer spacing of 1/8 -- exact at every spacing, not approximate.
+define lattice_matches_continuum_at_eighth returning Bool:
+    set lattice to lattice_curvature(fraction_from_ratio(1 and 8))
+    set continuum to continuum_curvature()
+    return fraction_is_equal(lattice and continuum)

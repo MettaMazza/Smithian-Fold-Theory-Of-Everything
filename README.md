@@ -130,9 +130,13 @@ And the structural laws of physics, forced the same way:
 - **Rationality, decays, scattering** — **every forced constant is rational** (`q·x = p`),
   **decay branching ratios** partition the One (lifetime `= 1/width`), and **cross
   sections** (scatter + pass = the One; free path is the inverse of the cross section).
+- **Computation, continuum, currents** — **computability/halting** (a depth-`k` config
+  halts in `k` folds), the **continuum limit** (the lattice curvature of `x²` is exactly
+  `2` at every spacing), and the **electroweak currents** (charged flips handedness,
+  neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 92 test
-suites (568 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
+The full, ordered, run-it-yourself derivation of all of it — every step, all 95 test
+suites (583 forced checks) — is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable
 in one run with `make -C verify prove`.
 
 ---

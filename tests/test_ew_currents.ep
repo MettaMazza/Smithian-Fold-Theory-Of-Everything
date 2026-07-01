@@ -1,0 +1,23 @@
+import "../constants/ew_currents.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== electroweak currents ==="
+    set ok to expect_equal("left hand = 1/4" and fraction_to_text(left_hand()) and "1/4")
+    set ok to expect_equal("right hand = 3/4" and fraction_to_text(right_hand()) and "3/4")
+    set ok to expect_bool("both hands fold to the shared coupling 1/2" and both_hands_share_coupling())
+    set ok to expect_equal("charged current (W) flips 1/4 -> 3/4" and fraction_to_text(charged_current(left_hand())) and "3/4")
+    set ok to expect_bool("the charged current FLIPS the hand (antipode)" and charged_current_flips_left())
+    set ok to expect_bool("the neutral current (Z) PRESERVES the hand (identity)" and neutral_current_preserves())
+    display "=== done ==="
+    return 0

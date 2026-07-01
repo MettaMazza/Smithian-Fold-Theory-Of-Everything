@@ -2880,6 +2880,73 @@ barns are measured.
 
 ---
 
+### Step 92 — Computability and halting
+
+**File:** `constants/computability_halting.ep`
+
+**What it does.** A bounded configuration at depth `k` is the state `1/2^k`; each fold
+lifts it one level, so it reaches the One (a definite answer — **halts**) in exactly `k`
+folds (`1/16 → 1/8 → 1/4 → 1/2 → 1`). Bounded depth means halting-guaranteed, with the
+step count forced to equal the depth, and it never vanishes (No-Zero) — it halts *at*
+the One.
+
+```
+=== computability and halting ===
+  ok    bounded configuration at depth 4 = 1/16
+  ok    a depth-4 config HALTS after 4 folds ; depth-6 after 6
+  ok    it has NOT halted one step early
+```
+
+**To measurement.** Bounded (space-bounded) computations are decidable and halt in a
+number of steps set by their size — the forced integer identity: depth-`k` reaches the
+One in exactly `k` folds.
+
+---
+
+### Step 93 — The continuum limit
+
+**File:** `constants/continuum_limit.ep`
+
+**What it does.** For `f(x) = x²` the lattice second-difference over the squared spacing
+`[f(x+s) − 2f(x) + f(x−s)]/s²` is exactly `2s²/s² = 2` — the continuum second derivative
+— for **any** spacing `s`. So the discrete grid reproduces the smooth curvature exactly
+at `s = 1/4, 1/8, …`, never approximate: the discreteness is faithful, not a defect.
+
+```
+=== the continuum limit ===
+  ok    continuum curvature of x^2 = 2
+  ok    lattice curvature at spacing 1/4 = 2 ; at 1/8 = 2
+  ok    lattice matches continuum exactly at every spacing
+```
+
+**To measurement.** Lattice discretisations converge to the continuum, and for a
+quadratic the stencil is exact — the forced result: the lattice curvature of `x²` is `2`
+at every spacing.
+
+---
+
+### Step 94 — Electroweak currents (charged flips, neutral preserves)
+
+**File:** `constants/ew_currents.ep`
+
+**What it does.** Handedness is one of the fold's two preimages (left `1/4`, right `3/4`,
+both folding to the shared coupling `1/2`). The **charged current** (W) acts by the
+antipode — `take(One, hand)` — so it **flips** the hand (`1/4 ↔ 3/4`), changing identity
+(e → ν). The **neutral current** (Z) acts by the identity — it **preserves** the hand.
+
+```
+=== electroweak currents ===
+  ok    left 1/4, right 3/4 ; both fold to the shared coupling 1/2
+  ok    charged current (W) flips 1/4 -> 3/4 (antipode)
+  ok    neutral current (Z) preserves the hand (identity)
+```
+
+**To measurement.** The charged weak current changes identity and handedness (e → ν)
+while the neutral current conserves them — the forced antipode (charged) vs identity
+(neutral) on the two handedness preimages.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3094,6 +3161,12 @@ runs):**
   (wider → shorter).
 - Step 91 — cross sections: scatter + pass = the One; the mean free path is the inverse
   of the cross section (larger target → shorter path).
+- Step 92 — computability and halting: a depth-`k` configuration reaches the One in
+  exactly `k` folds — bounded means halting, the step count = the depth.
+- Step 93 — the continuum limit: the lattice second-difference of `x²` over `s²` is
+  exactly `2` at every spacing — the discrete grid reproduces the continuum exactly.
+- Step 94 — electroweak currents: the charged current (W) flips handedness (antipode),
+  the neutral current (Z) preserves it (identity).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

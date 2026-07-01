@@ -1,0 +1,22 @@
+import "../constants/continuum_limit.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the continuum limit ==="
+    set ok to expect_equal("continuum curvature of x^2 = 2" and fraction_to_text(continuum_curvature()) and "2")
+    set ok to expect_equal("lattice curvature at spacing 1/4 = 2" and fraction_to_text(lattice_curvature(fraction_from_ratio(1 and 4))) and "2")
+    set ok to expect_equal("lattice curvature at spacing 1/8 = 2" and fraction_to_text(lattice_curvature(fraction_from_ratio(1 and 8))) and "2")
+    set ok to expect_bool("lattice matches continuum at spacing 1/4 (exact)" and lattice_matches_continuum_at_quarter())
+    set ok to expect_bool("lattice matches continuum at spacing 1/8 (exact at every spacing)" and lattice_matches_continuum_at_eighth())
+    display "=== done ==="
+    return 0

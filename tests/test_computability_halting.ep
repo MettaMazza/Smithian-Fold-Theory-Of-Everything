@@ -1,0 +1,21 @@
+import "../constants/computability_halting.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== computability and halting ==="
+    set ok to expect_equal("bounded configuration at depth 4 = 1/16" and fraction_to_text(bounded_configuration(4)) and "1/16")
+    set ok to expect_bool("a depth-4 config HALTS (reaches the One) after 4 folds" and halts_after_depth_folds(4))
+    set ok to expect_bool("a depth-6 config halts after exactly 6 folds" and halts_after_depth_folds(6))
+    set ok to expect_bool("it has NOT halted one step early (depth 4)" and not_halted_one_step_early(4))
+    display "=== done ==="
+    return 0

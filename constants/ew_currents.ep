@@ -1,0 +1,72 @@
+# ============================================================================
+#  ELECTROWEAK CURRENTS  --  why the charged current flips handedness and the
+#  neutral one does not, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The weak force acts through two currents. The CHARGED current (the W boson) turns
+#  one particle into another -- an electron into a neutrino -- flipping its identity and
+#  its handedness. The NEUTRAL current (the Z boson) leaves the particle as it is. Why
+#  one flips and the other preserves is the fold's antipode versus its identity.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A particle's handedness is one of the fold's two preimages: LEFT = 1/4, RIGHT = 3/4,
+#  both folding to the shared coupling 1/2. The CHARGED current acts by the antipode --
+#  take from the One -- so it FLIPS the hand:
+#       take(One, 1/4) = 3/4 (left -> right) ,   take(One, 3/4) = 1/4 (right -> left) .
+#  The NEUTRAL current acts by the identity -- it leaves the state untouched:
+#       neutral(1/4) = 1/4 ,   neutral(3/4) = 3/4 .
+#  So the charged current changes handedness (and identity), the neutral one preserves
+#  it -- the antipode versus the identity, both forced by the fold. Nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The charged weak current changes particle identity and handedness (e -> nu), while
+#  the neutral current conserves them -- exactly the forced split. The forced content is
+#  the antipode (charged, flips) versus the identity (neutral, preserves), acting on the
+#  two handedness preimages.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The left-handed preimage: 1/4.
+define left_hand returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The right-handed preimage: 3/4.
+define right_hand returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# Both hands fold to the shared electroweak coupling 1/2.
+define both_hands_share_coupling returning Bool:
+    set left_image to fold_fraction(left_hand())
+    set right_image to fold_fraction(right_hand())
+    return fraction_is_equal(left_image and right_image)
+
+# The CHARGED current (W): the antipode from the One -- it flips the hand.
+define charged_current with hand as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and hand)
+
+# The charged current FLIPS left to right: take(One, 1/4) = 3/4.
+define charged_current_flips_left returning Bool:
+    set flipped to charged_current(left_hand())
+    set right to right_hand()
+    return fraction_is_equal(flipped and right)
+
+# The NEUTRAL current (Z): the identity -- it leaves the hand unchanged.
+define neutral_current with hand as Fraction returning Fraction:
+    return hand
+
+# The neutral current PRESERVES the hand: neutral(1/4) = 1/4.
+define neutral_current_preserves returning Bool:
+    set kept to neutral_current(left_hand())
+    set left to left_hand()
+    return fraction_is_equal(kept and left)
