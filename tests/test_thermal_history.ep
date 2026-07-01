@@ -1,0 +1,25 @@
+import "../constants/thermal_history.ep"
+define expect_number with label as Str and got as Int and want as Int:
+    if got equals want:
+        display concat("  ok    " and concat(label and concat(" = " and int_to_string(got))))
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and int_to_string(got))
+        display concat("    want: " and int_to_string(want))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the thermal history ==="
+    set ok to expect_number("radiation epoch exponent = 4" and radiation_epoch_exponent() and 4)
+    set ok to expect_number("matter epoch exponent = 3" and matter_epoch_exponent() and 3)
+    set ok to expect_number("dark-energy epoch exponent = 0" and dark_energy_epoch_exponent() and 0)
+    set ok to expect_bool("radiation dominated BEFORE matter (4 > 3)" and radiation_before_matter())
+    set ok to expect_bool("matter dominated BEFORE dark energy (3 > 0)" and matter_before_dark_energy())
+    set ok to expect_bool("the timeline is ordered radiation -> matter -> dark energy" and timeline_is_ordered())
+    display "=== done ==="
+    return 0

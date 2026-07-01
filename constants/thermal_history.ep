@@ -1,0 +1,71 @@
+# ============================================================================
+#  THE THERMAL HISTORY  --  why the universe passed through radiation, then
+#  matter, then dark energy, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The universe's story has three great acts, in a fixed ORDER: first radiation ruled,
+#  then matter, and now dark energy. Nothing chose that order -- it follows from how
+#  fast each thing thins as space grows. The component that thins FASTEST was densest
+#  in the crowded past, so it ruled first.
+#
+#  ── DERIVATION ─ (check every line; uses the dilution exponents of Step 61) ──
+#  Each component dilutes as a^-n with a forced exponent n (Step 61):
+#       radiation  n = 4  (= spacetime dimensions) ,
+#       matter     n = 3  (= spatial dimensions) ,
+#       dark energy n = 0  (non-diluting, the fold-invariant One) .
+#  Run the film backward: the LARGER the exponent, the faster the density climbs into
+#  the past, so the larger-exponent component dominated EARLIER. Since 4 > 3 > 0, the
+#  order of dominance is forced:
+#       radiation (4)  ->  matter (3)  ->  dark energy (0) .
+#  Radiation first (it thins fastest, so it was overwhelmingly densest early), then
+#  matter, then dark energy (which never thins, so it only wins once everything else
+#  has thinned away). The ordering is forced by the exponents; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The cosmic timeline is radiation-dominated, then matter-dominated, then dark-energy-
+#  dominated -- exactly the forced order. The forced content is the ORDERING from the
+#  dilution exponents (4 > 3 > 0); the transition redshifts and temperatures in kelvin
+#  are measured values.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../constants/cosmic_dilution_exponents.ep"
+
+
+# The three dilution exponents, from Step 61: radiation 4, matter 3, dark energy 0.
+define radiation_epoch_exponent returning Int:
+    return radiation_dilution_exponent()
+
+define matter_epoch_exponent returning Int:
+    return matter_dilution_exponent()
+
+define dark_energy_epoch_exponent returning Int:
+    return vacuum_dilution_exponent()
+
+# Radiation dominated BEFORE matter: its exponent is larger (it thinned faster, so it
+# was denser in the past).
+define radiation_before_matter returning Bool:
+    set radiation to radiation_epoch_exponent()
+    set matter to matter_epoch_exponent()
+    if radiation > matter:
+        return true
+    return false
+
+# Matter dominated BEFORE dark energy: its exponent is larger (dark energy never
+# thins, so it only wins last).
+define matter_before_dark_energy returning Bool:
+    set matter to matter_epoch_exponent()
+    set dark_energy to dark_energy_epoch_exponent()
+    if matter > dark_energy:
+        return true
+    return false
+
+# The full timeline is ordered radiation -> matter -> dark energy (4 > 3 > 0).
+define timeline_is_ordered returning Bool:
+    set first_gap to radiation_before_matter()
+    set second_gap to matter_before_dark_energy()
+    if first_gap:
+        if second_gap:
+            return true
+    return false

@@ -1,0 +1,68 @@
+# ============================================================================
+#  EVOLUTION BY DESCENT  --  why selection sweeps a fitter variant to fixation,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Natural selection takes a rare advantageous variant and, generation by generation,
+#  raises its frequency until the WHOLE population carries it -- "fixation". A fitter
+#  variant does not drift; it climbs. That climb to fixation is the fold's own
+#  upward amplification.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A new beneficial variant starts rare -- take frequency 1/4. Selection favours it, so
+#  each generation its share rises; on the fold that is the upward amplification below
+#  the balance:
+#       fold(1/4) = 1/2 ,   fold(1/2) = 1 .
+#  In two selective steps it climbs from rare to the One -- FIXATION, the whole
+#  population. The frequency strictly increases at each step (a fitter variant is
+#  amplified, not held), and the endpoint is the One (fixation), the fold's fixed
+#  point. There is no attractor at nothing (zero is forbidden), so a favoured variant
+#  cannot be driven to extinction by selection; it sweeps to fixation. The rise and the
+#  endpoint are forced; nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  A beneficial allele under positive selection sweeps to fixation (its frequency
+#  climbs to one) -- exactly the forced result. The forced content is that selection
+#  amplifies a sub-balance variant upward to the One (fixation, not extinction); the
+#  actual sweep time in generations depends on the selection strength, a measured value.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A rare beneficial variant's starting frequency: 1/4.
+define rare_beneficial returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# One generation of selection: fold(1/4) = 1/2 -- the variant's share doubles upward.
+define after_one_generation returning Fraction:
+    return fold_fraction(rare_beneficial())
+
+# A second generation: fold(1/2) = 1 -- fixation, the whole population.
+define after_two_generations returning Fraction:
+    set once to after_one_generation()
+    return fold_fraction(once)
+
+# Selection AMPLIFIES the variant: after one generation its frequency is strictly
+# higher than it started (it climbs, not drifts).
+define selection_amplifies returning Bool:
+    set start to rare_beneficial()
+    set stepped to after_one_generation()
+    set order to fraction_compare(stepped and start)
+    if order > 0:
+        return true
+    return false
+
+# The variant reaches FIXATION at the One (the whole population carries it).
+define reaches_fixation returning Bool:
+    set reached to after_two_generations()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(reached and one)

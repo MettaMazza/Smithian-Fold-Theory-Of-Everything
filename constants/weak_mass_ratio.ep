@@ -1,0 +1,75 @@
+# ============================================================================
+#  THE WEAK MASS RATIO  --  why a sector's charged-to-neutral mass-part ratio is
+#  1/(m-1), forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A force sector of multiplicity m splits into a CHARGED channel and a NEUTRAL one
+#  (in the electroweak sector, the W and the Z). The ratio of their mass-parts is not
+#  free: it is exactly 1/(m-1), and it equals the sector's own mixing ratio. One
+#  formula, checked across sectors.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  In a sector of multiplicity m the channels split as charged = (m-1)/m and neutral
+#  = 1/m (the shortfall and its complement). Each channel's MASS-PART is the take of
+#  its split from the One:
+#     charged mass-part  = One - (m-1)/m = 1/m ,
+#     neutral mass-part  = One - 1/m     = (m-1)/m .
+#  Their ratio is therefore
+#       charged / neutral = (1/m) / ((m-1)/m) = 1/(m-1) ,
+#  and that is exactly the mixing ratio neutral-split / charged-split =
+#  (1/m)/((m-1)/m) = 1/(m-1). For m = 2 (electroweak) the ratio is 1; for m = 3 it is
+#  1/2; for m = 4 it is 1/3. One forced formula 1/(m-1), the same as the mixing;
+#  nothing is chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The charged/neutral channel structure (W and Z in the electroweak sector) follows a
+#  single mass-part ratio tied to the mixing -- exactly the forced 1/(m-1). The forced
+#  content is exact: the ratio of the two channels' mass-parts is 1/(m-1) and equals
+#  the mixing ratio; the physical W/Z mass ratio (with its running) is the separate
+#  w-boson result.
+# ============================================================================
+
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The charged channel of a sector of multiplicity m: (m-1)/m.
+define charged_channel with m as Int returning Fraction:
+    return fraction_from_ratio(m - 1 and m)
+
+# The neutral channel: 1/m.
+define neutral_channel with m as Int returning Fraction:
+    return fraction_from_ratio(1 and m)
+
+# The charged channel's mass-part: One - (m-1)/m = 1/m.
+define charged_mass_part with m as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set channel_split to charged_channel(m)
+    return fraction_subtract(one and channel_split)
+
+# The neutral channel's mass-part: One - 1/m = (m-1)/m.
+define neutral_mass_part with m as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set channel_split to neutral_channel(m)
+    return fraction_subtract(one and channel_split)
+
+# The mass ratio: charged mass-part over neutral mass-part = 1/(m-1).
+define mass_ratio with m as Int returning Fraction:
+    set charged to charged_mass_part(m)
+    set neutral to neutral_mass_part(m)
+    return fraction_divide(charged and neutral)
+
+# The mass ratio equals 1/(m-1) exactly.
+define mass_ratio_is_one_over_m_minus_one with m as Int returning Bool:
+    set ratio to mass_ratio(m)
+    set expected to fraction_from_ratio(1 and m - 1)
+    return fraction_is_equal(ratio and expected)
+
+# The mass ratio equals the sector's mixing ratio (neutral-split over charged-split).
+define mass_ratio_equals_mixing with m as Int returning Bool:
+    set ratio to mass_ratio(m)
+    set neutral to neutral_channel(m)
+    set charged to charged_channel(m)
+    set mixing to fraction_divide(neutral and charged)
+    return fraction_is_equal(ratio and mixing)

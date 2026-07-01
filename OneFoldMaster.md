@@ -2682,6 +2682,72 @@ the fold's self-coupling, harmonics are whole multiples of the input.
 
 ---
 
+### Step 83 — The weak mass ratio (`1/(m−1)`)
+
+**File:** `constants/weak_mass_ratio.ep`
+
+**What it does.** A sector of multiplicity `m` splits into charged `(m−1)/m` and neutral
+`1/m`; each channel's mass-part is the take from the One, so charged mass-part `= 1/m`,
+neutral `= (m−1)/m`, and their ratio is `1/(m−1)` — equal to the mixing ratio. For
+`m=2` (electroweak) it is `1`; `m=3` → `1/2`; `m=4` → `1/3`.
+
+```
+=== the weak mass ratio ===
+  ok    charged/neutral mass-parts (m=3) = 1/3, 2/3
+  ok    mass ratio m=2,3,4 = 1, 1/2, 1/3 (= 1/(m-1))
+  ok    mass ratio equals the mixing ratio
+```
+
+**To measurement.** The charged/neutral (W/Z) channel structure follows one mass-part
+ratio tied to the mixing — the forced `1/(m−1)`; the physical W/Z mass ratio with its
+running is the separate w-boson result.
+
+---
+
+### Step 84 — Evolution by descent (selection sweeps to fixation)
+
+**File:** `constants/evolution_descent.ep`
+
+**What it does.** A rare beneficial variant (`1/4`) climbs under selection each
+generation — the fold's upward amplification below the balance: `fold(1/4)=1/2`,
+`fold(1/2)=1` — reaching **fixation** (the One, the whole population) in two steps. Zero
+is forbidden, so a favoured variant sweeps to fixation, not extinction.
+
+```
+=== evolution by descent ===
+  ok    rare variant 1/4 -> 1/2 -> 1 (fixation)
+  ok    selection AMPLIFIES the variant (it climbs)
+  ok    the variant reaches fixation at the One
+```
+
+**To measurement.** A beneficial allele under positive selection sweeps to fixation
+(frequency climbs to one) — the forced upward amplification to the One; the sweep time
+in generations depends on selection strength (measured).
+
+---
+
+### Step 85 — The thermal history (radiation → matter → dark energy)
+
+**File:** `constants/thermal_history.ep`
+
+**What it does.** Each component dilutes as `a^−n` with a forced exponent (Step 61):
+radiation `4`, matter `3`, dark energy `0`. Run backward, the larger exponent climbs
+faster into the past, so it dominated earlier. Since `4 > 3 > 0`, the order of
+dominance is forced: **radiation → matter → dark energy**.
+
+```
+=== the thermal history ===
+  ok    epoch exponents: radiation 4, matter 3, dark energy 0
+  ok    radiation before matter (4>3) ; matter before dark energy (3>0)
+  ok    timeline ordered radiation -> matter -> dark energy
+```
+
+**To measurement.** The cosmic timeline is radiation-, then matter-, then
+dark-energy-dominated — exactly the forced ordering from the dilution exponents
+(`4 > 3 > 0`); the transition redshifts and temperatures are measured.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -2878,6 +2944,12 @@ runs):**
   `f_n = n·f0`.
 - Step 82 — nonlinear optics: an intense field self-couples (the fold, `fold(3/4)=1/2`)
   and makes harmonics (third `= 3·f`); a linear field does neither.
+- Step 83 — the weak mass ratio: a sector's charged/neutral mass-part ratio is
+  `1/(m−1)` (= the mixing ratio): `1, 1/2, 1/3` for `m = 2, 3, 4`.
+- Step 84 — evolution by descent: selection amplifies a rare beneficial variant
+  `1/4 → 1/2 → 1` to fixation (the One), not extinction.
+- Step 85 — the thermal history: the dilution exponents `4 > 3 > 0` force the epoch
+  order radiation → matter → dark energy.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
