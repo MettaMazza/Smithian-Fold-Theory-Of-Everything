@@ -1,0 +1,58 @@
+# ============================================================================
+#  WAVE OPTICS  --  why waves interfere bright and dark, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Split a wave and recombine it and you get fringes -- bright where the two arrive in
+#  step, dark where they arrive opposed. Interference, diffraction, the whole of wave
+#  optics, is this phase match. Forced: the fully-out-of-step mismatch is the
+#  self-antipodal half-One, and matching it back into step is one fold to unison.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Two waves recombine; the outcome depends on their phase MISMATCH. In phase, they
+#  add (bright); the maximal mismatch -- fully out of step -- is the half-One 1/2, the
+#  unique self-antipodal point (One - 1/2 = 1/2), and there they cancel exactly (dark).
+#  Reading the mismatch as a fold state: the half-One folds to unison, fold(1/2) = 1 --
+#  the two out-of-step halves, brought together, complete into one whole (a bright
+#  fringe is the mismatch closing). The two half-shares sum to the One (1/2 + 1/2 = 1):
+#  the destructive dark and the constructive bright are the SAME half, read as
+#  cancellation or as completion -- energy is not lost at a dark fringe, it is moved to
+#  a bright one, the whole conserved.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: maximal mismatch at the self-antipodal half (dark),
+#  folding to unison (bright), the whole conserved. Measured: two-slit and thin-film
+#  interference show exactly complementary bright/dark fringes with total energy
+#  conserved (a half-wavelength path difference gives cancellation) -- as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The maximal phase mismatch: fully out of step, the self-antipodal half-One.
+define maximal_mismatch returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The mismatch is self-antipodal: the darkest fringe, exact cancellation.
+define mismatch_is_self_antipodal returning Bool:
+    set mismatch to maximal_mismatch()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and mismatch)
+    return fraction_is_equal(complement and mismatch)
+
+# Brought into step, the halves complete to one whole: fold(1/2) = 1 (a bright fringe).
+define halves_complete_to_bright returning Fraction:
+    return fold_fraction(maximal_mismatch())
+
+# The dark and bright shares sum to the One: energy conserved, just moved.
+define dark_plus_bright returning Fraction:
+    set mismatch to maximal_mismatch()
+    return fraction_add(mismatch and mismatch)

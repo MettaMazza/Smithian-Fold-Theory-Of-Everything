@@ -1,0 +1,71 @@
+# ============================================================================
+#  MEMORY PERSISTENCE  --  why a memory is a held orbit, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A memory persists: it is not stored as a frozen mark but kept ALIVE, a pattern that
+#  keeps re-exciting itself (reverberating neural loops, refreshed cell state). Why a
+#  cycle rather than a static store? Forced: the only way to hold a value against the
+#  fold's pull toward unison is a closed orbit that never reaches it.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Any state below the One is pulled toward unison by folding -- a static mark decays
+#  (1/4 -> 1/2 -> 1, gone). The ONE way to persist is a closed orbit: the period-2 pair
+#  1/3 and 2/3, which fold into EACH OTHER forever (1/3 -> 2/3 -> 1/3 -> ...) and never
+#  reach the One. That perpetual cycle IS the held memory -- information kept by
+#  re-exciting, not by freezing. The two orbit states partition the One (1/3 + 2/3 = 1):
+#  the memory and its refresh are complementary halves of one whole, and the orbit never
+#  integrates into unison (it is exactly the introspection_limit.ep orbit, here read as
+#  storage rather than as the unconscious). A memory is a held orbit; forgetting is the
+#  orbit breaking and folding home to the One.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the period-2 orbit {1/3, 2/3} cycles forever without
+#  reaching unison, its states summing to the One. Observed: working memory is held by
+#  reverberating (persistent, self-re-exciting) neural activity, and durable memory by
+#  self-sustaining molecular cycles -- kept alive, not frozen, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two memory-orbit states: 1/3 and 2/3.
+define memory_state returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+define refresh_state returning Fraction:
+    return fraction_from_ratio(binary_count() and colour_count())
+
+# The states fold into each other -- a perpetual cycle, the held pattern.
+define memory_folds_to_refresh returning Bool:
+    set memory to memory_state()
+    set folded to fold_fraction(memory)
+    set refresh to refresh_state()
+    return fraction_is_equal(folded and refresh)
+
+define refresh_folds_to_memory returning Bool:
+    set refresh to refresh_state()
+    set folded to fold_fraction(refresh)
+    set memory to memory_state()
+    return fraction_is_equal(folded and memory)
+
+# The held pattern returns after two folds (a genuine period-2 orbit).
+define pattern_returns_after_two returning Bool:
+    set memory to memory_state()
+    set once to fold_fraction(memory)
+    set twice to fold_fraction(once)
+    return fraction_is_equal(twice and memory)
+
+# Memory and refresh partition the One: complementary halves of one whole.
+define memory_plus_refresh returning Fraction:
+    set memory to memory_state()
+    set refresh to refresh_state()
+    return fraction_add(memory and refresh)

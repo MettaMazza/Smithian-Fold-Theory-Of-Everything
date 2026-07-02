@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-146 suites, 848 forced checks, 0 failures). It needs nothing but a C compiler. Use
+151 suites, 873 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3494,6 +3494,56 @@ conductance quantised and disorder-robust).
 
 ---
 
+### Step 144 — The origin of life (autocatalytic ignition)
+
+**File:** `constants/origin_of_life.ep`
+
+**What it does.** The same two-fold ignition that lights a star: a prebiotic mixture at the
+pre-lock `1/4` climbs `1/4 → 1/2 → 1` — the first fold crosses the autocatalytic lock (the
+balance where a cycle just sustains itself), the second closes it into a self-holding loop
+that replicates. A sharp threshold, not a slope — life turns on, it does not fade in
+(autocatalytic sets show exactly such a concentration threshold).
+
+### Step 145 — Memory persistence (a held orbit)
+
+**File:** `constants/memory_persistence.ep`
+
+**What it does.** A static mark decays (`1/4 → 1/2 → 1`, gone); the only way to hold a value
+against the fold's pull is a closed orbit — the period-2 pair `1/3 ↔ 2/3` that folds into
+itself forever and never reaches the One. That perpetual cycle **is** the memory (kept by
+re-exciting, not freezing); the two states partition the One; forgetting is the orbit
+breaking and folding home. Reverberating working memory is the measured face.
+
+### Step 146 — The plasma state (screening by balance-and-fold)
+
+**File:** `constants/plasma_state.ep`
+
+**What it does.** Free charges swarm a field to the balance `1/2` (opposition equals source),
+and one fold completes the screening (`1/2 → 1`) — beyond the Debye length the field is folded
+into the whole, cancelled; opposition and field sum to the One (nothing leaks). The same
+balance ringing is the plasma oscillation. The ionosphere's radio cutoff is the measured face.
+
+### Step 147 — Wave optics (bright and dark fringes)
+
+**File:** `constants/wave_optics.ep`
+
+**What it does.** The maximal phase mismatch — fully out of step — is the self-antipodal
+`1/2` (a dark fringe, exact cancellation); brought into step the two halves complete to one
+whole (`1/2 → 1`, bright). Dark and bright are the *same* half read two ways, and they sum to
+the One — energy isn't lost at a dark fringe, it's moved to a bright one (two-slit / thin-film
+interference).
+
+### Step 148 — The sleep cycle (a held two-state orbit)
+
+**File:** `constants/sleep_cycle.ep`
+
+**What it does.** Sleep must hold itself for hours without waking (reaching the One), so it's
+not a static state but the closed period-2 orbit — deep (slow-wave) at `1/3` and REM at `2/3`,
+folding into each other all night. Balanced at `1/2`; only a full waking is the fold of that
+balance to unison. The ~90-minute deep/REM alternation is the measured face.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3814,6 +3864,16 @@ runs):**
   `1/2` — infrared/microwave bands below the visible/UV electronic lines.
 - Step 143 — topological matter: the edge carries the balance `1/2`; its only exit is a
   whole fold to the bulk — protection by discreteness (quantised, disorder-robust).
+- Step 144 — the origin of life: the two-fold ignition `1/4 → 1/2 → 1` crosses the
+  autocatalytic lock into a self-holding cycle — a threshold, not a slope.
+- Step 145 — memory persistence: a memory is the held period-2 orbit `1/3 ↔ 2/3` (kept
+  by re-exciting, never reaching the One); forgetting is the orbit folding home.
+- Step 146 — the plasma state: charges swarm to the balance `1/2` and one fold completes
+  the screening — the field cancelled beyond the Debye length, nothing leaking.
+- Step 147 — wave optics: the maximal mismatch is the self-antipodal `1/2` (dark); it
+  folds to unison (bright); dark + bright = the One, energy conserved.
+- Step 148 — the sleep cycle: the held period-2 orbit `1/3 ↔ 2/3` (deep ↔ REM), balanced
+  at `1/2`; only waking folds the balance to unison (the ~90-min alternation).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

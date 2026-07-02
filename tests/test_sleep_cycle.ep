@@ -1,0 +1,24 @@
+import "../constants/sleep_cycle.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the sleep cycle (a held two-state orbit) ==="
+    set ok to expect_equal("deep (slow-wave) sleep = 1/3" and fraction_to_text(deep_sleep()) and "1/3")
+    set ok to expect_equal("REM sleep = 2/3" and fraction_to_text(rem_sleep()) and "2/3")
+    set ok to expect_bool("deep folds to REM" and deep_folds_to_rem())
+    set ok to expect_bool("REM folds back to deep (alternating cycle)" and rem_folds_to_deep())
+    set ok to expect_equal("the crossing balance = 1/2" and fraction_to_text(cycle_balance()) and "1/2")
+    set ok to expect_equal("only waking is the fold of the balance to unison" and fraction_to_text(waking_is_the_fold_to_unison()) and "1")
+    set ok to expect_equal("deep + REM partition the night" and fraction_to_text(stages_partition_the_night()) and "1")
+    display "=== done ==="
+    return 0

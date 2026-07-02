@@ -1,0 +1,21 @@
+import "../constants/origin_of_life.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the origin of life (autocatalytic ignition) ==="
+    set ok to expect_equal("pre-lock state = 1/4 (two folds below unison)" and fraction_to_text(pre_lock_state()) and "1/4")
+    set ok to expect_equal("first fold crosses the autocatalytic lock (-> 1/2)" and fraction_to_text(crosses_the_lock()) and "1/2")
+    set ok to expect_equal("second fold locks in the cycle (-> the One)" and fraction_to_text(cycle_locks_in()) and "1")
+    set ok to expect_equal("two pre-lock shares make one lock" and fraction_to_text(two_pre_lock_make_the_lock()) and "1/2")
+    display "=== done ==="
+    return 0

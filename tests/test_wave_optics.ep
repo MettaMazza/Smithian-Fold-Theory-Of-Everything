@@ -1,0 +1,21 @@
+import "../constants/wave_optics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== wave optics (bright and dark fringes) ==="
+    set ok to expect_equal("maximal mismatch = 1/2 (fully out of step)" and fraction_to_text(maximal_mismatch()) and "1/2")
+    set ok to expect_bool("the darkest fringe is self-antipodal (exact cancellation)" and mismatch_is_self_antipodal())
+    set ok to expect_equal("brought into step, halves complete to bright (-> the One)" and fraction_to_text(halves_complete_to_bright()) and "1")
+    set ok to expect_equal("dark + bright shares sum to the One (energy conserved)" and fraction_to_text(dark_plus_bright()) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,56 @@
+# ============================================================================
+#  THE ORIGIN OF LIFE  --  why a self-sustaining cycle must ignite, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Life began when chemistry first crossed from inert mixtures to a self-sustaining,
+#  self-copying cycle. Why a sharp ignition rather than a gradual warming? Forced: the
+#  same two-fold ignition that lights a star (stellar_nucleosynthesis.ep) -- a pre-lock
+#  state crosses the balance and locks into a self-holding cycle.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A prebiotic mixture sits below the autocatalytic lock -- the pre-ignition quarter-One
+#  1/4 = (1/2)^2, two folds below unison. Ignition is the climb:
+#       1/4  ->  1/2  ->  1 :
+#  the first fold CROSSES the lock (the balance 1/2, where a cycle just sustains itself
+#  -- catalysis.ep's self-antipodal threshold), the second closes it into a whole
+#  self-holding loop (the One). Below the lock the reactions die out; at 1/4 they are
+#  one fold from crossing; once across, the cycle holds itself -- a HELD ORBIT that
+#  replicates (self_replication.ep). Two pre-lock shares make one lock (1/4 + 1/4 = 1/2):
+#  ignition is a threshold, not a slope, so life turns on, it does not fade in.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: pre-lock at 1/4, the autocatalytic lock at 1/2, the
+#  held cycle at the One, in two folds. Observed: autocatalytic sets and self-
+#  replicating molecules show a sharp concentration THRESHOLD for self-sustaining
+#  reaction (below it they die, above it they take off) -- the ignition this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The pre-lock (prebiotic) state: two folds below unison, 1/4.
+define pre_lock_state returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# First fold: crosses the autocatalytic lock (the balance 1/2).
+define crosses_the_lock returning Fraction:
+    return fold_fraction(pre_lock_state())
+
+# Second fold: closes into a whole self-holding cycle (the One).
+define cycle_locks_in returning Fraction:
+    return fold_fraction(crosses_the_lock())
+
+# Two pre-lock shares make one lock: 1/4 + 1/4 = 1/2 (a threshold, not a slope).
+define two_pre_lock_make_the_lock returning Fraction:
+    set state to pre_lock_state()
+    return fraction_add(state and state)

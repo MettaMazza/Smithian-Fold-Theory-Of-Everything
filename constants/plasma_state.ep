@@ -1,0 +1,60 @@
+# ============================================================================
+#  THE PLASMA STATE  --  why a plasma screens fields, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Heat a gas until its electrons tear free and you get a plasma -- the fourth state of
+#  matter, and 99% of the visible universe. Its signature is SHIELDING: free charges
+#  swarm any field and cancel it beyond a short screening length (the Debye length),
+#  and they ring at a sharp plasma frequency. Forced: shielding is the charges reaching
+#  the balance and folding the field to unison.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A test field enters the plasma; the free charges pile up to oppose it. Their
+#  response reaches the balance -- the half-One 1/2, where the shielding cloud exactly
+#  matches the field (self-antipodal: One - 1/2 = 1/2, opposition equal to source). One
+#  fold from the balance completes the screening: fold(1/2) = 1 -- beyond the screening
+#  length the field is folded into the whole, cancelled. The pile-up and the field sum
+#  to the One (1/2 + 1/2 = 1): all of the external field is accounted for by the
+#  cloud's opposition, none leaks through. The same balance ringing back and forth is
+#  the plasma OSCILLATION at its natural frequency; the screening length is how far the
+#  field survives before the fold closes it (weak_range.ep, applied to a massive
+#  collective mode).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: shielding at the balance, completed in one fold; the
+#  field fully opposed. Measured: plasmas screen static fields beyond the Debye length
+#  and oscillate at the plasma frequency (seen in the ionosphere's radio cutoff and in
+#  fusion devices) -- the balance-and-fold screening this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The shielding balance: the cloud matches the field, 1/2.
+define shielding_balance returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The balance is self-antipodal: opposition equals the source, no preference.
+define shielding_is_balanced returning Bool:
+    set balance to shielding_balance()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and balance)
+    return fraction_is_equal(complement and balance)
+
+# One fold completes the screening: beyond the length the field is cancelled.
+define screening_completes_in_one_fold returning Fraction:
+    return fold_fraction(shielding_balance())
+
+# Cloud opposition and field sum to the One: nothing leaks through.
+define opposition_plus_field returning Fraction:
+    set balance to shielding_balance()
+    return fraction_add(balance and balance)

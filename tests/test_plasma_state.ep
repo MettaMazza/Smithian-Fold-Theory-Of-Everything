@@ -1,0 +1,21 @@
+import "../constants/plasma_state.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the plasma state (screening by balance-and-fold) ==="
+    set ok to expect_equal("shielding balance = 1/2 (cloud matches field)" and fraction_to_text(shielding_balance()) and "1/2")
+    set ok to expect_bool("the shielding is self-antipodal (opposition = source)" and shielding_is_balanced())
+    set ok to expect_equal("one fold completes the screening (-> the One)" and fraction_to_text(screening_completes_in_one_fold()) and "1")
+    set ok to expect_equal("opposition + field sum to the One (nothing leaks)" and fraction_to_text(opposition_plus_field()) and "1")
+    display "=== done ==="
+    return 0

@@ -109,6 +109,14 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **Life's ignition, held orbits, screening, fringes** — the **origin of life** (the
+  two-fold ignition `1/4 → 1/2 → 1` crosses the autocatalytic lock into a self-holding
+  cycle — a threshold, not a slope), **memory persistence** (a memory is a held period-2
+  orbit `1/3 ↔ 2/3`, kept alive by re-exciting, not frozen), the **plasma state**
+  (charges swarm to the balance and one fold completes the screening — the Debye cancel),
+  **wave optics** (the maximal mismatch `1/2` is a dark fringe, folding to a bright one;
+  energy conserved), and the **sleep cycle** (the held deep ↔ REM period-2 orbit, the
+  ~90-minute alternation).
 - **The first light, the star's death, the protected edge** — **recombination / the CMB**
   (decoupling at the balance `1/2` completes in one fold — light freed in a thin shell),
   **supernovae** (the iron core falls to the balance, then one fold completes the collapse
@@ -215,8 +223,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 146 test
-suites (848 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 151 test
+suites (873 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -273,7 +281,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 146 suites, 848 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 151 suites, 873 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -1,0 +1,71 @@
+# ============================================================================
+#  THE SLEEP CYCLE  --  why sleep alternates two states, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Sleep is not one state but a CYCLE: the brain swings between deep (slow-wave) sleep
+#  and dreaming (REM) all night, roughly every ninety minutes. Why an alternation
+#  rather than a single flat rest? Forced: a self-sustaining rest is a closed period-2
+#  orbit -- two states that fold into each other and hold the night together.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Sleep must hold itself for hours without waking (reaching the One) -- so it cannot
+#  be a static state (which would fold home to unison and wake). It is the closed
+#  period-2 orbit: deep sleep at 1/3 and REM at 2/3, which fold into each other forever
+#  (1/3 -> 2/3 -> 1/3 -> ...) -- the same held orbit as memory (memory_persistence.ep),
+#  now read as the two alternating sleep stages. Their balance is the crossing point
+#  (1/3 + 2/3)/2 = 1/2, and only a full waking is the fold of that balance to unison
+#  (fold(1/2) = 1). Deep and REM partition the night (1/3 + 2/3 = 1): two complementary
+#  stages making one whole sleep, cycling until the orbit is deliberately broken (waking).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a period-2 orbit {1/3, 2/3} cycling without reaching
+#  unison, balanced at 1/2. Measured: sleep cycles between slow-wave and REM stages
+#  with a ~90-minute period across the night, alternating rather than resting flat --
+#  the held two-state orbit this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two sleep stages: deep (slow-wave) at 1/3, REM at 2/3.
+define deep_sleep returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+define rem_sleep returning Fraction:
+    return fraction_from_ratio(binary_count() and colour_count())
+
+# The stages fold into each other -- the alternating cycle.
+define deep_folds_to_rem returning Bool:
+    set deep to deep_sleep()
+    set folded to fold_fraction(deep)
+    set rem to rem_sleep()
+    return fraction_is_equal(folded and rem)
+
+define rem_folds_to_deep returning Bool:
+    set rem to rem_sleep()
+    set folded to fold_fraction(rem)
+    set deep to deep_sleep()
+    return fraction_is_equal(folded and deep)
+
+# The crossing balance between the stages: 1/2.
+define cycle_balance returning Fraction:
+    set whole to fraction_add(deep_sleep() and rem_sleep())
+    set two to fraction_from_whole_number(binary_count())
+    return fraction_divide(whole and two)
+
+# Only waking is the fold of that balance to unison.
+define waking_is_the_fold_to_unison returning Fraction:
+    return fold_fraction(cycle_balance())
+
+# Deep and REM partition the night: 1/3 + 2/3 = 1.
+define stages_partition_the_night returning Fraction:
+    return fraction_add(deep_sleep() and rem_sleep())
