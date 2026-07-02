@@ -1,0 +1,96 @@
+# ============================================================================
+#  THE INTER-SECTOR MASS PATTERN  --  electron, up, down, and no neutrino, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The first generation's mass pattern is odd: the down quark outweighs the up (the
+#  reason the proton is stable!), the electron is lighter than both, and the neutrino
+#  is essentially massless. The Standard Model takes all four as inputs. Forced: each
+#  sector's mass-part is the shortfall of its holding coupling from unison -- lepton
+#  1/2, up 1/3, down 2/3 (the complement) -- and the neutrino's is ABSENT because
+#  computing it would require the value the domain excludes.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A fermion's mass-part is what its sector's holding coupling leaves short of the
+#  whole. LEPTON: the electroweak coupling is the critical 1/2, so the electron's
+#  mass-part is 1 - 1/2 = 1/2 -- the fold's proper preimage of the One (Route B:
+#  fold(1/2) = 1). UP QUARK: the strong coupling is 2/3 (the bare strong sector), so
+#  m_up = 1 - 2/3 = 1/3. DOWN QUARK: the complement of the up, m_down = 1 - 1/3 = 2/3
+#  -- and Route B ties the pair to the fold's own cycle: {1/3, 2/3} is the period-2
+#  orbit (fold(1/3) = 2/3, fold(2/3) = 1/3). So m_down > m_up is FORCED -- the down
+#  is the orbit's upper point -- which is why the neutron outweighs the proton and
+#  hydrogen is stable. NEUTRINO: its mass-part would be the separation of a state
+#  from itself, 1/2 - 1/2 -- the boundary value the domain forbids (No-Zero). The
+#  computation itself is excluded, not just small: verified here by the guarded
+#  subtraction landing on the excluded boundary. Massless because unmakeable.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: mass-parts 1/2, 1/3, 2/3, the quark pair a period-2
+#  orbit, the neutrino's part at the excluded boundary. Measured: m_d (4.7 MeV) >
+#  m_u (2.2 MeV) as forced by the orbit ordering; the neutrino is at least six orders
+#  lighter than the electron -- the absent Dirac route (neutrino_mass_ladder.ep).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The electron's mass-part: the shortfall of the electroweak coupling 1/2.
+define electron_mass_part returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set g_ew to fraction_from_ratio(1 and 2)
+    return fraction_subtract(one and g_ew)
+
+# The up quark's mass-part: the shortfall of the strong coupling 2/3.
+define up_mass_part returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set g_s to fraction_from_ratio(2 and 3)
+    return fraction_subtract(one and g_s)
+
+# The down quark's mass-part: the complement of the up.
+define down_mass_part returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set up to up_mass_part()
+    return fraction_subtract(one and up)
+
+# Route B: the electron's part is the fold's proper preimage of the One.
+define electron_is_preimage returning Bool:
+    set part to electron_mass_part()
+    set folded to fold_fraction(part)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# Route B: the quark pair is the fold's period-2 orbit (1/3 <-> 2/3).
+define quark_pair_is_orbit returning Bool:
+    set up to up_mass_part()
+    set down to down_mass_part()
+    set from_up to fold_fraction(up)
+    set from_down to fold_fraction(down)
+    set up_to_down to fraction_is_equal(from_up and down)
+    set down_to_up to fraction_is_equal(from_down and up)
+    if up_to_down:
+        return down_to_up
+    return false
+
+# FORCED ORDERING: the down outweighs the up (the orbit's upper point) -- why the
+# neutron outweighs the proton and hydrogen is stable.
+define down_outweighs_up returning Bool:
+    set up to up_mass_part()
+    set down to down_mass_part()
+    set comparison to fraction_compare(down and up)
+    return comparison > 0
+
+# The neutrino's mass-part: the separation of a state from itself -- the excluded
+# boundary. The Dirac computation is unmakeable, not merely small.
+define neutrino_part_is_excluded returning Bool:
+    set hand to fraction_from_ratio(1 and 2)
+    set same_hand to fraction_from_ratio(1 and 2)
+    set separation to fraction_subtract(hand and same_hand)
+    return separation.numerator_sign == 0

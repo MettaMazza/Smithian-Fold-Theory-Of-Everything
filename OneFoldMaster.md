@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-217 suites, 1,215 forced checks, 0 failures). It needs nothing but a C compiler. Use
+222 suites, 1,249 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4197,6 +4197,57 @@ three-prime-products form over `2·3·5·7 = 210`). The "different" forces are o
 half — `g_strong > g_weak > g_em` with no crossing ever, both routes (constructed coupling,
 closed-form gap) agreeing at every rung. The order of the forces is the order of their generators.
 
+### Step 215 — The quark first invariants (1/12, 1/8, depths 7 and 5)
+
+**File:** `constants/quark_invariants.ep`
+
+**What it does.** Four numbers that run the mass sector, each by two independent routes. The
+invariants: up-hand channels `3 + 3 = 6` (colour + unbroken EW fibre) → `I1_up = 1/12`; down-hand
+`3 + 1 = 4` (colour + broken neutral) → `I1_down = 1/8` — matching the structural products
+`(1/4)(1/3)` and `(1/4)(1/2)`. The depths: minimal binary covers of `3⁴ = 81` → 7 and `3³ = 27` → 5,
+matching the fold periods of the Mersenne fractions `1/127` and `1/31`. Four numbers, eight routes,
+zero choices.
+
+### Step 216 — The inter-sector mass pattern (electron, up, down, no neutrino)
+
+**File:** `constants/inter_sector_mass_pattern.ep`
+
+**What it does.** Each sector's mass-part is its holding coupling's shortfall: electron
+`1 − 1/2 = 1/2` (the fold preimage of the One), up `1 − 2/3 = 1/3`, down the complement `2/3` — and
+the quark pair is the fold's period-2 orbit, so `m_down > m_up` is FORCED (why the neutron outweighs
+the proton and hydrogen is stable). The neutrino's mass-part is the separation of a state from
+itself — the excluded boundary: massless because unmakeable, not because small.
+
+### Step 217 — Confinement as work (the tube binds, the sphere frees)
+
+**File:** `constants/strong_confinement.ep`
+
+**What it does.** On the doubling radii `1/8, 1/4, 1/2`: in the flux TUBE (d=1, constant field) the
+work over an interval is its length — the farther doubling costs MORE (`1/4 > 1/8`), growing without
+bound: confinement. In the COULOMB field (d=3, `E = 1/r²`, flux `E·r² = 1` verified exactly) the
+exact work integrals give `4` then `2` — the farther doubling costs LESS: the charge comes free.
+Four-step exact Riemann sums BRACKET both integrals, and the far interval's upper bound sits below
+the near one's lower bound — the gap is arithmetic, not rounding.
+
+### Step 218 — The generation depth tower (2^d levels, enumerated)
+
+**File:** `constants/generation_depth_tower.ep`
+
+**What it does.** The claim every tower in the corpus stands on — depth `d` holds exactly `2^d`
+states — proven the hard way: every grid state `i/2^d` at depths 1, 2, 3 (14 states) is constructed
+and folded `d` times, and every one lands on the One. Census = closed form at every depth: the
+tower's level count is a THEOREM of the fold, not a definition.
+
+### Step 219 — The general covering principle (m^d for every generator)
+
+**File:** `constants/general_covering_depth.ep`
+
+**What it does.** The level law is not special to binary: for ANY generator `m`, the `m`-fold's
+tower at depth `d` holds exactly `m^d` states. Enumerated for the colour generator: all 3 states at
+depth 1 and all 9 at depth 2 arrive under triplings, alongside the binary census — one counted law,
+so the binary lepton towers (`2^d`) and ternary quark volumes (`27 = 3³`, `81 = 3⁴` — the seeds of
+depths 5 and 7) need no per-sector axiom.
+
 ---
 
 ## Where the recreation stands right now
@@ -4670,6 +4721,18 @@ runs):**
 - Step 214 — the order of the forces: `g_strong > g_weak > g_em` at every depth 0–11 with no
   crossing (gaps `1/(3+2^d) < 1/(2+2^d)`, weak strictly above the flat EM half) — the order of the
   forces is the order of their generators.
+- Step 215 — the quark first invariants: `I1_up = 1/12`, `I1_down = 1/8` (channel counts AND
+  structural products), depths 7 and 5 (minimal covers AND Mersenne periods) — four numbers, eight
+  routes, zero choices.
+- Step 216 — the inter-sector mass pattern: electron `1/2`, up `1/3`, down `2/3` (the period-2
+  orbit forces `m_down > m_up` — hydrogen's stability); the neutrino's part is the excluded
+  boundary — unmakeable, not small.
+- Step 217 — confinement as work: tube work grows per doubling (`1/8 → 1/4`, unbounded), Coulomb
+  work shrinks (`4 → 2`, bounded), exact Riemann brackets proving the gap is arithmetic.
+- Step 218 — the generation depth tower: all 14 grid states at depths 1–3 enumerated, each folding
+  to the One within its depth — `2^d` levels is a theorem, not a definition.
+- Step 219 — the general covering principle: the `m`-fold tower holds `m^d` states for EVERY
+  generator (ternary 3, 9 enumerated alongside binary 8) — one law, no per-sector axiom.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

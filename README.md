@@ -331,9 +331,18 @@ And the structural laws of physics, forced the same way:
   coupling `(p−1)/p` for `{2,3,5,7}`, strictly ordered, summing to `247/210` by two routes), and
   the **order of the forces** (`g_strong > g_weak > g_em` at every depth, no crossing — the order
   of the generators).
+- **The quark seeds, the first family, confinement computed, the towers proven** — the **quark
+  first invariants** (`1/12` and `1/8` by channel count AND structural product; depths 7 and 5 by
+  minimal cover AND Mersenne period — four numbers, eight routes), the **inter-sector mass
+  pattern** (electron `1/2`, up `1/3`, down `2/3` — the period-2 orbit forces `m_down > m_up`,
+  hydrogen's stability; the neutrino's part is the excluded boundary), **confinement as work**
+  (tube work grows per doubling, Coulomb work shrinks, exact Riemann brackets — no free quark by
+  arithmetic), the **generation depth tower** (`2^d` levels proven by full enumeration, 14 states
+  run individually), and the **general covering principle** (`m^d` for every generator — ternary
+  and binary censuses under one counted law).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 217 test
-suites (1,215 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 222 test
+suites (1,249 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -390,7 +399,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 217 suites, 1,215 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 222 suites, 1,249 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

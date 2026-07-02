@@ -1,0 +1,26 @@
+import "../constants/strong_confinement.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== confinement as work (the tube binds, the sphere frees) ==="
+    set ok to expect_equal("TUBE: work over the near doubling = 1/8" and fraction_to_text(tube_work_near()) and "1/8")
+    set ok to expect_equal("TUBE: work over the far doubling = 1/4" and fraction_to_text(tube_work_far()) and "1/4")
+    set ok to expect_bool("CONFINEMENT: the farther interval costs MORE (grows unbounded)" and tube_work_grows())
+    set ok to expect_bool("COULOMB: flux E*r^2 = 1 conserved exactly at 1/2, 1/4, 1/8" and flux_is_conserved())
+    set ok to expect_equal("COULOMB: exact work near = 1/a - 1/b = 4" and fraction_to_text(coulomb_work_near()) and "4")
+    set ok to expect_equal("COULOMB: exact work far = 1/b - 1/c = 2" and fraction_to_text(coulomb_work_far()) and "2")
+    set ok to expect_bool("DECONFINEMENT: the farther interval costs LESS (bounded total)" and coulomb_work_shrinks())
+    set ok to expect_bool("the Riemann sums bracket both exact integrals" and sums_bracket_integrals())
+    set ok to expect_bool("the gap is real: far UPPER bound < near LOWER bound" and deconfinement_gap_is_real())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,22 @@
+import "../constants/general_covering_depth.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the general covering principle (m^d for every generator) ==="
+    set ok to expect_bool("ternary depth 2, state 5/9 arrives within two triplings" and state_arrives_under(5 and 3 and 2))
+    set ok to expect_equal("the ternary census at depth 1 = 3" and int_to_string(census_of_tower(3 and 1)) and "3")
+    set ok to expect_equal("the ternary census at depth 2 = 9 = 3^2" and int_to_string(census_of_tower(3 and 2)) and "9")
+    set ok to expect_equal("the binary census at depth 3 = 8 (same law)" and int_to_string(census_of_tower(2 and 3)) and "8")
+    set ok to expect_bool("THE PRINCIPLE: m^d for every generator -- one law, no per-sector axiom" and covering_principle_holds())
+    display "=== done ==="
+    return 0

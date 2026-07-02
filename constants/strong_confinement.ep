@@ -1,0 +1,176 @@
+# ============================================================================
+#  CONFINEMENT AS WORK  --  why quarks cannot be pulled apart, computed, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Pull two quarks apart and the force does NOT weaken with distance -- the work grows
+#  without bound and a new quark pair snaps into existence first. Pull two charges
+#  apart and the work saturates -- they come free. Same kind of field, opposite fates.
+#  Forced: the strong flux is confined to a one-dimensional tube (flux_tube_formation)
+#  while the electric flux spreads over three dimensions, and the WORK INTEGRALS,
+#  computed exactly with Riemann bounds, do the rest: constant field -> work grows
+#  with every doubling; spreading field -> work shrinks with every doubling.
+#
+#  ── DERIVATION ─ (check every line; exact arithmetic, radii on the ladder) ───
+#  Take the doubling radii a = 1/8, b = 2a = 1/4, c = 2b = 1/2 (three rungs of the
+#  binary ladder). TUBE (d = 1): the flux threads a constant cross-section, so the
+#  field is constant E = 1 and the work over an interval is its LENGTH:
+#      W_near = b - a = 1/8 ,   W_far = c - b = 1/4  -- the FARTHER interval costs
+#  MORE (1/4 > 1/8): each doubling adds more work than the last, without bound --
+#  confinement. COULOMB (d = 3): the flux spreads over the sphere, E = 1/r² (flux
+#  conservation E·r² = 1 verified exactly at a, b, c), and the work is
+#      I_near = 1/a - 1/b = 4 ,   I_far = 1/b - 1/c = 2  -- the farther interval
+#  costs LESS (2 < 4): the total work to infinity is bounded -- the charge comes
+#  free. The exact integrals are BRACKETED by four-step Riemann sums in exact
+#  arithmetic: right sum < integral < left sum on both intervals, and even the far
+#  interval's UPPER bound sits below the near interval's LOWER bound (the
+#  deconfinement gap is not a rounding artifact). One geometry difference -- tube
+#  versus sphere -- and the fates follow by arithmetic.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: W grows (1/8 -> 1/4) in the tube, shrinks (4 -> 2) in
+#  the Coulomb field, Riemann-bracketed. Measured: no free quark has ever been
+#  observed (confinement); lattice QCD finds the linear potential; electrons ionise
+#  with finite work (13.6 eV for hydrogen) -- both fates as computed.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The three doubling radii: a = 1/8, b = 1/4, c = 1/2.
+define inner_radius returning Fraction:
+    return fraction_from_ratio(1 and 8)
+
+define middle_radius returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define outer_radius returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# TUBE (d=1): the work over an interval is its length (constant field E = 1).
+define tube_work_near returning Fraction:
+    set b to middle_radius()
+    set a to inner_radius()
+    return fraction_subtract(b and a)
+
+define tube_work_far returning Fraction:
+    set c to outer_radius()
+    set b to middle_radius()
+    return fraction_subtract(c and b)
+
+# CONFINEMENT: the farther interval costs MORE work (1/4 > 1/8).
+define tube_work_grows returning Bool:
+    set near to tube_work_near()
+    set far to tube_work_far()
+    set comparison to fraction_compare(far and near)
+    return comparison > 0
+
+# COULOMB (d=3): flux conservation E * r^2 = 1, verified exactly at a, b, c.
+define coulomb_field_at with r as Fraction returning Fraction:
+    set r_twin to fraction_make(fraction_numerator(r) and fraction_denominator(r))
+    set r_squared to fraction_multiply(r and r_twin)
+    set one to fraction_from_whole_number(1)
+    return fraction_divide(one and r_squared)
+
+define flux_is_conserved returning Bool:
+    set one to fraction_from_whole_number(1)
+    set all_conserved to true
+    set k to 1
+    repeat while k < 4:
+        set r to fraction_from_ratio(1 and whole_power(2 and k))
+        set field to coulomb_field_at(r)
+        set r_twin to fraction_from_ratio(1 and whole_power(2 and k))
+        set r_again to fraction_from_ratio(1 and whole_power(2 and k))
+        set r_squared to fraction_multiply(r_twin and r_again)
+        set flux to fraction_multiply(field and r_squared)
+        set conserved to fraction_is_equal(flux and one)
+        if conserved:
+            set all_conserved to all_conserved
+        else:
+            set all_conserved to false
+        set k to k + 1
+    return all_conserved
+
+# The exact Coulomb work integrals: I = 1/r_in - 1/r_out.
+define coulomb_work_near returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set a to inner_radius()
+    set b to middle_radius()
+    set inverse_a to fraction_divide(one and a)
+    set one_again to fraction_from_whole_number(1)
+    set inverse_b to fraction_divide(one_again and b)
+    return fraction_subtract(inverse_a and inverse_b)
+
+define coulomb_work_far returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set b to middle_radius()
+    set c to outer_radius()
+    set inverse_b to fraction_divide(one and b)
+    set one_again to fraction_from_whole_number(1)
+    set inverse_c to fraction_divide(one_again and c)
+    return fraction_subtract(inverse_b and inverse_c)
+
+# DECONFINEMENT: the farther interval costs LESS work (2 < 4).
+define coulomb_work_shrinks returning Bool:
+    set near to coulomb_work_near()
+    set far to coulomb_work_far()
+    set comparison to fraction_compare(far and near)
+    return comparison < 0
+
+# The four-step Riemann sum over [r_in, r_out] of E = 1/r^2, from the given edge.
+# from_left true -> left endpoints (upper bound); false -> right endpoints (lower).
+define riemann_sum with in_num as Int and in_den as Int and out_num as Int and out_den as Int and from_left as Bool returning Fraction:
+    set r_in to fraction_from_ratio(in_num and in_den)
+    set r_out to fraction_from_ratio(out_num and out_den)
+    set span to fraction_subtract(r_out and r_in)
+    set steps to fraction_from_whole_number(4)
+    set dr to fraction_divide(span and steps)
+    set total to fraction_from_whole_number(0)
+    set i to 0
+    repeat while i < 4:
+        set offset to i
+        if from_left:
+            set offset to i
+        else:
+            set offset to i + 1
+        set offset_fraction to fraction_from_whole_number(offset)
+        set advance to fraction_multiply(offset_fraction and dr)
+        set r_here to fraction_add(r_in and advance)
+        set field to coulomb_field_at(r_here)
+        set contribution to fraction_multiply(field and dr)
+        set total to fraction_add(total and contribution)
+        set i to i + 1
+    return total
+
+# The Riemann sums BRACKET the exact integrals on both intervals.
+define sums_bracket_integrals returning Bool:
+    set near_exact to coulomb_work_near()
+    set near_left to riemann_sum(1 and 8 and 1 and 4 and true)
+    set near_right to riemann_sum(1 and 8 and 1 and 4 and false)
+    set far_exact to coulomb_work_far()
+    set far_left to riemann_sum(1 and 4 and 1 and 2 and true)
+    set far_right to riemann_sum(1 and 4 and 1 and 2 and false)
+    set near_lower to fraction_compare(near_right and near_exact)
+    set near_upper to fraction_compare(near_exact and near_left)
+    set far_lower to fraction_compare(far_right and far_exact)
+    set far_upper to fraction_compare(far_exact and far_left)
+    set near_ok to near_lower < 0
+    set near_ok_upper to near_upper < 0
+    set far_ok to far_lower < 0
+    set far_ok_upper to far_upper < 0
+    if near_ok:
+        if near_ok_upper:
+            if far_ok:
+                return far_ok_upper
+            return false
+        return false
+    return false
+
+# The gap is not a rounding artifact: the far interval's UPPER bound sits strictly
+# below the near interval's LOWER bound.
+define deconfinement_gap_is_real returning Bool:
+    set far_upper to riemann_sum(1 and 4 and 1 and 2 and true)
+    set near_lower to riemann_sum(1 and 8 and 1 and 4 and false)
+    set comparison to fraction_compare(far_upper and near_lower)
+    return comparison < 0

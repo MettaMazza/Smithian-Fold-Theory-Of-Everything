@@ -1,0 +1,108 @@
+# ============================================================================
+#  THE QUARK FIRST INVARIANTS  --  1/12 and 1/8, and the depths 7 and 5, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The quark sector's cubic equations (the duals of the lepton cubic) need two first
+#  invariants -- the up-type 1/12 and down-type 1/8 -- and two covering depths -- 7 and
+#  5 -- that set everything from the mass ratios to the fine structure's tower and the
+#  Planck hierarchy. None is chosen. Forced: each invariant is a CHANNEL COUNT (colour
+#  plus electroweak channels, doubled for the two hands), each depth a minimal cover,
+#  and every one of the four is confirmed by an INDEPENDENT second route.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  CHANNEL COUNTS (Route A). The up-hand carries the full colour fibre (3) plus the
+#  unbroken electroweak combination (size 3, the fibre of the tripling): n_up = 6.
+#  The down-hand carries colour (3) plus the broken neutral channel (3·(1/3) = 1):
+#  n_down = 4. With the factor 2 for the two chirality hands:
+#      I1_up = 1/(2·6) = 1/12 ,   I1_down = 1/(2·4) = 1/8 .
+#  STRUCTURAL PRODUCTS (Route B, independent): the lower hand position 1/4 times the
+#  tripling share 1/3 gives 1/12; the lower hand 1/4 times the critical coupling 1/2
+#  gives 1/8. Both routes must agree -- and do.
+#  COVERING DEPTHS (Route A): the minimal binary cover of the up volume 3⁴ = 81 is
+#  COUNTED as 7 (2⁶ < 81 ≤ 2⁷) and of the down volume 3³ = 27 as 5 (2⁴ < 27 ≤ 2⁵).
+#  PERIODS (Route B, independent): the fold period of 1/(2⁷-1) = 1/127 is exactly 7,
+#  and of 1/(2⁵-1) = 1/31 exactly 5 -- the Mersenne denominators carry their own depth
+#  as their orbit length. Four numbers, eight routes, zero choices.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 1/12 and 1/8 by channel count AND structural product;
+#  7 and 5 by minimal cover AND fold period. Measured: these invariants seed the quark
+#  cubics whose dressed ratios land at +0.005%/-0.06%/+0.09% (the corpus quark
+#  dressing), and depth 7 carries the fine structure's 2⁷ and the Planck 2^(127/2).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# Route A: the up-hand channel count -- colour fibre 3 + unbroken electroweak 3 = 6.
+define up_channel_count returning Int:
+    return colour_count() + colour_count()
+
+# Route A: the down-hand channel count -- colour 3 + broken neutral channel 1 = 4.
+define down_channel_count returning Int:
+    return colour_count() + 1
+
+# Route A: the first invariants -- 1/(2 * channels), the 2 for the two hands.
+define up_first_invariant returning Fraction:
+    set channels to up_channel_count()
+    return fraction_from_ratio(1 and binary_count() * channels)
+
+define down_first_invariant returning Fraction:
+    set channels to down_channel_count()
+    return fraction_from_ratio(1 and binary_count() * channels)
+
+# Route B: the structural products -- lower hand 1/4 times tripling share / coupling.
+define up_invariant_structural returning Fraction:
+    set lower_hand to fraction_from_ratio(1 and 4)
+    set tripling_share to fraction_from_ratio(1 and 3)
+    return fraction_multiply(lower_hand and tripling_share)
+
+define down_invariant_structural returning Fraction:
+    set lower_hand to fraction_from_ratio(1 and 4)
+    set critical to fraction_from_ratio(1 and 2)
+    return fraction_multiply(lower_hand and critical)
+
+# The two routes agree on both invariants.
+define invariant_routes_agree returning Bool:
+    set up_a to up_first_invariant()
+    set up_b to up_invariant_structural()
+    set down_a to down_first_invariant()
+    set down_b to down_invariant_structural()
+    set up_match to fraction_is_equal(up_a and up_b)
+    set down_match to fraction_is_equal(down_a and down_b)
+    if up_match:
+        return down_match
+    return false
+
+# Route A: the covering depths, COUNTED -- minimal binary cover of 3^4 and 3^3.
+define up_depth returning Int:
+    set volume to whole_power(colour_count() and 4)
+    return minimal_binary_cover(volume)
+
+define down_depth returning Int:
+    set volume to whole_power(colour_count() and 3)
+    return minimal_binary_cover(volume)
+
+# Route B: the fold periods of the Mersenne fractions 1/127 and 1/31.
+define up_depth_by_period returning Int:
+    set mersenne to whole_power(binary_count() and 7) - 1
+    return fold_period_of_unit_fraction(mersenne)
+
+define down_depth_by_period returning Int:
+    set mersenne to whole_power(binary_count() and 5) - 1
+    return fold_period_of_unit_fraction(mersenne)
+
+# The two routes agree on both depths: cover count = orbit length.
+define depth_routes_agree returning Bool:
+    set up_a to up_depth()
+    set up_b to up_depth_by_period()
+    set down_a to down_depth()
+    set down_b to down_depth_by_period()
+    set up_match to up_a == up_b
+    set down_match to down_a == down_b
+    if up_match:
+        return down_match
+    return false

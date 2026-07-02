@@ -1,0 +1,22 @@
+import "../constants/generation_depth_tower.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the generation depth tower (2^d levels, enumerated) ==="
+    set ok to expect_bool("depth 2, state 3/4 arrives: 3/4 -> 1/2 -> 1" and state_arrives(3 and 2))
+    set ok to expect_equal("the census at depth 1 = 2 (every state run)" and int_to_string(census_at_depth(1)) and "2")
+    set ok to expect_equal("the census at depth 2 = 4" and int_to_string(census_at_depth(2)) and "4")
+    set ok to expect_equal("the census at depth 3 = 8" and int_to_string(census_at_depth(3)) and "8")
+    set ok to expect_bool("THE THEOREM: census = 2^d at all three depths (14 states)" and tower_theorem_holds())
+    display "=== done ==="
+    return 0
