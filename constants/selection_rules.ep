@@ -1,0 +1,58 @@
+# ============================================================================
+#  SELECTION RULES  --  why only some transitions are allowed, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Not every jump between atomic levels emits light: spectra show only CERTAIN lines,
+#  the rest "forbidden". A transition is allowed only when it carries away exactly the
+#  photon's one unit of angular momentum. Forced: an allowed transition is the balanced
+#  one-unit change that folds to a whole photon; a mismatched change cannot close.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A photon carries one whole unit of spin (spin_statistics.ep). An emission is allowed
+#  only if the electron's change hands that whole unit to the photon -- the balanced
+#  transition at 1/2, the self-antipodal point (One - 1/2 = 1/2, giver and taker equal),
+#  which folds to a whole emitted quantum (fold(1/2) = 1). A change that is not this
+#  balanced one unit -- too small or the wrong parity -- does NOT sit at the self-
+#  antipodal balance, so it cannot fold to a whole photon: forbidden. The two half-units
+#  (lost by the electron, gained by the photon) sum to the One (1/2 + 1/2 = 1): the
+#  conservation that IS the selection rule -- allowed exactly when the books balance.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: an allowed transition is the balanced one-unit change
+#  (self-antipodal 1/2) folding to a whole photon; mismatches cannot close. Measured:
+#  the electric-dipole selection rules (delta-l = +/-1, angular momentum conserved to
+#  the photon's one unit) govern which spectral lines appear; "forbidden" lines are
+#  vastly weaker -- the balanced hand-off this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The allowed transition: the balanced one-unit hand-off, 1/2.
+define allowed_transition returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# It is self-antipodal: giver and taker equal (the conservation that allows it).
+define transition_is_balanced returning Bool:
+    set transition to allowed_transition()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and transition)
+    return fraction_is_equal(complement and transition)
+
+# The allowed transition folds to a whole emitted photon.
+define emits_a_whole_photon returning Fraction:
+    return fold_fraction(allowed_transition())
+
+# The two half-units sum to the One: the electron's loss = the photon's gain.
+define loss_plus_gain returning Fraction:
+    set transition to allowed_transition()
+    return fraction_add(transition and transition)

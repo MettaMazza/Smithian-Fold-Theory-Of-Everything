@@ -1,0 +1,57 @@
+# ============================================================================
+#  REACTION KINETICS  --  why reactions need a push over a barrier, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Chemical reactions do not just happen -- reactants must climb an activation barrier
+#  first (the Arrhenius law: rate rises steeply with temperature as more molecules clear
+#  the barrier). Why a barrier crossing at all, and why the sharp temperature
+#  dependence? Forced: the transition state sits two folds below the product, and only
+#  molecules thrown across it react.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A reactant must reach the transition state before it can become product. That
+#  transition state sits at the activation fraction 1/4 -- two folds below the completed
+#  product (the One): 1/4 -> 1/2 -> 1. The first fold clears the barrier (up to the
+#  balance 1/2), the second completes the reaction (to the product, the One). Only a
+#  molecule thrown at least to the 1/4 state can start the climb; temperature is the
+#  mean throw-rate (temperature.ep), so hotter means more molecules reach 1/4 and cross
+#  -- the steep Arrhenius rise. Two activation shares make the barrier (1/4 + 1/4 = 1/2):
+#  reaching the transition state is a genuine two-fold threshold, which is why cold
+#  reactions crawl and a spark can set them off.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: transition state at 1/4, barrier at 1/2, product at the
+#  One, in two folds. Measured: reaction rates follow the Arrhenius law (exponential in
+#  the activation-energy-over-temperature), with a definite barrier every reaction must
+#  clear -- the two-fold activation threshold this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The transition (activation) state: two folds below the product, 1/4.
+define transition_state returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# First fold clears the barrier: 1/4 -> 1/2.
+define clears_the_barrier returning Fraction:
+    return fold_fraction(transition_state())
+
+# Second fold completes the reaction to the product (the One): 1/2 -> 1.
+define reaction_completes returning Fraction:
+    return fold_fraction(clears_the_barrier())
+
+# Two activation shares make the barrier: 1/4 + 1/4 = 1/2 (a two-fold threshold).
+define two_activations_make_barrier returning Fraction:
+    set state to transition_state()
+    return fraction_add(state and state)

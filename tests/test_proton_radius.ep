@@ -1,0 +1,21 @@
+import "../constants/proton_radius.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the proton radius (edge = complement of the quark) ==="
+    set ok to expect_equal("quark inner position = 1/3" and fraction_to_text(quark_inner_position()) and "1/3")
+    set ok to expect_equal("proton radius = take(One, 1/3) = 2/3" and fraction_to_text(proton_radius()) and "2/3")
+    set ok to expect_bool("the edge folds back to the quark centre (closes)" and edge_folds_to_center())
+    set ok to expect_equal("inner + radius = the One (centre + reach)" and fraction_to_text(inner_plus_radius()) and "1")
+    display "=== done ==="
+    return 0

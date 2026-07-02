@@ -1,0 +1,22 @@
+import "../constants/placebo_effect.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the placebo effect (expectation feeds the balance) ==="
+    set ok to expect_equal("expectation bias = 3/4" and fraction_to_text(expectation_bias()) and "3/4")
+    set ok to expect_equal("raw observation = 1/4" and fraction_to_text(raw_observation()) and "1/4")
+    set ok to expect_bool("both fold to the SAME lock 1/2 (belief feeds the balance)" and both_reach_the_same_lock())
+    set ok to expect_equal("the lock folds to the whole experience" and fraction_to_text(lock_folds_to_experience()) and "1")
+    set ok to expect_equal("expectation + observation partition the One" and fraction_to_text(expectation_plus_observation()) and "1")
+    display "=== done ==="
+    return 0

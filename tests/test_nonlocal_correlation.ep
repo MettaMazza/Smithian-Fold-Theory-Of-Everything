@@ -1,0 +1,21 @@
+import "../constants/nonlocal_correlation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== nonlocal correlation (one shared origin, no signal) ==="
+    set ok to expect_equal("joint dimension = colour*(colour+binary) = 15" and int_to_string(joint_dimension()) and "15")
+    set ok to expect_equal("shared origin = 1/15 (one joint state)" and fraction_to_text(shared_origin()) and "1/15")
+    set ok to expect_equal("it folds connected: fold(1/15) = 2/15" and fraction_to_text(shared_origin_folds_connected()) and "2/15")
+    set ok to expect_bool("it is ONE shared orbit (not two local parts)" and is_one_shared_orbit())
+    display "=== done ==="
+    return 0

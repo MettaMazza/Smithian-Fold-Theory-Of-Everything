@@ -1,0 +1,21 @@
+import "../constants/reaction_kinetics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== reaction kinetics (the activation barrier) ==="
+    set ok to expect_equal("transition state = 1/4 (two folds below the product)" and fraction_to_text(transition_state()) and "1/4")
+    set ok to expect_equal("first fold clears the barrier (-> 1/2)" and fraction_to_text(clears_the_barrier()) and "1/2")
+    set ok to expect_equal("second fold completes the reaction (-> the One)" and fraction_to_text(reaction_completes()) and "1")
+    set ok to expect_equal("two activation shares make the barrier" and fraction_to_text(two_activations_make_barrier()) and "1/2")
+    display "=== done ==="
+    return 0

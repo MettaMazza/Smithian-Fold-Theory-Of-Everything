@@ -1,0 +1,69 @@
+# ============================================================================
+#  THE PLACEBO EFFECT  --  why expectation moves the body, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A sugar pill can genuinely reduce pain if the patient expects it to -- the placebo
+#  effect, real enough that every drug trial must control for it. How can belief alone
+#  shift a physical outcome? Forced: expectation and raw observation are the two
+#  preimages of one lock, and the mind's state feeds the SAME balance the body reads.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Two inputs meet at one lock. The expectation bias sits high, at 3/4; the raw
+#  bodily observation sits low, at 1/4. They are the two fold-preimages of the balance:
+#  BOTH fold to the same lock state 1/2 (fold(3/4) = 1/2 and fold(1/4) = 1/2) -- the
+#  self-antipodal point where the felt outcome is set. Because expectation and
+#  observation land on the SAME balance, shifting the expectation moves the lock, and
+#  the lock folds to the whole experience (fold(1/2) = 1): belief is not fooling a
+#  separate readout, it is a genuine second input to the one balance the body resolves.
+#  Expectation and observation partition the One (3/4 + 1/4 = 1): the outcome is the
+#  whole of what is expected plus what is sensed, not either alone.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: expectation 3/4 and observation 1/4 both fold to the
+#  lock 1/2, which folds to unison, and they sum to the One. Measured: placebo
+#  analgesia is real and dose-of-belief dependent (open-label and expectation-primed
+#  effects), and every controlled trial must subtract it -- a genuine second input to
+#  the outcome, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The expectation bias: high, 3/4.
+define expectation_bias returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# The raw bodily observation: low, 1/4.
+define raw_observation returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# Both fold to the SAME lock (the balance 1/2) -- expectation feeds the body's balance.
+define expectation_folds_to_lock returning Fraction:
+    return fold_fraction(expectation_bias())
+
+define observation_folds_to_lock returning Fraction:
+    return fold_fraction(raw_observation())
+
+define both_reach_the_same_lock returning Bool:
+    set from_expectation to expectation_folds_to_lock()
+    set from_observation to observation_folds_to_lock()
+    return fraction_is_equal(from_expectation and from_observation)
+
+# The lock folds to the whole experience.
+define lock_folds_to_experience returning Fraction:
+    return fold_fraction(expectation_folds_to_lock())
+
+# Expectation and observation partition the One: the outcome is both, not either.
+define expectation_plus_observation returning Fraction:
+    set bias to expectation_bias()
+    set observation to raw_observation()
+    return fraction_add(bias and observation)

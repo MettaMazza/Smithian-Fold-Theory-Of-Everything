@@ -109,6 +109,15 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **Bell's whole, the proton's size, mind-on-body, the barrier, the spectra's rules** —
+  **nonlocal correlation** (the pair is one shared origin `1/15` on the coprime product,
+  irreducible to local parts — Bell, no signal), the **proton radius** (`r_p = 2/3`, the
+  complement of the quark's `1/3`, folding back to it), the **placebo effect** (expectation
+  `3/4` and observation `1/4` both fold to the same lock — belief is a real second input),
+  **reaction kinetics** (the `1/4` transition state clears the barrier then completes —
+  Arrhenius from the throw-rate), and **selection rules** (allowed = the balanced one-unit
+  hand-off folding to a whole photon; `Δl = ±1`).
+- **The two great interpretive puzzles, the leaking hole, the field law, the endless
 - **The two great interpretive puzzles, the leaking hole, the field law, the endless
   ladder** — the **measurement problem** (a result is one indivisible grid branch `1/8`;
   the 8 branches sum to the One — no "between" to land in), the **hard problem** (the two
@@ -247,8 +256,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 166 test
-suites (942 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 171 test
+suites (963 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -305,7 +314,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 166 suites, 942 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 171 suites, 963 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

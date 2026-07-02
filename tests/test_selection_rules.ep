@@ -1,0 +1,21 @@
+import "../constants/selection_rules.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== selection rules (allowed = balanced hand-off) ==="
+    set ok to expect_equal("allowed transition = the balanced one-unit hand-off 1/2" and fraction_to_text(allowed_transition()) and "1/2")
+    set ok to expect_bool("it is self-antipodal (giver = taker; conservation)" and transition_is_balanced())
+    set ok to expect_equal("it emits a whole photon (folds to the One)" and fraction_to_text(emits_a_whole_photon()) and "1")
+    set ok to expect_equal("electron's loss + photon's gain = the One" and fraction_to_text(loss_plus_gain()) and "1")
+    display "=== done ==="
+    return 0

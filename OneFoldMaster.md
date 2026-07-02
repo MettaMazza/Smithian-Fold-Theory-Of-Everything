@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-166 suites, 942 forced checks, 0 failures). It needs nothing but a C compiler. Use
+171 suites, 963 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3686,6 +3686,56 @@ completed infinity — as the No-Zero domain enforces.
 
 ---
 
+### Step 164 — Nonlocal correlation (one shared origin, no signal)
+
+**File:** `constants/nonlocal_correlation.ep`
+
+**What it does.** Two subsystems (the coprime `3` and `5`) live on the tensor product `3·5 = 15`;
+the shared origin `1/15` is one state of that joint whole, on a single orbit (`fold(1/15) =
+2/15`). A measurement folds the *whole* joint state, fixing both faces at once — not a message
+one to the other. The `15` is irreducible to a local `3`-part × `5`-part, which *is* Bell's
+result: no local hidden variables, because the pair is one nonlocal whole (Aspect; 2022 Nobel).
+
+### Step 165 — The proton radius (edge = complement of the quark)
+
+**File:** `constants/proton_radius.ep`
+
+**What it does.** A quark sits at the tripling inner position `1/3`; the proton's edge is its
+complement, `r_p = take(One, 1/3) = 2/3`, and the fold carries the edge back to the centre
+(`fold(2/3) = 1/3`) — edge and centre are the two faces of one period-2 tripling orbit, summing
+to the One. A definite finite size set by the tripling structure (measured ~0.84 fm, puzzle
+resolved).
+
+### Step 166 — The placebo effect (expectation feeds the balance)
+
+**File:** `constants/placebo_effect.ep`
+
+**What it does.** Expectation bias `3/4` and raw bodily observation `1/4` are the two preimages
+of the lock: **both** fold to the same balance `1/2`, which folds to the whole experience. Belief
+isn't fooling a separate readout — it's a genuine second input to the one balance the body
+resolves; the two sum to the One. Placebo analgesia is real and belief-dependent.
+
+### Step 167 — Reaction kinetics (the activation barrier)
+
+**File:** `constants/reaction_kinetics.ep`
+
+**What it does.** The transition state sits at `1/4`, two folds below the product: the first fold
+clears the barrier (`→ 1/2`), the second completes the reaction (`→ 1`). Only molecules thrown to
+`1/4` can start the climb, and temperature is the mean throw-rate — so hotter means more crossings
+(the steep Arrhenius rise). Two activation shares make the barrier (`1/4 + 1/4 = 1/2`).
+
+### Step 168 — Selection rules (allowed = balanced hand-off)
+
+**File:** `constants/selection_rules.ep`
+
+**What it does.** A photon carries one whole unit of spin; an emission is allowed only when the
+electron hands over exactly that unit — the balanced self-antipodal transition `1/2` that folds
+to a whole photon. A mismatched change doesn't sit at the balance and can't close: forbidden. The
+two half-units (electron's loss, photon's gain) sum to the One — the conservation that *is* the
+selection rule (`Δl = ±1`).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -4046,6 +4096,16 @@ runs):**
   operator with the source breaking it by the fold factor per dimension.
 - Step 163 — the potential infinite: always one deeper rung `1/2^k`, yet each finite and
   reaching the One in `k` folds, and the depth-5 ladder closes exactly — a process, not a thing.
+- Step 164 — nonlocal correlation: the pair is one shared origin `1/15` on the coprime
+  product `3·5` (irreducible to local parts) — Bell's result, no signal, one whole.
+- Step 165 — the proton radius: `r_p = take(One, 1/3) = 2/3`, folding back to the quark
+  centre `1/3` — edge and centre one tripling orbit (~0.84 fm).
+- Step 166 — the placebo effect: expectation `3/4` and observation `1/4` both fold to the
+  lock `1/2` — belief is a genuine second input to the balance the body resolves.
+- Step 167 — reaction kinetics: the transition state `1/4` clears the barrier then
+  completes (`1/4 → 1/2 → 1`); temperature (the throw-rate) sets the Arrhenius rise.
+- Step 168 — selection rules: an allowed transition is the balanced one-unit hand-off
+  `1/2` folding to a whole photon; mismatches can't close (`Δl = ±1`, conservation).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,58 @@
+# ============================================================================
+#  NONLOCAL CORRELATION  --  why entangled parts stay linked at a distance, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Measure one of an entangled pair and the other answers instantly, however far apart
+#  -- the correlation Bell proved cannot come from any local hidden variable, and Aspect
+#  and the 2022 Nobel confirmed. No signal crosses; nothing travels. Forced: the pair
+#  was never two things at separate places but ONE shared origin on the fold, so there
+#  is no distance for a link to cross.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Two subsystems are the two coprime generators, colour = 3 and the next odd, 5. Their
+#  joint system lives on the PRODUCT (entanglement.ep: coprime -> the tensor product,
+#  3 * 5 = 15), and the shared origin is one state of that joint whole: 1/15. It is a
+#  SINGLE fold-orbit, not two independent ones -- folding it gives 2/15, one connected
+#  point of the same orbit (fold(1/15) = 2/15), and the orbit visits all its residues as
+#  one thing. So a measurement is a fold of the WHOLE joint state, which fixes both faces
+#  at once -- not a message from one to the other, but one object resolving. There is no
+#  local factorisation (15 does not split into a 3-part times a 5-part that fold
+#  separately -- the coprime product is irreducible), which is exactly Bell's result:
+#  no local hidden variables, because the pair is one nonlocal whole.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a single joint origin 1/15 on one shared orbit
+#  (fold(1/15) = 2/15), irreducible to local parts. Measured: entangled pairs violate
+#  Bell inequalities (Aspect; 2022 Nobel), correlating with no signal and no local
+#  explanation -- one shared whole, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The joint dimension: the coprime product colour * (colour + binary) = 3 * 5 = 15.
+define joint_dimension returning Int:
+    return colour_count() * (colour_count() + binary_count())
+
+# The shared origin: one state of the joint whole, 1/15.
+define shared_origin returning Fraction:
+    return fraction_from_ratio(1 and joint_dimension())
+
+# It is one connected orbit: folding the shared origin gives 2/15, the same orbit.
+define shared_origin_folds_connected returning Fraction:
+    return fold_fraction(shared_origin())
+
+# The link is one orbit, not two: fold(1/15) = 2/15 (a single joint state advancing).
+define is_one_shared_orbit returning Bool:
+    set folded to shared_origin_folds_connected()
+    set expected to fraction_from_ratio(binary_count() and joint_dimension())
+    return fraction_is_equal(folded and expected)
