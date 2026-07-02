@@ -1,0 +1,58 @@
+# ============================================================================
+#  THE PERIODIC LAW  --  why chemistry repeats, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Mendeleev's discovery: line the elements up by weight and their CHEMISTRY repeats --
+#  lithium behaves like sodium, fluorine like chlorine. The periodic law predated any
+#  knowledge of shells. Why does adding one proton at a time produce a cycle? Forced:
+#  chemistry reads only the OPEN part of the outer shell, and shells close and re-open.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  An element's chemistry is its outer shell's state. A part-filled shell is the
+#  half-open balance 1/2; a CLOSED shell is the fold to unison, fold(1/2) = 1 -- a
+#  completed whole with nothing left for chemistry to grab (a noble gas). The next
+#  element must open a NEW shell -- back to a fresh half-open state -- so the cycle
+#  restarts: open -> fill -> close -> open again, period after period. The recurrence
+#  is exact because closure is exact (the fold lands ON the One, not near it): every
+#  time a shell closes, the next opening faces the same structure as the last, so the
+#  same chemistry returns. The two half-shares of the closing shell sum to the whole
+#  (1/2 + 1/2 = 1), and the shell sizes themselves are the forced capacities b*n^2
+#  (shell_capacities.ep) -- which is why the periods have the lengths they do.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: closure at the One, recurrence by re-opening, period
+#  lengths from the forced capacities. Measured: the periodic table's rows end at
+#  noble gases (closed shells) and every column shares chemistry (the same open
+#  structure) -- valence recurring exactly as the closures force.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A part-filled outer shell: the half-open balance, 1/2 (live chemistry).
+define open_shell_state returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# A closed shell: the fold to unison -- a noble gas, nothing left to grab.
+define shell_closes returning Fraction:
+    return fold_fraction(open_shell_state())
+
+# Closure is EXACT (lands on the One), so the recurrence is exact.
+define closure_is_exact returning Bool:
+    set closed to shell_closes()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(closed and one)
+
+# The closing shell's two half-shares sum to the whole.
+define half_shares_sum_to_whole returning Fraction:
+    set share to open_shell_state()
+    return fraction_add(share and share)

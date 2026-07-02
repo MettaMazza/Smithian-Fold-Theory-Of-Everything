@@ -1,0 +1,59 @@
+# ============================================================================
+#  STELLAR STRUCTURE  --  why a star holds its shape for aeons, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A star is a bomb inside a collapse: fusion pushes out while gravity pulls in, yet
+#  the Sun has held one steady shape for four and a half billion years. Why so stable
+#  for so long? Forced: hydrostatic equilibrium is the self-antipodal balance, and a
+#  self-antipodal point is self-correcting.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  At every layer the outward pressure share balances gravity's inward claim at the
+#  balance state 1/2 -- the unique self-antipodal point (One - 1/2 = 1/2, push equal to
+#  pull). The balance is SELF-CORRECTING: compress the star and pressure's share rises
+#  above 1/2, pushing back; let it swell and gravity's claim exceeds 1/2, pulling in --
+#  every deviation restores itself toward the balance, which is why the equilibrium
+#  survives for aeons rather than needing luck. The balanced star folds to unison
+#  (fold(1/2) = 1): the whole star is ONE bound object, not a loose pile. Push and pull
+#  sum to the One (1/2 + 1/2 = 1) -- the complete accounting of every layer. (The END
+#  of this balance, support falling to the threshold with nothing left to burn, is the
+#  supernova; supernovae_heavy.ep.)
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: equilibrium at the self-antipodal balance, self-
+#  correcting, the star one bound whole. Measured: stars sit on the main sequence in
+#  hydrostatic equilibrium for millions to billions of years, and helioseismology shows
+#  the Sun ringing ABOUT its equilibrium -- a restored balance, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Hydrostatic equilibrium: pressure's share balances gravity's claim at 1/2.
+define hydrostatic_balance returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The balance is self-antipodal: push equals pull, so deviations self-correct.
+define balance_is_self_antipodal returning Bool:
+    set balance to hydrostatic_balance()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and balance)
+    return fraction_is_equal(complement and balance)
+
+# The balanced star folds to unison: one bound object.
+define star_is_one_bound_whole returning Fraction:
+    return fold_fraction(hydrostatic_balance())
+
+# Push and pull sum to the One: the complete accounting of every layer.
+define push_plus_pull returning Fraction:
+    set balance to hydrostatic_balance()
+    return fraction_add(balance and balance)

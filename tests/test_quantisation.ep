@@ -1,0 +1,23 @@
+import "../constants/quantisation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== quantisation (the depth-k grid) ==="
+    set ok to expect_equal("depth-2 state count = 2^2 = 4" and int_to_string(state_count(2)) and "4")
+    set ok to expect_equal("grid state 3/4 at depth 2" and fraction_to_text(grid_state(3 and 2)) and "3/4")
+    set ok to expect_bool("the WHOLE depth-2 grid returns to the One within 2 folds" and whole_grid_returns(2))
+    set ok to expect_bool("the whole depth-3 grid returns within 3 folds" and whole_grid_returns(3))
+    set ok to expect_bool("adjacent gaps are uniform at depth 2 (steps, not a ramp)" and gaps_are_uniform(2))
+    set ok to expect_bool("adjacent gaps are uniform at depth 3" and gaps_are_uniform(3))
+    display "=== done ==="
+    return 0

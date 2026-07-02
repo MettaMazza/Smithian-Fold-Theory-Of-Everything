@@ -109,6 +109,21 @@ And the structural laws of physics, forced the same way:
   sensitivity scales as `(m_μ/m_e)² ≈ 42886`, so the muon is the sharp probe), the
   **Lamb shift** (the `1/4 = (1/2)²` state, the α² order, two folds deep), and
   **zero-point energy** (the vacuum floor is the half-One `1/2`, the `(1/2)` in `(1/2)hf`).
+- **Two Millennium-adjacent puzzles, the nuclear landscape, the steady star** —
+  **renormalization** (finite loop sums with nothing to subtract — the infinity was the
+  continuum), **nuclear binding** (the valley of stability: fusion climbs to the iron
+  peak, the One), the **nuclear shell model** (magic numbers are closed shells; the first
+  two ARE the forced capacities 2 and 8), **stellar structure** (a self-correcting
+  hydrostatic balance — why stars hold shape for aeons), and **tidal locking** (the spin–
+  orbit mismatch drained to a one-face lock).
+- **Quantisation, temperature, the bond, the table, and Wigner's puzzle** —
+  **quantisation** (the depth-k grid: `2^k` states, uniform steps, no continuum beneath),
+  **temperature** (the mean fold-throw-rate — why the three thermometers agree, and why
+  absolute zero is unreachable), the **molecular bond** (two half-shares complete the One),
+  the **periodic law** (chemistry repeats because shell closure is *exact*), and the
+  **effectiveness of mathematics** (a fold orbit read physically and arithmetically is one
+  object — the fit is forced, not lucky).
+- **Life's ignition, held orbits, screening, fringes** — the **origin of life**
 - **Life's ignition, held orbits, screening, fringes** — the **origin of life** (the
   two-fold ignition `1/4 → 1/2 → 1` crosses the autocatalytic lock into a self-holding
   cycle — a threshold, not a slope), **memory persistence** (a memory is a held period-2
@@ -223,8 +238,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 151 test
-suites (873 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 161 test
+suites (917 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -281,7 +296,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 151 suites, 873 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 161 suites, 917 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

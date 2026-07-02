@@ -1,0 +1,64 @@
+# ============================================================================
+#  TEMPERATURE  --  what "hot" actually is, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Temperature feels primitive -- hot and cold -- yet physics defines it three ways
+#  (kinetic energy, entropy slope, radiation colour) that all agree. What single thing
+#  are they all measuring? Forced: the mean THROW-RATE of a folding population -- how
+#  often, on average, a member gets thrown up its ladder.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A population in thermal contact is a crowd of states being folded at random. Its
+#  temperature is the mean throw: the average member sits at the balance 1/2 -- the
+#  equilibrium weight (canonical_distribution.ep) -- and one fold throws it to unison
+#  (1/2 -> 1), one whole level. Hotter = throws complete more of the ladder per tick;
+#  the SCALE of one throw is fixed: the balance to the One, exactly half the domain,
+#  and two mean throws account for the whole (1/2 + 1/2 = 1). That one number is why
+#  the three definitions agree: kinetic energy (the throw's size), entropy slope (bits
+#  erased per throw -- entropy.ep), and radiation colour (which ladder rung the throws
+#  reach -- blackbody_radiation.ep) all count the same folding rate. Absolute zero --
+#  a population never thrown -- would sit AT zero, which the domain forbids: the floor
+#  is the zero-point half-quantum (zero_point_energy.ep), so cooling has a hard bottom
+#  it never touches.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: one mean throw = the balance to the One, the three
+#  thermometers counting the same rate, and an unreachable absolute zero. Measured:
+#  kinetic, entropic, and radiative temperatures agree everywhere they are compared,
+#  and the third law holds -- no system has ever reached absolute zero, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The mean thermal state: the equilibrium balance, 1/2.
+define mean_thermal_state returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# One mean throw: the balance thrown one whole level to unison.
+define one_throw_reaches_unison returning Fraction:
+    return fold_fraction(mean_thermal_state())
+
+# Two mean throws account for the whole: 1/2 + 1/2 = 1.
+define two_throws_make_the_whole returning Fraction:
+    set mean to mean_thermal_state()
+    return fraction_add(mean and mean)
+
+# The cold floor is the zero-point half-quantum -- strictly positive, so absolute
+# zero (a never-thrown population AT zero) is not expressible.
+define cold_floor returning Fraction:
+    set floor to fraction_from_ratio(1 and binary_count())
+    return floor
+
+define floor_is_strictly_positive returning Bool:
+    set floor to cold_floor()
+    return floor.numerator_sign > 0

@@ -1,0 +1,22 @@
+import "../constants/math_effectiveness.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the effectiveness of mathematics (one structure, two readings) ==="
+    set ok to expect_equal("the orbit, physical reading: 1/3" and fraction_to_text(orbit_low()) and "1/3")
+    set ok to expect_equal("its partner: 2/3" and fraction_to_text(orbit_high()) and "2/3")
+    set ok to expect_bool("the SAME orbit, mathematical reading: period = ord_3(2) = 2" and orbit_period_is_arithmetic())
+    set ok to expect_equal("both readings agree on the whole (1/3 + 2/3 = 1)" and fraction_to_text(states_partition_one()) and "1")
+    set ok to expect_equal("their balance folds to unison (the shared centre)" and fraction_to_text(balance_folds_to_unison()) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,21 @@
+import "../constants/planetary_tidal.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== tidal locking (one face forever) ==="
+    set ok to expect_equal("the lock state = 1/2 (equal rhythm shares)" and fraction_to_text(lock_state()) and "1/2")
+    set ok to expect_bool("the lock is self-antipodal (nothing left to drain)" and lock_is_self_antipodal())
+    set ok to expect_equal("at the lock the rhythms merge into ONE period" and fraction_to_text(rhythms_merge_to_one()) and "1")
+    set ok to expect_equal("the equal shares sum to the One" and fraction_to_text(shares_sum_to_one()) and "1")
+    display "=== done ==="
+    return 0

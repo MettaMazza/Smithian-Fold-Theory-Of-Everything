@@ -1,0 +1,21 @@
+import "../constants/periodic_law.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the periodic law (why chemistry repeats) ==="
+    set ok to expect_equal("a part-filled outer shell = the half-open 1/2" and fraction_to_text(open_shell_state()) and "1/2")
+    set ok to expect_equal("a closed shell = the fold to unison (a noble gas)" and fraction_to_text(shell_closes()) and "1")
+    set ok to expect_bool("closure is EXACT, so the recurrence is exact" and closure_is_exact())
+    set ok to expect_equal("the closing shell's halves sum to the whole" and fraction_to_text(half_shares_sum_to_whole()) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,15 @@
+import "../constants/nuclear_binding.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== nuclear binding (the valley of stability) ==="
+    set ok to expect_equal("light-nucleus binding = 1/4 (two folds below the peak)" and fraction_to_text(light_nucleus_binding()) and "1/4")
+    set ok to expect_equal("first fusion step doubles the share (-> 1/2)" and fraction_to_text(first_fusion_step()) and "1/2")
+    set ok to expect_equal("second step reaches the peak (the One, iron)" and fraction_to_text(second_step_reaches_peak()) and "1")
+    set ok to expect_equal("two light nuclei fuse to the next level" and fraction_to_text(two_light_fuse_to_next_level()) and "1/2")
+    display "=== done ==="
+    return 0

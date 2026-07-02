@@ -1,0 +1,56 @@
+# ============================================================================
+#  NUCLEAR BINDING AND THE VALLEY OF STABILITY  --  why iron is the floor, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Plot binding energy per nucleon against mass and every nucleus sits in one valley:
+#  the curve rises steeply through the light elements, peaks at iron, and falls gently
+#  beyond. Everything decays TOWARD that floor -- fusion from below, fission from
+#  above. Forced: the peak is the One, and light nuclei sit whole folds below it.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The binding peak is unison -- the One, the most tightly bound arrangement (the same
+#  peak both fusion and fission fold toward; fission_fusion.ep). A light nucleus sits
+#  at the peak-binding state 1/4: two whole folds below the peak, so it can release
+#  energy by exactly two fusion steps (1/4 -> 1/2 -> 1) -- hydrogen to helium to the
+#  iron group, each step a doubling of its binding share. The valley is the fold
+#  ladder read as nuclear landscape: position = how many folds from the One, decay =
+#  falling one rung toward it, stability = sitting on the floor with no rung left.
+#  Two light-nucleus shares make the intermediate step: 1/4 + 1/4 = 1/2 (two light
+#  nuclei fuse into one at the next binding level -- which is what fusion IS).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the peak at the One, light nuclei whole folds below,
+#  fusion as the climb. Measured: the binding curve peaks at iron-56/nickel-62
+#  (~8.8 MeV per nucleon), rising from hydrogen in steps and falling beyond -- every
+#  spontaneous nuclear process moves toward that valley floor, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A light nucleus's binding share: two folds below the peak, 1/4.
+define light_nucleus_binding returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# The first fusion step doubles the binding share: 1/4 -> 1/2.
+define first_fusion_step returning Fraction:
+    return fold_fraction(light_nucleus_binding())
+
+# The second reaches the peak -- the One, the valley floor (iron group).
+define second_step_reaches_peak returning Fraction:
+    return fold_fraction(first_fusion_step())
+
+# Two light nuclei fuse into one at the next level: 1/4 + 1/4 = 1/2.
+define two_light_fuse_to_next_level returning Fraction:
+    set share to light_nucleus_binding()
+    return fraction_add(share and share)

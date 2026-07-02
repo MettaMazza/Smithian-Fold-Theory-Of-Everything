@@ -1,0 +1,59 @@
+# ============================================================================
+#  TIDAL LOCKING  --  why the Moon shows one face, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Moon turns exactly once per orbit, so we only ever see one side; most large
+#  moons in the solar system do the same, and close-in exoplanets lock to their stars.
+#  Why do two independent rhythms -- spin and orbit -- end up identical? Forced: tides
+#  drain the difference until the two rhythms merge at the lock, and the lock is the
+#  balance folding to unison.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A body spinning faster than it orbits carries a mismatch between its two rhythms.
+#  The tidal bulge, dragged around by the mismatch, dissipates it -- every cycle folds
+#  a little of the difference away (the arrow: dissipation only runs down, entropy.ep).
+#  The draining STOPS only where there is nothing left to drain: the lock state 1/2,
+#  where the two rhythms hold equal shares (self-antipodal -- One - 1/2 = 1/2, neither
+#  rhythm dominant). At the lock the two merge into ONE shared period: fold(1/2) = 1 --
+#  spin and orbit are no longer two motions but one, a 1:1 resonance the dissipation
+#  cannot break (there is no mismatch left to grab). The two equal shares sum to the
+#  One: 1/2 + 1/2 = 1, the locked pair as one bound rotation.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: dissipation runs the mismatch down to the equal-share
+#  lock, which folds into one shared period. Measured: the Moon, Phobos, the Galilean
+#  moons, Charon-Pluto (mutually locked), and hot exoplanets all sit in 1:1 spin-orbit
+#  locks -- the drained, merged rhythm this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lock state: spin and orbit hold equal shares, 1/2.
+define lock_state returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The lock is self-antipodal: neither rhythm dominant, nothing left to drain.
+define lock_is_self_antipodal returning Bool:
+    set lock to lock_state()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and lock)
+    return fraction_is_equal(complement and lock)
+
+# At the lock the two rhythms merge into ONE shared period.
+define rhythms_merge_to_one returning Fraction:
+    return fold_fraction(lock_state())
+
+# The two equal shares sum to the One: the locked pair as one bound rotation.
+define shares_sum_to_one returning Fraction:
+    set lock to lock_state()
+    return fraction_add(lock and lock)

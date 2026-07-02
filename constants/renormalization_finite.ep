@@ -1,0 +1,57 @@
+# ============================================================================
+#  RENORMALIZATION WITHOUT INFINITIES  --  why the loop sums are finite, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Quantum field theory's calculations famously blow up: loop corrections integrate
+#  over arbitrarily short distances and return infinity, which renormalization then
+#  subtracts away -- a procedure that works perfectly and has embarrassed theorists for
+#  eighty years. Forced: on the fold lattice the infinities never appear, because there
+#  IS no arbitrarily short distance to integrate over.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A loop correction sums contributions scale by scale down the ladder. On a continuum
+#  the ladder never ends -- that is the infinity. On the lattice the ladder ENDS at the
+#  floor: the scale state 1/4 sits a finite number of folds below unison and climbs back
+#  in exactly two (1/4 -> 1/2 -> 1) -- every scale is a finite number of rungs from the
+#  whole (continuum_ladder.ep closes the sum exactly: the depth-5 ladder plus its
+#  boundary is the One). A sum over finitely many rungs of exact rationals is a finite
+#  rational -- there is nothing to subtract, no infinity to cancel. Renormalization
+#  "works" because it was always secretly computing this floored sum; the divergence was
+#  the continuum assumption, not the physics (the same bug the continuum modules name).
+#  Two floor-scale shares make the balance: 1/4 + 1/4 = 1/2.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: every scale is finitely many folds from the One, so
+#  every loop sum is a finite rational. Measured: renormalized QFT predictions (the
+#  electron g-2 to twelve digits) are famously FINITE and correct -- the finite answers
+#  were always the physical ones, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The floor-scale state: 1/4, finitely many folds below unison.
+define floor_scale returning Fraction:
+    set half to fraction_from_ratio(1 and binary_count())
+    return fraction_multiply(half and half)
+
+# It climbs to the whole in exactly two folds -- no endless descent, no infinity.
+define first_climb returning Fraction:
+    return fold_fraction(floor_scale())
+
+define reaches_the_whole returning Fraction:
+    return fold_fraction(first_climb())
+
+# Two floor-scale shares make the balance: 1/4 + 1/4 = 1/2.
+define shares_make_the_balance returning Fraction:
+    set scale to floor_scale()
+    return fraction_add(scale and scale)

@@ -1,0 +1,16 @@
+import "../constants/nuclear_shell.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the nuclear shell model (magic numbers) ==="
+    set ok to expect_equal("a part-filled shell = the half-open balance 1/2" and fraction_to_text(open_shell()) and "1/2")
+    set ok to expect_equal("closing the shell = the fold to unison" and fraction_to_text(shell_closes_to_whole()) and "1")
+    set ok to expect_equal("two half-shells sum to the closed whole" and fraction_to_text(half_shells_sum_to_closed()) and "1")
+    set ok to expect_equal("first magic number = b*1^2 = 2 (helium)" and int_to_string(first_magic_number()) and "2")
+    set ok to expect_equal("second magic number = b*2^2 = 8 (oxygen)" and int_to_string(second_magic_number()) and "8")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,21 @@
+import "../constants/temperature.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== temperature (the mean throw-rate) ==="
+    set ok to expect_equal("mean thermal state = the balance 1/2" and fraction_to_text(mean_thermal_state()) and "1/2")
+    set ok to expect_equal("one mean throw reaches unison (one whole level)" and fraction_to_text(one_throw_reaches_unison()) and "1")
+    set ok to expect_equal("two mean throws account for the whole" and fraction_to_text(two_throws_make_the_whole()) and "1")
+    set ok to expect_bool("the cold floor is strictly positive (no absolute zero)" and floor_is_strictly_positive())
+    display "=== done ==="
+    return 0

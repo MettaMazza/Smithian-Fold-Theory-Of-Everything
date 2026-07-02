@@ -1,0 +1,15 @@
+import "../constants/molecular_bond.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the molecular bond (two halves complete a whole) ==="
+    set ok to expect_equal("each atom's valence share = 1/2 (half-open)" and fraction_to_text(valence_share()) and "1/2")
+    set ok to expect_equal("the two halves complete the whole (the bond)" and fraction_to_text(bond_completes_the_whole()) and "1")
+    set ok to expect_equal("each half is one fold from unison through the shared state" and fraction_to_text(half_closes_by_one_fold()) and "1")
+    set ok to expect_equal("electrons per bond = the binary fibre = 2" and int_to_string(electrons_per_bond()) and "2")
+    display "=== done ==="
+    return 0

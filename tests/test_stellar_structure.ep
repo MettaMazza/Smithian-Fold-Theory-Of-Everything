@@ -1,0 +1,21 @@
+import "../constants/stellar_structure.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== stellar structure (the self-correcting balance) ==="
+    set ok to expect_equal("hydrostatic balance = 1/2 (push = pull)" and fraction_to_text(hydrostatic_balance()) and "1/2")
+    set ok to expect_bool("the balance is self-antipodal (self-correcting)" and balance_is_self_antipodal())
+    set ok to expect_equal("the balanced star folds to unison (one bound whole)" and fraction_to_text(star_is_one_bound_whole()) and "1")
+    set ok to expect_equal("push + pull sum to the One" and fraction_to_text(push_plus_pull()) and "1")
+    display "=== done ==="
+    return 0

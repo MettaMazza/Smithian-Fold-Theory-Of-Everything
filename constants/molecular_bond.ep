@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE MOLECULAR BOND  --  why sharing holds atoms together, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two neutral atoms approach and suddenly hold: a covalent bond. Nothing new is
+#  added -- the same electrons, the same charges -- yet the pair is now lower in
+#  energy than the parts. What did sharing change? Forced: each atom contributes a
+#  half-share, and the two halves complete into one whole.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Each atom brings a half-open valence state -- the balance 1/2 (the same shared-pair
+#  balance as the covalent midpoint in electronegativity.ep). Alone, each half is
+#  incomplete: it sits below unison and cannot close itself. TOGETHER the two halves
+#  sum to the One (1/2 + 1/2 = 1) -- the shared pair completes a whole, and the fold
+#  confirms the closure: fold(1/2) = 1, each half one fold from unison THROUGH the
+#  shared state. The bond's stability is the completion: to break it you must re-open
+#  the whole back into two incomplete halves, which costs the binding energy. Sharing
+#  works because completion is cheaper than solitude -- two half-states make one
+#  closed state, and closed states are what the fold holds.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: two half-shares completing to the One, breakable only
+#  by paying the completion back. Measured: covalent bonds form electron PAIRS (two
+#  spins, one orbital -- the binary fibre filled), with definite bond energies that
+#  must be paid to dissociate -- completion chemistry, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Each atom's half-open valence share: the balance, 1/2.
+define valence_share returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The two halves complete into one whole: the bond.
+define bond_completes_the_whole returning Fraction:
+    set share to valence_share()
+    return fraction_add(share and share)
+
+# The fold confirms the closure: each half is one fold from unison.
+define half_closes_by_one_fold returning Fraction:
+    return fold_fraction(valence_share())
+
+# The pair count is the binary fibre: two electrons fill one bond.
+define electrons_per_bond returning Int:
+    return binary_count()

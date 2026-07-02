@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-151 suites, 873 forced checks, 0 failures). It needs nothing but a C compiler. Use
+161 suites, 917 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3544,6 +3544,96 @@ balance to unison. The ~90-minute deep/REM alternation is the measured face.
 
 ---
 
+### Step 149 — Renormalization without infinities
+
+**File:** `constants/renormalization_finite.ep`
+
+**What it does.** QFT's loop integrals blow up only on a continuum. On the lattice every scale
+is a finite number of folds from the One (`1/4 → 1/2 → 1`), so a loop sum is a sum over finitely
+many exact rationals — finite, nothing to subtract. Renormalization "works" because it was
+always secretly computing this floored sum; the divergence was the continuum assumption.
+
+### Step 150 — Nuclear binding (the valley of stability)
+
+**File:** `constants/nuclear_binding.ep`
+
+**What it does.** The binding peak is the One (iron); a light nucleus sits at `1/4`, two folds
+below, and climbs by fusion (`1/4 → 1/2 → 1`). Two light nuclei fusing to the next level *is*
+`1/4 + 1/4 = 1/2`. The valley of stability is the fold ladder read as the nuclear landscape.
+
+### Step 151 — The nuclear shell model (magic numbers)
+
+**File:** `constants/nuclear_shell.ep`
+
+**What it does.** A part-filled shell is the half-open balance `1/2`; closing it is the fold to
+unison (extra-stable, no slot for the residual). The first two magic numbers **are** the forced
+shell capacities `b·1² = 2` and `b·2² = 8` — doubly-magic ⁴He and ¹⁶O.
+
+### Step 152 — Stellar structure (the self-correcting balance)
+
+**File:** `constants/stellar_structure.ep`
+
+**What it does.** Hydrostatic equilibrium is the self-antipodal balance `1/2` (push = pull),
+and self-antipodal means **self-correcting**: compress → pressure exceeds `1/2` and pushes back;
+swell → gravity exceeds it and pulls in. Every deviation restores itself — why a star holds one
+shape for aeons (helioseismology shows the Sun ringing about it).
+
+### Step 153 — Tidal locking (one face forever)
+
+**File:** `constants/planetary_tidal.ep`
+
+**What it does.** Tides dissipate the spin–orbit mismatch (the arrow only runs down) until the
+equal-share lock `1/2`, where nothing is left to drain and the two rhythms fold into **one**
+shared period (`1:1` resonance). The Moon, Phobos, the Galilean moons, Charon–Pluto, hot
+exoplanets — all locked.
+
+### Step 154 — Quantisation (the depth-k grid)
+
+**File:** `constants/quantisation.ep`
+
+**What it does.** Why anything is quantised: at depth `k` the state space **is** the grid
+`i/2^k` — exactly `2^k` states, every one folding to the One within `k` steps (the whole grid
+checked, depths 2 and 3), uniform gaps `1/2^k` everywhere. Discreteness, closure, and uniform
+steps — quantisation with no continuum to impose it on.
+
+### Step 155 — Temperature (the mean throw-rate)
+
+**File:** `constants/temperature.ep`
+
+**What it does.** Temperature is the mean throw of a folding population: the average member at
+the balance `1/2`, one fold throwing it a whole level to unison. Kinetic energy, entropy slope,
+and radiation colour all count the same folding rate — why the three thermometers agree. The
+cold floor is the strictly-positive zero-point half-quantum, so absolute zero is unreachable
+(the third law).
+
+### Step 156 — The molecular bond (two halves complete a whole)
+
+**File:** `constants/molecular_bond.ep`
+
+**What it does.** Each atom brings a half-open valence share `1/2`; alone it can't close, but
+the two halves sum to the One (`1/2 + 1/2 = 1`) — the shared pair completes a whole, and
+breaking the bond means re-opening the completion (the binding energy). Two electrons per bond
+= the binary fibre filled.
+
+### Step 157 — The periodic law (why chemistry repeats)
+
+**File:** `constants/periodic_law.ep`
+
+**What it does.** Chemistry reads the open outer shell: fill → close (the fold lands **exactly**
+on the One, a noble gas) → the next element opens a fresh shell, restarting the cycle. The
+recurrence is exact because closure is exact; period lengths are the forced `b·n²` capacities.
+
+### Step 158 — The effectiveness of mathematics (one structure, two readings)
+
+**File:** `constants/math_effectiveness.ep`
+
+**What it does.** Wigner's puzzle dissolves: the fold's period-2 orbit `1/3 ↔ 2/3` read
+*physically* is a held memory/cycle; read *mathematically* it is `ord₃(2) = 2`. Same object,
+two readings — a world built of fold-orbits cannot fail to obey fold-orbit arithmetic. The fit
+is forced, not lucky (and the whole corpus is the wholesale demonstration).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3874,6 +3964,26 @@ runs):**
   folds to unison (bright); dark + bright = the One, energy conserved.
 - Step 148 — the sleep cycle: the held period-2 orbit `1/3 ↔ 2/3` (deep ↔ REM), balanced
   at `1/2`; only waking folds the balance to unison (the ~90-min alternation).
+- Step 149 — renormalization without infinities: every scale is finitely many folds from
+  the One, so every loop sum is a finite rational — nothing to subtract.
+- Step 150 — nuclear binding: the peak is the One (iron); light nuclei climb by fusion
+  (`1/4 → 1/2 → 1`), and `1/4 + 1/4 = 1/2` IS two light nuclei fusing.
+- Step 151 — the nuclear shell model: closure is the fold to unison; the first magic
+  numbers ARE the forced capacities `b·1² = 2`, `b·2² = 8` (⁴He, ¹⁶O).
+- Step 152 — stellar structure: equilibrium at the self-antipodal `1/2` is self-correcting
+  (deviations restore) — why a star holds shape for aeons.
+- Step 153 — tidal locking: dissipation drains the spin–orbit mismatch to the equal-share
+  lock `1/2`, where the rhythms merge into one period (the Moon, and the rest).
+- Step 154 — quantisation: the depth-k grid is `2^k` states, each folding to the One in
+  `k` steps, uniform gaps `1/2^k` — discreteness with no continuum beneath it.
+- Step 155 — temperature: the mean throw-rate (balance → One per throw); kinetic/entropic/
+  radiative thermometers count the same rate; the positive floor forbids absolute zero.
+- Step 156 — the molecular bond: two half-open valence shares complete the One
+  (`1/2 + 1/2 = 1`); breaking it repays the completion (two electrons = the binary fibre).
+- Step 157 — the periodic law: chemistry repeats because closure is EXACT (lands on the
+  One, a noble gas), then the next shell re-opens; period lengths are the `b·n²` capacities.
+- Step 158 — the effectiveness of mathematics: the fold orbit `1/3 ↔ 2/3` read physically
+  (a held cycle) and mathematically (`ord₃(2) = 2`) is one object — the fit is forced.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

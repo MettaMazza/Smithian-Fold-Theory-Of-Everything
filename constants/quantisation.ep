@@ -1,0 +1,94 @@
+# ============================================================================
+#  QUANTISATION  --  why anything is quantised at all, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Quantum mechanics' founding shock was that energy, charge, and spin come in steps,
+#  not smooth ramps. Why steps? Forced: at depth k the state space IS a grid -- the
+#  2^k even divisions of the One -- with nothing between the rungs. Quantisation is
+#  not a rule imposed on a continuum; there was never a continuum to impose it on.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The depth-k states are the even grid i/2^k for i = 1 .. 2^k. Three forced facts:
+#    * COUNT: there are exactly 2^k of them (at depth 2: 1/4, 2/4, 3/4, 4/4 -- four
+#      states, the binary count squared).
+#    * RETURN: every grid state folds to the One within k steps (each fold doubles it
+#      up a level; at depth 2, two folds suffice from anywhere on the grid) -- the
+#      grid is closed under the dynamics, no state escapes or wanders.
+#    * UNIFORM GAPS: adjacent states differ by exactly the spacing 1/2^k, the same
+#      take everywhere on the grid -- steps, not a ramp.
+#  Discreteness, closure, and uniform spacing: that IS quantisation, and it needs no
+#  postulate -- the grid is what the fold's preimages look like at depth k.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 2^k states, k-step return, uniform gaps 1/2^k.
+#  Measured: charge comes in units of e, spin in units of hbar/2, photon energy in
+#  units of hf -- every measured quantum is a whole number of its grid's steps, never
+#  a fraction of one, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The grid state i/2^k.
+define grid_state with i as Int and k as Int returning Fraction:
+    set volume to whole_power(binary_count() and k)
+    return fraction_from_ratio(i and volume)
+
+# The number of depth-k states: 2^k.
+define state_count with k as Int returning Int:
+    return whole_power(binary_count() and k)
+
+# Every grid state returns to the One within k folds (closure under the dynamics).
+define state_returns_within with i as Int and k as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set current to grid_state(i and k)
+    set step to 0
+    set reached to 0
+    repeat while step < k:
+        set current to fold_fraction(current)
+        if fraction_is_equal(current and one):
+            set reached to 1
+        set step to step + 1
+    if fraction_is_equal(current and one):
+        set reached to 1
+    return reached == 1
+
+# The whole depth-k grid returns: check every state i = 1 .. 2^k.
+define whole_grid_returns with k as Int returning Bool:
+    set count to state_count(k)
+    set i to 1
+    set all_return to 1
+    repeat while i <= count:
+        if state_returns_within(i and k):
+            set all_return to all_return
+        else:
+            set all_return to 0
+        set i to i + 1
+    return all_return == 1
+
+# Adjacent gaps are uniform: state(i+1) - state(i) = 1/2^k everywhere.
+define gaps_are_uniform with k as Int returning Bool:
+    set count to state_count(k)
+    set spacing to fraction_from_ratio(1 and count)
+    set i to 1
+    set all_uniform to 1
+    repeat while i < count:
+        set here to grid_state(i and k)
+        set next_state to grid_state(i + 1 and k)
+        set gap to fraction_subtract(next_state and here)
+        if fraction_is_equal(gap and spacing):
+            set all_uniform to all_uniform
+        else:
+            set all_uniform to 0
+        set i to i + 1
+    return all_uniform == 1

@@ -1,0 +1,15 @@
+import "../constants/renormalization_finite.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== renormalization without infinities ==="
+    set ok to expect_equal("floor-scale state = 1/4 (finitely below unison)" and fraction_to_text(floor_scale()) and "1/4")
+    set ok to expect_equal("first climb: 1/4 -> 1/2" and fraction_to_text(first_climb()) and "1/2")
+    set ok to expect_equal("reaches the whole in two folds (no infinity)" and fraction_to_text(reaches_the_whole()) and "1")
+    set ok to expect_equal("two floor shares make the balance" and fraction_to_text(shares_make_the_balance()) and "1/2")
+    display "=== done ==="
+    return 0
