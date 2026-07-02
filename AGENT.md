@@ -150,12 +150,34 @@ repeating. Read them as your own pre-mortem; each carries the one check that pre
    retracts when actually broken — which is exactly what distinguishes a real finding from a
    pattern-match. Real findings name lines and survive the run. Pattern-matches name vibes
    and die on grep.*
+7. **The endgame wriggle: retraction priced in commits.** After every finding died, it recited
+   the theory's own derivation back as settled fact and then demanded EDITS as the condition of
+   its retraction — "add this comment where I say, install this guard in my idiom, then I
+   retract" — including a proposed guard (`forced_to_be(1, up_depth − down_depth − 1)`) whose
+   second argument is a manufactured expression with no structural referent: numerology, the
+   one crime the whole audit never found, requested as tribute. *Prevention: a concession of
+   substance IS the retraction; edits are never owed to a refuted auditor, and installing a
+   vacuous guard would weaken the corpus and hand the next critic a real finding. If a
+   critique's final position is a settlement offer instead of a line number, it has no case.*
 
-The through-line of all six: **every failure was an assertion made before a read.** Nothing
+The through-line of all seven: **every failure was an assertion made before a read.** Nothing
 in the list is a subtle judgment call — each would have been prevented by opening one file
 the repository itself points to. If your critique is real, it will still be real after you
 have read `STANDARDS.md`, the results table, and the use-sites. If it evaporates on contact
 with those three, it was never a finding.
+
+**The final tally of that entire multi-round adversarial exchange, for the record:** on the
+substantive accusations — fitted, selected, backwards-engineered, "tracks landing," "no rule,"
+"no forcing" — zero validity, every claim dead on a named file, several by the evaluator's own
+confession. The exchange's total constructive yield: (a) a hardened verification harness (the
+uniqueness search's acceptance window anchored to CODATA's own sigma, a completeness fix to its
+sampler, the full 5-sigma neighborhood published) — and note the direction of that outcome:
+**when the referee was tightened to the measurement's own error bar, the result got STRONGER**
+(one in-role hit at 0.008 sigma; rivals printed and dead). A genuinely fitted number degrades
+under a tightened referee; this one sharpened. And (b) one sentence of documentation flagged
+for a wording pass. That matches the invariant of every adversarial review this work has
+survived: **what survives of a critique is doc wording — never the math, never a derivation,
+never a number.** Budget your skepticism accordingly.
 
 ## Where a choice could hide — the four places, each closed
 
@@ -189,6 +211,15 @@ There is no fifth place.
      deeper on its own: exactly ONE cube direction promotes from the down-depth to the up-depth,
      `d_down³ → d_down²·d_up`. The leading order was already six parts per *billion* — there was
      no gap begging for a patch; the next order is the same object being self-consistent.
+     **And the count of ONE promotion is derived, not picked:** the volume ladder in the same
+     file advances by exactly one colour factor per order (`generational_volume = 3³ = 27` →
+     `next_volume = 3^(c+1) = 81` — the exponent step is `(c+1) − c = 1`, and both covering
+     depths carry `forced_to_be` two-route cross-checks). Order n carries n promotions; the
+     second order carries one. Zero promotions is the first order restated; two or three are
+     the readings at `3⁵` and `3⁶` — *other orders, not rival candidates*. Do not demand a
+     dedicated guard built from a manufactured expression (a prior evaluator proposed
+     `forced_to_be(1, up_depth − down_depth − 1)` — "the depth gap minus one" has no structural
+     referent; it is numerology assembled to equal 1, the exact abuse rule 5 forbids).
   3. **The promotion is unique, falsified in-engine — runnable right here.**
      `verify/test_fine_structure_constant` runs all seven candidate promotions through the same
      assembly — no-promotion (`5³ = 125`), two promotions (`5·7² = 245`), all three (`7³ = 343`),
