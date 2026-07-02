@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-260 suites, 1,464 forced checks, 0 failures). It needs nothing but a C compiler. Use
+263 suites, 1,477 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4681,6 +4681,38 @@ state (`fold(1/8) = 1/4`), which folds on into the binding lock. Observation IS 
 homunculus enters (verified: the join is the same single operation as the dynamics), which is why
 measurement needs no conscious agent yet a conscious agent is automatically a measurer.
 
+### Step 258 — The convergence rate, closed (one exact formula)
+
+**File:** `constants/convergence_rate_closed.ep`
+
+**What it does.** The gap between the strong and electroweak couplings has an exact closed form at
+every depth: `gap(d) = 1/((2+2^d)(3+2^d))` — verified against direct subtraction at all eleven
+depths 0–10. The numerator is ALWAYS the One (the two source sizes differ by exactly 1), the bare
+gap is `1/12` — the up-type first invariant reappearing — and the gap dies as the square of the
+tower. Unification's rate is one rational function, not a fitted loop integral.
+
+### Step 259 — The accumulated separation (the total disagreement is finite)
+
+**File:** `constants/accumulated_separation.ep`
+
+**What it does.** The SUM of the two forces' gaps over the whole ladder converges: both summation
+routes (closed-form terms; direct coupling differences) agree exactly at every partial sum N =
+0–10, from `d = 1` onward every term is strictly under HALF the previous (checked term by term),
+and the total is bracketed forever in `[1/12, 11/60)`. The forces' entire disagreement, summed
+over every rung, is a finite quantity. (Corrected mid-build: the halving starts at `d = 1` — the
+first step `1/12 → 1/20` shrinks but does not halve; the exact arithmetic set the true bound.)
+
+### Step 260 — The variance uncertainty (Heisenberg's product, exact)
+
+**File:** `constants/variance_uncertainty.ep`
+
+**What it does.** The variance form of Heisenberg's principle, companion to the support-count form:
+at depth 2 the minimal state's weighted variance product is `(2·1/4)²·(2·1/4)² = 1/16`, EQUAL to
+the structural floor `1/2^(2k)` — saturated exactly, in both directions (a wider state verifiably
+exceeds the floor; no state sits below it). The floor is the spacing squared — one factor per
+conjugate variable, which is why the bound is a product of two spreads. Squeezed light reaches
+this floor and never crosses it.
+
 ---
 
 ## Where the recreation stands right now
@@ -5250,6 +5282,12 @@ runs):**
   intermediate in-domain — a derivation is a replayable sequence, the corpus's method in miniature.
 - Step 257 — the observer resolved: `fold(1/8) = 1/4` — the measurement branch folds into the
   observer's closure state; observation IS the fold, no homunculus.
+- Step 258 — the convergence rate, closed: `gap(d) = 1/((2+2^d)(3+2^d))` exactly at every depth,
+  numerator always the One, bare gap `1/12` — unification's rate as one rational function.
+- Step 259 — the accumulated separation: both sums agree at every N, terms halve from `d = 1`,
+  total bracketed in `[1/12, 11/60)` — the forces' whole disagreement is finite.
+- Step 260 — the variance uncertainty: the minimal state's variance product EQUALS the floor
+  `1/2^(2k)` exactly (both directions verified) — Heisenberg's product form, saturated on the grid.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

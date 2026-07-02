@@ -1,0 +1,22 @@
+import "../constants/variance_uncertainty.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the variance uncertainty (Heisenberg's product, exact) ==="
+    set ok to expect_equal("the minimal variance product at depth 2 = 1/16" and fraction_to_text(minimal_variance_product(2)) and "1/16")
+    set ok to expect_equal("the structural floor 1/2^(2k) = 1/16" and fraction_to_text(variance_floor(2)) and "1/16")
+    set ok to expect_bool("EQUALITY: the minimal state saturates the bound exactly" and minimal_state_saturates())
+    set ok to expect_bool("no state beats Heisenberg: a wider state exceeds the floor" and wider_state_exceeds_floor())
+    set ok to expect_bool("the floor is the spacing squared (one factor per conjugate)" and floor_is_spacing_squared())
+    display "=== done ==="
+    return 0

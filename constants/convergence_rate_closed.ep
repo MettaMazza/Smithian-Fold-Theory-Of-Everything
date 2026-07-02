@@ -1,0 +1,92 @@
+# ============================================================================
+#  THE CONVERGENCE RATE, CLOSED  --  the two forces' gap is one exact formula.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Grand unification in the Standard Model is a numerical near-miss: the running
+#  couplings approach each other on a log plot and the rate is fitted through
+#  loop integrals. Forced: here the gap between the strong and electroweak
+#  couplings has an exact CLOSED FORM at every depth --
+#      gap(d) = 1 / ((2 + 2^d)(3 + 2^d))
+#  -- the product of the two sectors' source sizes, inverted. Verified against
+#  the direct subtraction at eleven depths: the rate of unification is not an
+#  estimate; it is one rational function of the tower.
+#
+#  ── DERIVATION ─ (check every line; two routes at every depth) ───────────────
+#  The running couplings are g_m(d) = (m + 2^d - 1)/(m + 2^d) (unison_order.ep).
+#  ROUTE A -- direct subtraction: gap(d) = g_strong(d) - g_ew(d), computed
+#  exactly. ROUTE B -- the closed form: the difference of the two shortfalls is
+#      1/(2 + 2^d) - 1/(3 + 2^d) = 1/((2 + 2^d)(3 + 2^d)) ,
+#  since the numerator difference is exactly (3 + 2^d) - (2 + 2^d) = 1 -- the
+#  gap's numerator is ALWAYS the One, at every depth, which is why the closed
+#  form has no free residue. Both routes are computed at d = 0..10 and must
+#  agree exactly at each. The bare gap (d = 0) is 1/(3·4) = 1/12 -- the up-type
+#  first invariant! -- and the gap dies as the square of the tower (for large d
+#  the denominator grows as 2^d·2^d): exponential convergence with exponent 2,
+#  the same slope as the strong running (asymptotic_freedom.ep).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: eleven depth-by-depth agreements, bare gap 1/12,
+#  numerator always One. Comparison: measured running couplings converge toward
+#  high energy (the observed near-unification), at a rate that dies
+#  exponentially in the log of the scale -- the closed form's shape.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The running coupling of the sector with generator m at depth d.
+define rate_coupling with m as Int and d as Int returning Fraction:
+    set levels to whole_power(binary_count() and d)
+    set source to m + levels
+    return fraction_from_ratio(source - 1 and source)
+
+# ROUTE A: the gap by direct subtraction, g_strong - g_ew.
+define gap_by_subtraction with d as Int returning Fraction:
+    set strong to rate_coupling(3 and d)
+    set weak to rate_coupling(2 and d)
+    return fraction_subtract(strong and weak)
+
+# ROUTE B: the closed form 1/((2 + 2^d)(3 + 2^d)).
+define gap_closed_form with d as Int returning Fraction:
+    set levels to whole_power(binary_count() and d)
+    set denominator to (2 + levels) * (3 + levels)
+    return fraction_from_ratio(1 and denominator)
+
+# The two routes agree exactly at EVERY depth 0..10.
+define routes_agree_at_all_depths returning Bool:
+    set all_agree to true
+    set d to 0
+    repeat while d < 11:
+        set direct to gap_by_subtraction(d)
+        set closed to gap_closed_form(d)
+        set agrees to fraction_is_equal(direct and closed)
+        if agrees:
+            set all_agree to all_agree
+        else:
+            set all_agree to false
+        set d to d + 1
+    return all_agree
+
+# The bare gap (d = 0) is 1/12 -- the up-type first invariant reappearing.
+define bare_gap_is_up_invariant returning Bool:
+    set bare to gap_closed_form(0)
+    set invariant to fraction_from_ratio(1 and 12)
+    return fraction_is_equal(bare and invariant)
+
+# The gap shrinks strictly at every step (exponential convergence).
+define gap_shrinks_everywhere returning Bool:
+    set all_shrink to true
+    set d to 0
+    repeat while d < 10:
+        set here to gap_closed_form(d)
+        set next_gap to gap_closed_form(d + 1)
+        set comparison to fraction_compare(next_gap and here)
+        if comparison < 0:
+            set all_shrink to all_shrink
+        else:
+            set all_shrink to false
+        set d to d + 1
+    return all_shrink

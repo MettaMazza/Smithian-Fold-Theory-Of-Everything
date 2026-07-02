@@ -434,9 +434,16 @@ And the structural laws of physics, forced the same way:
   sequence of moves, the corpus's method in miniature), and the **observer resolved**
   (`fold(1/8) = 1/4` — the measurement branch folds into the observer's closure state:
   observation IS the fold, no homunculus).
+- **Unification's exact rate, its finite total, Heisenberg saturated** — the **convergence rate,
+  closed** (`gap(d) = 1/((2+2^d)(3+2^d))` exactly at every depth — numerator always the One, bare
+  gap `1/12`: unification's rate as one rational function, not a fitted loop integral), the
+  **accumulated separation** (both summation routes agree at every partial sum, terms halve from
+  `d = 1`, the total bracketed forever in `[1/12, 11/60)` — the forces' whole disagreement is
+  finite), and the **variance uncertainty** (the minimal state's variance product EQUALS the floor
+  `1/2^(2k)` — Heisenberg's product form saturated exactly on the grid, and no state sits below).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 260 test
-suites (1,464 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 263 test
+suites (1,477 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -493,7 +500,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 260 suites, 1,464 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 263 suites, 1,477 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

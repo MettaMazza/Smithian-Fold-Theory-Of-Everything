@@ -1,0 +1,21 @@
+import "../constants/convergence_rate_closed.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the convergence rate, closed (one exact formula) ==="
+    set ok to expect_equal("the gap at depth 3: 1/((2+8)(3+8)) = 1/110" and fraction_to_text(gap_closed_form(3)) and "1/110")
+    set ok to expect_bool("both routes agree at EVERY depth 0..10" and routes_agree_at_all_depths())
+    set ok to expect_bool("the bare gap = 1/12 -- the up-type invariant reappears" and bare_gap_is_up_invariant())
+    set ok to expect_bool("the gap shrinks strictly at every step" and gap_shrinks_everywhere())
+    display "=== done ==="
+    return 0

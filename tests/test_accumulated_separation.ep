@@ -1,0 +1,21 @@
+import "../constants/accumulated_separation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the accumulated separation (the total disagreement is finite) ==="
+    set ok to expect_equal("the first term = 1/12" and fraction_to_text(separation_term(0)) and "1/12")
+    set ok to expect_bool("both partial sums agree exactly at every N = 0..10" and sums_agree_everywhere())
+    set ok to expect_bool("CONVERGENCE: from d = 1 on, every next term is under HALF the current" and terms_halve_at_least())
+    set ok to expect_bool("the total is bracketed forever: 1/12 <= total < 11/60" and total_is_bracketed())
+    display "=== done ==="
+    return 0
