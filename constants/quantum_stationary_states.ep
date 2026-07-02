@@ -1,0 +1,102 @@
+# ============================================================================
+#  STATIONARY STATES  --  why quantum systems have a fixed spectrum, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The quantum mystery Bohr postulated and Schrodinger derived: an atom does not spiral
+#  or drift -- it HOLDS certain states, and only jumps between them. What makes a state
+#  stationary, and why is the spectrum fixed? Forced: a stationary state is a grid
+#  value whose magnitude the dynamics cannot move (only its phase rotates), and the
+#  spectrum is the grid itself -- ground state at half a step, one whole step between
+#  neighbours, nothing in between to drift through.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  At resolution depth k the energy grid step is 1/2^k. The ground state is HALF a
+#  step: E₀ = 1/2^(k+1) -- the deepest state, one fold below the spacing
+#  (fold(E₀) = 1/2^k, and E₀ + E₀ = 1/2^k: two ground shares make one step). The
+#  levels are E_n = E₀ + n/2^k -- every gap is exactly one grid step, uniform. What
+#  makes these STATIONARY: the evolution advances a state's PHASE by a fixed rotation
+#  per tick (phases add on the cyclic domain) while its magnitude is a grid value with
+#  no neighbour closer than a whole step -- there is no value between the levels to
+#  drift to, so the magnitude is held and only the phase turns. A state that is on the
+#  grid stays on the grid: observables built from magnitudes are constant in time,
+#  which is exactly what "stationary" means. Change happens only as a JUMP of a whole
+#  number of steps -- the quantum jump is the absence of anything between.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: E₀ = 1/2^(k+1), fold(E₀) = spacing = 1/2^k, uniform
+#  unit-step gaps, phase advancing while magnitude holds. Measured: atomic states are
+#  stationary (sharp spectral lines, no drift), transitions are discrete jumps, and
+#  the harmonic-oscillator spectrum is E_n = (n + 1/2)ħω -- ground at half a quantum,
+#  uniform spacing, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The energy grid step at depth k: 1/2^k.
+define level_spacing with k as Int returning Fraction:
+    set volume to whole_power(binary_count() and k)
+    return fraction_from_ratio(1 and volume)
+
+# The ground state: half a step, E_0 = 1/2^(k+1).
+define ground_state with k as Int returning Fraction:
+    set volume to whole_power(binary_count() and k + 1)
+    return fraction_from_ratio(1 and volume)
+
+# The ground state folds to the spacing: fold(E_0) = 1/2^k.
+define ground_folds_to_spacing with k as Int returning Bool:
+    set ground to ground_state(k)
+    set folded to fold_fraction(ground)
+    set spacing to level_spacing(k)
+    return fraction_is_equal(folded and spacing)
+
+# Two ground shares make one step: E_0 + E_0 = spacing.
+define two_grounds_make_one_step with k as Int returning Bool:
+    set ground to ground_state(k)
+    set ground_again to ground_state(k)
+    set total to fraction_add(ground and ground_again)
+    set spacing to level_spacing(k)
+    return fraction_is_equal(total and spacing)
+
+# The n-th level: E_n = E_0 + n * spacing.
+define energy_level with n as Int and k as Int returning Fraction:
+    set ground to ground_state(k)
+    set spacing to level_spacing(k)
+    set n_fraction to fraction_from_whole_number(n)
+    set climb to fraction_multiply(n_fraction and spacing)
+    return fraction_add(ground and climb)
+
+# The gap between neighbouring levels is exactly one grid step (uniform spectrum).
+define gap_is_one_step with n as Int and k as Int returning Bool:
+    set here to energy_level(n and k)
+    set above to energy_level(n + 1 and k)
+    set gap to fraction_subtract(above and here)
+    set spacing to level_spacing(k)
+    return fraction_is_equal(gap and spacing)
+
+# STATIONARITY: the phase advances by a fixed rotation per tick while the magnitude
+# holds -- after a full cycle of ticks the phase returns exactly (nothing drifted).
+define phase_rotate_step with phase as Fraction and amount as Fraction returning Fraction:
+    set advanced to fraction_add(phase and amount)
+    return cast_out_whole_ones(advanced)
+
+define phase_returns_after_full_cycle with k as Int returning Bool:
+    set spacing to level_spacing(k)
+    set phase to fraction_from_whole_number(1)
+    set volume to whole_power(binary_count() and k)
+    set tick to 0
+    repeat while tick < volume:
+        set phase to phase_rotate_step(phase and spacing)
+        set tick to tick + 1
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(phase and one)

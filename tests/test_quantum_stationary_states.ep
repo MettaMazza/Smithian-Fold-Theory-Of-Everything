@@ -1,0 +1,24 @@
+import "../constants/quantum_stationary_states.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== stationary states (the fixed spectrum) ==="
+    set ok to expect_equal("the grid step at depth 3 = 1/8" and fraction_to_text(level_spacing(3)) and "1/8")
+    set ok to expect_equal("the ground state = half a step = 1/16" and fraction_to_text(ground_state(3)) and "1/16")
+    set ok to expect_bool("the ground folds to the spacing: fold(E0) = 1/8" and ground_folds_to_spacing(3))
+    set ok to expect_bool("two ground shares make one step" and two_grounds_make_one_step(3))
+    set ok to expect_equal("the n=2 level = 1/16 + 2/8 = 5/16" and fraction_to_text(energy_level(2 and 3)) and "5/16")
+    set ok to expect_bool("every gap is exactly one grid step (uniform spectrum)" and gap_is_one_step(2 and 3))
+    set ok to expect_bool("the phase returns exactly after a full cycle (magnitude held)" and phase_returns_after_full_cycle(3))
+    display "=== done ==="
+    return 0

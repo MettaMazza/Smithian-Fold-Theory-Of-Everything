@@ -1,0 +1,24 @@
+import "../constants/cosmological_timeline.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the cosmological timeline (beginning, arrow, inflation) ==="
+    set ok to expect_equal("BEGINNING: fixed points on the eighth grid (exhaustive) = 1" and int_to_string(fixed_point_count()) and "1")
+    set ok to expect_bool("the unique fixed point is the One (the initial condition)" and initial_condition_is_one())
+    set ok to expect_bool("ARROW: each step merges two states into one (1/4, 3/4 -> 1/2)" and step_merges_two_into_one())
+    set ok to expect_equal("one bit lost per step (the KS entropy)" and int_to_string(bits_lost_per_step()) and "1")
+    set ok to expect_equal("INFLATION: the depth, counted (minimal cover of 27) = 5" and int_to_string(inflation_depth()) and "5")
+    set ok to expect_equal("the expansion factor, enumerated = 32" and int_to_string(expansion_factor()) and "32")
+    set ok to expect_bool("the enumeration equals the closed form 2^5" and expansion_matches_tower())
+    display "=== done ==="
+    return 0

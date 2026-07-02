@@ -1,0 +1,26 @@
+import "../constants/neutrino_mass_ladder.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the neutrino mass ladder (single-handed, on the tower) ==="
+    set ok to expect_bool("the two hands 1/4, 3/4 share one lock" and hands_share_lock())
+    set ok to expect_equal("the Dirac mass = the hands' separation = 1/2" and fraction_to_text(dirac_mass()) and "1/2")
+    set ok to expect_equal("the neutrino has ONE hand (no right-handed seen)" and int_to_string(neutrino_hand_count()) and "1")
+    set ok to expect_bool("one hand -> the Dirac route is closed (nearly massless)" and dirac_route_closed())
+    set ok to expect_equal("the tower depth, counted: minimal cover of 27 = 5" and int_to_string(tower_depth()) and "5")
+    set ok to expect_equal("the forced splitting ratio = 1/2^5 = 1/32" and fraction_to_text(splitting_ratio()) and "1/32")
+    set measured to fraction_from_ratio(3 and 100)
+    set deviation to fraction_divide(measured and splitting_ratio())
+    set ok to expect_equal("measured 3/100 over forced 1/32 = 24/25 (4 percent)" and fraction_to_text(deviation) and "24/25")
+    display "=== done ==="
+    return 0

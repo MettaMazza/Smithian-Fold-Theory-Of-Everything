@@ -1,0 +1,22 @@
+import "../constants/hadron_spectrum.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the hadron census (mesons and baryons only) ==="
+    set ok to expect_equal("SIZE 1: single-colour closures (no free quark)" and int_to_string(single_quark_closures()) and "0")
+    set ok to expect_equal("SIZE 2 qq: pair closures, all pairs enumerated (no diquark hadron)" and int_to_string(quark_pair_closures()) and "0")
+    set ok to expect_equal("SIZE 2 q-antiq: meson closures, one per colour" and int_to_string(meson_closures()) and "3")
+    set ok to expect_equal("SIZE 3: the whole cycle closes (the baryon)" and fraction_to_text(baryon_sum()) and "1")
+    set ok to expect_bool("the census: exactly two minimal hadron families" and census_is_two_families())
+    display "=== done ==="
+    return 0

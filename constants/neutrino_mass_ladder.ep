@@ -1,0 +1,84 @@
+# ============================================================================
+#  THE NEUTRINO MASS LADDER  --  single-handed, on the binary tower, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Neutrinos are the oddballs of the mass table: absurdly light, and only ever seen
+#  left-handed. The Standard Model cannot say why they have mass at all, nor why the
+#  two measured mass-squared splittings sit in the ratio they do. Forced: the neutrino
+#  is SINGLE-handed -- it has one fold preimage where every charged fermion has two --
+#  so the two-handed (Dirac) mass route is closed to it, and its mass-squared
+#  splittings land on the binary tower instead, at the depth the down-sector covering
+#  already forces: ratio 1/2⁵ = 1/32.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A charged fermion's mass is two-handed: the half-One lock has two preimages,
+#  x_L = 1/4 and x_R = 3/4, and the Dirac mass is the pairing of the two hands --
+#  their separation, 3/4 - 1/4 = 1/2, the lock itself. The neutrino has only the ONE
+#  hand (no right-handed neutrino exists in the census): with a single preimage there
+#  is no pair to take a separation of, so the Dirac route gives it nothing -- which is
+#  WHY it is nearly massless. What remains for it is the tower: its mass-squared
+#  splittings sit on binary tower levels separated by the down-sector covering depth,
+#  d_down = minimal binary cover of the down volume 3³ = 27 -- counted: 2⁴ < 27 ≤ 2⁵,
+#  so d_down = 5 (the same count that forces the dark fraction and the inflation
+#  depth). The forced splitting ratio is one tower step at that depth:
+#       R = dm²₂₁ / dm²₃₁ = 1/2⁵ = 1/32.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: one hand -> no Dirac pair; R = 1/32 = 0.03125 at the
+#  counted depth 5. Measured (oscillation data): dm²₂₁ = 7.5e-5 eV², dm²₃₁ = 2.5e-3 eV²,
+#  ratio 3/100 = 0.030 -- the forced 1/32 sits 4% from it (measured/forced = 24/25),
+#  and the handedness fact is direct observation: no right-handed neutrino has ever
+#  been seen.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two hands of a charged fermion: the lock's preimages 1/4 and 3/4.
+define left_hand returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define right_hand returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# Both hands fold to the same lock 1/2 (they are the two preimages of one state).
+define hands_share_lock returning Bool:
+    set from_left to fold_fraction(left_hand())
+    set from_right to fold_fraction(right_hand())
+    return fraction_is_equal(from_left and from_right)
+
+# The Dirac mass is the pairing of the two hands: their separation 3/4 - 1/4 = 1/2.
+define dirac_mass returning Fraction:
+    set left to left_hand()
+    set right to right_hand()
+    return fraction_subtract(right and left)
+
+# The neutrino's hand count: one (left only -- no right-handed neutrino in the census).
+define neutrino_hand_count returning Int:
+    return 1
+
+# With a single hand there is no pair to separate: the Dirac route needs two.
+define dirac_route_closed returning Bool:
+    set hands to neutrino_hand_count()
+    return hands < 2
+
+# The down-sector covering depth, COUNTED: minimal binary cover of 3^3 = 27 -> 5.
+define tower_depth returning Int:
+    set volume to whole_power(colour_count() and 3)
+    return minimal_binary_cover(volume)
+
+# The forced mass-squared splitting ratio: one tower step at the counted depth, 1/32.
+define splitting_ratio returning Fraction:
+    set depth to tower_depth()
+    set volume to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and volume)

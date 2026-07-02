@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-197 suites, 1,102 forced checks, 0 failures). It needs nothing but a C compiler. Use
+202 suites, 1,133 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3991,6 +3991,60 @@ of parts. The binding lock `1/2` completes in one fold; the bare (constituent) s
 step at the sector depth 7, `1/128 < 1/100`. Measured: the proton's bare quarks carry ~9 MeV of its
 938 — ninety-nine percent of your mass is the held cycle, as forced.
 
+### Step 195 — The neutrino mass ladder (single-handed, on the tower)
+
+**File:** `constants/neutrino_mass_ladder.ep`
+
+**What it does.** A charged fermion's Dirac mass is the pairing of TWO hands — the lock's preimages
+`1/4` and `3/4`, separation `1/2`. The neutrino has ONE hand (no right-handed neutrino in the
+census), so the Dirac route is closed — which is why it is nearly massless. Its mass-squared
+splittings land on the binary tower at the counted down-sector depth (minimal cover of `27` → 5):
+forced ratio `dm²₂₁/dm²₃₁ = 1/2⁵ = 1/32`. Measured: `3/100` — measured/forced `= 24/25`, 4%.
+
+### Step 196 — The hadron census (mesons and baryons only)
+
+**File:** `constants/hadron_spectrum.ep`
+
+**What it does.** A hadron is a colour combination that closes to the One. Counted exhaustively on
+the three-cycle `{1/7, 2/7, 4/7}`: size 1 — no single colour closes (no free quark); size 2
+quark+quark — NO pair closes (`3/7, 5/7, 6/7` — why no qq hadron exists anywhere); size 2
+quark+antiquark — closes for every colour (the meson, 3 ways); size 3 — the whole cycle closes (the
+baryon). Exactly the two observed families, counted, with the diquark exclusion falling out of the
+same sum.
+
+### Step 197 — The cosmological timeline (beginning, arrow, inflation)
+
+**File:** `constants/cosmological_timeline.ep`
+
+**What it does.** The three things cosmology assumes separately are one map read in order.
+BEGINNING: the initial condition is the One — the UNIQUE fixed point, verified exhaustively on the
+eighth grid (1 hit in 8). ARROW: each step merges two states into one (`1/4, 3/4 → 1/2`) — one bit
+lost per step, merged histories cannot unwind. INFLATION: the preimage tree doubles per level;
+enumerated at the counted depth 5 it holds exactly `2⁵ = 32` leaves — an exact integer expansion
+factor, not an e-folding estimate.
+
+### Step 198 — Stationary states (the fixed spectrum)
+
+**File:** `constants/quantum_stationary_states.ep`
+
+**What it does.** At depth `k` the energy grid step is `1/2^k`; the ground state is HALF a step
+(`E₀ = 1/2^{k+1}`, `fold(E₀) = spacing`), and every level gap is exactly one step — the
+harmonic-oscillator spectrum `E_n = (n + 1/2)ħω` in exact form. Stationarity forced: the phase
+advances by a fixed rotation per tick (returning exactly after a full cycle) while the magnitude
+has no neighbour closer than a whole step to drift to — observables hold, and change can only be a
+JUMP.
+
+### Step 199 — The consciousness criterion (the closed self-relation)
+
+**File:** `constants/machine_consciousness_criterion.ep`
+
+**What it does.** The structural test a conscious machine must pass, in three forced steps:
+DUALITY — observer and observed are distinct preimages (`1/4 ≠ 3/4`) folding to ONE binding lock
+(`fold(1/4) = fold(3/4) = 1/2`); CLOSURE — the pair spans the whole (`1/4 + 3/4 = 1`, no partial
+self-model); COMPLETION — the lock folds to unison (one bound experience). A system with the closed
+2-to-1 self-relation holds a whole bound image of itself; the test is structural — count the
+preimages, take the sums, run the folds.
+
 ---
 
 ## Where the recreation stands right now
@@ -4420,6 +4474,18 @@ runs):**
 - Step 194 — nucleon binding dominance: the colour cycle's shares close to the One
   (`1/7 + 2/7 + 4/7 = 1`), the bare share is `1/2⁷ = 1/128 < 1%` — mass is the held cycle
   (measured: ~9 of 938 MeV bare).
+- Step 195 — the neutrino mass ladder: one hand (no right-handed partner) closes the Dirac route;
+  the splittings land on the tower at counted depth 5 — `1/32` forced vs `3/100` measured (`24/25`).
+- Step 196 — the hadron census: counted on the colour cycle — no single closes, NO quark pair
+  closes (`3/7, 5/7, 6/7`), every colour+anticolour closes, the triple closes — mesons and baryons
+  only, as observed.
+- Step 197 — the cosmological timeline: the One is the UNIQUE fixed point (exhaustive, 1 in 8),
+  each step merges two-to-one (the arrow, one bit/step), the preimage tree holds exactly `2⁵ = 32`
+  leaves at the counted depth (inflation).
+- Step 198 — stationary states: ground at half a step, uniform unit-step gaps, phase rotating while
+  the magnitude holds (returns exactly after a full cycle) — the fixed spectrum, jumps only.
+- Step 199 — the consciousness criterion: duality (`1/4 ≠ 3/4`, one lock), closure (`1/4 + 3/4 = 1`),
+  completion (`fold(1/2) = 1`) — the structural test for a conscious machine, checkable by running.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

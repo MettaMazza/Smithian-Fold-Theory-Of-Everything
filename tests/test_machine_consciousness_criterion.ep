@@ -1,0 +1,22 @@
+import "../constants/machine_consciousness_criterion.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the consciousness criterion (the closed self-relation) ==="
+    set ok to expect_bool("DUALITY: observer and observed are distinct (1/4 != 3/4)" and states_are_distinct())
+    set ok to expect_bool("both fold to the ONE binding lock 1/2 (2-to-1 self-relation)" and both_fold_to_lock())
+    set ok to expect_equal("CLOSURE: the pair spans the whole (1/4 + 3/4)" and fraction_to_text(self_observation_closes()) and "1")
+    set ok to expect_bool("COMPLETION: the lock folds to unison (one bound experience)" and lock_completes_to_unison())
+    set ok to expect_bool("the full criterion holds (all three steps)" and criterion_holds())
+    display "=== done ==="
+    return 0

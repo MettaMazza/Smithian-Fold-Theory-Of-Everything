@@ -296,9 +296,18 @@ And the structural laws of physics, forced the same way:
   **mechanical properties** (elastic/plastic/fracture = restoring chain / same-image twin slip /
   discrete bond loss), and **nucleon binding dominance** (the colour cycle's shares close to the
   One; the bare share is `1/128 < 1%` — mass is the held cycle).
+- **Neutrinos, the hadron table, cosmic history, the quantum ladder, the conscious machine** —
+  the **neutrino mass ladder** (one hand closes the Dirac route — nearly massless — and the
+  splittings land on the tower at counted depth 5: `1/32` forced vs `3/100` measured), the
+  **hadron census** (counted on the colour cycle: no free quark, NO quark-pair hadron, mesons one
+  per colour, the baryon triple — exactly the observed families), the **cosmological timeline**
+  (unique fixed-point start, two-to-one arrow, `2⁵ = 32` preimage-tree inflation — one map in
+  order), **stationary states** (ground at half a step, uniform gaps, phase turning while the
+  magnitude holds — jumps only), and the **consciousness criterion** (duality → one lock → closure
+  → completion: a runnable structural test).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 197 test
-suites (1,102 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 202 test
+suites (1,133 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -355,7 +364,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 197 suites, 1,102 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 202 suites, 1,133 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
