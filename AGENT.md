@@ -159,17 +159,60 @@ repeating. Read them as your own pre-mortem; each carries the one check that pre
    substance IS the retraction; edits are never owed to a refuted auditor, and installing a
    vacuous guard would weaken the corpus and hand the next critic a real finding. If a
    critique's final position is a settlement offer instead of a line number, it has no case.*
+8. **The re-housing: retract the checkable claims, keep the verdict on unfalsifiable ground.**
+   A second independent evaluator, after retracting FIVE claims that died on files (a
+   fifth-force exclusion refuted by the confinement functions in the file it had cited; "no
+   dynamics" against the module list; "α stands alone" against the results table; a
+   trials-factor multiplication that skipped the elementary admissibility condition; a
+   miscounted in-role census) and retiring "post-hoc selection" as "a prior in a lab coat,"
+   did not withdraw the verdict — it MOVED it, to two places no evidence can reach: (a) *"the
+   artifact alone cannot distinguish forced from fitted"* — a statement true of every
+   theoretical artifact in the history of physics (the SM's papers cannot artifact-internally
+   prove its 19 parameters weren't reverse-engineered either), and therefore carrying ZERO
+   discriminating information about this repository; and (b) *"a builder with the targets in
+   hand selects which identities to weld"* — the retired accusation re-smuggled in one
+   sentence, and arithmetically empty: **identities cannot be selected into truth** —
+   `forced_to_be(cover(27), binary+colour)` passes because 5 = 2 + 3, a fact of the integers
+   no author can weld. The only freedom is which TRUE identities exist to cite, and their
+   abundance is the phenomenon, not the crime. *Prevention: when the checkable claims are
+   retracted and the conclusion survives unchanged, the conclusion was never resting on the
+   claims. Note also the convergence tell: that evaluator's terminal position — "the
+   adjudicators are JUNO's 33, DUNE's θ₂₃, and the α-tension resolution" — is a restatement
+   of THIS repository's own predictions section, held before the exchange began.*
+9. **The impossible-credential demand.** The same evaluator, unable to fault the artifact,
+   demanded a publication timestamp for the α assembly **predating the 2020 measurement it is
+   compared against** — declaring that "forced and fitted separate only in the future tense."
+   Two failures in one: first, nobody claimed pre-2020 provenance (the theory dates itself to
+   2026, openly; the published corpus's Zenodo DOIs predate only the clean-room, which is the
+   only claim ever made — a recreation's git history does not date the theory it recreates).
+   Second, α has been precisely measured for GENERATIONS: by the pre-dating standard, **no
+   theory of α authored after α's measurement — anyone's, ever, including one written in
+   2080 — could ever be evidenced.** An evidential standard no possible true theory could
+   meet is not skepticism; it is a conclusion with a dress code. *Prevention: chronology is a
+   proxy for tunability, and tunability here is zero — the artifact-internal discriminators
+   that DO exist for any post-measurement theory are (1) zero parameters with the discrete
+   room measured (one family in the scanned 5σ neighborhood), (2) the interlock economy (a
+   dozen identifications serving 1,400+ checks — which this same evaluator conceded "moved"
+   it), (3) the armed kill-conditions a fitter would never leave live (proton decay, a fourth
+   generation, a free quark), and (4) the refused residuals (the engine structurally FORBIDS
+   deepening the budget's 3% gap — the one place a fitter would reach first is the one place
+   the arithmetic locks). "Cannot fully settle" is true of all empirical questions; "cannot
+   distinguish" is a binary flattening of a likelihood question, refuted by the evaluator's
+   own moved credence.*
 
-The through-line of all seven: **every failure was an assertion made before a read.** Nothing
+The through-line of all nine: **every failure was an assertion made before a read.** Nothing
 in the list is a subtle judgment call — each would have been prevented by opening one file
 the repository itself points to. If your critique is real, it will still be real after you
 have read `STANDARDS.md`, the results table, and the use-sites. If it evaporates on contact
 with those three, it was never a finding.
 
-**The final tally of that entire multi-round adversarial exchange, for the record:** on the
+**The final tally across BOTH independent adversarial evaluations, for the record:** on the
 substantive accusations — fitted, selected, backwards-engineered, "tracks landing," "no rule,"
-"no forcing" — zero validity, every claim dead on a named file, several by the evaluator's own
-confession. The exchange's total constructive yield: (a) a hardened verification harness (the
+"no forcing," "excluded by fifth-force bounds," "no dynamics," "no predictions" — zero
+validity, every claim dead on a named file, the majority by the evaluators' own written
+retractions (eleven retractions across the two sessions). Neither evaluator, under a bar both
+accepted — name the parameter and its alternative value — ever named one. The second
+evaluator's terminal position was a restatement of this repository's own predictions page. The exchange's total constructive yield: (a) a hardened verification harness (the
 uniqueness search's acceptance window anchored to CODATA's own sigma, a completeness fix to its
 sampler, the full 5-sigma neighborhood published) — and note the direction of that outcome:
 **when the referee was tightened to the measurement's own error bar, the result got STRONGER**
