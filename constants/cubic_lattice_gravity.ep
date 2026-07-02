@@ -1,0 +1,117 @@
+# ============================================================================
+#  CUBIC-LATTICE GRAVITY  --  the 3D Laplacian equals dimension times expansion.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Poisson's equation -- the weak-field heart of general relativity -- needs the
+#  Laplacian of the quadratic potential to be a definite structural number in the
+#  ACTUAL three dimensions of space, not just on the line (continuum_limit.ep) or
+#  the plane (planar_lattice_gravity.ep). Forced: on the 3D cubic lattice the
+#  Laplacian of x² is EXACTLY 6 at every spacing -- the spatial dimension d = 3
+#  (the counted period of 1/7) times the fold expansion m = 2 (measured exactly)
+#  -- which is also binary·colour, the joint sector period. Gravity's source
+#  equation is lattice-native in the world's own dimension count.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the counted d and measured m) ──
+#  On a lattice with spacing s = 1/2^k the 1D second difference of f(x) = x² is
+#  exactly 2 at every spacing (the s² terms cancel identically -- verified at
+#  depths 3 and 5 as on the plane). The CUBIC lattice adds the three independent
+#  axis curvatures:
+#      Laplacian₃D = 2 + 2 + 2 = 6 .
+#  Two independent structural routes must equal it, and do:
+#      d · m  =  period(1/7) · (fold expansion on 1/5, 1/7)  =  3 · 2 = 6 ;
+#      binary · colour  =  2 · 3  =  6  (the joint sector period, master_equation).
+#  The three-way agreement -- walked Laplacian, dimension-times-expansion, and
+#  the generators' product -- closes gravity's operator in 3D with no continuum
+#  and no coefficient chosen. Together with the 1D and 2D cases the family reads
+#  2, 4, 6 = d·2: one law, every dimension the corpus uses.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: Laplacian₃D = 6 at every spacing checked, equal
+#  to d·m and to binary·colour. Comparison: the continuum nabla²(x²+y²+z²) = 6 --
+#  the lattice value IS the continuum value with no limit taken; Poisson and the
+#  weak-field Einstein reduction carry this 6 in every textbook.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The quadratic potential f(x) = x^2.
+define potential_of with x as Fraction returning Fraction:
+    set twin to fraction_make(fraction_numerator(x) and fraction_denominator(x))
+    return fraction_multiply(x and twin)
+
+# The 1D lattice curvature of x^2 at x = 1/2 with spacing 1/2^k (exact).
+define axis_curvature_at with k as Int returning Fraction:
+    set x to fraction_from_ratio(1 and 2)
+    set volume to whole_power(binary_count() and k)
+    set s to fraction_from_ratio(1 and volume)
+    set right to fraction_add(x and s)
+    set left to fraction_subtract(x and s)
+    set f_right to potential_of(right)
+    set f_left to potential_of(left)
+    set f_centre to potential_of(x)
+    set f_centre_again to potential_of(fraction_from_ratio(1 and 2))
+    set two_centre to fraction_add(f_centre and f_centre_again)
+    set outer to fraction_add(f_right and f_left)
+    set second_difference to fraction_subtract(outer and two_centre)
+    set s_twin to fraction_from_ratio(1 and volume)
+    set s_squared to fraction_multiply(s and s_twin)
+    return fraction_divide(second_difference and s_squared)
+
+# The 3D Laplacian: three independent axes, computed at spacing depth k.
+define cubic_laplacian_at with k as Int returning Fraction:
+    set first_axis to axis_curvature_at(k)
+    set second_axis to axis_curvature_at(k)
+    set third_axis to axis_curvature_at(k)
+    set pair to fraction_add(first_axis and second_axis)
+    return fraction_add(pair and third_axis)
+
+# The Laplacian is exactly 6 at every spacing (checked at depths 3 and 5).
+define laplacian_is_exact_six returning Bool:
+    set six to fraction_from_whole_number(6)
+    set at_three to cubic_laplacian_at(3)
+    set at_five to cubic_laplacian_at(5)
+    set three_ok to fraction_is_equal(at_three and six)
+    set five_ok to fraction_is_equal(at_five and six)
+    if three_ok:
+        return five_ok
+    return false
+
+# Route B1: the spatial dimension (the counted period of 1/7) times the fold
+# expansion (measured exactly on 1/5 and 1/7) equals the Laplacian.
+define dimension_times_expansion returning Fraction:
+    set d to fold_period_of_unit_fraction(7)
+    set p to fraction_from_ratio(1 and 5)
+    set q to fraction_from_ratio(1 and 7)
+    set gap to fraction_subtract(p and q)
+    set fold_p to fold_fraction(p)
+    set fold_q to fold_fraction(q)
+    set fold_gap to fraction_subtract(fold_p and fold_q)
+    set m to fraction_divide(fold_gap and gap)
+    set d_fraction to fraction_from_whole_number(d)
+    return fraction_multiply(d_fraction and m)
+
+# Route B2: the generators' product binary * colour = 6 (the joint sector period).
+define generators_product returning Int:
+    return binary_count() * colour_count()
+
+# The three-way agreement: walked Laplacian = d*m = binary*colour.
+define three_routes_agree returning Bool:
+    set laplacian to cubic_laplacian_at(3)
+    set structural to dimension_times_expansion()
+    set product to fraction_from_whole_number(generators_product())
+    set first_match to fraction_is_equal(laplacian and structural)
+    set second_match to fraction_is_equal(structural and product)
+    if first_match:
+        return second_match
+    return false

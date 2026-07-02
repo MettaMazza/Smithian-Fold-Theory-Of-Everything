@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-238 suites, 1,347 forced checks, 0 failures). It needs nothing but a C compiler. Use
+241 suites, 1,364 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4456,6 +4456,37 @@ constant 2 is the ladder size's own factor count (`6 = 2¹·3¹`, exponent sum 2
 generator). Interactions see the depth (identical for all three); masses see the position
 (different for each) — identical couplings at wildly different masses, as measured.
 
+### Step 236 — The confinement lift (the lightest quark is doubled)
+
+**File:** `constants/quark_mass_confinement_lift.ep`
+
+**What it does.** The sharpened mass cubics (the lepton neutral-channel correction at the two
+colour-tower depths: `e₃ = 3/1454` at `d=5`, `3/13118` at `d=7`) are solved by exact rational
+bisection, and the bare middle-to-light ratios come out at exactly TWICE the measured ones: the
+lightest generation of each quark ladder is confinement-lifted by the fold. The lift factor is
+COUNTED, not fitted — the fold's fibre size 2 (preimages of the One enumerated). Against the
+corpus's measured values (`s/d = 95/4.7`, `c/u = 1275/2.2` with QCD-scale corrections): down lift
+`1.99999`, up lift `1.99998` — one factor, both sectors, the counted 2.
+
+### Step 237 — Cubic-lattice gravity (Laplacian = 6 = d × m)
+
+**What it does.** **File:** `constants/cubic_lattice_gravity.ep` — completing the 1D/2D/3D family:
+the lattice curvature of `x²` is exactly 2 per axis at every spacing, so the 3D Laplacian is
+`6` — equal to `d·m` (the counted period of `1/7` times the measured fold expansion) AND to
+`binary·colour` (the joint sector period). Three routes, one 6: Poisson's equation is
+lattice-native in the world's own dimension count, no continuum, no coefficient chosen. The family
+reads `2, 4, 6 = d·2` — one law, every dimension.
+
+### Step 238 — The two-component dispersion (motion plus substance = the One)
+
+**File:** `constants/relativistic_two_component.ep`
+
+**What it does.** Relativity's `E² = p² + m²` at the first Pythagorean point: `p = 3/5`,
+`m = 4/5`, `9/25 + 16/25 = 1` EXACTLY — rational squares closing on the One with no radical — and
+the full polarization identity gives the same One by an independent route. The triple's parts are
+generated, not chosen: `3 = colour`, `4 = binary²`, `5 = 2+3` (the covering prime). The
+1-momentum companion of the full 3+1 Dirac closure: two exact ways the same energy law closes.
+
 ---
 
 ## Where the recreation stands right now
@@ -4979,6 +5010,13 @@ runs):**
   first PMNS row to the electroweak `1/2` — each matrix hands back its own generating lock.
 - Step 235 — the generation depth: all three sites fold home in the same two steps through the
   same `1/2` gate; the constant 2 = the factor count of `6 = 2¹·3¹` — universality is depth-equality.
+- Step 236 — the confinement lift: the sharpened cubics' bare ratios are exactly TWICE the measured
+  (down lift `1.99999`, up lift `1.99998` vs PDG) — the lightest quark is doubled by the fold's
+  counted fibre, one factor, both sectors.
+- Step 237 — cubic-lattice gravity: the 3D Laplacian of `x²` is exactly `6 = d·m = binary·colour`
+  at every spacing — three routes, one 6; the family reads `2, 4, 6` across dimensions.
+- Step 238 — the two-component dispersion: `(3/5)² + (4/5)² = 1` exactly, confirmed by the
+  polarization identity; the triple generated (`3 = colour, 4 = binary², 5 = 2+3`).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,23 @@
+import "../constants/cubic_lattice_gravity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== cubic-lattice gravity (Laplacian = 6 = d x m) ==="
+    set ok to expect_equal("one axis curvature of x^2 at spacing 1/8 = 2 EXACTLY" and fraction_to_text(axis_curvature_at(3)) and "2")
+    set ok to expect_equal("the 3D Laplacian: three axes = 6" and fraction_to_text(cubic_laplacian_at(3)) and "6")
+    set ok to expect_bool("exactly 6 at every spacing (depths 3 and 5)" and laplacian_is_exact_six())
+    set ok to expect_equal("Route B1: d x m = period(1/7) x measured expansion = 6" and fraction_to_text(dimension_times_expansion()) and "6")
+    set ok to expect_equal("Route B2: binary x colour = 6 (the joint period)" and int_to_string(generators_product()) and "6")
+    set ok to expect_bool("the three routes agree: walked = d*m = 2*3" and three_routes_agree())
+    display "=== done ==="
+    return 0

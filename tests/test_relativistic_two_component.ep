@@ -1,0 +1,23 @@
+import "../constants/relativistic_two_component.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the two-component dispersion (motion plus substance = the One) ==="
+    set ok to expect_equal("the momentum share p = 3/5" and fraction_to_text(momentum_share()) and "3/5")
+    set ok to expect_equal("the mass share m = 4/5" and fraction_to_text(mass_share_two()) and "4/5")
+    set ok to expect_equal("ROUTE A: p^2 + m^2 = 9/25 + 16/25 = the One" and fraction_to_text(dispersion_closes()) and "1")
+    set ok to expect_equal("ROUTE B: the polarization identity gives the same One" and fraction_to_text(polarization_route()) and "1")
+    set ok to expect_bool("the two routes agree (no single-computation artifact)" and routes_agree_on_one())
+    set ok to expect_bool("the triple is generated: 3 = colour, 4 = binary^2, 5 = 2+3" and triple_is_generated())
+    display "=== done ==="
+    return 0

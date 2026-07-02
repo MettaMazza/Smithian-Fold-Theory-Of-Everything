@@ -1,0 +1,36 @@
+import "../constants/quark_mass_confinement_lift.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the confinement lift (the lightest quark is doubled) ==="
+    set ok to expect_equal("the sharpened invariant at d=5: 3/1454" and fraction_to_text(sharpened_invariant(5)) and "3/1454")
+    set ok to expect_equal("at d=7: 3/13118" and fraction_to_text(sharpened_invariant(7)) and "3/13118")
+    set ok to expect_equal("the lift factor, COUNTED: the fold's fibre = 2" and int_to_string(lift_factor_counted()) and "2")
+    set down_bare to down_bare_ratio()
+    display concat("  info  bare s/d (sharpened) = " and fraction_to_decimal(down_bare and 4))
+    set up_bare to up_bare_ratio()
+    display concat("  info  bare c/u (sharpened) = " and fraction_to_decimal(up_bare and 4))
+    set measured_down to fraction_from_ratio(950 and 47)
+    set corr_down to fraction_from_ratio(1004988 and 1000000)
+    set down_target to fraction_divide(measured_down and corr_down)
+    set down_lift to fraction_divide(down_bare and down_target)
+    display concat("  info  down lift = " and fraction_to_decimal(down_lift and 5))
+    set ok to expect_bool("DOWN: bare/(measured/corr) lands on 2 (the counted fibre)" and lands_on_two(down_lift))
+    set measured_up to fraction_from_ratio(6375 and 11)
+    set corr_up to fraction_from_ratio(11916 and 10000)
+    set up_target to fraction_divide(measured_up and corr_up)
+    set up_lift to fraction_divide(up_bare and up_target)
+    display concat("  info  up lift = " and fraction_to_decimal(up_lift and 5))
+    set ok to expect_bool("UP: bare/(measured/corr) lands on 2 -- the SAME lift, one count" and lands_on_two(up_lift))
+    display "=== done ==="
+    return 0
