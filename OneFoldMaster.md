@@ -13,6 +13,38 @@ verified the entire recreation. Nothing is asked of you on trust.
 
 ---
 
+## 0. Where the axiom came from — the author's own account
+
+Before anything technical, the origin, in the author's reasoning. Maria Smith was
+not trying to build a theory of everything. She sat down and thought about **what
+mathematics actually is** — and realised that mathematics, as we currently use it,
+rests on axioms she had never derived from first principles. Zero, the negatives,
+the continuum: inherited, not earned. So she set out to build **an entirely new
+mathematical system**, and asked the only honest first question: *what is the
+first thing — the axiom?*
+
+Her answer was empirical. The first act of every subject that measures anything —
+physics, chemistry, a child counting — is **the observation itself**. That is the
+One: not a symbol postulated on a page, but the one thing no observer can be
+without. The second thing is **the observation observing itself and the outside**
+— the fold. And when she asked what else deserved to be assumed, the empirical
+world answered: nothing. **There is no no-grape. There is no negative-grape.**
+Nobody has ever held a zero of something or a minus-one of something; those are
+bookkeeping conveniences layered on top of what exists. So her mathematics would
+be based on **no assumptions — only the real whole**: the One, its domain, and
+its fold.
+
+Then she started from that, and everything just fell out. The constants, the
+forces, the particle census — none of it was the goal. She was trying to
+fundamentally understand the ground of mathematics, and the ground of mathematics
+turned out to carry the ground of physics with it. What began as the one axiom
+was later shown to be **not even an axiom**: given only that there is *not
+nothing*, the One, its domain, and its fold are forced — run
+`verify/test_the_axiom_is_a_theorem`. The starting point earned itself. Zero
+assumptions is not a slogan here; it is the audit trail's first entry.
+
+---
+
 ## 1. What this is, and what it is not
 
 The published Smithian Fold Theory lives in a separate, finished body of work.
