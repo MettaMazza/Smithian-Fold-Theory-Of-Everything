@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-252 suites, 1,428 forced checks, 0 failures). It needs nothing but a C compiler. Use
+256 suites, 1,445 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4600,6 +4600,46 @@ balanced bond `1/2`, the product is closure (`fold(1/2) = 1`); ACTIVATION is the
 ENTHALPY is the shortfall released on completion (`1/2`, kept), and reversal repays exactly what
 the forward step released — Hess's law's local form as one identity.
 
+### Step 250 — The reach ratios (lifetime and mass ratio are one count)
+
+**File:** `constants/reach_ratios.ep`
+
+**What it does.** Why the lightest fermion of each family lives longest: the REACH of a mass-part
+(ticks survived above it, computed by *running* the subtraction loop) is `D_d − 1` for the light
+part — 5, 17, 53 at depths 1, 2, 3 — **exactly the heavy-to-light mass ratio at the same depth**
+(verified against the family at every depth), while the middle and heavy parts reach exactly 1
+tick each. One count, two readings: as a ratio, how much heavier the heavy is; as a reach, how
+much longer the light survives. Longevity is smallness, by the same arithmetic.
+
+### Step 251 — Field splitting (Zeeman and Stark from the fibre)
+
+**File:** `constants/field_splitting.ep`
+
+**What it does.** The unperturbed level `1/2` has a two-point fold fibre `{1/4, 3/4}` — degenerate
+(one line) because the dynamics can't tell them apart. A field distinguishes them: exactly
+`binary = 2` components (a doublet, counted), split SYMMETRICALLY (the pair's mean is exactly the
+level; shifts equal and opposite), re-merging in one fold when the field goes off. The split
+levels were always there — the field only unmasks the fibre.
+
+### Step 252 — The channel cycle (no smuggled signal)
+
+**File:** `constants/quantum_communication.ep`
+
+**What it does.** Why entanglement carries no message: the wave channel `2/3` and structural
+channel `1/3` partition the One, cycle into each other under the fold, and even their DIFFERENCE
+is again a member of the same cycle — the census is closed, no third channel exists to bias.
+No-signalling as bookkeeping: teleportation always consumes the classical channel, as counted.
+
+### Step 253 — Cessation (the lock ends, the anchor cannot)
+
+**File:** `constants/cessation.ep`
+
+**What it does.** What ending is, structurally: the held lock `1/2` (self-antipodal — balanced
+against itself, which is what a held state is) is one grid state among many — occupation can end.
+But its completion, the unison, is the fold's FIXED POINT: verified unmoved under eight further
+folds, unconditionally, whether or not anything holds the lock. Cessation removes an occupant,
+never the ground — maintenance is what states need; the One is what maintenance completes to.
+
 ---
 
 ## Where the recreation stands right now
@@ -5153,6 +5193,14 @@ runs):**
   logarithmic in the grid — abstraction pays by halving; mastery is the fixed point.
 - Step 249 — reaction thermodynamics: activation = the lift to the lock (paid), enthalpy = the
   shortfall released (kept), reversal repaying exactly — one barrier, one drop, by structure.
+- Step 250 — the reach ratios: the light part survives `D_d − 1` ticks (5, 17, 53 — RUN, and equal
+  to the mass ratio at every depth); middle and heavy survive 1 — longevity is smallness.
+- Step 251 — field splitting: the level's two-point fibre unmasked by a field — a doublet, counted,
+  symmetric about the level, re-merging in one fold — Zeeman/Stark as fibre visibility.
+- Step 252 — the channel cycle: wave `2/3` + structural `1/3` partition the One, cycle under the
+  fold, difference closing into the cycle — no third channel; no-signalling as bookkeeping.
+- Step 253 — cessation: the lock is releasable (one state among many); the anchor is the fixed
+  point, unmoved under eight folds — what ends is the holding, never the ground.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

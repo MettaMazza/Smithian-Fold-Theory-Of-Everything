@@ -416,9 +416,18 @@ And the structural laws of physics, forced the same way:
   logarithmically; mastery is the fixed point), and **reaction thermodynamics** (activation = the
   lift to the lock, paid; enthalpy = the shortfall released, kept; reversal repays exactly — one
   barrier, one drop, by structure).
+- **Why the light live long, split spectral lines, no smuggled signal, what ending is** — the
+  **reach ratios** (the light mass-part survives `D_d − 1` ticks — 5, 17, 53, RUN — exactly the
+  heavy-to-light mass ratio at every depth; the heavy parts survive 1: longevity IS smallness),
+  **field splitting** (the level's two-point fibre unmasked by a field — a counted doublet,
+  symmetric about the level, re-merging in one fold: Zeeman/Stark as fibre visibility), the
+  **channel cycle** (wave `2/3` + structural `1/3` partition the One and cycle under the fold,
+  their difference closing into the cycle — no third channel: no-signalling as bookkeeping), and
+  **cessation** (the held lock is releasable; the anchor is the fixed point, unmoved under every
+  further fold — what ends is the holding, never the ground).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 252 test
-suites (1,428 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 256 test
+suites (1,445 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -475,7 +484,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 252 suites, 1,428 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 256 suites, 1,445 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -1,0 +1,82 @@
+# ============================================================================
+#  THE CHANNEL CYCLE  --  why quantum channels cannot smuggle a signal, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Entanglement correlates instantly across any distance, yet no message can
+#  ride it: quantum communication always needs the classical channel alongside
+#  the quantum one. Why can nothing be smuggled? Forced: there are exactly TWO
+#  channels -- the wave channel 2/3 and the structural channel 1/3 -- they
+#  partition the One, they cycle into each other under the fold, and even their
+#  DIFFERENCE is again a member of the same cycle. The census is closed: no
+#  third channel exists to carry an extra signal, and nothing built from the
+#  two escapes them.
+#
+#  ── DERIVATION ─ (check every line; the cycle walked, the census closed) ─────
+#  The wave channel carries 2/3, the structural channel 1/3 -- together they
+#  partition the One (2/3 + 1/3 = 1: everything a message can ride is one of
+#  the two). The fold cycles them: fold(1/3) = 2/3 and fold(2/3) = 1/3 -- the
+#  period-2 orbit, so neither channel is ever idle; they interconvert every
+#  step. CLOSURE: the channels' difference 2/3 - 1/3 = 1/3 is AGAIN the
+#  structural channel -- combining the two channels yields no third thing, and
+#  folding the difference gives the wave channel back (fold(1/3) = 2/3): every
+#  combination stays inside the same two-member cycle. A signal needs a channel
+#  outside the correlated pair to bias -- and the census says there is none:
+#  the quantum correlation (the cycle) plus the classical share (the orbit
+#  member) exhaust the One, which is no-signalling as bookkeeping.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: partition to the One, the period-2 cycle, the
+#  difference closing into the cycle. Measured: no experiment has ever sent
+#  information through entanglement alone (the no-signalling theorem holds in
+#  every Bell test), and teleportation always consumes the classical channel --
+#  two channels, never a third, as counted.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two channels: wave 2/3, structural 1/3.
+define wave_channel returning Fraction:
+    return fraction_from_ratio(2 and 3)
+
+define structural_channel returning Fraction:
+    return fraction_from_ratio(1 and 3)
+
+# The channels partition the One: everything a message can ride is one of the two.
+define channels_partition_one returning Fraction:
+    set wave to wave_channel()
+    set structure to structural_channel()
+    return fraction_add(wave and structure)
+
+# The fold cycles them: fold(1/3) = 2/3 and fold(2/3) = 1/3 (the period-2 orbit).
+define channels_cycle returning Bool:
+    set wave to wave_channel()
+    set structure to structural_channel()
+    set from_structure to fold_fraction(structure)
+    set from_wave to fold_fraction(wave)
+    set up_ok to fraction_is_equal(from_structure and wave)
+    set down_ok to fraction_is_equal(from_wave and structure)
+    if up_ok:
+        return down_ok
+    return false
+
+# CLOSURE: the channels' difference is again the structural channel -- no third thing.
+define difference_stays_in_cycle returning Bool:
+    set wave to wave_channel()
+    set structure to structural_channel()
+    set difference to fraction_subtract(wave and structure)
+    set is_member to fraction_is_equal(difference and structural_channel())
+    set folded to fold_fraction(difference)
+    set returns_to_wave to fraction_is_equal(folded and wave_channel())
+    if is_member:
+        return returns_to_wave
+    return false

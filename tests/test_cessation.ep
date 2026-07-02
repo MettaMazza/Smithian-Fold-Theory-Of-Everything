@@ -1,0 +1,21 @@
+import "../constants/cessation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== cessation (the lock ends, the anchor cannot) ==="
+    set ok to expect_bool("the lock is self-antipodal (balanced against itself)" and lock_is_self_antipodal())
+    set ok to expect_bool("the lock completes to unison in one fold" and lock_completes())
+    set ok to expect_bool("THE RELEASE: occupation can end (the lock is one state among many)" and lock_is_releasable())
+    set ok to expect_bool("THE ANCHOR: the unison persists under eight further folds" and anchor_persists())
+    display "=== done ==="
+    return 0

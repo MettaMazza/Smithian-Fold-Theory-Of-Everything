@@ -1,0 +1,88 @@
+# ============================================================================
+#  FIELD SPLITTING  --  Zeeman and Stark from the level's own fibre, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Put an atom in a magnetic field and each spectral line splits in two (Zeeman);
+#  an electric field does the same (Stark). Where do the extra levels come from,
+#  and why symmetric about the original line? Forced: the unperturbed level is a
+#  lock with a TWO-point fibre -- its preimages 1/4 and 3/4 -- which the fold
+#  merges into one line when nothing distinguishes them. A field distinguishes
+#  them: the hidden pair becomes visible, split symmetrically about the level
+#  (their mean IS the level), and switching the field off re-merges them in one
+#  fold. The split levels were always there; the field only unmasks them.
+#
+#  ── DERIVATION ─ (check every line; the fibre, the mean, the re-merge) ───────
+#  The unperturbed level is the lock 1/2. Its fold fibre is {1/4, 3/4}: both
+#  verified to land on 1/2 under one fold -- degenerate, ONE line, because the
+#  dynamics cannot tell them apart. The split census: the fibre has exactly
+#  binary = 2 members (the counted fibre size), so a field splits each line into
+#  exactly TWO -- no triplet without more structure. The SYMMETRY: the pair's
+#  mean is (1/4 + 3/4)/2 = 1/2 -- exactly the unperturbed level, so the split is
+#  symmetric about the original line, the up-shift equal to the down-shift
+#  (each 1/4). RE-MERGE: one fold returns both members to the same 1/2 -- switch
+#  the field off and the doublet collapses back to one line, exactly.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a two-point fibre, mean at the level, equal and
+#  opposite shifts, exact re-merge. Measured: the normal Zeeman effect splits
+#  lines into symmetric components about the unperturbed line, with splitting
+#  proportional to the field and full recovery when the field is removed --
+#  the unmasked fibre, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The unperturbed level: the lock 1/2.
+define unperturbed_level returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The hidden pair: the level's fold fibre, 1/4 and 3/4.
+define lower_component returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define upper_component returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# Degeneracy: both components land on the SAME level under one fold (one line).
+define components_are_degenerate returning Bool:
+    set level to unperturbed_level()
+    set from_lower to fold_fraction(lower_component())
+    set from_upper to fold_fraction(upper_component())
+    set lower_ok to fraction_is_equal(from_lower and level)
+    set upper_ok to fraction_is_equal(from_upper and level)
+    if lower_ok:
+        return upper_ok
+    return false
+
+# The split census: the fibre has exactly binary = 2 members -- a doublet.
+define split_count returning Int:
+    return binary_count()
+
+# The SYMMETRY: the pair's mean is exactly the unperturbed level.
+define split_is_symmetric returning Bool:
+    set lower to lower_component()
+    set upper to upper_component()
+    set total to fraction_add(lower and upper)
+    set two to fraction_from_whole_number(2)
+    set mean to fraction_divide(total and two)
+    set level to unperturbed_level()
+    return fraction_is_equal(mean and level)
+
+# The shifts are equal and opposite: each component sits 1/4 from the level.
+define shifts_are_equal returning Bool:
+    set level to unperturbed_level()
+    set lower to lower_component()
+    set upper to upper_component()
+    set down_shift to fraction_subtract(level and lower)
+    set up_shift to fraction_subtract(upper and level)
+    return fraction_is_equal(down_shift and up_shift)

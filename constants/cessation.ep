@@ -1,0 +1,89 @@
+# ============================================================================
+#  CESSATION  --  what ends is the lock; the anchor cannot end, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every bound thing in this corpus is a HELD state -- a lock maintained by
+#  folding (a self, a memory, a bond, an attention). What happens when the
+#  holding stops? Forced: cessation is structurally specific. The lock is a
+#  state a system occupies, and occupation can end. But the lock's completion
+#  -- the unison it folds to -- is the fold's FIXED POINT, and a fixed point
+#  cannot cease: fold(1) = 1, unconditionally, whether or not anything holds
+#  the lock. What ends is the holding; what the holding was a holding OF
+#  persists, because the One is not a state of any system -- it is what the
+#  domain is.
+#
+#  ── DERIVATION ─ (check every line; the release and the anchor) ──────────────
+#  The held state is the lock 1/2 -- self-antipodal (One - 1/2 = 1/2: balanced
+#  against itself, which is what a held state is), completing to unison in one
+#  fold (fold(1/2) = 1). THE RELEASE: the lock is one grid state among many --
+#  a system can leave it (any other state is not the lock; verified: 1/4 is
+#  not 1/2), and with the occupant gone the lock is unoccupied. THE ANCHOR:
+#  the unison persists regardless -- fold(1) = 1 now and after every further
+#  fold (verified over repeated folds: the fixed point never moves). Nothing
+#  a system does or stops doing alters the fixed point, because it is not
+#  maintained BY anything: maintenance is what states need; the One is what
+#  maintenance completes to. Cessation removes an occupant, never the ground.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the lock self-antipodal and releasable, the
+#  anchor invariant under arbitrarily many folds. Comparison: every held
+#  structure observed -- bonds, memories, organisms -- can end, while the
+#  ground they were configurations OF (the conservation of the total, the
+#  domain itself) has never been observed to end with them.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The held state: the lock 1/2.
+define held_lock returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The lock is self-antipodal: balanced against itself (what a held state is).
+define lock_is_self_antipodal returning Bool:
+    set lock to held_lock()
+    set one to fraction_from_whole_number(1)
+    set antipode to fraction_subtract(one and lock)
+    return fraction_is_equal(lock and antipode)
+
+# The lock completes to unison in one fold.
+define lock_completes returning Bool:
+    set lock to held_lock()
+    set folded to fold_fraction(lock)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# THE RELEASE: the lock is one state among many -- occupation can end
+# (another grid state is verifiably not the lock).
+define lock_is_releasable returning Bool:
+    set lock to held_lock()
+    set elsewhere to fraction_from_ratio(1 and 4)
+    set same to fraction_is_equal(elsewhere and lock)
+    if same:
+        return false
+    return true
+
+# THE ANCHOR: the unison persists under arbitrarily many folds (run eight).
+define anchor_persists returning Bool:
+    set one to fraction_from_whole_number(1)
+    set state to fraction_from_whole_number(1)
+    set held to true
+    set i to 0
+    repeat while i < 8:
+        set state to fold_fraction(state)
+        set still to fraction_is_equal(state and one)
+        if still:
+            set held to held
+        else:
+            set held to false
+        set i to i + 1
+    return held

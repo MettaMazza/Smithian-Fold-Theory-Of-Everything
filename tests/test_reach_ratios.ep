@@ -1,0 +1,23 @@
+import "../constants/reach_ratios.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the reach ratios (lifetime and mass ratio are one count) ==="
+    set ok to expect_equal("light reach at d=1, RUN: 5 ticks (1 -> 5/6 -> ... -> 1/6)" and int_to_string(light_reach(1)) and "5")
+    set ok to expect_equal("light reach at d=2: 17 ticks" and int_to_string(light_reach(2)) and "17")
+    set ok to expect_equal("light reach at d=3: 53 ticks" and int_to_string(light_reach(3)) and "53")
+    set ok to expect_bool("the light reach EQUALS the mass ratio at every depth" and reach_theorem_holds())
+    set ok to expect_equal("the middle part reaches exactly 1 tick" and int_to_string(reach_of(1 and 2)) and "1")
+    set ok to expect_equal("the heavy part (5/6) reaches exactly 1 tick" and int_to_string(reach_of(5 and 6)) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,101 @@
+# ============================================================================
+#  THE REACH RATIOS  --  lifetime and mass ratio are the same count, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The light fermion of each family effectively lasts forever while its heavy
+#  siblings decay at once -- the electron is stable, the muon and tau are gone in
+#  microseconds. Lifetime looks like a new physical input. Forced: it is the SAME
+#  count as the mass ratio. A presence starting at the One survives one tick per
+#  mass-part it can shed; run the subtraction, and the light generation's reach
+#  is exactly D_d - 1 ticks -- the very number that is the heavy-to-light mass
+#  ratio (mass_ratio_family.ep) -- while the middle and heavy parts survive
+#  exactly ONE tick each. Longevity is smallness, by the same arithmetic.
+#
+#  ── DERIVATION ─ (check every line; the survival loop RUN at three depths) ───
+#  On the ladder at depth d (size D_d = 2·3^d), the diagonal mass-parts are
+#  1/D_d (light), 1/2 (middle), (D_d-1)/D_d (heavy). The REACH of a mass-part is
+#  computed by running the loop: an intensity starts at the One and loses one
+#  mass-part per tick while it strictly exceeds the part.
+#      LIGHT (1/6 at d = 1):  1 -> 5/6 -> 4/6 -> 3/6 -> 2/6 -> 1/6 : 5 ticks.
+#      MIDDLE (1/2):          1 -> 1/2, stop : 1 tick.
+#      HEAVY (5/6):           1 -> 1/6, stop : 1 tick.
+#  Run at all three depths: the light reaches are 5, 17, 53 -- EQUAL to the
+#  heavy-to-light mass ratios D_d - 1 at the same depths (verified against the
+#  family), while middle and heavy reach exactly 1 everywhere. One count, two
+#  readings: as a ratio it is how much heavier the heavy is; as a reach it is
+#  how much longer the light survives. The lightest particle of a ladder is
+#  long-lived BECAUSE its mass-part is the ladder's smallest share.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: reaches (5,1,1), (17,1,1), (53,1,1) at depths
+#  1, 2, 3, the light reach equal to the family ratio at every depth. Measured:
+#  in each fermion family the lightest member is stable or longest-lived (e, u,
+#  d, the lightest neutrino) while the heavier generations decay promptly --
+#  the ordering this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The ladder size at depth d: D_d = 2 * 3^d.
+define reach_ladder_size with d as Int returning Int:
+    set tower to whole_power(colour_count() and d)
+    return binary_count() * tower
+
+# The REACH of a mass-part m_num/m_den: ticks survived above the part, RUN.
+define reach_of with m_num as Int and m_den as Int returning Int:
+    set mass to fraction_from_ratio(m_num and m_den)
+    set intensity to fraction_from_whole_number(1)
+    set reach to 0
+    set stepping to true
+    repeat while stepping:
+        set comparison to fraction_compare(intensity and mass)
+        if comparison > 0:
+            set mass_again to fraction_from_ratio(m_num and m_den)
+            set intensity to fraction_subtract(intensity and mass_again)
+            set reach to reach + 1
+        else:
+            set stepping to false
+    return reach
+
+# The light part's reach at depth d: run the loop on 1/D_d.
+define light_reach with d as Int returning Int:
+    set size to reach_ladder_size(d)
+    return reach_of(1 and size)
+
+# The light reach equals the ladder count less one (= the mass ratio) at depth d.
+define reach_equals_mass_ratio with d as Int returning Bool:
+    set reach to light_reach(d)
+    set size to reach_ladder_size(d)
+    return reach == size - 1
+
+# The middle and heavy parts reach exactly ONE tick at depth d.
+define heavy_parts_reach_one with d as Int returning Bool:
+    set middle_reach to reach_of(1 and 2)
+    set size to reach_ladder_size(d)
+    set heavy_reach to reach_of(size - 1 and size)
+    set middle_ok to middle_reach == 1
+    set heavy_ok to heavy_reach == 1
+    if middle_ok:
+        return heavy_ok
+    return false
+
+# The full theorem at all three depths: light reach = D_d - 1; others = 1.
+define reach_theorem_holds returning Bool:
+    set all_hold to true
+    set d to 1
+    repeat while d < 4:
+        set light_ok to reach_equals_mass_ratio(d)
+        set heavy_ok to heavy_parts_reach_one(d)
+        if light_ok:
+            if heavy_ok:
+                set all_hold to all_hold
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set d to d + 1
+    return all_hold

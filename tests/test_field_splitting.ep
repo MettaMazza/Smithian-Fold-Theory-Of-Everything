@@ -1,0 +1,21 @@
+import "../constants/field_splitting.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== field splitting (Zeeman and Stark from the fibre) ==="
+    set ok to expect_bool("the pair {1/4, 3/4} is degenerate: one line without a field" and components_are_degenerate())
+    set ok to expect_equal("the split census: exactly binary = 2 components (a doublet)" and int_to_string(split_count()) and "2")
+    set ok to expect_bool("the split is SYMMETRIC: the pair's mean is the unperturbed level" and split_is_symmetric())
+    set ok to expect_bool("the shifts are equal and opposite (1/4 up, 1/4 down)" and shifts_are_equal())
+    display "=== done ==="
+    return 0
