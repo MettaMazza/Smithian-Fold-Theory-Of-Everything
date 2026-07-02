@@ -1,0 +1,22 @@
+import "../constants/baryon_asymmetry.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the baryon asymmetry (why there is matter) ==="
+    set ok to expect_equal("the matter residue = 1/2 (smallest positive whole-balance)" and fraction_to_text(matter_residue()) and "1/2")
+    set ok to expect_bool("the residue is strictly positive (nonzero -- zero forbidden)" and residue_is_strictly_positive())
+    set ok to expect_bool("the residue is strictly below unison (not everything survived)" and residue_below_unison())
+    set ok to expect_bool("the residue is self-antipodal (matter vs mirror deficit)" and residue_is_self_antipodal())
+    set ok to expect_equal("the residue folds to the One (grows into the universe)" and fraction_to_text(residue_folds_to_one()) and "1")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,67 @@
+# ============================================================================
+#  THE BARYON ASYMMETRY  --  why there is matter at all, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The early universe made matter and antimatter in near-equal amounts; they should
+#  have annihilated to pure radiation, leaving nothing. Instead a tiny RESIDUE of
+#  matter survived -- us. Why is the residue nonzero? Forced: a perfectly symmetric
+#  outcome would be zero, and zero is outside the domain -- so a nonzero matter residue
+#  is not lucky, it is mandatory.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Perfect matter-antimatter symmetry would leave residue = nothing. But there IS no
+#  nothing (the No-Zero axiom): a state cannot sit at zero. The surviving residue is the
+#  smallest positive whole-balance the domain allows -- the half-One 1/2, the unique
+#  fold-preimage of the One (the same displaced ground as the vacuum and the matter
+#  sector): strictly positive (residue > the forbidden absence), strictly below unison
+#  (not everything survived), self-antipodal (One - 1/2 = 1/2), and folding to the One
+#  (fold(1/2) = 1 -- the residue grows into the whole material universe). So matter
+#  exists because ZERO is forbidden: the asymmetry had to be nonzero, and the arrow
+#  (baryogenesis.ep supplies the CP and out-of-equilibrium conditions) fixes which of
+#  matter/antimatter is the survivor. Matter and its mirror deficit sum to the One.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the residue is strictly positive (nonzero), below
+#  unison, self-antipodal, folding to the One. Measured: the universe is matter-
+#  dominated with a baryon-to-photon ratio ~6e-10 (a small but strictly nonzero
+#  asymmetry) and no antimatter regions -- a nonzero residue, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The surviving matter residue: the half-One, the smallest positive whole-balance.
+define matter_residue returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# Strictly positive -- a nonzero residue (zero, perfect symmetry, is forbidden).
+define residue_is_strictly_positive returning Bool:
+    set residue to matter_residue()
+    return residue.numerator_sign > 0
+
+# Strictly below unison -- not everything survived.
+define residue_below_unison returning Bool:
+    set residue to matter_residue()
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(residue and one)
+    return comparison < 0
+
+# Self-antipodal: One - 1/2 = 1/2 (matter and its mirror deficit are equidistant).
+define residue_is_self_antipodal returning Bool:
+    set residue to matter_residue()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and residue)
+    return fraction_is_equal(complement and residue)
+
+# The residue folds to the One: it grows into the whole material universe.
+define residue_folds_to_one returning Fraction:
+    return fold_fraction(matter_residue())

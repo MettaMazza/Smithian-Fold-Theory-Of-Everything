@@ -1,0 +1,21 @@
+import "../constants/network_scaling.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== network scaling (the 3/4 metabolic law) ==="
+    set ok to expect_equal("branching depth m = b^2 = 4" and int_to_string(branching_depth()) and "4")
+    set ok to expect_equal("scaling exponent (m-1)/m = 3/4 (Kleiber)" and fraction_to_text(scaling_exponent()) and "3/4")
+    set ok to expect_bool("it is NOT the naive surface-to-volume 2/3" and is_not_two_thirds())
+    set ok to expect_equal("the exponent folds to the balance (supply=demand)" and fraction_to_text(exponent_folds_to_balance()) and "1/2")
+    display "=== done ==="
+    return 0

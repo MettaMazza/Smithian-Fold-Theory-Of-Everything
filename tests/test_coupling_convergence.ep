@@ -1,0 +1,23 @@
+import "../constants/coupling_convergence.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== coupling convergence (grand unification) ==="
+    set ok to expect_equal("strong bare coupling = 2/3" and fraction_to_text(strong_bare()) and "2/3")
+    set ok to expect_equal("electroweak bare coupling = 1/2" and fraction_to_text(ew_bare()) and "1/2")
+    set ok to expect_equal("bare gap = 2/3 - 1/2 = 1/6" and fraction_to_text(coupling_gap(0)) and "1/6")
+    set ok to expect_equal("gap at depth 1 = 3/4 - 2/3 = 1/12 (shrinking)" and fraction_to_text(coupling_gap(1)) and "1/12")
+    set ok to expect_bool("the gap shrinks with depth (couplings converge)" and gap_shrinks_with_depth(0))
+    set ok to expect_bool("the strong coupling climbs toward the One" and strong_climbs_toward_one(1))
+    display "=== done ==="
+    return 0

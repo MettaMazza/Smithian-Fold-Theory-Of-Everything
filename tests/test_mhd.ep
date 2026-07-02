@@ -1,0 +1,21 @@
+import "../constants/mhd.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== magnetohydrodynamics (Alfven waves) ==="
+    set ok to expect_equal("Alfven wave state = 3/4 (field tension high)" and fraction_to_text(alfven_state()) and "3/4")
+    set ok to expect_equal("it folds to the tension-inertia balance 1/2" and fraction_to_text(alfven_folds_to_balance()) and "1/2")
+    set ok to expect_bool("the balance is self-antipodal (tension = inertia)" and balance_is_self_antipodal())
+    set ok to expect_equal("two Alfven shares -> 3/2 casting to 1/2" and fraction_to_text(two_alfven_shares()) and "1/2")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,60 @@
+# ============================================================================
+#  MAGNETOHYDRODYNAMICS  --  why a magnetised fluid carries Alfven waves, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A conducting fluid threaded by a magnetic field -- the Sun's plasma, the Earth's
+#  molten core, a fusion reactor -- carries a wave unknown to ordinary fluids: the
+#  Alfven wave, magnetic tension plucking the field lines like strings. Why does the
+#  field couple to the flow this way? Forced: field and flow lock at the balance, and
+#  the Alfven state folds onto it.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  In a perfect conductor the field is FROZEN into the fluid -- they move as one. The
+#  Alfven wave rides the coupling at the three-quarter state 3/4 (field tension high on
+#  the plucked line), which folds to the balance 1/2 (fold(3/4) = 1/2) -- the
+#  self-antipodal point where magnetic tension exactly matches fluid inertia, the
+#  restoring balance every wave oscillates about. The wave speed is set there: tension
+#  and inertia equal at 1/2, so the disturbance propagates without either winning. Two
+#  Alfven shares overshoot the whole by a half (3/4 + 3/4 = 3/2, casting to 1/2): the
+#  frozen-in field and the flow are one coupled medium, plucked at 3/4 and ringing about
+#  the balance.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the Alfven state 3/4 folds to the tension-inertia
+#  balance 1/2. Measured: Alfven waves are observed in the solar corona, the
+#  magnetosphere, and tokamaks, with speed set by field tension over fluid density (the
+#  frozen-in coupling) -- the balance this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The Alfven wave state: field tension high on the plucked line, 3/4.
+define alfven_state returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# It folds to the tension-inertia balance 1/2.
+define alfven_folds_to_balance returning Fraction:
+    return fold_fraction(alfven_state())
+
+# The balance is self-antipodal: magnetic tension equals fluid inertia there.
+define balance_is_self_antipodal returning Bool:
+    set balance to alfven_folds_to_balance()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and balance)
+    return fraction_is_equal(complement and balance)
+
+# Two Alfven shares overshoot the whole by a half: 3/4 + 3/4 = 3/2, casting to 1/2.
+define two_alfven_shares returning Fraction:
+    set state to alfven_state()
+    set doubled to fraction_add(state and state)
+    return cast_out_whole_ones(doubled)

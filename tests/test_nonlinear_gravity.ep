@@ -1,0 +1,23 @@
+import "../constants/nonlinear_gravity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== nonlinear gravity (the field sources itself) ==="
+    set ok to expect_equal("matter source M = 1/3" and fraction_to_text(matter_source()) and "1/3")
+    set ok to expect_equal("linear field f1 = g*M = 1/6" and fraction_to_text(linear_field()) and "1/6")
+    set ok to expect_equal("field energy = f1^2 = 1/36 (this gravitates)" and fraction_to_text(field_energy()) and "1/36")
+    set ok to expect_equal("corrected field f2 = g*(M+energy) = 13/72" and fraction_to_text(corrected_field()) and "13/72")
+    set ok to expect_equal("self-sourcing correction = f2 - f1 = 1/72" and fraction_to_text(self_sourcing_correction()) and "1/72")
+    set ok to expect_bool("it matches the structural 1/8 * 1/9 EXACTLY" and correction_matches_structural())
+    display "=== done ==="
+    return 0

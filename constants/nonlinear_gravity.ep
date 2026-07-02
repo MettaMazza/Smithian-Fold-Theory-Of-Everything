@@ -1,0 +1,77 @@
+# ============================================================================
+#  NONLINEAR GRAVITY  --  why gravity sources itself, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Gravity is the one force whose own field carries energy that gravitates -- so a
+#  strong field adds to its own source, and Einstein's equations are nonlinear (this
+#  self-feedback is what makes black holes and the two-body problem so hard). Why does
+#  gravity, uniquely, source itself? Forced: the field's energy is its own square, and
+#  that square feeds back as a second-order correction.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Take a matter source M = 1/3 (the tripling share) and the gravitational coupling
+#  g = 1/2 (the balance). The LINEAR field is f1 = g * M = 1/6. But the field carries
+#  ENERGY equal to its own square: energy = f1^2 = 1/36 -- and that energy gravitates,
+#  adding to the source. The corrected field is f2 = g * (M + energy) = 13/72, and the
+#  self-sourcing CORRECTION is the take:
+#       correction = take(f2, f1) = f2 - f1 = 1/72 .
+#  It matches the structural second-order scale EXACTLY: s_3 * (1/colour^2) =
+#  1/2^3 * 1/9 = 1/8 * 1/9 = 1/72 -- a depth-3 fold-level times the inverse colour
+#  square. So gravity's nonlinearity is forced: the field's energy is f1^2 (a square,
+#  hence second order), and its feedback lands on the forced 1/72, not a fitted number.
+#  A force whose charge did NOT carry its own kind of energy (like the photon, which is
+#  chargeless) would stay linear; gravity's charge is energy itself, so it self-sources.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the self-sourcing correction take(f2, f1) = 1/72 equals
+#  the structural 1/8 * 1/9. Measured: general relativity is nonlinear (gravitational
+#  binding energy gravitates, confirmed by the Nordtvedt effect and binary-pulsar
+#  timing) -- the second-order self-feedback this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The matter source: the tripling share, 1/3.
+define matter_source returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# The gravitational coupling: the balance, 1/2.
+define coupling returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The linear field: f1 = g * M = 1/6.
+define linear_field returning Fraction:
+    set g to coupling()
+    set m to matter_source()
+    return fraction_multiply(g and m)
+
+# The field's energy: its own square, f1^2 = 1/36 (this is what gravitates).
+define field_energy returning Fraction:
+    set f1 to linear_field()
+    return fraction_multiply(f1 and f1)
+
+# The corrected field: f2 = g * (M + energy), the energy re-sourcing the field.
+define corrected_field returning Fraction:
+    set m to matter_source()
+    set energy to field_energy()
+    set source_total to fraction_add(m and energy)
+    set g to coupling()
+    return fraction_multiply(g and source_total)
+
+# The self-sourcing correction: take(f2, f1) = f2 - f1 = 1/72.
+define self_sourcing_correction returning Fraction:
+    set f2 to corrected_field()
+    set f1 to linear_field()
+    return fraction_subtract(f2 and f1)
+
+# It matches the structural second-order scale EXACTLY: 1/2^3 * 1/colour^2 = 1/72.
+define correction_matches_structural returning Bool:
+    set correction to self_sourcing_correction()
+    set depth_scale to fraction_from_ratio(1 and whole_power(binary_count() and colour_count()))
+    set colour_scale to fraction_from_ratio(1 and whole_power(colour_count() and binary_count()))
+    set structural to fraction_multiply(depth_scale and colour_scale)
+    return fraction_is_equal(correction and structural)

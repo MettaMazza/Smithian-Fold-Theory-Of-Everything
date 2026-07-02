@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-171 suites, 963 forced checks, 0 failures). It needs nothing but a C compiler. Use
+176 suites, 988 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3736,6 +3736,54 @@ selection rule (`Δl = ±1`).
 
 ---
 
+### Step 169 — Network scaling (the 3/4 metabolic law)
+
+**File:** `constants/network_scaling.ep`
+
+**What it does.** A supply network branches through `m = b² = 4` levels; its scaling exponent is
+`(m−1)/m = 3/4` (the same ratio as Koide and the couplings), which folds to the balance `1/2`
+(supply=demand). So metabolism scales as mass^(3/4), **not** the naive surface-to-volume 2/3 — the
+extra `1/12` is the fourth branching level. Kleiber's law across ~27 orders of magnitude.
+
+### Step 170 — Magnetohydrodynamics (Alfvén waves)
+
+**File:** `constants/mhd.ep`
+
+**What it does.** In a perfect conductor the field is frozen into the fluid; the Alfvén wave rides
+the coupling at `3/4`, folding to the tension–inertia balance `1/2` (self-antipodal — magnetic
+tension equals fluid inertia). Observed in the solar corona, the magnetosphere, and tokamaks.
+
+### Step 171 — Nonlinear gravity (the field sources itself)
+
+**File:** `constants/nonlinear_gravity.ep`
+
+**What it does.** With source `M = 1/3` and coupling `g = 1/2`, the linear field is `f1 = 1/6`; its
+energy is its own square (`f1² = 1/36`), which gravitates and re-sources the field, giving the
+correction `take(f2, f1) = 1/72` — matching the structural `1/8 · 1/9` **exactly**. Gravity's charge
+is energy itself (a square → second order), so it self-sources; a chargeless field (the photon)
+stays linear. GR's nonlinearity, forced.
+
+### Step 172 — Coupling convergence (grand unification)
+
+**File:** `constants/coupling_convergence.ep`
+
+**What it does.** The strong coupling runs on `colour + 2^d`, the electroweak on `binary + 2^d` —
+same tower, sector counts 3 and 2. Bare: `2/3` and `1/2` (gap `1/6`); as the shared tower deepens
+the gap shrinks (`1/6 → 1/12 → 1/30 → 0`) and both climb toward the One. Unification is the
+couplings folding to unison together (near `10¹⁶ GeV`).
+
+### Step 173 — The baryon asymmetry (why there is matter)
+
+**File:** `constants/baryon_asymmetry.ep`
+
+**What it does.** Perfect matter–antimatter symmetry would leave residue = nothing, and zero is
+outside the domain — so a nonzero matter residue is *mandatory*, not lucky. The survivor is the
+half-One `1/2`: strictly positive, below unison, self-antipodal, folding to the One (growing into
+the whole material universe). Matter exists because zero is forbidden (baryogenesis supplies the
+CP/out-of-equilibrium conditions that pick which side survives).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -4106,6 +4154,16 @@ runs):**
   completes (`1/4 → 1/2 → 1`); temperature (the throw-rate) sets the Arrhenius rise.
 - Step 168 — selection rules: an allowed transition is the balanced one-unit hand-off
   `1/2` folding to a whole photon; mismatches can't close (`Δl = ±1`, conservation).
+- Step 169 — network scaling: the metabolic exponent is `(m-1)/m = 3/4` at branching
+  depth `m = b² = 4` (Kleiber), not the naive `2/3`; it folds to the balance.
+- Step 170 — magnetohydrodynamics: the Alfvén state `3/4` folds to the tension–inertia
+  balance `1/2` (the frozen-in field ringing about it).
+- Step 171 — nonlinear gravity: the field's energy is its own square (`f1² = 1/36`), so
+  it self-sources — the correction `1/72` matches the structural `1/8·1/9` exactly.
+- Step 172 — coupling convergence: strong `2/3` and electroweak `1/2` run on a shared
+  tower; the gap shrinks (`1/6 → 1/12 → …`) and both climb to the One — unification.
+- Step 173 — the baryon asymmetry: a zero residue is forbidden, so matter is mandatory —
+  the survivor is the strictly-positive half-One, folding to the whole universe.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
