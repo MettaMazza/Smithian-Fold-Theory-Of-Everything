@@ -1,0 +1,22 @@
+import "../constants/inter_entry_relation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the inter-entry relation (each row casts to its coupling) ==="
+    set ok to expect_equal("the first CKM row sums to 5/3" and fraction_to_text(ckm_row_sum()) and "5/3")
+    set ok to expect_equal("the first PMNS row sums to 3/2" and fraction_to_text(pmns_row_sum()) and "3/2")
+    set ok to expect_bool("cast_out(5/3) = 2/3: the STRONG coupling recovered" and ckm_residue_is_strong_coupling())
+    set ok to expect_bool("cast_out(3/2) = 1/2: the ELECTROWEAK coupling recovered" and pmns_residue_is_electroweak_coupling())
+    set ok to expect_bool("the seal: each matrix hands back its own generating lock" and locks_are_recoverable())
+    display "=== done ==="
+    return 0

@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-234 suites, 1,326 forced checks, 0 failures). It needs nothing but a C compiler. Use
+238 suites, 1,347 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4412,6 +4412,50 @@ counted reaches: solar at `2⁵−1 = 31` states, atmospheric at `2¹⁰−1 = 1
 `x = 2⁵`, both routes computed and agreeing, the factorisation `1023 = 31·33` checked. Measured:
 `dm²₃₁/dm²₂₁ = 33.3` — the forced 33 sits 1.0% below.
 
+### Step 232 — The mass-ratio family (heavy over light = 2·3^d − 1)
+
+**File:** `constants/mass_ratio_family.ep`
+
+**What it does.** At combined-ladder depth `d` the ladder has `N_d = 2·3^d` sites and diagonal
+mass-parts `{1/N_d, 1/2, (N_d−1)/N_d}`; the heavy-to-light ratio is EXACTLY `N_d − 1` — the ladder
+size less its one unison site. One formula, every depth: **5** at `d = 1` (the lepton diagonal
+`{1/6, 1/2, 5/6}`), **17** at `d = 2`, **53** at `d = 3` — each verified by the complement identity
+AND the independent structural count.
+
+### Step 233 — The proven mass ratios (mirror-closed, cubic-rooted)
+
+**File:** `constants/proven_mass_ratios.ep`
+
+**What it does.** The lepton diagonal is MIRROR-CLOSED: every shortfall `1 − p` is again a member
+of the position set (verified element by element, exact) — so every symmetric invariant agrees
+between the shortfall route and the position route identically, by the set's own symmetry. And the
+square-root shares (exact bisection enclosures of `√(1/6), √(1/2), √(5/6)`) normalized by their sum
+satisfy the cubic `y³ − y² + J₁y − J₂ = 0` with `J₁ = e₂/L²`, `J₂ = e₃/L³` — all three
+substitutions land within `1/10⁹`. The ladder's ratios are roots of a polynomial whose coefficients
+are the ladder's own symmetric functions.
+
+### Step 234 — The inter-entry relation (each row casts to its coupling)
+
+**File:** `constants/inter_entry_relation.ep`
+
+**What it does.** The first CKM row `{8/9, 5/9, 2/9}` sums to `5/3`, and `cast_out(5/3) = 2/3` —
+the STRONG holding coupling, the very lock whose fibre builds the CKM. The first PMNS row
+`{5/6, 1/2, 1/6}` sums to `3/2`, casting to `1/2` — the ELECTROWEAK coupling, the lepton fibre's
+lock. Each mixing matrix hands back its own generating lock as the residue of its first row — the
+matrix and the force are one bookkeeping, computed here from the fibre construction with no matrix
+element typed in.
+
+### Step 235 — The generation depth (all three fold home in two steps)
+
+**File:** `constants/generation_depth.ep`
+
+**What it does.** Why lepton universality: all three generation sites `{1/6, 1/2, 5/6}` reach the
+One in EXACTLY the same combined depth — one tripling, one doubling — and the tripling step sends
+all three through the SAME gate (the electroweak lock `1/2`) before the doubling completes. The
+constant 2 is the ladder size's own factor count (`6 = 2¹·3¹`, exponent sum 2 — one step per
+generator). Interactions see the depth (identical for all three); masses see the position
+(different for each) — identical couplings at wildly different masses, as measured.
+
 ---
 
 ## Where the recreation stands right now
@@ -4927,6 +4971,14 @@ runs):**
   measured `1.369e-5` (~2% on `V_ub`) — the entry adds nothing beyond the masses and the count.
 - Step 231 — the neutrino splitting ratio: Mersenne rungs `31` and `1023` at the counted reaches →
   `1023/31 = 33 = 2⁵+1` exactly (two routes) vs measured `33.3` — 1.0%.
+- Step 232 — the mass-ratio family: heavy/light `= 2·3^d − 1` — 5, 17, 53 at depths 1, 2, 3, each
+  the ladder count less its unison site, complement identity verified at every depth.
+- Step 233 — the proven mass ratios: the lepton diagonal is mirror-closed (shortfall set = position
+  set, exact), and the enclosed square-root shares root the cubic `y³−y²+J₁y−J₂` within `1/10⁹`.
+- Step 234 — the inter-entry relation: the first CKM row casts to the strong coupling `2/3`, the
+  first PMNS row to the electroweak `1/2` — each matrix hands back its own generating lock.
+- Step 235 — the generation depth: all three sites fold home in the same two steps through the
+  same `1/2` gate; the constant 2 = the factor count of `6 = 2¹·3¹` — universality is depth-equality.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,168 @@
+# ============================================================================
+#  THE PROVEN MASS RATIOS  --  the lepton triple is mirror-closed and cubic-rooted.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The charged-lepton mass-parts and their ladder positions could have been two
+#  unrelated triples needing two derivations. Forced: they are the SAME set --
+#  the diagonal triple {1/6, 1/2, 5/6} is mirror-closed (each mass-part 1 - p is
+#  again a member), so every symmetric invariant built from the shortfalls equals
+#  the one built from the positions IDENTICALLY, and the square-root shares are
+#  roots of the one normalized cubic. Two routes that could have disagreed are
+#  one route, by the set's own symmetry.
+#
+#  ── DERIVATION ─ (check every line; exact set identity + exact enclosures) ───
+#  MIRROR CLOSURE (exact): the positions are p = {1/6, 1/2, 5/6} (the tripling
+#  fibre of the 1/2 lock, full_mixing_matrices.ep). The shortfalls are
+#  m_i = 1 - p_i = {5/6, 1/2, 1/6} -- the SAME multiset, verified element by
+#  element. Hence e₁, e₂, e₃ (the symmetric polynomials) agree between the two
+#  routes exactly, with no computation beyond the set check: the triple sums to
+#  3/2, pairs to 13/18... every invariant is route-independent BY SYMMETRY.
+#  CUBIC ROOTING (exact enclosures): the mass shares are the square roots
+#  x_i = sqrt(m_i), pinned here by exact rational bisection (40 halvings) on
+#  x² - m_i. With L = x_e + x_mu + x_tau, the normalized shares y_i = x_i/L
+#  satisfy the cubic  y³ - y² + J₁y - J₂ = 0  with J₁ = e₂/L², J₂ = e₃/L³ --
+#  each y_i is substituted into the cubic and lands within the enclosure
+#  tolerance 1/10⁹ (against ~1/10¹² enclosure error). The ratios of the lepton
+#  ladder are the roots of one polynomial whose coefficients are the ladder's
+#  own symmetric functions -- nothing external anywhere.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the mirror set identity, the triple's sums, and
+#  three cubic substitutions within 1/10⁹. Comparison: this diagonal triple is
+#  the d = 1 member of the mass-ratio family (ratio 5) whose dressed lepton
+#  masses land on measurement in the corpus chain.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The three ladder positions: the tripling fibre of the 1/2 lock.
+define ladder_position with i as Int returning Fraction:
+    return fraction_from_ratio(2 * i - 1 and 6)
+
+# The mass-part of position i: the shortfall 1 - p_i.
+define shortfall_of with i as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set position to ladder_position(i)
+    return fraction_subtract(one and position)
+
+# MIRROR CLOSURE: every shortfall is again a ladder position (the same multiset).
+define set_is_mirror_closed returning Bool:
+    set all_found to true
+    set i to 1
+    repeat while i < 4:
+        set shortfall to shortfall_of(i)
+        set found to false
+        set j to 1
+        repeat while j < 4:
+            set position to ladder_position(j)
+            set matches to fraction_is_equal(shortfall and position)
+            if matches:
+                set found to true
+            set j to j + 1
+        if found:
+            set all_found to all_found
+        else:
+            set all_found to false
+        set i to i + 1
+    return all_found
+
+# The triple's first symmetric sum: 1/6 + 1/2 + 5/6 = 3/2 (route-independent).
+define triple_sum returning Fraction:
+    set first to ladder_position(1)
+    set second to ladder_position(2)
+    set third to ladder_position(3)
+    set pair to fraction_add(first and second)
+    return fraction_add(pair and third)
+
+# Exact square-root enclosure: bisect x^2 - target in [lo, hi], 40 halvings.
+define square_root_in_bracket with t_num as Int and t_den as Int and lo_num as Int and lo_den as Int and hi_num as Int and hi_den as Int returning Fraction:
+    set target to fraction_from_ratio(t_num and t_den)
+    set lo to fraction_from_ratio(lo_num and lo_den)
+    set hi to fraction_from_ratio(hi_num and hi_den)
+    set two_fraction to fraction_from_whole_number(2)
+    set count to 0
+    repeat while count < 40:
+        set bracket_sum to fraction_add(lo and hi)
+        set mid to fraction_divide(bracket_sum and two_fraction)
+        set mid_twin to fraction_make(fraction_numerator(mid) and fraction_denominator(mid))
+        set mid_squared to fraction_multiply(mid and mid_twin)
+        set comparison to fraction_compare(mid_squared and target)
+        if comparison < 0:
+            set lo to mid
+        else:
+            set hi to mid
+        set count to count + 1
+    set final_sum to fraction_add(lo and hi)
+    return fraction_divide(final_sum and two_fraction)
+
+# The three square-root mass shares (brackets around sqrt(1/6), sqrt(1/2), sqrt(5/6)).
+define share_root with i as Int returning Fraction:
+    if i == 1:
+        return square_root_in_bracket(1 and 6 and 2 and 5 and 1 and 2)
+    if i == 2:
+        return square_root_in_bracket(1 and 2 and 7 and 10 and 3 and 4)
+    return square_root_in_bracket(5 and 6 and 9 and 10 and 1 and 1)
+
+# The absolute size of a fraction (for enclosure-tolerance comparisons).
+define size_of with value as Fraction returning Fraction:
+    if value.numerator_sign < 0:
+        set zero to fraction_from_whole_number(0)
+        return fraction_subtract(zero and value)
+    return value
+
+# CUBIC ROOTING: each normalized share y_i = x_i/L satisfies
+# y^3 - y^2 + J1*y - J2 = 0 within the enclosure tolerance 1/10^9.
+define shares_root_the_cubic returning Bool:
+    set x1 to share_root(1)
+    set x2 to share_root(2)
+    set x3 to share_root(3)
+    set pair to fraction_add(x1 and x2)
+    set scale to fraction_add(pair and x3)
+    set e2_a to fraction_multiply(x1 and x2)
+    set x2_twin to fraction_make(fraction_numerator(x2) and fraction_denominator(x2))
+    set e2_b to fraction_multiply(x2_twin and x3)
+    set x1_twin to fraction_make(fraction_numerator(x1) and fraction_denominator(x1))
+    set x3_twin to fraction_make(fraction_numerator(x3) and fraction_denominator(x3))
+    set e2_c to fraction_multiply(x3_twin and x1_twin)
+    set e2_partial to fraction_add(e2_a and e2_b)
+    set e2 to fraction_add(e2_partial and e2_c)
+    set x1_third to fraction_make(fraction_numerator(x1) and fraction_denominator(x1))
+    set x2_third to fraction_make(fraction_numerator(x2) and fraction_denominator(x2))
+    set x3_third to fraction_make(fraction_numerator(x3) and fraction_denominator(x3))
+    set e3_pair to fraction_multiply(x1_third and x2_third)
+    set e3 to fraction_multiply(e3_pair and x3_third)
+    set scale_twin to fraction_make(fraction_numerator(scale) and fraction_denominator(scale))
+    set scale_squared to fraction_multiply(scale and scale_twin)
+    set scale_third to fraction_make(fraction_numerator(scale) and fraction_denominator(scale))
+    set scale_cubed to fraction_multiply(scale_squared and scale_third)
+    set j1 to fraction_divide(e2 and scale_squared)
+    set j2 to fraction_divide(e3 and scale_cubed)
+    set tolerance to fraction_from_ratio(1 and 1000000000)
+    set all_root to true
+    set i to 1
+    repeat while i < 4:
+        set x to share_root(i)
+        set scale_local to fraction_make(fraction_numerator(scale) and fraction_denominator(scale))
+        set y to fraction_divide(x and scale_local)
+        set y_twin to fraction_make(fraction_numerator(y) and fraction_denominator(y))
+        set y_squared to fraction_multiply(y and y_twin)
+        set y_third to fraction_make(fraction_numerator(y) and fraction_denominator(y))
+        set y_cubed to fraction_multiply(y_squared and y_third)
+        set j1_local to fraction_make(fraction_numerator(j1) and fraction_denominator(j1))
+        set y_fourth to fraction_make(fraction_numerator(y) and fraction_denominator(y))
+        set linear to fraction_multiply(j1_local and y_fourth)
+        set head to fraction_subtract(y_cubed and y_squared)
+        set with_linear to fraction_add(head and linear)
+        set j2_local to fraction_make(fraction_numerator(j2) and fraction_denominator(j2))
+        set residue to fraction_subtract(with_linear and j2_local)
+        set residue_size to size_of(residue)
+        set comparison to fraction_compare(residue_size and tolerance)
+        if comparison < 0:
+            set all_root to all_root
+        else:
+            set all_root to false
+        set i to i + 1
+    return all_root

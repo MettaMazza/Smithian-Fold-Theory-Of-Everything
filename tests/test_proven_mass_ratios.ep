@@ -1,0 +1,20 @@
+import "../constants/proven_mass_ratios.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the proven mass ratios (mirror-closed, cubic-rooted) ==="
+    set ok to expect_bool("MIRROR CLOSURE: every shortfall is again a position (exact)" and set_is_mirror_closed())
+    set ok to expect_equal("the triple's sum = 3/2 (route-independent by symmetry)" and fraction_to_text(triple_sum()) and "3/2")
+    set ok to expect_bool("CUBIC ROOTING: all three normalized shares root the cubic (1/10^9)" and shares_root_the_cubic())
+    display "=== done ==="
+    return 0

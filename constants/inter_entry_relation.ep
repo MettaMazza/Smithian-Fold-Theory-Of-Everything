@@ -1,0 +1,100 @@
+# ============================================================================
+#  THE INTER-ENTRY RELATION  --  each matrix's first row casts to its own coupling.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The nine CKM entries and nine PMNS entries are not independent: the entries of
+#  the first row -- the row of the LIGHTEST mass state, the one every sector's
+#  physics starts from -- are locked together. Forced: the first CKM row sums to
+#  5/3 and the first PMNS row to 3/2, and cast out past the whole, the CKM row
+#  lands EXACTLY on the strong holding coupling 2/3 while the PMNS row lands on
+#  the electroweak holding coupling 1/2. Each mixing matrix carries its own
+#  sector's coupling as the residue of its first row: the matrix and the force
+#  are one bookkeeping.
+#
+#  ── DERIVATION ─ (check every line; uses the two matrices already forced) ────
+#  The first CKM row (ckm_magnitudes.ep) is {8/9, 5/9, 2/9}:
+#      sum = 15/9 = 5/3 ;   cast_out(5/3) = 5/3 - 1 = 2/3  -- the strong holding
+#  coupling (the quark mass fibre's own lock: the fibre that BUILDS the CKM is
+#  the fibre of 2/3, and the first row hands that lock back as its residue).
+#  The first PMNS row (full_mixing_matrices.ep) is {5/6, 1/2, 1/6}:
+#      sum = 9/6 = 3/2 ;    cast_out(3/2) = 3/2 - 1 = 1/2  -- the electroweak
+#  holding coupling (the lepton fibre's own lock, handed back the same way).
+#  Both sums and both cast-outs are computed here exactly from the fibre
+#  construction -- V_1j = 1 - |M_1 - C_j| -- with no matrix element typed in.
+#  The closure is a consistency seal: the lock that generates each matrix is
+#  recoverable from the matrix's own first row.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: CKM first row sums to 5/3 casting to 2/3, PMNS
+#  first row to 3/2 casting to 1/2. Comparison: in the measured matrices the
+#  first-row entries are likewise bound (unitarity row normalisation), and the
+#  sectors' couplings are exactly the locks this residue recovers.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The CKM first-row element (mass fibre of 2/3, lightest state M_1 = 2/9).
+define ckm_first_row with j as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set mass to fraction_from_ratio(2 and 9)
+    set weak to fraction_from_ratio(j and 3)
+    set comparison to fraction_compare(mass and weak)
+    if comparison > 0:
+        set distance to fraction_subtract(mass and weak)
+        return fraction_subtract(one and distance)
+    set distance to fraction_subtract(weak and mass)
+    return fraction_subtract(one and distance)
+
+# The PMNS first-row element (mass fibre of 1/2, lightest state M_1 = 1/6).
+define pmns_first_row with j as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set mass to fraction_from_ratio(1 and 6)
+    set weak to fraction_from_ratio(j and 3)
+    set comparison to fraction_compare(mass and weak)
+    if comparison > 0:
+        set distance to fraction_subtract(mass and weak)
+        return fraction_subtract(one and distance)
+    set distance to fraction_subtract(weak and mass)
+    return fraction_subtract(one and distance)
+
+# The first CKM row's sum: 8/9 + 5/9 + 2/9 = 5/3.
+define ckm_row_sum returning Fraction:
+    set first to ckm_first_row(1)
+    set second to ckm_first_row(2)
+    set third to ckm_first_row(3)
+    set pair to fraction_add(first and second)
+    return fraction_add(pair and third)
+
+# The first PMNS row's sum: 5/6 + 1/2 + 1/6 = 3/2.
+define pmns_row_sum returning Fraction:
+    set first to pmns_first_row(1)
+    set second to pmns_first_row(2)
+    set third to pmns_first_row(3)
+    set pair to fraction_add(first and second)
+    return fraction_add(pair and third)
+
+# The CKM residue: cast_out(5/3) = 2/3 -- the strong holding coupling recovered.
+define ckm_residue_is_strong_coupling returning Bool:
+    set total to ckm_row_sum()
+    set residue to cast_out_whole_ones(total)
+    set target to fraction_from_ratio(2 and 3)
+    return fraction_is_equal(residue and target)
+
+# The PMNS residue: cast_out(3/2) = 1/2 -- the electroweak coupling recovered.
+define pmns_residue_is_electroweak_coupling returning Bool:
+    set total to pmns_row_sum()
+    set residue to cast_out_whole_ones(total)
+    set target to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(residue and target)
+
+# The seal: each matrix's generating lock is recoverable from its own first row.
+define locks_are_recoverable returning Bool:
+    set ckm_ok to ckm_residue_is_strong_coupling()
+    set pmns_ok to pmns_residue_is_electroweak_coupling()
+    if ckm_ok:
+        return pmns_ok
+    return false

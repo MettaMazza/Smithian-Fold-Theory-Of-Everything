@@ -373,9 +373,18 @@ And the structural laws of physics, forced the same way:
   `V_ub² = 1.31e-5` vs measured `1.37e-5` — the entry adds nothing beyond the masses), and the
   **neutrino splitting ratio** (Mersenne rungs `31` and `1023` → `1023/31 = 33 = 2⁵+1` exactly, vs
   measured `33.3` — 1.0%).
+- **The mass ladder's one rule, its mirror, the rows' seal, and universality** — the **mass-ratio
+  family** (heavy/light `= 2·3^d − 1`: 5, 17, 53 at depths 1, 2, 3 — one formula, every depth),
+  the **proven mass ratios** (the lepton diagonal is mirror-closed — shortfall set = position set,
+  exactly — and its enclosed square-root shares root the one cubic within `1/10⁹`), the
+  **inter-entry relation** (the first CKM row casts to the strong coupling `2/3`, the first PMNS
+  row to the electroweak `1/2` — each matrix hands back its own generating lock), and the
+  **generation depth** (all three generations fold home in the same two steps through the same
+  `1/2` gate — lepton universality is depth-equality: interactions see the depth, masses see the
+  position).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 234 test
-suites (1,326 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 238 test
+suites (1,347 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -432,7 +441,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 234 suites, 1,326 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 238 suites, 1,347 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
