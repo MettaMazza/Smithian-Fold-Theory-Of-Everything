@@ -1,0 +1,23 @@
+import "../constants/orbital_stability_dimension.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== orbital stability (why three dimensions) ==="
+    set ok to expect_equal("stability coefficient in d=3: S_3 = 1 (stable)" and int_to_string(stability_coefficient(3)) and "1")
+    set ok to expect_bool("orbits are stable in d = 3" and orbit_is_stable(3))
+    set ok to expect_bool("d = 4 is exactly marginal (S_4 = 0, no restoring force)" and four_dimensions_is_marginal())
+    set ok to expect_bool("orbits are UNSTABLE in d = 5" and orbit_is_stable(5) == false)
+    set ok to expect_equal("the maximum stable dimension, counted over d=1..5: 3" and int_to_string(maximum_stable_dimension()) and "3")
+    set ok to expect_bool("d_max equals the colour period (two forced counts agree)" and stable_dimension_is_colour_period())
+    display "=== done ==="
+    return 0

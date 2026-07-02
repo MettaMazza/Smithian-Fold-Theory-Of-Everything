@@ -1,0 +1,23 @@
+import "../constants/mechanical_properties.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== mechanical properties (elastic, plastic, fracture) ==="
+    set ok to expect_equal("the lattice-bond share = 1/4 (depth 2)" and fraction_to_text(bond_share()) and "1/4")
+    set ok to expect_bool("ELASTIC: the bond completes to unison in two folds (restoring chain)" and bond_completes_in_two_folds())
+    set ok to expect_bool("two bonded neighbours balance at the half-One (1/4 + 1/4 = 1/2)" and bonded_pair_balances())
+    set ok to expect_bool("PLASTIC: the twin 3/4 has the identical fold image (slip, same strength)" and slip_preserves_image())
+    set ok to expect_bool("the twin is a different position (permanent shape change)" and slip_changes_position())
+    set ok to expect_bool("FRACTURE: a present bond is strictly positive -> loss is discrete" and bond_share_is_positive())
+    display "=== done ==="
+    return 0

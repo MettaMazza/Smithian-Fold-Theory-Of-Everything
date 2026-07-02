@@ -1,0 +1,22 @@
+import "../constants/universality_threshold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== universality (one threshold for every system) ==="
+    set ok to expect_equal("the universal threshold = 1/2" and fraction_to_text(universal_threshold()) and "1/2")
+    set ok to expect_bool("the threshold is self-antipodal: p = One - p" and threshold_is_self_antipodal())
+    set ok to expect_bool("it is UNIQUE (exhaustive check: one hit on the quarter grid)" and threshold_is_unique())
+    set ok to expect_bool("the single lock folds to unison" and threshold_folds_to_unison())
+    set ok to expect_equal("the two phase-shares partition the whole" and fraction_to_text(phases_partition_whole()) and "1")
+    display "=== done ==="
+    return 0

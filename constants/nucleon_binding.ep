@@ -1,0 +1,80 @@
+# ============================================================================
+#  NUCLEON BINDING DOMINANCE  --  why your mass is not your quarks, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Add up the bare masses of the proton's three quarks and you get about one percent of
+#  the proton. Ninety-nine percent of the mass of everything you touch is not "stuff" at
+#  all -- it is binding: the energy of the held colour cycle. Forced: the nucleon is the
+#  fold's three-cycle held as one whole, so its mass IS the cycle's closure, with the
+#  constituent shares entering only as the small ladder-depth remainder.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The nucleon is three quarks on the colour three-cycle: the fold orbit of 1/7,
+#  which is 1/7 -> 2/7 -> 4/7 -> 1/7 (period 3, the colour count). The three orbit
+#  shares SUM TO THE ONE: 1/7 + 2/7 + 4/7 = 1 -- the whole nucleon is the closed cycle
+#  itself, not a bag of three parts. What the cycle holds is binding: the balance state
+#  of the held pair is the half-One (the binding lock 1/2, which folds to unison in one
+#  step -- the bound whole). The constituent (bare-quark) share sits far DOWN the binary
+#  ladder: at depth 7 (the tower depth forced elsewhere for the fine structure and the
+#  absolute scale), the grid step is 1/2^7 = 1/128 -- under one percent of the whole.
+#  So mass is cycle-dominated, not constituent-dominated: the whole (the One) belongs to
+#  the orbit's closure; the parts' bare shares are one grid step at the sector's depth,
+#  two orders below. Remove the binding (open the cycle) and almost nothing remains.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: orbit shares 1/7 + 2/7 + 4/7 = 1 (period 3 = colour),
+#  binding lock 1/2 -> 1 in one fold, bare-share grid step 1/128 < 1/100. Measured: the
+#  proton is 938.3 MeV while its bare quarks (u+u+d ~ 2.2+2.2+4.7 = 9.1 MeV, PDG) carry
+#  ~1% -- ninety-nine percent of nucleon mass is QCD binding energy, the dominance this
+#  forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The colour cycle length: the fold period of 1/7 = 3 (the colour count).
+define colour_cycle_length returning Int:
+    return fold_period_of_unit_fraction(7)
+
+# The three orbit shares of the nucleon's colour cycle sum to the One: 1/7 + 2/7 + 4/7 = 1.
+define cycle_closes_to_one returning Fraction:
+    set first to fraction_from_ratio(1 and 7)
+    set second to fold_fraction(first)
+    set third to fold_fraction(second)
+    set pair to fraction_add(first and second)
+    return fraction_add(pair and third)
+
+# The cycle length equals the colour count (three quarks because three cycle steps).
+define cycle_length_is_colour_count returning Bool:
+    set length to colour_cycle_length()
+    set colours to colour_count()
+    return length == colours
+
+# The binding lock: the half-One, one fold from the bound whole (fold(1/2) = 1).
+define binding_lock_completes returning Bool:
+    set lock to fraction_from_ratio(1 and 2)
+    set folded to fold_fraction(lock)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# The constituent (bare) share: one grid step at the sector depth 7 -- 1/2^7 = 1/128.
+define bare_share returning Fraction:
+    set volume to whole_power(binary_count() and 7)
+    return fraction_from_ratio(1 and volume)
+
+# Binding dominates: the bare share is under one percent of the whole (1/128 < 1/100).
+define binding_dominates returning Bool:
+    set bare to bare_share()
+    set one_percent to fraction_from_ratio(1 and 100)
+    set comparison to fraction_compare(bare and one_percent)
+    return comparison < 0

@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-191 suites, 1,067 forced checks, 0 failures). It needs nothing but a C compiler. Use
+197 suites, 1,102 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3928,6 +3928,69 @@ it holds at the One as space folds forward (`fold(1) = 1`) — so it does not di
 exponent to vanish: `3(1+w) = 0`, hence `w = −1`, the additive inverse of the fold's fixed point
 (pressure `= −`density). Measured: dark-energy surveys `w = −1.03 ± 0.03`, a cosmological constant.
 
+### Step 189 — Orbital stability (why three dimensions)
+
+**File:** `constants/orbital_stability_dimension.ep`
+
+**What it does.** In `d` spatial dimensions the effective orbital potential's stability coefficient
+is `S_d = 4 − d`, positive only for `d < 4`. Counting `d = 1..5`: stable in 1, 2, 3; exactly
+marginal at 4 (`S = 0`, no restoring force); unstable beyond. The maximum stable dimension is
+`d_max = 3` — and it EQUALS the colour period (the fold orbit length of `1/7`), two independently
+forced counts agreeing. Planets can hold orbits because space has the largest dimension where they
+can.
+
+### Step 190 — Quantum gravity (born quantized)
+
+**File:** `constants/quantum_gravity.ep`
+
+**What it does.** The metric is a rank-2 object on `4 = 2²` spacetime dimensions, so its grid
+spacing is `1/4 = (1/2)²` — the depth-two step. One fold lifts it to the critical coupling
+(`fold(1/4) = 1/2`), two complete to unison; the four dimension-shares partition the One. There is
+no continuum to quantize and no divergent mode-sum: the "problem of quantum gravity" asks how to
+discretize what was never continuous.
+
+### Step 191 — Universality (one threshold for every system)
+
+**File:** `constants/universality_threshold.ep`
+
+**What it does.** A critical threshold is a two-phase balance `p = One − p`, and on the fold's
+domain that equation has exactly ONE solution — verified exhaustively on the quarter grid: only
+`1/2` is self-antipodal. Being a domain fact, no system's microphysics can move it: magnet, fluid,
+network all lock at the same point, which folds to unison. Universality classes are the uniqueness
+of the self-antipodal half.
+
+### Step 192 — Irreversibility and recurrence (two timescales, one dynamics)
+
+**File:** `constants/irreversibility_recurrence.ep`
+
+**What it does.** The fold's dynamics contain both motions the nineteenth-century paradoxes fought
+over: descent chains (`1/4 → 1/2 → 1`, arriving in exactly their depth and never leaving — the
+one-way arrow) and periodic orbits (`1/3 ↔ 2/3`, returning EXACTLY — Poincaré recurrence). No orbit
+is both; Zermelo dissolves. And `fold(1/4) = fold(3/4)`: preimages merge, so reversed motion is
+undefined past a merge — Loschmidt dissolves. The arrow is the merging; the recurrence is the
+cycling.
+
+### Step 193 — Mechanical properties (elastic, plastic, fracture)
+
+**File:** `constants/mechanical_properties.ep`
+
+**What it does.** A lattice bond holds the depth-2 share `1/4` (two folds from unison; bonded pair
+balances at `1/2`). The three regimes are the three moves the fold allows: ELASTIC — the descent
+chain restores to the same unison; PLASTIC — the twin `3/4` has the identical fold image
+(`fold(1/4) = fold(3/4) = 1/2`), so slip re-forms the bond at a new position with unchanged
+strength (a dislocation); FRACTURE — a share cannot fade through the excluded boundary (No-Zero),
+so bond loss is discrete and cracks advance bond by bond.
+
+### Step 194 — Nucleon binding dominance (mass is the held cycle)
+
+**File:** `constants/nucleon_binding.ep`
+
+**What it does.** The nucleon is three quarks on the colour three-cycle — the fold orbit of `1/7`,
+whose three shares sum to the One (`1/7 + 2/7 + 4/7 = 1`): the whole IS the closed cycle, not a bag
+of parts. The binding lock `1/2` completes in one fold; the bare (constituent) share is one grid
+step at the sector depth 7, `1/128 < 1/100`. Measured: the proton's bare quarks carry ~9 MeV of its
+938 — ninety-nine percent of your mass is the held cycle, as forced.
+
 ---
 
 ## Where the recreation stands right now
@@ -4342,6 +4405,21 @@ runs):**
   curvature share at the excluded boundary `1 − 1` — space is flat (measured `|Ω_k| < 0.005`).
 - Step 188 — the vacuum equation of state: a fold-invariant (non-diluting) vacuum forces the
   dilution exponent `3(1+w) = 0`, so `w = −1 = −`(the One) — measured `w = −1.03 ± 0.03`.
+- Step 189 — orbital stability: `S_d = 4 − d > 0` only for `d < 4`, so `d_max = 3` — equal to the
+  colour period, two forced counts agreeing; `d = 4` is exactly marginal.
+- Step 190 — quantum gravity: the metric's spacing is `1/4 = (1/2)²` on `4 = 2²` dimensions,
+  folding to the critical coupling and then unison — born quantized, nothing continuous to fix.
+- Step 191 — universality: exactly one self-antipodal point exists (exhaustively checked), so every
+  two-phase system locks at the same `1/2` — universality classes are that uniqueness.
+- Step 192 — irreversibility and recurrence: descent chains arrive and stay (the arrow), periodic
+  orbits return exactly (Poincaré); preimages merge (`fold(1/4) = fold(3/4)`) so reversal is
+  undefined past a merge — Zermelo and Loschmidt both dissolve in one dynamics.
+- Step 193 — mechanical properties: elastic = the bond's restoring descent chain, plastic = slip to
+  the same-image twin `3/4` (unchanged strength), fracture = discrete bond loss (No-Zero forbids
+  fading) — the trichotomy of solids, forced.
+- Step 194 — nucleon binding dominance: the colour cycle's shares close to the One
+  (`1/7 + 2/7 + 4/7 = 1`), the bare share is `1/2⁷ = 1/128 < 1%` — mass is the held cycle
+  (measured: ~9 of 938 MeV bare).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

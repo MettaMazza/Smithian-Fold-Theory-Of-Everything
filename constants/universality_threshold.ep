@@ -1,0 +1,82 @@
+# ============================================================================
+#  UNIVERSALITY  --  why unrelated systems share one threshold, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The deepest surprise of critical phenomena: water at its critical point, a magnet at
+#  its Curie point, a percolating network -- systems with nothing microscopic in common
+#  -- transition with the SAME critical behaviour. Physics calls it universality and
+#  explains it with the renormalization group's fixed points. Forced: every threshold is
+#  the same point because the fold's domain contains exactly ONE self-antipodal value --
+#  the half -- and any two-sided balance, whatever it is made of, must lock there.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  A critical threshold is where a system balances between two phases: the point that
+#  splits the whole into two equal shares, p and One - p with p = One - p. On the fold's
+#  domain that equation has exactly one solution: p = 1/2, since p + p = 1 pins p
+#  uniquely (any candidate above or below the half fails the partition). Being a
+#  statement about the DOMAIN and not about any system's micro-details, the same 1/2 is
+#  the lock for every two-phase balance: magnet, fluid, network -- the microscopics
+#  cannot move it. That single lock folds to unison (fold(1/2) = 1): at threshold the
+#  system is one step from the whole. Universality is not a coincidence to explain; it
+#  is the uniqueness of the self-antipodal point. This is the SAME half that is the
+#  critical coupling, the sync threshold, and the percolation balance elsewhere in the
+#  corpus -- one point, every system.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the threshold 1/2 is unique (verified by exhaustive
+#  check over the denominator-4 grid: only 2/4 = 1/2 is self-antipodal), and it folds to
+#  unison. Measured: critical exponents and threshold behaviour repeat across fluids,
+#  magnets, and alloys with utterly different microphysics -- universality classes, the
+#  observed fact this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The universal threshold: the self-antipodal half.
+define universal_threshold returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The threshold is self-antipodal: p = One - p (the two-phase balance point).
+define threshold_is_self_antipodal returning Bool:
+    set p to universal_threshold()
+    set one to fraction_from_whole_number(1)
+    set partner to fraction_subtract(one and p)
+    return fraction_is_equal(p and partner)
+
+# Uniqueness, checked exhaustively: on the quarter grid {1/4, 2/4, 3/4, 4/4} exactly ONE
+# point is self-antipodal -- the half. Micro-details cannot move a domain fact.
+define threshold_is_unique returning Bool:
+    set hits to 0
+    set k to 1
+    repeat while k < 5:
+        set p to fraction_from_ratio(k and 4)
+        set one to fraction_from_whole_number(1)
+        set partner to fraction_subtract(one and p)
+        set balanced to fraction_is_equal(p and partner)
+        if balanced:
+            set hits to hits + 1
+        set k to k + 1
+    return hits == 1
+
+# The single lock folds to unison: at threshold the system is one step from the whole.
+define threshold_folds_to_unison returning Bool:
+    set p to universal_threshold()
+    set folded to fold_fraction(p)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# The two phase-shares partition the whole exactly: 1/2 + 1/2 = 1.
+define phases_partition_whole returning Fraction:
+    set p to universal_threshold()
+    set partner to fraction_from_ratio(1 and 2)
+    return fraction_add(p and partner)

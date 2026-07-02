@@ -1,0 +1,23 @@
+import "../constants/irreversibility_recurrence.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== irreversibility and recurrence (two timescales, one dynamics) ==="
+    set ok to expect_equal("the descent state = 1/4 (depth 2)" and fraction_to_text(descent_state()) and "1/4")
+    set ok to expect_bool("the chain arrives at the fixed point in its depth (2 folds)" and chain_arrives_in_depth())
+    set ok to expect_bool("arrival is one-way: fold(1) = 1, the chain never leaves" and arrival_is_permanent())
+    set ok to expect_bool("the cycle 1/3 <-> 2/3 returns EXACTLY (Poincare recurrence)" and cycle_returns_exactly())
+    set ok to expect_bool("the cycle never meets the fixed point (no orbit is both)" and cycle_avoids_fixed_point())
+    set ok to expect_bool("Loschmidt dissolves: 1/4 and 3/4 merge at 1/2 (the arrow is the merging)" and preimages_merge())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,23 @@
+import "../constants/nucleon_binding.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== nucleon binding dominance (mass is the held cycle) ==="
+    set ok to expect_equal("the colour cycle length = 3 (period of 1/7)" and int_to_string(colour_cycle_length()) and "3")
+    set ok to expect_bool("the cycle length equals the colour count (three quarks)" and cycle_length_is_colour_count())
+    set ok to expect_equal("the three orbit shares close to the One (1/7 + 2/7 + 4/7)" and fraction_to_text(cycle_closes_to_one()) and "1")
+    set ok to expect_bool("the binding lock completes: fold(1/2) = 1 (the bound whole)" and binding_lock_completes())
+    set ok to expect_equal("the bare (constituent) share = one step at depth 7 = 1/128" and fraction_to_text(bare_share()) and "1/128")
+    set ok to expect_bool("binding dominates: 1/128 < 1/100 (under one percent bare)" and binding_dominates())
+    display "=== done ==="
+    return 0

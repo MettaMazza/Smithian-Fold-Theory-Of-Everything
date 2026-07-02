@@ -1,0 +1,23 @@
+import "../constants/quantum_gravity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== quantum gravity (born quantized) ==="
+    set ok to expect_equal("spacetime dimension count = 4 = binary^2" and int_to_string(dimension_count()) and "4")
+    set ok to expect_equal("the metric grid spacing = 1/4" and fraction_to_text(metric_spacing()) and "1/4")
+    set ok to expect_bool("the spacing is the depth-two step: 1/4 = (1/2)^2" and spacing_is_depth_two())
+    set ok to expect_bool("one fold lifts gravity to the critical coupling: fold(1/4) = 1/2" and spacing_folds_to_critical())
+    set ok to expect_bool("two folds complete to unison (same ladder as every sector)" and spacing_completes_in_two_folds())
+    set ok to expect_equal("the four dimension-shares partition the One" and fraction_to_text(dimension_shares_partition_one()) and "1")
+    display "=== done ==="
+    return 0

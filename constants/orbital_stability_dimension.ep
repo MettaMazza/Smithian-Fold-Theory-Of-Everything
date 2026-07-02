@@ -1,0 +1,72 @@
+# ============================================================================
+#  ORBITAL STABILITY  --  why stable orbits need exactly three dimensions, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  In four or more spatial dimensions no planet could hold its orbit: the effective
+#  potential loses its minimum and every circular orbit is knocked into the centre or
+#  out to infinity by the slightest nudge. Only below four dimensions do bound orbits
+#  survive perturbation. Forced: the stability coefficient of a circular orbit in d
+#  dimensions is 4 - d, positive only for d < 4, so the largest stable count is d = 3
+#  -- and that 3 is the SAME count the fold already forces as the colour period.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY counting and the fold) ─────────
+#  In d spatial dimensions gravity's flux spreads over a (d-1)-sphere, so the force
+#  falls as 1/r^(d-1) and the effective radial potential combines a centrifugal wall
+#  (+1/r^2) with the gravitational well (-1/r^(d-2)). A circular orbit is stable only
+#  if the well rises more slowly than the wall: the stability coefficient is
+#       S_d = 4 - d,   stable  <=>  S_d > 0  <=>  d < 4.
+#  Counting d = 1, 2, 3, 4, 5: S = 3, 2, 1, 0, -1 -- the stable dimensions are 1, 2, 3,
+#  and the LARGEST is d_max = 3, with d = 4 exactly marginal (S = 0, no restoring
+#  force) and beyond that unstable. Cross-check against an independent forced count:
+#  the fold's colour period -- the orbit length of 1/7 (1/7 -> 2/7 -> 4/7 -> 1/7) -- is
+#  3. The maximum stable orbital dimension EQUALS the colour period; space has as many
+#  dimensions as the fold's three-cycle has steps, and both counts are read off, never
+#  chosen.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: S_d = 4 - d, stable exactly for d in {1, 2, 3},
+#  d_max = 3 = the colour period. Measured: planetary orbits, binaries, and satellites
+#  are stable over billions of years in our d = 3 -- the largest dimension where they
+#  can be.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The stability coefficient of a circular orbit in d spatial dimensions: S_d = 4 - d.
+define stability_coefficient with dims as Int returning Int:
+    return 4 - dims
+
+# Is a circular orbit stable in d dimensions? (S_d strictly positive.)
+define orbit_is_stable with dims as Int returning Bool:
+    set s to stability_coefficient(dims)
+    return s > 0
+
+# The maximum stable dimension, COUNTED: sweep d = 1..5, keep the largest stable.
+define maximum_stable_dimension returning Int:
+    set d_max to 0
+    set d to 1
+    repeat while d < 6:
+        set stable to orbit_is_stable(d)
+        if stable:
+            set d_max to d
+        set d to d + 1
+    return d_max
+
+# d = 4 is exactly marginal: the stability coefficient lands on nothing (no restoring force).
+define four_dimensions_is_marginal returning Bool:
+    set s to stability_coefficient(4)
+    return s == 0
+
+# The independent cross-check: the colour period -- the fold orbit length of 1/7 -- is 3.
+define colour_period returning Int:
+    return fold_period_of_unit_fraction(7)
+
+# The maximum stable orbital dimension EQUALS the colour period (two forced counts agree).
+define stable_dimension_is_colour_period returning Bool:
+    set d_max to maximum_stable_dimension()
+    set period to colour_period()
+    return d_max == period

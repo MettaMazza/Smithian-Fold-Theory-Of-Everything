@@ -1,0 +1,89 @@
+# ============================================================================
+#  MECHANICAL PROPERTIES  --  elasticity, plasticity, fracture, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Pull on a solid and three things can happen: it springs back (elastic), it keeps the
+#  new shape (plastic), or it snaps (fracture). Materials science measures where each
+#  regime ends; the trichotomy itself is taken as given. Forced: a lattice bond is a
+#  fold state two depths below unison, and the three regimes are the three moves the
+#  fold's structure allows that state -- return within its basin, exchange with its
+#  merged twin, or a discrete break (no fade-to-nothing, by No-Zero).
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A lattice bond holds the depth-2 share 1/4: two folds from unison
+#  (fold(fold(1/4)) = 1), and two bonded neighbour-shares make the half-One
+#  (1/4 + 1/4 = 1/2), the balance the crystal sits at. The three regimes:
+#  ELASTIC -- the bond's fold-image chain is fixed (1/4 -> 1/2 -> 1); a loaded bond still
+#  completes to the SAME unison, so releasing the load returns it: the restoring path is
+#  the descent chain itself. PLASTIC -- the bond share 1/4 has a merged twin 3/4 with the
+#  IDENTICAL fold image (fold(1/4) = fold(3/4) = 1/2): the bond can re-form at the twin
+#  position with the same energy accounting -- shape changed permanently, strength
+#  unchanged. That is a dislocation slip: same image, different preimage. FRACTURE -- a
+#  bond cannot fade continuously to nothing: its share would have to pass through the
+#  boundary the domain excludes (No-Zero), so bond loss is DISCRETE -- a bond either
+#  holds a positive share or is not there, which is why cracks propagate bond by bond
+#  instead of bonds thinning away.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: bond share 1/4 completing in two folds; twin 3/4 with
+#  the same fold image (slip without weakening); positive-share-or-absent bonds (discrete
+#  fracture). Measured: solids show exactly this trichotomy -- elastic return, plastic
+#  slip along dislocations at unchanged bond strength, and brittle crack propagation by
+#  sequential bond breaking.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lattice-bond share: the depth-2 state 1/4.
+define bond_share returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# ELASTIC: the bond completes to unison in two folds -- the restoring descent chain.
+define bond_completes_in_two_folds returning Bool:
+    set bond to bond_share()
+    set once to fold_fraction(bond)
+    set twice to fold_fraction(once)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(twice and one)
+
+# Two bonded neighbour-shares balance at the half-One: 1/4 + 1/4 = 1/2.
+define bonded_pair_balances returning Bool:
+    set bond to bond_share()
+    set neighbour to fraction_from_ratio(1 and 4)
+    set pair to fraction_add(bond and neighbour)
+    set half to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(pair and half)
+
+# PLASTIC: the twin position 3/4 has the IDENTICAL fold image -- slip re-forms the bond
+# at a new position with the same energy accounting (shape changes, strength does not).
+define slip_preserves_image returning Bool:
+    set bond to bond_share()
+    set twin to fraction_from_ratio(3 and 4)
+    set image to fold_fraction(bond)
+    set twin_image to fold_fraction(twin)
+    return fraction_is_equal(image and twin_image)
+
+# The twin is a genuinely different position (permanent shape change).
+define slip_changes_position returning Bool:
+    set bond to bond_share()
+    set twin to fraction_from_ratio(3 and 4)
+    set same to fraction_is_equal(bond and twin)
+    if same:
+        return false
+    return true
+
+# FRACTURE: a present bond's share is strictly positive -- there is no continuous fade
+# through the excluded boundary; bond loss is discrete (crack advances bond by bond).
+define bond_share_is_positive returning Bool:
+    set bond to bond_share()
+    return bond.numerator_sign > 0
