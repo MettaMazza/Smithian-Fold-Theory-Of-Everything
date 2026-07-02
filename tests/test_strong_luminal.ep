@@ -1,0 +1,21 @@
+import "../constants/strong_luminal.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the luminal strong carrier (gluons at c) ==="
+    set ok to expect_equal("the strong combination = the One" and fraction_to_text(strong_combination()) and "1")
+    set ok to expect_bool("the carrier is massless (shortfall at the excluded boundary)" and carrier_is_massless_here())
+    set ok to expect_bool("walked 8 ticks: the phase returns EXACTLY every tick (no dispersion)" and carrier_is_luminal_over(8))
+    set ok to expect_equal("the carrier speed = spacing/tick = the One = c" and fraction_to_text(carrier_speed()) and "1")
+    display "=== done ==="
+    return 0

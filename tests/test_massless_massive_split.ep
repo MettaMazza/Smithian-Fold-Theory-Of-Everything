@@ -1,0 +1,25 @@
+import "../constants/massless_massive_split.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the massless/massive split (photon vs W) ==="
+    set ok to expect_equal("EW preserved combination: 1/2 + 1/2 = the One" and fraction_to_text(preserved_combination(2)) and "1")
+    set ok to expect_equal("strong preserved combination: 2/3 + 1/3 = the One" and fraction_to_text(preserved_combination(3)) and "1")
+    set ok to expect_bool("the EW combination is MASSLESS (no shortfall exists)" and preserved_is_massless(2))
+    set ok to expect_bool("the strong combination is MASSLESS (the gluon)" and preserved_is_massless(3))
+    set ok to expect_bool("every broken channel is MASSIVE (positive shortfall)" and broken_channels_are_massive())
+    set ok to expect_equal("reach of mass 1/2: 1 step (run, not asserted)" and int_to_string(reach_of_mass(1 and 2)) and "1")
+    set ok to expect_equal("reach of mass 1/3: 2 steps" and int_to_string(reach_of_mass(1 and 3)) and "2")
+    set ok to expect_bool("all massive reaches finite and tiny (why the weak is short-range)" and massive_reaches_are_finite())
+    display "=== done ==="
+    return 0

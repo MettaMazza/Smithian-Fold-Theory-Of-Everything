@@ -1,0 +1,24 @@
+import "../constants/two_new_prime_charge_forces.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the force criterion (two new forces predicted) ==="
+    set ok to expect_bool("CARRY closes at p = 5: (1/5) * 5 = the One" and carry_closes(5))
+    set ok to expect_bool("CONFINEMENT: all 4 kinds of the 5-sector pair to the One" and all_kinds_pair(5))
+    set ok to expect_bool("all 6 kinds of the 7-sector pair (exhaustive)" and all_kinds_pair(7))
+    set ok to expect_bool("ALL FOUR sectors pass the identical criterion" and all_four_qualify())
+    set ok to expect_bool("the couplings rise strictly: 1/2 < 2/3 < 4/5 < 6/7" and couplings_rise_strictly())
+    set ok to expect_equal("the PREDICTED fifth-force coupling = 4/5" and fraction_to_text(fifth_force_coupling()) and "4/5")
+    set ok to expect_equal("the PREDICTED seventh-force coupling = 6/7" and fraction_to_text(seventh_force_coupling()) and "6/7")
+    display "=== done ==="
+    return 0

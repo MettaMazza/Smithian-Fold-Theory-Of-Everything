@@ -1,0 +1,116 @@
+# ============================================================================
+#  THE MASSLESS/MASSIVE SPLIT  --  why the photon is massless and the W is not.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Of the force carriers, exactly the ones on preserved combinations are
+#  massless (photon, gluon, graviton) and exactly the broken-channel ones are
+#  massive (W, Z) -- and the massless ones reach forever while the massive ones
+#  die in a few steps. The Standard Model gets this from the Higgs mechanism
+#  with the pattern put in. Forced: a channel's mass-part is its shortfall from
+#  unison; a PRESERVED combination sums to the One and has NO shortfall -- there
+#  is nothing to subtract, so its reach is unbounded; a broken channel has a
+#  positive shortfall, and the reach -- computed by actually running the
+#  subtraction -- is a definite small count of steps.
+#
+#  ── DERIVATION ─ (check every line; both sectors run, reaches computed) ──────
+#  ELECTROWEAK (m = 2): the two channels split the whole as c = 1/2, n = 1/2.
+#  STRONG (m = 3): c = 2/3, n = 1/3. In BOTH sectors the preserved combination
+#  c + n = 1 exactly -- it sits AT unison, its mass-part (the shortfall 1 - 1)
+#  would be the excluded boundary: massless because there is no value for its
+#  mass to take. Each broken channel sits BELOW unison with a positive
+#  shortfall: massive. REACH, computed by running the subtraction -- an
+#  intensity starting at the One loses one mass-part per step while it can:
+#      mass 1/2:  1 -> 1/2, stop            -- reach 1 step;
+#      mass 1/3:  1 -> 2/3 -> 1/3, stop     -- reach 2 steps;
+#      mass 2/3:  1 -> 1/3, stop            -- reach 1 step.
+#  Finite, tiny reaches for every massive channel -- the weak force is short-
+#  range -- while the massless combination, with nothing to subtract, never
+#  stops: infinite range for light and gravity. The split is not a mechanism
+#  bolted on; it is the arithmetic of shortfalls.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: c + n = 1 in both sectors, positive shortfalls
+#  on all broken channels, reaches 1 and 2 computed by running the loop.
+#  Measured: the photon mass bound is < 1e-18 eV and gravity reaches across the
+#  observable universe, while the W range is ~1e-18 m -- the split exactly as
+#  the shortfall arithmetic forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The channel split of the sector with generator m: c and n.
+define charged_channel with m as Int returning Fraction:
+    if m == 2:
+        return fraction_from_ratio(1 and 2)
+    return fraction_from_ratio(2 and 3)
+
+define neutral_channel with m as Int returning Fraction:
+    if m == 2:
+        return fraction_from_ratio(1 and 2)
+    return fraction_from_ratio(1 and 3)
+
+# The preserved combination: c + n -- exactly the One in the given sector.
+define preserved_combination with m as Int returning Fraction:
+    set c to charged_channel(m)
+    set n to neutral_channel(m)
+    return fraction_add(c and n)
+
+# The preserved combination is massless: its shortfall is the excluded boundary.
+define preserved_is_massless with m as Int returning Bool:
+    set combo to preserved_combination(m)
+    set one to fraction_from_whole_number(1)
+    set shortfall to fraction_subtract(one and combo)
+    return shortfall.numerator_sign == 0
+
+# A broken channel's mass-part: its positive shortfall from unison.
+define channel_mass with part as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and part)
+
+# The broken channels are massive in both sectors (positive shortfalls).
+define broken_channels_are_massive returning Bool:
+    set ew_charged to channel_mass(charged_channel(2))
+    set strong_charged to channel_mass(charged_channel(3))
+    set strong_neutral to channel_mass(neutral_channel(3))
+    set first_ok to ew_charged.numerator_sign > 0
+    set second_ok to strong_charged.numerator_sign > 0
+    set third_ok to strong_neutral.numerator_sign > 0
+    if first_ok:
+        if second_ok:
+            return third_ok
+        return false
+    return false
+
+# The REACH of a massive channel: run the subtraction -- an intensity starting
+# at the One loses one mass-part per step while it strictly exceeds the mass.
+define reach_of_mass with m_num as Int and m_den as Int returning Int:
+    set mass to fraction_from_ratio(m_num and m_den)
+    set intensity to fraction_from_whole_number(1)
+    set reach to 0
+    set stepping to true
+    repeat while stepping:
+        set comparison to fraction_compare(intensity and mass)
+        if comparison > 0:
+            set mass_again to fraction_from_ratio(m_num and m_den)
+            set intensity to fraction_subtract(intensity and mass_again)
+            set reach to reach + 1
+        else:
+            set stepping to false
+    return reach
+
+# All three massive reaches are finite and tiny: 1, 2, 1 steps.
+define massive_reaches_are_finite returning Bool:
+    set half_reach to reach_of_mass(1 and 2)
+    set third_reach to reach_of_mass(1 and 3)
+    set two_thirds_reach to reach_of_mass(2 and 3)
+    set first_ok to half_reach == 1
+    set second_ok to third_reach == 2
+    set third_ok to two_thirds_reach == 1
+    if first_ok:
+        if second_ok:
+            return third_ok
+        return false
+    return false

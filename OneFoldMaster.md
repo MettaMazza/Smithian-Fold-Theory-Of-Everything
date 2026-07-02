@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-241 suites, 1,366 forced checks, 0 failures). It needs nothing but a C compiler. Use
+244 suites, 1,385 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4487,6 +4487,39 @@ the full polarization identity gives the same One by an independent route. The t
 generated, not chosen: `3 = colour`, `4 = binary²`, `5 = 2+3` (the covering prime). The
 1-momentum companion of the full 3+1 Dirac closure: two exact ways the same energy law closes.
 
+### Step 239 — The force criterion (two new forces predicted)
+
+**File:** `constants/two_new_prime_charge_forces.ep`
+
+**What it does.** The mechanical criterion that makes a force a force — CARRY (`(1/p)·p = 1`,
+the binding closes exactly), CONFINEMENT (every kind `j/p` pairs with its antipode to the One —
+all 13 kinds across the four sectors run exhaustively), ORDERING (`1/2 < 2/3 < 4/5 < 6/7`) — is
+passed by the prime sectors **5 and 7 exactly as by 2 and 3**. Either the criterion is what makes
+the known forces forces — and then 5 and 7 are forces too, couplings `4/5` and `6/7` already fixed
+— or it must be abandoned for the known forces as well. The corpus's standing falsifiable
+prediction, stated by the framework's own standard.
+
+### Step 240 — The massless/massive split (photon vs W)
+
+**File:** `constants/massless_massive_split.ep`
+
+**What it does.** In BOTH sectors the preserved combination sums exactly to the One
+(`1/2 + 1/2`; `2/3 + 1/3`) — its mass-part would be the excluded boundary: massless because there
+is no value for its mass to take. Every broken channel carries a positive shortfall: massive. And
+the REACH is computed by *running the subtraction*: mass `1/2` → 1 step, `1/3` → 2 steps, `2/3` →
+1 step — finite and tiny (the weak force is short-range), while the massless combination, with
+nothing to subtract, never stops. The Higgs pattern as shortfall arithmetic, not a bolted-on
+mechanism.
+
+### Step 241 — The luminal strong carrier (gluons at c)
+
+**File:** `constants/strong_luminal.ep`
+
+**What it does.** The strong combination sits at unison, so its carrier holds no mass-part — and a
+carrier with nothing to shed advances by the whole One per tick: walked explicitly for eight ticks,
+the phase returns EXACTLY at every one — zero dispersion, no residue. The gluon is massless,
+luminal, and dispersion-free by one chain of arithmetic, its speed the same One that is `c`.
+
 ---
 
 ## Where the recreation stands right now
@@ -5017,6 +5050,13 @@ runs):**
   at every spacing — three routes, one 6; the family reads `2, 4, 6` across dimensions.
 - Step 238 — the two-component dispersion: `(3/5)² + (4/5)² = 1` exactly, confirmed by the
   polarization identity; the triple generated (`3 = colour, 4 = binary², 5 = 2+3`).
+- Step 239 — the force criterion: carry + exhaustive antipodal pairing + ordering, passed by
+  sectors 5 and 7 exactly as by 2 and 3 — two new forces PREDICTED, couplings `4/5` and `6/7` fixed.
+- Step 240 — the massless/massive split: preserved combinations at unison are massless (no value
+  for a mass to take); broken channels massive with reaches RUN — 1, 2, 1 steps — why light
+  reaches forever and the weak force does not.
+- Step 241 — the luminal strong carrier: no mass-part to shed → the full One per tick, walked 8
+  ticks with exact return each time — the gluon massless, luminal, dispersion-free.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

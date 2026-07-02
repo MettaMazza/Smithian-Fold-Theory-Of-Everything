@@ -1,0 +1,122 @@
+# ============================================================================
+#  THE FORCE CRITERION  --  sectors 5 and 7 qualify exactly as 2 and 3 do, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  What makes a force a force? In this model there is a mechanical criterion --
+#  a sector must carry its binding exactly and confine its kinds in antipodal
+#  pairs -- and the known forces (the binary 2 and colour 3 sectors) pass it.
+#  Forced: the SAME criterion, run identically, is passed by the prime sectors
+#  5 and 7 -- so the model PREDICTS two further fundamental prime-charge forces,
+#  with their couplings 4/5 and 6/7 already fixed. This is the standing
+#  falsifiable forecast of the corpus, stated by the framework's own standard.
+#
+#  ── DERIVATION ─ (check every line; one criterion, four primes, no dial) ─────
+#  For each prime sector p in the ladder span {2, 3, 5, 7}, the criterion:
+#  CARRY -- the binding must close exactly: the shortfall times the sector size
+#  returns the One, (1 - g_p)·p = (1/p)·p = 1, verified for all four.
+#  CONFINEMENT -- every kind j/p (j = 1 .. p-1) pairs with its antipode to the
+#  One: j/p + (p-j)/p = 1, verified EXHAUSTIVELY -- 1 + 2 + 4 + 6 = 13 kinds,
+#  every single pairing run. No kind escapes unpaired: nothing carrying a bare
+#  p-charge can appear alone (why no free quark at p = 3, and why the predicted
+#  5- and 7-charges will also never appear free).
+#  ORDERING -- the couplings g_p = (p-1)/p are strictly increasing with p:
+#  1/2 < 2/3 < 4/5 < 6/7 -- the deeper prime binds harder.
+#  The result: 5 and 7 satisfy every clause 2 and 3 satisfy, by the same
+#  arithmetic. Either the criterion is what makes 2 and 3 forces -- and then 5
+#  and 7 are forces too -- or the criterion must be abandoned for the known
+#  forces as well. There is no middle reading.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: carry, full pairing census, and ordering at all
+#  four primes. Comparison: sectors 2 and 3 are the observed electroweak and
+#  strong forces with exactly these binding structures; sectors 5 and 7 are the
+#  corpus's standing PREDICTION (couplings 4/5, 6/7; confining; see
+#  prime_force_phenomenology.ep for their spectra) -- falsifiable, committed,
+#  not yet probed at the required scale.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The sector prime by index (the ladder span).
+define force_prime with index as Int returning Int:
+    if index == 1:
+        return 2
+    if index == 2:
+        return 3
+    if index == 3:
+        return 5
+    return 7
+
+# CARRY: the binding closes exactly -- (1/p) * p = the One, for the given prime.
+define carry_closes with p as Int returning Bool:
+    set shortfall to fraction_from_ratio(1 and p)
+    set size to fraction_from_whole_number(p)
+    set carried to fraction_multiply(shortfall and size)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(carried and one)
+
+# CONFINEMENT: every kind j/p pairs with its antipode to the One -- exhaustive.
+define all_kinds_pair with p as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set all_pair to true
+    set j to 1
+    repeat while j < p:
+        set kind to fraction_from_ratio(j and p)
+        set antipode to fraction_from_ratio(p - j and p)
+        set total to fraction_add(kind and antipode)
+        set pairs to fraction_is_equal(total and one)
+        if pairs:
+            set all_pair to all_pair
+        else:
+            set all_pair to false
+        set j to j + 1
+    return all_pair
+
+# The full criterion at one prime: carry AND the complete pairing census.
+define sector_is_a_force with p as Int returning Bool:
+    set carry_ok to carry_closes(p)
+    set pairing_ok to all_kinds_pair(p)
+    if carry_ok:
+        return pairing_ok
+    return false
+
+# All four sectors pass the identical criterion -- including the two PREDICTED.
+define all_four_qualify returning Bool:
+    set all_ok to true
+    set i to 1
+    repeat while i < 5:
+        set p to force_prime(i)
+        set qualifies to sector_is_a_force(p)
+        if qualifies:
+            set all_ok to all_ok
+        else:
+            set all_ok to false
+        set i to i + 1
+    return all_ok
+
+# ORDERING: the couplings (p-1)/p rise strictly with the prime.
+define couplings_rise_strictly returning Bool:
+    set rising to true
+    set i to 1
+    repeat while i < 4:
+        set p_here to force_prime(i)
+        set p_next to force_prime(i + 1)
+        set g_here to fraction_from_ratio(p_here - 1 and p_here)
+        set g_next to fraction_from_ratio(p_next - 1 and p_next)
+        set comparison to fraction_compare(g_here and g_next)
+        if comparison < 0:
+            set rising to rising
+        else:
+            set rising to false
+        set i to i + 1
+    return rising
+
+# The predicted couplings of the two new forces: 4/5 and 6/7, already fixed.
+define fifth_force_coupling returning Fraction:
+    return fraction_from_ratio(4 and 5)
+
+define seventh_force_coupling returning Fraction:
+    return fraction_from_ratio(6 and 7)

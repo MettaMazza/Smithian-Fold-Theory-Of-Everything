@@ -389,9 +389,18 @@ And the structural laws of physics, forced the same way:
   every spacing — the family reads `2, 4, 6` across dimensions, no continuum anywhere), and the
   **two-component dispersion** (`(3/5)² + (4/5)² = 1` exactly, confirmed by the polarization
   identity — the triple generated: `3 = colour, 4 = binary², 5 = 2+3`).
+- **What makes a force a force, why light reaches forever, the gluon at c** — the **force
+  criterion** (carry `(1/p)·p = 1` + exhaustive antipodal pairing of all 13 kinds + strict
+  ordering, passed by sectors 5 and 7 exactly as by 2 and 3 — **two new forces predicted**,
+  couplings `4/5` and `6/7` already fixed: the corpus's standing falsifiable forecast), the
+  **massless/massive split** (preserved combinations sit at unison — massless because no value
+  exists for their mass; broken channels carry positive shortfalls with reaches RUN: 1, 2, 1
+  steps — the Higgs pattern as shortfall arithmetic), and the **luminal strong carrier** (no
+  mass-part to shed → the full One per tick, walked eight ticks with exact return — the gluon
+  massless, luminal, dispersion-free).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 241 test
-suites (1,366 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 244 test
+suites (1,385 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -448,7 +457,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 241 suites, 1,366 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 244 suites, 1,385 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
