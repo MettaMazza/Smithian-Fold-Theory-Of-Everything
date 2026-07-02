@@ -147,6 +147,18 @@ define inverse_fine_structure_second_order_decimal with places as Int returning 
     set numerator to tower() * effective_top + colour_squared() * (effective_top + sub)
     return ratio_to_decimal_text(numerator and effective_top and places)
 
+# The second-order value with an ARBITRARY sub scale -- for the promotion
+# falsification (AGENT.md): the test runs every alternative promotion of the
+# covering cube -- no promotion (5^3 = 125), two promotions (5*7^2 = 245), all
+# three (7^3 = 343), lead-carrying (2*5^2*7 = 350), one-each (5*7 = 35), the
+# strong alternative (5^2*3 = 75) -- through this and checks that ONLY the
+# forced single promotion d_down^2 * d_up = 175 lands on the measured value.
+define second_order_with_sub with sub as Int returning Fraction:
+    set cov to covering_volume()
+    set effective_top to cov * sub + 1
+    set numerator to tower() * effective_top + colour_squared() * (effective_top + sub)
+    return fraction_from_ratio(numerator and effective_top)
+
 
 # ----------------------------------------------------------------------------
 #  The assembled FORM is unique, not just its ingredients (forced_unique)

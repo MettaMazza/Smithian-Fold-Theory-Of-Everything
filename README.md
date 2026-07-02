@@ -391,7 +391,7 @@ And the structural laws of physics, forced the same way:
   identity — the triple generated: `3 = colour, 4 = binary², 5 = 2+3`).
 
 The full, ordered, run-it-yourself derivation of all of it — every step, all 241 test
-suites (1,364 forced checks, including the trace-to-the-One and the CODATA comparison) —
+suites (1,366 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -448,7 +448,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 241 suites, 1,364 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 241 suites, 1,366 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -4942,6 +4942,7 @@ long long inverse_fine_structure_first_order();
 long long inverse_fine_structure_first_order_decimal(long long);
 long long inverse_fine_structure_second_order();
 long long inverse_fine_structure_second_order_decimal(long long);
+long long second_order_with_sub(long long);
 long long fs_tower_fraction();
 long long fs_colour_square_fraction();
 long long fs_dilation_up();
@@ -5067,13 +5068,29 @@ L_cleanup:
 }
 
 long long _main() {
+    long long candidate = 0;
+    long long comparison = 0;
     long long first = 0;
+    long long gap = 0;
+    long long landings = 0;
+    long long measured = 0;
     long long ok = 0;
     long long second = 0;
+    long long sigma = 0;
+    long long value = 0;
+    long long which = 0;
+    long long zero = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&candidate);
     ep_gc_push_root(&first);
+    ep_gc_push_root(&gap);
+    ep_gc_push_root(&landings);
+    ep_gc_push_root(&measured);
     ep_gc_push_root(&second);
+    ep_gc_push_root(&sigma);
+    ep_gc_push_root(&value);
+    ep_gc_push_root(&zero);
 
     ep_gc_maybe_collect();
 
@@ -5096,11 +5113,50 @@ long long _main() {
     ok = expect_equal((long long)"second-order refinement is the unique form (forced_unique)", int_to_string(second_order_refinement_is_unique()), int_to_string(1));
     ok = expect_equal((long long)"no SIMPLER assembly reaches 1/alpha leading (generated grammar)", int_to_string(fine_structure_assembly_is_minimal()), int_to_string(1));
     ok = expect_equal((long long)"no SIMPLER assembly reaches the 2nd-order deepening (generated grammar)", int_to_string(second_order_deepening_is_minimal()), int_to_string(1));
+    printf("%s\n", (char*)(long long)"--- the promotion falsification: only d_down^2 * d_up = 175 lands ---");
+    landings = 0;
+    which = 1;
+    while (which < 8) {
+    candidate = 125;
+    if (which == 2) {
+    candidate = 245;
+    }
+    if (which == 3) {
+    candidate = 343;
+    }
+    if (which == 4) {
+    candidate = 350;
+    }
+    if (which == 5) {
+    candidate = 35;
+    }
+    if (which == 6) {
+    candidate = 75;
+    }
+    if (which == 7) {
+    candidate = 175;
+    }
+    value = second_order_with_sub(candidate);
+    measured = fraction_from_ratio(137035999177, 1000000000);
+    gap = fraction_subtract(value, measured);
+    if (({ long long _fap = gap; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }) < 0) {
+    zero = fraction_from_whole_number(0);
+    gap = fraction_subtract(zero, gap);
+    }
+    sigma = fraction_from_ratio(21, 1000000000);
+    comparison = fraction_compare(gap, sigma);
+    if (comparison < 0) {
+    landings = (landings + 1);
+    ok = expect_equal((long long)"landing sub scale (must be 175 alone)", int_to_string(candidate), int_to_string(175));
+    }
+    which = (which + 1);
+    }
+    ok = expect_equal((long long)"landings among the seven promotions: exactly one", int_to_string(landings), int_to_string(1));
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(2);
+    ep_gc_pop_roots(9);
     free_struct_Fraction(first);
     first = 0;
     free_struct_Fraction(second);
@@ -5297,6 +5353,27 @@ long long inverse_fine_structure_second_order_decimal(long long places) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long second_order_with_sub(long long sub) {
+    long long cov = 0;
+    long long effective_top = 0;
+    long long numerator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&effective_top);
+    ep_gc_push_root(&numerator);
+
+    ep_gc_maybe_collect();
+
+    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
+    effective_top = ((cov * sub) + 1);
+    numerator = ((whole_power(binary_count(), up_depth()) * effective_top) + (whole_power(colour_count(), binary_count()) * (effective_top + sub)));
+    ret_val = fraction_from_ratio(numerator, effective_top);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
     return ret_val;
 }
 

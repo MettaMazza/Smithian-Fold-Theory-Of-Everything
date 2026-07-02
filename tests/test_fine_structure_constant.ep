@@ -41,5 +41,40 @@ define main:
     set ok to expect_number("no SIMPLER assembly reaches 1/alpha leading (generated grammar)" and fine_structure_assembly_is_minimal() and 1)
     set ok to expect_number("no SIMPLER assembly reaches the 2nd-order deepening (generated grammar)" and second_order_deepening_is_minimal() and 1)
 
+    display "--- the promotion falsification: only d_down^2 * d_up = 175 lands ---"
+    # Comparison side: CODATA 1/alpha = 137.035999177, sigma = 21e-9. A sub scale
+    # "lands" when the second-order value sits within one sigma of the measurement.
+    # The seven candidates: no promotion 5^3, two 5*7^2, all 7^3, lead 2*5^2*7,
+    # one-each 5*7, strong 5^2*3, and the forced single promotion 5^2*7.
+    set landings to 0
+    set which to 1
+    repeat while which < 8:
+        set candidate to 125
+        if which == 2:
+            set candidate to 245
+        if which == 3:
+            set candidate to 343
+        if which == 4:
+            set candidate to 350
+        if which == 5:
+            set candidate to 35
+        if which == 6:
+            set candidate to 75
+        if which == 7:
+            set candidate to 175
+        set value to second_order_with_sub(candidate)
+        set measured to fraction_from_ratio(137035999177 and 1000000000)
+        set gap to fraction_subtract(value and measured)
+        if gap.numerator_sign < 0:
+            set zero to fraction_from_whole_number(0)
+            set gap to fraction_subtract(zero and gap)
+        set sigma to fraction_from_ratio(21 and 1000000000)
+        set comparison to fraction_compare(gap and sigma)
+        if comparison < 0:
+            set landings to landings + 1
+            set ok to expect_number("landing sub scale (must be 175 alone)" and candidate and 175)
+        set which to which + 1
+    set ok to expect_number("landings among the seven promotions: exactly one" and landings and 1)
+
     display "=== done ==="
     return 0

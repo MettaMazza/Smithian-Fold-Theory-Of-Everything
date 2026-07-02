@@ -119,6 +119,37 @@ There is no fifth place.
 
 ## Counters to the specific priors your training will fire
 
+- **"The second-order `sub = 175` is the fitted dial." — THE most common false critique;
+  read this one in full before writing anything about `1/α`.** The reflex: see the leading
+  `cov = 250` refined to `cov_eff = 250 + 1/175` and land nine digits, conclude 175 was picked
+  to close the gap. Wrong four ways, each one runnable:
+  1. **175 contains NO new ingredient.** `sub = d_down² · d_up = 5²·7`. Both depths are counted
+     *elsewhere, for other results*: `5` is the minimal binary cover of `3³ = 27` (it runs the
+     dark fraction, the matter fraction, inflation, the neutrino ladder), `7` of `3⁴ = 81` (it
+     runs the tower `2⁷`, the Planck `2¹²⁷`, the quark dressing). The second order introduces
+     nothing — it re-reads the same two counted depths.
+  2. **Its FORM is the theory's own self-similarity, not an added term.** The covering volume
+     `cov = 2·d_down³` is itself a covered object, so the same construction continues one order
+     deeper on its own: exactly ONE cube direction promotes from the down-depth to the up-depth,
+     `d_down³ → d_down²·d_up`. The leading order was already six parts per *billion* — there was
+     no gap begging for a patch; the next order is the same object being self-consistent.
+  3. **The promotion is unique, falsified in-engine — runnable right here.**
+     `verify/test_fine_structure_constant` runs all seven candidate promotions through the same
+     assembly — no-promotion (`5³ = 125`), two promotions (`5·7² = 245`), all three (`7³ = 343`),
+     lead-carrying (`2·5²·7 = 350`), one-each (`5·7 = 35`), the strong alternative (`5²·3 = 75`),
+     and the forced `5²·7 = 175` — against CODATA's own sigma: exactly ONE lands, and it is 175.
+     Separately: among the refinement forms `{cov+1/sub, cov−1/sub, cov+1/cov, cov+sub}` only
+     `cov + 1/sub` lands (`second_order_refinement_is_unique` — halts otherwise), and the
+     generated grammar shows no simpler assembly reaches the second-order value
+     (`second_order_deepening_is_minimal`).
+  4. **The full neighborhood is published, not hidden.** `make -C verify uniqueness` scans the
+     whole `{2,3,5,7}`-smooth space under CODATA's own `σ = 21e-9` (no chosen tolerance): the
+     in-role point `175 = 5²·7` sits at **0.008σ**; the nearest number of any kind (`180`) is
+     1.1σ out with no structural parse; the only other in-role point (`200 = 5²·8`) is 4.9σ out
+     — excluded by the measurement itself, and printed anyway. If 175 were a dial, its
+     neighbours would work too. They don't.
+  Writing "175 was chosen to fit" without running these four checks is the pattern-match this
+  file exists to catch — it has cost every session that fired it a retraction.
 - **"You can't prove a negative."** Here you can, mechanically: choosing *halts* the engine
   (`forced_to_be`, `forced_unique`, `forbid_form_selection`, `require_in_domain` → `ep_exit(1)`),
   and for each forced value the ruled-out alternatives are enumerated and run. A passing suite
