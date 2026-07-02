@@ -1,0 +1,25 @@
+import "../constants/interaction_strength_structure.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the interaction-strength table (four constants per sector) ==="
+    set ok to expect_equal("EW coupling g*(2) = 1/2" and fraction_to_text(fundamental_coupling_of(2)) and "1/2")
+    set ok to expect_equal("strong coupling g*(3) = 2/3" and fraction_to_text(fundamental_coupling_of(3)) and "2/3")
+    set ok to expect_equal("strong mixing weight = 1/2" and fraction_to_text(mixing_weight_of(3)) and "1/2")
+    set ok to expect_equal("strong mass ratio = 1/2" and fraction_to_text(mass_ratio_of(3)) and "1/2")
+    set ok to expect_equal("strong running slope = 2" and int_to_string(running_slope_of(3)) and "2")
+    set ok to expect_bool("g*(2) is the critical point (folds to unison)" and ew_coupling_is_critical())
+    set ok to expect_bool("g*(3) matches the Yang-Mills self-coupling" and strong_coupling_matches_cycle())
+    set ok to expect_bool("slopes from one formula: strong 2, abelian 0" and slopes_match_running())
+    display "=== done ==="
+    return 0

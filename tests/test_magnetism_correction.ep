@@ -1,0 +1,21 @@
+import "../constants/magnetism_correction.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== magnetism as relativity (the fold-covariant correction) ==="
+    set ok to expect_equal("at beta = 1/2: C = 1 - 1/4 = 3/4" and fraction_to_text(correction_factor(1 and 2)) and "3/4")
+    set ok to expect_bool("fold covariance at beta = 1/2: fold(C) = 1 - fold(beta^2)" and covariance_at(1 and 2))
+    set ok to expect_bool("the covariance holds across speeds (1/2 and 1/4)" and correction_is_fold_covariant())
+    set ok to expect_bool("a moving charge feels strictly less force (C < 1)" and moving_charge_feels_less())
+    display "=== done ==="
+    return 0

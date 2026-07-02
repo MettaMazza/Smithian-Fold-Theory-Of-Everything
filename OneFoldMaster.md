@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-244 suites, 1,385 forced checks, 0 failures). It needs nothing but a C compiler. Use
+248 suites, 1,407 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4520,6 +4520,47 @@ carrier with nothing to shed advances by the whole One per tick: walked explicit
 the phase returns EXACTLY at every one — zero dispersion, no residue. The gluon is massless,
 luminal, and dispersion-free by one chain of arithmetic, its speed the same One that is `c`.
 
+### Step 242 — What string theory got right (mode spacing 1/27)
+
+**File:** `constants/string_theory_correct.ep`
+
+**What it does.** String theory's sound kernel — particles as standing modes — without its
+machinery: the fold's grid vibrates in the COUNTED three dimensions (the period of `1/7`), the
+mode volume is `3³ = 27`, the spacing `1/27`, and the 27 modes partition the One exactly (summed
+explicitly). No ten dimensions, no landscape — and the same 27 seeds the covering depth 5 that
+runs the rest of the corpus.
+
+### Step 243 — The interaction-strength table (four constants per sector)
+
+**File:** `constants/interaction_strength_structure.ep`
+
+**What it does.** One formula family in the sector's single generator `m`: coupling `(m−1)/m`,
+mixing `1/(m−1)`, mass ratio `1/(m−1)`, running slope `m−1`. Evaluated at `m = 2` and `m = 3`, the
+eight table entries each agree with the value forced independently in its own module — `g*(2)` is
+the critical point, `g*(3)` the Yang–Mills self-coupling, slope(3) `= 2` exactly (asymptotic
+freedom) and the abelian slope `= 0` from the same formula. Two counted labels; the whole table
+follows.
+
+### Step 244 — Magnetism as relativity (the fold-covariant correction)
+
+**File:** `constants/magnetism_correction.ep`
+
+**What it does.** Magnetism is the relativistic correction to the Coulomb force — factor
+`C(β) = 1 − β²` — and that factor COMMUTES with the fold: `fold(1 − β²) = 1 − fold(β²)`, verified
+exactly at two speeds. The same commutation the gravitational clock factor obeys
+(static_metric_dilation): electricity's relativistic shadow and gravity's time dilation are one
+fold-covariant family, carried by the dynamics rather than imported.
+
+### Step 245 — The vacuum-inertia unity (exchange rate one)
+
+**File:** `constants/uap_vacuum_engineering.ep`
+
+**What it does.** The vacuum displacement (`v = 1/2`, No-Zero) and the fundamental coupling
+(`g* = (2−1)/2 = 1/2`) are the SAME point: their exchange rate is exactly the One, and both
+complete to unison in the same single fold. Nothing couples to the vacuum without coupling to
+inertia identically — the root of the equivalence principle (free fall universal to `1e-15`,
+MICROSCOPE), and the structural fact any vacuum-engineering claim must reckon with either way.
+
 ---
 
 ## Where the recreation stands right now
@@ -5057,6 +5098,14 @@ runs):**
   reaches forever and the weak force does not.
 - Step 241 — the luminal strong carrier: no mass-part to shed → the full One per tick, walked 8
   ticks with exact return each time — the gluon massless, luminal, dispersion-free.
+- Step 242 — what string theory got right: standing modes in the counted 3 dimensions, spacing
+  `1/27`, the 27 modes partitioning the One — the sound kernel, no landscape, no extra dimensions.
+- Step 243 — the interaction-strength table: coupling `(m−1)/m`, mixing `1/(m−1)`, mass ratio
+  `1/(m−1)`, slope `m−1` — eight entries from two counted labels, each matching its own module.
+- Step 244 — magnetism as relativity: `fold(1−β²) = 1−fold(β²)` exactly at two speeds — the
+  magnetic correction and the gravitational clock factor are one fold-covariant family.
+- Step 245 — the vacuum-inertia unity: `v/g* = 1` exactly, both halves completing in the same
+  fold — why free fall is universal (`1e-15`, MICROSCOPE) and inertia has no separate dial.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,22 @@
+import "../constants/string_theory_correct.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== what string theory got right (mode spacing 1/27) ==="
+    set ok to expect_equal("the mode dimensions = the counted 3 (period of 1/7)" and int_to_string(mode_dimensions()) and "3")
+    set ok to expect_equal("the mode volume = 3^3 = 27" and int_to_string(mode_volume()) and "27")
+    set ok to expect_equal("the mode spacing = 1/27" and fraction_to_text(mode_spacing()) and "1/27")
+    set ok to expect_equal("the 27 modes partition the One (summed explicitly)" and fraction_to_text(modes_partition_one()) and "1")
+    set ok to expect_bool("the same 27 seeds the covering depth 5 (the cross-link)" and volume_seeds_down_depth())
+    display "=== done ==="
+    return 0

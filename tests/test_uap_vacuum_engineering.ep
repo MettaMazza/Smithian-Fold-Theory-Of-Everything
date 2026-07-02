@@ -1,0 +1,22 @@
+import "../constants/uap_vacuum_engineering.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the vacuum-inertia unity (exchange rate one) ==="
+    set ok to expect_equal("the vacuum displacement v = 1/2" and fraction_to_text(vacuum_displacement()) and "1/2")
+    set ok to expect_equal("the inertia coupling g* = 1/2" and fraction_to_text(inertia_coupling()) and "1/2")
+    set ok to expect_equal("the exchange rate v/g* = the One, exactly" and fraction_to_text(exchange_rate()) and "1")
+    set ok to expect_bool("the rate is unity (couple to one = couple to the other)" and exchange_rate_is_one())
+    set ok to expect_bool("both complete to unison in the same single fold" and both_complete_together())
+    display "=== done ==="
+    return 0

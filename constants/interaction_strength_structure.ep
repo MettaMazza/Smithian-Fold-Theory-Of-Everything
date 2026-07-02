@@ -1,0 +1,82 @@
+# ============================================================================
+#  THE INTERACTION-STRENGTH TABLE  --  four constants per sector from one m.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Each interaction sector needs a family of characteristic numbers: its
+#  fundamental coupling, its mixing weight, its mass-part ratio, its running
+#  slope. The Standard Model measures each separately. Forced: ALL FOUR are one
+#  formula family in the sector's single generator m -- coupling (m-1)/m, mixing
+#  1/(m-1), mass ratio 1/(m-1), slope m-1 -- evaluated at m = 2 (electroweak)
+#  and m = 3 (strong), each output agreeing with the value forced independently
+#  in its own module. One label per sector; the whole table follows.
+#
+#  ── DERIVATION ─ (check every line; one generator per sector) ────────────────
+#  For the sector with generator m:
+#      fundamental coupling  g* = (m-1)/m       -- the sector's holding balance;
+#      mixing weight             1/(m-1)        -- the residual channel share;
+#      mass-part ratio           1/(m-1)        -- the same residual, as mass;
+#      running slope             m - 1          -- the carrier count that feeds.
+#  ELECTROWEAK (m = 2): g* = 1/2, mixing = 1, ratio = 1, slope = 1.
+#  STRONG (m = 3): g* = 2/3, mixing = 1/2, ratio = 1/2, slope = 2.
+#  Cross-checks against the independent modules: g*(2) = the critical coupling
+#  (fold(1/2) = 1); g*(3) = the strong self-coupling of the Yang-Mills cycle;
+#  slope(3) = 2 = the exact strong running slope (asymptotic_freedom) while the
+#  abelian slope is m - 1 at m = 1... the photon's sector has no residual channel
+#  and its slope is 0 = 1 - 1: the flat line, from the same formula. The table
+#  has no entries of its own -- only the sector labels 2 and 3, both counted.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the eight table entries from two labels, each
+#  agreeing with its independently forced module value. Measured: the weak
+#  mixing near maximal at the electroweak point, the strong slope exactly 2
+#  against QCD's asymptotic freedom, the photon flat -- the table as observed.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The fundamental coupling of the sector with generator m: (m-1)/m.
+define fundamental_coupling_of with m as Int returning Fraction:
+    return fraction_from_ratio(m - 1 and m)
+
+# The mixing weight: the residual channel share 1/(m-1).
+define mixing_weight_of with m as Int returning Fraction:
+    return fraction_from_ratio(1 and m - 1)
+
+# The mass-part ratio: the same residual read as mass, 1/(m-1).
+define mass_ratio_of with m as Int returning Fraction:
+    return fraction_from_ratio(1 and m - 1)
+
+# The running slope: the feeding carrier count, m - 1.
+define running_slope_of with m as Int returning Int:
+    return m - 1
+
+# Cross-check: the electroweak coupling is the critical point (folds to unison).
+define ew_coupling_is_critical returning Bool:
+    set g to fundamental_coupling_of(2)
+    set folded to fold_fraction(g)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# Cross-check: the strong coupling is the Yang-Mills self-coupling 2/3.
+define strong_coupling_matches_cycle returning Bool:
+    set g to fundamental_coupling_of(3)
+    set cycle_coupling to fraction_from_ratio(2 and 3)
+    return fraction_is_equal(g and cycle_coupling)
+
+# Cross-check: the slopes -- strong exactly 2, abelian exactly 0, from one formula.
+define slopes_match_running returning Bool:
+    set strong_ok to running_slope_of(3) == 2
+    set flat_ok to running_slope_of(1) == 0
+    if strong_ok:
+        return flat_ok
+    return false

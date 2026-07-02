@@ -1,0 +1,68 @@
+# ============================================================================
+#  WHAT STRING THEORY GOT RIGHT  --  mode spacing 1/27 in three dimensions.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  String theory's sound core is that particles are standing modes of an
+#  underlying vibrating structure. Its failure is everything bolted on to make a
+#  continuum vibrate: ten or eleven dimensions, a landscape of 10^500 vacua, no
+#  prediction. Forced: the fold's grid ALREADY vibrates in exactly the counted
+#  three spatial dimensions, and its mode spacing is fixed by the generational
+#  volume -- 1/27, with the 27 modes partitioning the One exactly. The correct
+#  kernel of string theory, with the dimension count forced instead of demanded
+#  and no landscape anywhere.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the counted d = 3) ─────────────
+#  The spatial dimensions are the counted d = 3 (the colour period). A standing
+#  mode fills the generational volume: with three directions each carrying the
+#  colour count of positions, the volume is 3^3 = 27 states and the mode spacing
+#  is one part of it:
+#      spacing = 1/27 -- one mode per state of the generational volume.
+#  The 27 modes PARTITION the One (27 * 1/27 = 1, summed explicitly): the
+#  spectrum is complete, with no state between modes -- the same 27 whose
+#  minimal binary cover forces the depth 5 everywhere else (quark_invariants,
+#  matter fraction, inflation). String theory's extra dimensions were a patch
+#  for making a continuum resonate; on the fold's grid the resonance comes with
+#  the counted three, and the "landscape" collapses to one forced spectrum.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: d = 3, spacing 1/27, 27 modes summing to the
+#  One. Comparison: the observed world has exactly three spatial dimensions and
+#  a discrete particle spectrum -- the two facts string theory postulates
+#  machinery for, both counted here.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The spatial dimension count: the counted colour period, 3.
+define mode_dimensions returning Int:
+    return fold_period_of_unit_fraction(7)
+
+# The generational volume: 3^3 = 27 states.
+define mode_volume returning Int:
+    set d to mode_dimensions()
+    return whole_power(colour_count() and d)
+
+# The mode spacing: one part of the generational volume, 1/27.
+define mode_spacing returning Fraction:
+    return fraction_from_ratio(1 and mode_volume())
+
+# The 27 modes partition the One -- summed explicitly, no state left over.
+define modes_partition_one returning Fraction:
+    set spacing to mode_spacing()
+    set count to mode_volume()
+    set total to fraction_from_whole_number(0)
+    set i to 0
+    repeat while i < count:
+        set total to fraction_add(total and spacing)
+        set i to i + 1
+    return total
+
+# The same 27 seeds the covering depth 5 (the cross-link to the rest of the corpus).
+define volume_seeds_down_depth returning Bool:
+    set volume to mode_volume()
+    set depth to minimal_binary_cover(volume)
+    return depth == 5

@@ -1,0 +1,82 @@
+# ============================================================================
+#  MAGNETISM AS RELATIVITY  --  the correction factor commutes with the fold.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Magnetism is not a second force: it is the relativistic correction to the
+#  Coulomb force seen from a frame where the charges move -- the net force on a
+#  co-moving charge is F = F_Coulomb · (1 - beta²). For that to be a law of the
+#  fold's dynamics and not an imported formula, the correction factor must be
+#  compatible with the fold itself. Forced: it is -- fold(1 - beta²) =
+#  1 - fold(beta²) for every weak-field speed, the same exact commutation the
+#  static metric obeys (static_metric_dilation.ep) -- electricity's relativistic
+#  shadow and gravity's clock factor carried by ONE covariance law.
+#
+#  ── DERIVATION ─ (check every line; exact rationals, two speeds run) ─────────
+#  At speed beta the moving pair's net force carries the factor
+#      C(beta) = 1 - beta²,
+#  the magnetic reduction of the electric attraction (lorentz_force.ep carries
+#  the force split; this claim carries the factor's LAW). Fold covariance, for
+#  beta² < 1/2 so no cast-out fires on either side:
+#      fold(C) = 2(1 - beta²) - 1 = 1 - 2·beta² = 1 - fold(beta²)  -- EXACTLY.
+#  Verified at beta = 1/2 (beta² = 1/4: fold(3/4) = 1/2 = 1 - fold(1/4)) and at
+#  beta = 1/4 (beta² = 1/16: fold(15/16) = 7/8 = 1 - fold(1/16)). Doubling the
+#  squared speed and folding the correction are the SAME operation: the
+#  magnetic correction is carried by the dynamics, not imposed on it -- and it
+#  is the same commutation the gravitational clock factor 1 - x obeys, so the
+#  two "corrections" of classical physics are one fold-covariant family.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: C = 1 - beta² with the commutation verified at
+#  two speeds. Measured: magnetism IS velocity-dependent electricity (a wire's
+#  magnetic force vanishes in the charges' rest frame; special relativity
+#  textbooks derive B from E exactly via this factor).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The squared speed beta^2 for a rational speed num/den.
+define speed_squared with num as Int and den as Int returning Fraction:
+    set beta to fraction_from_ratio(num and den)
+    set twin to fraction_from_ratio(num and den)
+    return fraction_multiply(beta and twin)
+
+# The magnetic correction factor: C = 1 - beta^2.
+define correction_factor with num as Int and den as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set beta_sq to speed_squared(num and den)
+    return fraction_subtract(one and beta_sq)
+
+# Fold covariance at a given speed: fold(C) = 1 - fold(beta^2).
+define covariance_at with num as Int and den as Int returning Bool:
+    set c to correction_factor(num and den)
+    set folded_c to fold_fraction(c)
+    set beta_sq to speed_squared(num and den)
+    set folded_sq to fold_fraction(beta_sq)
+    set one to fraction_from_whole_number(1)
+    set target to fraction_subtract(one and folded_sq)
+    return fraction_is_equal(folded_c and target)
+
+# The covariance holds across weak-field speeds (beta = 1/2 and beta = 1/4).
+define correction_is_fold_covariant returning Bool:
+    set at_half to covariance_at(1 and 2)
+    set at_quarter to covariance_at(1 and 4)
+    if at_half:
+        return at_quarter
+    return false
+
+# The correction reduces the force strictly (C < 1 for any moving charge).
+define moving_charge_feels_less returning Bool:
+    set c to correction_factor(1 and 2)
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(c and one)
+    return comparison < 0

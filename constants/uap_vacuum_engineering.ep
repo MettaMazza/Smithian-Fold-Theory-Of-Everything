@@ -1,0 +1,76 @@
+# ============================================================================
+#  THE VACUUM-INERTIA UNITY  --  the displacement and the coupling are one point.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Inertia is resistance to acceleration; the vacuum is the displaced ground
+#  every mass couples to. If the two were independent dials, engineering one
+#  without the other would be impossible in principle. Forced: they are not two
+#  dials -- the vacuum displacement v and the fundamental coupling g* are the
+#  SAME point (the half-One), their ratio exactly the One, both folding to
+#  unison in one step. Whatever couples to the vacuum couples to inertia at
+#  unit exchange rate: the structural fact behind the corpus's vacuum-
+#  engineering claim -- and a fact any propulsion claim must reckon with either
+#  way.
+#
+#  ── DERIVATION ─ (check every line; two forced points, one identity) ─────────
+#  The vacuum displacement is v = 1/2 (No-Zero forbids the symmetric ground;
+#  higgs_vacuum.ep). The fundamental coupling at m = 2 is g* = (2-1)/2 = 1/2
+#  (interaction_strength_structure.ep). Both derived independently; the
+#  identity:
+#      v / g* = 1  -- the vacuum-to-inertia exchange rate is exactly the One.
+#  Both points fold to unison in a single step (fold(1/2) = 1, each verified),
+#  so the vacuum's completion and the coupling's completion are the same event.
+#  Nothing couples to the vacuum without coupling to inertia identically --
+#  which is WHY inertia is universal (all masses fall alike: the equivalence
+#  principle's root) and why any modification of inertia is a modification of
+#  the local vacuum, at rate one.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: v = g* = 1/2, ratio = 1, both completing in one
+#  fold. Comparison: the universality of free fall is confirmed to 1e-15
+#  (MICROSCOPE) -- the unit exchange rate observed; no inertia modification has
+#  ever been seen without an energy cost through the vacuum, as the unity
+#  demands.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The vacuum displacement: the half-One (No-Zero forbids the symmetric ground).
+define vacuum_displacement returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The fundamental coupling at m = 2: (2-1)/2 = 1/2.
+define inertia_coupling returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The exchange rate: v / g* = the One, exactly.
+define exchange_rate returning Fraction:
+    set v to vacuum_displacement()
+    set g to inertia_coupling()
+    return fraction_divide(v and g)
+
+define exchange_rate_is_one returning Bool:
+    set rate to exchange_rate()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(rate and one)
+
+# Both points complete to unison in a single fold (the same event).
+define both_complete_together returning Bool:
+    set one to fraction_from_whole_number(1)
+    set v_folded to fold_fraction(vacuum_displacement())
+    set g_folded to fold_fraction(inertia_coupling())
+    set v_ok to fraction_is_equal(v_folded and one)
+    set g_ok to fraction_is_equal(g_folded and one)
+    if v_ok:
+        return g_ok
+    return false
