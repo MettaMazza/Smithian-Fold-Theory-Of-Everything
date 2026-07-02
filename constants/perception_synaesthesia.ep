@@ -1,0 +1,61 @@
+# ============================================================================
+#  SYNAESTHESIA  --  why senses can cross-wire, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Some people SEE sounds or TASTE words -- synaesthesia, where normally-separate senses
+#  bind together. That the crossing is even possible tells us the senses share a common
+#  binding mechanism. Forced: distinct sensory channels are different preimages of the
+#  SAME lock, so a cross-link routes one channel's preimage into another's -- the binding
+#  is one balance either can feed.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Two sensory channels are the two preimages of the binding lock: one at the quarter-One
+#  1/4, the other at the three-quarter-One 3/4. BOTH fold to the same lock state 1/2
+#  (fold(1/4) = fold(3/4) = 1/2) -- the common binding point where a percept becomes one
+#  experience, which folds to the whole (fold(1/2) = 1). Normally each channel keeps to
+#  its own preimage; synaesthesia is a cross-link that lets one channel's input arrive
+#  at the OTHER's preimage -- possible precisely because both preimages fold to the one
+#  shared lock, so a sound can bind as a colour. The two channels partition the One
+#  (1/4 + 3/4 = 1): cross-bound, they still make one whole experience, not two.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: two channel preimages (1/4, 3/4) folding to one shared
+#  lock 1/2. Observed: synaesthesia is real, consistent within a person, and traced to
+#  extra cross-connections between sensory areas -- channels sharing a binding lock,
+#  as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Two sensory channels: preimages of the binding lock, 1/4 and 3/4.
+define first_channel returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+define second_channel returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# Both fold to the SAME binding lock 1/2 -- the shared point a cross-link can route to.
+define channels_share_the_lock returning Bool:
+    set first_lock to fold_fraction(first_channel())
+    set second_lock to fold_fraction(second_channel())
+    return fraction_is_equal(first_lock and second_lock)
+
+# The lock folds to one whole experience.
+define lock_folds_to_experience returning Fraction:
+    return fold_fraction(fold_fraction(first_channel()))
+
+# The two channels partition the One: cross-bound, still one whole experience.
+define channels_partition_one returning Fraction:
+    set first to first_channel()
+    set second to second_channel()
+    return fraction_add(first and second)

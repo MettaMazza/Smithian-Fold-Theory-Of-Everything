@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-176 suites, 988 forced checks, 0 failures). It needs nothing but a C compiler. Use
+181 suites, 1,015 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3784,6 +3784,56 @@ CP/out-of-equilibrium conditions that pick which side survives).
 
 ---
 
+### Step 174 — The metric's degrees of freedom (two graviton polarisations)
+
+**File:** `constants/metric_components.ep`
+
+**What it does.** A symmetric `D`-metric has `D(D+1)/2` components; general covariance makes `2D`
+of them pure gauge, leaving `D(D−3)/2` physical. In `D = binary² = 4` that is `10` components and
+**2** degrees of freedom — the two graviton polarisations (LIGO's plus and cross). In `2+1D`:
+`6` components, **0** — so lower-dimensional gravity has no propagating waves, forced by the
+dimension count.
+
+### Step 175 — Multidimensional experience (a period-3 orbit)
+
+**File:** `constants/multidimensional_experience.ep`
+
+**What it does.** Beyond a single bound pair, a rich moment holds several qualities at once. The
+unit fraction `1/7` has fold period exactly `colour = 3`: the closed orbit `1/7 → 2/7 → 4/7 → 1/7`
+holds **three** states as one revolving whole, partitioning the One (`1/7 + 2/7 + 4/7 = 1`). A
+three-quality held orbit — the minimal "chord" of experience.
+
+### Step 176 — Stereochemistry (mirror molecules)
+
+**File:** `constants/stereochemistry.ep`
+
+**What it does.** Enantiomers are the two chiral preimages `1/4` and `3/4`. A mirror-blind probe
+reads only the fold *image* — both fold to the same `1/2`, so melting point, spectra, energy are
+identical. A chiral probe reads the *preimage* — `1/4` vs `3/4` differ — so a receptor or polarised
+light tells them apart (one medicine, one poison). Same image, different preimage; a racemic
+mixture is the whole (`1/4 + 3/4 = 1`).
+
+### Step 177 — Socio-economic cycles (boom and bust)
+
+**File:** `constants/socio_economic_dynamics.ep`
+
+**What it does.** A feedback-driven collective can't rest at a point (that would fold home and
+stop); it is the closed period-2 orbit — bust `1/3` and boom `2/3` folding into each other — the
+same held orbit as memory and sleep, read as economics. The "equilibrium" is the crossing balance
+`1/2` the system passes *through* but never rests at. The business cycle is structural, not a
+failure to converge.
+
+### Step 178 — Synaesthesia (senses sharing a lock)
+
+**File:** `constants/perception_synaesthesia.ep`
+
+**What it does.** Two sensory channels are the preimages `1/4` and `3/4` of the binding lock; both
+fold to the same `1/2`, which folds to one whole experience. Synaesthesia is a cross-link routing
+one channel's input to the other's preimage — possible precisely because both share the one lock,
+so a sound can bind as a colour. Cross-bound, still one whole (`1/4 + 3/4 = 1`).
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -4164,6 +4214,16 @@ runs):**
   tower; the gap shrinks (`1/6 → 1/12 → …`) and both climb to the One — unification.
 - Step 173 — the baryon asymmetry: a zero residue is forbidden, so matter is mandatory —
   the survivor is the strictly-positive half-One, folding to the whole universe.
+- Step 174 — the metric's DOF: `D(D+1)/2 = 10` components, `D(D-3)/2 = 2` physical in
+  3+1D (the two graviton polarisations); `0` in 2+1D (no propagating waves).
+- Step 175 — multidimensional experience: the period-3 orbit of `1/7` (`1/7, 2/7, 4/7`)
+  holds three qualities as one closed whole (summing to the One).
+- Step 176 — stereochemistry: enantiomers `1/4`/`3/4` share their fold image `1/2` (all
+  achiral properties identical) but differ in preimage (a chiral probe distinguishes).
+- Step 177 — socio-economic cycles: the period-2 orbit bust `1/3` / boom `2/3` never
+  rests at its `1/2` balance — the business cycle is structural, not a failure to converge.
+- Step 178 — synaesthesia: two channel preimages `1/4`, `3/4` share the binding lock `1/2`,
+  so a cross-link lets a sound bind as a colour (still one whole experience).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

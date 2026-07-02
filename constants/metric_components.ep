@@ -1,0 +1,58 @@
+# ============================================================================
+#  THE METRIC'S DEGREES OF FREEDOM  --  why gravity has two polarisations, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A gravitational wave has exactly TWO polarisations (LIGO measures "plus" and
+#  "cross"), fewer than the metric's ten components suggest. Why ten components, why
+#  two waves? Forced: the symmetric metric has D(D+1)/2 components, coordinate freedom
+#  removes 2D of them, and what remains is D(D-3)/2 -- which is 2 in our 3+1 dimensions
+#  and 0 in three.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the forced dimension count) ────
+#  Spacetime is D = binary^2 = 4 dimensions (3 space + 1 time, forced two ways;
+#  spacetime_dimensions.ep). A symmetric D-by-D metric has D(D+1)/2 independent
+#  components: in 4D, 4*5/2 = 10. General covariance lets you rechoose coordinates --
+#  D functions, each removing one component and one constraint, so 2D are pure gauge;
+#  the PHYSICAL degrees of freedom are
+#       D(D-3)/2  =  4*1/2 = 2  in 3+1D ,
+#  the two graviton polarisations. The same count gives D(D+1)/2 = 6 components and
+#  D(D-3)/2 = 0 physical DOF in 2+1D -- so lower-dimensional gravity has NO propagating
+#  waves, a forced consequence of the dimension count, not an added rule. The graviton
+#  is spin-2 because the physical field is the symmetric traceless part; two dimensions
+#  below the component count is exactly where the free radiation lives.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 10 metric components, 2 physical DOF in 3+1D; 6 and 0
+#  in 2+1D. Measured: gravitational waves have exactly two polarisations (LIGO's plus
+#  and cross), and 2+1D gravity is known to have no local propagating degrees of
+#  freedom -- the D(D-3)/2 count this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The spacetime dimension: D = binary^2 = 4 (3 space + 1 time).
+define spacetime_dimension returning Int:
+    return whole_power(binary_count() and binary_count())
+
+# The symmetric metric's component count: D(D+1)/2.
+define metric_components with d as Int returning Int:
+    return d * (d + 1) / binary_count()
+
+# The physical (gauge-fixed) degrees of freedom: D(D-3)/2.
+define physical_dof with d as Int returning Int:
+    return d * (d - colour_count()) / binary_count()
+
+# In 3+1D: 10 components, 2 physical DOF (the two graviton polarisations).
+define components_in_spacetime returning Int:
+    return metric_components(spacetime_dimension())
+
+define dof_in_spacetime returning Int:
+    return physical_dof(spacetime_dimension())
+
+# In 2+1D: 6 components, 0 physical DOF -- no propagating gravitational waves.
+define dof_in_three_dimensions returning Int:
+    return physical_dof(colour_count())

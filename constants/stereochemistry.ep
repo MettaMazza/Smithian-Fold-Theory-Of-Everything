@@ -1,0 +1,64 @@
+# ============================================================================
+#  STEREOCHEMISTRY  --  why mirror molecules are alike yet different, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Two enantiomers -- a molecule and its mirror image -- have identical melting points,
+#  identical spectra, identical everything a NON-chiral test can see, yet one may be
+#  medicine and its mirror poison (thalidomide). How can they be the same and not the
+#  same? Forced: they are the two chiral preimages of one balance -- identical to a
+#  mirror-blind probe (both fold to the same state), distinct only to a chiral one.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The two enantiomers are the fold's two handed preimages, the quarter-One 1/4 (left)
+#  and three-quarter-One 3/4 (right). Any SCALAR (mirror-blind) property reads only where
+#  they FOLD to -- and both fold to the same balance 1/2 (fold(1/4) = fold(3/4) = 1/2) --
+#  so melting point, energy, ordinary spectra are identical. But a CHIRAL probe reads the
+#  preimage itself, 1/4 vs 3/4, and those differ -- so a chiral partner (an enzyme, a
+#  receptor, plane-polarised light) tells them apart and reacts differently. Same fold
+#  image, different preimage: alike to the achiral world, opposite to the chiral one.
+#  The two enantiomers partition the One (1/4 + 3/4 = 1): a racemic mixture is the whole,
+#  mirror-balanced.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: enantiomers share their fold image (1/2, hence all
+#  scalar properties) but differ in preimage (1/4 vs 3/4, hence chiral reactions).
+#  Measured: enantiomers have identical achiral properties yet opposite optical rotation
+#  and different biological activity (one hand fits the receptor) -- as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The left enantiomer: the quarter-One, 1/4.
+define left_enantiomer returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# The right enantiomer: the three-quarter-One, 3/4.
+define right_enantiomer returning Fraction:
+    return fraction_from_ratio(colour_count() and binary_count() * binary_count())
+
+# A mirror-blind probe reads the fold IMAGE -- both enantiomers fold to the same 1/2.
+define achiral_properties_identical returning Bool:
+    set left_image to fold_fraction(left_enantiomer())
+    set right_image to fold_fraction(right_enantiomer())
+    return fraction_is_equal(left_image and right_image)
+
+# A chiral probe reads the PREIMAGE itself -- the two differ.
+define chiral_probe_distinguishes returning Bool:
+    set comparison to fraction_compare(left_enantiomer() and right_enantiomer())
+    return comparison != 0
+
+# The two enantiomers partition the One: a racemic mixture is the whole.
+define racemic_is_the_whole returning Fraction:
+    set left to left_enantiomer()
+    set right to right_enantiomer()
+    return fraction_add(left and right)

@@ -1,0 +1,70 @@
+# ============================================================================
+#  MULTIDIMENSIONAL EXPERIENCE  --  why experience has many bound qualities at once,
+#  forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A single moment of experience is not one note but a CHORD -- colour and shape and
+#  sound and feeling, many qualities held together as one. Beyond the two-state binding
+#  of a single pair, richer experience needs an orbit that carries several qualities at
+#  once. Forced: the colour fold has a period-THREE orbit that holds three states in one
+#  closed cycle.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The unit fraction 1/7 has fold period exactly colour = 3 (structural_counts.ep): its
+#  orbit is the three states 1/7, 2/7, 4/7, each folding to the next and back to the
+#  start (1/7 -> 2/7 -> 4/7 -> 1/7). Unlike the two-state period-2 orbit (a single bound
+#  pair -- memory, sleep), this is a THREE-state closed cycle: three qualities held
+#  together as one revolving whole, none reaching unison alone (a held, multidimensional
+#  experience). The three states PARTITION the One: 1/7 + 2/7 + 4/7 = 7/7 = 1 -- the
+#  complete moment is exactly its three bound qualities, and the number that can be held
+#  at once in one such orbit is the colour count, three. Deeper orbits (period 4, 5, ...
+#  at other denominators) hold more; the minimal rich experience is this period-3 triad.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a closed period-3 orbit (1/7, 2/7, 4/7) whose states
+#  sum to the One. Observed: a unified experience binds multiple simultaneous qualities
+#  (the "chord" of consciousness), and working memory's held items cluster at a small
+#  fixed capacity -- multiple qualities in one held orbit, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The seventh: base of the period-3 orbit.
+define orbit_base returning Fraction:
+    set seven to binary_count() * colour_count() + 1
+    return fraction_from_ratio(1 and seven)
+
+# The three orbit states: 1/7 -> 2/7 -> 4/7.
+define second_state returning Fraction:
+    return fold_fraction(orbit_base())
+
+define third_state returning Fraction:
+    return fold_fraction(second_state())
+
+# The orbit is closed with period 3: the third state folds back to the base.
+define orbit_returns_in_three returning Bool:
+    set back to fold_fraction(third_state())
+    set base to orbit_base()
+    return fraction_is_equal(back and base)
+
+# The three states partition the One: 1/7 + 2/7 + 4/7 = 1.
+define states_partition_one returning Fraction:
+    set first to orbit_base()
+    set second to second_state()
+    set third to third_state()
+    set partial to fraction_add(first and second)
+    return fraction_add(partial and third)
+
+# The number of qualities held at once is the colour count, three.
+define qualities_held returning Int:
+    return colour_count()

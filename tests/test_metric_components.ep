@@ -1,0 +1,22 @@
+import "../constants/metric_components.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the metric's degrees of freedom (two graviton polarisations) ==="
+    set ok to expect_equal("spacetime dimension D = binary^2 = 4" and int_to_string(spacetime_dimension()) and "4")
+    set ok to expect_equal("metric components D(D+1)/2 = 10" and int_to_string(components_in_spacetime()) and "10")
+    set ok to expect_equal("physical DOF D(D-3)/2 = 2 (two graviton polarisations)" and int_to_string(dof_in_spacetime()) and "2")
+    set ok to expect_equal("in 2+1D: components = 6" and int_to_string(metric_components(colour_count())) and "6")
+    set ok to expect_equal("in 2+1D: physical DOF = 0 (no gravitational waves)" and int_to_string(dof_in_three_dimensions()) and "0")
+    display "=== done ==="
+    return 0

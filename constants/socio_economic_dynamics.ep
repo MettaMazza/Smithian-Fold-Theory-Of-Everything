@@ -1,0 +1,69 @@
+# ============================================================================
+#  SOCIO-ECONOMIC CYCLES  --  why collectives boom and bust, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Markets, populations, and societies do not settle to a flat equilibrium -- they
+#  CYCLE: boom and bust, expansion and recession, over and over. Why an oscillation
+#  rather than a resting point? Forced: a dissipative collective is a closed period-2
+#  orbit -- two states that feed into each other and never settle to the One.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A collective driven by feedback (demand feeds supply feeds demand) cannot rest at a
+#  static point -- that would fold home to unison and stop. It is the closed period-2
+#  orbit: the low phase 1/3 (bust) and the high phase 2/3 (boom), folding into each
+#  other forever (1/3 -> 2/3 -> 1/3), the same held orbit as memory and the sleep cycle,
+#  now read as collective dynamics. Their balance is the crossing point (1/3 + 2/3)/2 =
+#  1/2 -- the "equilibrium" economists chase, which the system passes THROUGH but never
+#  rests at (the fold carries the balance to unison, fold(1/2) = 1, only if the cycle is
+#  broken). Boom and bust partition the whole (1/3 + 2/3 = 1): two complementary phases
+#  of one economy, cycling until the orbit is externally broken -- so the business cycle
+#  is structural, not a failure to reach equilibrium.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: a period-2 orbit {1/3, 2/3} that never rests at its
+#  1/2 balance. Observed: economic and population cycles (business cycles, predator-prey
+#  oscillations) persist around -- never at -- their notional equilibrium, exactly the
+#  held two-phase orbit this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The two collective phases: bust 1/3 and boom 2/3.
+define bust_phase returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+define boom_phase returning Fraction:
+    return fraction_from_ratio(binary_count() and colour_count())
+
+# The phases feed into each other -- a closed cycle, not a resting point.
+define bust_folds_to_boom returning Bool:
+    set bust to bust_phase()
+    set folded to fold_fraction(bust)
+    set boom to boom_phase()
+    return fraction_is_equal(folded and boom)
+
+define boom_folds_to_bust returning Bool:
+    set boom to boom_phase()
+    set folded to fold_fraction(boom)
+    set bust to bust_phase()
+    return fraction_is_equal(folded and bust)
+
+# The notional equilibrium is the crossing balance 1/2 (passed through, never rested at).
+define equilibrium_balance returning Fraction:
+    set whole to fraction_add(bust_phase() and boom_phase())
+    set two to fraction_from_whole_number(binary_count())
+    return fraction_divide(whole and two)
+
+# Boom and bust partition the whole economy: 1/3 + 2/3 = 1.
+define phases_partition_the_whole returning Fraction:
+    return fraction_add(bust_phase() and boom_phase())

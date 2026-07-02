@@ -1,0 +1,23 @@
+import "../constants/multidimensional_experience.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== multidimensional experience (a period-3 orbit) ==="
+    set ok to expect_equal("orbit base = 1/7" and fraction_to_text(orbit_base()) and "1/7")
+    set ok to expect_equal("second state = 2/7" and fraction_to_text(second_state()) and "2/7")
+    set ok to expect_equal("third state = 4/7" and fraction_to_text(third_state()) and "4/7")
+    set ok to expect_bool("the orbit is closed with period 3 (returns to the base)" and orbit_returns_in_three())
+    set ok to expect_equal("the three states partition the One (1/7+2/7+4/7)" and fraction_to_text(states_partition_one()) and "1")
+    set ok to expect_equal("qualities held at once = colour = 3" and int_to_string(qualities_held()) and "3")
+    display "=== done ==="
+    return 0

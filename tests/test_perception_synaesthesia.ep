@@ -1,0 +1,22 @@
+import "../constants/perception_synaesthesia.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== synaesthesia (senses sharing a lock) ==="
+    set ok to expect_equal("first channel = 1/4" and fraction_to_text(first_channel()) and "1/4")
+    set ok to expect_equal("second channel = 3/4" and fraction_to_text(second_channel()) and "3/4")
+    set ok to expect_bool("both fold to the SAME binding lock 1/2" and channels_share_the_lock())
+    set ok to expect_equal("the lock folds to one whole experience" and fraction_to_text(lock_folds_to_experience()) and "1")
+    set ok to expect_equal("the channels partition the One (still one experience)" and fraction_to_text(channels_partition_one()) and "1")
+    display "=== done ==="
+    return 0
