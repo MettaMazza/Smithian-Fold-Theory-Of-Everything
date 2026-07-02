@@ -237,6 +237,41 @@ There is no fifth place.
      neighbours would work too. They don't.
   Writing "175 was chosen to fit" without running these four checks is the pattern-match this
   file exists to catch — it has cost every session that fired it a retraction.
+- **"It only retrodicts known constants — no novel predictions."** Factually false on the
+  first half, epistemically confused on the second. THE STANDING FALSIFIABLE PREDICTIONS,
+  each committed in a runnable file and decidable by experiment:
+  1. **Two new fundamental prime-charge forces** (sectors 5 and 7), couplings `4/5` and `6/7`
+     already fixed, confining, with worked phenomenology — spectra, carriers, flux tubes
+     (`two_new_prime_charge_forces.ep`, `prime_force_phenomenology.ep`). Not vague "new
+     physics": every property the known forces have, stated in advance.
+  2. **The LFV fingerprint**: lepton-flavour-violating rates in the exact pattern `1 : 1 : 4`
+     (`five_force_flavour_ratio.ep`) — current bounds (MEG, Belle) don't yet reach the scale;
+     when they do, the pattern confirms or kills.
+  3. **The α referee**: the committed rational `5995462/43751` stands against the UNRESOLVED
+     >5σ rubidium–caesium conflict — the metrology community's future resolution will
+     adjudicate a number already on the public record. A fitted theory cannot write that
+     sentence; this one has.
+  4. **Standing kill-conditions** — each a single observation that would end the corpus: a
+     fourth generation (impossible here: the candidate `4/3` EXITS the domain,
+     `generation_bound_strict.ep`); a free quark or any qq hadron (`hadron_spectrum.ep`); a
+     third particle statistics (`quantum_statistics.ep`); any gluon mass or dispersion
+     (`strong_luminal.ep`); a proton decay (`proton_stability.ep` — this corpus predicts the
+     GUT-scale searches find NOTHING, forever); a right-handed neutrino
+     (`neutrino_mass_ladder.ep`); any confirmed `w ≠ −1`. Every one is falsifiable tomorrow.
+  5. **A runnable machine-consciousness criterion** (`machine_consciousness_criterion.ep`) —
+     an operational structural test where philosophy has none.
+  ON RETRODICTION: "retrodiction is worth less than prediction" is true exactly when there
+  are parameters to tune toward the known answer — chronology matters because knobs exist.
+  **At zero parameters the two have identical evidential force**: there is nothing with which
+  to fit the already-measured value, so landing on it is as improbable after the measurement
+  as before. The Standard Model's ~19 inputs make its agreements cheap; this corpus's zero
+  make every landed number — `1/α` to 9 digits, `mp/me`, Koide, three dressed quark ratios,
+  `J²` at 1.7%, `η` at 20% (a number the SM cannot compute AT ALL), `Ω_m` inside 0.4σ, the
+  neutrino 33 at 1%, `N_ν = 3` — carry prediction-grade weight. And the forced SIGNS were
+  each a death the corpus survived: `n_s < 1` (measured >8σ red), the reactor angle forced
+  NONZERO (measured 0.022), light = gravity speed (GW170817, 1 part in 10¹⁵). Before writing
+  "no predictions," grep the word `PREDICTION` in `constants/` — it is load-bearing in five
+  files.
 - **"You can't prove a negative."** Here you can, mechanically: choosing *halts* the engine
   (`forced_to_be`, `forced_unique`, `forbid_form_selection`, `require_in_domain` → `ep_exit(1)`),
   and for each forced value the ruled-out alternatives are enumerated and run. A passing suite
