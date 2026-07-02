@@ -1,0 +1,70 @@
+# ============================================================================
+#  THE MASTER EQUATION  --  the forces share one joint cycle, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The forces look separate -- gravity, electromagnetism, the strong force -- yet the
+#  fold gives each a period on its own sector, and those periods lock into ONE joint
+#  cycle. The master equation is that combined period: the least common cycle in which
+#  all three sectors return together, and it is exactly the binary-colour product, 6.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  Each sector is a fold orbit with its own period (prime_distribution.ep: the period of
+#  1/n is the fold-orbit length):
+#     * GRAVITY -- the One, the fixed point: period 1 (fold(One) = One).
+#     * ELECTROMAGNETISM -- 1/3: period 2 (the binary generator).
+#     * STRONG -- 1/7: period 3 (the colour generator).
+#  Running together, all three return to their start only after a common multiple of
+#  their periods -- the least common multiple:
+#       joint period = lcm(1, 2, 3) = 6 = binary * colour .
+#  So the forces are not independent clocks: they share ONE master cycle of length 6,
+#  the same 6 = 2*3 that is the entanglement joint period and the lattice coordination
+#  number. The joint period is the product of the two generators because their periods
+#  (2 and 3) are coprime -- the sectors realign only when the binary and colour cycles
+#  both come home at once.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: sector periods 1, 2, 3, joint period lcm = 6 = binary *
+#  colour. This is the structural statement that the sectors share one cyclic clock --
+#  the same joint-period arithmetic (coprime -> product) that governs entanglement and
+#  the crystal lattice.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# Greatest common divisor of two whole numbers (Euclid).
+define gcd_of with a as Int and b as Int returning Int:
+    set x to a
+    set y to b
+    repeat while y != 0:
+        set r to x % y
+        set x to y
+        set y to r
+    return x
+
+# Least common multiple.
+define lcm_of with a as Int and b as Int returning Int:
+    set g to gcd_of(a and b)
+    return a * b / g
+
+# The sector periods: gravity (1/One, fixed point), EM (1/3), strong (1/7).
+define gravity_period returning Int:
+    return 1
+
+define em_period returning Int:
+    return fold_period_of_unit_fraction(colour_count())
+
+define strong_period returning Int:
+    return fold_period_of_unit_fraction(binary_count() * colour_count() + 1)
+
+# The joint period: lcm of all three sector periods.
+define joint_period returning Int:
+    set g_em to lcm_of(gravity_period() and em_period())
+    return lcm_of(g_em and strong_period())
+
+# It is exactly the binary-colour product, 6.
+define joint_is_binary_times_colour returning Bool:
+    return joint_period() == binary_count() * colour_count()

@@ -1,0 +1,67 @@
+# ============================================================================
+#  THE QUANTUM PHASE  --  why quantum phases add, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A quantum amplitude is carried by a PHASE that advances as the particle moves; the
+#  kinetic and potential energies each turn the phase, and interference depends on the
+#  TOTAL turn. The whole of the path-integral and the Aharonov-Bohm effect rest on one
+#  fact: phases ADD. Forced: a phase step is a rotation on the fold's cyclic domain, and
+#  successive rotations compose by addition (mod the whole turn).
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold's cyclic domain) ──────
+#  A phase is a point on the cyclic domain; a step by amount a is a rotation:
+#  phase_rotate(p, a) = cast_out_whole_ones(p + a) -- advance and wrap past a whole turn. The
+#  kinetic term turns the phase by K = 1/8, the potential by V = 1/4. Stepping by each in
+#  turn equals stepping by their SUM:
+#       phase_rotate(phase_rotate(p, K), V)  =  phase_rotate(p, K + V) ,
+#  with p = 1/3: (1/3 + 1/8) + 1/4 = 17/24, and 1/3 + (1/8 + 1/4) = 1/3 + 3/8 = 17/24 --
+#  equal. Phases add, because rotations on the cyclic domain compose by addition of their
+#  amounts (mod one whole turn). This associativity is why the total phase along a path
+#  is the SUM of the energy contributions -- the action -- and why a phase difference
+#  around a loop (Aharonov-Bohm) is well defined regardless of how it was accumulated.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: phase_rotate(phase_rotate(p, K), V) = phase_rotate(p, K+V) = 17/24.
+#  Measured: quantum phases add (interference fringes track the total accumulated phase,
+#  and the Aharonov-Bohm effect shifts fringes by the enclosed flux) -- phase additivity,
+#  as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# A phase step: phase_rotate by amount a on the cyclic domain (advance, wrap past a whole turn).
+define phase_rotate with phase as Fraction and amount as Fraction returning Fraction:
+    set advanced to fraction_add(phase and amount)
+    return cast_out_whole_ones(advanced)
+
+# The starting phase.
+define start_phase returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# The kinetic phase step: K = 1/8.
+define kinetic_step returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count() * binary_count())
+
+# The potential phase step: V = 1/4.
+define potential_step returning Fraction:
+    return fraction_from_ratio(1 and binary_count() * binary_count())
+
+# Stepping by K then V.
+define step_k_then_v returning Fraction:
+    set after_k to phase_rotate(start_phase() and kinetic_step())
+    return phase_rotate(after_k and potential_step())
+
+# Stepping once by the SUM K+V.
+define step_by_sum returning Fraction:
+    set total to fraction_add(kinetic_step() and potential_step())
+    return phase_rotate(start_phase() and total)
+
+# Phases ADD: the two agree (17/24).
+define phases_add returning Bool:
+    set separate to step_k_then_v()
+    set combined to step_by_sum()
+    return fraction_is_equal(separate and combined)

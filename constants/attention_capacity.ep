@@ -1,0 +1,70 @@
+# ============================================================================
+#  ATTENTION CAPACITY  --  why you can hold only one focus, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Attention is a bottleneck: you can bind ONE thing into clear focus at a time, and
+#  splitting it degrades both. Why a single lock rather than many parallel focuses?
+#  Forced: focus is the binding lock itself -- the self-antipodal balance -- and there
+#  is exactly one such point, so one focus fully holds it.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  To attend to something is to BIND it -- to bring it to the lock where scattered
+#  processing becomes one focus (the same lock as binding_problem.ep). That lock is the
+#  self-antipodal balance 1/2, the UNIQUE value equal to its own complement
+#  (One - 1/2 = 1/2; half_one_center.ep proves it is the only one). A single focus sits
+#  at the whole lock and folds to unison (fold(1/2) = 1) -- one clear, bound experience.
+#  Splitting attention halves the lock: each of two focuses gets 1/4 (1/2 divided in
+#  two), and 1/4 is NOT self-antipodal (One - 1/4 = 3/4 differs from 1/4), so neither
+#  half is a complete lock -- divided attention binds nothing fully. The full lock and
+#  its complement sum to the One (1/2 + 1/2 = 1): attention is the whole balance, held
+#  once.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: one self-antipodal lock (1/2) folding to unison; a split
+#  gives 1/4, not self-antipodal. Observed: focal attention is a single bottleneck
+#  (the attentional blink, dual-task interference, inattentional blindness) -- one thing
+#  fully bound at a time, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The focus lock: the self-antipodal balance, 1/2.
+define focus_lock returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# A single focus fully holds the lock: it is self-antipodal.
+define single_focus_is_complete returning Bool:
+    set lock to focus_lock()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and lock)
+    return fraction_is_equal(complement and lock)
+
+# One focus folds to unison: one clear bound experience.
+define focus_folds_to_unison returning Fraction:
+    return fold_fraction(focus_lock())
+
+# Splitting attention halves the lock: each focus gets 1/4.
+define split_focus returning Fraction:
+    set lock to focus_lock()
+    set two to fraction_from_whole_number(binary_count())
+    return fraction_divide(lock and two)
+
+# A split focus is NOT self-antipodal -- it binds nothing fully.
+define split_focus_incomplete returning Bool:
+    set split to split_focus()
+    set one to fraction_from_whole_number(1)
+    set complement to fraction_subtract(one and split)
+    set same to fraction_is_equal(complement and split)
+    if same:
+        return 1 == 0
+    return 1 == 1

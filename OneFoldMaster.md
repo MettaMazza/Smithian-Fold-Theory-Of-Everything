@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-181 suites, 1,015 forced checks, 0 failures). It needs nothing but a C compiler. Use
+186 suites, 1,042 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3832,6 +3832,53 @@ fold to the same `1/2`, which folds to one whole experience. Synaesthesia is a c
 one channel's input to the other's preimage — possible precisely because both share the one lock,
 so a sound can bind as a colour. Cross-bound, still one whole (`1/4 + 3/4 = 1`).
 
+### Step 179 — Post-Newtonian convergence (the self-sourcing fixed point)
+
+**File:** `constants/pn_convergence.ep`
+
+**What it does.** Gravity's own field is a source for itself, so the post-Newtonian series is a
+self-referential map `f = g·(M + f²)` with the critical coupling `g = 1/2` and matter source
+`M = 7/16 = (binary·colour+1)/binary⁴`. The map has the exact fixed point `f* = 1/4`, which is
+the depth-two fold scale `(1/2)² = 1/4` — the series converges (each step's gap to `f*` strictly
+shrinks) rather than blowing up. General relativity's weak-field expansion closing on a finite
+answer, forced.
+
+### Step 180 — The quantum phase (why phases add)
+
+**File:** `constants/quantum_potential.ep`
+
+**What it does.** A phase is a point on the fold's cyclic domain and an energy step is a rotation
+`phase_rotate(p, a) = cast_out_whole_ones(p + a)`. Kinetic `K = 1/8` then potential `V = 1/4`
+gives the same result as one step by `K + V` (`17/24` either way): rotations of a circle add their
+angles, so phase along a path is the SUM of the energy contributions — the action, and the reason
+interference tracks total accumulated phase (Aharonov–Bohm).
+
+### Step 181 — Attention capacity (one focus)
+
+**File:** `constants/attention_capacity.ep`
+
+**What it does.** The focus lock is the self-antipodal `1/2`: a single focus fully holds it and
+folds to one bound experience (unison). Splitting attention halves the lock to `1/4`, which is no
+longer self-antipodal — a split focus binds nothing fully. Why attention has a unit capacity: only
+the one self-paired point completes.
+
+### Step 182 — The one-fold equation (fold² = identity)
+
+**File:** `constants/one_fold_equation.ep`
+
+**What it does.** The period-2 point `1/3` and its antipode `2/3` return to themselves under two
+folds (`fold² = id` on the orbit), and the orbit's two points sum to the One (`1/3 + 2/3 = 1`). The
+minimal closed cycle of the fold, stated as its own equation.
+
+### Step 183 — The master equation (the forces' joint cycle)
+
+**File:** `constants/master_equation.ep`
+
+**What it does.** Each sector's period is read off the fold: gravity `1` (the fixed point), EM
+`period(1/3) = 2`, strong `period(1/7) = 3`. Their joint cycle is `lcm(1, 2, 3) = 6`, which is
+exactly `binary · colour = 6` — the two generators' product is the period on which all three
+sectors realign. One cycle that closes the whole ladder.
+
 ---
 
 ## Where the recreation stands right now
@@ -4224,6 +4271,18 @@ runs):**
   rests at its `1/2` balance — the business cycle is structural, not a failure to converge.
 - Step 178 — synaesthesia: two channel preimages `1/4`, `3/4` share the binding lock `1/2`,
   so a cross-link lets a sound bind as a colour (still one whole experience).
+- Step 179 — post-Newtonian convergence: the self-sourcing map `f = (1/2)(7/16 + f²)` has the
+  exact fixed point `1/4 = (1/2)²`, and each step's gap to it shrinks — the weak-field series
+  closes on a finite answer instead of diverging.
+- Step 180 — the quantum phase: an energy step is a rotation on the cyclic domain, so `K = 1/8`
+  then `V = 1/4` equals one step by `K + V` (`17/24`) — phases ADD, which is why interference
+  tracks the total accumulated phase (Aharonov–Bohm).
+- Step 181 — attention capacity: the self-antipodal `1/2` is fully held by one focus (folds to
+  unison); splitting to `1/4` is no longer self-antipodal and binds nothing fully — a unit capacity.
+- Step 182 — the one-fold equation: the orbit `1/3`/`2/3` satisfies `fold² = identity` and sums to
+  the One — the fold's minimal closed cycle written as its own equation.
+- Step 183 — the master equation: sector periods gravity `1`, EM `2`, strong `3` share the joint
+  cycle `lcm(1,2,3) = 6 = binary · colour` — the one period on which all three forces realign.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

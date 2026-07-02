@@ -1,0 +1,22 @@
+import "../constants/master_equation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the master equation (the forces' joint cycle) ==="
+    set ok to expect_equal("gravity period = 1 (the fixed point)" and int_to_string(gravity_period()) and "1")
+    set ok to expect_equal("EM period (1/3) = 2" and int_to_string(em_period()) and "2")
+    set ok to expect_equal("strong period (1/7) = 3" and int_to_string(strong_period()) and "3")
+    set ok to expect_equal("joint period = lcm(1,2,3) = 6" and int_to_string(joint_period()) and "6")
+    set ok to expect_bool("the joint cycle is exactly binary * colour = 6" and joint_is_binary_times_colour())
+    display "=== done ==="
+    return 0

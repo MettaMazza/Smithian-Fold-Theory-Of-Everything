@@ -1,0 +1,68 @@
+# ============================================================================
+#  THE ONE-FOLD EQUATION  --  the master identity every cycle obeys, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Beneath every result in this corpus is one equation the fold obeys on its periodic
+#  points: applied enough times, the fold returns a value to itself. For the two-state
+#  cycles that run so much of physics (memory, sleep, boom-bust, quark orbits), the
+#  master identity is that folding TWICE is the identity. This is the A-1 root the whole
+#  ladder stands on.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  A period-2 point is a value the fold sends to its partner and back. The tripling
+#  preimage 1/3 is such a point: fold(1/3) = 2/3, and fold(2/3) = 1/3, so
+#       fold(fold(1/3)) = 1/3 -- folding twice is the identity on the orbit.
+#  The same holds for its antipode: One - 1/3 = 2/3, and fold(fold(2/3)) = 2/3. So the
+#  one-fold equation fold^2 = identity holds on the whole period-2 orbit, for a point
+#  AND its antipode together -- the closed two-state cycle that recurs everywhere. This
+#  is the master equation A-1: not a new fact but the identity the fold satisfies on its
+#  periodic points, from which the held orbits (and their absence at the fixed point,
+#  where fold(One) = One in ONE step) all follow. The orbit's two points sum to the One
+#  (1/3 + 2/3 = 1): the identity acts on a whole.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fold(fold(1/3)) = 1/3 and fold(fold(2/3)) = 2/3 -- the
+#  double fold is the identity on the period-2 orbit. This is the structural root of
+#  every two-state cycle the corpus derives (verified wherever a period-2 orbit appears).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The period-2 point: the tripling preimage, 1/3.
+define period_two_point returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+# Its antipode: One - 1/3 = 2/3.
+define point_antipode returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and period_two_point())
+
+# Folding TWICE is the identity on the point.
+define double_fold_is_identity returning Bool:
+    set point to period_two_point()
+    set once to fold_fraction(point)
+    set twice to fold_fraction(once)
+    return fraction_is_equal(twice and point)
+
+# And on its antipode.
+define double_fold_identity_on_antipode returning Bool:
+    set point to point_antipode()
+    set once to fold_fraction(point)
+    set twice to fold_fraction(once)
+    return fraction_is_equal(twice and point)
+
+# The orbit's two points sum to the One.
+define orbit_sums_to_one returning Fraction:
+    set point to period_two_point()
+    set antipode to point_antipode()
+    return fraction_add(point and antipode)

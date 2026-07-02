@@ -1,0 +1,23 @@
+import "../constants/quantum_potential.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the quantum phase (phases add) ==="
+    set ok to expect_equal("start phase = 1/3" and fraction_to_text(start_phase()) and "1/3")
+    set ok to expect_equal("kinetic step K = 1/8" and fraction_to_text(kinetic_step()) and "1/8")
+    set ok to expect_equal("potential step V = 1/4" and fraction_to_text(potential_step()) and "1/4")
+    set ok to expect_equal("step K then V = 17/24" and fraction_to_text(step_k_then_v()) and "17/24")
+    set ok to expect_equal("step by the sum K+V = 17/24" and fraction_to_text(step_by_sum()) and "17/24")
+    set ok to expect_bool("phases ADD: the two agree" and phases_add())
+    display "=== done ==="
+    return 0

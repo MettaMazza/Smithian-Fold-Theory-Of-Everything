@@ -1,0 +1,23 @@
+import "../constants/pn_convergence.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== post-Newtonian convergence (the self-sourcing fixed point) ==="
+    set ok to expect_equal("coupling g = 1/2" and fraction_to_text(pn_coupling()) and "1/2")
+    set ok to expect_equal("matter source M = 7/16" and fraction_to_text(pn_source()) and "7/16")
+    set ok to expect_equal("fixed point f* = 1/4" and fraction_to_text(fixed_point()) and "1/4")
+    set ok to expect_bool("f* is self-consistent: g(M + f*^2) = f*" and fixed_point_is_consistent())
+    set ok to expect_bool("the iteration contracts (gap shrinks) -> the series converges" and iteration_contracts())
+    set ok to expect_bool("the fixed point is the depth-2 fold scale 1/4 = (1/2)^2" and fixed_point_is_depth_two())
+    display "=== done ==="
+    return 0

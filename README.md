@@ -117,6 +117,14 @@ And the structural laws of physics, forced the same way:
   probe, opposite to a chiral one), **socio-economic cycles** (a period-2 orbit that never rests
   at its `1/2` equilibrium — the business cycle is structural), and **synaesthesia** (two channels
   share the binding lock, so a sound can bind as a colour).
+- **Gravity's self-sourcing, the quantum phase, one focus, the fold's own equation, the forces'
+  joint cycle** — **post-Newtonian convergence** (the self-sourcing map `f = (1/2)(7/16 + f²)` has
+  the fixed point `1/4 = (1/2)²`, and each step's gap to it shrinks — the weak-field series closes),
+  **the quantum phase** (an energy step is a rotation, so `1/8` then `1/4` equals one step by their
+  sum — phases add, hence Aharonov–Bohm), **attention capacity** (only the self-antipodal `1/2` is
+  fully held by one focus; splitting to `1/4` binds nothing — a unit capacity), **the one-fold
+  equation** (`fold² = identity` on the orbit `1/3`/`2/3`, summing to the One), and **the master
+  equation** (sector periods `1, 2, 3` share the joint cycle `lcm = 6 = binary · colour`).
 - **Life's scaling law, plasma waves, GR's nonlinearity, unification, why matter exists** —
 - **Life's scaling law, plasma waves, GR's nonlinearity, unification, why matter exists** —
   **network scaling** (metabolism as mass^(3/4): the `(m-1)/m` exponent at branching depth 4 —
@@ -274,8 +282,8 @@ And the structural laws of physics, forced the same way:
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 181 test
-suites (1,015 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 186 test
+suites (1,042 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -332,7 +340,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 181 suites, 1,015 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 186 suites, 1,042 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -1,0 +1,22 @@
+import "../constants/one_fold_equation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the one-fold equation (fold^2 = identity) ==="
+    set ok to expect_equal("period-2 point = 1/3" and fraction_to_text(period_two_point()) and "1/3")
+    set ok to expect_equal("its antipode = 2/3" and fraction_to_text(point_antipode()) and "2/3")
+    set ok to expect_bool("folding TWICE is the identity on the point (fold^2 = id)" and double_fold_is_identity())
+    set ok to expect_bool("and on its antipode" and double_fold_identity_on_antipode())
+    set ok to expect_equal("the orbit's two points sum to the One" and fraction_to_text(orbit_sums_to_one()) and "1")
+    display "=== done ==="
+    return 0
