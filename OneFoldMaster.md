@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-231 suites, 1,311 forced checks, 0 failures). It needs nothing but a C compiler. Use
+234 suites, 1,326 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4348,6 +4348,38 @@ exact mass ratio), `s₂₃` the difference of the two ladder slopes (exact root
 discriminating against a 10× wrong target. The half is the fold's imbalance share; every other
 factor traces to the cubics' counts.
 
+### Step 229 — The two mixing matrices (leptons wide, quarks narrow)
+
+**File:** `constants/full_mixing_matrices.ep`
+
+**What it does.** Both mixing matrices are ONE construction differing only in the sector's lock:
+the quark mass fibre covers `2/3` (an orbit point, close to the channel fibre → narrow CKM), the
+lepton fibre covers `1/2` (the balance, maximally far → wide PMNS). The lepton fibre
+`{1/6, 1/2, 5/6}` is verified; the first PMNS row is `{5/6, 1/2, 1/6}` — diagonal only `5/6`
+(below the CKM's `8/9`), solar element a huge `1/2`. Route B: all nine PMNS separations fold to
+the SAME point (`1/2`, the balance class) where the CKM's fold to the orbit points. Two shapes,
+two locks, no angle dialled in either.
+
+### Step 230 — The third CKM entry closed (the apex is the hand count)
+
+**File:** `constants/ckm_third_entry_closed.ep`
+
+**What it does.** The unitarity triangle's apex squared is `s₁₃²/(s₁₂²·s₂₃²) = 1/6 = 1/N_up`
+EXACTLY — the closure identity of the mixing chain, with the 6 the counted up-hand channels (the
+same 6 in `I1_up = 1/12` and the joint sector period). `V_ub² = s₁₃²` computed as one exact
+rational from the mass roots: `1.311e-5` vs measured `(0.0037)² = 1.369e-5` — ~2% on `V_ub`.
+Measuring the third entry adds no information beyond the masses and the count.
+
+### Step 231 — The neutrino splitting ratio (exactly 33)
+
+**File:** `constants/neutrino_mass_split.ep`
+
+**What it does.** The two oscillation splittings sit on the Mersenne rungs of the tower at the two
+counted reaches: solar at `2⁵−1 = 31` states, atmospheric at `2¹⁰−1 = 1023`. Their ratio is
+`1023/31 = 33` EXACTLY — by division AND by the geometric identity `(x²−1)/(x−1) = x+1` with
+`x = 2⁵`, both routes computed and agreeing, the factorisation `1023 = 31·33` checked. Measured:
+`dm²₃₁/dm²₂₁ = 33.3` — the forced 33 sits 1.0% below.
+
 ---
 
 ## Where the recreation stands right now
@@ -4856,6 +4888,13 @@ runs):**
 - Step 228 — the baryon-to-photon ratio: `J²` polynomial in exact squared sines (no square root
   anywhere) → `J² = 9.77e-10` vs measured `9.61e-10` (1.7%), `eta = J²/2 = 4.88e-10` vs measured
   `6.1e-10` — the number the Standard Model cannot compute, from the quark cubics and the half-One.
+- Step 229 — the two mixing matrices: one construction, two locks — quark `2/3` (orbit class →
+  narrow CKM), lepton `1/2` (balance class → wide PMNS, first row `{5/6, 1/2, 1/6}`, all nine
+  distances folding to `1/2`) — why leptons mix wide and quarks narrow.
+- Step 230 — the third CKM entry closed: `apex² = 1/6 = 1/N_up` exactly; `V_ub² = 1.311e-5` vs
+  measured `1.369e-5` (~2% on `V_ub`) — the entry adds nothing beyond the masses and the count.
+- Step 231 — the neutrino splitting ratio: Mersenne rungs `31` and `1023` at the counted reaches →
+  `1023/31 = 33 = 2⁵+1` exactly (two routes) vs measured `33.3` — 1.0%.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

@@ -1,0 +1,25 @@
+import "../constants/ckm_third_entry_closed.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the third CKM entry closed (the apex is the hand count) ==="
+    set ok to expect_equal("the up-hand count N_up = 6" and int_to_string(up_hand_count()) and "6")
+    set apex to apex_squared()
+    set ok to expect_equal("the apex squared = 1/6 EXACTLY (the closure identity)" and fraction_to_text(apex) and "1/6")
+    set ok to expect_bool("apex^2 = 1/N_up (the third entry adds no information)" and apex_is_inverse_hand_count())
+    set vub2 to v_ub_squared()
+    display concat("  info  V_ub^2 = " and fraction_to_decimal(vub2 and 9))
+    set measured_vub_squared to fraction_from_ratio(1369 and 100000000)
+    set ok to expect_bool("V_ub^2 lands within 25% of measured (0.0037)^2 (PDG)" and within_tolerance_of(vub2 and measured_vub_squared and 1 and 4))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,144 @@
+# ============================================================================
+#  THE TWO MIXING MATRICES  --  why leptons mix wide and quarks narrow, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Nature's two mixing matrices could not look more different: the quark CKM is
+#  nearly diagonal (small angles), the lepton PMNS is nearly anarchic (large
+#  angles). The Standard Model measures both shapes and explains neither. Forced:
+#  both matrices are the SAME construction -- an alignment between a mass fibre and
+#  the one channel fibre -- differing ONLY in which lock the sector's mass basis
+#  covers: the quark lock is 2/3 (an orbit point close to the channel fibre), the
+#  lepton lock is 1/2 (the critical balance, maximally far from it). One mechanism,
+#  two locks, two shapes -- wide and narrow both fall out.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY c = 3 and the fold) ────────────
+#  The channel basis is the tripling fibre of the One: C = {1/3, 2/3, 1}. The quark
+#  mass basis covers the lock 2/3: M_Q = {2/9, 5/9, 8/9} (ckm_magnitudes.ep -- the
+#  diagonal 8/9, near unity). The LEPTON mass basis covers the lock 1/2: the
+#  tripling fibre of 1/2 is M_L = {1/6, 1/2, 5/6}, each VERIFIED to land on 1/2
+#  under one tripling. The alignment U_ij = 1 - |M_L,i - C_j| gives the first row
+#      U₁₁ = 5/6 ,  U₁₂ = 1/2 ,  U₁₃ = 1/6
+#  -- a diagonal of only 5/6 (against the CKM's 8/9) and a HUGE first off-diagonal
+#  1/2 (against the CKM's 5/9... the second element is 1/2 = the solar mixing
+#  weight, neutrino_mixing.ep). The lepton matrix is genuinely wide: its rows are
+#  spread across the whole domain because the 1/2 lock sits maximally far from the
+#  channel fibre's own orbit. ROUTE B: every PMNS separation distance, tripled
+#  once, lands on the SAME point -- the critical 1/2 (all nine!) -- where the CKM
+#  distances land on the two orbit points {1/3, 2/3}. The two shapes are the two
+#  locks' fold-classes: orbit-class -> narrow (quarks), balance-class -> wide
+#  (leptons). No angle was dialled in either matrix.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: M_L = {1/6, 1/2, 5/6} verified, first row
+#  {5/6, 1/2, 1/6}, all nine PMNS distances folding to 1/2, all nine CKM distances
+#  to the orbit. Measured: PMNS angles are large (sin²θ₂₃ = 0.545, sin²θ₁₂ = 0.307)
+#  where CKM angles are small (0.0505, 0.0408 rad) -- the wide/narrow split this
+#  forces from the two locks alone.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The tripling fold: triple and cast out whole Ones.
+define tripling_fold with size as Fraction returning Fraction:
+    set twin_one to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set twin_two to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and twin_one)
+    set tripled to fraction_add(doubled and twin_two)
+    return cast_out_whole_ones(tripled)
+
+# The channel basis: the tripling fibre of the One, j/3.
+define channel_state_full with j as Int returning Fraction:
+    return fraction_from_ratio(j and 3)
+
+# The LEPTON mass basis: the tripling fibre of the 1/2 lock, (1/2 + (i-1))/3 = (2i-1)/6.
+define lepton_mass_state with i as Int returning Fraction:
+    return fraction_from_ratio(2 * i - 1 and 6)
+
+# The QUARK mass basis: the tripling fibre of the 2/3 lock, (3i-1)/9.
+define quark_mass_state with i as Int returning Fraction:
+    return fraction_from_ratio(3 * i - 1 and 9)
+
+# Every lepton mass state lands on the 1/2 lock under one tripling (verified).
+define lepton_fibre_verified returning Bool:
+    set lock to fraction_from_ratio(1 and 2)
+    set all_land to true
+    set i to 1
+    repeat while i < 4:
+        set state to lepton_mass_state(i)
+        set tripled to tripling_fold(state)
+        set lands to fraction_is_equal(tripled and lock)
+        if lands:
+            set all_land to all_land
+        else:
+            set all_land to false
+        set i to i + 1
+    return all_land
+
+# The separation |M_i - C_j| for a given mass state and channel state.
+define separation_of with mass as Fraction and weak as Fraction returning Fraction:
+    set comparison to fraction_compare(mass and weak)
+    if comparison > 0:
+        return fraction_subtract(mass and weak)
+    return fraction_subtract(weak and mass)
+
+# The PMNS alignment element: U_ij = 1 - |M_L,i - C_j|.
+define pmns_element with i as Int and j as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set mass to lepton_mass_state(i)
+    set weak to channel_state_full(j)
+    set distance to separation_of(mass and weak)
+    return fraction_subtract(one and distance)
+
+# The first PMNS row is {5/6, 1/2, 1/6} -- wide, not diagonal-dominant like the CKM.
+define first_row_is_wide returning Bool:
+    set e11 to pmns_element(1 and 1)
+    set e12 to pmns_element(1 and 2)
+    set e13 to pmns_element(1 and 3)
+    set five_sixths to fraction_from_ratio(5 and 6)
+    set half to fraction_from_ratio(1 and 2)
+    set sixth to fraction_from_ratio(1 and 6)
+    set first_ok to fraction_is_equal(e11 and five_sixths)
+    set second_ok to fraction_is_equal(e12 and half)
+    set third_ok to fraction_is_equal(e13 and sixth)
+    if first_ok:
+        if second_ok:
+            return third_ok
+        return false
+    return false
+
+# The lepton diagonal (5/6) sits BELOW the quark diagonal (8/9): leptons leak more.
+define lepton_diagonal_below_quark returning Bool:
+    set lepton_diag to pmns_element(1 and 1)
+    set one to fraction_from_whole_number(1)
+    set quark_mass to quark_mass_state(1)
+    set weak to channel_state_full(1)
+    set quark_distance to separation_of(quark_mass and weak)
+    set quark_diag to fraction_subtract(one and quark_distance)
+    set comparison to fraction_compare(lepton_diag and quark_diag)
+    return comparison < 0
+
+# ROUTE B: ALL NINE PMNS separations, tripled once, land on the SAME point -- the
+# critical 1/2 (the balance class), where the CKM's land on the orbit points.
+define pmns_distances_fold_to_balance returning Bool:
+    set lock to fraction_from_ratio(1 and 2)
+    set all_land to true
+    set i to 1
+    repeat while i < 4:
+        set j to 1
+        repeat while j < 4:
+            set mass to lepton_mass_state(i)
+            set weak to channel_state_full(j)
+            set distance to separation_of(mass and weak)
+            set folded to tripling_fold(distance)
+            set lands to fraction_is_equal(folded and lock)
+            if lands:
+                set all_land to all_land
+            else:
+                set all_land to false
+            set j to j + 1
+        set i to i + 1
+    return all_land

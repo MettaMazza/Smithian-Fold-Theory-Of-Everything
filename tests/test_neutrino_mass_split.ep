@@ -1,0 +1,29 @@
+import "../constants/neutrino_mass_split.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the neutrino splitting ratio (exactly 33) ==="
+    set ok to expect_equal("the solar rung: 2^5 - 1 = 31 states" and int_to_string(solar_rung()) and "31")
+    set ok to expect_equal("the atmospheric rung: 2^10 - 1 = 1023 states" and int_to_string(atmospheric_rung()) and "1023")
+    set ok to expect_equal("ROUTE A: the ratio by division = 33" and fraction_to_text(splitting_ratio_by_division()) and "33")
+    set ok to expect_bool("ROUTE B: the geometric identity gives the same 33 = 2^5 + 1" and routes_agree())
+    set ok to expect_bool("the factorisation holds: 1023 = 31 * 33" and factorisation_holds())
+    set measured to fraction_from_ratio(100 and 3)
+    set forced to splitting_ratio_by_division()
+    set gap to fraction_subtract(measured and forced)
+    set twentieth to fraction_from_ratio(1 and 20)
+    set allowed to fraction_multiply(twentieth and measured)
+    set comparison to fraction_compare(gap and allowed)
+    set ok to expect_bool("33 sits within 5% of measured 33.3 (1.0% below)" and comparison < 0)
+    display "=== done ==="
+    return 0

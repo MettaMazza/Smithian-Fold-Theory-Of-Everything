@@ -366,9 +366,16 @@ And the structural laws of physics, forced the same way:
   cubics — no square root anywhere — landing 1.7% from the measured Jarlskog invariant, and
   `η = J²/2 = 4.9e-10` vs measured `6.1e-10`: the matter census from the quark masses and the
   half-One, a number the Standard Model cannot compute at all).
+- **Why leptons mix wide, the triangle's apex, the neutrino 33** — the **two mixing matrices**
+  (one construction, two locks: the quark fibre covers the orbit point `2/3` → narrow CKM; the
+  lepton fibre covers the balance `1/2` → wide PMNS with first row `{5/6, 1/2, 1/6}` — no angle
+  dialled in either), the **third CKM entry closed** (`apex² = 1/6 = 1/N_up` exactly;
+  `V_ub² = 1.31e-5` vs measured `1.37e-5` — the entry adds nothing beyond the masses), and the
+  **neutrino splitting ratio** (Mersenne rungs `31` and `1023` → `1023/31 = 33 = 2⁵+1` exactly, vs
+  measured `33.3` — 1.0%).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 231 test
-suites (1,311 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 234 test
+suites (1,326 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -425,7 +432,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 231 suites, 1,311 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 234 suites, 1,326 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

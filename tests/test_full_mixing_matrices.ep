@@ -1,0 +1,22 @@
+import "../constants/full_mixing_matrices.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the two mixing matrices (leptons wide, quarks narrow) ==="
+    set ok to expect_bool("the lepton fibre {1/6, 1/2, 5/6} verified (all land on 1/2)" and lepton_fibre_verified())
+    set ok to expect_bool("the first PMNS row is {5/6, 1/2, 1/6} -- WIDE" and first_row_is_wide())
+    set ok to expect_equal("U_12 = 1/2 (the huge solar element)" and fraction_to_text(pmns_element(1 and 2)) and "1/2")
+    set ok to expect_bool("the lepton diagonal 5/6 sits BELOW the quark 8/9 (leptons leak more)" and lepton_diagonal_below_quark())
+    set ok to expect_bool("ROUTE B: all nine PMNS distances fold to the balance 1/2" and pmns_distances_fold_to_balance())
+    display "=== done ==="
+    return 0

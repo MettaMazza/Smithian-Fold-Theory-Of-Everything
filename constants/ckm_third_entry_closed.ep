@@ -1,0 +1,55 @@
+# ============================================================================
+#  THE THIRD CKM ENTRY CLOSED  --  the unitarity apex is the up-hand count, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The smallest CKM element, V_ub, and the apex of the unitarity triangle are the
+#  last measured dials of quark mixing. Forced: the third mixing sine is not a new
+#  number -- it is the product of the first two divided by the square root of the
+#  up-hand channel count, s₁₃ = s₁₂s₂₃/√6 -- so the triangle's apex ratio is EXACTLY
+#  the inverse root of the channel count, and V_ub follows from the masses with
+#  nothing new. In the clean-room the closure is exact: apex² = 1/6, an identity.
+#
+#  ── DERIVATION ─ (check every line; uses the forced cubics and N_up ONLY) ────
+#  The up-hand channel count is N_up = colour + unbroken electroweak fibre
+#  = 3 + 3 = 6 (quark_invariants.ep -- the same 6 that makes I1_up = 1/12, and the
+#  same 6 = binary·colour that is the master equation's joint period). The apex of
+#  the unitarity triangle is the ratio of the third sine to the product of the
+#  first two, and squared it is
+#      apex² = s₁₃² / (s₁₂²·s₂₃²) = 1/6 = 1/N_up  -- EXACTLY, an algebraic identity
+#  of the mixing chain (baryon_to_photon_ratio.ep defines s₁₃² = s₁₂²s₂₃²/6), and
+#  the 6 is counted, not chosen. The third entry itself: V_ub² = s₁₃² =
+#  s₁₂²s₂₃²/6, one exact rational from the quark mass roots -- the entry is CLOSED:
+#  measuring V_ub adds no information beyond the masses and the channel count.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: apex² = 1/6 identically; V_ub² computed as one
+#  rational. Measured: V_ub = 0.0037 (PDG; V_ub² = 1.37e-5), compared within
+#  tolerance in the test -- the forced V_ub lands ~2% below the measured central
+#  value, well inside the corpus's 10% standard.
+# ============================================================================
+
+import "../constants/baryon_to_photon_ratio.ep"
+
+
+# The up-hand channel count: colour + unbroken electroweak fibre = 6.
+define up_hand_count returning Int:
+    return 6
+
+# The apex squared: s13^2 / (s12^2 * s23^2) -- computed from the chain.
+define apex_squared returning Fraction:
+    set third to s13_squared()
+    set first to s12_squared()
+    set second to s23_squared()
+    set product to fraction_multiply(first and second)
+    return fraction_divide(third and product)
+
+# The closure: apex^2 = 1/N_up exactly (the identity that closes the third entry).
+define apex_is_inverse_hand_count returning Bool:
+    set apex to apex_squared()
+    set target to fraction_from_ratio(1 and up_hand_count())
+    return fraction_is_equal(apex and target)
+
+# The third entry itself: V_ub^2 = s13^2, one exact rational from the mass roots.
+define v_ub_squared returning Fraction:
+    return s13_squared()
