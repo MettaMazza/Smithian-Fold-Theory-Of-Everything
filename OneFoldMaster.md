@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-186 suites, 1,042 forced checks, 0 failures). It needs nothing but a C compiler. Use
+191 suites, 1,067 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3879,6 +3879,55 @@ minimal closed cycle of the fold, stated as its own equation.
 exactly `binary · colour = 6` — the two generators' product is the period on which all three
 sectors realign. One cycle that closes the whole ladder.
 
+### Step 184 — The strong-CP problem (alignment is the fixed point)
+
+**File:** `constants/strong_cp.ep`
+
+**What it does.** A CP phase is a point on the cyclic domain; the fold distinguishes exactly two —
+the fixed point (the One, `fold(1) = 1`, perfect alignment) and its unique preimage (the half-One,
+`fold(1/2) = 1`, maximal violation). The chiral weak sector is free to sit at the antipode (observed
+large CP violation); the vectorial strong sector's phase must be fold-invariant, so it can only sit
+at the fixed point — alignment. `θ` is not tuned to zero; alignment IS the only self-consistent
+strong phase. Measured: neutron-EDM bound `|θ| < 2e-10`, no axion required.
+
+### Step 185 — The synchronization threshold (coupled oscillators lock)
+
+**File:** `constants/sync_threshold.ep`
+
+**What it does.** Two unidirectionally-coupled folding maps have their difference multiplied each
+step by `2·(1 − g)` (binary times the un-coupled fraction). The gap is marginal — neither grows nor
+decays — exactly when that multiplier is the One: `g_c = 1/2`, the fold's own preimage of the One.
+Confirmed by exact arithmetic (`x = 1/5, y = 21/100`: the gap `1/100` is preserved through one
+coupled step at `g = 1/2`). Matches the conventional `1 − e^{−ln 2} = 1/2`.
+
+### Step 186 — Scale invariance (the limit speed at every scale)
+
+**File:** `constants/scale_invariance.ep`
+
+**What it does.** Space and time are read on the SAME grid step at each depth, `s_k = dt_k = 1/2^k`,
+so the limit speed is their ratio `c_k = 1` — the One at every depth `k`. Refining the scale halves
+both by the same binary factor, leaving the ratio untouched: `c` is a dimensionless invariant.
+Relativity's constant `c` (299792458 m/s) is the scale-dependent unit readout of this One.
+
+### Step 187 — Spatial flatness (the geometry is flat)
+
+**File:** `constants/spatial_flatness.ep`
+
+**What it does.** The physical density parameters sum to a total that neither grows nor decays under
+expansion — the fold's fixed point, `Ω_total = 1`. The curvature share is the remainder
+`Ω_k = 1 − 1`, which lands on the boundary the domain `(0,1]` forbids (No-Zero): there is no
+curvature to carry, so space is flat. Not fine-tuned — a curved universe would need the density
+budget to hold a piece at the one excluded value. Measured: Planck `|Ω_k| < 0.005`.
+
+### Step 188 — The vacuum equation of state (w = −1)
+
+**File:** `constants/vacuum_equation_of_state.ep`
+
+**What it does.** A density dilutes as `(scale)^{−3(1+w)}`. The vacuum energy is fold-invariant —
+it holds at the One as space folds forward (`fold(1) = 1`) — so it does not dilute, which forces the
+exponent to vanish: `3(1+w) = 0`, hence `w = −1`, the additive inverse of the fold's fixed point
+(pressure `= −`density). Measured: dark-energy surveys `w = −1.03 ± 0.03`, a cosmological constant.
+
 ---
 
 ## Where the recreation stands right now
@@ -4283,6 +4332,16 @@ runs):**
   the One — the fold's minimal closed cycle written as its own equation.
 - Step 183 — the master equation: sector periods gravity `1`, EM `2`, strong `3` share the joint
   cycle `lcm(1,2,3) = 6 = binary · colour` — the one period on which all three forces realign.
+- Step 184 — the strong-CP problem: the vectorial strong phase can only sit at the fold's
+  fixed point (the One = alignment), so `θ ≈ 0` is forced, not tuned — measured `|θ| < 2e-10`.
+- Step 185 — the synchronization threshold: coupled folding maps lock at `g_c = 1/2`, the fold's
+  preimage of the One (where the difference multiplier `2(1−g)` equals the One) — matches `1 − e^{−ln2}`.
+- Step 186 — scale invariance: space and time share one grid step `1/2^k`, so the limit speed
+  `c_k = 1` at every depth — `c` is a dimensionless invariant, its m/s value just a unit readout.
+- Step 187 — spatial flatness: the density budget sums to the fixed point `Ω_total = 1`, leaving the
+  curvature share at the excluded boundary `1 − 1` — space is flat (measured `|Ω_k| < 0.005`).
+- Step 188 — the vacuum equation of state: a fold-invariant (non-diluting) vacuum forces the
+  dilution exponent `3(1+w) = 0`, so `w = −1 = −`(the One) — measured `w = −1.03 ± 0.03`.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

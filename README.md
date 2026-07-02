@@ -281,9 +281,15 @@ And the structural laws of physics, forced the same way:
   halts in `k` folds), the **continuum limit** (the lattice curvature of `x²` is exactly
   `2` at every spacing), and the **electroweak currents** (charged flips handedness,
   neutral preserves it).
+- **Alignment, locking, invariance, flatness** — the **strong-CP problem** (the vectorial
+  strong phase can only sit at the fold's fixed point, so `θ ≈ 0` is forced, not tuned —
+  no axion), the **synchronization threshold** (coupled folding maps lock at `g_c = 1/2`,
+  the fold's preimage of the One), **scale invariance** (space and time share one grid step,
+  so the limit speed `c = 1` at every scale), and **spatial flatness** (the density budget
+  sums to the fixed point `Ω_total = 1`, leaving curvature at the domain's excluded boundary).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 186 test
-suites (1,042 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 191 test
+suites (1,067 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -340,7 +346,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 186 suites, 1,042 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 191 suites, 1,067 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

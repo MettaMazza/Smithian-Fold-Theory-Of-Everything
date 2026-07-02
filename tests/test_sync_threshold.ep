@@ -1,0 +1,21 @@
+import "../constants/sync_threshold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the synchronization threshold (coupled oscillators lock) ==="
+    set ok to expect_equal("the coupling threshold g_c = 1/2" and fraction_to_text(coupling_threshold()) and "1/2")
+    set ok to expect_bool("g_c is the fold's preimage of the One: fold(1/2) = 1" and threshold_is_fold_preimage())
+    set ok to expect_bool("the difference multiplier 2*(1 - g_c) = 1 (marginal)" and growth_multiplier_is_one())
+    set ok to expect_bool("at g_c the gap is preserved exactly (1/100 -> 1/100): locking" and difference_is_marginal())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,76 @@
+# ============================================================================
+#  SCALE INVARIANCE  --  why the limit speed is the same at every scale, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The speed of light is the same for every observer at every scale -- a postulate of
+#  relativity, taken as a brute fact. Forced: length and duration are the SAME grid
+#  step at each depth of the fold, so their ratio -- the limit speed -- is the One at
+#  every depth. Scale invariance is not imposed; it is what a single grid spacing shared
+#  by space and time forces.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2) ─────────────────────────
+#  At depth k the fold's grid step is 1/2^k. Space and time are read on the SAME grid,
+#  so a spatial step s_k = 1/2^k and a tick dt_k = 1/2^k are equal. The limit speed is
+#  their ratio:
+#       c_k = s_k / dt_k = (1/2^k) / (1/2^k) = 1  -- the One, at EVERY depth k.
+#  Refining the scale (k -> k+1) halves both s and dt by the same binary factor, so the
+#  ratio is untouched: c_{k+1} = c_k = 1. The limit speed is dimensionless unity,
+#  invariant under any change of scale, because space and time share one spacing. Only
+#  the CHOSEN unit that names the step (metres, seconds) is scale-dependent; the ratio
+#  is not.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: c_k = 1 for all depths k, with s and dt each halving per
+#  depth. Measured: c = 299792458 m/s is a scale-dependent readout -- the value of the
+#  One in the human unit system; its constancy across observers and scales is the forced
+#  invariance.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The spatial grid step at depth k: s_k = 1/2^k.
+define spatial_step with depth as Int returning Fraction:
+    set volume to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and volume)
+
+# The tick duration at depth k: dt_k = 1/2^k (the SAME grid step).
+define tick_step with depth as Int returning Fraction:
+    set volume to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and volume)
+
+# The limit speed at depth k: c_k = s_k / dt_k.
+define limit_speed with depth as Int returning Fraction:
+    set s_k to spatial_step(depth)
+    set dt_k to tick_step(depth)
+    return fraction_divide(s_k and dt_k)
+
+# c_k is the One at the given depth.
+define speed_is_one_at_depth with depth as Int returning Bool:
+    set c_k to limit_speed(depth)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(c_k and one)
+
+# The speed is invariant across depths: c_k equal for depths 1..7.
+define speed_invariant_across_depths returning Bool:
+    set all_one to true
+    set k to 1
+    repeat while k < 8:
+        set here to speed_is_one_at_depth(k)
+        if here:
+            set all_one to all_one
+        else:
+            set all_one to false
+        set k to k + 1
+    return all_one
+
+# Refining the scale halves the spatial step: s_{k+1} * 2 = s_k.
+define spacing_halves_per_depth with depth as Int returning Bool:
+    set s_k to spatial_step(depth)
+    set s_next to spatial_step(depth + 1)
+    set binary to fraction_from_whole_number(binary_count())
+    set doubled to fraction_multiply(s_next and binary)
+    return fraction_is_equal(doubled and s_k)

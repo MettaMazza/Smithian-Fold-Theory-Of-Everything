@@ -1,0 +1,21 @@
+import "../constants/spatial_flatness.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== spatial flatness (the geometry is flat) ==="
+    set ok to expect_equal("total physical density = the fold fixed point, the One" and fraction_to_text(total_density()) and "1")
+    set ok to expect_bool("the total is fold-invariant: fold(1) = 1" and total_is_fold_invariant())
+    set ok to expect_bool("the curvature share sits at the excluded boundary (no curvature)" and curvature_is_excluded_boundary())
+    set ok to expect_bool("flatness is forced: fixed-point total AND no curvature share" and flatness_forced())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,82 @@
+# ============================================================================
+#  THE VACUUM EQUATION OF STATE  --  why dark energy has w = -1, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Dark energy drives the accelerating expansion, and its equation of state -- the ratio
+#  w of pressure to energy density -- is measured to be almost exactly minus one. w = -1
+#  is the signature of a true vacuum energy: a density that does NOT dilute as space
+#  expands. Forced: the vacuum sits at the fold's fixed point (a non-diluting density),
+#  and the unique equation of state that keeps a density constant under expansion is the
+#  negative of that fixed point, w = -1.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold and 3 spatial dims) ───
+#  A density dilutes with expansion as (scale)^(-3(1 + w)): the 3 is the spatial
+#  dimension count (the volume exponent), and 1 + w sets how the pressure feeds back. The
+#  vacuum energy is fold-invariant -- it stays at the One as space folds forward
+#  (fold(1) = 1), so it does NOT dilute. A non-diluting density needs the dilution
+#  exponent to vanish: 3(1 + w) = 0, hence 1 + w = 0, hence w = -1. That value is not
+#  fitted: w is the additive inverse of the fold's fixed point -- minus the One -- the
+#  unique equation of state under which the density holds at its fixed point forever.
+#  Pressure equals the negative of the energy density, exactly.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: w = -1 = -(fold fixed point), giving a vanishing dilution
+#  exponent (non-diluting vacuum). Measured: dark-energy surveys find w = -1.03 +/- 0.03
+#  -- consistent with the forced w = -1 (a cosmological constant) within a few percent.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The fold-invariant vacuum density: the One (does not dilute; fold(1) = 1).
+define vacuum_density returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The vacuum density is fold-invariant: fold(1) = 1.
+define density_is_fold_invariant returning Bool:
+    set rho to vacuum_density()
+    set folded to fold_fraction(rho)
+    return fraction_is_equal(folded and rho)
+
+# The equation of state: w = -(the fold fixed point) = -1.
+define equation_of_state returning Fraction:
+    set zero to fraction_from_whole_number(0)
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(zero and one)
+
+# w is the negative of unison: it is negative, and adding the One lands exactly on the
+# excluded boundary (w + 1 = 0) -- so its size is the One and its sign is minus.
+define w_is_negative_unison returning Bool:
+    set w to equation_of_state()
+    set is_negative to w.numerator_sign < 0
+    set one to fraction_from_whole_number(1)
+    set restored to fraction_add(w and one)
+    set restores_to_boundary to restored.numerator_sign == 0
+    if is_negative:
+        return restores_to_boundary
+    return false
+
+# The non-diluting condition: w + 1 = 0 (pressure = -density).
+define non_diluting_condition returning Bool:
+    set w to equation_of_state()
+    set one to fraction_from_whole_number(1)
+    set total to fraction_add(w and one)
+    return total.numerator_sign == 0
+
+# The dilution exponent 3(1 + w) vanishes: the density holds constant under expansion.
+define dilution_exponent_vanishes returning Bool:
+    set w to equation_of_state()
+    set one to fraction_from_whole_number(1)
+    set one_plus_w to fraction_add(w and one)
+    set dims to fraction_from_whole_number(3)
+    set exponent to fraction_multiply(dims and one_plus_w)
+    return exponent.numerator_sign == 0

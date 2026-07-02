@@ -1,0 +1,21 @@
+import "../constants/scale_invariance.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== scale invariance (the limit speed at every scale) ==="
+    set ok to expect_equal("limit speed at depth 3 = 1 (s_3 / dt_3)" and fraction_to_text(limit_speed(3)) and "1")
+    set ok to expect_bool("the speed is the One at depth 5" and speed_is_one_at_depth(5))
+    set ok to expect_bool("the speed is invariant across depths 1..7" and speed_invariant_across_depths())
+    set ok to expect_bool("refining the scale halves the spatial step: s_4 * 2 = s_3" and spacing_halves_per_depth(3))
+    display "=== done ==="
+    return 0

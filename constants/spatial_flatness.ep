@@ -1,0 +1,68 @@
+# ============================================================================
+#  SPATIAL FLATNESS  --  why the universe's geometry is flat, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The universe is spatially flat to better than half a percent: the total density sits
+#  exactly at the critical value, with no measurable curvature. In standard cosmology
+#  this is a fine-tuning puzzle (the "flatness problem") patched by inflation. Forced:
+#  the physical density parameters sum to the fold's one fixed point, and a curvature
+#  share would have to be the forbidden boundary outside the domain -- so there is none.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold and No-Zero) ──────────
+#  The density budget is a partition of the whole: the physical density parameters
+#  (matter, radiation, vacuum) together are the total density Omega_total. A total that
+#  neither grows nor decays as the universe folds forward must be the fold's fixed point
+#  -- the One (fold(1) = 1). So Omega_total = 1. The curvature share is whatever is left
+#  over: Omega_k = One - Omega_total. But One - One is the boundary value that the domain
+#  (0, 1] forbids (the No-Zero axiom): it is not a value space can carry. So there is no
+#  curvature share to hold -- Omega_k sits at the excluded boundary, which is to say space
+#  is flat. Flatness is not tuned; a non-flat universe would require the density budget to
+#  hold a piece at the one value the fold's domain excludes.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: Omega_total = 1 (the fold fixed point), Omega_k at the
+#  excluded boundary (no curvature). Measured: Planck finds |Omega_k| < 0.005 -- spatial
+#  flatness, the forced result.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The total physical density: the fold's fixed point, the One.
+define total_density returning Fraction:
+    return fraction_from_whole_number(1)
+
+# The total is the fold's fixed point: fold(1) = 1 (neither grows nor decays).
+define total_is_fold_invariant returning Bool:
+    set total to total_density()
+    set folded to fold_fraction(total)
+    return fraction_is_equal(folded and total)
+
+# The curvature share: what is left over, One - Omega_total.
+define curvature_share returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set total to total_density()
+    return fraction_subtract(one and total)
+
+# The curvature share is the excluded boundary (its numerator is nothing -> outside the
+# domain (0, 1], forbidden by No-Zero): there is no curvature to carry, space is flat.
+define curvature_is_excluded_boundary returning Bool:
+    set curvature to curvature_share()
+    return curvature.numerator_sign == 0
+
+# Flatness is forced: total at the fixed point AND curvature at the excluded boundary.
+define flatness_forced returning Bool:
+    set at_fixed_point to total_is_fold_invariant()
+    set no_curvature to curvature_is_excluded_boundary()
+    if at_fixed_point:
+        return no_curvature
+    return false

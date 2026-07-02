@@ -1,0 +1,78 @@
+# ============================================================================
+#  THE SYNCHRONIZATION THRESHOLD  --  when coupled oscillators lock, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Fireflies flashing in unison, pacemaker cells beating together, coupled pendulums
+#  falling into step: below a critical coupling strength each does its own thing; at the
+#  threshold they lock. The threshold is usually fitted per system. Forced: the coupling
+#  at which the difference between two folding maps neither grows nor shrinks is exactly
+#  the fold's own preimage of the One -- the half.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Two maps run the fold, unidirectionally coupled with strength g:
+#       y_next = (1 - g) * fold(y) + g * fold(x).
+#  Since the fold doubles (before casting out), a small difference between the two maps
+#  is multiplied each step by 2 * (1 - g) -- the binary generator times the un-coupled
+#  fraction. The difference is marginal (neither grows nor decays) exactly when this
+#  multiplier is the One: 2 * (1 - g) = 1, i.e. g_c = 1/2. That value is not chosen: it
+#  is the fold's unique non-trivial preimage of the One (fold(1/2) = 1) -- the same half
+#  that is the fixed point's antipode everywhere in the corpus. We confirm it by exact
+#  arithmetic: with x = 1/5, y = 21/100 the gap is 1/100; fold_x = 2/5, fold_y = 42/100,
+#  and at g = 1/2 the coupled step gives y_next = 41/100, whose gap to fold_x is again
+#  1/100 -- the gap is preserved, the marginal (locking) threshold.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: g_c = 1/2, the fold preimage of the One, with the gap
+#  exactly preserved at that coupling. Measured/conventional: the standard coupled-map
+#  synchronization threshold is g_c = 1 - e^(-lambda) with Lyapunov exponent lambda = ln 2
+#  (the fold's doubling rate), which equals 1 - 1/2 = 1/2 -- the same half.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The synchronization threshold: g_c = 1/2.
+define coupling_threshold returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The threshold is the fold's unique preimage of the One: fold(1/2) = 1.
+define threshold_is_fold_preimage returning Bool:
+    set g_c to coupling_threshold()
+    set folded to fold_fraction(g_c)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# The difference multiplier at the threshold is the One: 2 * (1 - g_c) = 1.
+define growth_multiplier_is_one returning Bool:
+    set g_c to coupling_threshold()
+    set one to fraction_from_whole_number(1)
+    set uncoupled to fraction_subtract(one and g_c)
+    set binary to fraction_from_whole_number(binary_count())
+    set multiplier to fraction_multiply(binary and uncoupled)
+    return fraction_is_equal(multiplier and one)
+
+# The coupled step at g_c preserves the gap exactly (marginal stability -> locking).
+# x = 1/5, y = 21/100: gap 1/100 before, gap 1/100 after one coupled fold-step.
+define difference_is_marginal returning Bool:
+    set x to fraction_from_ratio(1 and 5)
+    set y to fraction_from_ratio(21 and 100)
+    set gap_before to fraction_subtract(y and x)
+    set fold_x to fold_fraction(x)
+    set fold_y to fold_fraction(y)
+    set g_c to coupling_threshold()
+    set one to fraction_from_whole_number(1)
+    set uncoupled to fraction_subtract(one and g_c)
+    set from_y to fraction_multiply(uncoupled and fold_y)
+    set from_x to fraction_multiply(g_c and fold_x)
+    set y_next to fraction_add(from_y and from_x)
+    set gap_after to fraction_subtract(y_next and fold_x)
+    return fraction_is_equal(gap_after and gap_before)

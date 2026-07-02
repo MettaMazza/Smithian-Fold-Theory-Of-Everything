@@ -1,0 +1,24 @@
+import "../constants/strong_cp.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the strong-CP problem (alignment is the fixed point) ==="
+    set ok to expect_equal("alignment (theta = 0) = the fold fixed point, the One" and fraction_to_text(alignment_state()) and "1")
+    set ok to expect_equal("maximal violation = the antipode 1/2" and fraction_to_text(max_violation_state()) and "1/2")
+    set ok to expect_bool("alignment is fold-invariant: fold(1) = 1" and alignment_is_fold_invariant())
+    set ok to expect_bool("the antipode folds to alignment: fold(1/2) = 1" and antipode_folds_to_alignment())
+    set ok to expect_bool("the two distinguished CP positions are distinct" and states_are_distinct())
+    set ok to expect_bool("the antipode's halves sum to alignment (1/2 + 1/2 = 1)" and antipode_doubles_to_alignment())
+    set ok to expect_bool("the vectorial strong phase can only sit at alignment -> theta = 0" and strong_lands_at_alignment())
+    display "=== done ==="
+    return 0

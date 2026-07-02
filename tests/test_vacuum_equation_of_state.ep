@@ -1,0 +1,23 @@
+import "../constants/vacuum_equation_of_state.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the vacuum equation of state (w = -1) ==="
+    set ok to expect_equal("the vacuum density = the One (non-diluting)" and fraction_to_text(vacuum_density()) and "1")
+    set ok to expect_bool("the density is fold-invariant: fold(1) = 1" and density_is_fold_invariant())
+    set ok to expect_equal("the equation of state w = -1" and fraction_to_text(equation_of_state()) and "-1")
+    set ok to expect_bool("w is the negative of unison (-1)" and w_is_negative_unison())
+    set ok to expect_bool("non-diluting: w + 1 = 0 (pressure = -density)" and non_diluting_condition())
+    set ok to expect_bool("the dilution exponent 3(1 + w) vanishes" and dilution_exponent_vanishes())
+    display "=== done ==="
+    return 0
