@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-207 suites, 1,163 forced checks, 0 failures). It needs nothing but a C compiler. Use
+212 suites, 1,187 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4097,6 +4097,54 @@ ANTISYMMETRIC, and the fibre caps occupancy at 2 (a third fermion has no distinc
 Pauli is the fibre running out). No third case exists on a two-point fibre — the same two-to-one
 fold that makes the arrow of time makes the two statistics.
 
+### Step 205 — The planar lattice (the line's law extends)
+
+**File:** `constants/planar_lattice.ep`
+
+**What it does.** On the plane each of the `d = 2` axes contributes `binary = 2` neighbours —
+`4 = 2·2`, each holding the depth-3 share `1/8`. The neighbour sum is `1/2` (summed explicitly),
+equal to the count times the centre share (the balance law whose failure IS the Laplacian), and it
+folds to unison. The plane needs no new operator — the 1D law extends with nothing added.
+
+### Step 206 — Planar gravity (Laplacian = expansion squared)
+
+**File:** `constants/planar_lattice_gravity.ep`
+
+**What it does.** The 1D second difference of `x²` on the lattice is EXACTLY 2 at every spacing —
+the `s²` terms cancel identically, computed here at depths 3 and 5. The planar Laplacian adds the
+two axis curvatures: `4 = d · curv = 2·2`. Cross-check: the fold expansion factor, measured exactly
+on `1/5` and `1/7` (gap `2/35 → 4/35`), is `m = 2` — and the Laplacian equals `m² = 4`. Poisson's
+equation reads the same on the fold's plane as on its line; gravity needs no continuum in 2D either.
+
+### Step 207 — The planar light wave (Maxwell closes in 2D)
+
+**File:** `constants/planar_maxwell_wave.ep`
+
+**What it does.** A wave equation balances spatial against temporal curvature. Spatial: the planar
+Laplacian 4 (two exact-2 axes); temporal: one axis, 2. Ratio `4/2 = 2` = the planar dimension = the
+measured fold expansion — the curl pair closes into a 2D wave with `c² = 1`. Light is
+dimension-blind because every axis carries the same exact curvature.
+
+### Step 208 — The static metric (fold-covariant clock factor)
+
+**File:** `constants/static_metric_dilation.ep`
+
+**What it does.** Gravity's clock factor `A(x) = 1 − x` COMMUTES with the fold on weak fields:
+`fold(A(x)) = A(fold(x))` — checked exactly at `x = 1/8` (`fold(7/8) = 3/4 = 1 − fold(1/8)`) and
+`x = 1/16`. Doubling the potential and folding the clock are the same operation: the static metric
+is carried by the dynamics, not imposed. And at depth `x = 7/16` the dilation is an exact rational:
+`dtau/dt = 3/4` since `(3/4)² = 9/16 = A` — three ticks per four, no float anywhere.
+
+### Step 209 — The Vieta cross-check (roots pinned from both sides)
+
+**File:** `constants/collapse_to_open_conversion.ep`
+
+**What it does.** The lepton cubic's three bisected roots get an INDEPENDENT algebraic
+characterisation: Vieta's identities force `r₁+r₂+r₃ = 1` (no mass share lost),
+`r₁r₂+r₁r₃+r₂r₃ = 1/6` (the second invariant), `r₁r₂r₃ = 1/485` (the third). All three hold to
+enclosure precision (`1/10⁹`, generous against the `1/2⁴⁰` bracket width). Bisection uses only sign
+changes; Vieta only the product expansion — two derivations, one triple of numbers.
+
 ---
 
 ## Where the recreation stands right now
@@ -4548,6 +4596,16 @@ runs):**
   measured expansion = constructed branches = binary; Lyapunov `ln 2`, KS entropy 1 bit/step.
 - Step 204 — quantum statistics: on the lock's two-point fibre a pair coincides (symmetric, Bose)
   or differs (sign-reversing, Fermi, capped at 2 = one per hand) — no third case exists.
+- Step 205 — the planar lattice: `4 = 2·2` neighbours at `1/8` sum to the balance `1/2` = count ×
+  centre share, folding to unison — the 1D law extends to the plane with nothing added.
+- Step 206 — planar gravity: the lattice curvature of `x²` is exactly 2 at every spacing (s² terms
+  cancel identically); the planar Laplacian `4 = m²` with the expansion `m = 2` measured exactly.
+- Step 207 — the planar light wave: spatial/temporal curvature ratio `4/2 = 2 = d = m` — Maxwell
+  closes into a 2D wave at `c = 1`; light is dimension-blind.
+- Step 208 — the static metric: `fold(1−x) = 1−fold(x)` exactly (the clock factor commutes with the
+  fold), and at `x = 7/16` the dilation is the exact rational `3/4` (`(3/4)² = 9/16`).
+- Step 209 — the Vieta cross-check: the bisected lepton roots satisfy sum `= 1`, pair-sum `= 1/6`,
+  product `= 1/485` to enclosure precision — bisection and Vieta pin the same triple independently.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

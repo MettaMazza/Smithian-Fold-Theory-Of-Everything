@@ -1,0 +1,103 @@
+# ============================================================================
+#  PLANAR GRAVITY  --  the 2D Laplacian equals the fold expansion squared, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Weak-field gravity is Poisson's equation: the Laplacian of the potential equals the
+#  source. On the plane, the discrete Laplacian of the quadratic potential must match a
+#  structural number of the fold for gravity to be lattice-native in 2D as it is in 1D
+#  and 3D. Forced: the 2D lattice Laplacian of f(x) = x² is EXACTLY 4 at every spacing
+#  -- the planar dimension (2) times the 1D curvature (2), which is the fold expansion
+#  factor squared (m² = 4), with m = 2 measured exactly on actual states.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  On a lattice with spacing s = 1/2^k, the 1D second difference of f(x) = x² at any
+#  point x is
+#      [f(x+s) - 2 f(x) + f(x-s)] / s²  =  [x² + 2xs + s² - 2x² + x² - 2xs + s²] / s²
+#                                       =  2s²/s² = 2  -- EXACTLY, at every spacing.
+#  Computed here at x = 1/2, spacing s = 1/2^k: the curvature is 2 with no continuum
+#  limit needed (the s² terms cancel identically -- see continuum_limit.ep for the 1D
+#  fact). The PLANAR Laplacian adds the two independent axis curvatures:
+#      Laplacian₂D = 2 + 2 = 4 = d · curv₁D  with d = 2.
+#  The structural cross-check: the fold expansion factor, measured exactly on the
+#  states 1/5 and 1/7 (gap 2/35 -> 4/35), is m = 2 -- and the planar Laplacian equals
+#  m² = 4: two axes each expanding by m give the plane's curvature response m·m. So
+#  Poisson's equation reads the same on the fold's plane as on its line -- gravity
+#  needs no continuum in two dimensions either.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: second difference of x² = 2 at spacing 1/8 with the
+#  s-terms cancelling identically, Laplacian₂D = 4 = m² with m measured = 2.
+#  Comparison: the continuum nabla²(x² + y²) = 4 -- the lattice value IS the continuum
+#  value at every spacing, no limit required.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The quadratic potential f(x) = x^2.
+define potential_at with x as Fraction returning Fraction:
+    set x_twin to fraction_make(fraction_numerator(x) and fraction_denominator(x))
+    return fraction_multiply(x and x_twin)
+
+# The 1D lattice curvature of x^2 at centre x with spacing s: [f(x+s) - 2f(x) + f(x-s)]/s^2.
+define lattice_curvature with k as Int returning Fraction:
+    set x to fraction_from_ratio(1 and 2)
+    set volume to whole_power(binary_count() and k)
+    set s to fraction_from_ratio(1 and volume)
+    set right to fraction_add(x and s)
+    set left to fraction_subtract(x and s)
+    set f_right to potential_at(right)
+    set f_left to potential_at(left)
+    set f_centre to potential_at(x)
+    set f_centre_again to potential_at(fraction_from_ratio(1 and 2))
+    set two_centre to fraction_add(f_centre and f_centre_again)
+    set outer to fraction_add(f_right and f_left)
+    set second_difference to fraction_subtract(outer and two_centre)
+    set s_twin to fraction_from_ratio(1 and volume)
+    set s_squared to fraction_multiply(s and s_twin)
+    return fraction_divide(second_difference and s_squared)
+
+# The curvature is exactly 2 at every spacing (checked at depths 3 and 5).
+define curvature_is_exact_two returning Bool:
+    set at_three to lattice_curvature(3)
+    set at_five to lattice_curvature(5)
+    set two to fraction_from_whole_number(2)
+    set three_ok to fraction_is_equal(at_three and two)
+    set five_ok to fraction_is_equal(at_five and two)
+    if three_ok:
+        return five_ok
+    return false
+
+# The planar Laplacian: the two independent axis curvatures added, 2 + 2 = 4.
+define planar_laplacian returning Fraction:
+    set axis_one to lattice_curvature(3)
+    set axis_two to lattice_curvature(3)
+    return fraction_add(axis_one and axis_two)
+
+# The fold expansion factor, MEASURED exactly on 1/5 and 1/7: m = 2.
+define fold_expansion returning Fraction:
+    set p to fraction_from_ratio(1 and 5)
+    set q to fraction_from_ratio(1 and 7)
+    set gap to fraction_subtract(p and q)
+    set fold_p to fold_fraction(p)
+    set fold_q to fold_fraction(q)
+    set fold_gap to fraction_subtract(fold_p and fold_q)
+    return fraction_divide(fold_gap and gap)
+
+# The planar Laplacian equals the expansion squared: 4 = m * m.
+define laplacian_is_expansion_squared returning Bool:
+    set laplacian to planar_laplacian()
+    set m to fold_expansion()
+    set m_twin to fold_expansion()
+    set m_squared to fraction_multiply(m and m_twin)
+    return fraction_is_equal(laplacian and m_squared)

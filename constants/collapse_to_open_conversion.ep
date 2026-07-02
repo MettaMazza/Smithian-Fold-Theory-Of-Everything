@@ -1,0 +1,103 @@
+# ============================================================================
+#  THE VIETA CROSS-CHECK  --  the lepton roots verified by an independent route, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The three charged-lepton mass shares are the roots of the forced cubic
+#  x³ - x² + (1/6)x - 1/485 = 0 (charged_lepton_cubic.ep), found there by exact
+#  bisection. Bisection could conceivably be systematically wrong -- a bad bracket, a
+#  sign slip. Forced and closed here: Vieta's identities give the SAME three numbers a
+#  totally independent algebraic characterisation -- their sum, pair-sum, and product
+#  are the cubic's own coefficients -- and the bisected roots pass all three to
+#  bracket precision. The collapse of the cubic (three separate roots) and the open
+#  form (the coefficient identities) convert into each other exactly.
+#
+#  ── DERIVATION ─ (check every line; uses the forced cubic and its roots ONLY) ─
+#  For any cubic x³ - x² + e₂x - e₃ with roots r₁, r₂, r₃, expanding
+#  (x - r₁)(x - r₂)(x - r₃) forces the identities
+#      r₁ + r₂ + r₃ = 1  (the One -- no mass share is lost),
+#      r₁r₂ + r₁r₃ + r₂r₃ = e₂ = 1/6  (the forced second invariant),
+#      r₁·r₂·r₃ = e₃ = 1/485  (the forced third invariant).
+#  The roots are taken from charged_lepton_cubic.ep at 40 exact halvings: each is a
+#  rational enclosure within 1/2⁴⁰ of the true root, so each identity must hold within
+#  a tolerance of 1/10⁹ (generous against the ~1/10¹² enclosure error) -- and is
+#  checked to. This is an INDEPENDENT route: bisection uses only sign changes of the
+#  cubic; Vieta uses only the expansion of the product form. Two derivations, one
+#  triple of numbers -- the electron, muon, and tau shares are pinned from both sides.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact-to-enclosure: sum within 1/10⁹ of 1, pair-sum within
+#  1/10⁹ of 1/6, product within 1/10⁹ of 1/485. Comparison: these are the same roots
+#  whose squares give the lepton masses matching measurement (Koide 2/3 to 5 digits,
+#  tau/mu to 7 parts in 10⁵ -- koide_relation.ep, charged_lepton_cubic.ep).
+# ============================================================================
+
+import "../constants/charged_lepton_cubic.ep"
+
+
+# The absolute size of a fraction (for enclosure-tolerance comparisons).
+define absolute_size with value as Fraction returning Fraction:
+    if value.numerator_sign < 0:
+        set zero to fraction_from_whole_number(0)
+        return fraction_subtract(zero and value)
+    return value
+
+# The enclosure tolerance: 1/10^9 (generous against the 1/2^40 bracket width).
+define enclosure_tolerance returning Fraction:
+    return fraction_from_ratio(1 and 1000000000)
+
+# Is a value within enclosure tolerance of a target?
+define lands_on with value as Fraction and target as Fraction returning Bool:
+    set gap to fraction_subtract(value and target)
+    set size to absolute_size(gap)
+    set tolerance to enclosure_tolerance()
+    set comparison to fraction_compare(size and tolerance)
+    return comparison < 0
+
+# VIETA 1: the roots sum to the One -- no mass share is lost.
+define roots_sum_to_one returning Bool:
+    set electron to electron_root()
+    set muon to muon_root()
+    set tau to tau_root()
+    set pair to fraction_add(electron and muon)
+    set total to fraction_add(pair and tau)
+    set one to fraction_from_whole_number(1)
+    return lands_on(total and one)
+
+# VIETA 2: the pairwise products sum to the second invariant 1/6.
+define pair_sum_is_second_invariant returning Bool:
+    set electron to electron_root()
+    set muon to muon_root()
+    set tau to tau_root()
+    set e_mu to fraction_multiply(electron and muon)
+    set electron_again to electron_root()
+    set tau_again to tau_root()
+    set e_tau to fraction_multiply(electron_again and tau_again)
+    set muon_again to muon_root()
+    set tau_third to tau_root()
+    set mu_tau to fraction_multiply(muon_again and tau_third)
+    set partial to fraction_add(e_mu and e_tau)
+    set total to fraction_add(partial and mu_tau)
+    set target to second_invariant()
+    return lands_on(total and target)
+
+# VIETA 3: the product of the roots is the third invariant 1/485.
+define product_is_third_invariant returning Bool:
+    set electron to electron_root()
+    set muon to muon_root()
+    set tau to tau_root()
+    set pair to fraction_multiply(electron and muon)
+    set total to fraction_multiply(pair and tau)
+    set target to leading_third_invariant()
+    return lands_on(total and target)
+
+# The full conversion: all three identities hold -- the roots are pinned from both sides.
+define conversion_closes returning Bool:
+    set first to roots_sum_to_one()
+    set second to pair_sum_is_second_invariant()
+    set third to product_is_third_invariant()
+    if first:
+        if second:
+            return third
+        return false
+    return false

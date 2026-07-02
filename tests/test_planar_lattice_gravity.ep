@@ -1,0 +1,22 @@
+import "../constants/planar_lattice_gravity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== planar gravity (Laplacian = expansion squared) ==="
+    set ok to expect_equal("the 1D lattice curvature of x^2 at spacing 1/8 = 2 EXACTLY" and fraction_to_text(lattice_curvature(3)) and "2")
+    set ok to expect_bool("the curvature is exactly 2 at every spacing (depths 3, 5)" and curvature_is_exact_two())
+    set ok to expect_equal("the planar Laplacian: two axes = 4" and fraction_to_text(planar_laplacian()) and "4")
+    set ok to expect_equal("the fold expansion, MEASURED on 1/5 and 1/7 = 2" and fraction_to_text(fold_expansion()) and "2")
+    set ok to expect_bool("the Laplacian equals the expansion squared: 4 = m*m" and laplacian_is_expansion_squared())
+    display "=== done ==="
+    return 0

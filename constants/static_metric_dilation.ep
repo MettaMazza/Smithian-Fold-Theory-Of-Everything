@@ -1,0 +1,85 @@
+# ============================================================================
+#  THE STATIC METRIC  --  gravity's clock factor commutes with the fold, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A static gravitational field slows clocks by the metric coefficient A = 1 - x
+#  (x the potential depth): dtau/dt = sqrt(A). For this to be a LAW of the fold's
+#  dynamics and not a bolted-on formula, the coefficient must be compatible with the
+#  fold itself. Forced: it is -- folding the coefficient equals the coefficient of the
+#  folded potential, fold(1 - x) = 1 - fold(x) for every weak field, an exact
+#  commutation; and at the right depths the clock ratio is an exact rational.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  The temporal coefficient at potential depth x is A(x) = 1 - x (gravitational time
+#  dilation; A stops at the horizon where x -> 1 would need the forbidden boundary).
+#  FOLD COVARIANCE -- for a weak field (x < 1/2, so no cast-out is triggered on either
+#  side):
+#      fold(A) = 2(1 - x) - 1 = 1 - 2x = 1 - fold(x)  -- EXACTLY.
+#  Checked here on x = 1/8: fold(7/8) = 3/4 and 1 - fold(1/8) = 1 - 1/4 = 3/4 -- equal.
+#  And on x = 1/16: fold(15/16) = 7/8 = 1 - 1/8. The metric coefficient is
+#  fold-covariant: doubling the potential depth and folding the clock factor are the
+#  SAME operation, so the static metric is carried by the dynamics, not imposed on it.
+#  EXACT CLOCK RATIO -- at potential depth x = 7/16 the coefficient is A = 9/16, whose
+#  square root is exactly rational: dtau/dt = 3/4 (since (3/4)² = 9/16). A clock at
+#  that depth ticks exactly three ticks per four -- no float, no approximation, the
+#  dilation factor an exact fraction on the same grid as everything else.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fold(1-x) = 1-fold(x) at x = 1/8 and 1/16, and
+#  (3/4)² = 9/16 = A(7/16). Measured: gravitational time dilation dtau/dt = sqrt(g_tt)
+#  is confirmed by GPS clock corrections, Pound-Rebka, and optical-clock height tests
+#  -- the static-metric kinematics this law carries.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The metric coefficient at potential depth x: A(x) = 1 - x.
+define metric_coefficient with x as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and x)
+
+# Fold covariance at a given weak-field depth: fold(A(x)) = A(fold(x)).
+define fold_covariance_at with num as Int and den as Int returning Bool:
+    set x to fraction_from_ratio(num and den)
+    set coefficient to metric_coefficient(x)
+    set folded_coefficient to fold_fraction(coefficient)
+    set folded_x to fold_fraction(x)
+    set coefficient_of_folded to metric_coefficient(folded_x)
+    return fraction_is_equal(folded_coefficient and coefficient_of_folded)
+
+# The covariance holds across weak fields (checked at x = 1/8 and x = 1/16).
+define metric_is_fold_covariant returning Bool:
+    set at_eighth to fold_covariance_at(1 and 8)
+    set at_sixteenth to fold_covariance_at(1 and 16)
+    if at_eighth:
+        return at_sixteenth
+    return false
+
+# The exact clock ratio: at depth x = 7/16, A = 9/16 and dtau/dt = 3/4 exactly.
+define clock_ratio returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+define ratio_squares_to_coefficient returning Bool:
+    set ratio to clock_ratio()
+    set ratio_twin to fraction_from_ratio(3 and 4)
+    set squared to fraction_multiply(ratio and ratio_twin)
+    set x to fraction_from_ratio(7 and 16)
+    set coefficient to metric_coefficient(x)
+    return fraction_is_equal(squared and coefficient)
+
+# The dilation is real: the clock at depth runs strictly slower than the far clock.
+define deep_clock_runs_slower returning Bool:
+    set ratio to clock_ratio()
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(ratio and one)
+    return comparison < 0

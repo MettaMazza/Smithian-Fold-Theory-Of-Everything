@@ -1,0 +1,21 @@
+import "../constants/collapse_to_open_conversion.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Vieta cross-check (roots pinned from both sides) ==="
+    set ok to expect_bool("VIETA 1: the roots sum to the One (no share lost)" and roots_sum_to_one())
+    set ok to expect_bool("VIETA 2: the pair-sum lands on the invariant 1/6" and pair_sum_is_second_invariant())
+    set ok to expect_bool("VIETA 3: the product lands on the invariant 1/485" and product_is_third_invariant())
+    set ok to expect_bool("the conversion closes: bisection and Vieta agree on all three" and conversion_closes())
+    display "=== done ==="
+    return 0

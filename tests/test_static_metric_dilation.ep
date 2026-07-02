@@ -1,0 +1,22 @@
+import "../constants/static_metric_dilation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the static metric (fold-covariant clock factor) ==="
+    set ok to expect_equal("the coefficient at x = 1/8: A = 7/8" and fraction_to_text(metric_coefficient(fraction_from_ratio(1 and 8))) and "7/8")
+    set ok to expect_bool("fold covariance at x = 1/8: fold(A) = A(fold(x))" and fold_covariance_at(1 and 8))
+    set ok to expect_bool("the covariance holds across weak fields (1/8 and 1/16)" and metric_is_fold_covariant())
+    set ok to expect_bool("the exact clock ratio: (3/4)^2 = 9/16 = A(7/16)" and ratio_squares_to_coefficient())
+    set ok to expect_bool("the deep clock runs strictly slower (3/4 < 1)" and deep_clock_runs_slower())
+    display "=== done ==="
+    return 0

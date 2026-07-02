@@ -1,0 +1,22 @@
+import "../constants/planar_lattice.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the planar lattice (the line's law extends) ==="
+    set ok to expect_equal("the planar neighbour count = 2 * 2 = 4" and int_to_string(neighbour_count()) and "4")
+    set ok to expect_equal("each neighbour's share = the depth-3 step 1/8" and fraction_to_text(neighbour_share()) and "1/8")
+    set ok to expect_equal("the neighbour sum, summed explicitly = 1/2" and fraction_to_text(neighbour_sum()) and "1/2")
+    set ok to expect_bool("the balance law: sum = count * centre share" and balance_law_holds())
+    set ok to expect_bool("the neighbourhood folds to unison" and neighbourhood_folds_to_unison())
+    display "=== done ==="
+    return 0

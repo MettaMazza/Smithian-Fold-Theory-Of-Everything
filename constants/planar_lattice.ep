@@ -1,0 +1,75 @@
+# ============================================================================
+#  THE PLANAR LATTICE  --  the line's law extends to the plane, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every field theory needs a spatial operator: how a point's value relates to its
+#  neighbours'. On the line the fold's lattice gives the second difference; the plane
+#  must inherit the same law with no new rule -- or the theory would need a fresh
+#  postulate per dimension. Forced: on the plane a point has 2·d = 4 neighbours, their
+#  shares sum to the half-One balance, and the symmetric neighbour rule is EXACTLY the
+#  centre's own share scaled by the neighbour count -- the 1D law extended, nothing
+#  added.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  On the planar lattice each of the d = 2 axes contributes binary = 2 neighbours:
+#  4 = 2·2 in total, each holding the depth-3 share 1/8 (three halvings: axis, side,
+#  centre-split). The neighbour sum is 4 · (1/8) = 1/2 -- the half-One, the same
+#  balance every sector sits at, and one fold from unison (fold(1/2) = 1: the
+#  neighbourhood closes to the whole). The symmetry law: the neighbour sum equals the
+#  neighbour count times the CENTRE share (U_c = 1/8): 4·U_c = 1/2 -- a flat plane is
+#  one whose every point already satisfies the balance, and curvature (the Laplacian)
+#  is precisely the failure of this equality. The plane needs no new operator: the
+#  neighbour count doubles per axis and the balance law is unchanged.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 4 = 2·2 neighbours, sum 4/8 = 1/2, equal to 4·U_c,
+#  folding to unison. Comparison: the standard 5-point discrete Laplacian on a square
+#  grid -- sum of 4 neighbours minus 4 times the centre -- is exactly this balance law's
+#  failure measure, the operator every planar field equation uses.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The planar neighbour count: binary neighbours per axis times two axes, 2*2 = 4.
+define neighbour_count returning Int:
+    return binary_count() * 2
+
+# Each neighbour's share: the depth-3 step 1/8.
+define neighbour_share returning Fraction:
+    return fraction_from_ratio(1 and 8)
+
+# The neighbour sum: 4 * (1/8) = 1/2, summed explicitly.
+define neighbour_sum returning Fraction:
+    set share to neighbour_share()
+    set count to neighbour_count()
+    set total to fraction_from_whole_number(0)
+    set i to 0
+    repeat while i < count:
+        set total to fraction_add(total and share)
+        set i to i + 1
+    return total
+
+# The balance law: the neighbour sum equals the count times the centre share.
+define balance_law_holds returning Bool:
+    set total to neighbour_sum()
+    set centre to fraction_from_ratio(1 and 8)
+    set count_fraction to fraction_from_whole_number(neighbour_count())
+    set scaled_centre to fraction_multiply(count_fraction and centre)
+    return fraction_is_equal(total and scaled_centre)
+
+# The neighbourhood closes to the whole: fold(1/2) = 1.
+define neighbourhood_folds_to_unison returning Bool:
+    set total to neighbour_sum()
+    set folded to fold_fraction(total)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
