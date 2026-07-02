@@ -1,0 +1,23 @@
+import "../constants/mixing_structure.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the mixing structure (why the CKM is nearly diagonal) ==="
+    set ok to expect_bool("the mass fibre {2/9, 5/9, 8/9} verified (all land on 2/3)" and mass_fibre_verified())
+    set ok to expect_bool("the channel fibre {1/3, 2/3, 1} verified (all land on the One)" and channel_fibre_verified())
+    set ok to expect_bool("the fibre offset is a uniform 1/9 across all generations" and offset_is_uniform_ninth())
+    set ok to expect_equal("the alignment diagonal V_kk = 8/9" and fraction_to_text(diagonal_element(1)) and "8/9")
+    set ok to expect_bool("the diagonal is UNIFORM (no three tuned angles)" and diagonal_is_uniform())
+    set ok to expect_bool("the offset is one step of the colour-squared grid (1/9 = 1/3^2)" and offset_is_colour_squared_step())
+    display "=== done ==="
+    return 0

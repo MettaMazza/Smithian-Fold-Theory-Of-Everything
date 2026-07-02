@@ -1,0 +1,21 @@
+import "../constants/absolute_scale_unobservable.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the unobservable absolute scale (only ratios are physical) ==="
+    set ok to expect_equal("the probe state = 2/5" and fraction_to_text(probe_state()) and "2/5")
+    set ok to expect_bool("rescaling by 7 (14/35) and by 3 (6/15) is INVISIBLE" and rescaling_is_invisible())
+    set ok to expect_bool("the fold agrees: identical images from all three forms" and fold_images_identical())
+    set ok to expect_equal("the common image = 4/5 (no trace of the scale factor)" and fraction_to_text(common_image()) and "4/5")
+    display "=== done ==="
+    return 0

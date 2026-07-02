@@ -1,0 +1,23 @@
+import "../constants/ew_mixing_running.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the running weak mixing (1/2 down through the measured value) ==="
+    set ok to expect_bool("BARE: the two channels born equal -> sin2 = 1/2 exactly" and bare_mixing_is_half())
+    set ok to expect_equal("the mixing at level 3: 25/89" and fraction_to_text(mixing_at(3)) and "25/89")
+    set ok to expect_bool("the running falls STRICTLY at every level through 15" and running_is_strictly_decreasing())
+    set ok to expect_equal("sin2 at level 9 (exact rational)" and fraction_to_text(mixing_at(9)) and "121/521")
+    set measured to fraction_from_ratio(23113 and 100000)
+    set ok to expect_bool("the curve CROSSES measured 0.23113 between levels 9 and 10" and curve_crosses_between_nine_and_ten(measured))
+    display "=== done ==="
+    return 0

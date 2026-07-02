@@ -1,0 +1,95 @@
+# ============================================================================
+#  THE FLAVOUR-VIOLATION RATIOS  --  the LFV transition spectrum, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  If the predicted fifth-sector force exists, it drives lepton-flavour-violating
+#  transitions (mu -> e conversions and their kin) whose RELATIVE rates are a fixed
+#  spectrum -- a falsifiable fingerprint. Forced: the three generations stand at the
+#  standing modes 1/4, 1/2, 3/4, and every transition amplitude is a mode SEPARATION,
+#  so the rate ratios come out as exact rationals with no coupling unknown entering
+#  the ratio.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the standing modes) ────────────
+#  The three generations sit at the standing modes g₁ = 1/4, g₂ = 1/2, g₃ = 3/4 (the
+#  quarter ladder: lower hand, lock, upper hand). A flavour transition's amplitude is
+#  the separation between its modes:
+#      adjacent:  s₂₁ = g₂ - g₁ = 1/4 ,   s₃₂ = g₃ - g₂ = 1/4  -- EQUAL (the ladder
+#      is uniform), and two-step:  s₃₁ = g₃ - g₁ = 1/2 = s₂₁ + s₃₂ (separations add).
+#  The amplitude ratio of adjacent to two-step is (1/4)/(1/2) = 1/2, and the RATE
+#  (amplitude squared) ratio is
+#      (s₂₁/s₃₁)² = 1/4  -- which EQUALS the adjacent separation itself (1/4), a
+#  self-consistency the structure imposes: the rate ratio is the ladder step. So the
+#  forced LFV spectrum is: adjacent transitions (mu->e, tau->mu) equal in amplitude,
+#  the two-step (tau->e) twice that, rates 1 : 1 : 4 -- exact rationals, no unknown
+#  coupling in any ratio.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: separations 1/4, 1/4, 1/2; amplitude ratio 1/2; rate
+#  ratio 1/4 = the ladder step. Comparison: this is a STANDING PREDICTION -- current
+#  bounds (MEG on mu->e gamma, Belle on tau modes) do not yet reach the fifth
+#  sector's scale; when they do, the 1 : 1 : 4 rate pattern is the fingerprint that
+#  falsifies or confirms (see the corpus lfv_spectrum engine).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The three generation standing modes: the quarter ladder.
+define first_mode returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define second_mode returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+define third_mode returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# The transition separations.
+define adjacent_separation returning Fraction:
+    set high to second_mode()
+    set low to first_mode()
+    return fraction_subtract(high and low)
+
+define upper_separation returning Fraction:
+    set high to third_mode()
+    set low to second_mode()
+    return fraction_subtract(high and low)
+
+define two_step_separation returning Fraction:
+    set high to third_mode()
+    set low to first_mode()
+    return fraction_subtract(high and low)
+
+# The ladder is uniform: the two adjacent separations are equal.
+define ladder_is_uniform returning Bool:
+    set lower to adjacent_separation()
+    set upper to upper_separation()
+    return fraction_is_equal(lower and upper)
+
+# Separations add: the two-step equals the sum of the adjacent steps.
+define separations_add returning Bool:
+    set lower to adjacent_separation()
+    set upper to upper_separation()
+    set total to fraction_add(lower and upper)
+    set two_step to two_step_separation()
+    return fraction_is_equal(total and two_step)
+
+# The amplitude ratio: adjacent over two-step = 1/2.
+define amplitude_ratio returning Fraction:
+    set adjacent to adjacent_separation()
+    set two_step to two_step_separation()
+    return fraction_divide(adjacent and two_step)
+
+# The rate ratio: the amplitude ratio squared = 1/4.
+define rate_ratio returning Fraction:
+    set ratio to amplitude_ratio()
+    set ratio_twin to amplitude_ratio()
+    return fraction_multiply(ratio and ratio_twin)
+
+# Self-consistency: the rate ratio EQUALS the ladder step itself.
+define rate_ratio_is_ladder_step returning Bool:
+    set rate to rate_ratio()
+    set step to adjacent_separation()
+    return fraction_is_equal(rate and step)

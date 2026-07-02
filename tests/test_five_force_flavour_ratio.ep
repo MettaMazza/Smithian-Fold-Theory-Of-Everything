@@ -1,0 +1,23 @@
+import "../constants/five_force_flavour_ratio.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the flavour-violation ratios (the LFV fingerprint) ==="
+    set ok to expect_equal("adjacent separation (mu->e) = 1/4" and fraction_to_text(adjacent_separation()) and "1/4")
+    set ok to expect_bool("the ladder is uniform (tau->mu equals mu->e)" and ladder_is_uniform())
+    set ok to expect_bool("separations add: two-step = sum of adjacent steps" and separations_add())
+    set ok to expect_equal("the amplitude ratio adjacent/two-step = 1/2" and fraction_to_text(amplitude_ratio()) and "1/2")
+    set ok to expect_equal("the RATE ratio = 1/4 (rates 1 : 1 : 4 -- the fingerprint)" and fraction_to_text(rate_ratio()) and "1/4")
+    set ok to expect_bool("self-consistency: the rate ratio equals the ladder step" and rate_ratio_is_ladder_step())
+    display "=== done ==="
+    return 0

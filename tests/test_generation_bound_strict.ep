@@ -1,0 +1,22 @@
+import "../constants/generation_bound_strict.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the strict generation bound (three, no fourth possible) ==="
+    set ok to expect_bool("the three constructed generations all triple to the One" and three_generations_verified())
+    set ok to expect_equal("the fourth candidate = 4/3 (outside the domain)" and fraction_to_text(generation_candidate(3)) and "4/3")
+    set ok to expect_bool("THE BOUND IS STRICT: the fourth candidate exits the domain" and fourth_candidate_exits_domain())
+    set ok to expect_equal("the generation count = 3" and int_to_string(generation_count_strict()) and "3")
+    set ok to expect_bool("Route B: the count equals the colour period (one structure)" and count_matches_colour_period())
+    display "=== done ==="
+    return 0

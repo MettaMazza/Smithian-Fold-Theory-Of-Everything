@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-222 suites, 1,249 forced checks, 0 failures). It needs nothing but a C compiler. Use
+227 suites, 1,275 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4248,6 +4248,57 @@ depth 1 and all 9 at depth 2 arrive under triplings, alongside the binary census
 so the binary lepton towers (`2^d`) and ternary quark volumes (`27 = 3³`, `81 = 3⁴` — the seeds of
 depths 5 and 7) need no per-sector axiom.
 
+### Step 220 — The running weak mixing (1/2 down through the measured value)
+
+**File:** `constants/ew_mixing_running.ep`
+
+**What it does.** The charged channel runs as `c_k = (k+1)/(k+2)`, the neutral stays flat at `1/2`,
+and the mixing is the neutral share of the squared couplings: `sin²θ_W(k) = (k+2)²/(4(k+1)²+(k+2)²)`
+— exact at every level. Bare (`k = 0`): the channels are born equal, `sin²θ_W = 1/2` exactly. The
+running falls strictly through every level checked (to 15), and the curve CROSSES the measured
+Z-scale value `0.23113` between levels nine and ten — the measured dial sits on the parameter-free
+curve.
+
+### Step 221 — The strict generation bound (three, no fourth possible)
+
+**File:** `constants/generation_bound_strict.ep`
+
+**What it does.** The generations are the tripling fibre's preimages of the One — `1/3, 2/3, 1`,
+each constructed and verified. THE BOUND IS STRICT: the fourth candidate is `4/3`, OUTSIDE the
+domain `(0, 1]`. A fourth generation is not "not yet found" — the value it would occupy does not
+exist, at any energy. Route B: the count equals the colour period. Measured: LEP's `N_ν = 2.984 ±
+0.008` from the Z width.
+
+### Step 222 — The flavour-violation ratios (the LFV fingerprint)
+
+**File:** `constants/five_force_flavour_ratio.ep`
+
+**What it does.** The generations stand at the quarter-ladder modes `1/4, 1/2, 3/4`; transition
+amplitudes are mode separations. The ladder is uniform (`s₂₁ = s₃₂ = 1/4`), separations add
+(`s₃₁ = 1/2`), the amplitude ratio is `1/2` and the RATE ratio `1/4` — which equals the ladder step
+itself. The forced LFV spectrum: rates `1 : 1 : 4`, exact rationals with no unknown coupling in any
+ratio — a standing falsifiable fingerprint for the predicted fifth sector.
+
+### Step 223 — The mixing structure (why the CKM is nearly diagonal)
+
+**File:** `constants/mixing_structure.ep`
+
+**What it does.** The mass basis is the tripling fibre of `2/3` (`{2/9, 5/9, 8/9}`, verified); the
+weak channel basis is the fibre of the One (`{1/3, 2/3, 1}`, verified). The two fibres are offset
+by a UNIFORM `1/9` — one step of the colour-squared grid `1/3²` — so the alignment diagonal is
+`V_kk = 8/9` for all three generations: near-diagonal by structure, the leak a fixed fibre offset,
+not three tuned angles. Measured: the CKM's diagonal dominance (`V_ud = 0.974, V_tb = 0.999`).
+
+### Step 224 — The unobservable absolute scale (only ratios are physical)
+
+**File:** `constants/absolute_scale_unobservable.ep`
+
+**What it does.** A value IS a ratio: `14/35 = 6/15 = 2/5` identically, and one fold of each gives
+the identical `4/5` — the dynamics sees the ratio alone, so no experiment run from inside can
+detect an absolute magnitude. Why every physical constant in this corpus is a dimensionless
+rational, and every dimensionful readout (the SI metre defined via `c`, the second via a caesium
+ratio) is a unit convention layered on top.
+
 ---
 
 ## Where the recreation stands right now
@@ -4733,6 +4784,16 @@ runs):**
   to the One within its depth — `2^d` levels is a theorem, not a definition.
 - Step 219 — the general covering principle: the `m`-fold tower holds `m^d` states for EVERY
   generator (ternary 3, 9 enumerated alongside binary 8) — one law, no per-sector axiom.
+- Step 220 — the running weak mixing: bare `sin²θ_W = 1/2` exactly, strict monotone descent, and
+  the parameter-free curve crosses measured `0.23113` between levels 9 and 10.
+- Step 221 — the strict generation bound: fibre `{1/3, 2/3, 1}` verified; the fourth candidate
+  `4/3` EXITS the domain — no fourth generation at any energy; LEP `N_ν = 2.984`.
+- Step 222 — the flavour-violation ratios: uniform quarter ladder, rates `1 : 1 : 4` exact — the
+  falsifiable LFV fingerprint of the fifth sector, no unknown coupling in any ratio.
+- Step 223 — the mixing structure: mass fibre `{2/9, 5/9, 8/9}` vs channel fibre `{1/3, 2/3, 1}`,
+  uniform offset `1/9 = 1/3²` → diagonal `V_kk = 8/9` — the CKM's near-diagonal shape by structure.
+- Step 224 — the unobservable absolute scale: `14/35 = 6/15 = 2/5` with identical fold images —
+  only ratios are physical; absolute magnitude is unaskable from inside.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

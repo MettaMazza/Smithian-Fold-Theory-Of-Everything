@@ -1,0 +1,82 @@
+# ============================================================================
+#  THE UNOBSERVABLE ABSOLUTE SCALE  --  only ratios are physical, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Physics never measures an absolute size -- every measurement is a comparison
+#  against a chosen unit (a metre stick, a caesium tick). Usually that is treated as
+#  a methodological habit. Forced: it is a THEOREM of the fold -- a value IS a ratio,
+#  rescaling its numerator and denominator by any common factor changes nothing the
+#  dynamics can see, so no experiment run inside the system can detect the absolute
+#  scale. The 2^(127/2) hierarchy (absolute_scale.ep) is a ratio BETWEEN rungs; the
+#  rungs' absolute size is unaskable.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold) ──────────────────────
+#  Take the state x = 2/5. Rescale both parts by the generational prime seven:
+#  14/35. The exact-fraction layer reduces it to the SAME value -- 14/35 = 2/5, not
+#  approximately but identically -- and one fold of each gives the identical result
+#  (4/5 both ways). Rescale instead by the colour three: 6/15 = 2/5, same value,
+#  same fold image. The dynamics is a function of the RATIO alone: any common factor
+#  in "how big" the parts are is cast out by the arithmetic before the fold ever
+#  acts. So an observer inside the system -- built of the same ratios -- has nothing
+#  to compare an absolute magnitude against: the question "how big is the universe's
+#  unit, absolutely?" has no operational content, which is WHY all physical constants
+#  in this corpus are dimensionless rationals and all dimensionful readouts (metres,
+#  seconds, GeV) are unit conventions layered on top.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 14/35 = 6/15 = 2/5 with identical fold images.
+#  Comparison: physics agrees in practice -- only dimensionless constants (alpha,
+#  mass RATIOS, angle sines) are unit-independent measurables; every "absolute"
+#  measurement carries a unit convention (the SI metre is DEFINED via c, the second
+#  via a caesium ratio) -- the unobservability this proves from inside.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The probe state: 2/5.
+define probe_state returning Fraction:
+    return fraction_from_ratio(2 and 5)
+
+# The state rescaled by the generational prime seven: 14/35.
+define rescaled_by_seven returning Fraction:
+    return fraction_from_ratio(14 and 35)
+
+# The state rescaled by the colour three: 6/15.
+define rescaled_by_three returning Fraction:
+    return fraction_from_ratio(6 and 15)
+
+# Rescaling changes nothing: both rescaled forms ARE the same value.
+define rescaling_is_invisible returning Bool:
+    set original to probe_state()
+    set by_seven to rescaled_by_seven()
+    set by_three to rescaled_by_three()
+    set seven_same to fraction_is_equal(original and by_seven)
+    set three_same to fraction_is_equal(original and by_three)
+    if seven_same:
+        return three_same
+    return false
+
+# The dynamics agrees: one fold of each gives the identical image (4/5 all ways).
+define fold_images_identical returning Bool:
+    set from_original to fold_fraction(probe_state())
+    set from_seven to fold_fraction(rescaled_by_seven())
+    set from_three to fold_fraction(rescaled_by_three())
+    set seven_same to fraction_is_equal(from_original and from_seven)
+    set three_same to fraction_is_equal(from_original and from_three)
+    if seven_same:
+        return three_same
+    return false
+
+# The common image is 4/5 (the ratio's own fold, no trace of the scale factor).
+define common_image returning Fraction:
+    return fold_fraction(probe_state())
