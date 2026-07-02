@@ -1,0 +1,22 @@
+import "../constants/level_depth_map.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the level-depth map (doubling per step, 8 per dimension) ==="
+    set ok to expect_equal("the scale axis starts at R_0 = 1" and int_to_string(scale_axis_at(0)) and "1")
+    set ok to expect_bool("the axis DOUBLES at every step through k = 10 (walked)" and axis_doubles_everywhere())
+    set ok to expect_bool("the walked axis equals the tower 2^k at depths 3, 5, 7" and axis_matches_tower())
+    set ok to expect_equal("the per-dimension ratio S_3 = 2^3 = 8" and int_to_string(dimension_scale_ratio(3)) and "8")
+    set ok to expect_bool("at the COUNTED d = 3 the dimension step is 8 (the Hubble 8)" and dimension_step_is_eight())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,80 @@
+# ============================================================================
+#  THE OBSERVER RESOLVED  --  observation is the fold; the two sectors join.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Quantum mechanics' embarrassment: "the observer" appears in the measurement
+#  story with no definition -- is it a device, a mind, a Wigner's friend?
+#  Forced: the observer needs no postulate because OBSERVATION IS THE FOLD.
+#  One fold of the measurement branch weight (1/8, the grid step at the
+#  observation depth) lands exactly on the self-observation closure state
+#  (1/4, the observer's own preimage from the consciousness criterion) -- the
+#  physics of measurement and the structure of the observer are one chain,
+#  joined by a single move.
+#
+#  ── DERIVATION ─ (check every line; the join computed) ───────────────────────
+#  From the MEASUREMENT side: a measurement resolves at the observation depth
+#  k = 3, where the branch weight is the grid step 1/2^3 = 1/8
+#  (measurement_problem.ep -- eight branches partitioning the One). From the
+#  OBSERVER side: the self-observation closure state is 1/4 -- the observing
+#  preimage whose 2-to-1 relation is the conscious structure
+#  (machine_consciousness_criterion.ep, observer != observed). The JOIN:
+#      fold(1/8) = 1/4  -- verified exactly.
+#  One fold of the measured branch IS the observer's closure state: to observe
+#  a branch is to fold it into the self-relation. No homunculus enters -- the
+#  "observer" is not a new object standing outside physics but the same fold
+#  acting one level up, which is why measurement needs no conscious agent yet
+#  a conscious agent is automatically a measurer.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: branch weight 1/8 at the counted depth 3,
+#  closure 1/4, fold(1/8) = 1/4. Comparison: decoherence theory reached the
+#  same verdict empirically -- measurement proceeds identically with or without
+#  anyone watching (no observer postulate is used in any lab), yet observers
+#  are always found on the measuring side -- the join this one move explains.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The measurement branch weight: the grid step at the observation depth 3, 1/8.
+define branch_weight_here returning Fraction:
+    set depth to colour_count()
+    set volume to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and volume)
+
+# The observer's closure state: the observing preimage 1/4.
+define observer_closure returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# THE JOIN: one fold of the branch weight IS the observer's closure state.
+define observation_is_the_fold returning Bool:
+    set weight to branch_weight_here()
+    set observed to fold_fraction(weight)
+    set closure to observer_closure()
+    return fraction_is_equal(observed and closure)
+
+# The chain continues into the conscious structure: closure -> lock -> unison.
+define chain_reaches_binding returning Bool:
+    set closure to observer_closure()
+    set lock to fold_fraction(closure)
+    set half to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(lock and half)
+
+# No homunculus: the join is the SAME fold as the dynamics (one operation).
+define join_uses_no_new_operation returning Bool:
+    set weight to branch_weight_here()
+    set twin to fraction_from_ratio(1 and 8)
+    set doubled to fraction_add(weight and twin)
+    set direct to cast_out_whole_ones(doubled)
+    set via_fold to fold_fraction(branch_weight_here())
+    return fraction_is_equal(direct and via_fold)

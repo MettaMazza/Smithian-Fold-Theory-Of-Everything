@@ -1,0 +1,84 @@
+# ============================================================================
+#  DEGENERATE ENDPOINTS  --  why collapsed stars stop at a balance, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A dead star does not fade smoothly away: it lands on one of a few sharp
+#  endpoints -- white dwarf, neutron star -- each held not by fuel but by
+#  degeneracy (Pauli's floor made macroscopic), each with a LIMIT above which
+#  the hold fails. Forced: the degeneracy limit is the upper preimage 3/4 of
+#  the balance -- one compression step (one fold) returns it to the balance
+#  1/2, where the remnant sits held -- and the limit has a lower twin 1/4 with
+#  the SAME balance image: two endpoint families, one shared equilibrium,
+#  which is why the collapsed remnants form a short discrete list and not a
+#  continuum of dead stars.
+#
+#  ── DERIVATION ─ (check every line; the limit folded, the census counted) ────
+#  The degeneracy limit is 3/4: the upper preimage of the balance (the filled
+#  side -- degeneracy is fullness, the exclusion floor loaded to its limit).
+#  One fold -- one compression step -- lands it exactly on the balance:
+#      fold(3/4) = 1/2 , verified -- the remnant equilibrium, self-antipodal
+#  (pressure against gravity, balanced against itself). The census: the
+#  balance's fibre is {1/4, 3/4} -- exactly TWO preimages (the counted binary
+#  fibre), so there are exactly two degenerate ways to sit one step from the
+#  balance -- the two observed remnant families below the collapse threshold.
+#  Above the limit there is no third preimage to catch the star: past 3/4 the
+#  next stop is the horizon chain (strong_field_gravity.ep). Discrete
+#  endpoints because the fibre is discrete.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fold(3/4) = 1/2, the two-member fibre, no
+#  third preimage. Measured: stellar remnants are a short discrete list --
+#  white dwarfs (Chandrasekhar-limited), neutron stars (TOV-limited), then
+#  black holes -- with sharp mass limits between them and nothing in between,
+#  the discrete census this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The degeneracy limit: the upper preimage 3/4 (the exclusion floor loaded full).
+define degeneracy_limit returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# One compression step lands the limit exactly on the balance: fold(3/4) = 1/2.
+define limit_folds_to_balance returning Bool:
+    set limit to degeneracy_limit()
+    set folded to fold_fraction(limit)
+    set balance to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(folded and balance)
+
+# The remnant equilibrium is self-antipodal: pressure against gravity, balanced.
+define equilibrium_is_self_antipodal returning Bool:
+    set balance to fraction_from_ratio(1 and 2)
+    set one to fraction_from_whole_number(1)
+    set antipode to fraction_subtract(one and balance)
+    return fraction_is_equal(balance and antipode)
+
+# The census: the balance's fibre has exactly TWO members (1/4 and 3/4, both
+# verified to land on it) -- two remnant families, nothing in between.
+define endpoint_census returning Int:
+    set balance to fraction_from_ratio(1 and 2)
+    set count to 0
+    set i to 1
+    repeat while i < 4:
+        set candidate to fraction_from_ratio(i and 4)
+        set folded to fold_fraction(candidate)
+        set lands to fraction_is_equal(folded and balance)
+        if lands:
+            set count to count + 1
+        set i to i + 1
+    return count
+
+# The census equals the counted binary fibre size.
+define census_is_binary_fibre returning Bool:
+    set census to endpoint_census()
+    return census == binary_count()

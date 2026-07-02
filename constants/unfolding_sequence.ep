@@ -1,0 +1,89 @@
+# ============================================================================
+#  THE UNFOLDING SEQUENCE  --  a derivation is a playable sequence of moves.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  In this corpus a derivation is not prose: it is a SEQUENCE OF MOVES -- fold
+#  and take, applied in dependency order -- that anyone can replay from the One
+#  and land on the same value. Forced and demonstrated here on a composed
+#  chain: the three-move sequence fold(take(One, fold(1/3))) lands on exactly
+#  2/3, and an INDEPENDENT route -- the starting point's own orbit -- reaches
+#  the same value in one move. Two playthroughs, one value: the derivation IS
+#  the sequence, and the sequence is checkable move by move.
+#
+#  ── DERIVATION ─ (check every line; both playthroughs run) ───────────────────
+#  PLAYTHROUGH A (the composed chain, three moves):
+#      start 1/3 --fold--> 2/3 --take from One--> 1/3 --fold--> 2/3 .
+#  Each move is a legal primitive (fold doubles and casts out; take is the
+#  positive difference), each intermediate is a domain value, and the chain
+#  lands on 2/3 exactly.
+#  PLAYTHROUGH B (the orbit route, one move): 1/3 is a period-2 point, so its
+#  own orbit already contains the target -- fold(1/3) = 2/3 directly.
+#  The two routes agree exactly. That agreement is the point: a value's
+#  derivation can be REPLAYED along different dependency orders and must land
+#  identically -- which is what the whole corpus's proof style is (every
+#  verify chain is such a playthrough, every forced_to_be a pair of them).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: both playthroughs land on 2/3, every
+#  intermediate verified in-domain. Comparison: this is the corpus's method in
+#  miniature -- the 9-digit alpha chain is the same thing at depth: a replayable
+#  move sequence from the One, checked at every step.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The take move: the positive difference from the One.
+define take_from_one with size as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and size)
+
+# PLAYTHROUGH A: the composed three-move chain from 1/3.
+define composed_chain returning Fraction:
+    set start to fraction_from_ratio(1 and 3)
+    set first_move to fold_fraction(start)
+    set second_move to take_from_one(first_move)
+    return fold_fraction(second_move)
+
+# Every intermediate of the chain is a domain value (positive, at most One).
+define intermediates_in_domain returning Bool:
+    set start to fraction_from_ratio(1 and 3)
+    set first_move to fold_fraction(start)
+    set second_move to take_from_one(first_move)
+    set one to fraction_from_whole_number(1)
+    set first_positive to first_move.numerator_sign > 0
+    set second_positive to second_move.numerator_sign > 0
+    set first_bounded to fraction_compare(first_move and one) <= 0
+    set second_bounded to fraction_compare(second_move and one) <= 0
+    if first_positive:
+        if second_positive:
+            if first_bounded:
+                return second_bounded
+            return false
+        return false
+    return false
+
+# PLAYTHROUGH B: the orbit route -- one move from the same start.
+define orbit_route returning Fraction:
+    set start to fraction_from_ratio(1 and 3)
+    return fold_fraction(start)
+
+# The two playthroughs agree exactly: one value, two dependency orders.
+define playthroughs_agree returning Bool:
+    set chain to composed_chain()
+    set orbit to orbit_route()
+    set target to fraction_from_ratio(2 and 3)
+    set chain_ok to fraction_is_equal(chain and target)
+    set orbit_ok to fraction_is_equal(orbit and target)
+    if chain_ok:
+        return orbit_ok
+    return false

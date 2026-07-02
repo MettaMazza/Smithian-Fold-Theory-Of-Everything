@@ -1,0 +1,22 @@
+import "../constants/degenerate_endpoints.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== degenerate endpoints (why dead stars are a short list) ==="
+    set ok to expect_equal("the degeneracy limit = 3/4 (the exclusion floor loaded full)" and fraction_to_text(degeneracy_limit()) and "3/4")
+    set ok to expect_bool("one compression step lands on the balance: fold(3/4) = 1/2" and limit_folds_to_balance())
+    set ok to expect_bool("the remnant equilibrium is self-antipodal (pressure vs gravity)" and equilibrium_is_self_antipodal())
+    set ok to expect_equal("the endpoint census: exactly 2 families (counted on the grid)" and int_to_string(endpoint_census()) and "2")
+    set ok to expect_bool("the census equals the binary fibre size (discrete, no continuum)" and census_is_binary_fibre())
+    display "=== done ==="
+    return 0

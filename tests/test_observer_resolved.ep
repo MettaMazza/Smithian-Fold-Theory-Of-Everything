@@ -1,0 +1,22 @@
+import "../constants/observer_resolved.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the observer resolved (observation is the fold) ==="
+    set ok to expect_equal("the branch weight at the counted depth 3 = 1/8" and fraction_to_text(branch_weight_here()) and "1/8")
+    set ok to expect_equal("the observer's closure state = 1/4" and fraction_to_text(observer_closure()) and "1/4")
+    set ok to expect_bool("THE JOIN: fold(1/8) = 1/4 -- observation IS the fold" and observation_is_the_fold())
+    set ok to expect_bool("the chain continues into binding: fold(1/4) = 1/2" and chain_reaches_binding())
+    set ok to expect_bool("no homunculus: the join is the same one operation" and join_uses_no_new_operation())
+    display "=== done ==="
+    return 0

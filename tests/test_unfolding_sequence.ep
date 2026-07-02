@@ -1,0 +1,21 @@
+import "../constants/unfolding_sequence.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the unfolding sequence (a derivation is playable) ==="
+    set ok to expect_equal("PLAYTHROUGH A: fold(take(One, fold(1/3))) = 2/3 (three moves)" and fraction_to_text(composed_chain()) and "2/3")
+    set ok to expect_bool("every intermediate is a domain value (positive, bounded)" and intermediates_in_domain())
+    set ok to expect_equal("PLAYTHROUGH B: the orbit route, one move = 2/3" and fraction_to_text(orbit_route()) and "2/3")
+    set ok to expect_bool("the two playthroughs agree exactly (one value, two orders)" and playthroughs_agree())
+    display "=== done ==="
+    return 0

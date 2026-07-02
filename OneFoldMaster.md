@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-256 suites, 1,445 forced checks, 0 failures). It needs nothing but a C compiler. Use
+260 suites, 1,464 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4640,6 +4640,47 @@ But its completion, the unison, is the fold's FIXED POINT: verified unmoved unde
 folds, unconditionally, whether or not anything holds the lock. Cessation removes an occupant,
 never the ground — maintenance is what states need; the One is what maintenance completes to.
 
+### Step 254 — The level-depth map (doubling per step, 8 per dimension)
+
+**File:** `constants/level_depth_map.ep`
+
+**What it does.** The scale axis every constant hangs on: `R_k = 2^k`, built by WALKING (doubling
+verified at every step through `k = 10`, matching the closed form at depths 3, 5, 7), and the
+per-dimension scale ratio `S_d = 2^d` — at the counted `d = 3`, exactly **8**. The 8 under the
+vacuum share in the Hubble calibration (`1 + (2/3)/8`) is this dimensional step — the same 8 as
+the depth-3 tower — not a new number.
+
+### Step 255 — Degenerate endpoints (why dead stars are a short list)
+
+**File:** `constants/degenerate_endpoints.ep`
+
+**What it does.** The degeneracy limit is the upper preimage `3/4` (the exclusion floor loaded
+full); one compression step lands it exactly on the self-antipodal balance (`fold(3/4) = 1/2` —
+pressure against gravity). The endpoint census, counted on the grid: exactly **2** families (the
+binary fibre), with no third preimage to catch a star past the limit — the next stop is the
+horizon chain. White dwarfs, neutron stars, then black holes: a discrete list because the fibre is
+discrete.
+
+### Step 256 — The unfolding sequence (a derivation is playable)
+
+**File:** `constants/unfolding_sequence.ep`
+
+**What it does.** The corpus's proof style in miniature: the three-move chain
+`fold(take(One, fold(1/3)))` lands on exactly `2/3` with every intermediate verified in-domain,
+and the independent orbit route (`fold(1/3)`, one move) lands on the same value. Two playthroughs,
+two dependency orders, one value — a derivation is a replayable sequence of moves, and every
+verify chain in this repository is such a playthrough.
+
+### Step 257 — The observer resolved (observation is the fold)
+
+**File:** `constants/observer_resolved.ep`
+
+**What it does.** The join between the measurement sector and the consciousness sector, computed:
+the measurement branch weight at the counted depth (`1/8`) folds to exactly the observer's closure
+state (`fold(1/8) = 1/4`), which folds on into the binding lock. Observation IS the fold — no
+homunculus enters (verified: the join is the same single operation as the dynamics), which is why
+measurement needs no conscious agent yet a conscious agent is automatically a measurer.
+
 ---
 
 ## Where the recreation stands right now
@@ -5201,6 +5242,14 @@ runs):**
   fold, difference closing into the cycle — no third channel; no-signalling as bookkeeping.
 - Step 253 — cessation: the lock is releasable (one state among many); the anchor is the fixed
   point, unmoved under eight folds — what ends is the holding, never the ground.
+- Step 254 — the level-depth map: the axis doubles per step (walked to k = 10), a dimension steps
+  by `2³ = 8` — the Hubble calibration's 8, the depth-3 tower, one number.
+- Step 255 — degenerate endpoints: the limit `3/4` folds to the self-antipodal balance; the census
+  is the binary fibre — exactly two remnant families, then the horizon; a discrete list.
+- Step 256 — the unfolding sequence: three moves and one move land on the same `2/3`, every
+  intermediate in-domain — a derivation is a replayable sequence, the corpus's method in miniature.
+- Step 257 — the observer resolved: `fold(1/8) = 1/4` — the measurement branch folds into the
+  observer's closure state; observation IS the fold, no homunculus.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
