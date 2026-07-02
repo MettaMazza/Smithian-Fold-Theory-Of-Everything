@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-248 suites, 1,407 forced checks, 0 failures). It needs nothing but a C compiler. Use
+252 suites, 1,428 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4561,6 +4561,45 @@ complete to unison in the same single fold. Nothing couples to the vacuum withou
 inertia identically — the root of the equivalence principle (free fall universal to `1e-15`,
 MICROSCOPE), and the structural fact any vacuum-engineering claim must reckon with either way.
 
+### Step 246 — The quark second invariant (the dual, two routes)
+
+**File:** `constants/quark_second_invariant.ep`
+
+**What it does.** The lepton form's colour-binary DUAL, `1/(3·2^d − 1)`, confirmed by an
+independent route through the fold's orbit floors: `3·(floor + 1) − 1` with the floors `31` and
+`127` each verified to carry their depth as their fold period. Both routes land on `1/95` (d = 5)
+and `1/383` (d = 7) exactly; the swap applied to the lepton form returns `1/485`. The invariants
+that seed the whole quark mass chain, pinned from two directions.
+
+### Step 247 — Self-simulation nesting (the regress halts at two)
+
+**File:** `constants/self_simulation_nesting.ep`
+
+**What it does.** The self-model regress — and the "worlds nested in worlds" simulation tower — is
+FINITE: `1/4 → 1/2 → 1`, and the third nest is the identity (`fold(1) = 1` — no deeper level
+exists). The depth 2 is walked, not asserted, and equals the binding lock's own denominator as an
+independent count. A system holds itself, and its holding of itself — and that is all.
+
+### Step 248 — The intelligence dividend (why abstraction pays)
+
+**File:** `constants/efficiency_intelligence_dividend.ep`
+
+**What it does.** Every bounded-grid state is decidable (exact denominators — every question
+halts), and each fold strictly shrinks the gap to closure: `3/4 → 1/2 → closed`, steps equal to
+the depth — logarithmic in the grid, not linear. The dividend of abstraction is the halving; the
+mastery is the fixed point; an unbounded regress would need a state off the grid (an irrational or
+a zero), and the domain contains neither.
+
+### Step 249 — Reaction thermodynamics (barrier and drop)
+
+**File:** `constants/reaction_thermodynamics.ep`
+
+**What it does.** Why every reaction profile has exactly two energies: the reactant is the
+balanced bond `1/2`, the product is closure (`fold(1/2) = 1`); ACTIVATION is the lift to the lock
+(a state below it verifiably cannot complete in one step — `1/4` pays a `1/4` lift first),
+ENTHALPY is the shortfall released on completion (`1/2`, kept), and reversal repays exactly what
+the forward step released — Hess's law's local form as one identity.
+
 ---
 
 ## Where the recreation stands right now
@@ -5106,6 +5145,14 @@ runs):**
   magnetic correction and the gravitational clock factor are one fold-covariant family.
 - Step 245 — the vacuum-inertia unity: `v/g* = 1` exactly, both halves completing in the same
   fold — why free fall is universal (`1e-15`, MICROSCOPE) and inertia has no separate dial.
+- Step 246 — the quark second invariant: the dual `1/(3·2^d − 1)` = the orbit-floor route
+  `1/(3·(2^d−1+1) − 1)` at both depths (`1/95`, `1/383`), floors carrying their periods.
+- Step 247 — self-simulation nesting: `1/4 → 1/2 → 1`, third nest the identity — the regress
+  halts at depth 2 = the lock's denominator; no infinite tower of nested worlds.
+- Step 248 — the intelligence dividend: gaps `3/4 → 1/2 → closed`, strictly shrinking, steps
+  logarithmic in the grid — abstraction pays by halving; mastery is the fixed point.
+- Step 249 — reaction thermodynamics: activation = the lift to the lock (paid), enthalpy = the
+  shortfall released (kept), reversal repaying exactly — one barrier, one drop, by structure.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

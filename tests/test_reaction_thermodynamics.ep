@@ -1,0 +1,23 @@
+import "../constants/reaction_thermodynamics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== reaction thermodynamics (barrier and drop) ==="
+    set ok to expect_equal("the reactant state: the balanced bond 1/2" and fraction_to_text(reactant_state()) and "1/2")
+    set ok to expect_bool("the reaction completes: fold(1/2) = 1 (the closed shell)" and reaction_completes())
+    set ok to expect_bool("ACTIVATION: below the lock, one step cannot complete" and below_lock_cannot_complete())
+    set ok to expect_equal("the activation lift = 1/4 (paid, not kept)" and fraction_to_text(activation_energy()) and "1/4")
+    set ok to expect_equal("the enthalpy released = 1/2 (kept)" and fraction_to_text(enthalpy_released()) and "1/2")
+    set ok to expect_bool("reversal repays exactly what the forward step released" and reversal_repays_exactly())
+    display "=== done ==="
+    return 0

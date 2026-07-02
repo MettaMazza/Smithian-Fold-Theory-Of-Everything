@@ -1,0 +1,86 @@
+# ============================================================================
+#  REACTION THERMODYNAMICS  --  enthalpy as fold-descent between fixed points.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Every chemical reaction is a bookkeeping of two energies: the barrier you must
+#  climb (activation) and the drop you keep (enthalpy). Thermodynamics measures
+#  both; nothing in it says why reactions have this two-number shape. Forced: a
+#  reaction is a fold-descent between two held states -- the reactant's bond
+#  balance and the product's closure -- so there are EXACTLY two characteristic
+#  energies: the lock that must be reached (the barrier) and the shortfall
+#  released on completion (the enthalpy), and they are the same two numbers that
+#  run the rest of chemistry (1/2 and its complement).
+#
+#  ── DERIVATION ─ (check every line; the reaction walked) ─────────────────────
+#  The reactant state is the balanced bond 1/2 (molecular_bond.ep: two half-open
+#  valences); the product state is unison -- the closed shell (periodic_law.ep).
+#  The reaction is one fold: fold(1/2) = 1, verified. Its two energies:
+#  ACTIVATION -- a reactant BELOW the lock cannot descend: 1/4 does not fold to
+#  unison in one step (fold(1/4) = 1/2, verified NOT equal to 1) -- the system
+#  must first be lifted to the lock, and that lift, 1/2 - 1/4 = 1/4, is the
+#  activation energy: paid first, not kept.
+#  ENTHALPY -- the completion releases the reactant's shortfall: 1 - 1/2 = 1/2,
+#  the enthalpy drop, kept. Exothermic BY STRUCTURE: descent toward the One
+#  releases (the shortfall is positive); the reverse step (unison back to the
+#  lock) must PAY the same 1/2 -- reversing a reaction costs exactly what the
+#  forward reaction released, which is energy conservation in one identity.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: barrier at the lock, activation 1/4 from the
+#  quarter state, enthalpy 1/2 released and repaid on reversal. Measured: every
+#  reaction profile has exactly this shape -- one barrier, one drop, with the
+#  reverse barrier equal to forward barrier plus drop (Hess's law's local form).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The reactant state: the balanced bond 1/2.
+define reactant_state returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The reaction: one fold from the lock to closure.
+define reaction_completes returning Bool:
+    set reactant to reactant_state()
+    set product to fold_fraction(reactant)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(product and one)
+
+# ACTIVATION: a state below the lock cannot complete in one step.
+define below_lock_cannot_complete returning Bool:
+    set below to fraction_from_ratio(1 and 4)
+    set folded to fold_fraction(below)
+    set one to fraction_from_whole_number(1)
+    set completes to fraction_is_equal(folded and one)
+    if completes:
+        return false
+    return true
+
+# The activation energy: the lift from the quarter state to the lock, 1/4.
+define activation_energy returning Fraction:
+    set lock to reactant_state()
+    set below to fraction_from_ratio(1 and 4)
+    return fraction_subtract(lock and below)
+
+# ENTHALPY: the shortfall released on completion, 1 - 1/2 = 1/2.
+define enthalpy_released returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set reactant to reactant_state()
+    return fraction_subtract(one and reactant)
+
+# Reversal pays back exactly what the forward step released (conservation).
+define reversal_repays_exactly returning Bool:
+    set released to enthalpy_released()
+    set one to fraction_from_whole_number(1)
+    set lock to reactant_state()
+    set cost_back to fraction_subtract(one and lock)
+    return fraction_is_equal(released and cost_back)

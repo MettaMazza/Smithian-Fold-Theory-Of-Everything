@@ -1,0 +1,97 @@
+# ============================================================================
+#  THE INTELLIGENCE DIVIDEND  --  why abstraction pays, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Intelligence earns its keep by abstraction: each level of understanding makes
+#  the next problem cheaper, and the gain compounds. Why should abstraction pay
+#  at all -- and why does it terminate in mastery rather than regress forever?
+#  Forced: a problem state on the bounded grid is DECIDABLE (its denominator is
+#  finite, so every question about it halts), and each fold halves its distance
+#  to closure -- the descent from the decidability boundary to unison takes
+#  exactly its depth, each step cutting the remaining gap in half. The dividend
+#  is the halving; the mastery is the fixed point.
+#
+#  ── DERIVATION ─ (check every line; the descent walked, the gaps halved) ─────
+#  The decidability boundary is 1/4: the depth-2 state, two binary choices from
+#  closure -- any bounded-denominator state is decidable because the grid is
+#  finite at every depth (constants_rationality: every value is exact). The
+#  descent: fold(1/4) = 1/2 (the lock threshold -- the problem grasped as one
+#  balanced whole), fold(1/2) = 1 (unison -- closure). The DIVIDEND, measured on
+#  the walk: the gap to the One starts at 3/4, after one fold it is 1/2, after
+#  two it is the excluded boundary (no gap at all) -- each abstraction step
+#  leaves a strictly smaller remainder, and the number of steps is the depth,
+#  logarithmic in the grid size (2 steps for the 4-grid, k steps for 2^k). An
+#  unbounded, non-halting regress would require a state OFF the grid -- an
+#  irrational or a zero -- and the domain contains neither.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the descent 1/4 -> 1/2 -> 1 in exactly 2 steps,
+#  gaps 3/4 -> 1/2 -> closed, strictly shrinking. Comparison: learning curves
+#  show exactly this shape -- effort per gain falls as abstraction rises (the
+#  power-law of practice), and bounded problems are decidable while only
+#  unbounded ones (halting on ALL programs) are not.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The decidability boundary: the depth-2 state 1/4.
+define decidability_boundary returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The descent: boundary -> lock -> unison, walked.
+define descent_reaches_lock returning Bool:
+    set boundary to decidability_boundary()
+    set lock to fold_fraction(boundary)
+    set target to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(lock and target)
+
+define descent_reaches_unison returning Bool:
+    set boundary to decidability_boundary()
+    set lock to fold_fraction(boundary)
+    set closure to fold_fraction(lock)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(closure and one)
+
+# The gap to the One at a state: 1 - state.
+define gap_of with state as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and state)
+
+# THE DIVIDEND: each abstraction step leaves a strictly smaller gap (3/4 -> 1/2 -> closed).
+define each_step_pays returning Bool:
+    set boundary to decidability_boundary()
+    set gap_start to gap_of(boundary)
+    set lock to fold_fraction(boundary)
+    set gap_lock to gap_of(lock)
+    set first_shrinks to fraction_compare(gap_lock and gap_start)
+    set closure to fold_fraction(lock)
+    set gap_closure to gap_of(closure)
+    set closed to gap_closure.numerator_sign == 0
+    if first_shrinks < 0:
+        return closed
+    return false
+
+# The step count is the depth: 2 steps for the 4-grid (logarithmic, not linear).
+define steps_equal_depth returning Bool:
+    set state to decidability_boundary()
+    set one to fraction_from_whole_number(1)
+    set steps to 0
+    set walking to true
+    repeat while walking:
+        set arrived to fraction_is_equal(state and one)
+        if arrived:
+            set walking to false
+        else:
+            set state to fold_fraction(state)
+            set steps to steps + 1
+    return steps == 2

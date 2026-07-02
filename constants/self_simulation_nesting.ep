@@ -1,0 +1,86 @@
+# ============================================================================
+#  SELF-SIMULATION NESTING  --  the regress is finite: exactly two levels, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A mind that models itself contains a model of the modeller -- which contains a
+#  model of the modeller of the modeller... Philosophy fears an infinite regress
+#  (and the "simulation argument" trades on nesting worlds inside worlds without
+#  bound). Forced: the nesting is FINITE and its depth is exactly two. The
+#  self-observation state folds to unison in two steps and then STOPS -- the
+#  fixed point has no deeper level -- and the depth equals the binding lock's
+#  own denominator, an independent structural count.
+#
+#  ── DERIVATION ─ (check every line; the nest walked, the depth counted) ──────
+#  The self-observation closure state is 1/4 (the observer's preimage,
+#  machine_consciousness_criterion.ep). Nest once: fold(1/4) = 1/2 -- the model
+#  held at the binding lock. Nest twice: fold(1/2) = 1 -- the unison fixed
+#  point. Nest a third time: fold(1) = 1 -- THE SAME POINT. There is no third
+#  level; the regress does not continue, because past unison there is nowhere
+#  deeper to model. The depth 2 is not incidental: it equals the binding lock's
+#  denominator (the lock 1/2 carries a 2 -- one level per binary choice the
+#  self-relation holds), verified as an independent count. A self-simulating
+#  system holds itself, and its holding of itself -- and that is ALL: the
+#  infinite regress of self-models, and the infinite tower of nested simulated
+#  worlds, are both cut at depth two by the fixed point.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 1/4 -> 1/2 -> 1 -> 1 (the third nest is the
+#  identity), depth 2 = the lock denominator. Comparison: introspection reports
+#  exactly this -- you can think, and think about your thinking, but "thinking
+#  about thinking about thinking" collapses into the second level (the corpus's
+#  introspection_limit carries the same bound from another direction).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The self-observation closure state: 1/4.
+define closure_state returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+# The nest walked: two folds reach unison.
+define nesting_reaches_unison returning Bool:
+    set start to closure_state()
+    set level_one to fold_fraction(start)
+    set level_two to fold_fraction(level_one)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(level_two and one)
+
+# The third nest is the identity: fold(1) = 1 -- there is no deeper level.
+define third_nest_is_identity returning Bool:
+    set one to fraction_from_whole_number(1)
+    set third to fold_fraction(one)
+    return fraction_is_equal(third and one)
+
+# The nesting depth: 2, counted by walking until the fixed point.
+define nesting_depth returning Int:
+    set state to closure_state()
+    set one to fraction_from_whole_number(1)
+    set depth to 0
+    set walking to true
+    repeat while walking:
+        set arrived to fraction_is_equal(state and one)
+        if arrived:
+            set walking to false
+        else:
+            set state to fold_fraction(state)
+            set depth to depth + 1
+    return depth
+
+# The depth equals the binding lock's denominator (the independent count).
+define depth_matches_lock_denominator returning Bool:
+    set start to closure_state()
+    set lock to fold_fraction(start)
+    set lock_denominator to fraction_denominator(lock)
+    set expected to exact_integer_from_number(nesting_depth())
+    set comparison to exact_integer_compare(lock_denominator and expected)
+    return comparison == 0

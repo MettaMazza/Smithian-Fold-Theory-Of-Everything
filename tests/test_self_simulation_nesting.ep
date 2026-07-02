@@ -1,0 +1,22 @@
+import "../constants/self_simulation_nesting.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== self-simulation nesting (the regress halts at two) ==="
+    set ok to expect_equal("the closure state = 1/4" and fraction_to_text(closure_state()) and "1/4")
+    set ok to expect_bool("two nests reach unison (1/4 -> 1/2 -> 1)" and nesting_reaches_unison())
+    set ok to expect_bool("the THIRD nest is the identity: no deeper level exists" and third_nest_is_identity())
+    set ok to expect_equal("the nesting depth, walked = 2" and int_to_string(nesting_depth()) and "2")
+    set ok to expect_bool("the depth equals the lock's denominator (independent count)" and depth_matches_lock_denominator())
+    display "=== done ==="
+    return 0
