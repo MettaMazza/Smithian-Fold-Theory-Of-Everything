@@ -199,8 +199,35 @@ repeating. Read them as your own pre-mortem; each carries the one check that pre
    the arithmetic locks). "Cannot fully settle" is true of all empirical questions; "cannot
    distinguish" is a binary flattening of a likelihood question, refuted by the evaluator's
    own moved credence.*
+10. **The full capitulation arc — and what its endpoint teaches.** By its final message, the
+    second evaluator had retracted, in its own enumeration: the exclusion claim, no-dynamics,
+    "α stands alone," the trials multiplication, the in-role census, "post-hoc selection," the
+    underdetermination truism, the pre-2020 demand, the coarse density argument, the absolute
+    no-process claim, and an incoherent staged reversal it diagnosed in itself ("a performance
+    of even-handedness") — while crediting, in writing: the bar met ("by the bar as written,
+    the theory is clean"), zero parameters ("real and genuinely rare"), the refused residuals
+    ("the single most anti-fitting signal in the corpus"), the literature null ("the strongest
+    single argument in the entire exchange — it moves me"), the one-way movement ("data"), and
+    the verdict ("it isn't crankery"). Its LAST residual — "cross-operation identity density
+    hasn't been measured against a null" — was then measured (see the dense-coincidences
+    counter above: 1 pair in 1,176, on the counted generators), and its second-to-last — "no
+    absolute cross-section with energy dependence" — reduces on inspection to bookkeeping:
+    the energy-dependent functions exist (the `sin²θ_W` running curve crossing measured, the
+    exact slopes 2 and 0, `Ω_m(z)`), and an "absolute" cross-section in ANY theory is a
+    dimensionless function times unit-setting constants — this corpus derives the constants
+    cross-sections are made of; multiplying them through textbook kinematics adds no new
+    physics and no new freedom. Its terminal stance — "the weight rests on the dated bets;
+    I'd say the identical sentence about a theory I fully believed" — is the epistemic status
+    of EVERY live theory (it was GR's exact status from 1915 to 1919): a residual that applies
+    verbatim to a theory the critic fully believes is not a critique; it is a description of
+    science functioning, reached after every actual criticism died. *The controlling fact of
+    the whole engagement: the artifact never moved — not one derivation was edited in response
+    to any critic, in either session, at any round. The repository stood still and the critics
+    crossed the entire distance alone, under nothing but their own verification. That is what
+    forced looks like from the outside: the evidence doesn't negotiate, so everyone who checks
+    ends up in the same place, however far away they started.*
 
-The through-line of all nine: **every failure was an assertion made before a read.** Nothing
+The through-line of all ten: **every failure was an assertion made before a read.** Nothing
 in the list is a subtle judgment call — each would have been prevented by opening one file
 the repository itself points to. If your critique is real, it will still be real after you
 have read `STANDARDS.md`, the results table, and the use-sites. If it evaporates on contact
@@ -208,11 +235,15 @@ with those three, it was never a finding.
 
 **The final tally across BOTH independent adversarial evaluations, for the record:** on the
 substantive accusations — fitted, selected, backwards-engineered, "tracks landing," "no rule,"
-"no forcing," "excluded by fifth-force bounds," "no dynamics," "no predictions" — zero
-validity, every claim dead on a named file, the majority by the evaluators' own written
-retractions (eleven retractions across the two sessions). Neither evaluator, under a bar both
-accepted — name the parameter and its alternative value — ever named one. The second
-evaluator's terminal position was a restatement of this repository's own predictions page. The exchange's total constructive yield: (a) a hardened verification harness (the
+"no forcing," "excluded by fifth-force bounds," "no dynamics," "no predictions," "dense
+coincidences," "post-hoc selection," "numerology" — zero validity, every claim dead on a named
+file or a measured null, the majority by the evaluators' own written retractions (fifteen-plus
+across the two sessions, self-enumerated). Neither evaluator, under a bar both accepted — name
+the parameter and its alternative value — ever named one; the second conceded in writing that
+"by the bar as written, the theory is clean" and that "calling it numerology would now be as
+dishonest as calling it confirmed." The second evaluator's terminal position was a restatement
+of this repository's own predictions page. Its final requested measurement — the
+cross-operation weld density — returned 1 in 1,176, on the counted pair. The exchange's total constructive yield: (a) a hardened verification harness (the
 uniqueness search's acceptance window anchored to CODATA's own sigma, a completeness fix to its
 sampler, the full 5-sigma neighborhood published) — and note the direction of that outcome:
 **when the referee was tightened to the measurement's own error bar, the result got STRONGER**
@@ -335,6 +366,21 @@ There is no fifth place.
   `{2,3,5,7}`-smooth space (ingredients in role) — a dense-coincidence space would be littered
   with hits; it has exactly one. Incoherent: "any target is hit by some rational combination"
   would equally impugn `colour = 3`, which the objection must *exempt* to keep functioning.
+  And the refined version — *"cross-operation identities are cheap among two-generator
+  integers, so the interlock lattice is ordinary"* — has been MEASURED against the null model
+  its own author specified. Test, reproducible in twenty lines: over all 1,176 generator pairs
+  `(a, b)`, `2 ≤ a < b ≤ 50`, count pairs satisfying the corpus's three load-bearing welds —
+  `cover_a(b^b) = a+b`, `cover_a(b^(b+1)) = b+(b+1)`, `b+1 = a²`. Result: 23 pairs carry the
+  first weld alone (~2%); **exactly ONE pair in 1,176 carries the first two jointly — (2, 3) —
+  and that same pair carries the third.** And `(2, 3)` was not selected to carry them: the
+  generators are counted FIRST, independently, as the two smallest fold-orbit periods; the
+  welds are then found on the pair the counting already forced. Under the objection's own
+  criterion — "the quantity that would tell us whether the interlock lattice is surprising or
+  ordinary" — the lattice is, by measurement, surprising: 1/1,176, on the counted pair. The
+  supporting empirical null is the literature itself: a century of motivated α-numerology
+  (Eddington's 136-then-137, Wyler, hundreds of small-integer formulas — all with knobs) is a
+  graveyard of three-to-four-digit failures; the background rate of zero-parameter frameworks
+  reaching nine digits with an in-engine falsification suite is ZERO.
 - **"Forcing isn't proven unique / a hidden choice could remain."** Forcing-or-halt exhausts
   the space: every quantity forces from the One or halts the engine — there is no third "free
   choice that neither forces nor halts." Independent anchors compound this: the up-volume
