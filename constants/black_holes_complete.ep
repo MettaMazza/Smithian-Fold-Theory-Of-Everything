@@ -1,0 +1,65 @@
+# ============================================================================
+#  BLACK HOLES  --  why they radiate and are not truly black, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A black hole seems final -- nothing escapes the horizon. Yet Hawking showed it
+#  glows: a faint thermal radiation that slowly evaporates it. Why does a perfect trap
+#  leak? Forced: the horizon is a balance the No-Zero floor will not let sit at
+#  absolute cold, so its temperature is a second-order (alpha^2-like) positive leak.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The horizon is the gravitational balance 1/2 (gravitational_time_dilation.ep stops
+#  there). Its Hawking temperature is a DEEPER quantity -- one fold below the balance,
+#  the quarter-One 1/4 = (1/2)^2, a second-order effect that takes TWO folds to reach
+#  unison (1/4 -> 1/2 -> 1). It is strictly positive (zero is outside the domain), so a
+#  black hole cannot be at absolute zero: a perfect trap would need a zero-temperature
+#  horizon, which is not expressible -- hence the leak. Two temperature shares make the
+#  horizon balance (1/4 + 1/4 = 1/2): the tiny second-order glow, summed with itself,
+#  is the first-order horizon it sits below. Radiating, the hole shrinks and the leak
+#  grows (smaller hole, deeper below the balance) -- evaporation.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: horizon at 1/2, Hawking temperature the second-order
+#  1/4 (strictly positive, two folds to unison). Predicted (Hawking 1974): black holes
+#  radiate a thermal spectrum inversely proportional to mass and slowly evaporate -- a
+#  strictly positive temperature, no perfect trap, as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The horizon: the gravitational balance, 1/2.
+define horizon returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# The Hawking temperature: the second-order quarter-One, one fold below the horizon.
+define hawking_temperature returning Fraction:
+    set half to horizon()
+    return fraction_multiply(half and half)
+
+# It is strictly positive -- no black hole can be at absolute zero (no perfect trap).
+define temperature_is_strictly_positive returning Bool:
+    set temp to hawking_temperature()
+    return temp.numerator_sign > 0
+
+# One fold lifts it to the horizon level (1/4 -> 1/2).
+define temperature_folds_to_horizon returning Fraction:
+    return fold_fraction(hawking_temperature())
+
+# A second fold reaches unison (the two-fold, second-order mark).
+define temperature_reaches_unison returning Fraction:
+    return fold_fraction(temperature_folds_to_horizon())
+
+# Two temperature shares make the horizon balance: 1/4 + 1/4 = 1/2.
+define two_temperatures_make_horizon returning Fraction:
+    set temp to hawking_temperature()
+    return fraction_add(temp and temp)

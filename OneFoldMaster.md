@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-161 suites, 917 forced checks, 0 failures). It needs nothing but a C compiler. Use
+166 suites, 942 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -3634,6 +3634,58 @@ is forced, not lucky (and the whole corpus is the wholesale demonstration).
 
 ---
 
+### Step 159 — The measurement problem (one branch, indivisible)
+
+**File:** `constants/measurement_problem.ep`
+
+**What it does.** A measurement resolves at the observation depth `k = colour = 3`, where the
+branch weights are the indivisible grid steps `1/2³ = 1/8` — an outcome is a *whole* number of
+these, never a fraction, so a result is always one definite branch (there is no "between" to
+land in). The `2³ = 8` branches sum to the One (the Born certainty). Superposition before is the
+undivided One; measurement is the fold onto one grid branch.
+
+### Step 160 — The hard problem (unity + interiority)
+
+**File:** `constants/hard_problem.ep`
+
+**What it does.** Not a promise to derive qualia, but the two forced structural marks any
+account needs: **unity** — bound processing folds to one whole (the balance → the One), so an
+experience is a completed One, not a heap; and **interiority** — the carrier rides the closed
+`1/3 ↔ 2/3` orbit that never reaches the One from *inside*, so the system cannot stand outside
+and read its own whole. Being the One while unable to fold yourself to it from within.
+
+### Step 161 — Black holes (Hawking radiation, not a perfect trap)
+
+**File:** `constants/black_holes_complete.ep`
+
+**What it does.** The horizon is the gravitational balance `1/2`; its Hawking temperature is the
+second-order quarter-One `1/4` (one fold below, two folds to unison), and it is **strictly
+positive** because zero is outside the domain — a perfect (zero-temperature) trap is not
+expressible, so the hole must leak. Radiating, it shrinks and the leak grows: evaporation
+(Hawking 1974).
+
+### Step 162 — The Poisson equation (∇²Φ = d·m)
+
+**File:** `constants/poisson_equation.ep`
+
+**What it does.** The discrete Laplacian is the lattice's balance operator (a site vs its
+neighbours over the `d = colour = 3` directions — the coupled-lattice kernel), and in static
+equilibrium a source breaks the balance by the fold factor `m = b = 2` per dimension:
+`∇²Φ = d·m = 3·2 = 6` (the same `6 = 2·3` as the cubic-lattice coordination number). Its
+integral is Gauss's law; nothing in the coefficient is fitted.
+
+### Step 163 — The potential infinite (a process, not a thing)
+
+**File:** `constants/potential_infinite.ep`
+
+**What it does.** Aristotle's distinction, made concrete: for any rung `1/2^k` there is a `k+1`
+(the potential infinite — always one more step), yet every rung is a *finite* rational reaching
+the One in exactly `k` folds, and the depth-5 ladder closes **exactly** to the One (a finite
+whole, not an endless totality). The infinite exists only as "always one more rung," never as a
+completed infinity — as the No-Zero domain enforces.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
@@ -3984,6 +4036,16 @@ runs):**
   One, a noble gas), then the next shell re-opens; period lengths are the `b·n²` capacities.
 - Step 158 — the effectiveness of mathematics: the fold orbit `1/3 ↔ 2/3` read physically
   (a held cycle) and mathematically (`ord₃(2) = 2`) is one object — the fit is forced.
+- Step 159 — the measurement problem: branch weight `1/2³ = 1/8` is indivisible, the 8
+  branches sum to the One — a result is one definite branch, no "between" to land in.
+- Step 160 — the hard problem: unity (bound processing folds to one whole) + interiority
+  (the `1/3 ↔ 2/3` carrier never reaches the One from within) — the two forced marks.
+- Step 161 — black holes: the horizon `1/2` has a strictly-positive second-order Hawking
+  temperature `1/4` — no zero-temperature perfect trap is expressible, so it radiates.
+- Step 162 — the Poisson equation: `∇²Φ = d·m = colour·binary = 6` — the lattice balance
+  operator with the source breaking it by the fold factor per dimension.
+- Step 163 — the potential infinite: always one deeper rung `1/2^k`, yet each finite and
+  reaching the One in `k` folds, and the depth-5 ladder closes exactly — a process, not a thing.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

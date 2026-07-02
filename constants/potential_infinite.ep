@@ -1,0 +1,79 @@
+# ============================================================================
+#  THE POTENTIAL INFINITE  --  why infinity is a process, not a thing, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Aristotle drew a line mathematics still leans on: the POTENTIAL infinite (you can
+#  always take one more step) is real; the ACTUAL infinite (a completed endless totality)
+#  is not. The fold makes the distinction concrete: you can always fold one level deeper,
+#  but every level is a finite, reachable rational -- there is no completed infinity
+#  anywhere in the construction, only an endless-in-principle ladder of finite rungs.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The dyadic ladder 1/2, 1/4, 1/8, ... goes as deep as you like: rung k is 1/2^k, and
+#  for ANY k there is a k+1 -- the potential infinite, always one more step. But each
+#  rung is FINITE and reaches the One in exactly k folds (a completed, finite descent;
+#  computability_halting.ep) -- no rung is itself an actual infinity. And the ladder
+#  down to the forced depth CLOSES exactly: to depth d = 5 the rungs plus the boundary
+#  sum to the One (1/2 + 1/4 + ... + 1/32 + 1/32 = 1; continuum_ladder.ep) -- a finite
+#  whole, not an endless sum. So the infinite lives only as "always one more rung
+#  available", never as a finished totality: potential, not actual, exactly as Aristotle
+#  held and as the No-Zero domain enforces (there is no bottom rung = zero to complete at).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: every rung 1/2^k is finite and reaches the One in k
+#  folds, and the depth-5 ladder closes to the One. Observed/mathematical: constructive
+#  and finitist mathematics take exactly this stance, and no physical measurement has
+#  ever returned a completed infinity -- always a finite value at finite resolution.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# Rung k of the ladder: 1/2^k (always defined -- there is always a deeper rung).
+define ladder_rung with k as Int returning Fraction:
+    set volume to whole_power(binary_count() and k)
+    return fraction_from_ratio(1 and volume)
+
+# Every rung is FINITE and reaches the One in exactly k folds (a completed descent).
+define rung_reaches_one_in with k as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set current to ladder_rung(k)
+    set step to 0
+    repeat while step < k:
+        set current to fold_fraction(current)
+        set step to step + 1
+    return fraction_is_equal(current and one)
+
+# There is ALWAYS one more rung: rung k+1 is strictly smaller than rung k, never zero.
+define always_a_deeper_rung with k as Int returning Bool:
+    set here to ladder_rung(k)
+    set deeper to ladder_rung(k + 1)
+    set comparison to fraction_compare(deeper and here)
+    set smaller to comparison < 0
+    set positive to deeper.numerator_sign > 0
+    if smaller:
+        return positive
+    return 1 == 0
+
+# The ladder to the forced depth CLOSES exactly to the One -- a finite whole, not an
+# endless totality: 1/2 + 1/4 + ... + 1/32 + boundary(1/32) = 1.
+define ladder_closes_to_one returning Fraction:
+    set depth to binary_count() + colour_count()
+    set total to ladder_rung(1)
+    set k to 2
+    repeat while k <= depth:
+        set rung to ladder_rung(k)
+        set total to fraction_add(total and rung)
+        set k to k + 1
+    set boundary to ladder_rung(depth)
+    return fraction_add(total and boundary)

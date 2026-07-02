@@ -1,0 +1,21 @@
+import "../constants/potential_infinite.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the potential infinite (a process, not a thing) ==="
+    set ok to expect_equal("rung 5 of the ladder = 1/32" and fraction_to_text(ladder_rung(5)) and "1/32")
+    set ok to expect_bool("rung 5 is finite and reaches the One in 5 folds" and rung_reaches_one_in(5))
+    set ok to expect_bool("there is ALWAYS a deeper rung (smaller, never zero)" and always_a_deeper_rung(5))
+    set ok to expect_equal("the depth-5 ladder closes EXACTLY to the One (a finite whole)" and fraction_to_text(ladder_closes_to_one()) and "1")
+    display "=== done ==="
+    return 0

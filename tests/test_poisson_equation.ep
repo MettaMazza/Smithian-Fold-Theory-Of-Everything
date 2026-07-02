@@ -1,0 +1,22 @@
+import "../constants/poisson_equation.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Poisson equation (nabla^2 = d*m) ==="
+    set ok to expect_equal("expansion factor m = binary = 2" and int_to_string(expansion_factor()) and "2")
+    set ok to expect_equal("spatial dimensions d = colour = 3" and int_to_string(spatial_dimensions()) and "3")
+    set ok to expect_equal("Poisson coefficient nabla^2 = d*m = 6" and int_to_string(poisson_coefficient()) and "6")
+    set ok to expect_bool("in three dimensions it is 6 (the coordination number)" and coefficient_is_six())
+    set ok to expect_equal("scales with dimension: 2D -> 4" and int_to_string(coefficient_in_dimension(2)) and "4")
+    display "=== done ==="
+    return 0

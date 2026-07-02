@@ -1,0 +1,65 @@
+# ============================================================================
+#  THE MEASUREMENT PROBLEM  --  why a measurement picks ONE branch, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Quantum mechanics' deepest puzzle: before you look, a system is a superposition of
+#  possibilities; after, you find exactly ONE definite outcome. What selects the single
+#  branch, and why can't you land "between" outcomes? Forced: a measurement is a fold to
+#  a definite depth, and its branches are the indivisible grid weights -- there is no
+#  "between" to land in.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  A measurement resolves to depth k = colour = 3 (the observation depth). At that depth
+#  the branch weights are the grid steps 1/2^3 = 1/8 -- indivisible: an outcome is a
+#  WHOLE number of these, never a fraction of one (quantisation.ep). So a result is
+#  always one definite branch, because the domain has no value between adjacent branch
+#  weights to be "half-measured" into. The weights partition the whole: 2^3 = 8 branches
+#  of 1/8 each sum to the One (8 * 1/8 = 1) -- the Born accounting, every branch weight
+#  a positive share, together the certainty. Superposition BEFORE is the undivided One;
+#  measurement is the fold that lands it on one branch of the grid, and once landed
+#  there is no fractional branch it could have landed on instead.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: branch weight 1/2^3 = 1/8, eight branches summing to
+#  the One, each indivisible. Measured: every quantum measurement yields one definite
+#  eigenvalue (never a superposition of readings), with probabilities that are positive
+#  and sum to one -- the discrete-branch outcome this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The observation depth: k = colour = 3.
+define observation_depth returning Int:
+    return colour_count()
+
+# The branch weight: the indivisible grid step 1/2^k = 1/8.
+define branch_weight returning Fraction:
+    set volume to whole_power(binary_count() and observation_depth())
+    return fraction_from_ratio(1 and volume)
+
+# The number of branches: 2^k = 8.
+define branch_count returning Int:
+    return whole_power(binary_count() and observation_depth())
+
+# The branches partition the One: 8 * (1/8) = 1 (every share positive, together certain).
+define branches_partition_one returning Fraction:
+    set weight to branch_weight()
+    set count to branch_count()
+    set total to fraction_from_whole_number(0)
+    set i to 0
+    repeat while i < count:
+        set total to fraction_add(total and weight)
+        set i to i + 1
+    return total
+
+# The weight is indivisible: its denominator is exactly 2^k (a whole grid step).
+define weight_is_indivisible returning Bool:
+    set weight to branch_weight()
+    set denominator to fraction_denominator(weight)
+    set expected to exact_integer_from_number(branch_count())
+    set comparison to exact_integer_compare(denominator and expected)
+    return comparison == 0
