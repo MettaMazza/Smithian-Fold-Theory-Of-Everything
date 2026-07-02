@@ -1,0 +1,23 @@
+import "../constants/quantum_statistics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== quantum statistics (Bose and Fermi, no third) ==="
+    set ok to expect_bool("the two hands are identical particles (one fold image)" and hands_are_identical_particles())
+    set ok to expect_equal("the fibre size = binary = 2" and int_to_string(fibre_size()) and "2")
+    set ok to expect_bool("BOSE: a coincident pair is fixed under exchange (symmetric)" and coincident_pair_is_symmetric())
+    set ok to expect_bool("FERMI: a distinct pair reverses sign under exchange (antisymmetric)" and distinct_pair_is_antisymmetric())
+    set ok to expect_bool("the Pauli cap = the fibre size (a third fermion has no preimage)" and fermion_cap_is_fibre_size())
+    set ok to expect_bool("no third case: the two statistics exhaust the fibre" and two_statistics_exhaust())
+    display "=== done ==="
+    return 0

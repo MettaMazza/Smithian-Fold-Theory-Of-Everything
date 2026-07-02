@@ -1,0 +1,23 @@
+import "../constants/matter_fraction_tower.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the matter fraction (Omega_m = 5/16) ==="
+    set ok to expect_equal("the covering depth, counted (minimal cover of 27) = 5" and int_to_string(covering_depth()) and "5")
+    set ok to expect_equal("the tower, built by doubling = 32 states" and int_to_string(tower_states()) and "32")
+    set ok to expect_equal("the pinned states: two per level = 10" and int_to_string(pinned_states()) and "10")
+    set ok to expect_equal("the vacuum share = 22/32 = 11/16" and fraction_to_text(vacuum_fraction()) and "11/16")
+    set ok to expect_equal("the matter fraction = 5/16 (Planck: 0.315, forced: 0.3125)" and fraction_to_text(matter_fraction()) and "5/16")
+    set ok to expect_equal("the two shares partition the One (no third piece)" and fraction_to_text(shares_partition_one()) and "1")
+    display "=== done ==="
+    return 0

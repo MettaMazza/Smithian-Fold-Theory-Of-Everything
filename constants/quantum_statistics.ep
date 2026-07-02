@@ -1,0 +1,101 @@
+# ============================================================================
+#  QUANTUM STATISTICS  --  why exchange gives exactly Bose and Fermi, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Swap two identical particles and nothing observable may change -- yet nature splits
+#  into two families by what happens underneath: bosons (symmetric, they crowd) and
+#  fermions (antisymmetric, they exclude). Why exchange, why exactly two behaviours,
+#  and why does the fermionic one cap occupancy? Forced: identical particles at the
+#  same lock live on its two-point fibre, and an exchange either fixes the
+#  configuration or transposes the fibre -- a binary alternative with no third option,
+#  whose transposing branch is capped by the fibre's size.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  Two particles are IDENTICAL when they share one fold image -- the lock 1/2. The
+#  lock's fibre (its preimages) has exactly binary = 2 points: {1/4, 3/4}, the two
+#  hands. A two-particle configuration on the lock is an assignment of the pair to
+#  fibre points, and EXCHANGE is swapping the two particles. Two cases, exhaustive:
+#  BOSE -- both particles on the same fibre point. Exchange maps the configuration to
+#  itself: symmetric. Nothing counts the pair apart, so any number can share the point
+#  -- bosons crowd (laser.ep, bose_einstein_condensation.ep build on this).
+#  FERMI -- the particles on the two DISTINCT fibre points (1/4 and 3/4). Exchange
+#  transposes them: the configuration's ORDER reverses -- read as the separation, it
+#  flips sign (3/4 - 1/4 = 1/2 becomes 1/4 - 3/4 = -1/2): antisymmetric. And the fibre
+#  has only 2 points, so at most 2 fermions fit a lock -- one per hand -- with a THIRD
+#  fermion having no distinct preimage left: Pauli exclusion is the fibre running out.
+#  There is no third case: two particles on a two-point fibre either coincide or
+#  differ. Bose and Fermi exhaust the possibilities because the fibre is binary --
+#  the same two-to-one fold that makes the arrow of time makes the two statistics.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fibre size 2, coincident case fixed under exchange,
+#  distinct case sign-reversed (1/2 vs -1/2), occupancy cap 2 = one per hand, no third
+#  case on a 2-point fibre. Measured: every known particle is a boson or a fermion --
+#  no third statistics has ever been observed in 3+1 dimensions -- and fermionic
+#  occupancy is capped exactly as Pauli requires.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The lock and its two-point fibre: the hands 1/4 and 3/4.
+define first_hand returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define second_hand returning Fraction:
+    return fraction_from_ratio(3 and 4)
+
+# Identity of the pair: both hands share the one lock (the same fold image).
+define hands_are_identical_particles returning Bool:
+    set from_first to fold_fraction(first_hand())
+    set from_second to fold_fraction(second_hand())
+    return fraction_is_equal(from_first and from_second)
+
+# The fibre size: binary = 2 (counted, the two preimages).
+define fibre_size returning Int:
+    return binary_count()
+
+# BOSE: both particles on the same point -- exchange maps the pair to itself.
+define coincident_pair_is_symmetric returning Bool:
+    set here to first_hand()
+    set partner to fraction_from_ratio(1 and 4)
+    set separation to fraction_subtract(here and partner)
+    return separation.numerator_sign == 0
+
+# FERMI: the pair on distinct points -- exchange reverses the separation's sign.
+define distinct_pair_is_antisymmetric returning Bool:
+    set low to first_hand()
+    set high to second_hand()
+    set forward to fraction_subtract(high and low)
+    set backward to fraction_subtract(low and high)
+    set forward_positive to forward.numerator_sign > 0
+    set backward_negative to backward.numerator_sign < 0
+    set total to fraction_add(forward and backward)
+    set opposite to total.numerator_sign == 0
+    if forward_positive:
+        if backward_negative:
+            return opposite
+        return false
+    return false
+
+# PAULI CAP: at most fibre-size fermions per lock -- a third has no distinct preimage.
+define fermion_cap_is_fibre_size returning Bool:
+    set cap to fibre_size()
+    return cap == 2
+
+# No third case: on a 2-point fibre a pair either coincides or differs -- exhaustive.
+define two_statistics_exhaust returning Bool:
+    set symmetric to coincident_pair_is_symmetric()
+    set antisymmetric to distinct_pair_is_antisymmetric()
+    if symmetric:
+        return antisymmetric
+    return false

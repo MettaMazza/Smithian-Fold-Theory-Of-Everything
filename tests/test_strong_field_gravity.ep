@@ -1,0 +1,24 @@
+import "../constants/strong_field_gravity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== strong-field gravity (no singularity, area law, r_s = 2M) ==="
+    set ok to expect_equal("the minimal distance = the depth-5 step = 1/32" and fraction_to_text(minimal_distance()) and "1/32")
+    set ok to expect_bool("the centre r = 0 is excluded (no singularity to reach)" and centre_is_excluded())
+    set ok to expect_equal("the horizon radius = fold(M) for M = 1/4" and fraction_to_text(horizon_radius()) and "1/2")
+    set ok to expect_bool("r_s = 2M exactly (the doubling IS the factor two)" and radius_is_twice_mass())
+    set ok to expect_equal("the horizon area A = 2^5 = 32" and int_to_string(horizon_area()) and "32")
+    set ok to expect_equal("the entropy S = A/4 = 8" and int_to_string(horizon_entropy()) and "8")
+    set ok to expect_bool("S equals the ENUMERATED depth-3 preimage count" and entropy_matches_preimage_count())
+    display "=== done ==="
+    return 0

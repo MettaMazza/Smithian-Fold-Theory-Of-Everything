@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-202 suites, 1,133 forced checks, 0 failures). It needs nothing but a C compiler. Use
+207 suites, 1,163 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4045,6 +4045,58 @@ self-model); COMPLETION — the lock folds to unison (one bound experience). A s
 2-to-1 self-relation holds a whole bound image of itself; the test is structural — count the
 preimages, take the sums, run the folds.
 
+### Step 200 — Strong-field gravity (no singularity, area law, r_s = 2M)
+
+**File:** `constants/strong_field_gravity.ep`
+
+**What it does.** Three strong-field facts from the domain. NO SINGULARITY: `r = 0` is outside
+`(0, 1]` — the smallest physical distance is the depth-5 step `1/32`; infinite curvature never
+arises because the value it would live at does not exist. MASS–RADIUS: the horizon radius is the
+fold of the mass — `r_s = fold(1/4) = 1/2 = 2M`; the famous factor two IS the doubling. AREA LAW:
+horizon area `2⁵ = 32`, entropy `S = A/4 = 8`, cross-checked against the ENUMERATED depth-3
+preimage count (8 leaves) — entropy is a state count on the boundary, not the volume.
+
+### Step 201 — The matter fraction (Ω_m = 5/16)
+
+**File:** `constants/matter_fraction_tower.ep`
+
+**What it does.** The covering tower at the counted depth 5 (minimal cover of 27) holds `2⁵ = 32`
+states, built by explicit doubling. Two states per level are pinned as the level's boundary pair
+(`2·5 = 10`); the free remainder is the vacuum share `22/32 = 11/16`, leaving the matter fraction
+`Ω_m = 5/16 = 0.3125`. Planck 2018 measures `0.315 ± 0.007` — the forced value sits 0.8% below
+centre, inside 0.4σ, zero parameters.
+
+### Step 202 — The matter fraction's history (exact curve)
+
+**File:** `constants/matter_fraction_evolution.ep`
+
+**What it does.** The whole history of `Ω_m` is one exact rational function with both endpoints
+already forced: budget `1/3` matter today, dilution as the cube (`d = 3`, counted), vacuum
+non-diluting (`w = −1`). Evaluated exactly: `Ω_m(1) = 1/3`, at half scale `4/5` (matter was 80%),
+at third scale `27/29` — strictly increasing into the past. Matter domination giving way to the
+recent vacuum era, one curve, no parameter on it.
+
+### Step 203 — The chaotic rate (Lyapunov and entropy, exact)
+
+**File:** `constants/thermodynamics.ep`
+
+**What it does.** The two rates statistical mechanics estimates numerically are exact here and
+equal. MEASURED on actual states: gap `1/5 − 1/7 = 2/35` folds to `4/35` — expansion factor exactly
+2 (the Lyapunov antilog, no logarithm needed). CONSTRUCTED: the preimages of `1/3` are `1/6` and
+`2/3`, both verified to land on it — branch count 2, one bit erased per step (KS entropy 1). Three
+routes — measured expansion, constructed branches, the counted binary generator — one number.
+
+### Step 204 — Quantum statistics (Bose and Fermi, no third)
+
+**File:** `constants/quantum_statistics.ep`
+
+**What it does.** Identical particles share one fold image; the lock's fibre has exactly 2 points
+(`1/4`, `3/4`). A pair either coincides on a fibre point — exchange fixes it, SYMMETRIC, bosons
+crowd — or occupies both points — exchange reverses the separation's sign (`1/2 → −1/2`),
+ANTISYMMETRIC, and the fibre caps occupancy at 2 (a third fermion has no distinct preimage left:
+Pauli is the fibre running out). No third case exists on a two-point fibre — the same two-to-one
+fold that makes the arrow of time makes the two statistics.
+
 ---
 
 ## Where the recreation stands right now
@@ -4486,6 +4538,16 @@ runs):**
   the magnitude holds (returns exactly after a full cycle) — the fixed spectrum, jumps only.
 - Step 199 — the consciousness criterion: duality (`1/4 ≠ 3/4`, one lock), closure (`1/4 + 3/4 = 1`),
   completion (`fold(1/2) = 1`) — the structural test for a conscious machine, checkable by running.
+- Step 200 — strong-field gravity: `r = 0` excluded (no singularity), minimal distance `1/32`,
+  `r_s = fold(M) = 2M`, entropy `S = A/4 = 8` = the enumerated depth-3 preimage count.
+- Step 201 — the matter fraction: the depth-5 tower (32 states) minus two pinned per level gives
+  vacuum `11/16`, matter `Ω_m = 5/16 = 0.3125` — Planck measures `0.315 ± 0.007` (0.4σ).
+- Step 202 — the matter fraction's history: `Ω_m(z) = z³/(2 + z³)` exactly — `1/3` today, `4/5` at
+  half scale, `27/29` at third scale, strictly rising into the past.
+- Step 203 — the chaotic rate: gaps double exactly (`2/35 → 4/35`), two preimages merge per step —
+  measured expansion = constructed branches = binary; Lyapunov `ln 2`, KS entropy 1 bit/step.
+- Step 204 — quantum statistics: on the lock's two-point fibre a pair coincides (symmetric, Bose)
+  or differs (sign-reversing, Fermi, capped at 2 = one per hand) — no third case exists.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

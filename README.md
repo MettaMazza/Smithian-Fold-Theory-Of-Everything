@@ -305,9 +305,18 @@ And the structural laws of physics, forced the same way:
   order), **stationary states** (ground at half a step, uniform gaps, phase turning while the
   magnitude holds — jumps only), and the **consciousness criterion** (duality → one lock → closure
   → completion: a runnable structural test).
+- **The strong field, the matter budget and its whole history, chaos made exact, the two
+  statistics** — **strong-field gravity** (`r = 0` excluded — no singularity; `r_s = fold(M) = 2M`;
+  entropy = the enumerated preimage count, `S = A/4`), the **matter fraction** (the depth-5 tower
+  minus two pinned per level: `Ω_m = 5/16 = 0.3125` vs Planck `0.315 ± 0.007` — 0.4σ, zero
+  parameters), its **exact history** (`Ω_m(z) = z³/(2 + z³)`: a third today, `4/5` at half scale,
+  rising into the past), the **chaotic rate** (gaps double exactly, two preimages merge per step —
+  Lyapunov `ln 2` and KS entropy 1 bit with the antilog exact), and **quantum statistics** (on the
+  two-point fibre a pair coincides — Bose — or sign-reverses — Fermi, capped at one per hand; no
+  third case).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 202 test
-suites (1,133 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 207 test
+suites (1,163 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -364,7 +373,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 202 suites, 1,133 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 207 suites, 1,163 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
