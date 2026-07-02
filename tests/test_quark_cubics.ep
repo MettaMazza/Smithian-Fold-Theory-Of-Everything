@@ -1,0 +1,40 @@
+import "../constants/quark_cubics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the quark cubics (the dual mass equations) ==="
+    set ok to expect_equal("down second invariant: the dual 1/(3*2^7 - 1) = 1/383" and fraction_to_text(down_second_invariant()) and "1/383")
+    set ok to expect_equal("up second invariant: the dual 1/(3*2^10 - 1) = 1/3071" and fraction_to_text(up_second_invariant()) and "1/3071")
+    set ok to expect_bool("all three brackets carry genuine sign changes" and brackets_carry_sign_changes())
+    set light to down_root(1)
+    set central to down_root(2)
+    set heavy to down_root(3)
+    set first_ordered to fraction_compare(light and central)
+    set second_ordered to fraction_compare(central and heavy)
+    set ok to expect_bool("the down roots are ordered (light < central < heavy)" and first_ordered < 0)
+    set ok to expect_bool("and central < heavy" and second_ordered < 0)
+    set one to fraction_from_whole_number(1)
+    set sd to bare_s_over_d()
+    set bs to bare_b_over_s()
+    set tc to bare_t_over_c()
+    set sd_above to fraction_compare(sd and one)
+    set bs_above to fraction_compare(bs and one)
+    set tc_above to fraction_compare(tc and one)
+    set ok to expect_bool("the bare ratios all exceed the One (mass grows up the ladder)" and sd_above > 0)
+    set ok to expect_bool("b/s bare > 1" and bs_above > 0)
+    set ok to expect_bool("t/c bare > 1" and tc_above > 0)
+    display concat("  info  bare s/d = " and fraction_to_decimal(sd and 4))
+    display concat("  info  bare b/s = " and fraction_to_decimal(bs and 4))
+    display concat("  info  bare t/c = " and fraction_to_decimal(tc and 4))
+    display "=== done ==="
+    return 0

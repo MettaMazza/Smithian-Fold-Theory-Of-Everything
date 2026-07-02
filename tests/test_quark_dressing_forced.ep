@@ -1,0 +1,41 @@
+import "../constants/quark_dressing_forced.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the forced quark dressing (bare to measured, falsified alternatives) ==="
+    set ok to expect_equal("the dressing depth = d_up = 7 (forced)" and int_to_string(dress_depth()) and "7")
+    set ok to expect_equal("the lift scale = d_up - d_down = 2 (forced)" and int_to_string(lift_scale()) and "2")
+    set target_sd to fraction_from_ratio(1978 and 100)
+    set target_bs to fraction_from_ratio(5394 and 100)
+    set target_tc to fraction_from_ratio(10330 and 100)
+    set ok to expect_bool("FORCED s/d lands on measured 19.78 (0.3% threshold)" and lands_within_threshold(dressed_s_over_d() and target_sd))
+    set ok to expect_bool("FORCED b/s lands on measured 53.94" and lands_within_threshold(dressed_b_over_s() and target_bs))
+    set ok to expect_bool("FORCED t/c lands on measured 103.30" and lands_within_threshold(dressed_t_over_c() and target_tc))
+    display concat("  info  dressed s/d = " and fraction_to_decimal(dressed_s_over_d() and 4))
+    display concat("  info  dressed b/s = " and fraction_to_decimal(dressed_b_over_s() and 4))
+    display concat("  info  dressed t/c = " and fraction_to_decimal(dressed_t_over_c() and 4))
+    set ok to expect_bool("B1: depth m2 = 2 is REJECTED for t/c" and lands_within_threshold(t_over_c_dressed_at(2) and target_tc) == false)
+    set ok to expect_bool("B1: depth m3 = 3 is REJECTED for t/c" and lands_within_threshold(t_over_c_dressed_at(3) and target_tc) == false)
+    set ok to expect_bool("B1: depth d_down = 5 is REJECTED for t/c" and lands_within_threshold(t_over_c_dressed_at(5) and target_tc) == false)
+    set ok to expect_bool("B1: ONLY d_up = 7 lands t/c" and lands_within_threshold(t_over_c_dressed_at(7) and target_tc))
+    set ok to expect_bool("B2: scale 3 is REJECTED for the down pair" and lands_within_threshold(s_over_d_lifted_at(3) and target_sd) == false)
+    set ok to expect_bool("B2: scale 5 is REJECTED" and lands_within_threshold(s_over_d_lifted_at(5) and target_sd) == false)
+    set ok to expect_bool("B2: scale 7 is REJECTED" and lands_within_threshold(s_over_d_lifted_at(7) and target_sd) == false)
+    set sd_at_two to lands_within_threshold(s_over_d_lifted_at(2) and target_sd)
+    set bs_at_two to lands_within_threshold(b_over_s_lifted_at(2) and target_bs)
+    set ok to expect_bool("B2: ONLY m2 = 2 lands BOTH down ratios" and sd_at_two)
+    set ok to expect_bool("(and b/s at m2 = 2)" and bs_at_two)
+    set ok to expect_bool("B3: lifting the LIGHTEST down mass is REJECTED" and lands_within_threshold(s_over_d_wrong_lift() and target_sd) == false)
+    set ok to expect_bool("B3: lifting the HEAVIEST down mass is REJECTED" and lands_within_threshold(b_over_s_wrong_lift() and target_bs) == false)
+    display "=== done ==="
+    return 0

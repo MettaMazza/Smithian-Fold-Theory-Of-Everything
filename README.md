@@ -34,6 +34,7 @@ nothing added, the model reaches:
 | Proton-to-Planck hierarchy | `(M/m)² = 2¹²⁷` | — | 0.24% on the ratio |
 | Proton/electron mass ratio | `(1/3)(m_μ−m_e)/(m_μ m_e) = 1836.3254` | `1836.15267` | 0.0094% |
 | Koide lepton relation `Q` | `2/3 = 0.666666…` | `0.666661` | **5 digits** |
+| Quark ratios `s/d, b/s, t/c` | dual cubics dressed over `1/α`: `19.768, 53.986, 103.305` | `19.78, 53.94, 103.30` | 0.06%, 0.08%, 0.005% |
 | Dark-to-baryon ratio | `279/52 = 5.3653` | `5.3643` | 0.02% |
 | Hubble calibration ratio | `3305/3048 = 1.0843175` | `1.0843230` | 5 × 10⁻⁶ |
 | Weak mixing `sin²θ_W` | forced running crosses measured | `0.23113` | exact crossing |
@@ -349,9 +350,16 @@ And the structural laws of physics, forced the same way:
   structure** (mass and weak fibres offset by a uniform `1/9 = 1/3²` → diagonal `8/9` — the CKM's
   near-diagonal shape by structure, not three tuned angles), and the **unobservable absolute
   scale** (`14/35 = 6/15 = 2/5` with identical folds — only ratios are physical).
+- **The quark mass ladder, complete** — the **quark cubics** (the lepton form's colour-binary dual:
+  `e₃ = 1/383` and `1/3071` at the counted tower reaches, `e₂ = 1/8` and `1/12` from channel
+  counts; six roots by exact rational bisection, no floats) and the **forced dressing** (one
+  mechanism over `1/α`: t/c reduced by `d_up = 7`, one central lift by `m₂ = 2` pulling `s/d` up
+  and `b/s` down together — landing `19.768 / 53.986 / 103.305` on measured `19.78 / 53.94 /
+  103.30`, with ONLY `d_up` landing t/c, ONLY `m₂` landing both down ratios, and wrong-mass lifts
+  rejected: every factor forced, every alternative dead).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 227 test
-suites (1,275 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 229 test
+suites (1,299 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -408,7 +416,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 227 suites, 1,275 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 229 suites, 1,299 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

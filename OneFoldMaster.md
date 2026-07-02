@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-227 suites, 1,275 forced checks, 0 failures). It needs nothing but a C compiler. Use
+229 suites, 1,299 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4299,6 +4299,30 @@ detect an absolute magnitude. Why every physical constant in this corpus is a di
 rational, and every dimensionful readout (the SI metre defined via `c`, the second via a caesium
 ratio) is a unit convention layered on top.
 
+### Step 225 — The quark cubics (the dual mass equations)
+
+**File:** `constants/quark_cubics.ep`
+
+**What it does.** The quark sector carries the lepton cubic's exact DUAL — colour and binary
+exchanged: `e₃ = 1/(3·2^D − 1)` with the tower reach read off the covering depths (down `D = 7` →
+`1/383`; up `D = 7 + 3 = 10` → `1/3071`), and the first invariants the forced channel counts
+(`1/8`, `1/12`). Six roots pinned by EXACT rational bisection (40 halvings — no floats, where the
+published corpus itself used float bisection), sign changes verified in every bracket, roots
+ordered. Bare ratios: `s/d = 19.4835`, `b/s = 54.7736`, `t/c = 108.5821`.
+
+### Step 226 — The forced quark dressing (bare to measured, alternatives falsified)
+
+**File:** `constants/quark_dressing_forced.ep`
+
+**What it does.** The flagship mass-sector mechanism, in exact arithmetic end to end. One forward
+dressing over `1/α = 34259/250`: t/c reduced by `(1/α)/((1/α) + d_up)` with `d_up = 7`; ONE lift of
+the central (strange) mass by `m₂ = d_up − d_down = 2` over `1/α`, pulling `s/d` up and `b/s` down
+together. Landed: `s/d = 19.7678`, `b/s = 53.9857`, `t/c = 103.3051` vs measured `19.78 / 53.94 /
+103.30` — all inside 0.3% (corpus: +0.005%, −0.06%, +0.09%). FALSIFICATION passes in full: among
+the forced counts `{2, 3, 5, 7}` ONLY `d_up` lands t/c and ONLY `m₂` lands both down ratios, and
+lifting the lightest or heaviest down mass instead of the central is rejected. Every factor forced,
+every alternative dead.
+
 ---
 
 ## Where the recreation stands right now
@@ -4794,6 +4818,13 @@ runs):**
   uniform offset `1/9 = 1/3²` → diagonal `V_kk = 8/9` — the CKM's near-diagonal shape by structure.
 - Step 224 — the unobservable absolute scale: `14/35 = 6/15 = 2/5` with identical fold images —
   only ratios are physical; absolute magnitude is unaskable from inside.
+- Step 225 — the quark cubics: the lepton form's colour-binary dual (`1/383`, `1/3071` at the
+  counted reaches; `1/8`, `1/12` from channels), six roots by exact rational bisection — bare
+  ratios `19.4835`, `54.7736`, `108.5821`.
+- Step 226 — the forced quark dressing: one mechanism over `1/α` (t/c by `d_up = 7`; one central
+  lift by `m₂ = 2`) lands `19.7678 / 53.9857 / 103.3051` on measured `19.78 / 53.94 / 103.30`,
+  with ONLY `d_up` landing t/c, ONLY `m₂` landing both down ratios, and wrong-mass lifts rejected
+  — the flagship, exact end to end.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

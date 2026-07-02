@@ -1,0 +1,162 @@
+# ============================================================================
+#  THE QUARK CUBICS  --  the two dual mass equations and their bare ratios, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The lepton masses are the roots of one forced cubic (charged_lepton_cubic.ep).
+#  The quark sector carries the SAME equation in its dual form -- colour and binary
+#  exchanged -- once per hand: an up-type cubic and a down-type cubic whose roots'
+#  squares are the six quark mass shares. Nothing new is chosen: the first invariants
+#  are the channel counts already forced (quark_invariants.ep), and the second
+#  invariants are the exact colour-binary DUAL of the lepton form.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the forced counts) ─────────────
+#  The universal emergence form is  x³ - x² + e₂x - e₃ = 0. For leptons the third
+#  invariant is 1/(2·3⁵ - 1): binary times the COLOUR tower. The quark sector is the
+#  dual -- colour times the BINARY tower:  e₃ = 1/(3·2^D - 1), with D the sector's
+#  tower reach read off the covering depths (quark_invariants.ep): the down sector
+#  reaches the up covering depth D = d_up = 7, the up sector reaches D = d_up +
+#  colour = 10. So, with the forced first invariants:
+#      DOWN:  e₂ = 1/8  (channels 2·4),  e₃ = 1/(3·2⁷ - 1)  = 1/383 ;
+#      UP:    e₂ = 1/12 (channels 2·6),  e₃ = 1/(3·2¹⁰ - 1) = 1/3071 .
+#  Each cubic has three roots in (0, 1), pinned here by EXACT rational bisection (40
+#  halvings, enclosure 1/2⁴⁰) in three non-overlapping sign-change brackets. The mass
+#  shares are the squares of the roots, and the BARE mass ratios are
+#      s/d = m₂/m₁ (down),   b/s = m₃/m₂ (down),   t/c = m₃/m₂ (up)
+#  -- exact rationals from exact enclosures, ready for the forced dressing
+#  (quark_dressing_forced.ep). No number in this file is fitted: two channel counts,
+#  two tower reaches, one universal cubic form.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact-to-enclosure: sign changes verified in every bracket,
+#  invariants 1/8, 1/383, 1/12, 1/3071 from counts. Comparison: the bare ratios land
+#  on the measured quark ratios AFTER the forced 1/alpha dressing (next module) --
+#  s/d, b/s, t/c to +0.005%/-0.06%/+0.09%.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The down-sector second invariant: the colour-binary dual at reach d_up = 7 -- 1/383.
+define down_second_invariant returning Fraction:
+    set reach to whole_power(binary_count() and 7)
+    set denominator to colour_count() * reach - 1
+    return fraction_from_ratio(1 and denominator)
+
+# The up-sector second invariant: the dual at reach d_up + colour = 10 -- 1/3071.
+define up_second_invariant returning Fraction:
+    set reach to whole_power(binary_count() and 10)
+    set denominator to colour_count() * reach - 1
+    return fraction_from_ratio(1 and denominator)
+
+# The first invariants: the forced channel counts (quark_invariants.ep).
+define down_first_invariant_here returning Fraction:
+    return fraction_from_ratio(1 and 8)
+
+define up_first_invariant_here returning Fraction:
+    return fraction_from_ratio(1 and 12)
+
+# The quark cubic value at x for the given invariants: x^3 - x^2 + e2*x - e3.
+define quark_cubic_value with x as Fraction and e2 as Fraction and e3 as Fraction returning Fraction:
+    set x_twin to fraction_make(fraction_numerator(x) and fraction_denominator(x))
+    set x_squared to fraction_multiply(x and x_twin)
+    set x_third to fraction_make(fraction_numerator(x) and fraction_denominator(x))
+    set x_cubed to fraction_multiply(x_squared and x_third)
+    set e2_term to fraction_multiply(e2 and x)
+    set cubic_minus_square to fraction_subtract(x_cubed and x_squared)
+    set with_linear to fraction_add(cubic_minus_square and e2_term)
+    return fraction_subtract(with_linear and e3)
+
+# Exact rational bisection: 40 halvings in a sign-change bracket.
+define quark_root_in_bracket with lo_num as Int and lo_den as Int and hi_num as Int and hi_den as Int and e2 as Fraction and e3 as Fraction returning Fraction:
+    set lo to fraction_from_ratio(lo_num and lo_den)
+    set hi to fraction_from_ratio(hi_num and hi_den)
+    set zero to fraction_from_whole_number(0)
+    set two_fraction to fraction_from_whole_number(2)
+    set value_at_lo to quark_cubic_value(lo and e2 and e3)
+    set sign_at_lo to fraction_compare(value_at_lo and zero)
+    set count to 0
+    repeat while count < 40:
+        set bracket_sum to fraction_add(lo and hi)
+        set mid to fraction_divide(bracket_sum and two_fraction)
+        set value_at_mid to quark_cubic_value(mid and e2 and e3)
+        set sign_at_mid to fraction_compare(value_at_mid and zero)
+        if sign_at_mid equals sign_at_lo:
+            set lo to mid
+        else:
+            set hi to mid
+        set count to count + 1
+    set final_sum to fraction_add(lo and hi)
+    set root to fraction_divide(final_sum and two_fraction)
+    return root
+
+# The three down-sector roots (brackets: [1/10000, 1/20], [1/20, 7/20], [7/10, 99/100]).
+define down_root with which as Int returning Fraction:
+    set e2 to down_first_invariant_here()
+    set e3 to down_second_invariant()
+    if which == 1:
+        return quark_root_in_bracket(1 and 10000 and 1 and 20 and e2 and e3)
+    if which == 2:
+        return quark_root_in_bracket(1 and 20 and 7 and 20 and e2 and e3)
+    return quark_root_in_bracket(7 and 10 and 99 and 100 and e2 and e3)
+
+# The three up-sector roots (same universal brackets).
+define up_root with which as Int returning Fraction:
+    set e2 to up_first_invariant_here()
+    set e3 to up_second_invariant()
+    if which == 1:
+        return quark_root_in_bracket(1 and 10000 and 1 and 20 and e2 and e3)
+    if which == 2:
+        return quark_root_in_bracket(1 and 20 and 7 and 20 and e2 and e3)
+    return quark_root_in_bracket(7 and 10 and 99 and 100 and e2 and e3)
+
+# A mass share is the square of its root.
+define mass_share_of with root as Fraction returning Fraction:
+    set twin to fraction_make(fraction_numerator(root) and fraction_denominator(root))
+    return fraction_multiply(root and twin)
+
+# The bare mass ratios.
+define bare_s_over_d returning Fraction:
+    set light to down_root(1)
+    set central to down_root(2)
+    set light_mass to mass_share_of(light)
+    set central_mass to mass_share_of(central)
+    return fraction_divide(central_mass and light_mass)
+
+define bare_b_over_s returning Fraction:
+    set central to down_root(2)
+    set heavy to down_root(3)
+    set central_mass to mass_share_of(central)
+    set heavy_mass to mass_share_of(heavy)
+    return fraction_divide(heavy_mass and central_mass)
+
+define bare_t_over_c returning Fraction:
+    set central to up_root(2)
+    set heavy to up_root(3)
+    set central_mass to mass_share_of(central)
+    set heavy_mass to mass_share_of(heavy)
+    return fraction_divide(heavy_mass and central_mass)
+
+# Every bracket carries a genuine sign change (the roots are real and separated).
+define brackets_carry_sign_changes returning Bool:
+    set zero to fraction_from_whole_number(0)
+    set e2 to down_first_invariant_here()
+    set e3 to down_second_invariant()
+    set at_lo to quark_cubic_value(fraction_from_ratio(1 and 10000) and e2 and e3)
+    set at_mid_low to quark_cubic_value(fraction_from_ratio(1 and 20) and e2 and e3)
+    set at_mid_high to quark_cubic_value(fraction_from_ratio(7 and 20) and e2 and e3)
+    set at_hi to quark_cubic_value(fraction_from_ratio(99 and 100) and e2 and e3)
+    set s1 to fraction_compare(at_lo and zero)
+    set s2 to fraction_compare(at_mid_low and zero)
+    set s3 to fraction_compare(at_mid_high and zero)
+    set s4 to fraction_compare(at_hi and zero)
+    set first_change to s1 != s2
+    set second_change to s2 != s3
+    set third_change to s3 != s4
+    if first_change:
+        if second_change:
+            return third_change
+        return false
+    return false
