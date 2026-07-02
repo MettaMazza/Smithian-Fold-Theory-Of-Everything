@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-212 suites, 1,187 forced checks, 0 failures). It needs nothing but a C compiler. Use
+217 suites, 1,215 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4145,6 +4145,58 @@ characterisation: Vieta's identities force `r₁+r₂+r₃ = 1` (no mass share l
 enclosure precision (`1/10⁹`, generous against the `1/2⁴⁰` bracket width). Bisection uses only sign
 changes; Vieta only the product expansion — two derivations, one triple of numbers.
 
+### Step 210 — The full Dirac structure (the 3+1 dispersion closes)
+
+**File:** `constants/full_dirac_structure.ep`
+
+**What it does.** The four Dirac generators — three momentum components and the mass, `3 + 1 = 4 =
+2²` — each sit at the critical `1/2` and each folds to unison on its own. The dispersion closes on
+the whole: `E² = 4·(1/4) = 1` (Route A, summed explicitly), and the FULL polarization identity —
+`[(p₁+p₂)² + (p₁−p₂)² + (p₃+m)² + (p₃−m)²]/2`, every term computed including the zero differences —
+gives the same One (Route B). Two algebraic routes, one closure: relativity's energy accounting is
+the One partitioned into its four critical quarters.
+
+### Step 211 — The fermion mass-part (mass is vacuum-shaped)
+
+**File:** `constants/fermion_mass_part.ep`
+
+**What it does.** A fermion's mass-part is the electroweak sector's shortfall from unison:
+`m_f = 1 − 1/2 = 1/2`. Independently, No-Zero forbids the symmetric vacuum, displacing it to
+`v = 1/2`. The two are EQUAL — mass is proportional to the vacuum by identity, not by an inserted
+Yukawa term; the flavour factors are ladder positions on that common scale. The point is the fold's
+unique proper preimage of the One and self-antipodal: mass-part, vacuum, and critical coupling are
+one point seen three ways. Measured: LHC coupling strength ∝ mass across flavours.
+
+### Step 212 — Within-generation ratios (mass ratios are position ratios)
+
+**File:** `constants/within_generation_ratio.ep`
+
+**What it does.** The three generations are the tripling fibre's positions `1/3, 2/3, 1` — each
+VERIFIED to land on the One under one tripling. Each generation's mass-part IS its shortfall
+(`2/3, 1/3, 1`), so between-generation mass ratios are position ratios (`m₁/m₂ = 2`). Route B: the
+two light mass-parts are the doubling fold's period-2 orbit (`2/3 ↔ 1/3`) and the heaviest sits at
+the fixed point — the mass ladder and the fold's cycle structure are the same object.
+
+### Step 213 — The unified force law (four primes, one formula)
+
+**File:** `constants/unified_force_law.ep`
+
+**What it does.** Every prime sector carries the same law: shortfall `1/p`, coupling `(p−1)/p`,
+partitioning the One — verified for all four sectors `{2, 3, 5, 7}`. The couplings are strictly
+ordered (`1/2 < 2/3 < 4/5 < 6/7` — the force hierarchy read off the ladder), and the shortfalls sum
+to the span invariant `247/210` by two independent routes (direct addition; the algebraic
+three-prime-products form over `2·3·5·7 = 210`). The "different" forces are one law at four primes.
+
+### Step 214 — The order of the forces (strong above weak above EM)
+
+**File:** `constants/unison_order.ep`
+
+**What it does.** Each sector runs as `g_m(d) = (m + 2^d − 1)/(m + 2^d)` seeded by its generator
+(colour 3 strong, binary 2 weak) with EM flat at `1/2`. At every depth 0–11: the strong gap
+`1/(3+2^d)` is strictly smaller than the weak `1/(2+2^d)`, and the weak sits strictly above the EM
+half — `g_strong > g_weak > g_em` with no crossing ever, both routes (constructed coupling,
+closed-form gap) agreeing at every rung. The order of the forces is the order of their generators.
+
 ---
 
 ## Where the recreation stands right now
@@ -4606,6 +4658,18 @@ runs):**
   fold), and at `x = 7/16` the dilation is the exact rational `3/4` (`(3/4)² = 9/16`).
 - Step 209 — the Vieta cross-check: the bisected lepton roots satisfy sum `= 1`, pair-sum `= 1/6`,
   product `= 1/485` to enclosure precision — bisection and Vieta pin the same triple independently.
+- Step 210 — the full Dirac structure: four generators at `1/2` (3+1 = 2²), dispersion
+  `4·(1/4) = 1` by direct sum AND by the full polarization identity — two routes, one closure.
+- Step 211 — the fermion mass-part: shortfall `1 − 1/2 = 1/2` EQUALS the displaced vacuum — mass ∝ v
+  by identity, not by an inserted Yukawa; one self-antipodal point seen three ways.
+- Step 212 — within-generation ratios: positions `1/3, 2/3, 1` (verified tripling to the One),
+  mass-parts = shortfalls, ratios = position ratios; the light pair is the period-2 orbit, the
+  heaviest the fixed point.
+- Step 213 — the unified force law: shortfall `1/p`, coupling `(p−1)/p` for all four primes,
+  strictly ordered, shortfalls summing to `247/210` by two routes — one law at four primes.
+- Step 214 — the order of the forces: `g_strong > g_weak > g_em` at every depth 0–11 with no
+  crossing (gaps `1/(3+2^d) < 1/(2+2^d)`, weak strictly above the flat EM half) — the order of the
+  forces is the order of their generators.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

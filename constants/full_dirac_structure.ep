@@ -1,0 +1,113 @@
+# ============================================================================
+#  THE FULL DIRAC STRUCTURE  --  the 3+1 dispersion closes on the One, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Dirac's equation carries a relativistic particle's full energy accounting in three
+#  space dimensions plus mass: E² = p₁² + p₂² + p₃² + m². Why four squared terms, and
+#  why do they close exactly on the whole? Forced: with every component at the critical
+#  half-One, the four quarter-shares partition the One exactly -- and the closure holds
+#  by TWO independent algebraic routes, the direct sum and the polarization identity,
+#  which cross-check each other to exclude a mutated arithmetic.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
+#  The four Dirac generators -- three momentum components and the mass -- each sit at
+#  the critical coupling 1/2 (each is a half-One lock; each folds to unison on its
+#  own). The dispersion is the sum of their squares:
+#      E² = (1/2)² + (1/2)² + (1/2)² + (1/2)² = 4 · 1/4 = 1  -- the One, exactly.
+#  Four generators because spacetime is 3+1 = 4 = 2² (three spatial from the colour
+#  count, one mass/time from the fold): the energy budget has exactly four quadratic
+#  channels and they exhaust the whole with nothing left over. ROUTE B, the
+#  polarization identity: for any pair (a, b), (a+b)² + (a-b)² = 2a² + 2b², so
+#      [(p₁+p₂)² + (p₁-p₂)² + (p₃+m)² + (p₃-m)²] / 2 = p₁² + p₂² + p₃² + m² = 1.
+#  Computed here term by term: (1)² + (0 excluded -> the difference of equal halves
+#  contributes nothing) ... the pairs give (1 + 0 + 1 + 0)/2 = 1. Two routes, one
+#  closure: the 3+1 energy accounting is the One partitioned into its four critical
+#  quarters.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: 3·(1/4) + 1/4 = 1 and the polarization route gives the
+#  same 1. Measured: the relativistic dispersion E² = |p|²c² + m²c⁴ holds for every
+#  particle ever tracked (accelerator kinematics confirm it to high precision), with
+#  exactly three momentum components and one mass term -- the 3+1 structure this
+#  closes.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# A Dirac generator: the critical half-One.
+define dirac_generator returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# Each generator folds to unison on its own.
+define generator_folds_to_unison returning Bool:
+    set g to dirac_generator()
+    set folded to fold_fraction(g)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(folded and one)
+
+# The generator count: 3 momentum + 1 mass = 4 = binary^2 (the 3+1 dimensions).
+define generator_count returning Int:
+    return colour_count() + 1
+
+# The square of a generator: (1/2)^2 = 1/4.
+define generator_squared returning Fraction:
+    set g to dirac_generator()
+    set g_twin to fraction_from_ratio(1 and 2)
+    return fraction_multiply(g and g_twin)
+
+# ROUTE A: the dispersion -- the four squares summed explicitly = the One.
+define dispersion_sum returning Fraction:
+    set square to generator_squared()
+    set count to generator_count()
+    set total to fraction_from_whole_number(0)
+    set i to 0
+    repeat while i < count:
+        set total to fraction_add(total and square)
+        set i to i + 1
+    return total
+
+# ROUTE B: the FULL polarization identity --
+# [(p1+p2)^2 + (p1-p2)^2 + (p3+m)^2 + (p3-m)^2] / 2, every term computed (the equal-pair
+# differences are zero on the arithmetic layer and contribute exactly nothing).
+define square_of with value as Fraction returning Fraction:
+    set twin to fraction_make(fraction_numerator(value) and fraction_denominator(value))
+    return fraction_multiply(value and twin)
+
+define polarization_sum returning Fraction:
+    set p1 to dirac_generator()
+    set p2 to dirac_generator()
+    set first_sum to fraction_add(p1 and p2)
+    set first_sum_squared to square_of(first_sum)
+    set p1_again to dirac_generator()
+    set p2_again to dirac_generator()
+    set first_difference to fraction_subtract(p1_again and p2_again)
+    set first_difference_squared to square_of(first_difference)
+    set p3 to dirac_generator()
+    set m to dirac_generator()
+    set second_sum to fraction_add(p3 and m)
+    set second_sum_squared to square_of(second_sum)
+    set p3_again to dirac_generator()
+    set m_again to dirac_generator()
+    set second_difference to fraction_subtract(p3_again and m_again)
+    set second_difference_squared to square_of(second_difference)
+    set partial_one to fraction_add(first_sum_squared and first_difference_squared)
+    set partial_two to fraction_add(second_sum_squared and second_difference_squared)
+    set total to fraction_add(partial_one and partial_two)
+    set two to fraction_from_whole_number(2)
+    return fraction_divide(total and two)
+
+# The two routes agree: the closure is not an artifact of one computation.
+define routes_agree returning Bool:
+    set direct to dispersion_sum()
+    set polarized to polarization_sum()
+    return fraction_is_equal(direct and polarized)

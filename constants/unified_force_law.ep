@@ -1,0 +1,114 @@
+# ============================================================================
+#  THE UNIFIED FORCE LAW  --  four prime sectors, one formula, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The forces look unrelated: different strengths, different carriers, different
+#  ranges. Forced: every prime sector p carries the SAME law -- shortfall 1/p,
+#  coupling (p-1)/p -- so the four sectors on the ladder span {2, 3, 5, 7} are one
+#  structure evaluated at four primes. Their couplings are strictly ordered by p, and
+#  their shortfalls sum to a single algebraic invariant of the span, 247/210, whose
+#  denominator is the span's own product.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the primes of the ladder span) ─
+#  The sectors are the primes up to the covering ceiling: 2 (binary/EM), 3 (colour/
+#  strong), 5 (the covering prime), 7 (the generational prime) -- each counted
+#  elsewhere in this corpus (prime_sector_ladder.ep). One law for all:
+#      shortfall(p) = 1/p ,   coupling(p) = 1 - 1/p = (p-1)/p .
+#  Each sector's two shares partition the One exactly: 1/p + (p-1)/p = 1. The
+#  couplings are STRICTLY ORDERED: 1/2 < 2/3 < 4/5 < 6/7 -- deeper primes bind closer
+#  to unison, the hierarchy of the forces read off the ladder. And the four shortfalls
+#  sum to the span invariant:
+#      1/2 + 1/3 + 1/5 + 1/7 = (105 + 70 + 42 + 30)/210 = 247/210 ,
+#  computed here BOTH ways -- by direct addition and by the algebraic form
+#  (sum of the three-prime products over the full product 2·3·5·7 = 210) -- and the
+#  two must agree. One formula, four primes, one invariant: the "different" forces
+#  are the same law at different points of the span.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: partitions 1/p + (p-1)/p = 1 for all four, strict
+#  ordering, and 247/210 by two independent routes. Comparison: the observed coupling
+#  hierarchy (EM weakest, strong strongest of the gauge sectors at bound scale)
+#  follows the forced ordering; the two predicted sectors at 5 and 7 are the corpus's
+#  standing falsifiable forecast (two_new_prime_charge_forces).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The four prime sectors of the ladder span.
+define sector_prime with index as Int returning Int:
+    if index == 1:
+        return 2
+    if index == 2:
+        return 3
+    if index == 3:
+        return 5
+    return 7
+
+# One law for all sectors: the shortfall is 1/p.
+define sector_shortfall_of with p as Int returning Fraction:
+    return fraction_from_ratio(1 and p)
+
+# One law for all sectors: the coupling is (p-1)/p.
+define sector_coupling_of with p as Int returning Fraction:
+    return fraction_from_ratio(p - 1 and p)
+
+# Each sector's two shares partition the One: 1/p + (p-1)/p = 1, all four verified.
+define every_sector_partitions returning Bool:
+    set one to fraction_from_whole_number(1)
+    set all_close to true
+    set i to 1
+    repeat while i < 5:
+        set p to sector_prime(i)
+        set shortfall to sector_shortfall_of(p)
+        set coupling to sector_coupling_of(p)
+        set total to fraction_add(shortfall and coupling)
+        set closes to fraction_is_equal(total and one)
+        if closes:
+            set all_close to all_close
+        else:
+            set all_close to false
+        set i to i + 1
+    return all_close
+
+# The couplings are strictly ordered: 1/2 < 2/3 < 4/5 < 6/7 (the force hierarchy).
+define couplings_strictly_ordered returning Bool:
+    set ordered to true
+    set i to 1
+    repeat while i < 4:
+        set p_here to sector_prime(i)
+        set p_next to sector_prime(i + 1)
+        set g_here to sector_coupling_of(p_here)
+        set g_next to sector_coupling_of(p_next)
+        set comparison to fraction_compare(g_here and g_next)
+        if comparison < 0:
+            set ordered to ordered
+        else:
+            set ordered to false
+        set i to i + 1
+    return ordered
+
+# ROUTE A: the shortfall sum by direct addition.
+define shortfall_sum returning Fraction:
+    set total to fraction_from_whole_number(0)
+    set i to 1
+    repeat while i < 5:
+        set p to sector_prime(i)
+        set shortfall to sector_shortfall_of(p)
+        set total to fraction_add(total and shortfall)
+        set i to i + 1
+    return total
+
+# ROUTE B: the algebraic span invariant -- three-prime products over the full product.
+define span_invariant returning Fraction:
+    set numerator to 3 * 5 * 7 + 2 * 5 * 7 + 2 * 3 * 7 + 2 * 3 * 5
+    set denominator to 2 * 3 * 5 * 7
+    return fraction_from_ratio(numerator and denominator)
+
+# The two routes agree: 247/210 from addition and from algebra.
+define routes_agree returning Bool:
+    set direct to shortfall_sum()
+    set algebraic to span_invariant()
+    return fraction_is_equal(direct and algebraic)

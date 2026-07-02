@@ -1,0 +1,24 @@
+import "../constants/within_generation_ratio.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== within-generation ratios (mass ratios are position ratios) ==="
+    set ok to expect_bool("all three positions triple to the One (the fibre, verified)" and positions_triple_to_one())
+    set ok to expect_equal("mass-part of generation 1 = 2/3" and fraction_to_text(mass_part(1)) and "2/3")
+    set ok to expect_equal("mass-part of generation 2 = 1/3" and fraction_to_text(mass_part(2)) and "1/3")
+    set ok to expect_equal("mass-part of generation 3 = the whole" and fraction_to_text(mass_part(3)) and "1")
+    set ok to expect_equal("the between-generation ratio m1/m2 = 2 (position ratio)" and fraction_to_text(first_to_second_ratio()) and "2")
+    set ok to expect_bool("ROUTE B: the light pair is the doubling period-2 orbit" and light_pair_is_period_two())
+    set ok to expect_bool("the heaviest generation sits at the fixed point" and heaviest_is_fixed_point())
+    display "=== done ==="
+    return 0

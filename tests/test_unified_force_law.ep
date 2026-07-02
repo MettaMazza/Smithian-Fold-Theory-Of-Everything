@@ -1,0 +1,22 @@
+import "../constants/unified_force_law.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the unified force law (four primes, one formula) ==="
+    set ok to expect_bool("every sector partitions: 1/p + (p-1)/p = 1, all four" and every_sector_partitions())
+    set ok to expect_bool("the couplings are strictly ordered: 1/2 < 2/3 < 4/5 < 6/7" and couplings_strictly_ordered())
+    set ok to expect_equal("ROUTE A: the shortfall sum by addition = 247/210" and fraction_to_text(shortfall_sum()) and "247/210")
+    set ok to expect_equal("ROUTE B: the algebraic span invariant = 247/210" and fraction_to_text(span_invariant()) and "247/210")
+    set ok to expect_bool("the two routes agree" and routes_agree())
+    display "=== done ==="
+    return 0

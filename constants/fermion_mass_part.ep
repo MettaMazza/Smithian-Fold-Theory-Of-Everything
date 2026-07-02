@@ -1,0 +1,85 @@
+# ============================================================================
+#  THE FERMION MASS-PART  --  why every fermion mass scales with the vacuum, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  In the Standard Model every fermion gets its mass from the Higgs vacuum: m = y·v,
+#  a Yukawa coupling times the vacuum expectation value -- but the PROPORTIONALITY to
+#  v is put in by hand when the Yukawa term is written down. Forced: a fermion's
+#  mass-part is the electroweak sector's shortfall from unison, and that shortfall
+#  EQUALS the displaced vacuum -- so mass is vacuum-shaped by identity, not by an
+#  inserted coupling term.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY the fold and No-Zero) ──────────
+#  The electroweak matter sector sits at the critical coupling c_ew = 1/2. A fermion's
+#  mass-part is what the sector leaves short of the whole:
+#      m_f = One - c_ew = 1/2.
+#  Independently, the vacuum cannot sit at the symmetric point (the boundary the
+#  domain excludes -- No-Zero forbids the unbroken vacuum), so it is displaced to the
+#  half-One: v = 1/2 (higgs_vacuum.ep). The two are EQUAL: m_f = v -- the mass-part IS
+#  the displaced vacuum, which is why every fermion mass in nature is proportional to
+#  v: the proportionality is an identity of the structure, and the per-flavour Yukawa
+#  factors are the ladder positions (charged_lepton_cubic.ep, quark invariants) ON
+#  that common scale. Structural cross-check: the shortfall 1/2 is the fold's unique
+#  proper preimage of the One (fold(1/2) = 1, 1/2 < 1) and is self-antipodal
+#  (One - 1/2 = 1/2) -- the mass-part, the vacuum, and the critical coupling are one
+#  point seen three ways.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: m_f = One - 1/2 = 1/2 = v, fold(1/2) = 1, self-antipodal.
+#  Measured: every fermion mass tracks the electroweak scale v = 246 GeV (m = y·v/sqrt2
+#  with y flavour-dependent) -- when the Higgs vacuum was mapped at the LHC, coupling
+#  strength was found proportional to mass across leptons and quarks, exactly the
+#  vacuum-shaped mass structure this identity forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The electroweak sector's coupling: the critical half-One.
+define electroweak_coupling returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# The fermion mass-part: the sector's shortfall from unison, One - c_ew.
+define fermion_mass_share returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set coupling to electroweak_coupling()
+    return fraction_subtract(one and coupling)
+
+# The displaced vacuum (No-Zero forbids the symmetric point; higgs_vacuum.ep): 1/2.
+define displaced_vacuum returning Fraction:
+    return fraction_from_ratio(1 and 2)
+
+# THE IDENTITY: the mass-part equals the displaced vacuum -- m proportional to v by
+# structure, not by an inserted coupling.
+define mass_part_is_vacuum returning Bool:
+    set mass to fermion_mass_share()
+    set vacuum to displaced_vacuum()
+    return fraction_is_equal(mass and vacuum)
+
+# The shortfall is the fold's unique proper preimage of the One: fold(1/2) = 1, 1/2 < 1.
+define mass_part_is_proper_preimage returning Bool:
+    set mass to fermion_mass_share()
+    set folded to fold_fraction(mass)
+    set one to fraction_from_whole_number(1)
+    set folds_to_one to fraction_is_equal(folded and one)
+    set comparison to fraction_compare(mass and one)
+    set is_proper to comparison < 0
+    if folds_to_one:
+        return is_proper
+    return false
+
+# The point is self-antipodal: One - 1/2 = 1/2 (mass-part, vacuum, coupling: one point).
+define point_is_self_antipodal returning Bool:
+    set mass to fermion_mass_share()
+    set one to fraction_from_whole_number(1)
+    set antipode to fraction_subtract(one and mass)
+    return fraction_is_equal(mass and antipode)

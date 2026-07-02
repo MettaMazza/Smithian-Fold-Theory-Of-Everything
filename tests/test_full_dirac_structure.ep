@@ -1,0 +1,23 @@
+import "../constants/full_dirac_structure.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the full Dirac structure (the 3+1 dispersion closes) ==="
+    set ok to expect_bool("each generator (1/2) folds to unison on its own" and generator_folds_to_unison())
+    set ok to expect_equal("the generator count = 3 + 1 = 4" and int_to_string(generator_count()) and "4")
+    set ok to expect_equal("each square = 1/4" and fraction_to_text(generator_squared()) and "1/4")
+    set ok to expect_equal("ROUTE A: the dispersion sum = the One" and fraction_to_text(dispersion_sum()) and "1")
+    set ok to expect_equal("ROUTE B: the full polarization identity = the One" and fraction_to_text(polarization_sum()) and "1")
+    set ok to expect_bool("the two routes agree (no mutated arithmetic)" and routes_agree())
+    display "=== done ==="
+    return 0

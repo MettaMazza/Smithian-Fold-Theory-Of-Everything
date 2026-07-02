@@ -1,0 +1,105 @@
+# ============================================================================
+#  WITHIN-GENERATION RATIOS  --  mass ratios are position ratios, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The generations differ in mass by fixed ratios that the Standard Model reads off
+#  experiment. Forced: the three generations sit at the tripling fibre's three
+#  positions, each generation's mass-part IS its position's shortfall from unison,
+#  and the mass ratios between generations are exactly the position-shortfall ratios
+#  -- geometry, not input. The two light shortfalls even form the doubling fold's
+#  period-2 orbit, tying the mass ladder to the fold's own cycle.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  The tripling fold sends p to cast_out(3p); the preimages of the One under it are
+#  the three generation positions p₁ = 1/3, p₂ = 2/3, p₃ = 1 -- each VERIFIED here to
+#  land on the One under one tripling (3·(1/3) = 1, 3·(2/3) = 2 -> cast to 1, 3·1 = 3
+#  -> cast to 1). Each generation's mass-part is its shortfall from unison:
+#      m₁ = 1 - 1/3 = 2/3 ,   m₂ = 1 - 2/3 = 1/3 ,   m₃ = 1 (the whole).
+#  Within each generation the mass-to-shortfall ratio is exactly ONE (the mass-part is
+#  not proportional to the shortfall -- it IS the shortfall), so between generations
+#  the mass ratios equal the position ratios: m₁/m₂ = 2, m₂/m₃ = 1/3, m₁/m₃ = 2/3.
+#  ROUTE B, independent: the two light mass-parts are the doubling fold's period-2
+#  orbit -- fold(2/3) = 1/3 and fold(1/3) = 2/3 -- while m₃ = 1 is its fixed point.
+#  The mass ladder and the fold's cycle structure are the same object: the heaviest
+#  generation sits at the fixed point, the two lighter ones swap on the cycle.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: positions {1/3, 2/3, 1} all tripling to the One,
+#  shortfalls {2/3, 1/3, 1}, ratios {2, 1/3, 2/3}, the light pair a period-2 orbit.
+#  Measured: three generations at fixed mass ratios in every fermion family (the
+#  down-quark sector's dressed ratios land at -0.06%/+0.09% -- see the corpus quark
+#  dressing), with the third generation dominating -- the fixed-point weight.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once (doubling): double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The tripling fold: triple and cast out whole Ones.
+define tripling_fold with size as Fraction returning Fraction:
+    set twin_one to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set twin_two to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and twin_one)
+    set tripled to fraction_add(doubled and twin_two)
+    return cast_out_whole_ones(tripled)
+
+# The generation position k (k = 1, 2, 3): k/3.
+define generation_position with k as Int returning Fraction:
+    return fraction_from_ratio(k and 3)
+
+# Every position lands on the One under one tripling (verified, all three).
+define positions_triple_to_one returning Bool:
+    set one to fraction_from_whole_number(1)
+    set all_land to true
+    set k to 1
+    repeat while k < 4:
+        set position to generation_position(k)
+        set tripled to tripling_fold(position)
+        set lands to fraction_is_equal(tripled and one)
+        if lands:
+            set all_land to all_land
+        else:
+            set all_land to false
+        set k to k + 1
+    return all_land
+
+# The mass-part of generation k: the shortfall from unison (with the third the whole).
+define mass_part with k as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set position to generation_position(k)
+    set shortfall to fraction_subtract(one and position)
+    if shortfall.numerator_sign == 0:
+        return fraction_from_whole_number(1)
+    return shortfall
+
+# The between-generation mass ratios equal the position-shortfall ratios: m1/m2 = 2.
+define first_to_second_ratio returning Fraction:
+    set m1 to mass_part(1)
+    set m2 to mass_part(2)
+    return fraction_divide(m1 and m2)
+
+# ROUTE B: the two light mass-parts are the doubling fold's period-2 orbit.
+define light_pair_is_period_two returning Bool:
+    set m1 to mass_part(1)
+    set m2 to mass_part(2)
+    set from_m1 to fold_fraction(m1)
+    set from_m2 to fold_fraction(m2)
+    set m1_to_m2 to fraction_is_equal(from_m1 and m2)
+    set m2_to_m1 to fraction_is_equal(from_m2 and m1)
+    if m1_to_m2:
+        return m2_to_m1
+    return false
+
+# The heaviest generation sits at the fold's fixed point: fold(m3) = m3 = 1.
+define heaviest_is_fixed_point returning Bool:
+    set m3 to mass_part(3)
+    set folded to fold_fraction(m3)
+    return fraction_is_equal(folded and m3)

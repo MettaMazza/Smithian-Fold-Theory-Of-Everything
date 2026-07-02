@@ -1,0 +1,22 @@
+import "../constants/fermion_mass_part.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the fermion mass-part (mass is vacuum-shaped) ==="
+    set ok to expect_equal("the electroweak coupling = 1/2" and fraction_to_text(electroweak_coupling()) and "1/2")
+    set ok to expect_equal("the fermion mass-part = the shortfall = 1/2" and fraction_to_text(fermion_mass_share()) and "1/2")
+    set ok to expect_bool("THE IDENTITY: the mass-part equals the displaced vacuum" and mass_part_is_vacuum())
+    set ok to expect_bool("the shortfall is the fold's unique proper preimage of the One" and mass_part_is_proper_preimage())
+    set ok to expect_bool("the point is self-antipodal (mass, vacuum, coupling: one point)" and point_is_self_antipodal())
+    display "=== done ==="
+    return 0

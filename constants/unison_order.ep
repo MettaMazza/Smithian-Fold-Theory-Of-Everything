@@ -1,0 +1,108 @@
+# ============================================================================
+#  THE ORDER OF THE FORCES  --  strong above weak above EM, at every depth, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  At any energy you probe, the strong coupling is the largest, the weak next, and
+#  electromagnetism flattest -- an ordering physics measures but does not derive.
+#  Forced: each force's running coupling is one formula seeded by its generator
+#  (colour 3 for strong, binary 2 for weak, the flat half-One for EM), and the
+#  ordering g_strong > g_weak > g_em holds at EVERY depth of the tower -- verified
+#  here across twelve depths by two independent routes.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the tower) ────
+#  A sector seeded by generator m runs on the binary tower as
+#      g_m(d) = (m + 2^d - 1) / (m + 2^d)  -- the coupling at depth d,
+#  with gap to unison  1 - g_m(d) = 1/(m + 2^d)  (ROUTE B computes the gap directly
+#  from this closed form and both routes must agree). The electromagnetic sector is
+#  the flat critical coupling 1/2 at every depth (asymptotic_freedom.ep: its running
+#  slope is exactly 0). At every depth d = 0..11:
+#      gap_strong = 1/(3 + 2^d)  <  gap_weak = 1/(2 + 2^d)   (since 3 > 2),
+#  so  g_strong > g_weak,  and  g_weak = (1 + 2^d)/(2 + 2^d) > 1/2 = g_em  at EVERY
+#  depth (already 2/3 > 1/2 at d = 0). The order of the forces is the order of their
+#  generators: the deeper generator binds closer to unison, at every rung of the
+#  tower, with no crossing ever.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: gap_strong < gap_weak and g_strong > g_weak > g_em
+#  at all twelve depths, the closed form matching the constructed coupling at each,
+#  the weak strictly above the flat EM half everywhere. Measured: at every probed
+#  energy alpha_s > alpha_w > alpha_em in bound strength ordering -- the ordering
+#  this forces with no crossing.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The tower size at depth d: 2^d.
+define tower_at with d as Int returning Int:
+    return whole_power(binary_count() and d)
+
+# The running coupling of the sector with generator m at depth d: (m + 2^d - 1)/(m + 2^d).
+define running_coupling with m as Int and d as Int returning Fraction:
+    set levels to tower_at(d)
+    set source to m + levels
+    return fraction_from_ratio(source - 1 and source)
+
+# ROUTE B: the gap to unison, directly from the closed form 1/(m + 2^d).
+define closed_form_gap with m as Int and d as Int returning Fraction:
+    set levels to tower_at(d)
+    return fraction_from_ratio(1 and m + levels)
+
+# The two routes agree at a given sector and depth: 1 - g = closed-form gap.
+define routes_agree_at with m as Int and d as Int returning Bool:
+    set one to fraction_from_whole_number(1)
+    set g to running_coupling(m and d)
+    set constructed_gap to fraction_subtract(one and g)
+    set closed to closed_form_gap(m and d)
+    return fraction_is_equal(constructed_gap and closed)
+
+# The routes agree for BOTH sectors at every depth 0..11.
+define routes_agree_everywhere returning Bool:
+    set all_agree to true
+    set d to 0
+    repeat while d < 12:
+        set strong_ok to routes_agree_at(3 and d)
+        set weak_ok to routes_agree_at(2 and d)
+        if strong_ok:
+            if weak_ok:
+                set all_agree to all_agree
+            else:
+                set all_agree to false
+        else:
+            set all_agree to false
+        set d to d + 1
+    return all_agree
+
+# The strong gap is strictly smaller than the weak gap at every depth (3 > 2).
+define strong_binds_closer_everywhere returning Bool:
+    set all_closer to true
+    set d to 0
+    repeat while d < 12:
+        set gap_strong to closed_form_gap(3 and d)
+        set gap_weak to closed_form_gap(2 and d)
+        set comparison to fraction_compare(gap_strong and gap_weak)
+        if comparison < 0:
+            set all_closer to all_closer
+        else:
+            set all_closer to false
+        set d to d + 1
+    return all_closer
+
+# The weak coupling sits STRICTLY above the flat EM half at every depth 0..11
+# (already 2/3 > 1/2 at depth 0) -- the full three-force ordering with no crossing.
+define weak_above_em_everywhere returning Bool:
+    set half to fraction_from_ratio(1 and 2)
+    set above to true
+    set d to 0
+    repeat while d < 12:
+        set g_weak to running_coupling(2 and d)
+        set comparison to fraction_compare(g_weak and half)
+        if comparison > 0:
+            set above to above
+        else:
+            set above to false
+        set d to d + 1
+    return above
