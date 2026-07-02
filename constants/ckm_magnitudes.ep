@@ -1,0 +1,161 @@
+# ============================================================================
+#  THE CKM MAGNITUDES  --  the full 3x3 alignment matrix, every element forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The CKM matrix's nine magnitudes are nine measured numbers in the Standard Model.
+#  mixing_structure.ep forced the diagonal (8/9, uniform). Here the WHOLE matrix:
+#  every element is an overlap between a mass-basis state and a channel-basis state,
+#  V_ij = 1 - |M_i - C_j|, and all nine come out as exact ninths -- with a Route B
+#  showing every distance and every overlap folds onto the period-2 orbit with exact
+#  complementarity. The matrix's whole shape -- diagonal dominance, the Cabibbo
+#  step, the tiny far corner -- is the geometry of two fibres, not nine dials.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY c = 3 and the fold) ────────────
+#  The mass basis M = {2/9, 5/9, 8/9} (the tripling fibre of 2/3) and the channel
+#  basis C = {1/3, 2/3, 1} (the fibre of the One), both verified element by element.
+#  The alignment matrix is V_ij = 1 - |M_i - C_j|, all nine computed exactly:
+#      V = | 8/9  5/9  2/9 |
+#          | 7/9  8/9  5/9 |
+#          | 4/9  7/9  8/9 |
+#  Diagonal 8/9 (uniform); first off-diagonals 5/9 and 7/9 (the Cabibbo band, and
+#  the matrix is NOT symmetric -- the up-transition and down-transition leaks differ,
+#  as measured); far corner V₁₃ = 2/9 the smallest (two full fibre steps away).
+#  ROUTE B: every distance |M_i - C_j| and every overlap V_ij, tripled once, lands
+#  on the period-2 orbit {1/3, 2/3} -- and for each pair the folded distance and
+#  folded overlap are exact COMPLEMENTS (sum = the One). The matrix is closed under
+#  the fold's own cycle: nine elements, zero dials.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the nine ninths above, the fibres verified, the
+#  orbit-fold closure with complementarity on all nine pairs. Measured: the CKM
+#  magnitude pattern -- diagonal dominance (V_ud = 0.974), the asymmetric Cabibbo
+#  band, and the far corner V_ub smallest of all (0.0038) -- the shape this forces
+#  (the dressed magnitudes ride the corpus scale chain; this claim carries the
+#  structure).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The tripling fold: triple and cast out whole Ones.
+define tripling_fold with size as Fraction returning Fraction:
+    set twin_one to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set twin_two to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and twin_one)
+    set tripled to fraction_add(doubled and twin_two)
+    return cast_out_whole_ones(tripled)
+
+# The mass-basis state i (i = 1, 2, 3): (2 + 3(i-1))/9.
+define mass_basis with i as Int returning Fraction:
+    return fraction_from_ratio(3 * i - 1 and 9)
+
+# The channel-basis state j: j/3.
+define channel_basis with j as Int returning Fraction:
+    return fraction_from_ratio(j and 3)
+
+# The separation |M_i - C_j| (positive difference).
+define basis_distance with i as Int and j as Int returning Fraction:
+    set mass to mass_basis(i)
+    set weak to channel_basis(j)
+    set comparison to fraction_compare(mass and weak)
+    if comparison > 0:
+        return fraction_subtract(mass and weak)
+    return fraction_subtract(weak and mass)
+
+# The alignment element V_ij = 1 - |M_i - C_j|.
+define alignment_element with i as Int and j as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set distance to basis_distance(i and j)
+    return fraction_subtract(one and distance)
+
+# The diagonal is the uniform 8/9 (all three, verified).
+define diagonal_is_eight_ninths returning Bool:
+    set target to fraction_from_ratio(8 and 9)
+    set all_match to true
+    set i to 1
+    repeat while i < 4:
+        set element to alignment_element(i and i)
+        set matches to fraction_is_equal(element and target)
+        if matches:
+            set all_match to all_match
+        else:
+            set all_match to false
+        set i to i + 1
+    return all_match
+
+# The matrix is NOT symmetric: the two Cabibbo bands differ (5/9 above, 7/9 below).
+define matrix_is_asymmetric returning Bool:
+    set above to alignment_element(1 and 2)
+    set below to alignment_element(2 and 1)
+    set five_ninths to fraction_from_ratio(5 and 9)
+    set seven_ninths to fraction_from_ratio(7 and 9)
+    set above_ok to fraction_is_equal(above and five_ninths)
+    set below_ok to fraction_is_equal(below and seven_ninths)
+    if above_ok:
+        return below_ok
+    return false
+
+# The far corner V_13 = 2/9 is the smallest element of the whole matrix.
+define far_corner_is_smallest returning Bool:
+    set corner to alignment_element(1 and 3)
+    set two_ninths to fraction_from_ratio(2 and 9)
+    set corner_ok to fraction_is_equal(corner and two_ninths)
+    set smallest to true
+    set i to 1
+    repeat while i < 4:
+        set j to 1
+        repeat while j < 4:
+            set same_cell to 0
+            if i == 1:
+                if j == 3:
+                    set same_cell to 1
+            if same_cell == 0:
+                set element to alignment_element(i and j)
+                set comparison to fraction_compare(corner and element)
+                if comparison < 0:
+                    set smallest to smallest
+                else:
+                    set smallest to false
+            set j to j + 1
+        set i to i + 1
+    if corner_ok:
+        return smallest
+    return false
+
+# ROUTE B: every distance and overlap, tripled once, lands on the period-2 orbit
+# {1/3, 2/3}, and the folded pair are exact complements (sum = the One) -- all nine.
+define orbit_closure_holds returning Bool:
+    set third to fraction_from_ratio(1 and 3)
+    set two_thirds to fraction_from_ratio(2 and 3)
+    set one to fraction_from_whole_number(1)
+    set all_close to true
+    set i to 1
+    repeat while i < 4:
+        set j to 1
+        repeat while j < 4:
+            set distance to basis_distance(i and j)
+            set overlap to alignment_element(i and j)
+            set folded_distance to tripling_fold(distance)
+            set folded_overlap to tripling_fold(overlap)
+            set d_on_low to fraction_is_equal(folded_distance and third)
+            set d_on_high to fraction_is_equal(folded_distance and two_thirds)
+            set d_on_orbit to false
+            if d_on_low:
+                set d_on_orbit to true
+            if d_on_high:
+                set d_on_orbit to true
+            set pair_sum to fraction_add(folded_distance and folded_overlap)
+            set complements to fraction_is_equal(pair_sum and one)
+            if d_on_orbit:
+                if complements:
+                    set all_close to all_close
+                else:
+                    set all_close to false
+            else:
+                set all_close to false
+            set j to j + 1
+        set i to i + 1
+    return all_close

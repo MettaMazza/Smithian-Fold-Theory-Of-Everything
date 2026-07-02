@@ -1,0 +1,25 @@
+import "../constants/ckm_magnitudes.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the CKM magnitudes (the full 3x3 alignment matrix) ==="
+    set ok to expect_equal("V_12 = 5/9 (the upper Cabibbo band)" and fraction_to_text(alignment_element(1 and 2)) and "5/9")
+    set ok to expect_equal("V_21 = 7/9 (the lower band -- different!)" and fraction_to_text(alignment_element(2 and 1)) and "7/9")
+    set ok to expect_equal("V_13 = 2/9 (the far corner)" and fraction_to_text(alignment_element(1 and 3)) and "2/9")
+    set ok to expect_equal("V_31 = 4/9" and fraction_to_text(alignment_element(3 and 1)) and "4/9")
+    set ok to expect_bool("the diagonal is the uniform 8/9 (all three)" and diagonal_is_eight_ninths())
+    set ok to expect_bool("the matrix is asymmetric (up-leak != down-leak, as measured)" and matrix_is_asymmetric())
+    set ok to expect_bool("the far corner is the smallest element of the whole matrix" and far_corner_is_smallest())
+    set ok to expect_bool("ROUTE B: all nine pairs fold onto the orbit with exact complementarity" and orbit_closure_holds())
+    display "=== done ==="
+    return 0

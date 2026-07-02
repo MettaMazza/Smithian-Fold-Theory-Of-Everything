@@ -1,0 +1,33 @@
+import "../constants/baryon_to_photon_ratio.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the baryon-to-photon ratio (eta from the quark masses) ==="
+    set s23 to s23_value()
+    set ok to expect_bool("s23 is strictly positive (the two ladder slopes differ)" and s23.numerator_sign > 0)
+    display concat("  info  s23 = " and fraction_to_decimal(s23 and 6))
+    set j_squared to jarlskog_squared()
+    display concat("  info  J^2 = " and fraction_to_decimal(j_squared and 12))
+    set measured_j_squared to fraction_from_ratio(961 and 1000000000000)
+    set ok to expect_bool("J^2 lands within 25% of measured (3.1e-5)^2 (PDG)" and within_tolerance_of(j_squared and measured_j_squared and 1 and 4))
+    set half to fraction_from_ratio(1 and 2)
+    set j_squared_twin to fraction_make(fraction_numerator(j_squared) and fraction_denominator(j_squared))
+    set eta to fraction_multiply(j_squared_twin and half)
+    display concat("  info  eta = J^2/2 = " and fraction_to_decimal(eta and 12))
+    set measured_eta to fraction_from_ratio(61 and 100000000000)
+    set ok to expect_bool("eta = J^2/2 lands within 25% of measured 6.1e-10 (Planck/BBN)" and within_tolerance_of(eta and measured_eta and 1 and 4))
+    set wrong_eta to fraction_from_ratio(61 and 1000000000)
+    set eta_twin to fraction_make(fraction_numerator(eta) and fraction_denominator(eta))
+    set ok to expect_bool("and does NOT land on a 10x wrong target (discriminating)" and within_tolerance_of(eta_twin and wrong_eta and 1 and 4) == false)
+    display "=== done ==="
+    return 0

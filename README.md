@@ -42,6 +42,8 @@ nothing added, the model reaches:
 | Strong-force gluons | `colour² − 1 = 8` | `8` | exact |
 | Neutrino mixing (PMNS) | `1/2, 1/3, 1/48` | `0.545, 0.307, 0.022` | reactor angle forced **nonzero** |
 | Cosmic energy budget | `Ω_Λ=2/3, Ω_m=1/3, Ω_b=5/96, Ω_cdm=9/32` | Planck 2018 | within ~3% |
+| Jarlskog CP invariant `J²` | from the quark cubics, no √ anywhere: `9.77 × 10⁻¹⁰` | `(3.1×10⁻⁵)² = 9.61 × 10⁻¹⁰` | **1.7%** |
+| Baryon-to-photon ratio `η` | `J²/2 = 4.9 × 10⁻¹⁰` | `6.1 × 10⁻¹⁰` | 20% — a number the SM cannot compute at all |
 | Speed of light `c` | `= the One = 1` (exact) | metre *defined* via `c` | light = gravity to **1 part in 10¹⁵** (GW170817) |
 | Dark-energy `w` | `−1` (exact) | `−1.03 ± 0.03` | forced value inside 1σ |
 | Primordial tilt `n_s` | `< 1` (red, forced sign) | `0.9649 ± 0.0042` | **>8σ** below 1, as forced |
@@ -357,9 +359,16 @@ And the structural laws of physics, forced the same way:
   and `b/s` down together — landing `19.768 / 53.986 / 103.305` on measured `19.78 / 53.94 /
   103.30`, with ONLY `d_up` landing t/c, ONLY `m₂` landing both down ratios, and wrong-mass lifts
   rejected: every factor forced, every alternative dead).
+- **The CKM matrix whole, and why there is matter** — the **CKM magnitudes** (all nine elements as
+  exact ninths: uniform `8/9` diagonal, asymmetric Cabibbo bands `5/9`/`7/9`, far corner `2/9`
+  smallest — all nine folding onto the orbit with exact complementarity; nine elements, zero
+  dials), and the **baryon-to-photon ratio** (`J²` polynomial in exact squared sines from the quark
+  cubics — no square root anywhere — landing 1.7% from the measured Jarlskog invariant, and
+  `η = J²/2 = 4.9e-10` vs measured `6.1e-10`: the matter census from the quark masses and the
+  half-One, a number the Standard Model cannot compute at all).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 229 test
-suites (1,299 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 231 test
+suites (1,311 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -416,7 +425,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 229 suites, 1,299 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 231 suites, 1,311 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

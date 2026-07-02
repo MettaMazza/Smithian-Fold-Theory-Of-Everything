@@ -48,7 +48,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-229 suites, 1,299 forced checks, 0 failures). It needs nothing but a C compiler. Use
+231 suites, 1,311 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4323,6 +4323,31 @@ the forced counts `{2, 3, 5, 7}` ONLY `d_up` lands t/c and ONLY `m₂` lands bot
 lifting the lightest or heaviest down mass instead of the central is rejected. Every factor forced,
 every alternative dead.
 
+### Step 227 — The CKM magnitudes (the full 3×3 alignment matrix)
+
+**File:** `constants/ckm_magnitudes.ep`
+
+**What it does.** The whole matrix, extending the diagonal of Step 223: `V_ij = 1 − |M_i − C_j|`
+over the mass fibre `{2/9, 5/9, 8/9}` and channel fibre `{1/3, 2/3, 1}` gives all nine elements as
+exact ninths — diagonal `8/9` uniform, Cabibbo bands `5/9` above and `7/9` below (the matrix is NOT
+symmetric, as measured), far corner `V₁₃ = 2/9` the smallest of all nine (verified against every
+element). ROUTE B: all nine distances and overlaps, tripled once, land on the period-2 orbit with
+exact complementarity (folded pair sums to the One) — nine elements, zero dials.
+
+### Step 228 — The baryon-to-photon ratio (eta from the quark masses)
+
+**File:** `constants/baryon_to_photon_ratio.ep`
+
+**What it does.** The number the Standard Model cannot compute at all, from the quark cubics with
+zero parameters — and in the clean-room the ENTIRE chain is exact rational: `s₁₂² = m_d/m_s` (an
+exact mass ratio), `s₂₃` the difference of the two ladder slopes (exact root ratios, `0.039151`),
+`s₁₃² = s₁₂²s₂₃²/6` (the 6 = binary·colour, the joint sector period) — so
+`J² = s₁₂²(1−s₁₂²)·s₂₃²(1−s₂₃²)·s₁₃²(1−s₁₃²)²` needs NO square root anywhere. Landed:
+`J² = 9.77e-10` vs measured `(3.1e-5)² = 9.61e-10` — **1.7%** — and
+`eta = J²·(1/2) = 4.88e-10` vs measured `6.1e-10` (Planck/BBN), inside the 25% standard and
+discriminating against a 10× wrong target. The half is the fold's imbalance share; every other
+factor traces to the cubics' counts.
+
 ---
 
 ## Where the recreation stands right now
@@ -4825,6 +4850,12 @@ runs):**
   lift by `m₂ = 2`) lands `19.7678 / 53.9857 / 103.3051` on measured `19.78 / 53.94 / 103.30`,
   with ONLY `d_up` landing t/c, ONLY `m₂` landing both down ratios, and wrong-mass lifts rejected
   — the flagship, exact end to end.
+- Step 227 — the CKM magnitudes: all nine elements as exact ninths (`8/9` diagonal, asymmetric
+  Cabibbo bands `5/9`/`7/9`, far corner `2/9` smallest), all nine folding onto the orbit with exact
+  complementarity — nine elements, zero dials.
+- Step 228 — the baryon-to-photon ratio: `J²` polynomial in exact squared sines (no square root
+  anywhere) → `J² = 9.77e-10` vs measured `9.61e-10` (1.7%), `eta = J²/2 = 4.88e-10` vs measured
+  `6.1e-10` — the number the Standard Model cannot compute, from the quark cubics and the half-One.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
