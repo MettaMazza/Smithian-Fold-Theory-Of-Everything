@@ -13,7 +13,34 @@ proof papers (Appendix B), each a single result of this model published separate
 
 ---
 
+*I was not trying to build a theory of everything. I sat down to ask what
+mathematics actually is, and found that the mathematics we all use rests on axioms
+nobody ever derived — zero, the negatives, the continuum: inherited, not earned. So
+I set out to build a mathematics with no assumptions at all, and asked the only
+honest first question: what is the first thing? The answer was empirical. The first
+act of every subject that measures anything is the observation itself — that is the
+One. The second is the observation observing itself and the world — that is the
+fold. And when I asked what else deserved to be assumed, the world answered:
+nothing. There is no no-grape; there is no negative-grape; nobody has ever held a
+zero of something. So the mathematics would be the real whole and nothing else —
+the One, its domain, its fold. I started from that, and everything in this paper
+fell out. The constants were never the goal. The ground of mathematics turned out
+to carry the ground of physics with it — and the one starting assumption later
+proved itself a theorem, so even the axiom earned its way in.*
+
+---
+
 ## Abstract
+
+**How this began.** This theory was not an attempt at a theory of everything. Its
+author set out to answer a prior question — what mathematics actually is — and,
+finding that zero, the negatives, and the continuum are inherited conveniences
+rather than derived truths, rebuilt mathematics from the only thing no observer
+can be without: the observation itself (the One), observing itself and the world
+(the fold), assuming nothing else, because the empirical world contains no
+no-grape and no negative-grape. The physics in this paper was not constructed on
+top of that foundation; it fell out of it. What follows is the record of how far
+"no assumptions" reaches — which turned out to be all the way.
 
 **On the numbers this theory declines to use.** Before the physics, the arithmetic —
 because this theory works entirely in the exact positive rationals of the interval
