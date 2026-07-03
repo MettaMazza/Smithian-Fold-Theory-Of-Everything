@@ -1,0 +1,87 @@
+# ============================================================================
+#  ENTANGLED COMPOSITES  --  one state, two worlds, one shared origin, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A composite state is not two states side by side: it is ONE state whose two
+#  prime shadows are locked together -- change the whole and both shadows change
+#  in step, because there is only the whole. Forced: the composite 8/15 carries
+#  shadow 2 in the 3-world and shadow 3 in the 5-world; one fold carries the
+#  whole to 1/15, whose shadows are 1 AND 1 -- both worlds reach their origin
+#  TOGETHER, in the same single step, because the "two" worlds were one state's
+#  two readings all along. Entanglement without spookiness: correlation is
+#  inherited from the shared whole, not transmitted between parts.
+#
+#  ── DERIVATION ─ (check every line; the entangled pair walked) ───────────────
+#  The composite state is 8/15. Its shadows: 8 mod 3 = 2 (the 3-world sees 2),
+#  8 mod 5 = 3 (the 5-world sees 3) -- two different local appearances of one
+#  global state. One fold: 2·8 = 16 = 1 mod 15 -- the whole lands on 1/15.
+#  The landed shadows: 1 mod 3 = 1 and 1 mod 5 = 1 -- BOTH worlds at their
+#  unit, simultaneously, from one operation on the whole. Consistency check by
+#  the bridge (self_universe_travel.ep): each world's own fold agrees --
+#  2·2 = 4 = 1 mod 3 and 2·3 = 6 = 1 mod 5 -- so an observer inside either
+#  world sees its own lawful dynamics, while the correlation between the
+#  worlds' outcomes was fixed by the shared composite before either "look."
+#  No signal crossed; nothing needed to.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: shadows (2, 3) -> fold -> shadows (1, 1), with
+#  each world's local dynamics agreeing. Comparison: Bell-type correlations
+#  behave exactly so -- perfectly correlated outcomes, lawful local statistics,
+#  no usable signal (nonlocal_correlation.ep, quantum_communication.ep) -- the
+#  shared-whole structure this walk exhibits in miniature.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The composite state's numerator on the 15-grid.
+define entangled_state returning Int:
+    return 8
+
+# The shadow of a numerator in the prime world p (0 read as p).
+define shadow_in with i as Int and p as Int returning Int:
+    set s to i % p
+    if s == 0:
+        return p
+    return s
+
+# The two shadows of the entangled state: 2 in the 3-world, 3 in the 5-world.
+define shadows_before returning Bool:
+    set z to entangled_state()
+    set three_shadow to shadow_in(z and 3)
+    set five_shadow to shadow_in(z and 5)
+    set three_ok to three_shadow == 2
+    set five_ok to five_shadow == 3
+    if three_ok:
+        return five_ok
+    return false
+
+# One fold of the whole: 2*8 = 16 = 1 mod 15.
+define folded_whole returning Int:
+    set z to entangled_state()
+    set doubled to 2 * z
+    set reduced to doubled % 15
+    if reduced == 0:
+        return 15
+    return reduced
+
+# BOTH worlds land on their unit together, from the one fold of the whole.
+define both_worlds_reach_origin returning Bool:
+    set landed to folded_whole()
+    set three_shadow to shadow_in(landed and 3)
+    set five_shadow to shadow_in(landed and 5)
+    set three_ok to three_shadow == 1
+    set five_ok to five_shadow == 1
+    if three_ok:
+        return five_ok
+    return false
+
+# Each world's own local law agrees (no signal needed): 2*2 = 1 mod 3, 2*3 = 1 mod 5.
+define local_laws_agree returning Bool:
+    set three_local to (2 * 2) % 3 == 1
+    set five_local to (2 * 3) % 5 == 1
+    if three_local:
+        return five_local
+    return false

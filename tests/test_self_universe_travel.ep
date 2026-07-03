@@ -1,0 +1,21 @@
+import "../constants/self_universe_travel.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the composite bridge (the fold commutes with the prime worlds) ==="
+    set ok to expect_equal("the composite fold: 2/15 doubles to 4/15" and int_to_string(composite_fold(2)) and "4")
+    set ok to expect_bool("commutation at 2/15 in the 3-world" and commutes_at(2 and 3))
+    set ok to expect_bool("THE CENSUS: all 15 states commute in BOTH worlds (30 checks)" and bridge_commutes_everywhere())
+    set ok to expect_bool("the anchor is universal: the One fixed in every world" and anchor_is_universal())
+    display "=== done ==="
+    return 0

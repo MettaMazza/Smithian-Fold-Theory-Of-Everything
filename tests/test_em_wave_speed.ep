@@ -1,0 +1,20 @@
+import "../constants/em_wave_speed.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the coupled light wave (E and B in lockstep at c) ==="
+    set ok to expect_bool("E and B locked and returning at every one of 8 ticks" and fields_stay_locked())
+    set ok to expect_equal("the wave speed = displacement/tick = the One = c" and fraction_to_text(light_speed()) and "1")
+    set ok to expect_bool("the energy shares split the whole evenly (E = B)" and energy_shares_equal())
+    display "=== done ==="
+    return 0

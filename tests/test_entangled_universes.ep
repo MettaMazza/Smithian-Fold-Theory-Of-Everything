@@ -1,0 +1,21 @@
+import "../constants/entangled_universes.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== entangled composites (one state, two worlds, one origin) ==="
+    set ok to expect_bool("the shadows before: 2 in the 3-world, 3 in the 5-world" and shadows_before())
+    set ok to expect_equal("one fold of the whole: 8/15 -> 1/15" and int_to_string(folded_whole()) and "1")
+    set ok to expect_bool("BOTH worlds reach their origin together (1, 1)" and both_worlds_reach_origin())
+    set ok to expect_bool("each world's local law agrees (no signal crossed)" and local_laws_agree())
+    display "=== done ==="
+    return 0

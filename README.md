@@ -441,9 +441,18 @@ And the structural laws of physics, forced the same way:
   `d = 1`, the total bracketed forever in `[1/12, 11/60)` — the forces' whole disagreement is
   finite), and the **variance uncertainty** (the minimal state's variance product EQUALS the floor
   `1/2^(2k)` — Heisenberg's product form saturated exactly on the grid, and no state sits below).
+- **The prime worlds bridged, entanglement demystified, order explained, light walked** — the
+  **composite bridge** (all 15 states of the `3·5` grid commute with both prime-world projections,
+  30 checks run — the fold respects the Chinese-remainder split, verified not cited), **entangled
+  composites** (`8/15` folds ONCE to `1/15`: both worlds reach origin together from the shared
+  whole, each world's local law agreeing — correlation inherited, no signal crossed), **order from
+  complexity** (`2^k` states counted, longest descent exactly `k` walked over every state — order
+  is the log of complexity; each doubling adds one step), and the **coupled light wave** (E and B
+  walked eight ticks: speed the One, equal at every tick, exact return — light's speed, coupling,
+  and phase-lock as one verified walk).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 263 test
-suites (1,477 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 267 test
+suites (1,492 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -500,7 +509,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 263 suites, 1,477 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 267 suites, 1,492 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-263 suites, 1,477 forced checks, 0 failures). It needs nothing but a C compiler. Use
+267 suites, 1,492 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4713,6 +4713,47 @@ exceeds the floor; no state sits below it). The floor is the spacing squared —
 conjugate variable, which is why the bound is a product of two spreads. Squeezed light reaches
 this floor and never crosses it.
 
+### Step 261 — The composite bridge (the fold commutes with the prime worlds)
+
+**File:** `constants/self_universe_travel.ep`
+
+**What it does.** A composite grid (denominator `15 = 3·5`) contains two prime worlds at once, and
+the fold COMMUTES with the decomposition — verified by FULL CENSUS: for every one of the 15
+states, fold-then-project equals project-then-fold, in both worlds (30 commutations run), with the
+anchor (the One) fixed in every world. The doubling map respects the Chinese-remainder split,
+verified rather than cited — the structure behind `combined_period` and the master equation's lcm.
+
+### Step 262 — Entangled composites (one state, two worlds, one origin)
+
+**File:** `constants/entangled_universes.ep`
+
+**What it does.** Entanglement without spookiness, walked: the composite `8/15` carries shadow 2
+in the 3-world and shadow 3 in the 5-world; ONE fold of the whole lands on `1/15`, whose shadows
+are 1 AND 1 — both worlds reach their origin together, from one operation on the shared whole.
+Each world's own local law agrees (`2·2 = 1 mod 3`, `2·3 = 1 mod 5`): lawful local dynamics,
+perfect correlation, no signal crossed — because nothing needed to.
+
+### Step 263 — Order from complexity (exponential states, linear paths)
+
+**File:** `constants/order_complexity.ep`
+
+**What it does.** Complexity and order are two readings of one fold: the state count at depth `k`
+is `2^k` (counted: 4, 8, 16), while the LONGEST descent — walked over every state at each depth —
+is exactly `k` (2, 3, 4). Each doubling of complexity adds exactly ONE step to the worst path:
+order is the logarithm of complexity, which is why organization keeps up with combinatorial
+explosion everywhere the fold runs (Levinthal's proteins, relaxation, the intelligence dividend —
+one law behind all).
+
+### Step 264 — The coupled light wave (E and B in lockstep at c)
+
+**File:** `constants/em_wave_speed.ep`
+
+**What it does.** Light's three postulates as one verified walk: E and B advanced tick by tick for
+eight ticks — each moving exactly the One per tick (the causal speed), exactly EQUAL at every tick
+(the Faraday/Ampère lockstep, nothing leaking), returning exactly (zero dispersion). Plus the even
+energy split (`1/2 + 1/2 = 1`). Measured: vacuum light carries equal E and B energy densities at
+exactly `c` with no dispersion to the tightest bounds set.
+
 ---
 
 ## Where the recreation stands right now
@@ -5288,6 +5329,14 @@ runs):**
   total bracketed in `[1/12, 11/60)` — the forces' whole disagreement is finite.
 - Step 260 — the variance uncertainty: the minimal state's variance product EQUALS the floor
   `1/2^(2k)` exactly (both directions verified) — Heisenberg's product form, saturated on the grid.
+- Step 261 — the composite bridge: all 15 states of the `3·5` grid commute with both prime-world
+  projections (30 checks run) — the fold respects the Chinese-remainder split, verified.
+- Step 262 — entangled composites: `8/15` (shadows 2 and 3) folds ONCE to `1/15` (shadows 1 and
+  1) — both worlds reach origin together from the shared whole; no signal crossed.
+- Step 263 — order from complexity: `2^k` states counted, longest descent exactly `k` walked —
+  order is the log of complexity; each doubling adds one step.
+- Step 264 — the coupled light wave: E and B walked eight ticks — speed the One, equal at every
+  tick, exact return — light's speed, coupling, and phase-lock as one verified walk.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

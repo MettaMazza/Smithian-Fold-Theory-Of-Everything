@@ -1,0 +1,97 @@
+# ============================================================================
+#  ORDER FROM COMPLEXITY  --  exponential states, linear paths home, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The world is simultaneously complex (astronomically many configurations) and
+#  ordered (things find their way to stable states fast). Those look like
+#  opposites needing separate explanations. Forced: they are the two readings
+#  of one fold. The state count at depth k is 2^k -- EXPONENTIAL complexity,
+#  counted -- while every one of those states descends to unison in at most k
+#  steps -- LINEAR order, walked. The gap between 2^k configurations and k
+#  steps home is why complexity never costs order: doubling the possibilities
+#  adds ONE step to the longest path.
+#
+#  ── DERIVATION ─ (check every line; counted and walked at three depths) ──────
+#  COMPLEXITY: the grid at depth k holds 2^k states (the tower theorem,
+#  generation_depth_tower.ep -- here recounted at k = 2, 3, 4: 4, 8, 16).
+#  ORDER: every state at depth k reaches the One in at most k folds -- verified
+#  by walking ALL states at each depth and recording the LONGEST descent:
+#  exactly 2, 3, 4 steps at depths 2, 3, 4. The ratio tells the story: at
+#  depth 4, sixteen configurations, longest path four -- and each further
+#  doubling of complexity (x2 states) lengthens the worst path by ONE step.
+#  Order is cheap in a folded world: the descent is the logarithm of the
+#  complexity, which is why organized structure keeps up with combinatorial
+#  explosion everywhere the fold runs (protein folding's fast native descent,
+#  the intelligence dividend, relaxation's short reach -- one law behind all).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: states 4, 8, 16 counted; longest descents 2, 3,
+#  4 walked. Comparison: real systems equilibrate in times logarithmic-to-
+#  polynomial in their state counts, not proportional to them -- proteins fold
+#  in microseconds against 10^large conformations (Levinthal) -- the
+#  exponential-to-linear gap this fold forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# COMPLEXITY: the state count at depth k, 2^k.
+define state_count with k as Int returning Int:
+    return whole_power(binary_count() and k)
+
+# The descent length of one state i/2^k: folds until the One, walked.
+define descent_of with i as Int and k as Int returning Int:
+    set grid to whole_power(binary_count() and k)
+    set state to fraction_from_ratio(i and grid)
+    set one to fraction_from_whole_number(1)
+    set steps to 0
+    set walking to true
+    repeat while walking:
+        set arrived to fraction_is_equal(state and one)
+        if arrived:
+            set walking to false
+        else:
+            set state to fold_fraction(state)
+            set steps to steps + 1
+    return steps
+
+# ORDER: the LONGEST descent at depth k, over all 2^k states, walked.
+define longest_descent with k as Int returning Int:
+    set grid to whole_power(binary_count() and k)
+    set longest to 0
+    set i to 1
+    repeat while i < grid + 1:
+        set length to descent_of(i and k)
+        if length > longest:
+            set longest to length
+        set i to i + 1
+    return longest
+
+# The law: the longest path equals the depth -- order is the LOG of complexity.
+define order_is_log_of_complexity returning Bool:
+    set at_two to longest_descent(2) == 2
+    set at_three to longest_descent(3) == 3
+    set at_four to longest_descent(4) == 4
+    if at_two:
+        if at_three:
+            return at_four
+        return false
+    return false
+
+# Each doubling of complexity adds exactly ONE step to the worst path.
+define doubling_adds_one_step returning Bool:
+    set states_grow to state_count(4) == 2 * state_count(3)
+    set path_grows to longest_descent(4) == longest_descent(3) + 1
+    if states_grow:
+        return path_grows
+    return false

@@ -1,0 +1,21 @@
+import "../constants/order_complexity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== order from complexity (exponential states, linear paths) ==="
+    set ok to expect_equal("COMPLEXITY at depth 4: 16 states, counted" and int_to_string(state_count(4)) and "16")
+    set ok to expect_equal("ORDER at depth 4: longest descent = 4, walked over all 16" and int_to_string(longest_descent(4)) and "4")
+    set ok to expect_bool("order is the LOG of complexity (depths 2, 3, 4 all walked)" and order_is_log_of_complexity())
+    set ok to expect_bool("each doubling of complexity adds exactly ONE step" and doubling_adds_one_step())
+    display "=== done ==="
+    return 0
