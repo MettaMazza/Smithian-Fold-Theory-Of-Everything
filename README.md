@@ -22,7 +22,7 @@ or chosen value is introduced. Nothing slips through.
 > **THE PAPER:** [`THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md`](THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md)
 > — the complete model in one document: the history of number, every derivation,
 > every forced value, the engines, the lock, the ledger, and the full 303-step
-> catalogue. Start here. Published: [DOI 10.5281/zenodo.21182469](https://doi.org/10.5281/zenodo.21182469).
+> catalogue. Start here. Published: [DOI 10.5281/zenodo.21182468](https://doi.org/10.5281/zenodo.21182468).
 
 > **Where the theory stakes its life:** [`PREDICTIONS.md`](PREDICTIONS.md) — the
 > pre-registered ledger of every standing prediction, ordered by decision date,
