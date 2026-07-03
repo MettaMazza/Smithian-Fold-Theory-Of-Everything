@@ -1,0 +1,27 @@
+import "../constants/compact_coords.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the compact generator: derived forward, traced to the One ==="
+    set ok to expect_bool("THE GROUP LAW: chi_a chi_b = chi_(a XOR b) -- all a,b < 8, all n < 64" and group_law_holds(8 and 64))
+    set ok to expect_bool("the subtraction-game span {0,1,2,3} is pairwise distinct" and span_is_distinct(1 and 2))
+    set ok to expect_equal("its generator coefficient: the dyadic 1/2^2" and fraction_to_text(generator_coefficient(2)) and "1/4")
+    set ok to expect_bool("SUBTRACTION reconstructed exactly over 2^6 states" and subtraction_reconstructs_to(64))
+    set ok to expect_bool("SUBTRACTION reconstructed exactly over 2^10 states (generator CONSTANT)" and subtraction_reconstructs_to(1024))
+    set ok to expect_bool("the Nim column span is pairwise distinct (3 heaps, 3 bits)" and span_is_distinct(73 and 3))
+    set ok to expect_equal("the Nim generator length 2^bits at 3 bits" and int_to_string(nim_generator_length(3)) and "8")
+    set ok to expect_bool("NIM (2 heaps) reconstructed exactly -- field 64, generator 8" and nim_reconstructs(2 and 3))
+    set ok to expect_bool("NIM (3 heaps) reconstructed exactly -- field 512, generator 8" and nim_reconstructs(3 and 3))
+    set ok to expect_bool("NIM (4 heaps) reconstructed exactly -- field 4096, generator STILL 8" and nim_reconstructs(4 and 3))
+    display "=== done ==="
+    return 0

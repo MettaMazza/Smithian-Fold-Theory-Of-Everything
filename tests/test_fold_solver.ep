@@ -1,0 +1,22 @@
+import "../constants/fold_solver.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the universal exact solver: the chess engine, off chess ==="
+    set ok to expect_equal("the binary tower above 1001 states" and int_to_string(tower_above(1001)) and "1024")
+    set ok to expect_bool("every state coordinate is a legal fold value (1001 states)" and coordinates_are_legal(1001))
+    set ok to expect_equal("GAME 1: subtraction, 1001 states vs the mod-4 oracle -- disagreements" and int_to_string(certify_subtraction(1000)) and "0")
+    set ok to expect_equal("GAME 2: Nim, 512 states vs Bouton's XOR oracle -- disagreements" and int_to_string(certify_nim()) and "0")
+    set ok to expect_bool("every Nim coordinate is a legal fold value (512 states)" and coordinates_are_legal(512))
+    display "=== done ==="
+    return 0

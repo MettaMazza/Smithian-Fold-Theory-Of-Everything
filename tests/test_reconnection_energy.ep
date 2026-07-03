@@ -1,0 +1,26 @@
+import "../constants/reconnection_energy.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Parker reconnection protons: E = 8 alpha^2 m_p c^2, nothing local ==="
+    set ok to expect_equal("the proton's channels: colour^2 - 1 (the eight gluons' count)" and int_to_string(proton_channels()) and "8")
+    set ok to expect_equal("alpha^2 from the forced 1/alpha = 34259/250" and fraction_to_text(coupling_squared()) and "62500/1173679081")
+    set ok to expect_equal("THE FORCED FRACTION: 8 alpha^2 of the proton rest energy" and fraction_to_text(ceiling_fraction()) and "500000/1173679081")
+    set ok to expect_bool("the channel rung 1/8 tiles back to the One" and channel_rung_is_traced())
+    # comparison side: proton rest energy 938272 keV (CODATA), passed here only
+    set cutoff to cutoff_from_proton(938272 and 1)
+    set ok to expect_equal("E = 8 alpha^2 x m_p c^2, exact" and fraction_to_text(cutoff) and "469136000000/1173679081")
+    set cutoff_again to cutoff_from_proton(938272 and 1)
+    set ok to expect_equal("E = 399.714 keV (Parker: ~400 keV -- within 0.1%)" and fraction_to_decimal(cutoff_again and 3) and "399.714")
+    display "=== done ==="
+    return 0

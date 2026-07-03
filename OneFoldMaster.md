@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-285 suites, 1,647 forced checks, 0 failures). It needs nothing but a C compiler. Use
+288 suites, 1,668 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5015,6 +5015,47 @@ name moves no ratio (walked at scale 1000). THE TALLY: **the SM's ~26 continuous
 against the fold's ZERO** — one bounded label, one unit name, nothing else: the space of
 fold-consistent universes is very nearly a single point.
 
+### Step 283 — Parker reconnection protons (a solar cutoff with nothing local)
+
+**File:** `constants/reconnection_energy.ep`
+
+**What it does.** Parker Solar Probe's ~400 keV proton cutoff at the near-Sun current sheet,
+computed with ZERO local inputs — no plasma density, no field strength, no Alfvén energy.
+Every factor forced elsewhere: the coupling is α (imported from the forced
+`1/α = 34259/250`, entering SQUARED for an energy: `62500/1173679081`); the channels are the
+proton's own `colour² − 1 = 8` (the gluon count); the scale is the proton's own rest energy
+(comparison side only, in the test). THE FORCED FRACTION: the proton reaches
+**`8α² = 500000/1173679081`** of its own rest energy — read forward:
+**`E = 399.714 keV` against Parker's ~400 keV, within 0.1%.**
+
+### Step 284 — The compact generator (derived forward, not measured)
+
+**File:** `constants/compact_coords.ep`
+
+**What it does.** Solved game fields collapse in the fold's own coordinates — and the
+generator is DERIVED from the rule, never found by transforming and counting. The group law
+`χ_a χ_b = χ_(a XOR b)` verified exhaustively (all 512 cases) first; a bit-rule IS the fold
+projector `(χ_0 + χ_mask)/2`; a product of rules multiplies out to the XOR-span of the masks
+with all coefficients the dyadic `1/2^r`. Reconstruction exact and exhaustive: the
+subtraction game (generator length 4, CONSTANT across fields 2⁶ and 2¹⁰) and Nim at 2, 3,
+and 4 heaps — fields 64 → 512 → 4096, **generator 8 at every heap count, every state
+reconstructed**: the compression is a THEOREM — adding heaps multiplies the field but
+cannot grow the generator.
+
+### Step 285 — The universal exact solver (the chess engine, off chess)
+
+**File:** `constants/fold_solver.ep`
+
+**What it does.** The corpus's chess campaign solved ~10⁹ positions by retrograde folding
+at zero error against Syzygy; this module proves the engine was never about chess. Every
+state gets a fold coordinate `(index+1)/2^k` — dyadic, in the domain, checked legal for all
+states — and the retrograde induction runs from the terminal seed (no moves = the mover
+loses). GAME 1: the subtraction game, **1001 states solved and certified against the
+independent mod-4 oracle — zero disagreements**. GAME 2: three-heap Nim, **512 states
+certified against Bouton's XOR oracle** (the XOR built by Step 284's verified bit
+arithmetic) — **zero disagreements**. Three domains, one engine, each certified by an
+oracle it did not write.
+
 ---
 
 ## Where the recreation stands right now
@@ -5638,6 +5679,14 @@ runs):**
 - Step 282 — the counterfactual map: `1/2` the unique self-antipode (exhaustive to denominator
   300); the master dial moves all NINE constants together; freedoms = one bounded label
   m ∈ {2,3,5,7} + one unit name — **zero continuous dials**.
+- Step 283 — Parker reconnection protons: `E = 8α² m_p c² = 399.714 keV` vs the observed
+  ~400 keV — within 0.1%, with NOTHING local (no density, no field, no Alfvén energy).
+- Step 284 — the compact generator: derived forward from the rule via the verified group law
+  `χ_a χ_b = χ_(a XOR b)`; Nim's generator is 8 at 2, 3, AND 4 heaps (fields 64 → 4096) —
+  compression is a theorem, every state reconstructed exactly.
+- Step 285 — the universal solver: subtraction (1001 states) and Nim (512) solved by the
+  retrograde fold and certified against independent oracles — **zero disagreements**; the
+  chess engine was never about chess.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
