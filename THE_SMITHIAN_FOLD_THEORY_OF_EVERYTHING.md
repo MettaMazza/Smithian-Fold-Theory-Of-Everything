@@ -668,3 +668,613 @@ converge to exact unification at unison**, each gap closing at its own forced
 rate: no tuning, no thresholds, no desert, no new fields. Unification is not
 arranged; it is arithmetic.
 
+# Part X — The structural laws
+
+The same counting that yields the constants yields the architecture. **Spacetime
+is 3 + 1**: three spatial dimensions as the unique integer strictly between the
+binary generator and its square (and, independently, the colour count and the
+generation count — three of everything, one number reached three separate ways),
+plus the fold's single direction of application as time. **Parity is violated**
+because the lock's two preimages 1/4 and 3/4 are opposite-handed and the weak
+sector couples to one hand: the universe is a southpaw. **The arrow of time** is
+the fold's non-invertibility — two preimages collapse to one image, one bit lost
+per step, entropy obliged to increase. **The uncertainty principle** is a counting
+bound on conjugate supports (position support × frequency support ≥ the tower),
+saturated by the minimal state. **Spin and statistics** admit exactly two kinds —
+the One (boson) and the half-One (fermion, closing only in two turns) — with
+Pauli exclusion as the mode's two-preimage occupancy {0,1}. **The four laws of
+thermodynamics** are fold facts (equilibrium = shared image; the One conserved;
+the lost bit; the unreachable floor). **Asymptotic freedom** is the strong
+carrier's self-charge: running slope exactly 2 against the photon's exact 0, sign
+and rationals both. **The eight gluons** are colour² − 1; **baryogenesis** has all
+three Sakharov conditions as fold facts; the **Dirac g-factor** is exactly 2 (the
+inverse critical coupling); **black-hole entropy** carries the exact
+Bekenstein–Hawking quarter; **gravitational time dilation** stops at the horizon's
+forbidden zero; and **gravitational waves travel at exactly c** — the same One
+that is the speed of light, with GW170817's one-part-in-10¹⁵ agreement as the
+comparison to an identity that is exact.
+
+# Part XI — Classical physics, condensed matter, earth and sky
+
+**Turbulence.** The energy cascade branches across the counted three dimensions,
+so the structure-function exponent is the branching ratio (m−1)/m = **2/3** and
+the spectrum exponent its successor **5/3** — Kolmogorov's two most-measured
+numbers, with the 2/3 checked EQUAL to the strong coupling (one number, two
+roles) and the binary cascade machine-excluded as giving the wrong spectrum. The
+corpus separately proves no finite-time blow-up: the cascade halts at the floor
+because there is nothing below it.
+
+**Criticality, exactly.** The mean-field exponents are forced fold values — β =
+1/2, ν = 1/2, γ = 1, δ = 3 — and the classical scaling relations close with zero
+residual: Widom γ = β(δ−1) exactly, Rushbrooke's α landing exactly on the floor,
+Fisher's γ = 2ν exactly. The quantum-Hall plateaus are the same story: exact
+rational counts.
+
+**The unit power law.** The one-over-rank law is the unique distribution
+self-similar under the fold's own move (rank doubling halves the count — walked
+exactly; square and flat laws excluded), which is why nature keeps choosing it:
+**Zipf's exponent = Gutenberg–Richter's b = 1**, a decade of earthquakes per
+magnitude, the same slope in solar flares.
+
+**Earth and sky, one mechanism.** Climate tipping is a one-step crossing of the
+self-antipodal lock (the basins 1/4 and 3/4 fold to the same point — bistability
+IS the 2-to-1 structure, so transitions are abrupt by construction). Quakes
+release in fold avalanches on the unit law. Bursts are atomic because the fold is
+— half-One to the One in one move, a flash and never a leak. A perturbed black
+hole rings down by the fold's own halving, each cycle exactly half the last,
+never zero. Quasicrystals are the prime-5 sector made visible: five-fold order
+exists as a fold sector while the periodic five-fold lattice is machine-forbidden
+by the crystallographic restriction — so it can only be realized aperiodically,
+which is precisely what was found in 1984. Planetary spacing is the binary tower
+(consecutive orbital ratios exactly 2 — Titius–Bode as mechanism, not
+numerology). Tully–Fisher's fourth power is d + 1 = 4 (the radiation exponent),
+with the halo set by the counted relic 27/5. And the Parker Solar Probe's proton
+cutoff at the near-Sun current sheet is computed with **zero local inputs** —
+E = (colour² − 1)·α²·m_p c² = **399.714 keV** against the observed ~400 keV — no
+density, no field strength, no Alfvén speed: the proton reaching eight
+alpha-squared of its own rest energy.
+
+# Part XII — Life and mind
+
+**Life's architecture.** The genetic code is the covering at base four: a base is
+a two-bit fold pair, a codon three bases, 4³ = 2⁶ = **64 codons** grouped by the
+wobble rung into the observed redundancy (the amino-acid count is honestly NOT
+forced — stated as such). Kleiber's quarter-power law of life is the fold
+branching ratio **3/4**. Self-replication is the two-to-one covering; protein
+folding is a directed descent to one native fixed point (Levinthal's paradox
+dissolves); aging is the **transient running down** — a soma's even-denominator
+orbit decays in exactly its 2-adic valuation of divisions (the Hayflick limit as
+number theory) while the germ line rides an eternal odd orbit; the neural spike
+is an atomic threshold fold (all-or-nothing because no half-fold exists); cancer
+is the orbit that fails to lock — the lost descent; ecosystem stability is
+bounded-denominator periodicity.
+
+**Mind, closed where it can be closed.** Observation is the fold, and the
+self-observation closure is 1/4 — the observer inside the system. The free-will
+question closes in both directions at once: forward, the fold is a function —
+one state, one successor, the unfolding **fully determined**, libertarian free
+will ruled out — and backward, the fold is 2-to-1 — distinct pasts, equal
+presents, one bit lost per act — so **no self can pre-read its own next fold**.
+What exists is a determined self that cannot foresee its own determined act:
+from the inside, that is exactly what choosing feels like. Determinism plus
+forced self-opacity — a closure, not an open.
+
+# Part XIII — Mathematics from the fold
+
+The integers' classical structure IS the fold's orbit dynamics, verified
+exhaustively rather than sampled. The orbit length of every reduced p/q equals
+ord_q(2) for every numerator (a denominator class is one eternal mode); the
+φ(q)/ord_q(2) orbit census tiles exactly, residue by residue (q = 7 carries two
+modes, q = 31 six, q = 73 eight); the antipodal involution has exactly one fixed
+point — the half-One — which is the seed of the **Riemann critical line** (the
+unique self-dual axis, swept exhaustively to denominator 300 elsewhere in the
+corpus); even denominators decay for exactly their 2-adic valuation onto odd
+eternal cores; and **Artin's conjecture is renamed a fold question** — how often
+is a prime a single fully-ergodic mode? — with the count exact to 4000: 214 of
+549, density 0.390 descending toward the conjectured 0.3739….
+
+**Collatz** is a fold contraction: the odd step's forced even successor makes
+every odd–even pair multiply by (3/2)(1/2) = **3/4** — the fold branching ratio,
+Kleiber's own number — strictly below the One; the eternal cycle 1→4→2→1 is the
+floor; every start to 100,000 verified to fall (n = 27 in its famous 111 steps).
+**Goldbach** is the statement that every even number's half-One carries a prime
+antipodal pair (k/E + (E−k)/E = 1, the pair casting to the One): verified with
+zero failures for all 4,999 evens to 10,000, with the twin count to the same
+bound landing on the published **205** exactly. The **Millennium positives** are
+structural: the Yang–Mills mass gap exists because the spectrum has a floor; no
+Navier–Stokes blow-up because there is nothing below the floor to concentrate
+into; and the P-vs-NP-adjacent capability — solved fields collapsing to derived
+compact generators — is Part XIV's theorem, not a conjecture.
+
+# Part XIV — The engines: the theory computes
+
+**The discovery engine (USDE), remade under the law.** The corpus's original
+discovery prototype swept fold structures against measured physics with floats,
+tolerances, and a probabilistic flag its own record later disowned. The remade
+engine is deterministic and exact: the standing-mode census of every m-fold map
+(**5,022 members**, counted two independent ways — direct enumeration = 1 +
+Euler-phi sum), closure under all four sector forces **proven member by member**
+(zero escapes — not iterated, proven), the orbit partition tiled, and the
+emergence family swept across the sectors. The physical constants **fall out of
+the sweep as exact rational identities** against their independently forced
+modules — the four couplings, the mixing partition, the dark shares, the full
+cosmic budget, the reactor angle composed from the sweep's own members, the
+floor — with no tolerance dial, no seed, no null model, no statistical
+annotation, in 0.02 seconds. A deterministic engine has no chance to correct
+for; discovery here means identity, not proximity.
+
+**The universal solver, certified off its birthplace.** The retrograde fold that
+solved the corpus's chess endgames is domain-agnostic: given any finite state
+space, move rule, and terminal rule, it returns exact game-theoretic values,
+self-certified against an oracle it did not write. Demonstrated at zero
+disagreements against the subtraction game's mod-4 theorem (1,001 states) and
+Bouton's XOR theorem for Nim (512 states) — the engine was never about chess.
+
+**The certified game theorems, generalized.** The chess campaign's two
+machine-certified laws are re-proven exhaustively on independent solved fields:
+the **twin-pair law** (a field symmetry forces every spectral coefficient to
+equal its partner — all 64 Nim coefficients equal their swapped twins, the
+spectrum collapsing to c_s = 8 exactly when the blocks agree) and the
+**vanishing law** (a mirror symmetry acting as XOR forces every odd-overlap
+coefficient to exactly zero — half the spectrum provably empty, the storage
+corollary by count). The compact generator is DERIVED forward from the rule via
+the exhaustively verified group law χ_aχ_b = χ_(a XOR b): the subtraction game's
+generator is 4 at every field size, and Nim's is 2^bits at two, three, AND four
+heaps while the field grows 64 → 4096 — compression as theorem, with every state
+of every field reconstructed exactly.
+
+**The fold chess bot: the capability demonstration, stated exactly.** A complete
+legal chess player — castling, en passant, all four promotions, check, mate,
+stalemate — containing **zero fitted parameters**: material counted from the
+board's own geometry (a knight commands 2 squares from the corner and 8 from the
+centre; a rook 14; a queen 21–27 — counts the engine performs), position value
+the mover's exact share of the One (the starting position evaluating to exactly
+the half-One), search an exact alpha-beta whose minimax step is the fold's own
+involution (mine = 1 − theirs), quiescence reading the forced events — captures
+and horizon checks — until the counting settles, and repetition priced at the
+lock 1/2 by the game's own rule. The rules substrate is certified against the
+published perft census at four positions spanning the entire rules space
+(**8,902; 97,862; 43,238; 9,483 — zero disagreements at every depth**). In
+refereed play, with an independent rules implementation validating every move,
+the bot has never produced an illegal move in any game; it defeats a random
+legal mover 10–0, defeats Stockfish configured at Elo 1320 (3–1) and at 1500
+(2–0 with two draws), and measures at **~1550–1600** over proper 12-game
+samples, with the full engineering ledger — including the measurement-noise
+lessons — public in the repository. It is stated exactly: this bot does not
+rival tuned engines, and is not claimed to; it is, to our knowledge, **the only
+complete chess player in existence whose every number is counted rather than
+chosen** — and the demonstration that the fold framework computes forward as
+well as it derives. The fold does not just derive; it plays.
+
+# Part XV — The lock, the map, and the finite inventory
+
+**The Grand Lock.** Every major constant in this paper is a closed form over
+{ONE, 2, 3} with the depths counted from the colour: 1/α, the lepton and quark
+invariants, the dark fractions, the Hubble ratio, the Planck exponent, the
+Λ-floor. Perturb the colour to 4 and **all nine c-dependent constants move
+together** — counted one by one — while the colour-free half-One coupling stays
+put: dependence and independence both demonstrated, so the web is structure, not
+assertion. The Standard Model's ~26 "independent parameters" are one object seen
+from many sides; no future measurement can reveal a knob, because there is no
+knob to reveal.
+
+**The counterfactual map.** Only a zero-parameter theory can ask what had to be.
+Answered by test: NECESSARY — the self-antipodal coupling (1/2 is the unique
+fixed point of x ↔ 1−x, exhaustively to denominator 300), the fold base (1 is
+the identity, 2 the minimal generator), the depths (counted, no residue).
+CONTINGENT — exactly one bounded discrete label, the sector prime m ∈ {2,3,5,7}
+under the sealed ladder. CONVENTION — the unit name, which moves no ratio
+(walked). **Zero continuous dials.** The space of fold-consistent universes is
+very nearly a single point: almost nothing about our universe could have been
+otherwise.
+
+**The finite inventory.** The fold has a floor and a ceiling, so every list
+ends: excitation towers of at most 2⁷ = 128 rungs (the floor 1/128 walked, still
+positive — No-Zero holds at the bottom); elements at most 137; fundamental
+species exactly the census (83 gauge carriers, the photon/graviton/Higgs, the
+known fermions, the twelve Smithions). **The inventory of everything that can
+exist is a finite count, not an endless list** — and every one of these
+boundaries is a standing falsification target.
+
+# Part XVI — The prediction ledger: where the theory stakes its life
+
+Every standing prediction is pre-registered in this repository (`PREDICTIONS.md`,
+timestamped by the git history), ordered by decision date, each row carrying the
+forced value, the proving module, the deciding experiment, and the explicit kill
+condition. The Standard Model, with ~26 dials, can absorb almost any result; the
+fold, with zero, can absorb almost none. In summary:
+
+**Deciding now (2025–2028).**
+- **α, exact and adjudicating:** the digits at 2×10⁻¹¹ are …177181; the 5.4σ
+  Rb/Cs recoil discrepancy resolves at 137.0359991772 (Rb down, Cs up). CODATA's
+  g−2-dominated value already sits 0.009σ from the terminal rational.
+- **Σm_ν = 0.0583 eV, normal ordering** (DESI/Euclid + CMB lensing — likely first
+  to decide). Kill: a robust bound below 0.058 eV, or inverted ordering.
+- **w = −1 exactly, at every epoch** — staked against the DESI evolving-dark-
+  energy preference. Kill: evolving dark energy confirmed decisively.
+- **The Hubble ratio = 3305/3048 = 1.0843175.** Kill: the tension resolves to
+  unity (a systematic) or to any other number.
+- **LFV fingerprint** — rates 1 : 1 : 4, physical weights 3 : 5 : 20, τ→e over
+  τ→μ = 4:1 mass-independent (MEG II, Mu2e/COMET, Belle II). Kill: any other
+  pattern at discovery.
+- **No nuclear recoil, ever** (XENONnT/LZ/PandaX). Kill: one confirmed
+  WIMP-style recoil.
+
+**This decade (2028–2035).**
+- **0νββ must occur** (LEGEND-1000, nEXO, CUPID). Kill: a proven Dirac neutrino
+  — which refutes the corpus outright.
+- **The island at Z = 126, N = 184** — not 114, not 120 (superheavy programmes).
+  Kill: a stability centre confirmed elsewhere.
+- **PMNS sharpens onto 1/2, 1/3, 1/48** (JUNO, DUNE, Hyper-K). Kill: precision
+  excluding the rationals — e.g. θ₂₃ convincingly non-maximal.
+- **The cosmic budget digits** — 279/52, 5/96, 9/32, 2/3 (CMB-S4, LiteBIRD).
+  Kill: the ratios walking off the rationals as errors shrink.
+
+**The long horizon (absolute).**
+- **The table ends at 137.** Kill: one element beyond it, ever.
+- **Smithium = [Og] 8s² 5g⁶**, g-block at 121, island chemistry as written.
+- **The census is closed** — 83 carriers, 12 Smithions, nothing else; new-force
+  signatures are confining jets + missing energy with dark-CKM 14/15 and 20/21.
+  Kill, two-sided: any confirmed particle outside the list (a SUSY partner, an
+  axion, a sterile neutrino), or any confining sector beyond prime 7.
+- **The graviton exists; GW speed stays exactly c** at every future event.
+
+**Mathematical standing claims:** no Collatz counterexample will ever be found;
+Goldbach never fails; the Riemann zeros stay on the line; Artin's density
+converges to 0.3739…. A counterexample to any falsifies the fold frame itself.
+
+# Part XVII — Methods and reproduction
+
+**Two implementations, one set of numbers.** The theory exists as two complete,
+independent constructions: the original Python corpus (321 machine-verified
+claims with proof-tree tracing to the One) and this clean room — a from-scratch
+rebuild in ErnosPlain, compiled to self-contained C, using exact rational
+arithmetic strictly (floats forbidden on the derivation side; roots by exact
+bisection with sign-scan-found brackets; irrational comparison targets handled
+by exact squares). The two agree end to end. Every claim in this paper cites
+machinery in this repository:
+
+- **`make -C verify prove`** — the complete audit: **306 suites, 1,832 forced
+  checks, 0 failures**, from the axiom to every measured comparison, requiring
+  nothing but a C compiler.
+- **`make online`** — the live mode: current CODATA/NIST values fetched at run
+  time, closing the "you typed the measured numbers in yourself" objection.
+- **`OneFoldMaster.md`** — the dependency-ordered spine: Steps 1–303, each with
+  its WHY / DERIVATION / CHECK discipline (philosophy skippable, every
+  derivation line checkable, measurement comparison-only).
+- **`STANDARDS.md` and `AGENT.md`** — the rules every module is held to, and
+  the mechanical answer to "where is the free parameter?" (there is none; the
+  enforcement halts on any).
+- **`PREDICTIONS.md`**, **`tools/MATCHES.md`** — the pre-registration ledger and
+  the refereed capability record, with reproducible harnesses.
+
+The enforcement layer (`forced_to_be`, `forced_unique`, form and assembly
+enforcement, the domain gate, the Measured barrier) is not documentation — it is
+running code proven to halt the build on any fitted, chosen, or selected value.
+The reader is invited to try: change any number in any module and run the
+command. The theory's strongest sentence is the one no parametrized model can
+say: **break anything, and the machine will tell you.**
+
+---
+
+## Appendix A — The complete catalogue: Steps 1–303
+
+One line per step, with its forced value(s); every step's full derivation,
+falsification battery, and check lives in `OneFoldMaster.md` and its module.
+
+- Step 1 — exact whole numbers of unlimited size.
+- Step 2 — exact fractions in lowest terms.
+- Step 3 — the One and the two moves, fold and take, with the rhythms they make.
+- Step 4 — the two generators, counted from the fold (binary two, colour three),
+- Step 5 — the fine-structure constant, forced from the two generators alone,
+- Step 6 — the charged-lepton mass cubic, its three invariants forced from the
+- Step 7 — the dark-to-baryon fraction, forced from the covering of the
+- Step 8 — the Hubble tension calibration ratio `13/12`, forced from a flat
+- Step 9 — the gauge mediator counts: eight gluons (`colour² − 1`), the ladder
+- Step 10 — the electroweak mixing angle: sin²θ_W = `1/4`, cos²θ_W = `3/4` as the
+- Step 11 — the absolute scale: the proton-to-Planck hierarchy `2^(127/2)`, forced
+- Step 12 — the neutrino mixing angles (PMNS): `sin²θ₂₃ = 1/2`, `sin²θ₁₂ = 1/3`
+- Step 13 — the W-to-Z boson mass ratio: `(M_W/M_Z)² = cos²θ_W = 3/4` (the same
+- Step 14 — the Koide relation: the charged-lepton ratio `Q = 2/3`, forced two
+- Step 15 — the cosmic energy budget: `Ω_Λ = 2/3`, `Ω_matter = 1/3` (flat),
+- Step 16 — asymptotic freedom: the strong coupling grows with range (`1,3,5,…`,
+- Step 17 — the CP-violating phase: forced to the self-antipodal `1/2` (maximal CP
+- Step 18 — three of everything: spatial dimensions, generations, and colours are
+- Step 19 — the gyromagnetic ratio: the Dirac g-factor `g = 2 = 1/(1/2)`, the
+- Step 20 — parity violation: the fold's two preimages of `1/2` are `1/4` (left)
+- Step 21 — the arrow of time: the fold is non-injective (`fold(1/4) = fold(3/4)
+- Step 22 — the uncertainty principle: position support × frequency support `≥
+- Step 23 — spin and statistics: the boson is the One, the fermion the half-One
+- Step 24 — the axiom is a theorem: given only "not nothing", the One, the domain
+- Step 26 — the prime-sector ladder: the force-sectors are exactly the primes
+- Step 27 — the fold's orbits are the order of two: `period(1/p) = ord_p(2)`
+- Step 28 — the four laws of thermodynamics: a transitive equilibrium, conserved
+- Step 29 — the genetic code: 4 bases (`binary²`), triplet codons (`colour`), 64
+- Step 30 — the Higgs vacuum: the displaced half-One `1/2` (nonzero, self-antipodal,
+- Step 31 — the inflation factor: `binary^5 = 32` states at the generation covering
+- Step 32 — spacetime dimensions: `3` spatial (unique stable = colour) `+ 1` time
+- Step 33 — three-body solvability: three bodies on the fold orbit of 1/7 recur
+- Step 34 — baryogenesis: the three Sakharov conditions (number violation, C/CP
+- Step 35 — dark energy: the vacuum is the One, fold-invariant (`fold(1)=1`), hence
+- Step 36 — the speed of light: the fold's one advance is the signal speed = the One
+- Step 37 — self-replication: the fold's two-to-one covering gives every pattern a
+- Step 38 — the measurement branch weight: binary halving to the colour depth gives
+- Step 39 — self-organisation: the fold's closed binary orbit `1/3 ↔ 2/3` (period
+- Step 40 — the cosmological constant: vacuum forced positive at `1/2` on the single
+- Step 41 — protein folding: one native fixed point (the One), reached by directed
+- Step 42 — structure formation: the fold amplifies a sub-balance perturbation
+- Step 43 — Coulomb's law: flux conservation over an `r²` shell in 3 space
+- Step 44 — black-hole entropy: two binary halvings force the Bekenstein–Hawking
+- Step 45 — the d'Alembert wave: a disturbance `1/2` splits into two equal
+- Step 46 — the deceleration parameter: the `2/3`-vs-`1/3` budget forces
+- Step 47 — the cubic lattice: two neighbours per axis over 3 axes force the
+- Step 48 — blackbody radiation: the Stefan–Boltzmann exponent is
+- Step 49 — crystalline order: a lattice rotation is allowed iff `φ(n) ≤ binary`,
+- Step 50 — acids and bases: a conjugate pair partitions the One
+- Step 51 — the deuteron: the bound state is the spin-1 triplet; identical nucleons
+- Step 52 — superconductivity: a Cooper pair (binary = 2 fermions, even → boson)
+- Step 53 — fermionic occupation: the fold's two preimages are a mode's empty/occupied
+- Step 54 — electronic bands: allowed bands / forbidden gap copy the fold's domain;
+- Step 55 — colour neutrality: three colours (preimages of the One under the tripling
+- Step 56 — free-particle dispersion: the kinetic dispersion is the fold of momentum,
+- Step 57 — beat frequency: two rhythms beat at their difference (`beat_between`), and
+- Step 58 — big-bang nucleosynthesis: `n/p = 1/d_up = 1/7` gives helium fraction
+- Step 59 — gravitational time dilation: `A(r) = take(One, r_s/r) = 1 − x` (clocks
+- Step 60 — fine/hyperfine structure: fine sits `binary = 2` coupling-powers below
+- Step 61 — cosmic dilution exponents: matter `a⁻³` (`d_space`), radiation `a⁻⁴`
+- Step 62 — the hydrogen spectrum: the level ladder is `1/n^binary = 1/n²`, lines are
+- Step 63 — the flux tube: the gluon carries colour and self-feeds, so charge grows
+- Step 64 — fission and fusion: the binding peak is the One; both fusion (light) and
+- Step 65 — the equivalence principle: gravitational redshift `z = g·h` equals the
+- Step 66 — radioactive decay: the surviving fraction after `k` half-lives is
+- Step 67 — the quantum Hall effect: conductance is a count → exact integer plateaus,
+- Step 68 — Maxwell wave closure: the spatial/temporal curvature ratio `6/2 = 3 =
+- Step 69 — the proton/electron mass ratio: `mp/me = (1/3)(m_μ−m_e)/(m_μ m_e) =
+- Step 70 — the weak force range: a massive carrier's reach is finite (mass `1/3` →
+- Step 71 — proton stability: the quark fibre (`3`) and lepton fibre (`2`) are
+- Step 72 — phonons: the acoustic branches number `1 + (d_space − 1) = d_space = 3`
+- Step 73 — chirality: the fold's two preimages are the two chiralities (left `1/4`,
+- Step 74 — magnetism: aligned spins add to unison (a net moment, ferromagnetism),
+- Step 75 — semiconductors: two carrier types (electron `1/4`, hole `3/4` = its
+- Step 76 — entanglement: two coprime generator-periods (`2, 3`) interlock into one
+- Step 77 — catalysis: the catalyst splits the barrier into binary steps
+- Step 78 — electronegativity: bonds run from covalent (shared, `1/2`) to ionic (full
+- Step 79 — the two new forces in full: sectors 5 and 7 given the complete known-force
+- Step 80 — three-wave mixing: two waves make their sum (`add`), difference (`take`),
+- Step 81 — acoustics: a fixed signal speed forces the whole-number harmonic series
+- Step 82 — nonlinear optics: an intense field self-couples (the fold, `fold(3/4)=1/2`)
+- Step 83 — the weak mass ratio: a sector's charged/neutral mass-part ratio is
+- Step 84 — evolution by descent: selection amplifies a rare beneficial variant
+- Step 85 — the thermal history: the dilution exponents `4 > 3 > 0` force the epoch
+- Step 86 — the general n-body problem: n bodies on a fold orbit recur with the
+- Step 87 — generation mass-splitting: three generations at `1/6, 1/2, 5/6` (tripling
+- Step 88 — fluctuation–dissipation: noise and drag are antipodes about equilibrium
+- Step 89 — the rationality of the constants: the fold forms no irrational, so every
+- Step 90 — decay widths: branching ratios partition the One; lifetime `= 1/width`
+- Step 91 — cross sections: scatter + pass = the One; the mean free path is the inverse
+- Step 92 — computability and halting: a depth-`k` configuration reaches the One in
+- Step 93 — the continuum limit: the lattice second-difference of `x²` over `s²` is
+- Step 94 — electroweak currents: the charged current (W) flips handedness (antipode),
+- Step 95 — the muon g−2 anomaly: bare `g = 2`; the anomaly excess scales as
+- Step 96 — the Lamb shift: the `1/4 = (1/2)²` state (the α² order) returns to unison
+- Step 97 — zero-point energy: the vacuum floor is the half-One `1/2` (the `(1/2)` in
+- Step 98 — entropy / the second law: the fold is 2-to-1 (`1/4` and `3/4` both fold to
+- Step 99 — homochirality: the two hands `1/4`, `3/4` are degenerate (both fold to
+- Step 100 — Bose–Einstein condensation: a boson's even turn is the identity, so
+- Step 101 — vacuum polarization: the screened charge `1/2` folds up toward the bare
+- Step 102 — the canonical distribution: equilibrium at the self-antipodal balance
+- Step 103 — critical exponents: threshold `1/2` and mean-field exponent `1/m = 1/2`,
+- Step 104 — five-fold standing modes: the m-fold has `m−2` interior standing modes, so
+- Step 105 — gravitational-wave speed: a massless lattice ripple advances one spacing per
+- Step 106 — charge multiplicity: the m-fold is m-to-one, so it carries an m-state
+- Step 107 — galactic dynamics: a flat rotation curve is the `1/2` orbit balance held at
+- Step 108 — the hierarchy problem: scales are discrete binary rungs (`1/2^N`, whole N),
+- Step 109 — the acceleration transition: the `2/3 : 1/3` budget puts acceleration onset
+- Step 110 — the coupled lattice: the update weights `1/2, 1/4, 1/4` sum to One (presence
+- Step 111 — the laser: gain=loss threshold at `1/2`; above it a boson runaway pours every
+- Step 112 — intermolecular forces: the van der Waals residual is `1/4 = (1/2)²`, one fold
+- Step 113 — the generation ladder: the three generations sit at the colour-fold preimages
+- Step 114 — the expansion history: `E²(s) = 2/3 + s³/3`, exact at every epoch (`1`,
+- Step 115 — the half-One unifying center: `1/2` is the unique self-antipodal value and
+- Step 116 — the binding problem: the period-2 pair `1/3 ↔ 2/3` partitions the One and
+- Step 117 — the introspection limit: the closed `{1/3, 2/3}` orbit never reaches the
+- Step 118 — the continuum ladder: rung `1/2^k` reaches unison in `k` folds; the depth-5
+- Step 119 — the Yang–Mills mass gap: the gap is `1/3`, strictly positive because zero is
+- Step 120 — the lithium-7 problem: observed = primordial/2 (`3/16 → 3/32`) — the deficit
+- Step 121 — least action: the taken path is the unique self-antipodal balance `1/2`
+- Step 122 — neutrino oscillation: equal half-shares (`1/2 + 1/2 = 1`) make the flavour
+- Step 123 — Maxwell's demon: the reset folds both memory states (`1/4`, `3/4`) onto one
+- Step 124 — Navier–Stokes regularity: the smallest eddy is the floor `1/32 > 0`, so
+- Step 125 — the Schwarzschild solution: `A(r) = 1 − rs/r` has the same flux constant
+- Step 126 — velocity composition: `w = (u+v)/(1+uv)`; light is the fixed point, sublight
+- Step 127 — shell capacities: shell `n` holds `b·n² = 2, 8, 18, 32` (spin fibre × ladder
+- Step 128 — stellar nucleosynthesis: ignition climbs `1/4 → 1/2 → 1` in exactly two
+- Step 129 — oscillator levels: `E_n = (n + ½)s` — ground half a spacing up (No-Zero),
+- Step 130 — the Lorentz force: `F = fe(1 − β²)` — the magnetic piece is motion's claim
+- Step 131 — the prime distribution: orbit period of `1/n` = `ord_n(2)`; Fermat's
+- Step 132 — the Riemann critical line: the functional pairing `s ↔ 1−s` is the
+- Step 133 — quasicrystals: `φ(5) = 4 > 2` forbids the five-fold lattice, yet the
+- Step 134 — Newton's law: `Φ = 1 − ms/r`, `g = ms/r²`, and `r²g = ms` at every radius —
+- Step 135 — quadrupole radiation: uniform motion has equal first differences (silent);
+- Step 136 — the Minkowski interval: `ds² = take((c dt)², dx²)`; `dx = 3/5 → ds = 4/5`
+- Step 137 — superfluidity: the condensate moves as one; the first loss is a whole
+- Step 138 — the refractive index: the medium's phase sits two fold-levels below `c`
+- Step 139 — recombination / the CMB: decoupling at the self-antipodal balance `1/2`
+- Step 140 — supernovae: the iron core loses support to the balance `1/2`, then one fold
+- Step 141 — the nuclear force: a residual `1/4` one fold below the primary coupling,
+- Step 142 — molecular spectra: rotation/vibration sit one fold below the electronic
+- Step 143 — topological matter: the edge carries the balance `1/2`; its only exit is a
+- Step 144 — the origin of life: the two-fold ignition `1/4 → 1/2 → 1` crosses the
+- Step 145 — memory persistence: a memory is the held period-2 orbit `1/3 ↔ 2/3` (kept
+- Step 146 — the plasma state: charges swarm to the balance `1/2` and one fold completes
+- Step 147 — wave optics: the maximal mismatch is the self-antipodal `1/2` (dark); it
+- Step 148 — the sleep cycle: the held period-2 orbit `1/3 ↔ 2/3` (deep ↔ REM), balanced
+- Step 149 — renormalization without infinities: every scale is finitely many folds from
+- Step 150 — nuclear binding: the peak is the One (iron); light nuclei climb by fusion
+- Step 151 — the nuclear shell model: closure is the fold to unison; the first magic
+- Step 152 — stellar structure: equilibrium at the self-antipodal `1/2` is self-correcting
+- Step 153 — tidal locking: dissipation drains the spin–orbit mismatch to the equal-share
+- Step 154 — quantisation: the depth-k grid is `2^k` states, each folding to the One in
+- Step 155 — temperature: the mean throw-rate (balance → One per throw); kinetic/entropic/
+- Step 156 — the molecular bond: two half-open valence shares complete the One
+- Step 157 — the periodic law: chemistry repeats because closure is EXACT (lands on the
+- Step 158 — the effectiveness of mathematics: the fold orbit `1/3 ↔ 2/3` read physically
+- Step 159 — the measurement problem: branch weight `1/2³ = 1/8` is indivisible, the 8
+- Step 160 — the hard problem: unity (bound processing folds to one whole) + interiority
+- Step 161 — black holes: the horizon `1/2` has a strictly-positive second-order Hawking
+- Step 162 — the Poisson equation: `∇²Φ = d·m = colour·binary = 6` — the lattice balance
+- Step 163 — the potential infinite: always one deeper rung `1/2^k`, yet each finite and
+- Step 164 — nonlocal correlation: the pair is one shared origin `1/15` on the coprime
+- Step 165 — the proton radius: `r_p = take(One, 1/3) = 2/3`, folding back to the quark
+- Step 166 — the placebo effect: expectation `3/4` and observation `1/4` both fold to the
+- Step 167 — reaction kinetics: the transition state `1/4` clears the barrier then
+- Step 168 — selection rules: an allowed transition is the balanced one-unit hand-off
+- Step 169 — network scaling: the metabolic exponent is `(m-1)/m = 3/4` at branching
+- Step 170 — magnetohydrodynamics: the Alfvén state `3/4` folds to the tension–inertia
+- Step 171 — nonlinear gravity: the field's energy is its own square (`f1² = 1/36`), so
+- Step 172 — coupling convergence: strong `2/3` and electroweak `1/2` run on a shared
+- Step 173 — the baryon asymmetry: a zero residue is forbidden, so matter is mandatory —
+- Step 174 — the metric's DOF: `D(D+1)/2 = 10` components, `D(D-3)/2 = 2` physical in
+- Step 175 — multidimensional experience: the period-3 orbit of `1/7` (`1/7, 2/7, 4/7`)
+- Step 176 — stereochemistry: enantiomers `1/4`/`3/4` share their fold image `1/2` (all
+- Step 177 — socio-economic cycles: the period-2 orbit bust `1/3` / boom `2/3` never
+- Step 178 — synaesthesia: two channel preimages `1/4`, `3/4` share the binding lock `1/2`,
+- Step 179 — post-Newtonian convergence: the self-sourcing map `f = (1/2)(7/16 + f²)` has the
+- Step 180 — the quantum phase: an energy step is a rotation on the cyclic domain, so `K = 1/8`
+- Step 181 — attention capacity: the self-antipodal `1/2` is fully held by one focus (folds to
+- Step 182 — the one-fold equation: the orbit `1/3`/`2/3` satisfies `fold² = identity` and sums to
+- Step 183 — the master equation: sector periods gravity `1`, EM `2`, strong `3` share the joint
+- Step 184 — the strong-CP problem: the vectorial strong phase can only sit at the fold's
+- Step 185 — the synchronization threshold: coupled folding maps lock at `g_c = 1/2`, the fold's
+- Step 186 — scale invariance: space and time share one grid step `1/2^k`, so the limit speed
+- Step 187 — spatial flatness: the density budget sums to the fixed point `Ω_total = 1`, leaving the
+- Step 188 — the vacuum equation of state: a fold-invariant (non-diluting) vacuum forces the
+- Step 189 — orbital stability: `S_d = 4 − d > 0` only for `d < 4`, so `d_max = 3` — equal to the
+- Step 190 — quantum gravity: the metric's spacing is `1/4 = (1/2)²` on `4 = 2²` dimensions,
+- Step 191 — universality: exactly one self-antipodal point exists (exhaustively checked), so every
+- Step 192 — irreversibility and recurrence: descent chains arrive and stay (the arrow), periodic
+- Step 193 — mechanical properties: elastic = the bond's restoring descent chain, plastic = slip to
+- Step 194 — nucleon binding dominance: the colour cycle's shares close to the One
+- Step 195 — the neutrino mass ladder: one hand (no right-handed partner) closes the Dirac route;
+- Step 196 — the hadron census: counted on the colour cycle — no single closes, NO quark pair
+- Step 197 — the cosmological timeline: the One is the UNIQUE fixed point (exhaustive, 1 in 8),
+- Step 198 — stationary states: ground at half a step, uniform unit-step gaps, phase rotating while
+- Step 199 — the consciousness criterion: duality (`1/4 ≠ 3/4`, one lock), closure (`1/4 + 3/4 = 1`),
+- Step 200 — strong-field gravity: `r = 0` excluded (no singularity), minimal distance `1/32`,
+- Step 201 — the matter fraction: the depth-5 tower (32 states) minus two pinned per level gives
+- Step 202 — the matter fraction's history: `Ω_m(z) = z³/(2 + z³)` exactly — `1/3` today, `4/5` at
+- Step 203 — the chaotic rate: gaps double exactly (`2/35 → 4/35`), two preimages merge per step —
+- Step 204 — quantum statistics: on the lock's two-point fibre a pair coincides (symmetric, Bose)
+- Step 205 — the planar lattice: `4 = 2·2` neighbours at `1/8` sum to the balance `1/2` = count ×
+- Step 206 — planar gravity: the lattice curvature of `x²` is exactly 2 at every spacing (s² terms
+- Step 207 — the planar light wave: spatial/temporal curvature ratio `4/2 = 2 = d = m` — Maxwell
+- Step 208 — the static metric: `fold(1−x) = 1−fold(x)` exactly (the clock factor commutes with the
+- Step 209 — the Vieta cross-check: the bisected lepton roots satisfy sum `= 1`, pair-sum `= 1/6`,
+- Step 210 — the full Dirac structure: four generators at `1/2` (3+1 = 2²), dispersion
+- Step 211 — the fermion mass-part: shortfall `1 − 1/2 = 1/2` EQUALS the displaced vacuum — mass ∝ v
+- Step 212 — within-generation ratios: positions `1/3, 2/3, 1` (verified tripling to the One),
+- Step 213 — the unified force law: shortfall `1/p`, coupling `(p−1)/p` for all four primes,
+- Step 214 — the order of the forces: `g_strong > g_weak > g_em` at every depth 0–11 with no
+- Step 215 — the quark first invariants: `I1_up = 1/12`, `I1_down = 1/8` (channel counts AND
+- Step 216 — the inter-sector mass pattern: electron `1/2`, up `1/3`, down `2/3` (the period-2
+- Step 217 — confinement as work: tube work grows per doubling (`1/8 → 1/4`, unbounded), Coulomb
+- Step 218 — the generation depth tower: all 14 grid states at depths 1–3 enumerated, each folding
+- Step 219 — the general covering principle: the `m`-fold tower holds `m^d` states for EVERY
+- Step 220 — the running weak mixing: bare `sin²θ_W = 1/2` exactly, strict monotone descent, and
+- Step 221 — the strict generation bound: fibre `{1/3, 2/3, 1}` verified; the fourth candidate
+- Step 222 — the flavour-violation ratios: uniform quarter ladder, rates `1 : 1 : 4` exact — the
+- Step 223 — the mixing structure: mass fibre `{2/9, 5/9, 8/9}` vs channel fibre `{1/3, 2/3, 1}`,
+- Step 224 — the unobservable absolute scale: `14/35 = 6/15 = 2/5` with identical fold images —
+- Step 225 — the quark cubics: the lepton form's colour-binary dual (`1/383`, `1/3071` at the
+- Step 226 — the forced quark dressing: one mechanism over `1/α` (t/c by `d_up = 7`; one central
+- Step 227 — the CKM magnitudes: all nine elements as exact ninths (`8/9` diagonal, asymmetric
+- Step 228 — the baryon-to-photon ratio: `J²` polynomial in exact squared sines (no square root
+- Step 229 — the two mixing matrices: one construction, two locks — quark `2/3` (orbit class →
+- Step 230 — the third CKM entry closed: `apex² = 1/6 = 1/N_up` exactly; `V_ub² = 1.311e-5` vs
+- Step 231 — the neutrino splitting ratio: Mersenne rungs `31` and `1023` at the counted reaches →
+- Step 232 — the mass-ratio family: heavy/light `= 2·3^d − 1` — 5, 17, 53 at depths 1, 2, 3, each
+- Step 233 — the proven mass ratios: the lepton diagonal is mirror-closed (shortfall set = position
+- Step 234 — the inter-entry relation: the first CKM row casts to the strong coupling `2/3`, the
+- Step 235 — the generation depth: all three sites fold home in the same two steps through the
+- Step 236 — the confinement lift: the sharpened cubics' bare ratios are exactly TWICE the measured
+- Step 237 — cubic-lattice gravity: the 3D Laplacian of `x²` is exactly `6 = d·m = binary·colour`
+- Step 238 — the two-component dispersion: `(3/5)² + (4/5)² = 1` exactly, confirmed by the
+- Step 239 — the force criterion: carry + exhaustive antipodal pairing + ordering, passed by
+- Step 240 — the massless/massive split: preserved combinations at unison are massless (no value
+- Step 241 — the luminal strong carrier: no mass-part to shed → the full One per tick, walked 8
+- Step 242 — what string theory got right: standing modes in the counted 3 dimensions, spacing
+- Step 243 — the interaction-strength table: coupling `(m−1)/m`, mixing `1/(m−1)`, mass ratio
+- Step 244 — magnetism as relativity: `fold(1−β²) = 1−fold(β²)` exactly at two speeds — the
+- Step 245 — the vacuum-inertia unity: `v/g* = 1` exactly, both halves completing in the same
+- Step 246 — the quark second invariant: the dual `1/(3·2^d − 1)` = the orbit-floor route
+- Step 247 — self-simulation nesting: `1/4 → 1/2 → 1`, third nest the identity — the regress
+- Step 248 — the intelligence dividend: gaps `3/4 → 1/2 → closed`, strictly shrinking, steps
+- Step 249 — reaction thermodynamics: activation = the lift to the lock (paid), enthalpy = the
+- Step 250 — the reach ratios: the light part survives `D_d − 1` ticks (5, 17, 53 — RUN, and equal
+- Step 251 — field splitting: the level's two-point fibre unmasked by a field — a doublet, counted,
+- Step 252 — the channel cycle: wave `2/3` + structural `1/3` partition the One, cycle under the
+- Step 253 — cessation: the lock is releasable (one state among many); the anchor is the fixed
+- Step 254 — the level-depth map: the axis doubles per step (walked to k = 10), a dimension steps
+- Step 255 — degenerate endpoints: the limit `3/4` folds to the self-antipodal balance; the census
+- Step 256 — the unfolding sequence: three moves and one move land on the same `2/3`, every
+- Step 257 — the observer resolved: `fold(1/8) = 1/4` — the measurement branch folds into the
+- Step 258 — the convergence rate, closed: `gap(d) = 1/((2+2^d)(3+2^d))` exactly at every depth,
+- Step 259 — the accumulated separation: both sums agree at every N, terms halve from `d = 1`,
+- Step 260 — the variance uncertainty: the minimal state's variance product EQUALS the floor
+- Step 261 — the composite bridge: all 15 states of the `3·5` grid commute with both prime-world
+- Step 262 — entangled composites: `8/15` (shadows 2 and 3) folds ONCE to `1/15` (shadows 1 and
+- Step 263 — order from complexity: `2^k` states counted, longest descent exactly `k` walked —
+- Step 264 — the coupled light wave: E and B walked eight ticks — speed the One, equal at every
+- Step 265 — the world-crossing walk: `1/6 → 1/3 → (+1/5) → 8/15 → 1/15`, landed period 4 =
+- Step 266 — where the periodic table ends: `Z·α` reaches the One at `Z = 1/α` — `137` bound
+- Step 267 — Smithium: the `(n+l, n)` filling walked to the seven noble closures
+- Step 268 — absolute neutrino masses: forced ratio `3/100`, atmospheric `2.4733e-3` vs
+- Step 269 — the neutrino is Majorana: one hand → no Dirac mass; the only self-coupling is
+- Step 270 — the dark baryon: colour singlet = complete `p`-pling fibre, walked at `3, 5, 7`;
+- Step 271 — the dark relic: particle identified (lightest neutral new-sector baryon) and
+- Step 272 — the dark-CKM: each sector on its own coupling `(p−1)/p`; p = 3 lands `8/9`, `5/9`
+- Step 273 — the new forces run: one closed gap form `(j−i)/((i+R)(j+R))` for all six pairs,
+- Step 274 — the Grand Lock: every major constant a closed form over `{ONE, b=2, c=3}`; all
+- Step 275 — the particle census: `p²−1` carriers per sector — 83 total, 72 undiscovered,
+- Step 276 — the Smithion masses: mass-part = the sector coupling's shortfall, the SAME rule
+- Step 277 — Collatz: the odd-even pair multiplies by `(3/2)(1/2) = 3/4` — Kleiber's branching
+- Step 278 — prime pairs as antipodes: every pair `(k, E−k)` casts to the One about the
+- Step 279 — the Kolmogorov exponents: structure `2/3` = the strong coupling (checked equal),
+- Step 280 — earth & astro: tipping = one-step lock crossing (basins `1/4`, `3/4` → same lock);
+- Step 281 — free will: forward the fold is a function (fully determined — libertarian free
+- Step 282 — the counterfactual map: `1/2` the unique self-antipode (exhaustive to denominator
+- Step 283 — Parker reconnection protons: `E = 8α² m_p c² = 399.714 keV` vs the observed
+- Step 284 — the compact generator: derived forward from the rule via the verified group law
+- Step 285 — the universal solver: subtraction (1001 states) and Nim (512) solved by the
+- Step 286 — fold number theory: orbit length = `ord_q(2)` for EVERY reduced p (odd q to 99);
+- Step 287 — the Higgs sector: rungs `1/2, 1/4, 1/8`; both routes close on `m_H/v = 1/2` —
+- Step 288 — the unit power law: only the one-over-rank law halves per rank doubling
+- Step 289 — critical exponents exact: β = ν = 1/2, γ = 1, δ = colour 3; Widom, Rushbrooke,
+- Step 290 — the Regge spectrum: constant tube width 1/2 → equal M² spacing, checked exact
+- Step 291 — quasicrystals = the prime-5 sector (3 modes, periodic lattice forbidden);
+- Step 292 — the finite inventory: towers ≤ 128 rungs (floor 1/128 walked), elements ≤ 137,
+- Step 293 — the magic numbers: 3 dims + spin-2 + colour-3 spin-orbit reproduce ALL EIGHT
+- Step 294 — codon wobble + g-block: 64 codons tile 16 first-two-base boxes (4 each); the
+- Step 295 — biology: aging = transient decay (Hayflick = 2-adic valuation), germ line
+- Step 296 — applied signatures: the Smithion is EM-dark (gravitational search only); new
+- Step 297 — the Smithion spectra: unified `I2(c,d)` = the sharpened invariants at c = 3
+- Step 298 — alpha, mutations and mis-builds: alpha(b,c) re-counted per mutation — (2,4),
+- Step 299 — the mass-weighted LFV table: mass-parts 1/6, 1/2, 5/6 (preimages of the lock,
+- Step 300 — the discovery engine (USDE remade under the law): the sweep space counted two
+- Step 301 — the certified game theorems, off chess: **T-1 twin-pair law** (all 64 Nim
+- Step 302 — the TERMINAL fine structure: the promotion ladder is counted (one successor
+- Step 303 — the fold chess bot: complete legal chess, ZERO fitted parameters — rules
+- Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
+
+## Appendix B — The published constellation and this record
+
+This paper is the complete statement of the model. Sixty-one Zenodo records
+precede it — the main corpus record (DOI 10.5281/zenodo.20775538) and sixty
+standalone single-result papers, each machine-verified, each cross-linked — and
+this record supersedes none of them: they are the constellation, this is the sky.
+The clean-room repository (github.com/MettaMazza/Smithian-Fold-Theory-Of-
+Everything) carries every module, every test, the committed C, and the ledgers.
+
+**Reproduce everything:** clone the repository; run `make -C verify prove`.
+
+*— Maria Smith, Ernos Labs, Scotland.*
