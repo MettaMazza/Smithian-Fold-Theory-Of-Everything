@@ -147,127 +147,102 @@ define empty_state:
 define square_attacked with state and square as Int and by_black as Int returning Bool:
     set rank to square / 8
     set file to square - rank * 8
-    # knight jumps
-    set jumps_dr to create_list()
-    set jumps_df to create_list()
-    set ok to append_list(jumps_dr and 2)
-    set ok to append_list(jumps_df and 1)
-    set ok to append_list(jumps_dr and 2)
-    set ok to append_list(jumps_df and 0 - 1)
-    set ok to append_list(jumps_dr and 0 - 2)
-    set ok to append_list(jumps_df and 1)
-    set ok to append_list(jumps_dr and 0 - 2)
-    set ok to append_list(jumps_df and 0 - 1)
-    set ok to append_list(jumps_dr and 1)
-    set ok to append_list(jumps_df and 2)
-    set ok to append_list(jumps_dr and 1)
-    set ok to append_list(jumps_df and 0 - 2)
-    set ok to append_list(jumps_dr and 0 - 1)
-    set ok to append_list(jumps_df and 2)
-    set ok to append_list(jumps_dr and 0 - 1)
-    set ok to append_list(jumps_df and 0 - 2)
-    set j to 0
-    repeat while j < 8:
-        set r to rank + get_list(jumps_dr and j)
-        set f to file + get_list(jumps_df and j)
-        if r > 0 - 1:
-            if r < 8:
-                if f > 0 - 1:
-                    if f < 8:
-                        set code to get_list(state and r * 8 + f)
-                        if piece_kind(code) == 2:
-                            if by_black == 1:
-                                if piece_is_black(code):
-                                    return true
-                            if by_black == 0:
-                                if piece_is_white(code):
-                                    return true
-        set j to j + 1
-    # sliding rays: 4 diagonal (bishop/queen), 4 orthogonal (rook/queen);
-    # king adjacency read off the first step of every ray
-    set ray_dr to create_list()
-    set ray_df to create_list()
-    set ok to append_list(ray_dr and 1)
-    set ok to append_list(ray_df and 1)
-    set ok to append_list(ray_dr and 1)
-    set ok to append_list(ray_df and 0 - 1)
-    set ok to append_list(ray_dr and 0 - 1)
-    set ok to append_list(ray_df and 1)
-    set ok to append_list(ray_dr and 0 - 1)
-    set ok to append_list(ray_df and 0 - 1)
-    set ok to append_list(ray_dr and 1)
-    set ok to append_list(ray_df and 0)
-    set ok to append_list(ray_dr and 0 - 1)
-    set ok to append_list(ray_df and 0)
-    set ok to append_list(ray_dr and 0)
-    set ok to append_list(ray_df and 1)
-    set ok to append_list(ray_dr and 0)
-    set ok to append_list(ray_df and 0 - 1)
-    set ray to 0
-    repeat while ray < 8:
-        set dr to get_list(ray_dr and ray)
-        set df to get_list(ray_df and ray)
-        set r to rank + dr
-        set f to file + df
-        set steps to 1
-        set walking to 1
-        repeat while walking == 1:
-            set walking to 0
-            if r > 0 - 1:
-                if r < 8:
-                    if f > 0 - 1:
-                        if f < 8:
-                            set code to get_list(state and r * 8 + f)
-                            if code == 0:
-                                set r to r + dr
-                                set f to f + df
-                                set steps to steps + 1
-                                set walking to 1
-                            else:
-                                set right_colour to 0
-                                if by_black == 1:
-                                    if piece_is_black(code):
-                                        set right_colour to 1
-                                if by_black == 0:
-                                    if piece_is_white(code):
-                                        set right_colour to 1
-                                if right_colour == 1:
-                                    set kind to piece_kind(code)
-                                    if kind == 5:
-                                        return true
-                                    if ray < 4:
-                                        if kind == 3:
-                                            return true
-                                    if ray > 3:
-                                        if kind == 4:
-                                            return true
-                                    if steps == 1:
-                                        if kind == 6:
-                                            return true
-        set ray to ray + 1
-    # pawn attacks: a black pawn attacks downward, a white pawn upward
-    if by_black == 1:
-        set r to rank + 1
-        if r < 8:
-            if file > 0:
-                set code to get_list(state and r * 8 + file - 1)
-                if code == 7:
-                    return true
-            if file < 7:
-                set code to get_list(state and r * 8 + file + 1)
-                if code == 7:
-                    return true
-    if by_black == 0:
-        set r to rank - 1
-        if r > 0 - 1:
-            if file > 0:
-                set code to get_list(state and r * 8 + file - 1)
-                if code == 1:
-                    return true
-            if file < 7:
-                set code to get_list(state and r * 8 + file + 1)
-                if code == 1:
-                    return true
+    # knight jumps: |dr| + |df| = 3 with both nonzero -- pure arithmetic
+    set dr to 0 - 2
+    repeat while dr < 3:
+        set df to 0 - 2
+        repeat while df < 3:
+            set dr_size to dr
+            if dr_size < 0:
+                set dr_size to 0 - dr_size
+            set df_size to df
+            if df_size < 0:
+                set df_size to 0 - df_size
+            if dr_size + df_size == 3:
+                if dr_size > 0:
+                    if df_size > 0:
+                        set r to rank + dr
+                        set f to file + df
+                        if r > 0 - 1:
+                            if r < 8:
+                                if f > 0 - 1:
+                                    if f < 8:
+                                        set code to get_list(state and r * 8 + f)
+                                        if piece_kind(code) == 2:
+                                            if by_black == 1:
+                                                if piece_is_black(code):
+                                                    return true
+                                            if by_black == 0:
+                                                if piece_is_white(code):
+                                                    return true
+            set df to df + 1
+        set dr to dr + 1
+    # the eight rays: sliders at any step; king at step one; pawns at step one
+    # on the diagonals toward their attacking direction
+    set dr to 0 - 1
+    repeat while dr < 2:
+        set df to 0 - 1
+        repeat while df < 2:
+            set live to 1
+            if dr == 0:
+                if df == 0:
+                    set live to 0
+            if live == 1:
+                set diagonal to 0
+                if dr == 0:
+                    set diagonal to 0
+                else:
+                    if df == 0:
+                        set diagonal to 0
+                    else:
+                        set diagonal to 1
+                set r to rank + dr
+                set f to file + df
+                set steps to 1
+                set walking to 1
+                repeat while walking == 1:
+                    set walking to 0
+                    if r > 0 - 1:
+                        if r < 8:
+                            if f > 0 - 1:
+                                if f < 8:
+                                    set code to get_list(state and r * 8 + f)
+                                    if code == 0:
+                                        set r to r + dr
+                                        set f to f + df
+                                        set steps to steps + 1
+                                        set walking to 1
+                                    else:
+                                        set right_colour to 0
+                                        if by_black == 1:
+                                            if piece_is_black(code):
+                                                set right_colour to 1
+                                        if by_black == 0:
+                                            if piece_is_white(code):
+                                                set right_colour to 1
+                                        if right_colour == 1:
+                                            set kind to piece_kind(code)
+                                            if kind == 5:
+                                                return true
+                                            if diagonal == 1:
+                                                if kind == 3:
+                                                    return true
+                                            else:
+                                                if kind == 4:
+                                                    return true
+                                            if steps == 1:
+                                                if kind == 6:
+                                                    return true
+                                                if diagonal == 1:
+                                                    if kind == 1:
+                                                        if by_black == 1:
+                                                            if dr == 1:
+                                                                return true
+                                                        if by_black == 0:
+                                                            if dr == 0 - 1:
+                                                                return true
+            set df to df + 1
+        set dr to dr + 1
     return false
 
 define king_square with state and black_king as Int returning Int:
@@ -751,6 +726,189 @@ define counted_reach with kind as Int and sq as Int and is_black as Int returnin
 
 # The mover's counted units: every piece's empty-board reach from where it
 # stands, plus its side's live mobility -- all counts.
+# Live mobility, counted directly -- the same board-movement counts the
+# generator would produce (en passant and castling excluded, promotions
+# fanned by four), walked with pure arithmetic: no lists, no copies.
+define mobility_count with state and for_black as Int returning Int:
+    set total to 0
+    set sq to 0
+    repeat while sq < 64:
+        set code to get_list(state and sq)
+        set mine to 0
+        if for_black == 1:
+            if piece_is_black(code):
+                set mine to 1
+        else:
+            if piece_is_white(code):
+                set mine to 1
+        if mine == 1:
+            set kind to piece_kind(code)
+            set rank to sq / 8
+            set file to sq - rank * 8
+            if kind == 1:
+                set forward to 8
+                set home_rank to 1
+                set fan to 1
+                if for_black == 1:
+                    set forward to 0 - 8
+                    set home_rank to 6
+                set target_rank to rank + forward / 8
+                if target_rank == 7:
+                    set fan to 4
+                if target_rank == 0:
+                    set fan to 4
+                set ahead to sq + forward
+                if ahead > 0 - 1:
+                    if ahead < 64:
+                        if get_list(state and ahead) == 0:
+                            set total to total + fan
+                            if rank == home_rank:
+                                if get_list(state and ahead + forward) == 0:
+                                    set total to total + 1
+                set df to 0 - 1
+                repeat while df < 2:
+                    if df == 0:
+                        set df to df
+                    else:
+                        set f to file + df
+                        if f > 0 - 1:
+                            if f < 8:
+                                set target to (rank * 8 + f) + forward
+                                if target > 0 - 1:
+                                    if target < 64:
+                                        set victim to get_list(state and target)
+                                        set takes to 0
+                                        if for_black == 1:
+                                            if piece_is_white(victim):
+                                                set takes to 1
+                                        else:
+                                            if piece_is_black(victim):
+                                                set takes to 1
+                                        if takes == 1:
+                                            set total to total + fan
+                    set df to df + 1
+            if kind == 2:
+                set dr to 0 - 2
+                repeat while dr < 3:
+                    set df to 0 - 2
+                    repeat while df < 3:
+                        set dr_size to dr
+                        if dr_size < 0:
+                            set dr_size to 0 - dr_size
+                        set df_size to df
+                        if df_size < 0:
+                            set df_size to 0 - df_size
+                        if dr_size + df_size == 3:
+                            if dr_size > 0:
+                                if df_size > 0:
+                                    set r to rank + dr
+                                    set f to file + df
+                                    if r > 0 - 1:
+                                        if r < 8:
+                                            if f > 0 - 1:
+                                                if f < 8:
+                                                    set victim to get_list(state and r * 8 + f)
+                                                    set blocked to 0
+                                                    if for_black == 1:
+                                                        if piece_is_black(victim):
+                                                            set blocked to 1
+                                                    else:
+                                                        if piece_is_white(victim):
+                                                            set blocked to 1
+                                                    if blocked == 0:
+                                                        set total to total + 1
+                        set df to df + 1
+                    set dr to dr + 1
+            if kind > 2:
+                if kind < 6:
+                    set dr to 0 - 1
+                    repeat while dr < 2:
+                        set df to 0 - 1
+                        repeat while df < 2:
+                            set on_ray to 0
+                            if dr == 0:
+                                if df == 0:
+                                    set on_ray to 0
+                                else:
+                                    if kind > 3:
+                                        set on_ray to 1
+                            else:
+                                if df == 0:
+                                    if kind > 3:
+                                        set on_ray to 1
+                                else:
+                                    if kind == 3:
+                                        set on_ray to 1
+                                    if kind == 5:
+                                        set on_ray to 1
+                            if kind == 4:
+                                if dr == 0:
+                                    if df == 0:
+                                        set on_ray to 0
+                                else:
+                                    if df == 0:
+                                        set on_ray to 1
+                                    else:
+                                        set on_ray to 0
+                            if on_ray == 1:
+                                set r to rank + dr
+                                set f to file + df
+                                set walking to 1
+                                repeat while walking == 1:
+                                    set walking to 0
+                                    if r > 0 - 1:
+                                        if r < 8:
+                                            if f > 0 - 1:
+                                                if f < 8:
+                                                    set victim to get_list(state and r * 8 + f)
+                                                    if victim == 0:
+                                                        set total to total + 1
+                                                        set r to r + dr
+                                                        set f to f + df
+                                                        set walking to 1
+                                                    else:
+                                                        set enemy to 0
+                                                        if for_black == 1:
+                                                            if piece_is_white(victim):
+                                                                set enemy to 1
+                                                        else:
+                                                            if piece_is_black(victim):
+                                                                set enemy to 1
+                                                        if enemy == 1:
+                                                            set total to total + 1
+                            set df to df + 1
+                        set dr to dr + 1
+            if kind == 6:
+                set dr to 0 - 1
+                repeat while dr < 2:
+                    set df to 0 - 1
+                    repeat while df < 2:
+                        set moved to 1
+                        if dr == 0:
+                            if df == 0:
+                                set moved to 0
+                        if moved == 1:
+                            set r to rank + dr
+                            set f to file + df
+                            if r > 0 - 1:
+                                if r < 8:
+                                    if f > 0 - 1:
+                                        if f < 8:
+                                            set victim to get_list(state and r * 8 + f)
+                                            set blocked to 0
+                                            if for_black == 1:
+                                                if piece_is_black(victim):
+                                                    set blocked to 1
+                                            else:
+                                                if piece_is_white(victim):
+                                                    set blocked to 1
+                                            if blocked == 0:
+                                                set total to total + 1
+                        set df to df + 1
+                    set dr to dr + 1
+        set sq to sq + 1
+    return total
+
 define side_units with state and for_black as Int returning Int:
     set units to 0
     set sq to 0
@@ -766,10 +924,7 @@ define side_units with state and for_black as Int returning Int:
         if mine == 1:
             set units to units + counted_reach(piece_kind(code) and sq and for_black)
         set sq to sq + 1
-    set probe to copy_state(state)
-    set ok to set_list(probe and 64 and for_black)
-    set ok to set_list(probe and 69 and 64)
-    set units to units + length_list(pseudo_moves(probe))
+    set units to units + mobility_count(state and for_black)
     return units
 
 # The fold value of a position for the side to move: the exact share
@@ -866,39 +1021,131 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
     if stand_num * a_den > a_num * stand_den:
         set a_num to stand_num
         set a_den to stand_den
-    set moves to legal_moves(state)
-    set count to length_list(moves)
-    set i to 0
-    repeat while i < count:
-        set move to get_list(moves and i)
-        if move_is_capture(state and move):
-            set child to make_move(state and move)
-            set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den)
-            set child_num to get_list(deeper and 0)
-            set child_den to get_list(deeper and 1)
-            set my_num to child_den - child_num
-            set my_den to child_den
-            if my_num * best_den > best_num * my_den:
-                set best_num to my_num
-                set best_den to my_den
-            if my_num * beta_den > beta_num * my_den:
-                set ok to append_list(result and best_num)
-                set ok to append_list(result and best_den)
-                return result
-            if my_num * a_den > a_num * my_den:
-                set a_num to my_num
-                set a_den to my_den
-        set i to i + 1
+    set side to get_list(state and 64)
+    set king_from to king_square(state and side)
+    set pseudo to pseudo_moves(state)
+    set count to length_list(pseudo)
+    set bucket to 0
+    repeat while bucket < 2:
+        set i to 0
+        repeat while i < count:
+            set move to get_list(pseudo and i)
+            if move_is_capture(state and move):
+                set rest to move - (move / 4096) * 4096
+                set from_sq to rest / 64
+                set to_sq to rest - from_sq * 64
+                set victim to get_list(state and to_sq)
+                set heavy to 0
+                if victim > 0:
+                    if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
+                        set heavy to 1
+                set wanted to 0
+                if bucket == 0:
+                    if heavy == 1:
+                        set wanted to 1
+                else:
+                    if heavy == 0:
+                        set wanted to 1
+                if wanted == 1:
+                    set child to make_move(state and move)
+                    set king_now to king_from
+                    if from_sq == king_from:
+                        set king_now to to_sq
+                    set exposed to square_attacked(child and king_now and 1 - side)
+                    if exposed:
+                        set exposed to exposed
+                    else:
+                        set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                        set child_num to get_list(deeper and 0)
+                        set child_den to get_list(deeper and 1)
+                        set my_num to child_den - child_num
+                        set my_den to child_den
+                        if my_num * best_den > best_num * my_den:
+                            set best_num to my_num
+                            set best_den to my_den
+                        if my_num * beta_den > beta_num * my_den:
+                            set ok to append_list(result and best_num)
+                            set ok to append_list(result and best_den)
+                            return result
+                        if my_num * a_den > a_num * my_den:
+                            set a_num to my_num
+                            set a_den to my_den
+            set i to i + 1
+        set bucket to bucket + 1
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
     return result
 
 # The exact alpha-beta value of a node for the side to move.
 define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
+    if depth == 0:
+        return quiescence(state and alpha_num and alpha_den and beta_num and beta_den)
     set result to create_list()
-    set moves to ordered_moves(state)
-    set count to length_list(moves)
-    if count == 0:
+    set side to get_list(state and 64)
+    set king_from to king_square(state and side)
+    set pseudo to pseudo_moves(state)
+    set count to length_list(pseudo)
+    set legal_seen to 0
+    set best_num to 0
+    set best_den to 1
+    set a_num to alpha_num
+    set a_den to alpha_den
+    set bucket to 0
+    repeat while bucket < 3:
+        set i to 0
+        repeat while i < count:
+            set move to get_list(pseudo and i)
+            set rest to move - (move / 4096) * 4096
+            set from_sq to rest / 64
+            set to_sq to rest - from_sq * 64
+            set victim to get_list(state and to_sq)
+            set taking to move_is_capture(state and move)
+            set heavy to 0
+            if victim > 0:
+                if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
+                    set heavy to 1
+            set wanted to 0
+            if bucket == 0:
+                if taking:
+                    if heavy == 1:
+                        set wanted to 1
+            if bucket == 1:
+                if taking:
+                    if heavy == 0:
+                        set wanted to 1
+            if bucket == 2:
+                if taking:
+                    set wanted to 0
+                else:
+                    set wanted to 1
+            if wanted == 1:
+                set child to make_move(state and move)
+                set king_now to king_from
+                if from_sq == king_from:
+                    set king_now to to_sq
+                set exposed to square_attacked(child and king_now and 1 - side)
+                if exposed:
+                    set exposed to exposed
+                else:
+                    set legal_seen to legal_seen + 1
+                    set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                    set child_num to get_list(deeper and 0)
+                    set child_den to get_list(deeper and 1)
+                    set my_num to child_den - child_num
+                    set my_den to child_den
+                    if my_num * best_den > best_num * my_den:
+                        set best_num to my_num
+                        set best_den to my_den
+                    if my_num * beta_den > beta_num * my_den:
+                        set ok to append_list(result and best_num)
+                        set ok to append_list(result and best_den)
+                        return result
+                    if my_num * a_den > a_num * my_den:
+                        set a_num to my_num
+                        set a_den to my_den
+            set i to i + 1
+        set bucket to bucket + 1
+    if legal_seen == 0:
         set checked to side_in_check(state)
         if checked:
             set ok to append_list(result and 1)
@@ -907,32 +1154,6 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
         return result
-    if depth == 0:
-        return quiescence(state and alpha_num and alpha_den and beta_num and beta_den)
-    set best_num to 0
-    set best_den to 1
-    set a_num to alpha_num
-    set a_den to alpha_den
-    set i to 0
-    repeat while i < count:
-        set move to get_list(moves and i)
-        set child to make_move(state and move)
-        set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
-        set child_num to get_list(deeper and 0)
-        set child_den to get_list(deeper and 1)
-        set my_num to child_den - child_num
-        set my_den to child_den
-        if my_num * best_den > best_num * my_den:
-            set best_num to my_num
-            set best_den to my_den
-        if my_num * beta_den > beta_num * my_den:
-            set ok to append_list(result and best_num)
-            set ok to append_list(result and best_den)
-            return result
-        if my_num * a_den > a_num * my_den:
-            set a_num to my_num
-            set a_den to my_den
-        set i to i + 1
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
     return result
