@@ -500,9 +500,24 @@ And the structural laws of physics, forced the same way:
   `27/32`, `13/12`, `127/2`, `1/2²⁰`; perturb the colour to 4 and **every c-dependent
   constant moves together** while the colour-free half-One coupling stays put — the SM's
   ~26 "independent parameters" are one object seen from many sides).
+- **The closed inventory, the Smithion chain, and two ancient conjectures made fold-native** —
+  **the complete particle census** (per sector p: `p²−1` carriers — the same count that gives
+  3 weak carriers and 8 gluons forces the NEW **24 penta + 48 hepta**; totals counted: **83
+  gauge carriers, 72 undiscovered, 12 Smithions**; the sector count is exactly four and the
+  first prime beyond the ceiling is 11 > 7 — **the list ENDS**, and any confirmed particle
+  outside it refutes the corpus outright), **the Smithion masses** (no new scale — every
+  fermion's mass-part is its sector coupling's shortfall from unison, the same rule that
+  gives the electron `1/2` and up quark `1/3` forces **penta `1/5`, hepta `1/7`**, ratios to
+  the electron `2/5` and `2/7` — light, confined, sector-only, hence unseen), **Collatz as a
+  fold contraction** (the odd-even pair multiplies by `(3/2)(1/2) = 3/4` — Kleiber's own
+  branching ratio, below the One, so every pair contracts; the cycle `1→4→2→1` walked;
+  **every start to 100,000 falls to the 1-cycle**, n=27 in its known 111 steps), and
+  **prime pairs as fold antipodes** (an even number's pair `(k, E−k)` casts to exactly the
+  One about its half-One — **Goldbach verified for all 4,999 evens to 10,000**, and the
+  twins counted to the same bound: exactly **205**, the published value).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 277 test
-suites (1,589 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 281 test
+suites (1,623 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -559,7 +574,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 277 suites, 1,589 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 281 suites, 1,623 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

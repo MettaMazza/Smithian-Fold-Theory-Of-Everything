@@ -1,0 +1,131 @@
+# ============================================================================
+#  PRIME PAIRS AS FOLD ANTIPODES  --  Goldbach and the twins about the half-One.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Goldbach's conjecture has stood unproven since 1742 because arithmetic gives
+#  the pair (p, E-p) no structure to stand on. The fold does: the antipodal
+#  involution sends a part to its complement and the two sum to the One, with
+#  exactly ONE self-antipodal point -- the half-One (the same lock that forces
+#  Majorana neutrinos and maximal CP violation). Scaled to an even number E,
+#  the pair (k, E-k) is an antipodal pair about E's own half-One, E/2. So
+#  Goldbach IS the statement that every even number's half-One carries at
+#  least one prime antipodal pair, and the twins (p, p+2) are the closest odd
+#  antipodal neighbours. The form of both problems is fold-native.
+#
+#  ── DERIVATION ─ (check every line; the frame traced, the census run) ────────
+#  THE FRAME: the half-One is self-antipodal (1 - 1/2 = 1/2, the unique such
+#  point), and a pair (k, E-k) scaled by E is the antipodal pair k/E, (E-k)/E
+#  summing to exactly the One -- walked on E = 10, k = 3, and re-checked on
+#  every counted pair of the spot censuses. THE CENSUS (exact integer walk,
+#  trial-division primality): every even E in [4, 10000] is checked -- each
+#  has at least one prime antipodal pair (4999 evens, zero failures). Spot
+#  counts: E = 12 carries exactly 1 pair (5+7), E = 100 exactly 6. THE TWINS:
+#  the pairs (p, p+2) with both prime are counted to the same bound: 205.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is the frame (antipodal pairs about the half-One, traced
+#  to the One) and the exact census: 4999/4999 evens carry a prime pair, 205
+#  twin pairs below 10^4 (the published count is 205). Comparison: Goldbach is
+#  machine-verified far beyond this bound (to 4x10^18) with no counterexample,
+#  and the twin count keeps growing at every bound ever checked -- both
+#  consistent with what the antipodal frame requires.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The half-One is self-antipodal: 1 - 1/2 = 1/2 -- the unique fixed point
+# of the antipodal involution, the midpoint every even number scales to.
+define half_one_self_antipodal returning Bool:
+    set one to fraction_from_whole_number(1)
+    set half to fraction_from_ratio(1 and 2)
+    set antipode to fraction_subtract(one and half)
+    set half_twin to fraction_from_ratio(1 and 2)
+    return fraction_is_equal(antipode and half_twin)
+
+# The antipodal frame at even E: the pair (k, E-k) scaled by E sums to the
+# One exactly -- k/E + (E-k)/E = 1.
+define pair_casts_to_one with e as Int and k as Int returning Bool:
+    set near_side to fraction_from_ratio(k and e)
+    set far_side to fraction_from_ratio(e - k and e)
+    set total to fraction_add(near_side and far_side)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+# Primality by exact trial division (divisors to the square root).
+define whole_prime with n as Int returning Bool:
+    if n < 2:
+        return false
+    set divisor to 2
+    repeat while divisor * divisor < n + 1:
+        set quotient to n / divisor
+        set remainder to n - quotient * divisor
+        if remainder == 0:
+            return false
+        set divisor to divisor + 1
+    return true
+
+# One even number's smallest prime antipodal pair: the least prime p with
+# E - p also prime (0 if none exists below the midpoint -- never happens).
+define smallest_prime_pair with e as Int returning Int:
+    set p to 2
+    repeat while p < e / 2 + 1:
+        set p_prime to whole_prime(p)
+        if p_prime:
+            set partner_prime to whole_prime(e - p)
+            if partner_prime:
+                set casts to pair_casts_to_one(e and p)
+                if casts:
+                    return p
+        set p to p + 1
+    return 0
+
+# The full pair count of one even E: every prime p <= E/2 with E - p prime,
+# each found pair re-checked to cast to the One.
+define prime_pair_count with e as Int returning Int:
+    set count to 0
+    set p to 2
+    repeat while p < e / 2 + 1:
+        set p_prime to whole_prime(p)
+        if p_prime:
+            set partner_prime to whole_prime(e - p)
+            if partner_prime:
+                set casts to pair_casts_to_one(e and p)
+                if casts:
+                    set count to count + 1
+        set p to p + 1
+    return count
+
+# GOLDBACH to the bound: every even E in [4, bound] carries at least one
+# prime antipodal pair about its half-One.
+define goldbach_holds_to with bound as Int returning Bool:
+    set all_hold to true
+    set e to 4
+    repeat while e < bound + 1:
+        set found to smallest_prime_pair(e)
+        if found > 0:
+            set all_hold to all_hold
+        else:
+            set all_hold to false
+        set e to e + 2
+    return all_hold
+
+# The count of evens the census walks in [4, bound].
+define goldbach_census_size with bound as Int returning Int:
+    return (bound - 4) / 2 + 1
+
+# THE TWINS: pairs (p, p+2), both prime -- the closest odd antipodal
+# neighbours -- counted to the bound.
+define twin_pair_count_to with bound as Int returning Int:
+    set count to 0
+    set p to 3
+    repeat while p < bound - 1:
+        set p_prime to whole_prime(p)
+        if p_prime:
+            set partner_prime to whole_prime(p + 2)
+            if partner_prime:
+                set count to count + 1
+        set p to p + 2
+    return count

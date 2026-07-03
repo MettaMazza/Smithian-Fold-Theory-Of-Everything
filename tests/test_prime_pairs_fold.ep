@@ -1,0 +1,24 @@
+import "../constants/prime_pairs_fold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== prime pairs as fold antipodes: Goldbach and the twins ==="
+    set ok to expect_bool("THE FRAME: the half-One is self-antipodal (1 - 1/2 = 1/2)" and half_one_self_antipodal())
+    set ok to expect_bool("the pair (3, 7) about 10's half-One casts to the One" and pair_casts_to_one(10 and 3))
+    set ok to expect_equal("the census size: evens in [4, 10000]" and int_to_string(goldbach_census_size(10000)) and "4999")
+    set ok to expect_bool("GOLDBACH: every even in [4, 10000] carries a prime antipodal pair" and goldbach_holds_to(10000))
+    set ok to expect_equal("the fewest pairs never dip to zero: E=12 carries exactly 1 (5+7)" and int_to_string(prime_pair_count(12)) and "1")
+    set ok to expect_equal("E=100 carries 6 prime pairs" and int_to_string(prime_pair_count(100)) and "6")
+    set ok to expect_equal("THE TWINS: pairs (p, p+2) below 10^4 (published: 205)" and int_to_string(twin_pair_count_to(10000)) and "205")
+    display "=== done ==="
+    return 0

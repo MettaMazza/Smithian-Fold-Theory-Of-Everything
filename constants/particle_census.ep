@@ -1,0 +1,130 @@
+# ============================================================================
+#  THE COMPLETE PARTICLE CENSUS  --  the closed, finite inventory of the fold.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Standard Model cannot say whether its particle list is complete -- every
+#  extension (SUSY partners, axions, sterile neutrinos, extra Z's) is equally
+#  admissible because nothing in the theory closes the door. The fold closes
+#  it: force comes in PRIME SECTORS, the sector ladder is counted and SEALED at
+#  the deepest covering depth 7 (prime_sector_ladder.ep -- forced two ways),
+#  so there are exactly FOUR sectors -- 2, 3, 5, 7 -- and no more. That makes
+#  the particle inventory of the universe CLOSED AND FINITE, and this module
+#  enumerates it in full: every carrier, every matter family, known and
+#  predicted, with the totals -- and the proof that the list ends.
+#
+#  ── DERIVATION ─ (check every line; every count from the ladder) ─────────────
+#  Per sector p (all counts forced in prime_sector_ladder.ep and reused here):
+#  coupling (p-1)/p (the One less the shortfall), p charges, p^2 - 1 carriers
+#  (the charge-anticharge channels minus the singlet -- the same count that
+#  gives the eight gluons at p = 3):
+#      sector 2 (electroweak) : coupling 1/2, carriers  3   [known: W+, W-, Z]
+#      sector 3 (strong)      : coupling 2/3, carriers  8   [known: 8 gluons]
+#      sector 5 (penta)       : coupling 4/5, carriers 24   [PREDICTED]
+#      sector 7 (hepta)       : coupling 6/7, carriers 48   [PREDICTED]
+#  Totals COUNTED here: 3 + 8 + 24 + 48 = 83 gauge carriers, of which 72 are
+#  still to be discovered. Plus the photon (the unbroken phase), the graviton
+#  (the curvature carrier), the Higgs (the mass scalar). Matter: the
+#  Standard-Model fermions (three generations, counted elsewhere) and the
+#  SMITHIONS -- up-type + down-type, three generations each, per new sector
+#  = 12 new coloured fermions. THE LIST ENDS: the sector count is exactly
+#  four and the first prime beyond the ceiling (11) exceeds the deepest
+#  covering depth -- there is no fifth sector for a new particle to live in.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Every "known" row is measured: exactly 3 weak carriers (W+, W-, Z -- PDG),
+#  exactly 8 gluons, one photon, one Higgs, three fermion generations (LEP's
+#  N_nu = 2.984 +/- 0.008 closes the count). The 24 + 48 carriers and 12
+#  Smithions are the fold's standing prediction; the census says NOTHING ELSE
+#  will ever be found -- itself a falsifiable claim: any confirmed fundamental
+#  particle outside this list (a SUSY partner, an axion, a sterile neutrino)
+#  refutes the corpus outright.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/enforcement.ep"
+import "../constants/prime_sector_ladder.ep"
+
+
+# The four sector primes by index, read off the counted ladder (2, 3, 5, 7).
+define census_prime with index as Int returning Int:
+    if index == 1:
+        return 2
+    if index == 2:
+        return 3
+    if index == 3:
+        return 5
+    return 7
+
+# The carrier count of one sector: p^2 - 1, the ladder's mediator count.
+define census_carriers with p as Int returning Int:
+    return sector_mediator_count(p)
+
+# The total gauge-carrier count across all four sectors: 3 + 8 + 24 + 48 = 83.
+define total_gauge_carriers returning Int:
+    set total to 0
+    set i to 1
+    repeat while i < 5:
+        set p to census_prime(i)
+        set carriers to census_carriers(p)
+        set total to total + carriers
+        set i to i + 1
+    return total
+
+# The carriers still to be discovered: the two new sectors, 24 + 48 = 72.
+define undiscovered_carriers returning Int:
+    set penta to census_carriers(5)
+    set hepta to census_carriers(7)
+    return penta + hepta
+
+# The Smithion count: up-type + down-type, three generations each, per new
+# sector -- 2 x 3 x 2 = 12 new coloured fermions.
+define smithion_count returning Int:
+    set kinds to 2
+    set generations to colour_count()
+    set new_sectors to 2
+    return kinds * generations * new_sectors
+
+# The known-sector anchors: the electroweak sector carries exactly 3
+# (W+, W-, Z) and the strong sector exactly 8 (the gluons) -- the same
+# p^2 - 1 that forces the new 24 and 48.
+define known_anchors_hold returning Bool:
+    set weak_ok to census_carriers(2) == 3
+    set strong_ok to census_carriers(3) == 8
+    if weak_ok:
+        return strong_ok
+    return false
+
+# Every sector's coupling partitions the One with its shortfall and its
+# carry closes -- the force criterion, checked for all four.
+define all_sectors_qualify returning Bool:
+    set all_ok to true
+    set i to 1
+    repeat while i < 5:
+        set p to census_prime(i)
+        set partition_ok to sector_partition_holds(p)
+        if partition_ok:
+            set all_ok to all_ok
+        else:
+            set all_ok to false
+        set carry_ok to sector_carry_closes(p)
+        if carry_ok:
+            set all_ok to all_ok
+        else:
+            set all_ok to false
+        set i to i + 1
+    return all_ok
+
+# THE LIST ENDS: the counted sector total is exactly four, and the first
+# prime beyond the ceiling (11) lies past the deepest covering depth (7) --
+# no fifth sector exists for any further particle to live in.
+define census_is_closed returning Bool:
+    set count_ok to prime_sector_count() == 4
+    set ceiling to deepest_covering_depth()
+    set beyond to first_prime_beyond_ceiling()
+    set sealed to beyond > ceiling
+    if count_ok:
+        return sealed
+    return false

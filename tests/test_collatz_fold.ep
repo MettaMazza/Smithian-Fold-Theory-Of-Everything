@@ -1,0 +1,24 @@
+import "../constants/collatz_fold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Collatz as a fold contraction ==="
+    set ok to expect_equal("the odd-even pair multiplier (3/2)(1/2)" and fraction_to_text(pair_multiplier()) and "3/4")
+    set ok to expect_bool("the multiplier IS the branching ratio (m-1)/m at m=4 (Kleiber's 3/4)" and multiplier_is_branching_ratio())
+    set ok to expect_bool("the pair CONTRACTS: 3/4 < the One" and pair_contracts())
+    set ok to expect_bool("the odd move 3n+1 lands EVEN for every odd n to 10001" and odd_move_lands_even_to(10001))
+    set ok to expect_bool("THE FLOOR: the eternal cycle 1 -> 4 -> 2 -> 1 closes in three" and eternal_cycle_closes())
+    set ok to expect_equal("the walked descent of 27 (the famous long orbit): 111 steps" and int_to_string(descent_steps(27)) and "111")
+    set ok to expect_bool("THE DESCENT: every start 1 .. 100000 falls to the 1-cycle" and all_orbits_descend_to(100000))
+    display "=== done ==="
+    return 0

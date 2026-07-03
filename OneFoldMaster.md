@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-277 suites, 1,589 forced checks, 0 failures). It needs nothing but a C compiler. Use
+281 suites, 1,623 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4905,6 +4905,60 @@ one by one — while the half-One coupling (which carries no colour) verifiably 
 dependence AND independence both demonstrated, so the web is a real structure. Cross-domain
 locks explicit: α and the dark fraction share the SAME counted d_down; α and the up-quark
 invariant the SAME d_up. The constants are not ~26 coincidences; they are one object.
+
+### Step 275 — The complete particle census (the inventory is closed and finite)
+
+**File:** `constants/particle_census.ep`
+
+**What it does.** What the Standard Model can never say — that the list ENDS. Per sector p
+(all counts from the counted ladder): coupling `(p−1)/p`, p charges, `p²−1` carriers. The
+known anchors: 3 weak carriers (W⁺, W⁻, Z) and 8 gluons from the same `p²−1` that forces the
+NEW **24 penta and 48 hepta carriers** — totals counted: **83 gauge carriers, 72 still to be
+discovered**, plus the photon, graviton, Higgs, and **12 Smithions** (2 kinds × 3 generations
+× 2 new sectors). THE LIST ENDS: the sector count is exactly four and the first prime beyond
+the ceiling (11) lies past the deepest covering depth 7 — no fifth sector exists. Falsifiable
+both ways: any confirmed fundamental particle outside this list (a SUSY partner, an axion, a
+sterile neutrino) refutes the corpus outright.
+
+### Step 276 — The Smithion masses (the new fermions on the ONE chain)
+
+**File:** `constants/absolute_new_masses.ep`
+
+**What it does.** No new scale invented — a unified theory does not fork. Every fermion's
+mass-part is the shortfall from unison of its sector's holding coupling: Route A (two
+subtractions from the One) = Route B (the charge unit `1/p`) at every sector. The ANCHORS,
+imported not restated: the electron's `1/2` and up-quark's `1/3` are the SAME rule at
+p = 2, 3. The new sectors by the same rule: **penta `1/5`, hepta `1/7`**, cross-sector
+ratios to the electron **`2/5` and `2/7`** — dimensionless, forced; the chain ordering
+`1/2 > 1/3 > 1/5 > 1/7` checked. The lightest Smithions are LIGHT, confined, and
+sector-only — exactly why no collider has stumbled on them. The absolute GeV value is a
+unit calibration, not a derivation, and is not invented here.
+
+### Step 277 — Collatz as a fold contraction (the descent forced by 3/4)
+
+**File:** `constants/collatz_fold.ep`
+
+**What it does.** The century-old conjecture read as fold dynamics: halving IS the fold's
+decay step, and the odd move `3n+1` always lands even (checked for every odd start to
+10,001), so each odd step drags a halving — the pair multiplies n by `(3/2)(1/2) = 3/4`,
+which IS the branching ratio `(m−1)/m` at m = 4, **the same 3/4 as Kleiber's quarter-power
+law**. Below the One, so every pair contracts. The floor: the eternal cycle `1 → 4 → 2 → 1`
+walked and closed in three. The descent: **every start 1..100,000 falls to the 1-cycle**
+(zero failures; the famous n = 27 takes its known 111 steps).
+
+### Step 278 — Prime pairs as fold antipodes (Goldbach and the twins)
+
+**File:** `constants/prime_pairs_fold.ep`
+
+**What it does.** Goldbach made fold-native: the antipodal involution has exactly one
+self-antipodal point — the half-One (the same lock as Majorana and maximal CP) — and an even
+number's pair `(k, E−k)` scaled by E is an antipodal pair casting to exactly the One
+(walked, and re-checked on every counted pair). The census, exact integer arithmetic
+throughout: **every even in [4, 10000] carries a prime antipodal pair — 4,999 evens, zero
+failures**; spot counts E = 12 → 1 pair, E = 100 → 6; the twins (closest odd antipodal
+neighbours) counted to the same bound: **exactly 205, the published value**. Machine
+verification elsewhere reaches 4×10¹⁸ with no counterexample — consistent with what the
+antipodal frame requires.
 
 ---
 

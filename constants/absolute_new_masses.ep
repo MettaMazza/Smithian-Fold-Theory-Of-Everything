@@ -1,0 +1,104 @@
+# ============================================================================
+#  THE SMITHION MASSES  --  the new fermions on the ONE fermion chain.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  When mainstream physics predicts a new particle it must also invent a new
+#  scale for it -- a coupling here, a condensate there -- which is how the
+#  prediction stays safely untestable. The fold does not fork: EVERY fermion's
+#  mass-part sits on one chain -- the shortfall from unison of its sector's
+#  holding coupling (inter_sector_mass_pattern.ep: electron = 1 - 1/2 = 1/2,
+#  up quark = 1 - 2/3 = 1/3) -- so the Smithions, the coloured fermions of the
+#  new prime-5 and prime-7 forces, get their mass-parts from the SAME rule
+#  with nothing new introduced: 1/5 and 1/7. The lightest Smithions are LIGHT
+#  -- 2/5 and 2/7 of the electron's structural part -- confined and
+#  sector-only, which is exactly why no collider has stumbled on them.
+#
+#  ── DERIVATION ─ (check every line; one rule, every sector) ──────────────────
+#  ROUTE A (built): the sector coupling is (p-1)/p = 1 - 1/p; the mass-part is
+#  its shortfall from unison, 1 - (p-1)/p -- two subtractions from the One.
+#  ROUTE B (closed): the mass-part is 1/p, the sector's own charge unit (the
+#  same 1/p the new force carries). Both routes checked equal at every sector.
+#  ANCHORS on the known chain (imported, not restated): the electron mass-part
+#  1/2 and the up-quark mass-part 1/3 (inter_sector_mass_pattern.ep). The NEW
+#  sectors by the same rule: penta 1/5, hepta 1/7. CROSS-SECTOR RATIOS, forced
+#  and dimensionless (the same kind of statement as proton/electron): lightest
+#  penta-Smithion / electron = (1/5)/(1/2) = 2/5; hepta = 2/7. The ordering is
+#  checked: 1/2 > 1/3 > 1/5 > 1/7 -- the deeper the sector, the lighter the
+#  structural part, each strictly inside the domain.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is the full DIMENSIONLESS spectrum: mass-parts 1/5, 1/7
+#  and ratios 2/5, 2/7 to the electron -- exact, zero parameters. What is NOT
+#  claimed: an absolute GeV value -- that is a unit calibration (the universe
+#  does not know what an MeV is), not a derivation, and it is not invented
+#  here. The known-sector anchors validate the rule: electron 1/2 and up 1/3
+#  are the mass-parts whose chain lands the measured lepton and quark spectra
+#  (their modules); the Smithion rows are the standing prediction -- light,
+#  confined, sector-only matter, unseen exactly as forced.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/inter_sector_mass_pattern.ep"
+
+
+# ROUTE A: the mass-part built as the shortfall of the sector coupling --
+# two subtractions from the One: 1 - ((p-1)/p) with (p-1)/p = 1 - 1/p.
+define built_mass_part with p as Int returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set shortfall to fraction_from_ratio(1 and p)
+    set coupling to fraction_subtract(one and shortfall)
+    set one_twin to fraction_from_whole_number(1)
+    return fraction_subtract(one_twin and coupling)
+
+# ROUTE B: the closed form -- the sector's own charge unit 1/p.
+define closed_mass_part with p as Int returning Fraction:
+    return fraction_from_ratio(1 and p)
+
+# Both routes agree at sector p.
+define mass_part_routes_agree with p as Int returning Bool:
+    set built to built_mass_part(p)
+    set closed to closed_mass_part(p)
+    return fraction_is_equal(built and closed)
+
+# The known-chain anchors, imported from the proven mass pattern: the
+# electron's mass-part is the p = 2 case of the SAME rule, and the up
+# quark's is the p = 3 case -- one rule, every sector, no fork.
+define known_chain_anchors_hold returning Bool:
+    set electron to electron_mass_part()
+    set rule_at_two to built_mass_part(2)
+    set electron_ok to fraction_is_equal(electron and rule_at_two)
+    set up to up_mass_part()
+    set rule_at_three to built_mass_part(3)
+    set up_ok to fraction_is_equal(up and rule_at_three)
+    if electron_ok:
+        return up_ok
+    return false
+
+# The cross-sector mass ratio, forced and dimensionless: the lightest
+# Smithion's mass-part over the electron's, (1/p)/(1/2) = 2/p.
+define smithion_to_electron with p as Int returning Fraction:
+    set smithion to built_mass_part(p)
+    set electron to electron_mass_part()
+    return fraction_divide(smithion and electron)
+
+# The chain's ordering: deeper sector, lighter structural part --
+# 1/2 > 1/3 > 1/5 > 1/7, each strictly inside the domain (0, 1].
+define chain_ordering_holds returning Bool:
+    set electroweak to built_mass_part(2)
+    set strong to built_mass_part(3)
+    set first_step to fraction_compare(electroweak and strong) == 1
+    set strong_twin to built_mass_part(3)
+    set penta to built_mass_part(5)
+    set second_step to fraction_compare(strong_twin and penta) == 1
+    set penta_twin to built_mass_part(5)
+    set hepta to built_mass_part(7)
+    set third_step to fraction_compare(penta_twin and hepta) == 1
+    set hepta_twin to built_mass_part(7)
+    set positive to hepta_twin.numerator_sign == 1
+    if first_step:
+        if second_step:
+            if third_step:
+                return positive
+    return false

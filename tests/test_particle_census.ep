@@ -1,0 +1,27 @@
+import "../constants/particle_census.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the complete particle census: closed and finite ==="
+    set ok to expect_bool("KNOWN ANCHORS: 3 weak carriers (W+,W-,Z) and 8 gluons from p^2-1" and known_anchors_hold())
+    set ok to expect_equal("penta-sector carriers 5^2-1 (PREDICTED)" and int_to_string(census_carriers(5)) and "24")
+    set ok to expect_equal("hepta-sector carriers 7^2-1 (PREDICTED)" and int_to_string(census_carriers(7)) and "48")
+    set ok to expect_equal("total gauge carriers 3+8+24+48" and int_to_string(total_gauge_carriers()) and "83")
+    set ok to expect_equal("still to be discovered: 24+48" and int_to_string(undiscovered_carriers()) and "72")
+    set ok to expect_equal("the SMITHIONS: 2 kinds x 3 generations x 2 new sectors" and int_to_string(smithion_count()) and "12")
+    set ok to expect_bool("all four sectors qualify: partition + carry at 2, 3, 5, 7" and all_sectors_qualify())
+    set ok to expect_equal("the sector count is exactly FOUR" and int_to_string(prime_sector_count()) and "4")
+    set ok to expect_equal("the first prime beyond the ceiling: 11 > 7" and int_to_string(first_prime_beyond_ceiling()) and "11")
+    set ok to expect_bool("THE LIST ENDS: no fifth sector -- the census is closed" and census_is_closed())
+    display "=== done ==="
+    return 0
