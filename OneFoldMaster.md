@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-272 suites, 1,523 forced checks, 0 failures). It needs nothing but a C compiler. Use
+275 suites, 1,561 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4837,6 +4837,45 @@ generic hand `1/4` is verifiably NOT self-paired — the exclusion). Mass + one 
 self-paired point = **MAJORANA: the neutrino is its own antiparticle, so neutrinoless double-beta
 decay MUST occur** — the target of LEGEND and nEXO, at the few-meV effective mass the forced
 masses set. Observation confirms; a proven Dirac neutrino falsifies the corpus outright.
+
+### Step 270 — The dark baryon (the colour-singlet rule, forced from the fold's fibre)
+
+**File:** `constants/dark_baryon.ep`
+
+**What it does.** QCD's "three quarks to a baryon, two to a meson" — counted, with no SU(3)
+imported: a colour singlet is a complete fibre of the p-pling fold (walked member by member,
+every `(1+k)/p` folding to the One, for p = 3, 5, 7), so BARYON = p constituents and
+MESON = 2 (a colour with its antipode). The baryon charge sum is `(p+1)/2` — whole exactly
+when p is odd, so every sector prime beyond two has a neutral baryon (even sectors verifiably
+excluded). At the counted colour three: the Standard-Model nucleon and pion, the anchor. At
+five and seven: the **NEW forced hadrons — the 5-quark PENTA and 7-quark HEPTA baryons** — the
+dark matter is a many-body bound state, not a WIMP.
+
+### Step 271 — The dark relic (identified particle, counted abundance)
+
+**File:** `constants/dark_relic.ep`
+
+**What it does.** Both halves of the dark-matter question closed with zero parameters: the relic
+PARTICLE is the lightest neutral new-sector baryon (stable — the singlet census plus the
+even-sector exclusion, imported from Step 270), and the relic AMOUNT is the covering ratio —
+volume `3³ = 27` over its counted minimal binary cover 5 — fixed before any dynamics. The
+absolute density read FORWARD: `Ω_dm h² = 27/5 × 0.0224 = 0.12096` against the measured
+`0.120` (the one measured baryon density enters comparison-side only, in the test). No
+cross-section, no freeze-out, no tuning — the abundance was never an accident.
+
+### Step 272 — The dark-CKM (the new sectors' generation mixing, predicted)
+
+**File:** `constants/dark_ckm.ep`
+
+**What it does.** The corpus's own CKM mechanism (`ckm_magnitudes.ep` — mass basis = tripling
+preimages of the holding coupling, channel basis = preimages of the One) run for the
+new sectors, each anchored on ITS OWN holding coupling `(p−1)/p`. Route A builds the bases
+(every preimage checked to fold back to its base; the separation `1/(3p)` checked equal across
+all three generations) and Route B is the independent closed form `V_ii = (3p−1)/(3p)`,
+`V_12 = (2p−1)/(3p)` — both routes must agree at every p. The anchor: p = 3 reproduces the
+corpus quark values `8/9` and `5/9` exactly. The PREDICTIONS: **penta `14/15`, hepta `20/21`**
+— generation leakage `1/(3p)` strictly shrinking along the ladder: the heavier the colour, the
+more diagonal the mixing, so dark flavour is calmer than ours and the relic survives.
 
 ---
 

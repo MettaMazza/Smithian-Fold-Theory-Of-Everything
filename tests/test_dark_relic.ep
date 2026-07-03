@@ -1,0 +1,28 @@
+import "../constants/dark_relic.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the dark relic: identified particle, counted abundance ==="
+    set ok to expect_equal("the generational volume: colour cubed" and int_to_string(relic_volume()) and "27")
+    set ok to expect_equal("the covering depth: minimal binary cover of 27" and int_to_string(relic_depth()) and "5")
+    set ok to expect_equal("the forced dark-to-baryon ratio 27/5" and fraction_to_text(relic_to_baryon()) and "27/5")
+    set ok to expect_equal("the forced dark fraction of matter 27/32" and fraction_to_text(relic_fraction_of_matter()) and "27/32")
+    set ok to expect_bool("THE RELIC IS IDENTIFIED: the lightest neutral new-sector baryon" and relic_particle_identified())
+    # comparison side: measured Omega_b h^2 = 0.0224 = 224/10000 (CMB) anchors
+    # the absolute density; forced forward Omega_dm h^2 = 27/5 x 224/10000.
+    set forced_density to relic_density_from_baryon(224 and 10000)
+    set ok to expect_equal("forced Omega_dm h^2 = 27/5 x 0.0224 (exact)" and fraction_to_text(forced_density) and "378/3125")
+    set forced_density_again to relic_density_from_baryon(224 and 10000)
+    set ok to expect_equal("forced Omega_dm h^2 = 0.12096 (measured ~0.120)" and fraction_to_decimal(forced_density_again and 5) and "0.12096")
+    display "=== done ==="
+    return 0

@@ -476,9 +476,21 @@ And the structural laws of physics, forced the same way:
   **the neutrino is Majorana** (one hand → no Dirac mass; the only self-coupling exists at the
   self-antipodal lock, the generic hand verifiably excluded → **0νββ MUST occur** — LEGEND/nEXO
   territory; a proven Dirac neutrino falsifies the corpus outright).
+- **The dark sector: what it is, how much there is, how it mixes** — **the dark baryon**
+  (colour singlet = complete fold-fibre, no SU(3) imported: baryon = p constituents, meson = 2;
+  the charge sum `(p+1)/2` whole only at odd p — even sectors excluded, neutrality counted; at
+  p = 3 the nucleon and pion, at 5 and 7 the **NEW 5-quark PENTA and 7-quark HEPTA baryons** —
+  the dark matter is a many-body bound state, not a WIMP), **the dark relic** (particle
+  identified — the lightest neutral new-sector baryon, stable — and abundance counted:
+  `Ω_dm/Ω_b = 27/5` fixed before any dynamics; read forward through the one comparison-side
+  baryon density, `Ω_dm h² = 0.12096` vs measured `0.120` — no cross-section, no freeze-out,
+  no tuning), and **the dark-CKM** (the corpus's own mixing mechanism at each sector's own
+  holding coupling `(p−1)/p`: built bases and closed form `V_ii = (3p−1)/(3p)` agree at every
+  p; p = 3 reproduces the quark `8/9` and `5/9` exactly; PREDICTIONS **penta `14/15`, hepta
+  `20/21`** — leakage `1/(3p)` shrinks with colour: dark flavour is calmer than ours).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 272 test
-suites (1,523 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 275 test
+suites (1,561 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -535,7 +547,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 272 suites, 1,523 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 275 suites, 1,561 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

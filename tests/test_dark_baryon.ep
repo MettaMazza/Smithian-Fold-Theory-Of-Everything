@@ -1,0 +1,32 @@
+import "../constants/dark_baryon.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the dark baryon: the colour-singlet rule from the fold's fibre ==="
+    set ok to expect_bool("the p=3 fibre folds to the One, member by member" and fibre_folds_to_one(3))
+    set ok to expect_bool("the p=5 fibre folds to the One, member by member" and fibre_folds_to_one(5))
+    set ok to expect_bool("the p=7 fibre folds to the One, member by member" and fibre_folds_to_one(7))
+    set ok to expect_equal("baryon multiplicity at p=3 (the nucleon)" and int_to_string(baryon_multiplicity(3)) and "3")
+    set ok to expect_equal("baryon multiplicity at p=5 (the PENTA baryon)" and int_to_string(baryon_multiplicity(5)) and "5")
+    set ok to expect_equal("baryon multiplicity at p=7 (the HEPTA baryon)" and int_to_string(baryon_multiplicity(7)) and "7")
+    set ok to expect_equal("meson multiplicity is two in EVERY sector (p=3)" and int_to_string(meson_multiplicity(3)) and "2")
+    set ok to expect_equal("meson multiplicity is two in EVERY sector (p=5)" and int_to_string(meson_multiplicity(5)) and "2")
+    set ok to expect_equal("meson multiplicity is two in EVERY sector (p=7)" and int_to_string(meson_multiplicity(7)) and "2")
+    set ok to expect_equal("baryon charge sum at p=3 is whole: (3+1)/2" and fraction_to_text(baryon_charge_sum(3)) and "2")
+    set ok to expect_equal("baryon charge sum at p=5 is whole: (5+1)/2" and fraction_to_text(baryon_charge_sum(5)) and "3")
+    set ok to expect_equal("baryon charge sum at p=7 is whole: (7+1)/2" and fraction_to_text(baryon_charge_sum(7)) and "4")
+    set ok to expect_bool("the Standard-Model anchor: counted colour gives nucleon + pion" and standard_model_anchor())
+    set ok to expect_bool("the NEW dark hadrons are forced: neutral 5- and 7-quark baryons" and dark_hadrons_forced())
+    set ok to expect_bool("EXCLUSION: even sectors have no neutral baryon" and even_sector_excluded())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,33 @@
+import "../constants/dark_ckm.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the dark-CKM: generation mixing for the new sectors ==="
+    set ok to expect_equal("the strong holding coupling (p-1)/p at p=3" and fraction_to_text(sector_holding_coupling(3)) and "2/3")
+    set ok to expect_equal("the penta holding coupling at p=5" and fraction_to_text(sector_holding_coupling(5)) and "4/5")
+    set ok to expect_equal("the hepta holding coupling at p=7" and fraction_to_text(sector_holding_coupling(7)) and "6/7")
+    set ok to expect_bool("ROUTE A = ROUTE B and near-diagonal at p=3" and routes_agree_at(3))
+    set ok to expect_bool("ROUTE A = ROUTE B and near-diagonal at p=5" and routes_agree_at(5))
+    set ok to expect_bool("ROUTE A = ROUTE B and near-diagonal at p=7" and routes_agree_at(7))
+    set ok to expect_bool("THE ANCHOR: p=3 reproduces the corpus quark values 8/9 and 5/9" and quark_anchor_holds())
+    set ok to expect_equal("quark diagonal V_ii at p=3" and fraction_to_text(built_diagonal(3)) and "8/9")
+    set ok to expect_equal("quark off-diagonal V_12 at p=3" and fraction_to_text(built_off_diagonal(3)) and "5/9")
+    set ok to expect_equal("PENTA diagonal V_ii at p=5 (new, forced)" and fraction_to_text(built_diagonal(5)) and "14/15")
+    set ok to expect_equal("PENTA off-diagonal V_12 at p=5" and fraction_to_text(built_off_diagonal(5)) and "3/5")
+    set ok to expect_equal("HEPTA diagonal V_ii at p=7 (new, forced)" and fraction_to_text(built_diagonal(7)) and "20/21")
+    set ok to expect_equal("HEPTA off-diagonal V_12 at p=7" and fraction_to_text(built_off_diagonal(7)) and "13/21")
+    set ok to expect_equal("the generation leakage 1/(3p) at p=3" and fraction_to_text(generation_leakage(3)) and "1/9")
+    set ok to expect_equal("the generation leakage at p=7" and fraction_to_text(generation_leakage(7)) and "1/21")
+    set ok to expect_bool("the leakage SHRINKS along the ladder: heavier colour, calmer mixing" and leakage_shrinks())
+    display "=== done ==="
+    return 0

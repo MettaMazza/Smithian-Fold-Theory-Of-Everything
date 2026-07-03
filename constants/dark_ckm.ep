@@ -1,0 +1,157 @@
+# ============================================================================
+#  THE DARK-CKM  --  the new sectors' generation mixing, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Standard Model's quark mixing matrix is measured, never derived -- its
+#  near-diagonal shape is an unexplained input. Here the quark mixing was
+#  already forced (ckm_magnitudes.ep): align the three tripling-fold preimages
+#  of the strong holding coupling 2/3 (the MASS basis) with the three preimages
+#  of the One (the CHANNEL basis), and the diagonal 8/9 and off-diagonal 5/9
+#  fall out. This module runs the IDENTICAL mechanism for the new prime-5 and
+#  prime-7 sectors: each coloured sector anchors its mass basis on ITS OWN
+#  holding coupling (p-1)/p, and the mixing collapses to one closed form. The
+#  dark sectors' generation mixing is a PREDICTION -- 14/15 and 20/21 -- and
+#  the pattern says: the heavier the colour charge, the MORE diagonal the
+#  mixing. Dark flavour physics is calmer than ours, forced.
+#
+#  ── DERIVATION ─ (check every line; both routes must agree) ──────────────────
+#  ROUTE A (built): for sector p, the holding coupling is g_p = (p-1)/p (the
+#  sector's own preserved share; at p = 3 the strong 2/3). The mass basis is
+#  the three tripling preimages M_i = (g_p + i)/3 and the channel basis the
+#  three preimages of the One, C_i = (1 + i)/3 -- each preimage CHECKED to fold
+#  back to its base under tripling. The alignment rule (the corpus's own, at
+#  p = 3): V_ii = 1 - (C_i - M_i), V_12 = 1 - (C_1 - M_0). The separation
+#  C_i - M_i = (1 - g_p)/3 = 1/(3p) is the SAME for all three generations
+#  (checked), so the diagonal is one number.
+#  ROUTE B (closed form, independent): V_ii = (3p-1)/(3p), V_12 = (2p-1)/(3p).
+#  Both routes must agree at every p or the module fails. At p = 3 the built
+#  matrix must reproduce the corpus quark values 8/9 and 5/9 EXACTLY -- the
+#  anchor. At p = 5, 7: diagonals 14/15 and 20/21, off-diagonals 9/15 = 3/5
+#  and 13/21. The generation leakage is 1/(3p), shrinking as 1/p.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  At p = 3 the mechanism reproduces the near-diagonal CKM shape the Standard
+#  Model can only measure: dominant diagonal, asymmetric off-diagonals
+#  (ckm_magnitudes.ep lands the measured magnitudes). The p = 5, 7 mixings are
+#  predictions with no measurement yet -- they say dark-sector flavour is more
+#  conserved than ours, so dark decays are slower and dark bound states more
+#  stable, consistent with a relic that has survived since the first fold.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# The sector holding coupling: g_p = (p-1)/p (at p = 3 the strong 2/3).
+define sector_holding_coupling with p as Int returning Fraction:
+    return fraction_from_ratio(p - 1 and p)
+
+# A tripling preimage of the base b: (b + i)/3, CHECKED to fold back to b.
+define tripling_preimage with base as Fraction and i as Int returning Fraction:
+    set base_for_build to fraction_make(fraction_numerator(base) and fraction_denominator(base))
+    set base_for_check to fraction_make(fraction_numerator(base) and fraction_denominator(base))
+    set shift to fraction_from_whole_number(i)
+    set shifted to fraction_add(base_for_build and shift)
+    set three to fraction_from_whole_number(3)
+    set preimage to fraction_divide(shifted and three)
+    set preimage_twin to fraction_make(fraction_numerator(preimage) and fraction_denominator(preimage))
+    set three_again to fraction_from_whole_number(3)
+    set tripled to fraction_multiply(three_again and preimage_twin)
+    set folded to cast_out_whole_ones(tripled)
+    set lands to fraction_is_equal(folded and base_for_check)
+    if lands:
+        return preimage
+    return fraction_from_ratio(1 and 1000000007)
+
+# The generation separation at sector p: C_i - M_i, built from the bases.
+define generation_separation with p as Int and i as Int returning Fraction:
+    set coupling to sector_holding_coupling(p)
+    set mass_i to tripling_preimage(coupling and i)
+    set one to fraction_from_whole_number(1)
+    set channel_i to tripling_preimage(one and i)
+    return fraction_subtract(channel_i and mass_i)
+
+# ROUTE A diagonal: V_ii = 1 - (C_i - M_i), checked EQUAL for all three
+# generations -- the diagonal is one number per sector.
+define built_diagonal with p as Int returning Fraction:
+    set sep0 to generation_separation(p and 0)
+    set sep1 to generation_separation(p and 1)
+    set sep1_matches to fraction_is_equal(sep1 and sep0)
+    set sep0_twin to generation_separation(p and 0)
+    set sep2_twin to generation_separation(p and 2)
+    set sep2_matches to fraction_is_equal(sep2_twin and sep0_twin)
+    set symmetric to false
+    if sep1_matches:
+        if sep2_matches:
+            set symmetric to true
+    if symmetric:
+        set one to fraction_from_whole_number(1)
+        set sep to generation_separation(p and 0)
+        return fraction_subtract(one and sep)
+    return fraction_from_ratio(1 and 1000000007)
+
+# ROUTE A off-diagonal: V_12 = 1 - (C_1 - M_0).
+define built_off_diagonal with p as Int returning Fraction:
+    set coupling to sector_holding_coupling(p)
+    set mass_0 to tripling_preimage(coupling and 0)
+    set one to fraction_from_whole_number(1)
+    set channel_1 to tripling_preimage(one and 1)
+    set sep12 to fraction_subtract(channel_1 and mass_0)
+    set one_twin to fraction_from_whole_number(1)
+    return fraction_subtract(one_twin and sep12)
+
+# ROUTE B, the closed forms -- independent of the built bases.
+define closed_diagonal with p as Int returning Fraction:
+    return fraction_from_ratio(3 * p - 1 and 3 * p)
+
+define closed_off_diagonal with p as Int returning Fraction:
+    return fraction_from_ratio(2 * p - 1 and 3 * p)
+
+# Both routes agree at sector p, and the matrix is near-diagonal (V_ii > V_12).
+define routes_agree_at with p as Int returning Bool:
+    set built_d to built_diagonal(p)
+    set closed_d to closed_diagonal(p)
+    set diag_ok to fraction_is_equal(built_d and closed_d)
+    set built_o to built_off_diagonal(p)
+    set closed_o to closed_off_diagonal(p)
+    set off_ok to fraction_is_equal(built_o and closed_o)
+    set built_d_twin to built_diagonal(p)
+    set built_o_twin to built_off_diagonal(p)
+    set near_diagonal to fraction_compare(built_d_twin and built_o_twin) == 1
+    if diag_ok:
+        if off_ok:
+            return near_diagonal
+    return false
+
+# The quark anchor: at the counted colour three, the built matrix must
+# reproduce the corpus values 8/9 and 5/9 exactly.
+define quark_anchor_holds returning Bool:
+    set c to colour_count()
+    set built_d to built_diagonal(c)
+    set eight_ninths to fraction_from_ratio(8 and 9)
+    set diag_ok to fraction_is_equal(built_d and eight_ninths)
+    set built_o to built_off_diagonal(c)
+    set five_ninths to fraction_from_ratio(5 and 9)
+    set off_ok to fraction_is_equal(built_o and five_ninths)
+    if diag_ok:
+        return off_ok
+    return false
+
+# The generation leakage at sector p: 1/(3p) -- shrinks as the colour grows.
+define generation_leakage with p as Int returning Fraction:
+    return fraction_from_ratio(1 and 3 * p)
+
+# The dark sectors are MORE diagonal than the quarks: leakage strictly
+# shrinks along the sector ladder 3 -> 5 -> 7.
+define leakage_shrinks returning Bool:
+    set leak3 to generation_leakage(3)
+    set leak5 to generation_leakage(5)
+    set first_drop to fraction_compare(leak3 and leak5) == 1
+    set leak5_twin to generation_leakage(5)
+    set leak7 to generation_leakage(7)
+    set second_drop to fraction_compare(leak5_twin and leak7) == 1
+    if first_drop:
+        return second_drop
+    return false
