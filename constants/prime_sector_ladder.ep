@@ -119,3 +119,16 @@ define sector_carry_closes with p as Int returning Bool:
 define sector_mediator_count with p as Int returning Int:
     set squared to whole_power(p and 2)
     return squared - 1
+
+# A sector's beta slope: coupling over shortfall, (p-1)/p over 1/p = p - 1
+# -- the strength-to-gap ratio the running inherits (the corpus's
+# derive_running reading), returned as the exact whole number.
+define sector_beta_slope with p as Int returning Int:
+    set coupling to sector_coupling(p)
+    set shortfall to sector_shortfall(p)
+    set ratio to fraction_divide(coupling and shortfall)
+    set slope to fraction_from_whole_number(p - 1)
+    set matches to fraction_is_equal(ratio and slope)
+    if matches:
+        return p - 1
+    return 0 - 1

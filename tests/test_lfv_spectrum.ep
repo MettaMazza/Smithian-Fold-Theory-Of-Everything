@@ -1,0 +1,25 @@
+import "../constants/lfv_spectrum.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the LFV spectrum, mass-weighted: the full table ==="
+    set ok to expect_equal("the electron mass-part: the first preimage of the lock" and fraction_to_text(generation_mass_part(0)) and "1/6")
+    set ok to expect_equal("the tau mass-part: the third preimage" and fraction_to_text(generation_mass_part(2)) and "5/6")
+    set ok to expect_bool("all three mass-parts triple back to the half-One (checked)" and mass_parts_are_preimages())
+    set ok to expect_equal("the physical weight of mu -> e: (1/4)^2 x 1/2" and fraction_to_text(weight_mu_to_e()) and "1/32")
+    set ok to expect_equal("the physical weight of tau -> mu: (1/4)^2 x 5/6" and fraction_to_text(weight_tau_to_mu()) and "5/96")
+    set ok to expect_equal("the physical weight of tau -> e: (1/2)^2 x 5/6" and fraction_to_text(weight_tau_to_e()) and "5/24")
+    set ok to expect_bool("THE CANCELLATION: tau -> e vs tau -> mu = 4:1, mass-independent" and tau_ratio_is_mass_independent())
+    set ok to expect_bool("THE TABLE: 1/32 : 5/96 : 5/24 = 3 : 5 : 20 exactly" and table_reduces_to_3_5_20())
+    display "=== done ==="
+    return 0

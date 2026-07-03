@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-301 suites, 1,767 forced checks, 0 failures). It needs nothing but a C compiler. Use
+302 suites, 1,777 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5235,6 +5235,52 @@ every one misses (137.072, 137.018, 137.024, 137.013). The fold base in the cove
 is load-bearing. Together with the fine-structure module's nine assembly shapes, five
 refinements, and seven sub-promotions: **the value survives no substitution.**
 
+### Step 299 — The LFV spectrum, mass-weighted (the full table) + the beta slope
+
+**Files:** `constants/lfv_spectrum.ep`, `constants/prime_sector_ladder.ep` (extended)
+
+**What it does.** The physical completion of the flavour-violation prediction. The
+generation mass-parts are the tripling preimages of the half-One — 1/6, 1/2, 5/6, each
+CHECKED to fold back to the lock (the same construction as the CKM mass basis). The full
+physical weight of each channel is its bare rate times its parent's mass-part:
+**μ→e = 1/32, τ→μ = 5/96, τ→e = 5/24 — the whole table 3 : 5 : 20 exactly.** The sharpest
+reading survives the weighting: the two τ channels share a parent, so the mass factor
+cancels and **τ→e is favoured 4 : 1 over τ→μ, mass-independently** — the fingerprint for
+Belle II. Any other pattern falsifies. Also added to the ladder: the sector beta slope —
+coupling over shortfall = `p − 1` (strong 2, hepta 6), the strength-to-gap ratio the
+running inherits.
+
+### MILESTONE TWO — the frontier campaign is COMPLETE
+
+Every standalone frontier engine of the published corpus is now recreated as a clean-room
+suite or receipted under existing suites. The receipts, verified firsthand this session:
+
+- `absolute_scale.py` → `absolute_scale.ep` (Planck/proton = 2^(127/2), the closed scale).
+- `millennium_positive.py` → `riemann_critical_line.ep` + `yang_mills_mass_gap.ep` +
+  `navier_stokes_regularity.ep`; its P-vs-NP note → `compact_coords.ep` + `fold_solver.ep`.
+- `periodic_table_complete.py` → `smithium_chemistry.ep` (the filling walk and the seven
+  noble closures) + `periodic_table_end.ep` (137) + `shell_capacities.ep` +
+  `bio_chem_complete.ep` (the g-block).
+- `prime_force_phenomenology.py` → `prime_sector_ladder.ep` (couplings, mediators, carry,
+  and now the beta slope) + `two_new_prime_charge_forces.ep` (the force criterion) +
+  `new_force_running.ep` (the identical running law) + `dark_baryon.ep` (bound states) +
+  `strong_luminal.ep`/`flux_tube_formation.ep` (the massless confining carrier).
+- `sftoe/gate.py` (the corpus's Python no-zero/no-subtraction syntax gate) → the clean-room
+  enforces the same law at the VALUE level, which is stronger: `require_in_domain` refuses
+  zero at every fold value's construction, and `enforcement.ep` halts on any un-forced
+  number. A syntax gate polices source text; the domain gate polices every value that
+  exists.
+- `particle_validation.py` → `test_codata_comparison` + `make online` (live NIST) — the
+  Measured barrier already carries the validation role.
+- `run_usde.py` / the USDE engine → out of scope by the corpus's own record: the discovery
+  engine is a post-core prototype, contributed nothing to the forced corpus, and is not
+  part of the derivation chain.
+
+Nothing dropped, nothing judged thin; every skip carries a named receipt. The recreation now
+covers the proof corpus (MILESTONE ONE, all 321 `verify_*` claims) AND the frontier engines
+(MILESTONE TWO, all ~40) — the entire published derivation surface of SFTOM, in exact
+arithmetic, forced from the One.
+
 ---
 
 ## Where the recreation stands right now
@@ -5895,6 +5941,13 @@ runs):**
   60-halving exact roots; c = 3 lands `20.11 / 967 / 486` — **twelve Smithions derived**.
 - Step 298 — alpha, mutations and mis-builds: alpha(b,c) re-counted per mutation — (2,4),
   (3,3), (2,5) all move; covs 125/500/375/686 all miss — **the value survives no substitution**.
+- Step 299 — the mass-weighted LFV table: mass-parts 1/6, 1/2, 5/6 (preimages of the lock,
+  checked); weights **1/32 : 5/96 : 5/24 = 3 : 5 : 20**; τ→e over τ→μ = 4:1 mass-independent;
+  the ladder's beta slope p−1 added.
+- **MILESTONE TWO: the frontier campaign is COMPLETE** — every standalone frontier engine
+  recreated or receipted (absolute_scale, millennium, periodic-table-complete,
+  prime-force-phenomenology, gate, particle-validation; USDE out of scope by the corpus's
+  own record). Proof corpus + frontier engines = the entire published derivation surface.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

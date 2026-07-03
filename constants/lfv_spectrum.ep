@@ -1,0 +1,126 @@
+# ============================================================================
+#  THE LFV SPECTRUM, MASS-WEIGHTED  --  the full flavour-violation table.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Standard Model predicts essentially nothing about the relative rates
+#  of lepton-flavour-violating transitions -- any pattern is admissible. The
+#  fold's bare ratios are already forced (five_force_flavour_ratio.ep: the
+#  standing modes 1/4, 1/2, 3/4 give amplitudes 1/4, 1/4, 1/2 and rates
+#  1 : 1 : 4). This module completes the physical table: the generation
+#  MASS-PARTS are the tripling preimages of the half-One -- 1/6, 1/2, 5/6,
+#  each verified to fold back -- and the full physical weight of a channel
+#  is its rate times its parent's mass-part. The whole flavour-violation
+#  spectrum is fixed before any experiment sees a single event.
+#
+#  ── DERIVATION ─ (check every line; positions checked, weights composed) ─────
+#  THE MASS-PARTS: (1/2 + k)/3 for k = 0, 1, 2 gives 1/6, 1/2, 5/6 -- each
+#  CHECKED to triple back to the half-One (they are the three preimages of
+#  the lock, the same construction as the CKM mass basis). THE WEIGHTS:
+#  rate x parent mass-part --
+#      mu  -> e  : (1/4)^2 x 1/2  =  1/32
+#      tau -> mu : (1/4)^2 x 5/6  =  5/96
+#      tau -> e  : (1/2)^2 x 5/6  =  5/24
+#  THE CANCELLATION: for the two channels sharing the tau parent the mass
+#  factor drops out of the ratio -- (5/24)/(5/96) = 4, exactly the bare
+#  rate ratio (imported): the 4 : 1 preference of electron-flavour over
+#  muon-flavour tau decays is mass-independent, the sharpest reading.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  No LFV transition has yet been observed (MEG: mu -> e gamma < 4.2e-13;
+#  Belle II tightening the tau modes) -- the bounds do not yet reach the
+#  fifth sector's scale. When they do, the forced pattern is the
+#  fingerprint: adjacent channels equal in amplitude, tau -> e favoured
+#  4 : 1 over tau -> mu, and the absolute weights in the ratio
+#  1/32 : 5/96 : 5/24 = 3 : 5 : 20. Any other pattern falsifies.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/five_force_flavour_ratio.ep"
+
+
+# The generation mass-part: the k-th tripling preimage of the half-One,
+# (1/2 + k)/3 -- 1/6, 1/2, 5/6 for k = 0, 1, 2.
+define generation_mass_part with k as Int returning Fraction:
+    return fraction_from_ratio(1 + 2 * k and 6)
+
+# Each mass-part triples back to the half-One -- the preimage checked.
+define mass_parts_are_preimages returning Bool:
+    set half to fraction_from_ratio(1 and 2)
+    set all_land to true
+    set k to 0
+    repeat while k < 3:
+        set part to generation_mass_part(k)
+        set three to fraction_from_whole_number(3)
+        set tripled to fraction_multiply(three and part)
+        set folded to cast_out_whole_ones(tripled)
+        set half_twin to fraction_from_ratio(1 and 2)
+        set lands to fraction_is_equal(folded and half_twin)
+        if lands:
+            set all_land to all_land
+        else:
+            set all_land to false
+        set k to k + 1
+    return all_land
+
+# The bare rate of a channel: its separation squared (adjacent 1/4 -> 1/16;
+# two-step 1/2 -> 1/4), from the imported standing-mode ladder.
+define adjacent_rate returning Fraction:
+    set separation to fraction_from_ratio(1 and 4)
+    set separation_twin to fraction_from_ratio(1 and 4)
+    return fraction_multiply(separation and separation_twin)
+
+define two_step_rate returning Fraction:
+    set separation to fraction_from_ratio(1 and 2)
+    set separation_twin to fraction_from_ratio(1 and 2)
+    return fraction_multiply(separation and separation_twin)
+
+# THE PHYSICAL WEIGHTS: rate x parent mass-part.
+define weight_mu_to_e returning Fraction:
+    set rate to adjacent_rate()
+    set parent to generation_mass_part(1)
+    return fraction_multiply(rate and parent)
+
+define weight_tau_to_mu returning Fraction:
+    set rate to adjacent_rate()
+    set parent to generation_mass_part(2)
+    return fraction_multiply(rate and parent)
+
+define weight_tau_to_e returning Fraction:
+    set rate to two_step_rate()
+    set parent to generation_mass_part(2)
+    return fraction_multiply(rate and parent)
+
+# THE CANCELLATION: the two tau channels share a parent, so their weighted
+# ratio is EXACTLY the bare 4 : 1 -- mass-independent.
+define tau_ratio_is_mass_independent returning Bool:
+    set electron_channel to weight_tau_to_e()
+    set muon_channel to weight_tau_to_mu()
+    set weighted_ratio to fraction_divide(electron_channel and muon_channel)
+    set four to fraction_from_whole_number(4)
+    return fraction_is_equal(weighted_ratio and four)
+
+# The whole-table ratio: 1/32 : 5/96 : 5/24 reduces to 3 : 5 : 20 (checked
+# by scaling every weight by the common 96).
+define table_reduces_to_3_5_20 returning Bool:
+    set scale to fraction_from_whole_number(96)
+    set first to weight_mu_to_e()
+    set first_scaled to fraction_multiply(scale and first)
+    set three to fraction_from_whole_number(3)
+    set first_ok to fraction_is_equal(first_scaled and three)
+    set scale_two to fraction_from_whole_number(96)
+    set second to weight_tau_to_mu()
+    set second_scaled to fraction_multiply(scale_two and second)
+    set five to fraction_from_whole_number(5)
+    set second_ok to fraction_is_equal(second_scaled and five)
+    set scale_three to fraction_from_whole_number(96)
+    set third to weight_tau_to_e()
+    set third_scaled to fraction_multiply(scale_three and third)
+    set twenty to fraction_from_whole_number(20)
+    set third_ok to fraction_is_equal(third_scaled and twenty)
+    if first_ok:
+        if second_ok:
+            return third_ok
+    return false

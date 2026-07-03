@@ -42,5 +42,7 @@ define main:
     set ok to expect_number("sector 5 mediators (new force)" and sector_mediator_count(5) and 24)
     set ok to expect_number("sector 7 mediators (new force)" and sector_mediator_count(7) and 48)
 
+    set ok to expect_number("the beta slope: coupling over shortfall = p-1 (strong)" and sector_beta_slope(3) and 2)
+    set ok to expect_number("the beta slope at the hepta sector" and sector_beta_slope(7) and 6)
     display "=== done ==="
     return 0

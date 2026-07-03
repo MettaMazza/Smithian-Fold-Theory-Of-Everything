@@ -590,9 +590,20 @@ And the structural laws of physics, forced the same way:
   re-counted per mutation — (2,4), (3,3), (2,5) all move the value; the covering volume
   rebuilt four "plausible" wrong ways — 125, 500, 375, 686 — all miss: **the value survives
   no substitution**).
+- **The mass-weighted LFV table — and the frontier campaign COMPLETE** — **the LFV
+  spectrum** (the generation mass-parts 1/6, 1/2, 5/6 are the checked preimages of the
+  lock; the full physical weights **μ→e : τ→μ : τ→e = 1/32 : 5/96 : 5/24 = 3 : 5 : 20
+  exactly**, with the τ channels' 4:1 preference mass-independent — the Belle II
+  fingerprint; the ladder's beta slope `p−1` added), and **MILESTONE TWO**: every
+  standalone frontier engine of the published corpus is now recreated as a clean-room
+  suite or receipted under existing suites (absolute scale, the Millennium positives, the
+  complete periodic table, prime-force phenomenology, the validation harness, and the
+  syntax gate — whose no-zero law the clean-room enforces at the stronger VALUE level).
+  Proof corpus + frontier engines = **the entire published derivation surface of SFTOM,
+  in exact arithmetic, forced from the One.**
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 301 test
-suites (1,767 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 302 test
+suites (1,777 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -649,7 +660,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 301 suites, 1,767 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 302 suites, 1,777 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
