@@ -4936,6 +4936,7 @@ long long starting_state();
 long long copy_state(long long);
 long long empty_state();
 long long square_attacked(long long, long long, long long);
+long long lesser_attacker_exists(long long, long long, long long, long long);
 long long king_square(long long, long long);
 long long side_in_check(long long);
 long long make_move(long long, long long);
@@ -4951,7 +4952,7 @@ long long share_numerator(long long);
 long long share_denominator(long long);
 long long move_is_capture(long long, long long);
 long long ordered_moves(long long);
-long long quiescence(long long, long long, long long, long long, long long);
+long long quiescence(long long, long long, long long, long long, long long, long long);
 long long search_value(long long, long long, long long, long long, long long, long long);
 long long state_signature(long long);
 long long root_pass(long long, long long, long long, long long);
@@ -5631,6 +5632,196 @@ long long square_attacked(long long state, long long square, long long by_black)
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long lesser_attacker_exists(long long state, long long square, long long defender_reach, long long by_black) {
+    long long attacks = 0;
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long diagonal = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long kind = 0;
+    long long live = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long right_colour = 0;
+    long long steps = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&f);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&by_black);
+
+    ep_gc_maybe_collect();
+
+    rank = (square / 8);
+    file = (square - (rank * 8));
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (piece_kind(code) == 2) {
+    right_colour = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    right_colour = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    right_colour = 1;
+    }
+    }
+    if (right_colour == 1) {
+    if (counted_reach(2, ((r * 8) + f), by_black) < defender_reach) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    live = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    live = 0;
+    }
+    }
+    if (live == 1) {
+    diagonal = 0;
+    if (dr == 0) {
+    diagonal = 0;
+    } else {
+    if (df == 0) {
+    diagonal = 0;
+    } else {
+    diagonal = 1;
+    }
+    }
+    r = (rank + dr);
+    f = (file + df);
+    steps = 1;
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (code == 0) {
+    r = (r + dr);
+    f = (f + df);
+    steps = (steps + 1);
+    walking = 1;
+    } else {
+    right_colour = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    right_colour = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    right_colour = 1;
+    }
+    }
+    if (right_colour == 1) {
+    kind = piece_kind(code);
+    attacks = 0;
+    if (kind == 5) {
+    attacks = 1;
+    }
+    if (diagonal == 1) {
+    if (kind == 3) {
+    attacks = 1;
+    }
+    } else {
+    if (kind == 4) {
+    attacks = 1;
+    }
+    }
+    if (steps == 1) {
+    if (kind == 6) {
+    attacks = 1;
+    }
+    if (diagonal == 1) {
+    if (kind == 1) {
+    if (by_black == 1) {
+    if (dr == 1) {
+    attacks = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (dr == -1) {
+    attacks = 1;
+    }
+    }
+    }
+    }
+    }
+    if (attacks == 1) {
+    if (counted_reach(kind, ((r * 8) + f), by_black) < defender_reach) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
     return ret_val;
 }
 
@@ -6516,10 +6707,13 @@ long long mobility_count(long long state, long long for_black) {
     long long file = 0;
     long long forward = 0;
     long long home_rank = 0;
+    long long hostage = 0;
     long long kind = 0;
     long long mine = 0;
     long long moved = 0;
+    long long offered_down = 0;
     long long on_ray = 0;
+    long long own_reach = 0;
     long long r = 0;
     long long rank = 0;
     long long sq = 0;
@@ -6527,6 +6721,7 @@ long long mobility_count(long long state, long long for_black) {
     long long target = 0;
     long long target_rank = 0;
     long long total = 0;
+    long long unsafe = 0;
     long long victim = 0;
     long long walking = 0;
     long long ret_val = 0;
@@ -6535,11 +6730,14 @@ long long mobility_count(long long state, long long for_black) {
     ep_gc_push_root(&code);
     ep_gc_push_root(&f);
     ep_gc_push_root(&forward);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&own_reach);
     ep_gc_push_root(&r);
     ep_gc_push_root(&sq);
     ep_gc_push_root(&target);
     ep_gc_push_root(&victim);
     ep_gc_push_root(&state);
+    ep_gc_push_root(&for_black);
 
     ep_gc_maybe_collect();
 
@@ -6561,6 +6759,16 @@ long long mobility_count(long long state, long long for_black) {
     kind = piece_kind(code);
     rank = (sq / 8);
     file = (sq - (rank * 8));
+    own_reach = 0;
+    if (kind < 6) {
+    if (kind > 1) {
+    own_reach = counted_reach(kind, sq, for_black);
+    hostage = lesser_attacker_exists(state, sq, own_reach, (1 - for_black));
+    if (hostage) {
+    kind = 0;
+    }
+    }
+    }
     if (kind == 1) {
     forward = 8;
     home_rank = 1;
@@ -6656,7 +6864,12 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (blocked == 0) {
+    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
+    if (offered_down) {
+    offered_down = offered_down;
+    } else {
     total = (total + 1);
+    }
     }
     }
     }
@@ -6724,7 +6937,12 @@ long long mobility_count(long long state, long long for_black) {
     if (f < 8) {
     victim = get_list(state, ((r * 8) + f));
     if (victim == 0) {
+    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
+    if (offered_down) {
+    offered_down = offered_down;
+    } else {
     total = (total + 1);
+    }
     r = (r + dr);
     f = (f + df);
     walking = 1;
@@ -6740,7 +6958,12 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (enemy == 1) {
+    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
+    if (offered_down) {
+    offered_down = offered_down;
+    } else {
     total = (total + 1);
+    }
     }
     }
     }
@@ -6785,7 +7008,12 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (blocked == 0) {
+    unsafe = square_attacked(state, ((r * 8) + f), (1 - for_black));
+    if (unsafe) {
+    unsafe = unsafe;
+    } else {
     total = (total + 1);
+    }
     }
     }
     }
@@ -6803,7 +7031,7 @@ long long mobility_count(long long state, long long for_black) {
     ret_val = total;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(9);
+    ep_gc_pop_roots(12);
     return ret_val;
 }
 
@@ -7080,7 +7308,7 @@ L_cleanup:
     return ret_val;
 }
 
-long long quiescence(long long state, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den) {
+long long quiescence(long long state, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den, long long fresh) {
     long long a_den = 0;
     long long a_num = 0;
     long long best_den = 0;
@@ -7093,9 +7321,11 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long child_num = 0;
     long long count = 0;
     long long deeper = 0;
+    long long enemy_king = 0;
     long long examine = 0;
     long long exposed = 0;
     long long from_sq = 0;
+    long long gives_check = 0;
     long long heavy = 0;
     long long i = 0;
     long long king_from = 0;
@@ -7107,11 +7337,14 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long nodes = 0;
     long long ok = 0;
     long long pseudo = 0;
+    long long read_this = 0;
     long long rest = 0;
     long long result = 0;
     long long side = 0;
     long long stand_den = 0;
+    long long stand_mine = 0;
     long long stand_num = 0;
+    long long stand_theirs = 0;
     long long taking = 0;
     long long to_sq = 0;
     long long victim = 0;
@@ -7124,6 +7357,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     ep_gc_push_root(&best_num);
     ep_gc_push_root(&child);
     ep_gc_push_root(&deeper);
+    ep_gc_push_root(&enemy_king);
     ep_gc_push_root(&i);
     ep_gc_push_root(&king_from);
     ep_gc_push_root(&king_now);
@@ -7147,6 +7381,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     side = get_list(state, 64);
     king_from = king_square(state, side);
     checked = square_attacked(state, king_from, (1 - side));
+    enemy_king = king_square(state, (1 - side));
     best_num = 0;
     best_den = 1;
     a_num = alpha_num;
@@ -7154,8 +7389,10 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if (checked) {
     best_num = best_num;
     } else {
-    stand_num = share_numerator(state);
-    stand_den = share_denominator(state);
+    stand_mine = side_units(state, side);
+    stand_theirs = side_units(state, (1 - side));
+    stand_num = stand_mine;
+    stand_den = (stand_mine + stand_theirs);
     if ((stand_num * beta_den) > (beta_num * stand_den)) {
     ok = append_list(result, stand_num);
     ok = append_list(result, stand_den);
@@ -7178,6 +7415,9 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if (checked) {
     bucket_end = 3;
     }
+    if (fresh == 1) {
+    bucket_end = 3;
+    }
     bucket = 0;
     while (bucket < bucket_end) {
     i = 0;
@@ -7189,6 +7429,9 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     examine = 1;
     }
     if (checked) {
+    examine = 1;
+    }
+    if (fresh == 1) {
     examine = 1;
     }
     if (examine == 1) {
@@ -7235,7 +7478,25 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     exposed = exposed;
     } else {
     legal_seen = (legal_seen + 1);
-    deeper = quiescence(child, (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
+    read_this = 1;
+    if (taking) {
+    read_this = 1;
+    } else {
+    if (checked) {
+    read_this = 1;
+    } else {
+    gives_check = square_attacked(child, enemy_king, side);
+    if (gives_check) {
+    read_this = 1;
+    } else {
+    read_this = 0;
+    }
+    }
+    }
+    if (read_this == 0) {
+    read_this = read_this;
+    } else {
+    deeper = quiescence(child, (beta_den - beta_num), beta_den, (a_den - a_num), a_den, 0);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
     nodes = (nodes + get_list(deeper, 2));
@@ -7256,6 +7517,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if ((my_num * a_den) > (a_num * my_den)) {
     a_num = my_num;
     a_den = my_den;
+    }
     }
     }
     }
@@ -7281,7 +7543,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     result = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(21);
+    ep_gc_pop_roots(22);
     return ret_val;
 }
 
@@ -7344,7 +7606,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     ep_gc_maybe_collect();
 
     if (depth == 0) {
-    ret_val = quiescence(state, alpha_num, alpha_den, beta_num, beta_den);
+    ret_val = quiescence(state, alpha_num, alpha_den, beta_num, beta_den, 1);
     goto L_cleanup;
     }
     result = create_list();

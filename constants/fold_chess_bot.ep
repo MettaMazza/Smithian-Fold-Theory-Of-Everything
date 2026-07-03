@@ -855,6 +855,7 @@ define mobility_count with state and for_black as Int returning Int:
             set kind to piece_kind(code)
             set rank to sq / 8
             set file to sq - rank * 8
+            set own_reach to 0
             if kind < 6:
                 if kind > 1:
                     set own_reach to counted_reach(kind and sq and for_black)
@@ -932,7 +933,11 @@ define mobility_count with state and for_black as Int returning Int:
                                                         if piece_is_white(victim):
                                                             set blocked to 1
                                                     if blocked == 0:
-                                                        set total to total + 1
+                                                        set offered_down to lesser_attacker_exists(state and r * 8 + f and own_reach and 1 - for_black)
+                                                        if offered_down:
+                                                            set offered_down to offered_down
+                                                        else:
+                                                            set total to total + 1
                         set df to df + 1
                     set dr to dr + 1
             if kind > 2:
@@ -978,7 +983,11 @@ define mobility_count with state and for_black as Int returning Int:
                                                 if f < 8:
                                                     set victim to get_list(state and r * 8 + f)
                                                     if victim == 0:
-                                                        set total to total + 1
+                                                        set offered_down to lesser_attacker_exists(state and r * 8 + f and own_reach and 1 - for_black)
+                                                        if offered_down:
+                                                            set offered_down to offered_down
+                                                        else:
+                                                            set total to total + 1
                                                         set r to r + dr
                                                         set f to f + df
                                                         set walking to 1
@@ -991,7 +1000,11 @@ define mobility_count with state and for_black as Int returning Int:
                                                             if piece_is_black(victim):
                                                                 set enemy to 1
                                                         if enemy == 1:
-                                                            set total to total + 1
+                                                            set offered_down to lesser_attacker_exists(state and r * 8 + f and own_reach and 1 - for_black)
+                                                            if offered_down:
+                                                                set offered_down to offered_down
+                                                            else:
+                                                                set total to total + 1
                             set df to df + 1
                         set dr to dr + 1
             if kind == 6:
