@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-304 suites, 1,801 forced checks, 0 failures). It needs nothing but a C compiler. Use
+305 suites, 1,813 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5319,6 +5319,27 @@ and every odd-overlap coefficient is certified EXACTLY zero — 32 of 64, the st
 corollary by count. Same theorems, third and fourth solved domains: the pipeline, not the
 board, is the instrument.
 
+### Step 302 — The terminal fine structure (alpha read to ALL its orders: exact)
+
+**File:** `constants/fine_structure_terminal.ep`
+
+**What it does.** The question a physicist asks after the second order — does the
+self-similarity continue, and does it end? — answered by counting. Each order of the
+covering self-similarity promotes EXACTLY ONE remaining cube direction from the down-depth
+to the up-depth; a rung is a multiset of three directions, so each rung has exactly one
+successor (no choice anywhere) and the ladder is 5³ → 5²·7 → 5·7² → 7³ — **four rungs
+(colour + 1), then no successor exists: the construction terminates.** The tower is the
+finite continued deepening `250 + 1/(175 + 1/(245 + 1/343))`, every order exact; orders 1
+and 2 equal the independent module's forced values as identities; the shifts collapse
+> 10³ per rung (exact inequalities). THE TERMINAL VALUE:
+**1/α = 503846395469/3676744786 = 137.035999177180855… — exact.** Against CODATA 2022:
+0.009σ. THE STANDING PREDICTIONS: the digits at 2 × 10⁻¹¹ are **…177181** (called before
+metrology can see them), and the live 5.4σ Rb/Cs photon-recoil discrepancy resolves to
+**137.0359991772** (the fold's value sits 2.6σ below Rb and 4.9σ above Cs — both carry
+systematics). Pre-registered in `PREDICTIONS.md`. Not a series and not a correction
+scheme: one finite counted object, read to the end of its own structure — to our
+knowledge the first exact closed value of α ever stated.
+
 ---
 
 ## Where the recreation stands right now
@@ -5995,6 +6016,10 @@ runs):**
   coefficients equal their swapped twins; c_s = 8 iff blocks agree) and **T-2 vanishing law**
   (all odd-overlap subtraction coefficients exactly zero — half the spectrum, the storage
   corollary) — the chess campaign's laws on third and fourth solved domains.
+- Step 302 — the TERMINAL fine structure: the promotion ladder is counted (one successor
+  per rung, 5³ → 5²·7 → 5·7² → 7³, then NONE — four rungs = colour + 1) so the construction
+  ENDS: **1/α = 503846395469/3676744786 = 137.035999177180855… exactly** (0.009σ); the
+  digits **…177181** and the Rb/Cs resolution called in advance (`PREDICTIONS.md`).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

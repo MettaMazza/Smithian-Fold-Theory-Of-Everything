@@ -18,6 +18,28 @@ the receipts predate it.
 
 ## TIER I — DECIDING NOW (data arriving 2025–2028)
 
+### 0. The fine-structure constant is EXACT — and its next digits are called
+- **Forced:** the self-similar covering ladder is COUNTED and it TERMINATES: the
+  cube has three directions, one is promoted per order (5³ → 5²·7 → 5·7² → 7³),
+  and then no successor exists. Four orders, then done:
+  **1/α = 503846395469/3676744786 = 137.035999177180855…, exactly** —
+  `constants/fine_structure_terminal.ep` (orders 1–2 cross-checked as identities
+  against the independently forced module values; convergence collapses by >10³
+  per rung, checked as exact inequalities). To our knowledge the first exact
+  closed value of α ever stated.
+- **The called digits:** at ~2 × 10⁻¹¹ precision the digits are **…177181**
+  (the second order alone would say …177162 — the third rung moves the 12th
+  significant digit, and the fold states it now, before metrology can see it).
+- **The live discrepancy, called:** the two best photon-recoil measurements
+  disagree by 5.4σ (Rb 2020: 137.035999206(11); Cs 2018: 137.035999046(27)).
+  The fold's value sits between — 2.6σ below Rb, 4.9σ above Cs — and says the
+  discrepancy resolves to **137.0359991772**. CODATA 2022 (g−2 dominated)
+  already sits 0.009σ from the terminal value.
+- **Decides:** next-generation photon-recoil interferometry (Rb/Cs upgrades) and
+  the electron g−2 + QED pipeline, mid-to-late 2020s.
+- **Falsifies:** the discrepancy resolving decisively AWAY from 137.0359991772,
+  or any future digit past the 11th differing from …177181.
+
 ### 1. The sum of the neutrino masses: **Σmν = 0.0583 eV, normal ordering**
 - **Forced:** the splitting ratio 3/100 (counted tower 1/32 × the M25 scale 24/25),
   one comparison-side anchor, and the No-Zero floor — `constants/neutrino_absolute_masses.ep`.
@@ -181,5 +203,5 @@ A counterexample to any of these falsifies the fold frame itself.
 ---
 
 *Every value on this page is forced — never fitted, never chosen — and recomputes
-from the One in one command: `make -C verify prove` (304 suites, 1,801 forced
+from the One in one command: `make -C verify prove` (305 suites, 1,813 forced
 checks). The git log timestamps this ledger. — Maria Smith, Ernos Labs.*

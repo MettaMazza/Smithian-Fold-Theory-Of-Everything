@@ -36,7 +36,7 @@ nothing added, the model reaches:
 
 | Result | Forced value | Measured | Agreement |
 |---|---|---|---|
-| Fine-structure constant `1/α` | `5995462/43751 = 137.035999177` | `137.035999177` | **9 digits** |
+| Fine-structure constant `1/α` | **EXACT — the ladder closes**: `503846395469/3676744786 = 137.035999177180855…` | `137.035999177(21)` | **0.009σ**; next digits called |
 | Proton-to-Planck hierarchy | `(M/m)² = 2¹²⁷` | — | 0.24% on the ratio |
 | Proton/electron mass ratio | `(1/3)(m_μ−m_e)/(m_μ m_e) = 1836.3254` | `1836.15267` | 0.0094% |
 | Koide lepton relation `Q` | `2/3 = 0.666666…` | `0.666661` | **5 digits** |
@@ -622,8 +622,8 @@ And the structural laws of physics, forced the same way:
   odd-overlap subtraction coefficient is exactly zero, half the spectrum provably empty:
   the storage corollary by count — the pipeline, not the board, is the instrument).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 304 test
-suites (1,801 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 305 test
+suites (1,813 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -680,7 +680,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 304 suites, 1,801 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 305 suites, 1,813 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

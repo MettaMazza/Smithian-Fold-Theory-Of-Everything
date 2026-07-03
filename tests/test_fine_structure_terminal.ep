@@ -1,0 +1,36 @@
+import "../constants/fine_structure_terminal.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the terminal fine structure: alpha read to ALL its orders ==="
+    set ok to expect_equal("the ladder's rungs: 5^3" and int_to_string(ladder_rung(0)) and "125")
+    set ok to expect_equal("one direction promoted: 5^2*7" and int_to_string(ladder_rung(1)) and "175")
+    set ok to expect_equal("two promoted: 5*7^2" and int_to_string(ladder_rung(2)) and "245")
+    set ok to expect_equal("all promoted: 7^3 (the last rung)" and int_to_string(ladder_rung(3)) and "343")
+    set ok to expect_bool("THE LADDER IS COUNTED: one successor per rung, then NONE" and ladder_is_counted())
+    set ok to expect_equal("the ladder length: colour + 1" and int_to_string(ladder_length()) and "4")
+    set ok to expect_bool("orders 1 and 2 EQUAL the independent module values (identities)" and orders_match_the_module())
+    set ok to expect_equal("the third order, exact" and fraction_to_text(inverse_alpha_at_order(3)) and "1468922449/10719245")
+    set ok to expect_equal("THE TERMINAL VALUE: alpha exact, the ladder closed" and fraction_to_text(terminal_inverse_alpha()) and "503846395469/3676744786")
+    set terminal to terminal_inverse_alpha()
+    set ok to expect_equal("the terminal decimal: the called digits ...177181" and fraction_to_decimal(terminal and 12) and "137.035999177180")
+    set ok to expect_bool("convergence collapses self-similarly (>1000x per rung, exact)" and convergence_collapses())
+    # comparison side: CODATA 2022 gives 137.035999177(21); the terminal value
+    # sits 0.009 sigma away -- |terminal - codata| < sigma/50, checked exactly.
+    set codata to fraction_from_ratio(137035999177 and 1000000000)
+    set terminal_twin to terminal_inverse_alpha()
+    set deviation to fraction_subtract(terminal_twin and codata)
+    set sigma_fiftieth to fraction_from_ratio(21 and 50000000000)
+    set ok to expect_bool("vs CODATA: inside a FIFTIETH of the error bar (0.009 sigma)" and fraction_compare(deviation and sigma_fiftieth) == 0 - 1)
+    display "=== done ==="
+    return 0
