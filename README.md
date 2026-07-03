@@ -515,9 +515,24 @@ And the structural laws of physics, forced the same way:
   **prime pairs as fold antipodes** (an even number's pair `(k, E−k)` casts to exactly the
   One about its half-One — **Goldbach verified for all 4,999 evens to 10,000**, and the
   twins counted to the same bound: exactly **205**, the published value).
+- **Turbulence, the violent Earth and sky, free will, and the map of necessity** — **the
+  Kolmogorov exponents** (the cascade branches across the COUNTED three dimensions: the
+  structure exponent is the branching ratio `2/3` — checked equal to the strong coupling,
+  one number two roles — and the spectrum exponent `5/3`; a binary cascade verifiably gives
+  the wrong answer), **earth & high-energy astro** (tipping = a one-step lock crossing, the
+  basins 1/4 and 3/4 folding to the same lock; quakes = the unit power law exact over ten
+  octaves — **Gutenberg-Richter b = 1**; bursts = atomic release, half-One to the One in one
+  move; ringdown = the fold's own halving, never zero), **free will** (forward the fold is a
+  function — fully determined, **libertarian free will ruled out**; backward it is 2-to-1 —
+  distinct pasts, equal presents, one bit lost — so the self cannot pre-read its own next
+  act: determinism plus forced self-opacity, a closure not an open), and **the
+  counterfactual map** (NECESSARY: 1/2 the unique self-antipode — exhaustive to denominator
+  300 — base 2 the minimal fold, the depths counted; the master dial moves all NINE
+  c-dependent constants together; CONTINGENT: one bounded label m ∈ {2,3,5,7}; CONVENTION:
+  the unit name — **the SM's ~26 dials against the fold's ZERO**).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 281 test
-suites (1,623 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 285 test
+suites (1,647 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -574,7 +589,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 281 suites, 1,623 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 285 suites, 1,647 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

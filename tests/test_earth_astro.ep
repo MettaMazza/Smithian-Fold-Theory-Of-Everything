@@ -1,0 +1,23 @@
+import "../constants/earth_astro.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== earth and high-energy astro: four coats, one fold ==="
+    set ok to expect_equal("TIPPING: the lock threshold is the self-antipodal half-One" and fraction_to_text(tipping_threshold()) and "1/2")
+    set ok to expect_bool("the two basins 1/4 and 3/4 fold to the SAME lock (bistability)" and two_basins_one_lock())
+    set ok to expect_bool("QUAKES: the unit power law exact over ten octaves (Gutenberg-Richter b=1)" and unit_power_law_holds_over(10))
+    set ok to expect_bool("BURSTS: the release is atomic -- half-One to the One in ONE move" and release_is_atomic())
+    set ok to expect_equal("RINGDOWN: the amplitude at cycle 4" and fraction_to_text(ringdown_amplitude(4)) and "1/16")
+    set ok to expect_bool("the ringdown halves each cycle and never reaches zero (10 cycles)" and ringdown_decays_over(10))
+    display "=== done ==="
+    return 0

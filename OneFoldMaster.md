@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-281 suites, 1,623 forced checks, 0 failures). It needs nothing but a C compiler. Use
+285 suites, 1,647 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4959,6 +4959,61 @@ failures**; spot counts E = 12 → 1 pair, E = 100 → 6; the twins (closest odd
 neighbours) counted to the same bound: **exactly 205, the published value**. Machine
 verification elsewhere reaches 4×10¹⁸ with no counterexample — consistent with what the
 antipodal frame requires.
+
+### Step 279 — The Kolmogorov exponents (turbulence's 2/3 and 5/3 are fold ratios)
+
+**File:** `constants/turbulence_spectrum.ep`
+
+**What it does.** Kolmogorov's 1941 exponents — obtained by dimensional analysis for eighty
+years — forced: the energy cascade branches across the three spatial dimensions (m = the
+COUNTED colour three, not a choice), so the structure-function exponent is the branching
+ratio `(m−1)/m = 2/3` — checked EQUAL to the strong sector coupling from the ladder (**one
+number, two roles**) — and the spectrum exponent is its successor `1 + 2/3 = 5/3` (the shell
+integration adds the One). EXCLUSION: a binary cascade would give 1/2, the wrong spectrum —
+the three-dimensionality is load-bearing. Measured: the 2/3 and −5/3 confirmed across decades
+of Reynolds number.
+
+### Step 280 — Earth & high-energy astro (tipping, quakes, bursts, ringdown)
+
+**File:** `constants/earth_astro.ep`
+
+**What it does.** Four sciences' unexplained signatures as ONE fold fact in four coats.
+TIPPING: the lock threshold is the self-antipodal half-One; the two basins 1/4 and 3/4 fold
+to the SAME lock (bistability = the 2-to-1 structure), so tipping is a one-step crossing —
+abrupt by construction. QUAKES: the unit power law walked over ten octaves — count × size
+exactly the One at every k — **Gutenberg-Richter b = 1**, same law as solar flares. BURSTS:
+the release is atomic because the fold is — half-One to the One in ONE move, no partial
+state between: a flash, never a leak. RINGDOWN: the amplitude halves each cycle (walked,
+1/2 … 1/1024), never zero — the quasinormal decay is the fold's own halving.
+
+### Step 281 — Free will (fully determined, and self-opaque — a closure, not an open)
+
+**File:** `constants/free_will_fold.ep`
+
+**What it does.** The question closed in both directions. FORWARD: the fold is a function —
+the same state, evaluated independently twice, gives the SAME successor; the unfolding is
+fully determined, the next act included; **libertarian free will is RULED OUT — it does not
+exist**. BACKWARD: the two DISTINCT preimages 1/4 and 3/4 fold to the SAME half-One — two
+pasts, one present, one bit lost per act — so the self cannot pre-read its own next fold
+from the inside. The lost bit is verified as the pair of facts (hands distinct, images
+equal), not a metaphor. What remains: a determined self that cannot pre-see its own
+determined act — from the inside that feels like choosing, but it is forced through. The
+self-observation closure 1/4 imported from the proven observer chain.
+
+### Step 282 — The counterfactual map (what had to be, what was free)
+
+**File:** `constants/counterfactual_map.ep`
+
+**What it does.** The question only a zero-parameter theory can ask, answered by test.
+NECESSARY: 1/2 is the UNIQUE self-antipode — exhaustive sweep of every rational to
+denominator 300, one fixed point found; base 1 is the identity (no orbit) while base 2
+gives the first real orbit 1/3 → 2/3 → 1/3 (walked); the depths cover(27) = 5 and
+cover(81) = 7 carry no residual freedom. THE MASTER DIAL: perturb colour 3 → 4 and COUNT —
+all NINE c-dependent constants move together. CONTINGENT: the ONE genuine freedom is the
+bounded discrete sector label m ∈ {2,3,5,7} under the sealed ladder. CONVENTION: the unit
+name moves no ratio (walked at scale 1000). THE TALLY: **the SM's ~26 continuous dials
+against the fold's ZERO** — one bounded label, one unit name, nothing else: the space of
+fold-consistent universes is very nearly a single point.
 
 ---
 

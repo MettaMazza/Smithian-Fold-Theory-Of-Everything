@@ -1,0 +1,25 @@
+import "../constants/counterfactual_map.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the counterfactual map: what had to be, what was free ==="
+    set ok to expect_bool("NECESSARY: 1/2 is the UNIQUE self-antipode -- exhaustive to denominator 300" and self_antipodal_unique_to(300))
+    set ok to expect_bool("NECESSARY: base 1 is the identity -- no orbit, no dynamics" and base_one_is_identity())
+    set ok to expect_bool("NECESSARY: base 2 gives the first real orbit 1/3 -> 2/3 -> 1/3" and base_two_first_orbit())
+    set ok to expect_equal("NECESSARY: the depths given colour -- cover(27)" and int_to_string(lock_down_depth(3)) and "5")
+    set ok to expect_equal("NECESSARY: the depths given colour -- cover(81)" and int_to_string(lock_up_depth(3)) and "7")
+    set ok to expect_equal("THE MASTER DIAL: colour 3 -> 4 moves all NINE c-dependent constants" and int_to_string(master_dial_moved_count()) and "9")
+    set ok to expect_bool("CONTINGENT: the one freedom is the bounded label m in {2,3,5,7}" and sector_label_is_bounded())
+    set ok to expect_bool("CONVENTION: the unit name moves no ratio (walked at scale 1000)" and unit_name_is_physics_free())
+    display "=== done ==="
+    return 0

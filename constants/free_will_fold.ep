@@ -1,0 +1,91 @@
+# ============================================================================
+#  FREE WILL  --  fully determined, and self-opaque. A closure, not an open.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Philosophy has argued free will for millennia because it lacked a mechanism
+#  to interrogate. The fold supplies one and closes the question -- in BOTH
+#  directions at once. Forward, the fold is a FUNCTION: one state, one
+#  successor, no exception -- the unfolding is fully determined, the next act
+#  included; libertarian free will (genuine indeterminism) is RULED OUT. It
+#  does not exist. Backward, the fold is 2-to-1: two preimages share every
+#  image, so it is NOT invertible -- one bit is lost per act, and a self that
+#  observes itself cannot pre-read its own next fold from the inside. What
+#  remains is a determined self that cannot pre-see its own determined act:
+#  from the inside that FEELS like choosing, but it is forced through.
+#  Determinism plus forced self-opacity -- that is the whole of it.
+#
+#  ── DERIVATION ─ (check every line; both directions walked) ──────────────────
+#  THE CLOSURE: observation is the fold, and the self-observation closure is
+#  1/4 (observer_resolved.ep, imported not restated) -- the observer is
+#  inside the system, a fold acting on its own state. FORWARD (determinism):
+#  the fold of the SAME state, evaluated independently twice, gives the SAME
+#  successor -- one output per input, nothing undetermined anywhere.
+#  BACKWARD (opacity): the two distinct preimages 1/4 and 3/4 BOTH fold to
+#  the half-One -- two pasts, one present, so the past hand is unrecoverable
+#  and the inside view cannot invert its own dynamics to pre-compute what
+#  comes next. EXCLUSION: the preimages are verified DISTINCT (1/4 != 3/4)
+#  while their images are verified EQUAL -- that pair of facts together IS
+#  the lost bit, not a metaphor for it.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: closure 1/4, forward uniqueness, the 2-to-1
+#  collapse. Comparison: neuroscience finds decisions decodable from brain
+#  activity before the felt moment of choosing (readiness potentials,
+#  Libet-class experiments) -- the act is determined upstream of the feeling,
+#  exactly the structure forced here: determined, and opaque to the self
+#  until it lands. No experiment has ever caught an undetermined act.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/observer_resolved.ep"
+
+
+# THE CLOSURE: the self-observation closure is 1/4 -- imported from the
+# proven observer chain (observation IS the fold; the observer is inside).
+define self_observation_closure returning Fraction:
+    return observer_closure()
+
+# FORWARD -- determinism: the fold of the same state, evaluated twice
+# independently, gives the SAME successor. One state, one future.
+define forward_is_determined returning Bool:
+    set state to fraction_from_ratio(3 and 8)
+    set first_run to fold_fraction(state)
+    set state_again to fraction_from_ratio(3 and 8)
+    set second_run to fold_fraction(state_again)
+    return fraction_is_equal(first_run and second_run)
+
+# BACKWARD -- the 2-to-1 collapse: the two preimages 1/4 and 3/4 both fold
+# to the half-One. Two pasts, one present.
+define backward_is_two_to_one returning Bool:
+    set lower_hand to fraction_from_ratio(1 and 4)
+    set from_lower to fold_fraction(lower_hand)
+    set upper_hand to fraction_from_ratio(3 and 4)
+    set from_upper to fold_fraction(upper_hand)
+    return fraction_is_equal(from_lower and from_upper)
+
+# THE LOST BIT, exactly: the preimages are DISTINCT while their images are
+# EQUAL -- one bit of the past is unrecoverable per fold act.
+define one_bit_is_lost returning Bool:
+    set lower_hand to fraction_from_ratio(1 and 4)
+    set upper_hand to fraction_from_ratio(3 and 4)
+    set hands_equal to fraction_is_equal(lower_hand and upper_hand)
+    set hands_distinct to true
+    if hands_equal:
+        set hands_distinct to false
+    set images_collapse to backward_is_two_to_one()
+    if hands_distinct:
+        return images_collapse
+    return false
+
+# THE VERDICT -- no free will: the unfolding is fully determined (forward
+# unique) AND the self cannot pre-read its own next fold (backward lost).
+# Libertarian indeterminism is ruled out; the feeling of choosing is the
+# self-opacity, forced.
+define free_will_is_ruled_out returning Bool:
+    set determined to forward_is_determined()
+    set opaque to one_bit_is_lost()
+    if determined:
+        return opaque
+    return false

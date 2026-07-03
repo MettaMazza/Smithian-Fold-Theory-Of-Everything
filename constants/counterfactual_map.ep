@@ -1,0 +1,206 @@
+# ============================================================================
+#  THE COUNTERFACTUAL MAP  --  what had to be, and what was free.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Only a parameter-free generative theory can even ask this question: of
+#  everything in our universe, what was FORCED (no consistent alternative),
+#  what was a bounded LABEL (a discrete index the fold leaves open), and what
+#  was pure CONVENTION (no physics at all)? The Standard Model cannot ask it
+#  -- with ~26 continuous dials nearly everything is free by construction.
+#  The fold has a root, so every structural number can be sorted into
+#  necessity, contingency, or convention -- and the genuine freedoms COUNTED.
+#  The answer: zero continuous dials, ONE bounded discrete label (the sector
+#  prime), one physics-free unit name. The space of fold-consistent universes
+#  is very nearly a single point: almost nothing could have been otherwise.
+#
+#  ── DERIVATION ─ (check every line; each classification tested, not asserted) ─
+#  NECESSARY -- the self-antipodal coupling: 1/2 is the UNIQUE fixed point of
+#  the reflection x <-> 1-x, verified by exhaustive sweep of every reduced
+#  rational with denominator up to 300 (one fixed point found, and it is 1/2).
+#  NECESSARY -- the fold base 2: base 1 is the identity (1/3 never moves --
+#  no orbit, no dynamics); base 2 gives the first real orbit, 1/3 -> 2/3 ->
+#  1/3, walked and closed. The doubling base is the minimal nontrivial fold.
+#  NECESSARY -- the covering depths: given the colour count, cover(3^3) = 5
+#  and cover(3^4) = 7 are counted with no residual freedom (grand_lock.ep).
+#  THE MASTER DIAL -- perturb colour 3 -> 4 and count: all NINE c-dependent
+#  constants move together (counted one by one); nothing downstream is
+#  independently dialable.
+#  CONTINGENT -- the one genuine freedom: the sector label m, bounded and
+#  discrete -- exactly the four primes {2,3,5,7} under the sealed ladder
+#  (count = 4; the next prime 11 lies beyond the ceiling and carries nothing).
+#  CONVENTION -- the unit name: scaling both sides of any mass ratio by the
+#  same unit leaves the ratio EXACTLY unchanged (walked at scale 1000) --
+#  which rung is called "one kilogram" moves no ratio and no forced number.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is the sort and the count: 0 continuous dials, one
+#  bounded discrete label, one unit convention. Comparison: the SM's ~26
+#  measured-and-inserted parameters (PDG) against the fold's zero -- and
+#  every one of the fold's forced values is validated against measurement in
+#  its own module. The map itself is the standing claim: no future
+#  measurement can reveal a knob, because there is no knob to reveal.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../constants/grand_lock.ep"
+import "../constants/prime_sector_ladder.ep"
+
+
+# NECESSARY: 1/2 is the unique fixed point of x <-> 1-x, swept exhaustively
+# over every rational p/q with 2 <= q <= bound, 1 <= p < q.
+define self_antipodal_unique_to with bound as Int returning Bool:
+    set half to fraction_from_ratio(1 and 2)
+    set found to 0
+    set all_are_half to true
+    set q to 2
+    repeat while q < bound + 1:
+        set p to 1
+        repeat while p < q:
+            set candidate to fraction_from_ratio(p and q)
+            set one to fraction_from_whole_number(1)
+            set reflected to fraction_subtract(one and candidate)
+            set candidate_twin to fraction_from_ratio(p and q)
+            set fixed to fraction_is_equal(reflected and candidate_twin)
+            if fixed:
+                set found to found + 1
+                set candidate_check to fraction_from_ratio(p and q)
+                set half_twin to fraction_from_ratio(1 and 2)
+                set is_half to fraction_is_equal(candidate_check and half_twin)
+                if is_half:
+                    set all_are_half to all_are_half
+                else:
+                    set all_are_half to false
+            set p to p + 1
+        set q to q + 1
+    if found > 0:
+        return all_are_half
+    return false
+
+# NECESSARY: base 1 is the identity -- the state never moves, no orbit.
+define base_one_is_identity returning Bool:
+    set state to fraction_from_ratio(1 and 3)
+    set one_fraction to fraction_from_whole_number(1)
+    set moved to fraction_multiply(one_fraction and state)
+    set state_twin to fraction_from_ratio(1 and 3)
+    return fraction_is_equal(moved and state_twin)
+
+# NECESSARY: base 2 gives the first real orbit -- 1/3 moves to 2/3 and
+# returns in two steps, walked.
+define base_two_first_orbit returning Bool:
+    set start to fraction_from_ratio(1 and 3)
+    set start_for_step to fraction_from_ratio(1 and 3)
+    set once to fraction_add(start_for_step and start)
+    set start_check to fraction_from_ratio(1 and 3)
+    set really_moved to true
+    set stayed to fraction_is_equal(once and start_check)
+    if stayed:
+        set really_moved to false
+    set once_twin to fraction_from_ratio(2 and 3)
+    set once_again to fraction_from_ratio(2 and 3)
+    set twice_raw to fraction_add(once_twin and once_again)
+    set twice to cast_out_whole_ones(twice_raw)
+    set start_final to fraction_from_ratio(1 and 3)
+    set returned to fraction_is_equal(twice and start_final)
+    if really_moved:
+        return returned
+    return false
+
+# THE MASTER DIAL: perturb colour 3 -> 4 and COUNT the constants that move
+# -- all nine c-dependent constants, counted one by one.
+define master_dial_moved_count returning Int:
+    set moved to 0
+    set alpha3 to lock_alpha(3)
+    set alpha4 to lock_alpha(4)
+    set alpha_same to fraction_is_equal(alpha3 and alpha4)
+    if alpha_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set lepton3 to lock_lepton_third(3)
+    set lepton4 to lock_lepton_third(4)
+    set lepton_same to fraction_is_equal(lepton3 and lepton4)
+    if lepton_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set up3 to lock_quark_up(3)
+    set up4 to lock_quark_up(4)
+    set up_same to fraction_is_equal(up3 and up4)
+    if up_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set down3 to lock_quark_down(3)
+    set down4 to lock_quark_down(4)
+    set down_same to fraction_is_equal(down3 and down4)
+    if down_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set ratio3 to lock_dark_to_baryon(3)
+    set ratio4 to lock_dark_to_baryon(4)
+    set ratio_same to fraction_is_equal(ratio3 and ratio4)
+    if ratio_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set dark3 to lock_dark_fraction(3)
+    set dark4 to lock_dark_fraction(4)
+    set dark_same to fraction_is_equal(dark3 and dark4)
+    if dark_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set hubble3 to lock_hubble(3)
+    set hubble4 to lock_hubble(4)
+    set hubble_same to fraction_is_equal(hubble3 and hubble4)
+    if hubble_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set planck3 to lock_planck_exponent(3)
+    set planck4 to lock_planck_exponent(4)
+    set planck_same to fraction_is_equal(planck3 and planck4)
+    if planck_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    set floor3 to lock_lambda_floor(3)
+    set floor4 to lock_lambda_floor(4)
+    set floor_same to fraction_is_equal(floor3 and floor4)
+    if floor_same:
+        set moved to moved
+    else:
+        set moved to moved + 1
+    return moved
+
+# CONTINGENT: the one genuine freedom -- the sector label, bounded and
+# discrete: exactly four primes under the sealed ladder, the next (11)
+# carrying nothing.
+define sector_label_is_bounded returning Bool:
+    set count_ok to prime_sector_count() == 4
+    set ceiling to deepest_covering_depth()
+    set beyond to first_prime_beyond_ceiling()
+    set sealed to beyond > ceiling
+    if count_ok:
+        return sealed
+    return false
+
+# CONVENTION: the unit name carries no physics -- scaling both sides of a
+# ratio by the same unit leaves the ratio exactly unchanged (walked at 1000).
+define unit_name_is_physics_free returning Bool:
+    set numerator_side to fraction_from_ratio(27 and 1)
+    set denominator_side to fraction_from_ratio(5 and 1)
+    set bare_ratio to fraction_divide(numerator_side and denominator_side)
+    set unit to fraction_from_whole_number(1000)
+    set numerator_scaled_base to fraction_from_ratio(27 and 1)
+    set numerator_scaled to fraction_multiply(numerator_scaled_base and unit)
+    set unit_twin to fraction_from_whole_number(1000)
+    set denominator_scaled_base to fraction_from_ratio(5 and 1)
+    set denominator_scaled to fraction_multiply(denominator_scaled_base and unit_twin)
+    set scaled_ratio to fraction_divide(numerator_scaled and denominator_scaled)
+    return fraction_is_equal(scaled_ratio and bare_ratio)

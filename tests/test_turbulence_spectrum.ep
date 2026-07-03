@@ -1,0 +1,22 @@
+import "../constants/turbulence_spectrum.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Kolmogorov exponents: turbulence's 2/3 and 5/3 as fold ratios ==="
+    set ok to expect_equal("the cascade dimension is COUNTED: the colour three" and int_to_string(cascade_dimension()) and "3")
+    set ok to expect_equal("the STRUCTURE-FUNCTION exponent (Kolmogorov's 2/3 law)" and fraction_to_text(structure_function_exponent()) and "2/3")
+    set ok to expect_equal("the ENERGY-SPECTRUM exponent 1 + 2/3 (the 5/3 law)" and fraction_to_text(energy_spectrum_exponent()) and "5/3")
+    set ok to expect_bool("the cascade ratio IS the strong coupling (one number, two roles)" and ratio_is_strong_coupling())
+    set ok to expect_bool("EXCLUSION: a binary cascade (1/2) is ruled out -- 3D is load-bearing" and binary_cascade_excluded())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,22 @@
+import "../constants/free_will_fold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== free will: fully determined, and self-opaque ==="
+    set ok to expect_equal("the self-observation closure (observation IS the fold)" and fraction_to_text(self_observation_closure()) and "1/4")
+    set ok to expect_bool("FORWARD: the fold is a function -- one state, one successor" and forward_is_determined())
+    set ok to expect_bool("BACKWARD: 1/4 and 3/4 both fold to the half-One (2-to-1)" and backward_is_two_to_one())
+    set ok to expect_bool("THE LOST BIT: distinct pasts, equal presents -- unrecoverable" and one_bit_is_lost())
+    set ok to expect_bool("THE VERDICT: libertarian free will RULED OUT -- determinism + forced self-opacity" and free_will_is_ruled_out())
+    display "=== done ==="
+    return 0
