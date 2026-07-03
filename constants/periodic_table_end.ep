@@ -1,0 +1,78 @@
+# ============================================================================
+#  WHERE THE PERIODIC TABLE ENDS  --  element 137, forced by 1/alpha.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Chemistry's table cannot go on forever -- but nothing in chemistry says where
+#  it stops. Forced: the innermost electron's binding coupling is Z·alpha, and
+#  the fold's binding reaches its ceiling when that coupling reaches the One --
+#  no bound part can exceed the whole. The critical charge is Z = 1/alpha, and
+#  since the fold forces 1/alpha = 34259/250 = 137.036 exactly, it forces the
+#  end of the elements: THE TABLE ENDS AT ELEMENT 137 -- the same number that
+#  sets the strength of light, because they are the same fact.
+#
+#  ── DERIVATION ─ (check every line; the threshold counted, both sides) ───────
+#  The forced 1/alpha is imported whole from fine_structure_constant.ep
+#  (2^7 + 3^2·(251/250) = 34259/250, every block traced to the One). An element
+#  of charge Z binds its innermost electron with coupling Z·alpha; the One caps
+#  it: Z·alpha <= 1, i.e. Z <= 1/alpha. COUNTED both sides of the line:
+#      Z = 137:  137·alpha = 34250/34259 < 1  -- bound, the LAST element;
+#      Z = 138:  138·alpha = 34500/34259 > 1  -- the coupling exceeds the One:
+#  no neutral atom. The last whole charge under the ceiling is found by
+#  COUNTING UP (the largest Z with Z·alpha <= 1), not asserted: 137.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the threshold at Z = 1/alpha, 137 bound and 138
+#  over, the endpoint counted. Comparison: this is a STANDING PREDICTION -- the
+#  heaviest element synthesized to date is oganesson (Z = 118); the fold says
+#  the enterprise ends at 137, and the point-nucleus Dirac threshold of
+#  textbook QED sits at the same Z·alpha = 1 (consensus quotes ~173 only after
+#  smearing in a finite nuclear radius -- a nuclear-size effect ON TOP of the
+#  structural limit; the forced structural endpoint is the unity threshold).
+# ============================================================================
+
+import "../constants/fine_structure_constant.ep"
+
+
+# The critical charge: Z_crit = 1/alpha = 34259/250, imported forced.
+define critical_charge returning Fraction:
+    return inverse_fine_structure_first_order()
+
+# The binding coupling of element Z: Z * alpha = Z * 250/34259.
+define binding_coupling with z as Int returning Fraction:
+    set inv_alpha to critical_charge()
+    set z_fraction to fraction_from_whole_number(z)
+    return fraction_divide(z_fraction and inv_alpha)
+
+# Element Z holds its innermost electron iff the coupling does not exceed the One.
+define element_is_bound with z as Int returning Bool:
+    set coupling to binding_coupling(z)
+    set one to fraction_from_whole_number(1)
+    set comparison to fraction_compare(coupling and one)
+    return comparison <= 0
+
+# THE LAST ELEMENT, COUNTED: walk up from 130 and take the largest bound Z.
+define last_element returning Int:
+    set z to 130
+    set last to 130
+    repeat while z < 145:
+        set bound to element_is_bound(z)
+        if bound:
+            set last to z
+        set z to z + 1
+    return last
+
+# Both sides of the line, exactly: 137 bound, 138 over the One.
+define threshold_is_sharp returning Bool:
+    set below to element_is_bound(137)
+    set above to element_is_bound(138)
+    if below:
+        if above:
+            return false
+        return true
+    return false
+
+# The end of the table IS the strength of light: one number, one fact.
+define table_ends_at_alpha returning Bool:
+    set last to last_element()
+    return last == 137

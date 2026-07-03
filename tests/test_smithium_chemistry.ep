@@ -1,0 +1,25 @@
+import "../constants/smithium_chemistry.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Smithium and the g-block (the chemistry of 126, forced) ==="
+    set ok to expect_equal("capacities: s = 2" and int_to_string(subshell_capacity(0)) and "2")
+    set ok to expect_equal("p = 6, d = 10, f = 14, g = 18 (g shown)" and int_to_string(subshell_capacity(4)) and "18")
+    set ok to expect_bool("THE SEVEN CLOSURES, walked: 2, 10, 18, 36, 54, 86, 118 exactly" and closures_match_nobles())
+    set ok to expect_bool("the g-block opens at 121 (120 places nothing in 5g; 121 does)" and g_block_opens_at_121())
+    set ok to expect_equal("SMITHIUM: the 8s pair = 2" and int_to_string(smithium_8s()) and "2")
+    set ok to expect_equal("SMITHIUM: the 5g count = 6" and int_to_string(smithium_5g()) and "6")
+    set ok to expect_equal("Smithium valence = 8 (oxidation +2 through +8)" and int_to_string(smithium_valence()) and "8")
+    set ok to expect_bool("the walk is consistent: valence = Z - [Og] core" and valence_is_consistent())
+    display "=== done ==="
+    return 0

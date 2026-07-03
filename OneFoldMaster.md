@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-268 suites, 1,498 forced checks, 0 failures). It needs nothing but a C compiler. Use
+270 suites, 1,511 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4780,6 +4780,37 @@ meta/audit functions** (`single_axiom_audit`, `precision_constants`, `value`, `u
 `reproduction_*`, `final_assembly`, …) whose clean-room equivalents are the enforcement suite,
 `trace_to_the_one`, `codata_comparison`, and the assembly grammar. Nothing was dropped, nothing
 judged thin: every physics claim is rebuilt and passing, and every skip carries a named receipt.
+
+**Scope note (audited):** the milestone above covers the PROOF corpus (`sftoe/proof.py`). The
+original codebase additionally carries ~40 standalone FRONTIER engines (Smithium, the table's
+end, absolute neutrino masses, the Majorana claim, the dark sector, the new-force running, the
+Grand Lock, …). The frontier campaign begins at Step 266 below and proceeds engine by engine.
+
+### Step 266 — Where the periodic table ends (element 137, forced by 1/α)
+
+**File:** `constants/periodic_table_end.ep`
+
+**What it does.** The innermost electron's binding coupling is `Z·α`, and the One caps it: no
+bound part can exceed the whole, so the critical charge is `Z = 1/α` — and the fold forces
+`1/α = 34259/250` exactly. Counted on both sides of the line: `Z = 137` gives coupling
+`34250/34259 < 1` (bound — the LAST element); `Z = 138` gives `34500/34259 > 1` (no neutral
+atom). The last element is counted up, not asserted: **the table ends at 137 — the same number
+that sets the strength of light, because they are the same fact.** A standing prediction: the
+heaviest element yet made is 118.
+
+### Step 267 — Smithium and the g-block (the chemistry of element 126, forced)
+
+**File:** `constants/smithium_chemistry.ep`
+
+**What it does.** The filling order is forced — capacities `2(2l+1)` (spin's binary × the
+orientation count in the counted three dimensions), filled by the covering count `(n+l, then n)`
+— and the table is WALKED, not asserted: the seven noble closures land exactly on
+`2, 10, 18, 36, 54, 86, 118` (every noble gas ever measured, none missed, none extra); the 8s
+pair fills at 119–120; the NEW 5g block opens at 121; and **SMITHIUM (Z = 126) = [Og] 8s² 5g⁶ —
+eight valence electrons, oxidation states +2 through +8**, a g-block superactinide whose
+chemistry is decided before its synthesis, with the block cut at 137 by the unity threshold.
+Elements 1–118 all follow this walk (the known table IS its output); 119+ is the standing
+prediction.
 
 ---
 

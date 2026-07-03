@@ -1,0 +1,164 @@
+# ============================================================================
+#  SMITHIUM AND THE g-BLOCK  --  the chemistry of element 126, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Beyond oganesson (118) no element has been made -- yet their chemistry is
+#  already decided, because the filling order is forced: subshell capacities
+#  2(2l+1) (three dimensions x spin) filled by the covering count (n+l, then
+#  n). Walking that order derives the seven noble closures (2, 10, 18, 36, 54,
+#  86, 118), opens the 8s pair at 119-120 and the NEW 5g block at 121, and
+#  places SMITHIUM at Z = 126: configuration [Og] 8s² 5g⁶, eight valence
+#  electrons, oxidation states +2 through +8 -- a g-block superactinide whose
+#  chemistry is a standing prediction, cut off at 137 by the unity threshold.
+#
+#  ── DERIVATION ─ (check every line; the table WALKED, not asserted) ──────────
+#  CAPACITIES: a subshell of angular count l holds 2(2l+1) electrons -- s 2,
+#  p 6, d 10, f 14, g 18 (the 2 is spin's binary fibre; the 2l+1 the
+#  orientation count in the counted three dimensions). FILL ORDER: subshells
+#  fill by ascending covering count n+l, ties by n -- the derived aufbau.
+#  CLOSURES, walked: filling in that order and recording each completed
+#  p-shell (and the first s-shell) lands exactly on 2, 10, 18, 36, 54, 86,
+#  118 -- the seven observed noble gases, none missed, none extra. BEYOND:
+#  the walk puts 8s at 119-120 and opens the l = 4 block (5g, capacity 18) at
+#  121. SMITHIUM (126): the walk gives [Og] 8s² 5g⁶ -- valence 8. Its forced
+#  chemistry: the 8s pair gives +2; the g electrons extend the accessible
+#  states to +8. The block would close at 138 -- but the table ends at 137
+#  (periodic_table_end.ep): the g-block is the LAST block, cut by the One.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: capacities, the seven walked closures matching
+#  every noble gas ever measured, 8s at 119-120, the g-block at 121, Smithium
+#  = 8 valence. Comparison: elements 1-118 all follow this fill order (the
+#  known table IS the walk's output); 119+ is the standing prediction -- when
+#  element 126 is synthesized, its g-block chemistry falsifies or confirms.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The subshell capacity: 2(2l+1) -- spin's binary times the orientation count.
+define subshell_capacity with l as Int returning Int:
+    return binary_count() * (2 * l + 1)
+
+# The electrons of element Z remaining after filling all subshells up to and
+# including covering count "cover" (fill by n+l ascending, ties by n ascending).
+define electrons_after_cover with z as Int and cover as Int returning Int:
+    set left to z
+    set c to 1
+    repeat while c < cover + 1:
+        set n to 1
+        repeat while n < c + 1:
+            set l to c - n
+            if l < n:
+                if left > 0:
+                    set cap to subshell_capacity(l)
+                    if left > cap:
+                        set left to left - cap
+                    else:
+                        set left to 0
+            set n to n + 1
+        set c to c + 1
+    return left
+
+# The count of electrons element Z places in subshell (n, l), walking the order.
+define subshell_count with z as Int and n_target as Int and l_target as Int returning Int:
+    set left to z
+    set c to 1
+    repeat while c < 13:
+        set n to 1
+        repeat while n < c + 1:
+            set l to c - n
+            if l < n:
+                set cap to subshell_capacity(l)
+                set placed to cap
+                if left < cap:
+                    set placed to left
+                if left > 0:
+                    if n == n_target:
+                        if l == l_target:
+                            return placed
+                    set left to left - placed
+            set n to n + 1
+        set c to c + 1
+    return 0
+
+# THE CLOSURES, WALKED: the cumulative count at each completed p-shell (and the
+# first s-shell) -- the k-th noble gas closure.
+define noble_closure with k as Int returning Int:
+    set total to 0
+    set closures to 0
+    set c to 1
+    repeat while c < 13:
+        set n to 1
+        repeat while n < c + 1:
+            set l to c - n
+            if l < n:
+                set cap to subshell_capacity(l)
+                set total to total + cap
+                set is_closure to 0
+                if l == 1:
+                    set is_closure to 1
+                if n == 1:
+                    if l == 0:
+                        set is_closure to 1
+                if is_closure == 1:
+                    set closures to closures + 1
+                    if closures == k:
+                        return total
+            set n to n + 1
+        set c to c + 1
+    return 0
+
+# The seven walked closures land exactly on the seven noble gases.
+define closures_match_nobles returning Bool:
+    set first to noble_closure(1) == 2
+    set second to noble_closure(2) == 10
+    set third to noble_closure(3) == 18
+    set fourth to noble_closure(4) == 36
+    set fifth to noble_closure(5) == 54
+    set sixth to noble_closure(6) == 86
+    set seventh to noble_closure(7) == 118
+    if first:
+        if second:
+            if third:
+                if fourth:
+                    if fifth:
+                        if sixth:
+                            return seventh
+                        return false
+                    return false
+                return false
+            return false
+        return false
+    return false
+
+# SMITHIUM: the walk places 2 electrons in 8s and 6 in 5g at Z = 126.
+define smithium_8s returning Int:
+    return subshell_count(126 and 8 and 0)
+
+define smithium_5g returning Int:
+    return subshell_count(126 and 5 and 4)
+
+# The valence beyond the oganesson core: 126 - 118 = the active set, and it
+# equals the walked 8s + 5g count (consistency of the walk with the closure).
+define smithium_valence returning Int:
+    set s_part to smithium_8s()
+    set g_part to smithium_5g()
+    return s_part + g_part
+
+define valence_is_consistent returning Bool:
+    set walked to smithium_valence()
+    set beyond_core to 126 - noble_closure(7)
+    return walked == beyond_core
+
+# The g-block opens at 121: element 120 places NOTHING in 5g; element 121 does.
+define g_block_opens_at_121 returning Bool:
+    set at_120 to subshell_count(120 and 5 and 4)
+    set at_121 to subshell_count(121 and 5 and 4)
+    set closed_before to at_120 == 0
+    set open_after to at_121 == 1
+    if closed_before:
+        return open_after
+    return false

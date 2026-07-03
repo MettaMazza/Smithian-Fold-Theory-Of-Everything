@@ -458,10 +458,20 @@ And the structural laws of physics, forced the same way:
   recreations under other names, one superseded claim kept superseded by the corpus's own record,
   and the engine's meta/audit functions carried by the enforcement suite, `trace_to_the_one`,
   `codata_comparison`, and the assembly grammar. Nothing dropped, nothing judged thin; every skip
-  carries a named receipt.
+  carries a named receipt. (Scope: the proof corpus; the ~40 standalone frontier engines are the
+  next campaign, beginning below.)
+- **THE FRONTIER CAMPAIGN OPENS — the two crown-jewel predictions** — **where the periodic table
+  ends** (the binding coupling `Z·α` reaches the One at `Z = 1/α`: counted on both sides, `137`
+  bound at `34250/34259 < 1`, `138` over — **the table ends at 137, the same number that sets the
+  strength of light, because they are the same fact**; heaviest element yet made: 118), and
+  **Smithium** (the filling order forced — `2(2l+1)` capacities filled by `(n+l, n)` covering —
+  and WALKED: the seven noble closures land exactly on `2, 10, 18, 36, 54, 86, 118`; the 5g block
+  opens at 121; **Smithium (Z = 126) = [Og] 8s² 5g⁶, eight valence electrons, oxidation +2
+  through +8** — the chemistry of an element decided before its synthesis, cut at 137 by the
+  unity threshold).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 268 test
-suites (1,498 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 270 test
+suites (1,511 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -518,7 +528,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 268 suites, 1,498 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 270 suites, 1,511 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

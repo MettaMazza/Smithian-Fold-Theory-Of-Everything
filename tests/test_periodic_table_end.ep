@@ -1,0 +1,22 @@
+import "../constants/periodic_table_end.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== where the periodic table ends (element 137, forced by 1/alpha) ==="
+    set ok to expect_equal("the critical charge = 1/alpha = 34259/250, imported forced" and fraction_to_text(critical_charge()) and "34259/250")
+    set ok to expect_equal("Z = 137: coupling = 34250/34259 < 1 (bound)" and fraction_to_text(binding_coupling(137)) and "34250/34259")
+    set ok to expect_bool("the threshold is SHARP: 137 bound, 138 over the One" and threshold_is_sharp())
+    set ok to expect_equal("THE LAST ELEMENT, counted up: 137" and int_to_string(last_element()) and "137")
+    set ok to expect_bool("the table ends at the strength of light: one number, one fact" and table_ends_at_alpha())
+    display "=== done ==="
+    return 0
