@@ -38,14 +38,22 @@
 #  final position verified legal).
 #
 #  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
-#  The perft numbers 20 / 400 / 8,902 are the published census of chess
-#  itself (independently reproduced by every engine ever written) -- the
-#  external oracle this engine is certified against, zero disagreements.
-#  What this bot is NOT claimed to be: a rival to tuned engines on playing
-#  strength. What it IS: a complete legal player whose entire evaluation
-#  chain is counted and exact -- the only chess player with zero fitted
-#  parameters -- and the demonstration that the fold framework computes
-#  forward (plays) as well as it derives.
+#  THE RULES, whole-board: certified against the published perft census at
+#  FOUR positions -- the start (20/400/8,902), Kiwipete with castling, pins
+#  and double checks (48/2,039/97,862), the en-passant-pin endgame at depth
+#  four (43,238), and the four-way-promotion position (9,483) -- zero
+#  disagreements at every depth. THE PLAY, refereed: in whole games where an
+#  INDEPENDENT rules implementation (python-chess) validates every move the
+#  bot emits, the bot went 10-0 against a random legal mover (both colours,
+#  zero illegal moves) and held Stockfish AT ITS MINIMUM EXPOSED STRENGTH
+#  (Elo floor, skill 0, 1-node search) to 5 draws in 6 games (1 loss, zero
+#  illegal moves) -- full record and reproducible harnesses in
+#  tools/MATCHES.md. What this bot is NOT claimed to be: a rival to tuned
+#  engines on playing strength -- it does not beat Stockfish. What it IS: a
+#  complete, certified legal player whose entire evaluation chain is counted
+#  and exact -- to our knowledge the only chess player with zero fitted
+#  parameters -- and the demonstration that the fold computes forward
+#  (plays) as well as it derives.
 # ============================================================================
 
 import "../foundation/structural_counts.ep"
@@ -118,6 +126,21 @@ define copy_state with state:
         set ok to append_list(fresh and get_list(state and i))
         set i to i + 1
     return fresh
+
+# An empty state for setting up arbitrary positions (all rights off).
+define empty_state:
+    set state to create_list()
+    set sq to 0
+    repeat while sq < 64:
+        set ok to append_list(state and 0)
+        set sq to sq + 1
+    set ok to append_list(state and 0)
+    set right to 0
+    repeat while right < 4:
+        set ok to append_list(state and 0)
+        set right to right + 1
+    set ok to append_list(state and 64)
+    return state
 
 # ---------- attack detection ------------------------------------------------
 # Is `square` attacked by the side `by_black` (1 = black attacks it)?
@@ -265,12 +288,15 @@ define side_in_check with state returning Bool:
     return square_attacked(state and ksq and attacker)
 
 # ---------- making a move ---------------------------------------------------
-# A move is from*64 + to. Castling = king moving two files; en passant = pawn
-# capturing onto the ep square; promotion (always to queen) on the last rank.
+# A move is promo*4096 + from*64 + to, promo in {0 (none), 2 N, 3 B, 4 R, 5 Q}.
+# Castling = king moving two files; en passant = pawn capturing onto the empty
+# ep square; a promotion move places the encoded piece (all four generated).
 define make_move with state and move as Int:
     set fresh to copy_state(state)
-    set from_sq to move / 64
-    set to_sq to move - from_sq * 64
+    set promo to move / 4096
+    set rest to move - promo * 4096
+    set from_sq to rest / 64
+    set to_sq to rest - from_sq * 64
     set code to get_list(fresh and from_sq)
     set side to get_list(fresh and 64)
     set kind to piece_kind(code)
@@ -285,15 +311,18 @@ define make_move with state and move as Int:
     # move the piece
     set ok to set_list(fresh and from_sq and 0)
     set ok to set_list(fresh and to_sq and code)
-    # promotion to queen
+    # promotion: place the encoded piece (queen when unencoded -- CLI safety)
     if kind == 1:
         set to_rank to to_sq / 8
+        set landed to promo
+        if landed == 0:
+            set landed to 5
         if side == 0:
             if to_rank == 7:
-                set ok to set_list(fresh and to_sq and 5)
+                set ok to set_list(fresh and to_sq and landed)
         else:
             if to_rank == 0:
-                set ok to set_list(fresh and to_sq and 11)
+                set ok to set_list(fresh and to_sq and landed + 6)
     # castling: king moved two files -> bring the rook across
     if kind == 6:
         set from_file to from_sq - (from_sq / 8) * 8
@@ -345,6 +374,26 @@ define push_move with moves and from_sq as Int and to_sq as Int:
     set ok to append_list(moves and from_sq * 64 + to_sq)
     return moves
 
+# A pawn arrival: on the last rank it fans into the four promotions
+# (N, B, R, Q -- all legal choices generated); otherwise one plain move.
+define push_pawn_move with moves and from_sq as Int and to_sq as Int and side as Int:
+    set to_rank to to_sq / 8
+    set promotes to 0
+    if side == 0:
+        if to_rank == 7:
+            set promotes to 1
+    else:
+        if to_rank == 0:
+            set promotes to 1
+    if promotes == 1:
+        set promo to 2
+        repeat while promo < 6:
+            set ok to append_list(moves and promo * 4096 + from_sq * 64 + to_sq)
+            set promo to promo + 1
+    else:
+        set ok to append_list(moves and from_sq * 64 + to_sq)
+    return moves
+
 # Pseudo-legal moves for the side to move (legality filtered afterwards).
 define pseudo_moves with state:
     set moves to create_list()
@@ -374,7 +423,7 @@ define pseudo_moves with state:
                 if ahead > 0 - 1:
                     if ahead < 64:
                         if get_list(state and ahead) == 0:
-                            set moves to push_move(moves and sq and ahead)
+                            set moves to push_pawn_move(moves and sq and ahead and side)
                             if rank == home_rank:
                                 set two_ahead to ahead + forward
                                 if get_list(state and two_ahead) == 0:
@@ -400,7 +449,7 @@ define pseudo_moves with state:
                                         if target == ep_square:
                                             set takes to 1
                                         if takes == 1:
-                                            set moves to push_move(moves and sq and target)
+                                            set moves to push_pawn_move(moves and sq and target and side)
                     set capture_file to capture_file + 1
             if kind == 2:
                 set deltas_r to create_list()

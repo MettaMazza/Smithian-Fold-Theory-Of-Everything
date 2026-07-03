@@ -4934,11 +4934,13 @@ long long piece_is_black(long long);
 long long piece_kind(long long);
 long long starting_state();
 long long copy_state(long long);
+long long empty_state();
 long long square_attacked(long long, long long, long long);
 long long king_square(long long, long long);
 long long side_in_check(long long);
 long long make_move(long long, long long);
 long long push_move(long long, long long, long long);
+long long push_pawn_move(long long, long long, long long, long long);
 long long pseudo_moves(long long);
 long long legal_moves(long long);
 long long perft(long long, long long);
@@ -5046,12 +5048,22 @@ L_cleanup:
 }
 
 long long _main() {
+    long long endgame = 0;
+    long long kiwi = 0;
+    long long kiwi_three = 0;
+    long long kiwi_two = 0;
     long long ok = 0;
+    long long promo_pos = 0;
     long long state = 0;
     long long state_three = 0;
     long long state_two = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&endgame);
+    ep_gc_push_root(&kiwi);
+    ep_gc_push_root(&kiwi_three);
+    ep_gc_push_root(&kiwi_two);
+    ep_gc_push_root(&promo_pos);
     ep_gc_push_root(&state);
     ep_gc_push_root(&state_three);
     ep_gc_push_root(&state_two);
@@ -5075,11 +5087,179 @@ long long _main() {
     ok = expect_bool((long long)"the strike carries a MATE value (the One-approach, above every share)", fools_mate_is_seen_as_mate());
     ok = expect_bool((long long)"and it IS mate on the board: no reply, king in check", fools_mate_is_real());
     ok = expect_equal((long long)"SELF-PLAY: twenty plies of legal chess, final position legal", int_to_string(self_play_plies(20)), (long long)"20");
+    kiwi = empty_state();
+    ok = set_list(kiwi, 0, 4);
+    ok = set_list(kiwi, 4, 6);
+    ok = set_list(kiwi, 7, 4);
+    ok = set_list(kiwi, 8, 1);
+    ok = set_list(kiwi, 9, 1);
+    ok = set_list(kiwi, 10, 1);
+    ok = set_list(kiwi, 11, 3);
+    ok = set_list(kiwi, 12, 3);
+    ok = set_list(kiwi, 13, 1);
+    ok = set_list(kiwi, 14, 1);
+    ok = set_list(kiwi, 15, 1);
+    ok = set_list(kiwi, 18, 2);
+    ok = set_list(kiwi, 21, 5);
+    ok = set_list(kiwi, 23, 7);
+    ok = set_list(kiwi, 25, 7);
+    ok = set_list(kiwi, 28, 1);
+    ok = set_list(kiwi, 35, 1);
+    ok = set_list(kiwi, 36, 2);
+    ok = set_list(kiwi, 40, 9);
+    ok = set_list(kiwi, 41, 8);
+    ok = set_list(kiwi, 44, 7);
+    ok = set_list(kiwi, 45, 8);
+    ok = set_list(kiwi, 46, 7);
+    ok = set_list(kiwi, 48, 7);
+    ok = set_list(kiwi, 50, 7);
+    ok = set_list(kiwi, 51, 7);
+    ok = set_list(kiwi, 52, 11);
+    ok = set_list(kiwi, 53, 7);
+    ok = set_list(kiwi, 54, 9);
+    ok = set_list(kiwi, 56, 10);
+    ok = set_list(kiwi, 60, 12);
+    ok = set_list(kiwi, 63, 10);
+    ok = set_list(kiwi, 64, 0);
+    ok = set_list(kiwi, 65, 1);
+    ok = set_list(kiwi, 66, 1);
+    ok = set_list(kiwi, 67, 1);
+    ok = set_list(kiwi, 68, 1);
+    ok = set_list(kiwi, 69, 64);
+    ok = expect_equal((long long)"KIWIPETE depth 1: 48 (castling + pins live)", int_to_string(perft(kiwi, 1)), (long long)"48");
+    kiwi_two = empty_state();
+    ok = set_list(kiwi_two, 0, 4);
+    ok = set_list(kiwi_two, 4, 6);
+    ok = set_list(kiwi_two, 7, 4);
+    ok = set_list(kiwi_two, 8, 1);
+    ok = set_list(kiwi_two, 9, 1);
+    ok = set_list(kiwi_two, 10, 1);
+    ok = set_list(kiwi_two, 11, 3);
+    ok = set_list(kiwi_two, 12, 3);
+    ok = set_list(kiwi_two, 13, 1);
+    ok = set_list(kiwi_two, 14, 1);
+    ok = set_list(kiwi_two, 15, 1);
+    ok = set_list(kiwi_two, 18, 2);
+    ok = set_list(kiwi_two, 21, 5);
+    ok = set_list(kiwi_two, 23, 7);
+    ok = set_list(kiwi_two, 25, 7);
+    ok = set_list(kiwi_two, 28, 1);
+    ok = set_list(kiwi_two, 35, 1);
+    ok = set_list(kiwi_two, 36, 2);
+    ok = set_list(kiwi_two, 40, 9);
+    ok = set_list(kiwi_two, 41, 8);
+    ok = set_list(kiwi_two, 44, 7);
+    ok = set_list(kiwi_two, 45, 8);
+    ok = set_list(kiwi_two, 46, 7);
+    ok = set_list(kiwi_two, 48, 7);
+    ok = set_list(kiwi_two, 50, 7);
+    ok = set_list(kiwi_two, 51, 7);
+    ok = set_list(kiwi_two, 52, 11);
+    ok = set_list(kiwi_two, 53, 7);
+    ok = set_list(kiwi_two, 54, 9);
+    ok = set_list(kiwi_two, 56, 10);
+    ok = set_list(kiwi_two, 60, 12);
+    ok = set_list(kiwi_two, 63, 10);
+    ok = set_list(kiwi_two, 64, 0);
+    ok = set_list(kiwi_two, 65, 1);
+    ok = set_list(kiwi_two, 66, 1);
+    ok = set_list(kiwi_two, 67, 1);
+    ok = set_list(kiwi_two, 68, 1);
+    ok = set_list(kiwi_two, 69, 64);
+    ok = expect_equal((long long)"KIWIPETE depth 2: 2039", int_to_string(perft(kiwi_two, 2)), (long long)"2039");
+    kiwi_three = empty_state();
+    ok = set_list(kiwi_three, 0, 4);
+    ok = set_list(kiwi_three, 4, 6);
+    ok = set_list(kiwi_three, 7, 4);
+    ok = set_list(kiwi_three, 8, 1);
+    ok = set_list(kiwi_three, 9, 1);
+    ok = set_list(kiwi_three, 10, 1);
+    ok = set_list(kiwi_three, 11, 3);
+    ok = set_list(kiwi_three, 12, 3);
+    ok = set_list(kiwi_three, 13, 1);
+    ok = set_list(kiwi_three, 14, 1);
+    ok = set_list(kiwi_three, 15, 1);
+    ok = set_list(kiwi_three, 18, 2);
+    ok = set_list(kiwi_three, 21, 5);
+    ok = set_list(kiwi_three, 23, 7);
+    ok = set_list(kiwi_three, 25, 7);
+    ok = set_list(kiwi_three, 28, 1);
+    ok = set_list(kiwi_three, 35, 1);
+    ok = set_list(kiwi_three, 36, 2);
+    ok = set_list(kiwi_three, 40, 9);
+    ok = set_list(kiwi_three, 41, 8);
+    ok = set_list(kiwi_three, 44, 7);
+    ok = set_list(kiwi_three, 45, 8);
+    ok = set_list(kiwi_three, 46, 7);
+    ok = set_list(kiwi_three, 48, 7);
+    ok = set_list(kiwi_three, 50, 7);
+    ok = set_list(kiwi_three, 51, 7);
+    ok = set_list(kiwi_three, 52, 11);
+    ok = set_list(kiwi_three, 53, 7);
+    ok = set_list(kiwi_three, 54, 9);
+    ok = set_list(kiwi_three, 56, 10);
+    ok = set_list(kiwi_three, 60, 12);
+    ok = set_list(kiwi_three, 63, 10);
+    ok = set_list(kiwi_three, 64, 0);
+    ok = set_list(kiwi_three, 65, 1);
+    ok = set_list(kiwi_three, 66, 1);
+    ok = set_list(kiwi_three, 67, 1);
+    ok = set_list(kiwi_three, 68, 1);
+    ok = set_list(kiwi_three, 69, 64);
+    ok = expect_equal((long long)"KIWIPETE depth 3: 97862 (the published census)", int_to_string(perft(kiwi_three, 3)), (long long)"97862");
+    endgame = empty_state();
+    ok = set_list(endgame, 12, 1);
+    ok = set_list(endgame, 14, 1);
+    ok = set_list(endgame, 25, 4);
+    ok = set_list(endgame, 29, 7);
+    ok = set_list(endgame, 31, 12);
+    ok = set_list(endgame, 32, 6);
+    ok = set_list(endgame, 33, 1);
+    ok = set_list(endgame, 39, 10);
+    ok = set_list(endgame, 43, 7);
+    ok = set_list(endgame, 50, 7);
+    ok = set_list(endgame, 64, 0);
+    ok = set_list(endgame, 65, 0);
+    ok = set_list(endgame, 66, 0);
+    ok = set_list(endgame, 67, 0);
+    ok = set_list(endgame, 68, 0);
+    ok = set_list(endgame, 69, 64);
+    ok = expect_equal((long long)"ENDGAME (en-passant pins) depth 4: 43238", int_to_string(perft(endgame, 4)), (long long)"43238");
+    promo_pos = empty_state();
+    ok = set_list(promo_pos, 5, 2);
+    ok = set_list(promo_pos, 7, 2);
+    ok = set_list(promo_pos, 12, 6);
+    ok = set_list(promo_pos, 13, 7);
+    ok = set_list(promo_pos, 14, 7);
+    ok = set_list(promo_pos, 15, 7);
+    ok = set_list(promo_pos, 48, 1);
+    ok = set_list(promo_pos, 49, 1);
+    ok = set_list(promo_pos, 50, 1);
+    ok = set_list(promo_pos, 51, 12);
+    ok = set_list(promo_pos, 56, 8);
+    ok = set_list(promo_pos, 58, 8);
+    ok = set_list(promo_pos, 64, 1);
+    ok = set_list(promo_pos, 65, 0);
+    ok = set_list(promo_pos, 66, 0);
+    ok = set_list(promo_pos, 67, 0);
+    ok = set_list(promo_pos, 68, 0);
+    ok = set_list(promo_pos, 69, 64);
+    ok = expect_equal((long long)"PROMOTIONS (all four pieces) depth 3: 9483", int_to_string(perft(promo_pos, 3)), (long long)"9483");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(3);
+    ep_gc_pop_roots(8);
+    free_list(endgame);
+    endgame = 0;
+    free_list(kiwi);
+    kiwi = 0;
+    free_list(kiwi_three);
+    kiwi_three = 0;
+    free_list(kiwi_two);
+    kiwi_two = 0;
+    free_list(promo_pos);
+    promo_pos = 0;
     free_list(state);
     state = 0;
     free_list(state_three);
@@ -5229,6 +5409,38 @@ long long copy_state(long long state) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long empty_state() {
+    long long ok = 0;
+    long long right = 0;
+    long long sq = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = create_list();
+    sq = 0;
+    while (sq < 64) {
+    ok = append_list(state, 0);
+    sq = (sq + 1);
+    }
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    right = 4;
+    ok = append_list(state, 64);
+    ret_val = state;
+    state = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
     return ret_val;
 }
 
@@ -6105,7 +6317,10 @@ long long make_move(long long state, long long move) {
     long long from_file = 0;
     long long from_sq = 0;
     long long kind = 0;
+    long long landed = 0;
     long long ok = 0;
+    long long promo = 0;
+    long long rest = 0;
     long long side = 0;
     long long to_file = 0;
     long long to_rank = 0;
@@ -6115,6 +6330,7 @@ long long make_move(long long state, long long move) {
     ep_gc_push_root(&code);
     ep_gc_push_root(&fresh);
     ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&landed);
     ep_gc_push_root(&side);
     ep_gc_push_root(&to_sq);
     ep_gc_push_root(&state);
@@ -6122,8 +6338,10 @@ long long make_move(long long state, long long move) {
     ep_gc_maybe_collect();
 
     fresh = copy_state(state);
-    from_sq = (move / 64);
-    to_sq = (move - (from_sq * 64));
+    promo = (move / 4096);
+    rest = (move - (promo * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
     code = get_list(fresh, from_sq);
     side = get_list(fresh, 64);
     kind = piece_kind(code);
@@ -6141,13 +6359,17 @@ long long make_move(long long state, long long move) {
     ok = set_list(fresh, to_sq, code);
     if (kind == 1) {
     to_rank = (to_sq / 8);
+    landed = promo;
+    if (landed == 0) {
+    landed = 5;
+    }
     if (side == 0) {
     if (to_rank == 7) {
-    ok = set_list(fresh, to_sq, 5);
+    ok = set_list(fresh, to_sq, landed);
     }
     } else {
     if (to_rank == 0) {
-    ok = set_list(fresh, to_sq, 11);
+    ok = set_list(fresh, to_sq, (landed + 6));
     }
     }
     }
@@ -6212,7 +6434,7 @@ long long make_move(long long state, long long move) {
     fresh = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(6);
+    ep_gc_pop_roots(7);
     return ret_val;
 }
 
@@ -6232,6 +6454,48 @@ long long push_move(long long moves, long long from_sq, long long to_sq) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long push_pawn_move(long long moves, long long from_sq, long long to_sq, long long side) {
+    long long ok = 0;
+    long long promo = 0;
+    long long promotes = 0;
+    long long to_rank = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&promo);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&to_sq);
+
+    ep_gc_maybe_collect();
+
+    to_rank = (to_sq / 8);
+    promotes = 0;
+    if (side == 0) {
+    if (to_rank == 7) {
+    promotes = 1;
+    }
+    } else {
+    if (to_rank == 0) {
+    promotes = 1;
+    }
+    }
+    if (promotes == 1) {
+    promo = 2;
+    while (promo < 6) {
+    ok = append_list(moves, (((promo * 4096) + (from_sq * 64)) + to_sq));
+    promo = (promo + 1);
+    }
+    } else {
+    ok = append_list(moves, ((from_sq * 64) + to_sq));
+    }
+    ret_val = moves;
+    moves = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
     return ret_val;
 }
 
@@ -6292,6 +6556,7 @@ long long pseudo_moves(long long state) {
     ep_gc_push_root(&ray);
     ep_gc_push_root(&ray_df);
     ep_gc_push_root(&ray_dr);
+    ep_gc_push_root(&side);
     ep_gc_push_root(&sq);
     ep_gc_push_root(&target);
     ep_gc_push_root(&two_ahead);
@@ -6331,7 +6596,7 @@ long long pseudo_moves(long long state) {
     if (ahead > -1) {
     if (ahead < 64) {
     if (get_list(state, ahead) == 0) {
-    moves = push_move(moves, sq, ahead);
+    moves = push_pawn_move(moves, sq, ahead, side);
     if (rank == home_rank) {
     two_ahead = (ahead + forward);
     if (get_list(state, two_ahead) == 0) {
@@ -6366,7 +6631,7 @@ long long pseudo_moves(long long state) {
     takes = 1;
     }
     if (takes == 1) {
-    moves = push_move(moves, sq, target);
+    moves = push_pawn_move(moves, sq, target, side);
     }
     }
     }
@@ -6605,7 +6870,7 @@ long long pseudo_moves(long long state) {
     ret_val = moves;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(18);
+    ep_gc_pop_roots(19);
     free_list(deltas_f);
     deltas_f = 0;
     free_list(deltas_r);

@@ -1,0 +1,18 @@
+# The fold chess bot, command-line protocol (stateless per call):
+#   line 1: search depth
+#   then: move integers (promo*4096 + from*64 + to) applied in order
+#   sentinel 8888: compute and print the bot's move for the side to move, exit
+import "../constants/fold_chess_bot.ep"
+define main:
+    set depth to read_int()
+    set state to starting_state()
+    set running to 1
+    repeat while running == 1:
+        set token to read_int()
+        if token == 8888:
+            set answer to search_best(state and depth)
+            display int_to_string(get_list(answer and 0))
+            set running to 0
+        else:
+            set state to make_move(state and token)
+    return 0

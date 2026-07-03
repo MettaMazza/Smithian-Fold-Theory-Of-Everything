@@ -627,15 +627,18 @@ And the structural laws of physics, forced the same way:
   **1/α = 503846395469/3676744786 = 137.035999177180855… exactly**, 0.009σ from CODATA;
   the digits at 2×10⁻¹¹ called in advance — **…177181** — and the live 5.4σ Rb/Cs
   discrepancy called to resolve at 137.0359991772; see [`PREDICTIONS.md`](PREDICTIONS.md)),
-  and **the fold chess bot** (complete legal chess — castling, en passant, promotion,
-  mate — with **zero fitted parameters**: rules certified against the published perft
-  census **20/400/8,902** with zero disagreements, material counted from the board's own
-  geometry, the starting position evaluating to EXACTLY the half-One, minimax through the
-  fold's antipode; it finds the fool's mate, proves it on the board, and plays legal
-  self-play in under a second — **the fold does not just derive; it plays**).
+  and **the fold chess bot** (complete legal chess — castling, en passant, all four
+  promotions, mate — with **zero fitted parameters**: rules certified at FOUR published
+  perft positions — the start **8,902**, Kiwipete **97,862**, the en-passant-pin endgame
+  **43,238**, four-way promotions **9,483** — zero disagreements at every depth; material
+  counted from the board's own geometry; the starting position EXACTLY the half-One;
+  minimax through the fold's antipode; and in refereed whole games with python-chess
+  independently validating every move it emits: **10–0 vs a random legal mover and
+  5 draws + 1 loss vs Stockfish at its minimum exposed strength, zero illegal moves**
+  ([`tools/MATCHES.md`](tools/MATCHES.md)) — **the fold does not just derive; it plays**).
 
 The full, ordered, run-it-yourself derivation of all of it — every step, all 306 test
-suites (1,826 forced checks, including the trace-to-the-One and the CODATA comparison) —
+suites (1,831 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -692,7 +695,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 306 suites, 1,826 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 306 suites, 1,831 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

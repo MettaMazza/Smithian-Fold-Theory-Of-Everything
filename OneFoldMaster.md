@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-306 suites, 1,826 forced checks, 0 failures). It needs nothing but a C compiler. Use
+306 suites, 1,831 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5360,8 +5360,22 @@ with mate approaching the One and being mated at the floor, ordered by exact
 cross-multiplication. Demonstrated: the bot finds the fool's-mate strike Qd8–h4 (carrying a
 mate value above every live share), the strike is verified to BE mate on the board, and it
 plays twenty plies of legal self-play ending in a verified-legal position — all in under a
-second. The corpus's chess campaign derived laws from solved fields; **this plays the whole
-board.** The fold does not just derive — it plays.
+second.
+
+**Whole-board certification and the refereed match record (tools/MATCHES.md).** The rules
+are certified at FOUR published perft positions — the start (20/400/8,902), Kiwipete with
+castling, pins and double checks (**48/2,039/97,862**), the en-passant-pin endgame at depth
+four (**43,238**), and the four-way promotion position (**9,483** — the position that
+caught and now guards the underpromotion rule: the bot generates N/B/R/Q, not queen-only) —
+zero disagreements at every depth. In whole refereed games, with python-chess (an
+independent rules implementation) validating every move the bot emits: **10–0 against a
+random legal mover** (both colours, zero illegal moves), and **5 draws + 1 loss in 6 games
+against Stockfish at its minimum exposed strength** (Elo floor 1320, skill 0, 1-node
+search; zero illegal moves). Stated exactly: it does not beat Stockfish and is not claimed
+to; it beats chance decisively, holds a world-class engine's floor to draws, and is — to
+our knowledge — the only complete chess player with zero fitted parameters. The corpus's
+chess campaign derived laws from solved fields; **this plays the whole board.** The fold
+does not just derive — it plays.
 
 ---
 
@@ -6044,9 +6058,11 @@ runs):**
   ENDS: **1/α = 503846395469/3676744786 = 137.035999177180855… exactly** (0.009σ); the
   digits **…177181** and the Rb/Cs resolution called in advance (`PREDICTIONS.md`).
 - Step 303 — the fold chess bot: complete legal chess, ZERO fitted parameters — rules
-  certified against the perft oracle (**20/400/8,902**, zero disagreements), material
-  counted from geometry, the start position EXACTLY the half-One, minimax = the antipode;
-  finds and proves the fool's mate, plays legal self-play. **The fold plays.**
+  certified at FOUR published perft positions (start **8,902**, Kiwipete **97,862**,
+  EP-pin endgame **43,238**, four-way promotions **9,483** — zero disagreements),
+  material counted from geometry, the start EXACTLY the half-One, minimax = the antipode;
+  refereed whole games (python-chess validating every move): **10–0 vs random, 5 draws +
+  1 loss vs floor-Stockfish, zero illegal moves** (tools/MATCHES.md). **The fold plays.**
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no
