@@ -1,0 +1,92 @@
+# ============================================================================
+#  THE FINITE INVENTORY  --  everything is bounded; nothing is infinite.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Mainstream physics is haunted by infinities -- infinite towers of
+#  resonances, endless islands of superheavy elements, unbounded zoos of
+#  hypothetical species -- because a continuum theory has no floor and no
+#  ceiling. The fold has both: nothing above the One, nothing below the
+#  floor. So every ladder ends, the table of elements ends, the species
+#  list ends -- and the inventory of everything that can exist is a NUMBER,
+#  not an endless list. This module derives the three bounds and composes
+#  them from pieces already forced.
+#
+#  ── DERIVATION ─ (check every line; each bound walked or imported) ───────────
+#  [1] THE LADDERS END: the deepest covering depth is seven, so the tower
+#  from the One to the floor has 2^7 = 128 rungs -- the floor 1/128 walked
+#  down halving by halving (seven exact steps), still positive (No-Zero) --
+#  and no excitation ladder can exceed 128 rungs. [2] THE ELEMENTS END: the
+#  table stops at 137 = the fine-structure count, imported from the proven
+#  threshold (periodic_table_end.ep -- 137 bound, 138 over, the threshold
+#  sharp). [3] THE SPECIES END: the sector ladder is sealed at four, so the
+#  gauge carriers total 83 and the new fermions twelve -- imported from the
+#  closed census (particle_census.ep). FINITE x FINITE x FINITE: a bounded
+#  species list, each species with a bounded tower, combining into bounded
+#  nuclei -- the whole inventory is one finite count.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured, so far as measurement can reach a boundedness claim: no hadron
+#  resonance tower has ever climbed past a few tens of rungs (PDG); the
+#  heaviest synthesized element is 118 and no island beyond 137 has ever
+#  been claimed; no fifth force and no particle outside the census has been
+#  found. Every boundary the fold forces is exactly where observation has
+#  stopped -- and each is a standing falsification target: one element past
+#  137, one particle off the list, one infinite tower refutes the corpus.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/periodic_table_end.ep"
+import "../constants/particle_census.ep"
+
+
+# [1] The tower height: 2^7 = 128 rungs from the One to the floor.
+define inventory_tower_rungs returning Int:
+    return whole_power(2 and 7)
+
+# The floor walked down: the One halved seven times, each step exact, the
+# landing 1/128 -- and still positive (the No-Zero axiom holds at the floor).
+define floor_is_walked returning Bool:
+    set rung to fraction_from_whole_number(1)
+    set step to 0
+    repeat while step < 7:
+        set half to fraction_from_ratio(1 and 2)
+        set rung to fraction_multiply(rung and half)
+        set step to step + 1
+    set expected to fraction_from_ratio(1 and 128)
+    set lands to fraction_is_equal(rung and expected)
+    set survivor to fraction_from_ratio(1 and 128)
+    set alive to survivor.numerator_sign == 1
+    if lands:
+        return alive
+    return false
+
+# [2] The element cap: the table's last element, imported from the proven
+# sharp threshold -- 137, the fine-structure count.
+define element_cap returning Int:
+    return last_element()
+
+# [3] The species bounds, imported from the closed census: 83 gauge
+# carriers across the four sealed sectors, twelve Smithions.
+define species_are_finite returning Bool:
+    set carriers_ok to total_gauge_carriers() == 83
+    set smithions_ok to smithion_count() == 12
+    set sealed to census_is_closed()
+    if carriers_ok:
+        if smithions_ok:
+            return sealed
+    return false
+
+# THE COMPOSED BOUND: finite species, each with a tower of at most 128
+# rungs, elements capped at 137 -- every factor of the inventory bounded,
+# so the inventory is a finite count.
+define inventory_is_finite returning Bool:
+    set ladders_end to floor_is_walked()
+    set elements_end to element_cap() == 137
+    set species_end to species_are_finite()
+    if ladders_end:
+        if elements_end:
+            return species_end
+    return false

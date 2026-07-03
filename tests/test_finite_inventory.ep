@@ -1,0 +1,22 @@
+import "../constants/finite_inventory.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the finite inventory: everything bounded, nothing infinite ==="
+    set ok to expect_equal("[1] the tower: 2^7 rungs from the One to the floor" and int_to_string(inventory_tower_rungs()) and "128")
+    set ok to expect_bool("the floor 1/128 walked down in seven halvings, still positive" and floor_is_walked())
+    set ok to expect_equal("[2] the element cap: the table's last element (imported threshold)" and int_to_string(element_cap()) and "137")
+    set ok to expect_bool("[3] the species are finite: 83 carriers, 12 Smithions, ladder sealed" and species_are_finite())
+    set ok to expect_bool("THE INVENTORY IS FINITE: every factor bounded, the total a number" and inventory_is_finite())
+    display "=== done ==="
+    return 0

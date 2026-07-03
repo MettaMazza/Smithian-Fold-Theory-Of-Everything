@@ -552,9 +552,22 @@ And the structural laws of physics, forced the same way:
   measured 125.25, 1.7%**; forced `λ = 0.125`), and **the unit power law** (only the
   one-over-rank law halves per rank doubling — square and flat laws verifiably excluded —
   **Zipf's exponent = Gutenberg-Richter's b = the One**).
+- **Phase transitions, the hadron towers, three astronomical orphans, and the end of
+  infinity** — **critical exponents made exact** (β = ν = 1/2, γ = 1, δ = the colour 3;
+  Widom, Rushbrooke, and Fisher all close with ZERO residual, α and η at the floor — the
+  textbook mean-field set, forced), **the Regge spectrum** (constant tube width = the
+  half-One → `M² = M₀² + σJ` with spacing checked exactly equal at every rung and at two
+  different anchor pairs — the shape is forced, the tension is the one anchored scale;
+  multiplicity 2^d walked to the ceiling), **materials & astro** (quasicrystals ARE the
+  prime-5 sector — three standing modes, periodic lattice verifiably forbidden, hence
+  aperiodic; Titius-Bode IS the binary tower — ratios exactly 2; **Tully-Fisher's fourth
+  power = d+1**, the halo = the relic 27/5), and **the finite inventory** (towers ≤ 2⁷ = 128
+  rungs — the floor 1/128 walked; elements ≤ 137; species = 83 carriers + 12 Smithions —
+  **the inventory of everything that can exist is a finite count**, and every boundary is a
+  standing falsification target).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 291 test
-suites (1,693 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 295 test
+suites (1,717 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -611,7 +624,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 291 suites, 1,693 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 295 suites, 1,717 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

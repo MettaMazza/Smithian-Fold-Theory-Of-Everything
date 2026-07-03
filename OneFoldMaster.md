@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-291 suites, 1,693 forced checks, 0 failures). It needs nothing but a C compiler. Use
+295 suites, 1,717 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5101,6 +5101,58 @@ unit exponent walks in step. In magnitude units that is a decade of count per ma
 walks over ten octaves. Measured: Zipf ~1.0 across corpora and city registers, b = 0.9–1.1
 across worldwide quake catalogues.
 
+### Step 289 — Critical exponents made exact (the mean-field set forced)
+
+**File:** `constants/condensed_exact.ep`
+
+**What it does.** The exponents every phase transition shares, as forced fold values:
+β = (m−1)/m at the binary m = 2 (imported from the proven consistency anchor) = the
+half-One; ν = 1/2; γ = the One; δ = the counted colour three. The classical scaling
+relations then close EXACTLY: Widom `γ = β(δ−1)` → (1/2)(2) = 1 ✓; Rushbrooke
+`α = 2 − 2β − γ` lands exactly on the floor (zero residual — the fold has no zero exponent
+to give); Fisher `γ = 2ν` exactly (η at the floor). Three independent scaling laws, one
+forced set, zero slack — the textbook mean-field values 0.5, 0.5, 1.0, 3.0, 0.
+
+### Step 290 — The excited-state spectrum (linear Regge from the flux tube)
+
+**File:** `constants/excited_states.ep`
+
+**What it does.** Hadron physics' oldest measured regularity — mass-squared linear in spin,
+read off Chew-Frautschi plots since the 1960s — forced by the tube: the confining flux tube
+has CONSTANT width, the half-One (its preimage-of-the-One status walked), so a rotating
+fixed-tension string gives `M²(J) = M₀² + σJ` with equal M² steps. The spacing checked
+EXACTLY equal at every rung J = 0..5 — and at a second, different anchor pair, proving the
+shape anchor-independent; the slope is the one anchored scale (ρ trajectory: 0.59 + 1.10J
+GeV², the measured ladder). The multiplicity: level d carries 2^d states, walked doubling
+to the depth ceiling 7.
+
+### Step 291 — Materials & astrophysics (quasicrystals, planetary doubling, Tully-Fisher)
+
+**File:** `constants/orbital_quasicrystal.ep`
+
+**What it does.** Three orphaned observations, one fold. QUASICRYSTALS = the prime-5
+sector: exactly three standing modes (imported census) while the periodic five-fold lattice
+is verifiably forbidden (imported restriction) — five-fold order can only exist
+aperiodically, which is precisely what Shechtman found. PLANETARY DOUBLING: the ladder
+`a_n = a₀2ⁿ` walked seven orbits out, every consecutive ratio exactly the fold base two —
+Titius-Bode is the binary tower, not numerology. TULLY-FISHER: the exponent is
+`d_space + 1 = 4` with the counted colour as the dimension (the same 4 as the radiation
+dilution; measured L ~ v^3.9±0.2), and the halo that sets the rotation is the relic —
+27/5 to baryons, 27/32 of matter, imported.
+
+### Step 292 — The finite inventory (everything bounded, nothing infinite)
+
+**File:** `constants/finite_inventory.ep`
+
+**What it does.** The fold has a floor and a ceiling, so every list ends. [1] THE LADDERS:
+the tower from the One to the floor has `2⁷ = 128` rungs — the floor 1/128 walked down in
+seven exact halvings, still positive (No-Zero at the floor) — no excitation tower exceeds
+it. [2] THE ELEMENTS: capped at 137, imported from the sharp threshold. [3] THE SPECIES:
+83 gauge carriers and 12 Smithions under the sealed ladder, imported from the closed
+census. Finite × finite × finite: **the inventory of everything that can exist is a
+number, not an endless list** — and each boundary is a standing falsification target: one
+element past 137, one particle off the list, one infinite tower refutes the corpus.
+
 ---
 
 ## Where the recreation stands right now
@@ -5739,6 +5791,15 @@ runs):**
   forward **123.11 GeV vs measured 125.25 (1.7%)**; forced `λ = 0.125` vs implied 0.1294.
 - Step 288 — the unit power law: only the one-over-rank law halves per rank doubling
   (walked 1..32; square and flat laws excluded) — **Zipf = Gutenberg-Richter b = the One**.
+- Step 289 — critical exponents exact: β = ν = 1/2, γ = 1, δ = colour 3; Widom, Rushbrooke,
+  and Fisher close with ZERO residual (α, η at the floor) — the mean-field set, forced.
+- Step 290 — the Regge spectrum: constant tube width 1/2 → equal M² spacing, checked exact
+  at every rung AND anchor-independent; multiplicity 2^d walked to the ceiling 7.
+- Step 291 — quasicrystals = the prime-5 sector (3 modes, periodic lattice forbidden);
+  Titius-Bode = the binary tower (ratios exactly 2); Tully-Fisher exponent = d+1 = **4**,
+  halo = the relic 27/5.
+- Step 292 — the finite inventory: towers ≤ 128 rungs (floor 1/128 walked), elements ≤ 137,
+  species = 83 carriers + 12 Smithions — **everything that can exist is a finite count**.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

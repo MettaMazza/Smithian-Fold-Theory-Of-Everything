@@ -1,0 +1,26 @@
+import "../constants/excited_states.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the excited-state spectrum: linear Regge from the flux tube ==="
+    set ok to expect_equal("the flux-tube width: the half-One" and fraction_to_text(flux_tube_width()) and "1/2")
+    set ok to expect_bool("the width is the fold preimage of the One (doubled = unison)" and width_is_preimage_of_one())
+    # comparison-side anchors: the rho trajectory M0^2 = 0.59 GeV^2, sigma = 1.10 GeV^2
+    set ok to expect_bool("THE FORCED SHAPE: equal M^2 spacing, J = 0..5 (rho anchors)" and spacing_is_equal(59 and 100 and 110 and 100))
+    set ok to expect_bool("the shape holds at a DIFFERENT anchor pair (anchor-independent)" and spacing_is_equal(7 and 3 and 5 and 4))
+    set first_level to regge_mass_squared(59 and 100 and 110 and 100 and 1)
+    set ok to expect_equal("the J=1 rung: 0.59 + 1.10 = 1.69 GeV^2" and fraction_to_text(first_level) and "169/100")
+    set ok to expect_equal("tower multiplicity at level 3: 2^3 states" and int_to_string(level_multiplicity(3)) and "8")
+    set ok to expect_bool("the multiplicity doubles level by level to the ceiling 7" and multiplicity_doubles_to_ceiling())
+    display "=== done ==="
+    return 0

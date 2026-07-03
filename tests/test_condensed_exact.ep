@@ -1,0 +1,24 @@
+import "../constants/condensed_exact.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== critical exponents made exact ==="
+    set ok to expect_equal("beta (order parameter): the half-One, from the proven anchor" and fraction_to_text(beta_exponent()) and "1/2")
+    set ok to expect_equal("nu (correlation length): the half-One" and fraction_to_text(nu_exponent()) and "1/2")
+    set ok to expect_equal("gamma (susceptibility): the One" and fraction_to_text(gamma_exponent()) and "1")
+    set ok to expect_equal("delta (critical isotherm): the counted colour" and int_to_string(delta_exponent()) and "3")
+    set ok to expect_bool("WIDOM closes exactly: gamma = beta(delta-1)" and widom_closes())
+    set ok to expect_bool("RUSHBROOKE: alpha lands exactly on the floor (zero residual)" and rushbrooke_alpha_is_floor())
+    set ok to expect_bool("FISHER: gamma = 2 nu exactly (eta at the floor)" and fisher_closes())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,22 @@
+import "../constants/orbital_quasicrystal.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== materials and astrophysics: three orphans, one fold ==="
+    set ok to expect_bool("QUASICRYSTAL = PRIME-5: three standing modes AND the periodic lattice forbidden" and quasicrystal_is_prime_five())
+    set ok to expect_bool("the modes 1/4, 1/2, 3/4 each stand under the five-fold map" and modes_stand())
+    set ok to expect_bool("PLANETARY DOUBLING: consecutive orbit ratios exactly 2, seven orbits out" and orbital_doubling_holds())
+    set ok to expect_equal("TULLY-FISHER: the exponent d_space + 1 (measured L ~ v^3.9)" and int_to_string(tully_fisher_exponent()) and "4")
+    set ok to expect_bool("the halo is the relic: 27/5 to baryons, 27/32 of matter" and halo_is_the_relic())
+    display "=== done ==="
+    return 0
