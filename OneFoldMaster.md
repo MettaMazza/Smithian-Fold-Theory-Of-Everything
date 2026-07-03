@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-288 suites, 1,668 forced checks, 0 failures). It needs nothing but a C compiler. Use
+291 suites, 1,693 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5056,6 +5056,51 @@ certified against Bouton's XOR oracle** (the XOR built by Step 284's verified bi
 arithmetic) — **zero disagreements**. Three domains, one engine, each certified by an
 oracle it did not write.
 
+### Step 286 — Fold number theory (the integers as orbit dynamics)
+
+**File:** `constants/fold_number_theory.ep`
+
+**What it does.** Classical number theory read off the fold's own orbits — five laws, each
+verified exhaustively, no sampling. [1] ORBIT-LENGTH LAW: for every odd q to 99 and EVERY
+reduced p (stronger than the corpus's one-witness sweep), the doubling orbit closes in
+exactly `ord_q(2)` steps — a denominator class is one eternal mode with one period. [2]
+ORBIT COUNT: the φ(q) reduced fractions tile into exactly `φ(q)/ord_q(2)` orbits (the
+2-cyclotomic cosets), tiling verified residue by residue — q = 7 carries 2 modes, q = 31
+six, q = 73 eight. [3] ANTIPODES: every pair `j/q + (q−j)/q` sums to the One (to q = 99);
+the unique self-antipodal point across the sweep is the half-One — the critical-line seed.
+[4] ETERNAL vs TRANSIENT: `q = 2^a·odd` decays for exactly a steps (the 2-adic valuation,
+computed independently) onto its odd eternal core — walked for every even q to 64. [5]
+FULLY-ERGODIC DENOMINATORS: primes whose single orbit has full length q−1, counted exactly
+to 4000: **214 of 549** — density 0.390 against Artin's constant 0.374 (the conjectured
+limit; convergence from above is the known behaviour). Artin's conjecture, renamed: how
+often is a prime one ergodic mode?
+
+### Step 287 — The Higgs mass and self-coupling (the tower's first three rungs)
+
+**File:** `constants/higgs_fold.ep`
+
+**What it does.** The Higgs sector with no inserted mass: the vacuum sits displaced at the
+half-One (self-antipodal, folds to the One — checked), the Higgs is one rung down, the
+self-coupling one below that: `v = 1/2, m_H-part = 1/4, λ = 1/8` — the rungs walked, each
+the previous halved. Route A reads `m_H/v = (1/4)/(1/2) = 1/2` straight off the rungs;
+Route B runs the Standard Model's own relation `m_H² = 2λv²` → ratio² = `2·(1/8) = 1/4` —
+both routes close on the same 1/2. Forward through the measured VEV (comparison side):
+**`m_H = 246.22/2 = 123.11 GeV` vs measured 125.25 — 1.7%**; forced `λ = 0.125` vs the
+implied 0.1294 — 3.4%. Three rungs, zero dials.
+
+### Step 288 — The unit power law (Zipf and Gutenberg-Richter)
+
+**File:** `constants/power_laws_fold.ep`
+
+**What it does.** Nature's favourite exponent, forced: the one-over-rank law is the UNIQUE
+distribution self-similar under the fold's own move — double the rank, the count halves
+(walked exactly at every rank 1..32). The exclusion picks the exponent out: the square law
+falls by 1/4 per doubling and the flat law by 1 — neither is the fold's halving; only the
+unit exponent walks in step. In magnitude units that is a decade of count per magnitude:
+**Zipf's exponent = Gutenberg-Richter's b = the One**, the same unit slope earth_astro.ep
+walks over ten octaves. Measured: Zipf ~1.0 across corpora and city registers, b = 0.9–1.1
+across worldwide quake catalogues.
+
 ---
 
 ## Where the recreation stands right now
@@ -5687,6 +5732,13 @@ runs):**
 - Step 285 — the universal solver: subtraction (1001 states) and Nim (512) solved by the
   retrograde fold and certified against independent oracles — **zero disagreements**; the
   chess engine was never about chess.
+- Step 286 — fold number theory: orbit length = `ord_q(2)` for EVERY reduced p (odd q to 99);
+  the `φ(q)/ord_q(2)` census tiles exactly; only `1/2` self-antipodal; even q decays its
+  2-adic valuation onto the odd core; fully-ergodic primes to 4000 = **214/549** (Artin 0.374).
+- Step 287 — the Higgs sector: rungs `1/2, 1/4, 1/8`; both routes close on `m_H/v = 1/2` —
+  forward **123.11 GeV vs measured 125.25 (1.7%)**; forced `λ = 0.125` vs implied 0.1294.
+- Step 288 — the unit power law: only the one-over-rank law halves per rank doubling
+  (walked 1..32; square and flat laws excluded) — **Zipf = Gutenberg-Richter b = the One**.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

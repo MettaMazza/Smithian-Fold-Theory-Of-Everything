@@ -1,0 +1,30 @@
+import "../constants/fold_number_theory.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== fold number theory: the integers as orbit dynamics ==="
+    set ok to expect_equal("the eternal period of q=7: ord_7(2)" and int_to_string(order_of_two(7)) and "3")
+    set ok to expect_equal("the eternal period of q=31" and int_to_string(order_of_two(31)) and "5")
+    set ok to expect_bool("[1] ORBIT-LENGTH LAW: every reduced p/q, every odd q to 99" and orbit_length_law_to(99))
+    set ok to expect_equal("[2] the orbit census at q=7: two eternal modes" and int_to_string(orbit_census(7)) and "2")
+    set ok to expect_equal("[2] the orbit census at q=31: six modes" and int_to_string(orbit_census(31)) and "6")
+    set ok to expect_equal("[2] the orbit census at q=73: eight modes" and int_to_string(orbit_census(73)) and "8")
+    set ok to expect_bool("[2] ORBIT COUNT: exact tiling for every odd q to 99" and orbit_count_law_to(99))
+    set ok to expect_bool("[3] ANTIPODES: every pair sums to the One; only 1/2 self-paired (to 99)" and antipodal_law_to(99))
+    set ok to expect_equal("[4] the transient of q=48: four decay steps" and int_to_string(transient_length(48)) and "4")
+    set ok to expect_equal("[4] the eternal core of q=48" and int_to_string(eternal_core(48)) and "3")
+    set ok to expect_bool("[4] ETERNAL vs TRANSIENT: walked for every even q to 64" and transient_law_to(64))
+    set ok to expect_equal("[5] odd primes to 4000" and int_to_string(odd_prime_count_to(4000)) and "549")
+    set ok to expect_equal("[5] FULLY ERGODIC: single full-orbit primes to 4000 (density 0.390 vs Artin 0.374)" and int_to_string(fully_ergodic_count_to(4000)) and "214")
+    display "=== done ==="
+    return 0

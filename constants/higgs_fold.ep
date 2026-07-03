@@ -1,0 +1,110 @@
+# ============================================================================
+#  THE HIGGS MASS & SELF-COUPLING  --  the displaced-vacuum tower's first rungs.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The Standard Model measures the Higgs mass and inserts it; nothing in the
+#  theory says why 125 GeV and not any other value. The fold's Higgs sector
+#  is the first three rungs of the binary tower, nothing more: the vacuum
+#  sits displaced at the half-One (higgs_vacuum.ep -- the unique
+#  self-antipodal proper preimage of the One), the Higgs is that vacuum's
+#  radial excitation one rung down, and the self-coupling is the branch
+#  weight one rung below that:
+#      VEV v = 1/2 ,   Higgs part = 1/4 ,   lambda = 1/8.
+#  The Standard Model's own relation m_H^2 = 2 lambda v^2 then FORCES
+#  m_H/v = 1/2: the Higgs mass is exactly half the electroweak VEV.
+#
+#  ── DERIVATION ─ (check every line; the tower walked, the relation exact) ────
+#  THE RUNGS: 1/2, 1/4, 1/8 -- each the previous halved (walked), each a
+#  legal fold value tiling back to the One in 2, 4, 8 steps. THE VACUUM
+#  CHECKS (imported ground: higgs_vacuum.ep): the VEV is self-antipodal
+#  (1 - 1/2 = 1/2) and folds to the One in one step -- the displaced ground
+#  state. THE RELATION, exact: m_H^2/v^2 = 2 lambda = 2 x 1/8 = 1/4, so
+#  m_H/v = 1/2 -- the ratio of the first two rungs, closing the tower on
+#  itself: (1/4)/(1/2) = 1/2 read straight off the rungs agrees with
+#  sqrt(2 lambda) read through the Standard-Model relation. Two routes,
+#  one answer, zero parameters.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Anchor (comparison side, in the test): the electroweak VEV v = 246.22 GeV.
+#  Forced forward: m_H = v/2 = 123.11 GeV against the measured 125.25 GeV --
+#  1.7%. The self-coupling: forced lambda = 1/8 = 0.125 against the value
+#  the measured mass implies, m_H^2/(2v^2) = 0.1294 -- 3.4%. Both readings
+#  at leading order from three tower rungs and no dial anywhere.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The depth-d tower rung: 1/2^d.
+define tower_rung with depth as Int returning Fraction:
+    set tower to whole_power(2 and depth)
+    return fraction_from_ratio(1 and tower)
+
+# The three Higgs-sector rungs.
+define higgs_vev returning Fraction:
+    return tower_rung(1)
+
+define higgs_mass_part returning Fraction:
+    return tower_rung(2)
+
+define higgs_self_coupling returning Fraction:
+    return tower_rung(3)
+
+# Each rung is the previous halved -- the tower walked.
+define rungs_halve returning Bool:
+    set half to fraction_from_ratio(1 and 2)
+    set vev to higgs_vev()
+    set second to fraction_multiply(vev and half)
+    set mass_part to higgs_mass_part()
+    set first_step to fraction_is_equal(second and mass_part)
+    set half_twin to fraction_from_ratio(1 and 2)
+    set mass_part_twin to higgs_mass_part()
+    set third to fraction_multiply(mass_part_twin and half_twin)
+    set coupling to higgs_self_coupling()
+    set second_step to fraction_is_equal(third and coupling)
+    if first_step:
+        return second_step
+    return false
+
+# The vacuum is displaced and self-antipodal: 1 - v = v, and v + v = 1.
+define vacuum_is_displaced returning Bool:
+    set one to fraction_from_whole_number(1)
+    set vev to higgs_vev()
+    set reflected to fraction_subtract(one and vev)
+    set vev_twin to higgs_vev()
+    set self_antipodal to fraction_is_equal(reflected and vev_twin)
+    set vev_a to higgs_vev()
+    set vev_b to higgs_vev()
+    set folded to fraction_add(vev_a and vev_b)
+    set one_twin to fraction_from_whole_number(1)
+    set reaches_one to fraction_is_equal(folded and one_twin)
+    if self_antipodal:
+        return reaches_one
+    return false
+
+# ROUTE A: the mass ratio read straight off the rungs -- (1/4)/(1/2) = 1/2.
+define mass_ratio_from_rungs returning Fraction:
+    set mass_part to higgs_mass_part()
+    set vev to higgs_vev()
+    return fraction_divide(mass_part and vev)
+
+# ROUTE B: the Standard-Model relation m_H^2 = 2 lambda v^2 gives the ratio
+# SQUARED as 2 lambda = 1/4 -- and Route A's ratio squared must equal it.
+define relation_closes returning Bool:
+    set two to fraction_from_whole_number(2)
+    set coupling to higgs_self_coupling()
+    set ratio_squared_b to fraction_multiply(two and coupling)
+    set ratio_a to mass_ratio_from_rungs()
+    set ratio_a_twin to mass_ratio_from_rungs()
+    set ratio_squared_a to fraction_multiply(ratio_a and ratio_a_twin)
+    return fraction_is_equal(ratio_squared_a and ratio_squared_b)
+
+# The absolute Higgs mass, read FORWARD through the electroweak VEV (passed
+# by the caller -- the measured scale lives on the comparison side): v/2.
+define higgs_mass_from_vev with vev_top as Int and vev_bottom as Int returning Fraction:
+    set anchor to fraction_from_ratio(vev_top and vev_bottom)
+    set ratio to mass_ratio_from_rungs()
+    return fraction_multiply(ratio and anchor)

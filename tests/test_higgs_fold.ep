@@ -1,0 +1,27 @@
+import "../constants/higgs_fold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Higgs sector: the displaced-vacuum tower's first rungs ==="
+    set ok to expect_equal("the VEV: the tower's first rung" and fraction_to_text(higgs_vev()) and "1/2")
+    set ok to expect_equal("the Higgs mass-part: the second rung" and fraction_to_text(higgs_mass_part()) and "1/4")
+    set ok to expect_equal("the self-coupling lambda: the third rung" and fraction_to_text(higgs_self_coupling()) and "1/8")
+    set ok to expect_bool("the rungs halve in sequence (the tower walked)" and rungs_halve())
+    set ok to expect_bool("the vacuum is displaced: self-antipodal, folds to the One" and vacuum_is_displaced())
+    set ok to expect_equal("ROUTE A: m_H/v read off the rungs" and fraction_to_text(mass_ratio_from_rungs()) and "1/2")
+    set ok to expect_bool("ROUTE B: m_H^2 = 2 lambda v^2 closes on the same 1/2" and relation_closes())
+    # comparison side: the electroweak VEV 246.22 GeV, passed here only
+    set forced_mass to higgs_mass_from_vev(24622 and 100)
+    set ok to expect_equal("forced m_H = v/2 = 123.11 GeV (measured 125.25 -- 1.7%)" and fraction_to_decimal(forced_mass and 2) and "123.11")
+    display "=== done ==="
+    return 0

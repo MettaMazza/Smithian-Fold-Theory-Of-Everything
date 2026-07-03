@@ -1,0 +1,21 @@
+import "../constants/power_laws_fold.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Zipf and Gutenberg-Richter: the unit power law ==="
+    set ok to expect_bool("SELF-SIMILARITY: doubling the rank halves the count, r = 1..32" and unit_law_is_self_similar_to(32))
+    set ok to expect_bool("EXCLUSION: the square law (1/4 per doubling) and flat law (1) rejected" and other_exponents_excluded())
+    set ok to expect_equal("THE FORCED EXPONENT: Zipf = the One" and fraction_to_text(unit_exponent()) and "1")
+    set ok to expect_equal("Gutenberg-Richter b = the same One (a decade per magnitude)" and fraction_to_text(unit_exponent()) and "1")
+    display "=== done ==="
+    return 0

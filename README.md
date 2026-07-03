@@ -541,9 +541,20 @@ And the structural laws of physics, forced the same way:
   (the chess campaign's retrograde fold, off chess: the subtraction game — 1001 states —
   and Nim — 512 states — solved and certified against independent closed-form oracles at
   **zero disagreements**; the engine was never about chess).
+- **Number theory native to the fold, the Higgs with no inserted mass, and nature's
+  favourite exponent** — **fold number theory** (five laws, exhaustive: orbit length =
+  `ord_q(2)` for EVERY reduced p at every odd q to 99; the `φ(q)/ord_q(2)` orbit census
+  tiles exactly; only the half-One is self-antipodal; even denominators decay their 2-adic
+  valuation onto the odd core; fully-ergodic primes counted to 4000 — **214 of 549**,
+  density 0.390 vs Artin's 0.374 — the conjecture renamed: how often is a prime one ergodic
+  mode?), **the Higgs sector** (the tower's first three rungs `1/2, 1/4, 1/8`; Route A off
+  the rungs and Route B through `m_H² = 2λv²` both close on **`m_H = v/2` → 123.11 GeV vs
+  measured 125.25, 1.7%**; forced `λ = 0.125`), and **the unit power law** (only the
+  one-over-rank law halves per rank doubling — square and flat laws verifiably excluded —
+  **Zipf's exponent = Gutenberg-Richter's b = the One**).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 288 test
-suites (1,668 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 291 test
+suites (1,693 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -600,7 +611,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 288 suites, 1,668 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 291 suites, 1,693 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
