@@ -784,14 +784,177 @@ define share_denominator with state returning Int:
     set theirs to side_units(state and 1 - get_list(state and 64))
     return mine + theirs
 
-# ---------- the search: exact negamax through the antipode -------------------
-# Values are exact fractions: mate for the mover approaches the One
+# ---------- the search: exact alpha-beta through the antipode ----------------
+# Values are exact fractions in (0,1): mate for the mover approaches the One
 # ((1023-k)/(1024-k), faster strictly larger), being mated sits at the floor
-# (1/(1024-k), slower strictly larger), live positions are the counted share.
-# The parent's value is the child's ANTIPODE: mine = 1 - theirs.
-define search_best with state and depth as Int:
-    set result to create_list()
+# (1/(1024-k)), live positions are the counted share. The parent's value is
+# the child's ANTIPODE (mine = 1 - theirs) -- the fold's involution as the
+# minimax step. Alpha-beta pruning is LOSSLESS (a theorem: identical values
+# to full minimax), so nothing here trades exactness for speed; all bound
+# comparisons are exact cross-multiplications.
+
+# Is this move a capture (a take event -- the fold's own subtraction)?
+define move_is_capture with state and move as Int returning Bool:
+    set promo to move / 4096
+    set rest to move - promo * 4096
+    set from_sq to rest / 64
+    set to_sq to rest - from_sq * 64
+    set victim to get_list(state and to_sq)
+    if victim > 0:
+        return true
+    set code to get_list(state and from_sq)
+    if piece_kind(code) == 1:
+        if to_sq == get_list(state and 69):
+            return true
+    return false
+
+# Move ordering, counted: take events first (they change the count, so they
+# decide the bounds fastest); the biggest counted victims lead. Three
+# buckets: heavy captures (victim commands 9+ squares), light captures, quiet.
+define ordered_moves with state:
     set moves to legal_moves(state)
+    set count to length_list(moves)
+    set ordered to create_list()
+    set bucket to 0
+    repeat while bucket < 3:
+        set i to 0
+        repeat while i < count:
+            set move to get_list(moves and i)
+            set rest to move - (move / 4096) * 4096
+            set to_sq to rest - (rest / 64) * 64
+            set victim to get_list(state and to_sq)
+            set taking to move_is_capture(state and move)
+            set heavy to 0
+            if victim > 0:
+                if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
+                    set heavy to 1
+            set wanted to 0
+            if bucket == 0:
+                if taking:
+                    if heavy == 1:
+                        set wanted to 1
+            if bucket == 1:
+                if taking:
+                    if heavy == 0:
+                        set wanted to 1
+            if bucket == 2:
+                if taking:
+                    set wanted to 0
+                else:
+                    set wanted to 1
+            if wanted == 1:
+                set ok to append_list(ordered and move)
+            set i to i + 1
+        set bucket to bucket + 1
+    return ordered
+
+# QUIESCENCE: at the horizon, read the take chains until the counting
+# settles. Every capture strictly reduces the piece count, so the chain
+# terminates structurally -- no depth knob. Returns the exact value pair.
+define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
+    set result to create_list()
+    set stand_num to share_numerator(state)
+    set stand_den to share_denominator(state)
+    if stand_num * beta_den > beta_num * stand_den:
+        set ok to append_list(result and stand_num)
+        set ok to append_list(result and stand_den)
+        return result
+    set best_num to stand_num
+    set best_den to stand_den
+    set a_num to alpha_num
+    set a_den to alpha_den
+    if stand_num * a_den > a_num * stand_den:
+        set a_num to stand_num
+        set a_den to stand_den
+    set moves to legal_moves(state)
+    set count to length_list(moves)
+    set i to 0
+    repeat while i < count:
+        set move to get_list(moves and i)
+        if move_is_capture(state and move):
+            set child to make_move(state and move)
+            set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+            set child_num to get_list(deeper and 0)
+            set child_den to get_list(deeper and 1)
+            set my_num to child_den - child_num
+            set my_den to child_den
+            if my_num * best_den > best_num * my_den:
+                set best_num to my_num
+                set best_den to my_den
+            if my_num * beta_den > beta_num * my_den:
+                set ok to append_list(result and best_num)
+                set ok to append_list(result and best_den)
+                return result
+            if my_num * a_den > a_num * my_den:
+                set a_num to my_num
+                set a_den to my_den
+        set i to i + 1
+    set ok to append_list(result and best_num)
+    set ok to append_list(result and best_den)
+    return result
+
+# The exact alpha-beta value of a node for the side to move.
+define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
+    set result to create_list()
+    set moves to ordered_moves(state)
+    set count to length_list(moves)
+    if count == 0:
+        set checked to side_in_check(state)
+        if checked:
+            set ok to append_list(result and 1)
+            set ok to append_list(result and 1024 - depth)
+        else:
+            set ok to append_list(result and 1)
+            set ok to append_list(result and 2)
+        return result
+    if depth == 0:
+        return quiescence(state and alpha_num and alpha_den and beta_num and beta_den)
+    set best_num to 0
+    set best_den to 1
+    set a_num to alpha_num
+    set a_den to alpha_den
+    set i to 0
+    repeat while i < count:
+        set move to get_list(moves and i)
+        set child to make_move(state and move)
+        set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+        set child_num to get_list(deeper and 0)
+        set child_den to get_list(deeper and 1)
+        set my_num to child_den - child_num
+        set my_den to child_den
+        if my_num * best_den > best_num * my_den:
+            set best_num to my_num
+            set best_den to my_den
+        if my_num * beta_den > beta_num * my_den:
+            set ok to append_list(result and best_num)
+            set ok to append_list(result and best_den)
+            return result
+        if my_num * a_den > a_num * my_den:
+            set a_num to my_num
+            set a_den to my_den
+        set i to i + 1
+    set ok to append_list(result and best_num)
+    set ok to append_list(result and best_den)
+    return result
+
+# A position's signature: the board, side, rights and ep square as text --
+# used to recognise closed orbits (repetitions) in whole games.
+define state_signature with state returning Str:
+    set signature to "|"
+    set i to 0
+    repeat while i < 70:
+        set signature to concat(signature and concat(int_to_string(get_list(state and i)) and "."))
+        set i to i + 1
+    return signature
+
+# The root, orbit-aware: a child position already visited in the game is a
+# CLOSED ORBIT that never reached the One -- chess's own repetition rule
+# prices it at the draw value, the lock 1/2, exactly. So the bot avoids
+# repetition when its share exceeds the lock and seeks it when behind:
+# the rule's own value, no knob anywhere.
+define search_best_seen with state and depth as Int and seen as Str:
+    set result to create_list()
+    set moves to ordered_moves(state)
     set count to length_list(moves)
     if count == 0:
         set checked to side_in_check(state)
@@ -804,24 +967,59 @@ define search_best with state and depth as Int:
             set ok to append_list(result and 2)
         return result
     set best_move to get_list(moves and 0)
-    set best_num to 0 - 1
+    set best_num to 0
     set best_den to 1
     set i to 0
     repeat while i < count:
         set move to get_list(moves and i)
         set child to make_move(state and move)
-        set value_num to 0
-        set value_den to 1
-        if depth == 1:
-            set value_num to share_numerator(child)
-            set value_den to share_denominator(child)
+        set my_num to 1
+        set my_den to 2
+        set signature to state_signature(child)
+        set visited to string_index_of(seen and signature)
+        if visited < 0:
+            set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
+            set child_num to get_list(deeper and 0)
+            set child_den to get_list(deeper and 1)
+            set my_num to child_den - child_num
+            set my_den to child_den
+        if my_num * best_den > best_num * my_den:
+            set best_num to my_num
+            set best_den to my_den
+            set best_move to move
+        set i to i + 1
+    set ok to append_list(result and best_move)
+    set ok to append_list(result and best_num)
+    set ok to append_list(result and best_den)
+    return result
+
+# The root: pick the move whose exact alpha-beta value is largest.
+define search_best with state and depth as Int:
+    set result to create_list()
+    set moves to ordered_moves(state)
+    set count to length_list(moves)
+    if count == 0:
+        set checked to side_in_check(state)
+        set ok to append_list(result and 0 - 1)
+        if checked:
+            set ok to append_list(result and 1)
+            set ok to append_list(result and 1024 - depth)
         else:
-            set deeper to search_best(child and depth - 1)
-            set value_num to get_list(deeper and 1)
-            set value_den to get_list(deeper and 2)
-        # my value is the child's antipode: 1 - theirs
-        set my_num to value_den - value_num
-        set my_den to value_den
+            set ok to append_list(result and 1)
+            set ok to append_list(result and 2)
+        return result
+    set best_move to get_list(moves and 0)
+    set best_num to 0
+    set best_den to 1
+    set i to 0
+    repeat while i < count:
+        set move to get_list(moves and i)
+        set child to make_move(state and move)
+        set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
+        set child_num to get_list(deeper and 0)
+        set child_den to get_list(deeper and 1)
+        set my_num to child_den - child_num
+        set my_den to child_den
         if my_num * best_den > best_num * my_den:
             set best_num to my_num
             set best_den to my_den

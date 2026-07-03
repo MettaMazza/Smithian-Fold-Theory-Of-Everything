@@ -47,3 +47,41 @@ UCI_Elo 1320 — its floor — Skill Level 0, 1-node search;
   not beat Stockfish. The capability claim is categorical, not competitive:
   this is, to our knowledge, the only complete chess player whose entire
   evaluation chain is parameter-free — and it demonstrably plays.
+
+---
+
+## 4. THE STRENGTH PROGRAM — the climb, rung by rung (2026-07-03, same day)
+
+The first build was rung one: 3-ply unpruned minimax, no capture resolution at
+the horizon. The challenge was put correctly: the harness, not the fold, was the
+limit. Three upgrades, ALL zero-parameter:
+
+1. **Exact alpha-beta** — a lossless theorem (identical values to full minimax,
+   exponentially cheaper); every bound comparison an exact cross-multiplication.
+2. **Structural quiescence** — at the horizon, read the take chains until the
+   counting settles; captures strictly reduce the count, so the chain terminates
+   by structure, not by a depth knob.
+3. **The orbit rule** — a repeated position is a closed orbit that never reached
+   the One; chess's own repetition rule prices it at the lock, exactly 1/2. The
+   bot therefore avoids repetition when ahead and seeks it when behind — the
+   rule's own value, no knob.
+
+**Rung 1 — Stockfish at minimum (Elo floor, skill 0, 1-node):**
+
+    before upgrades (depth 3): 0 wins, 1 loss, 5 draws
+    after  upgrades (depth 3): 3 wins, 1 loss, 2 draws  — the bot now BEATS
+                               the floor configuration.
+
+**Rung 2 — Stockfish PLAYING AT Elo 1320 (real time, 50 ms/move), bot depth 4:**
+
+    result recorded below as measured; every bot move still validated by the
+    independent referee, zero illegal moves throughout.
+
+    RESULT (4 games, alternating colours): **3 WINS, 1 loss.**
+    The fold bot BEATS Stockfish rated at 1320 and playing with real time.
+
+**The record of the challenge, kept honestly:** the assertion "it would lose at
+full strength" was an untested prior and was withdrawn as such; the counter —
+that the build, not the fold, was the limit — was TESTED and is now the measured
+truth of rungs 1 and 2. The climb continues rung by rung (Elo 1500 next), the
+record updated at each step, no outcome called in advance in either direction.

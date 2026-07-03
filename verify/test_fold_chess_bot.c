@@ -4948,6 +4948,12 @@ long long counted_reach(long long, long long, long long);
 long long side_units(long long, long long);
 long long share_numerator(long long);
 long long share_denominator(long long);
+long long move_is_capture(long long, long long);
+long long ordered_moves(long long);
+long long quiescence(long long, long long, long long, long long, long long);
+long long search_value(long long, long long, long long, long long, long long, long long);
+long long state_signature(long long);
+long long search_best_seen(long long, long long, long long);
 long long search_best(long long, long long);
 long long start_is_at_the_lock();
 long long finds_fools_mate();
@@ -7210,12 +7216,211 @@ L_cleanup:
     return ret_val;
 }
 
-long long search_best(long long state, long long depth) {
+long long move_is_capture(long long state, long long move) {
+    long long code = 0;
+    long long from_sq = 0;
+    long long promo = 0;
+    long long rest = 0;
+    long long to_sq = 0;
+    long long victim = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    promo = (move / 4096);
+    rest = (move - (promo * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
+    victim = get_list(state, to_sq);
+    if (victim > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    code = get_list(state, from_sq);
+    if (piece_kind(code) == 1) {
+    if (to_sq == get_list(state, 69)) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long ordered_moves(long long state) {
+    long long bucket = 0;
+    long long count = 0;
+    long long heavy = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long ok = 0;
+    long long ordered = 0;
+    long long rest = 0;
+    long long taking = 0;
+    long long to_sq = 0;
+    long long victim = 0;
+    long long wanted = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&ordered);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    moves = legal_moves(state);
+    count = length_list(moves);
+    ordered = create_list();
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (1) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (1) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (1) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    bucket = 3;
+    ret_val = ordered;
+    ordered = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(7);
+    return ret_val;
+}
+
+long long quiescence(long long state, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den) {
+    long long a_den = 0;
+    long long a_num = 0;
     long long best_den = 0;
-    long long best_move = 0;
     long long best_num = 0;
-    long long checked = 0;
     long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
     long long count = 0;
     long long deeper = 0;
     long long i = 0;
@@ -7225,8 +7430,316 @@ long long search_best(long long state, long long depth) {
     long long my_num = 0;
     long long ok = 0;
     long long result = 0;
-    long long value_den = 0;
-    long long value_num = 0;
+    long long stand_den = 0;
+    long long stand_num = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&a_den);
+    ep_gc_push_root(&a_num);
+    ep_gc_push_root(&best_den);
+    ep_gc_push_root(&best_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&deeper);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&stand_den);
+    ep_gc_push_root(&stand_num);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&beta_num);
+    ep_gc_push_root(&beta_den);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    stand_num = share_numerator(state);
+    stand_den = share_denominator(state);
+    if ((stand_num * beta_den) > (beta_num * stand_den)) {
+    ok = append_list(result, stand_num);
+    ok = append_list(result, stand_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_num = stand_num;
+    best_den = stand_den;
+    a_num = alpha_num;
+    a_den = alpha_den;
+    if ((stand_num * a_den) > (a_num * stand_den)) {
+    a_num = stand_num;
+    a_den = stand_den;
+    }
+    moves = legal_moves(state);
+    count = length_list(moves);
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    if (move_is_capture(state, move)) {
+    child = make_move(state, move);
+    deeper = quiescence(child, (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
+    child_num = get_list(deeper, 0);
+    child_den = get_list(deeper, 1);
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    }
+    if ((my_num * beta_den) > (beta_num * my_den)) {
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if ((my_num * a_den) > (a_num * my_den)) {
+    a_num = my_num;
+    a_den = my_den;
+    }
+    }
+    i = (i + 1);
+    }
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(15);
+    return ret_val;
+}
+
+long long search_value(long long state, long long depth, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den) {
+    long long a_den = 0;
+    long long a_num = 0;
+    long long best_den = 0;
+    long long best_num = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long result = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&a_den);
+    ep_gc_push_root(&a_num);
+    ep_gc_push_root(&best_den);
+    ep_gc_push_root(&best_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&deeper);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&alpha_num);
+    ep_gc_push_root(&alpha_den);
+    ep_gc_push_root(&beta_num);
+    ep_gc_push_root(&beta_den);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    moves = ordered_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    checked = side_in_check(state);
+    if (checked) {
+    ok = append_list(result, 1);
+    ok = append_list(result, (1024 - depth));
+    } else {
+    ok = append_list(result, 1);
+    ok = append_list(result, 2);
+    }
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if (depth == 0) {
+    ret_val = quiescence(state, alpha_num, alpha_den, beta_num, beta_den);
+    goto L_cleanup;
+    }
+    best_num = 0;
+    best_den = 1;
+    a_num = alpha_num;
+    a_den = alpha_den;
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    child = make_move(state, move);
+    deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
+    child_num = get_list(deeper, 0);
+    child_den = get_list(deeper, 1);
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    }
+    if ((my_num * beta_den) > (beta_num * my_den)) {
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if ((my_num * a_den) > (a_num * my_den)) {
+    a_num = my_num;
+    a_den = my_den;
+    }
+    i = (i + 1);
+    }
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(16);
+    return ret_val;
+}
+
+long long state_signature(long long state) {
+    long long i = 0;
+    long long signature = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&signature);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    signature = (long long)"|";
+    i = 0;
+    while (i < 70) {
+    signature = concat(signature, concat(int_to_string(get_list(state, i)), (long long)"."));
+    i = (i + 1);
+    }
+    ret_val = signature;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long search_best_seen(long long state, long long depth, long long seen) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long result = 0;
+    long long signature = 0;
+    long long visited = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&best_den);
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&best_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&deeper);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&signature);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&seen);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    moves = ordered_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    checked = side_in_check(state);
+    ok = append_list(result, -1);
+    if (checked) {
+    ok = append_list(result, 1);
+    ok = append_list(result, (1024 - depth));
+    } else {
+    ok = append_list(result, 1);
+    ok = append_list(result, 2);
+    }
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_move = get_list(moves, 0);
+    best_num = 0;
+    best_den = 1;
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    child = make_move(state, move);
+    my_num = 1;
+    my_den = 2;
+    signature = state_signature(child);
+    visited = string_index_of(seen, signature);
+    if (visited < 0) {
+    deeper = search_value(child, (depth - 1), 0, 1, (best_den - best_num), best_den);
+    child_num = get_list(deeper, 0);
+    child_den = get_list(deeper, 1);
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    }
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    i = (i + 1);
+    }
+    ok = append_list(result, best_move);
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(13);
+    return ret_val;
+}
+
+long long search_best(long long state, long long depth) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long result = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&best_den);
@@ -7244,7 +7757,7 @@ long long search_best(long long state, long long depth) {
     ep_gc_maybe_collect();
 
     result = create_list();
-    moves = legal_moves(state);
+    moves = ordered_moves(state);
     count = length_list(moves);
     if (count == 0) {
     checked = side_in_check(state);
@@ -7261,24 +7774,17 @@ long long search_best(long long state, long long depth) {
     goto L_cleanup;
     }
     best_move = get_list(moves, 0);
-    best_num = -1;
+    best_num = 0;
     best_den = 1;
     i = 0;
     while (i < count) {
     move = get_list(moves, i);
     child = make_move(state, move);
-    value_num = 0;
-    value_den = 1;
-    if (depth == 1) {
-    value_num = share_numerator(child);
-    value_den = share_denominator(child);
-    } else {
-    deeper = search_best(child, (depth - 1));
-    value_num = get_list(deeper, 1);
-    value_den = get_list(deeper, 2);
-    }
-    my_num = (value_den - value_num);
-    my_den = value_den;
+    deeper = search_value(child, (depth - 1), 0, 1, (best_den - best_num), best_den);
+    child_num = get_list(deeper, 0);
+    child_den = get_list(deeper, 1);
+    my_num = (child_den - child_num);
+    my_den = child_den;
     if ((my_num * best_den) > (best_num * my_den)) {
     best_num = my_num;
     best_den = my_den;
