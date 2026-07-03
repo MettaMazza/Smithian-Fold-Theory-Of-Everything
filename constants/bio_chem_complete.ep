@@ -1,0 +1,86 @@
+# ============================================================================
+#  CHEMISTRY & BIOLOGY COMPLETION  --  the codon wobble grouping and the g-block.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The 64-codon genetic code is already forced (genetic_code.ep: 4^3 = 2^6,
+#  two ways). What this adds is the STRUCTURE of the redundancy: the codon
+#  space is a fold covering, so the third base is the least-significant
+#  position -- the "wobble" rung -- and the 64 codons group by their first
+#  two bases into 16 boxes, which is exactly how the code packs into the
+#  amino-acid set. And beyond the periodic table's known blocks lies the
+#  g-block (elements 121-137, the superactinides): a chemistry never
+#  entered, whose subshell capacity is the same 2(2l+1) count that fills
+#  every other block, and where SMITHIUM (Z = 126) sits.
+#
+#  ── DERIVATION ─ (check every line; coverings counted, boxes forced) ─────────
+#  THE CODON COVERING: a base is a two-bit fold pair (binary^2 = 4 bases); a
+#  codon is three bases = six bits, so the codon space is 4^3 = 2^6 = 64
+#  (imported forced from genetic_code.ep). THE BOXES: grouping by the first
+#  two bases gives base^2 = 16 boxes, and the 64 codons partition into them
+#  4 per box (the third-base wobble) -- 16 x 4 = 64 checked exactly. THE
+#  WOBBLE RUNG: the third base is the lowest fold position; its degeneracy
+#  is the half-One folding to the same image (the wobble collapses the
+#  fourth-fold distinctions). THE g-BLOCK: angular kind l = 4, subshell
+#  capacity 2(2l+1) = 18 -- the same rule that gives s = 2, p = 6, d = 10,
+#  f = 14 (all checked) -- so elements 121-137 are the 18-wide g-block, and
+#  126 (Smithium) lies inside it.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured: the standard genetic code has 64 codons in 16 first-two-base
+#  family boxes, with third-base wobble degeneracy -- textbook. The subshell
+#  capacities 2, 6, 10, 14 are the measured s/p/d/f block widths; the
+#  g-block (18-wide, l = 4) is the predicted next block, unentered because no
+#  element has reached it -- element 118 is the heaviest synthesized. Every
+#  count here is a forced covering, zero parameters.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/genetic_code.ep"
+
+
+# THE BOXES: the codons grouped by their first two bases -- base^2 = 16.
+define first_two_base_boxes returning Int:
+    set bases to nucleotide_base_count()
+    return whole_power(bases and 2)
+
+# The 64 codons partition into the 16 boxes exactly four per box (the
+# third-base wobble): boxes x 4 = codon count, checked.
+define boxes_tile_the_codons returning Bool:
+    set boxes to first_two_base_boxes()
+    set per_box to nucleotide_base_count()
+    set total to boxes * per_box
+    set codons to codon_count()
+    return total == codons
+
+# THE WOBBLE RUNG: the third base is the lowest fold position; its
+# degeneracy is the half-One folding to unison (the wobble collapse).
+define wobble_rung_folds_to_one returning Bool:
+    set rung to fraction_from_ratio(1 and 2)
+    set rung_twin to fraction_from_ratio(1 and 2)
+    set doubled to fraction_add(rung and rung_twin)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(doubled and one)
+
+# THE SUBSHELL CAPACITY: 2(2l+1) -- the block width at angular kind l.
+define subshell_capacity with l as Int returning Int:
+    return 2 * (2 * l + 1)
+
+# The known blocks come from the same rule: s = 2, p = 6, d = 10, f = 14.
+define known_blocks_hold returning Bool:
+    set s_ok to subshell_capacity(0) == 2
+    set p_ok to subshell_capacity(1) == 6
+    set d_ok to subshell_capacity(2) == 10
+    set f_ok to subshell_capacity(3) == 14
+    if s_ok:
+        if p_ok:
+            if d_ok:
+                return f_ok
+    return false
+
+# THE g-BLOCK: angular kind l = 4, capacity 18 -- the next, unentered block
+# (elements 121-137), where Smithium (126) sits.
+define g_block_capacity returning Int:
+    return subshell_capacity(4)

@@ -1,0 +1,29 @@
+import "../constants/fold_elements.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the magic numbers and SMITHIUM (the island of stability) ==="
+    set ok to expect_equal("the oscillator shell H(0): the first magic 2" and int_to_string(oscillator_shell(0)) and "2")
+    set ok to expect_equal("the oscillator shell H(2)" and int_to_string(oscillator_shell(2)) and "20")
+    set ok to expect_equal("the reordered closure M(3): magic 28 (spin-orbit intruder)" and int_to_string(magic_closure(3)) and "28")
+    set ok to expect_equal("the reordered closure M(5): magic 82" and int_to_string(magic_closure(5)) and "82")
+    set ok to expect_equal("the spin-orbit full-shell threshold: l = 3" and int_to_string(spin_orbit_threshold()) and "3")
+    set ok to expect_bool("the generators trace to the One (spin base 2, colour-3 orbit)" and generators_trace_to_one())
+    set ok to expect_bool("THE GENERATOR reproduces ALL EIGHT known magic numbers" and reproduces_known_magic())
+    set ok to expect_bool("EXCLUSION: no closure between 82 and 126 (so NOT 114 or 120)" and no_closure_between_82_and_126())
+    set ok to expect_equal("SMITHIUM's proton number (the next closure past 82)" and int_to_string(smithium_proton_number()) and "126")
+    set ok to expect_equal("SMITHIUM's neutron number (the next closure past 126)" and int_to_string(smithium_neutron_number()) and "184")
+    set ok to expect_equal("SMITHIUM's mass number: the doubly-magic 126 + 184" and int_to_string(smithium_mass_number()) and "310")
+    set ok to expect_bool("THE ISLAND IS FORCED: SMITHIUM (Sh, Z=126, N=184, A=310)" and island_is_forced())
+    display "=== done ==="
+    return 0

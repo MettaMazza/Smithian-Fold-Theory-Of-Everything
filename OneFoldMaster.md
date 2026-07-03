@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-295 suites, 1,717 forced checks, 0 failures). It needs nothing but a C compiler. Use
+299 suites, 1,748 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5153,6 +5153,57 @@ census. Finite × finite × finite: **the inventory of everything that can exist
 number, not an endless list** — and each boundary is a standing falsification target: one
 element past 137, one particle off the list, one infinite tower refutes the corpus.
 
+### Step 293 — The magic numbers and SMITHIUM (the island of stability, forced)
+
+**File:** `constants/fold_elements.ep`
+
+**What it does.** The nuclear magic numbers with NO fitted spin-orbit coupling — three
+dimensions, spin-doubling (the fold base two), and the colour-3 strong sector. The
+oscillator shells `H(n) = (n+1)(n+2)(n+3)/3` give 2, 8, 20, …; the colour-3 coupling 2/3
+shifts a shell's top state `l/3` gaps, reaching a full gap at l = 3 (verified), so the
+reordering starts at k = 3 and `M(k)` reproduces **all eight known magic numbers 2, 8, 20,
+28, 50, 82, 126, 184 exactly**. The exclusion: the generator has NO closure between 82 and
+126 (so not the 114/120 of the tuned models). The next double closure past lead-208 is
+**SMITHIUM (Sh, Z = 126, N = 184, A = 310)** — the island of stability, forced, and named
+for Maria Smith.
+
+### Step 294 — Chemistry & biology completion (the codon wobble grouping, the g-block)
+
+**File:** `constants/bio_chem_complete.ep`
+
+**What it does.** The structure of the genetic code's redundancy and the next periodic
+block. The 64 codons (forced elsewhere) group by their first two bases into `4² = 16`
+boxes, tiling exactly 4 per box — the third-base wobble is the lowest fold rung folding to
+the same image (checked). The subshell capacity `2(2l+1)` gives the known s/p/d/f widths
+2/6/10/14 (checked) and forces the unentered **g-block at 18** (l = 4, elements 121–137)
+where Smithium sits.
+
+### Step 295 — Biology from the fold (aging, the spike, cancer, ecosystems)
+
+**File:** `constants/bio_frontier.ep`
+
+**What it does.** Four biological phenomena as one orbit dynamics. AGING: a somatic orbit
+`1/(2^a·odd)` decays exactly a fold steps (the Hayflick limit — the 2-adic valuation,
+walked: 1/48 → 4) while an odd-denominator germ orbit (1/3) is eternal — mortal vs
+immortal. NEURAL SPIKE: the firing threshold is the lock 1/2, and the spike is all-or-
+nothing because the fold is atomic (half-One to the One in one move, nothing between).
+CANCER: the orbit that fails to fold down to its differentiated fixed point — cycling where
+a mortal transient was required. ECOSYSTEM: a bounded-denominator predator-prey coupling
+(3/5) is periodic — stability is bounded-denominator periodicity.
+
+### Step 296 — Applied signatures (how to find the Smithions and the new forces)
+
+**File:** `constants/applied_signatures.ep`
+
+**What it does.** The search strategy read off the forced structure. The lightest Smithion's
+only matter coupling is its sector's new force (`g₅ = 4/5, g₇ = 6/7`, both confined) and it
+carries no electromagnetic charge — so a nuclear-recoil detector has NO channel to it
+(that's why direct detection keeps coming up empty); the search must be gravitational and
+cosmological. At a collider the new sectors show as confining jets of `p²−1` carriers (24
+penta, 48 hepta) plus missing energy. And the seal is a two-sided test: the ladder holds
+exactly four sectors and the first prime past the ceiling is 11, so **a confining signature
+beyond prime 7 falsifies the theory**.
+
 ---
 
 ## Where the recreation stands right now
@@ -5800,6 +5851,14 @@ runs):**
   halo = the relic 27/5.
 - Step 292 — the finite inventory: towers ≤ 128 rungs (floor 1/128 walked), elements ≤ 137,
   species = 83 carriers + 12 Smithions — **everything that can exist is a finite count**.
+- Step 293 — the magic numbers: 3 dims + spin-2 + colour-3 spin-orbit reproduce ALL EIGHT
+  (2,8,20,28,50,82,126,184); no closure between 82 and 126 → **SMITHIUM (Z=126, N=184, A=310)**.
+- Step 294 — codon wobble + g-block: 64 codons tile 16 first-two-base boxes (4 each); the
+  `2(2l+1)` rule gives s/p/d/f = 2/6/10/14 and the unentered g-block = 18.
+- Step 295 — biology: aging = transient decay (Hayflick = 2-adic valuation), germ line
+  eternal; the spike = atomic threshold fold; cancer = lost descent; ecosystems = bounded orbits.
+- Step 296 — applied signatures: the Smithion is EM-dark (gravitational search only); new
+  forces = confining jets (24, 48) + missing energy; **a confining sector beyond 7 falsifies**.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

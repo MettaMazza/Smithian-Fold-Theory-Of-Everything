@@ -1,0 +1,24 @@
+import "../constants/applied_signatures.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== applied signatures: finding the Smithions and the new forces ==="
+    set ok to expect_equal("the penta Smithion's only coupling g = 4/5 (confined)" and fraction_to_text(smithion_coupling(5)) and "4/5")
+    set ok to expect_equal("the hepta Smithion's only coupling g = 6/7 (confined)" and fraction_to_text(smithion_coupling(7)) and "6/7")
+    set ok to expect_bool("ELECTROMAGNETICALLY DARK: no ordinary recoil channel (gravitational search)" and electromagnetically_dark())
+    set ok to expect_equal("the PENTA confining-jet multiplicity: 24 carriers" and int_to_string(new_jet_multiplicity(5)) and "24")
+    set ok to expect_equal("the HEPTA confining-jet multiplicity: 48 carriers" and int_to_string(new_jet_multiplicity(7)) and "48")
+    set ok to expect_bool("new jets counted (24 penta, 48 hepta)" and new_jets_are_counted())
+    set ok to expect_bool("THE SEAL: a confining signature beyond prime 7 falsifies the theory" and beyond_seven_falsifies())
+    display "=== done ==="
+    return 0

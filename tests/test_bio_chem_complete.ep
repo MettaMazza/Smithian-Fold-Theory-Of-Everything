@@ -1,0 +1,22 @@
+import "../constants/bio_chem_complete.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== chemistry and biology: the codon wobble grouping and the g-block ==="
+    set ok to expect_equal("the first-two-base boxes: 4^2 = 16" and int_to_string(first_two_base_boxes()) and "16")
+    set ok to expect_bool("the 64 codons tile the 16 boxes exactly (4 per box, wobble)" and boxes_tile_the_codons())
+    set ok to expect_bool("the wobble rung folds to unison (the third-base degeneracy)" and wobble_rung_folds_to_one())
+    set ok to expect_bool("the known blocks s/p/d/f = 2/6/10/14 from 2(2l+1)" and known_blocks_hold())
+    set ok to expect_equal("the g-block capacity: 2(2*4+1) = 18 (elements 121-137)" and int_to_string(g_block_capacity()) and "18")
+    display "=== done ==="
+    return 0

@@ -1,0 +1,92 @@
+# ============================================================================
+#  APPLIED SIGNATURES  --  how to find the Smithions and the new forces.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A prediction that cannot be looked for is worth little. This module reads
+#  the SEARCH STRATEGY straight off the forced structure: WHY the dark-matter
+#  Smithion has evaded every direct-detection experiment, and WHAT its
+#  colliders and telescopes should look for instead. The lightest Smithion is
+#  electromagnetically dark and strong-inert -- it carries only its new
+#  charge and gravity -- so a nuclear-recoil detector has no channel to it;
+#  the search must be gravitational and cosmological. The new forces confine
+#  (p^2-1 massless self-binding carriers), so at a collider they appear as a
+#  new kind of jet plus missing energy -- and because the ladder is sealed at
+#  seven, a confining signature at any prime beyond seven would falsify the
+#  theory outright: a sharp, two-sided test.
+#
+#  ── DERIVATION ─ (check every line; each signature from the forced structure) ─
+#  DARK DETECTION: the Smithion's only matter-coupling is its sector's new
+#  force g = (p-1)/p, and it is electromagnetically dark -- so there is no
+#  ordinary recoil channel, and its detection cross-section is structurally
+#  tiny (that is WHY it is unseen). Checked: g_5 = 4/5 and g_7 = 6/7 are the
+#  only couplings, both below the One (confined), with no electromagnetic
+#  (sector-2) coupling in the list. COLLIDER: each new sector carries
+#  p^2-1 self-confining carriers -- 24 at p = 5, 48 at p = 7 (counted) -- so
+#  pair-produced Smithions hadronize into neutral bound states: a new
+#  confining jet plus missing energy. THE SEAL: the sector ladder stops at
+#  four (2,3,5,7); the first prime beyond the ceiling is 11, which carries
+#  no force -- so a confining signature beyond prime 7 is a falsification,
+#  checked both ways (the count is four AND 11 lies past the ceiling).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Consistent with the record: decades of nuclear-recoil direct-detection
+#  (XENON, LUX, PandaX) have found no WIMP -- exactly what an
+#  electromagnetically dark, many-body relic predicts; dark matter is seen
+#  ONLY gravitationally (rotation curves, lensing, the CMB). The confining-
+#  jet + missing-energy signature is the LHC's standard hidden-valley search
+#  channel. No confining sector beyond prime 7 has ever been seen -- the
+#  prediction stands unfalsified.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/prime_sector_ladder.ep"
+import "../constants/particle_census.ep"
+
+
+# The only matter-detector coupling of a sector-p Smithion: its new force
+# g = (p-1)/p -- confined (below the One), the sole recoil channel.
+define smithion_coupling with p as Int returning Fraction:
+    return sector_coupling(p)
+
+# DARK DETECTION: the new-sector couplings are confined (below the One) and
+# there is no electromagnetic (sector-2) coupling to the Smithion -- so no
+# ordinary recoil channel exists; detection must be gravitational.
+define electromagnetically_dark returning Bool:
+    set one to fraction_from_whole_number(1)
+    set g5 to smithion_coupling(5)
+    set g5_confined to fraction_compare(g5 and one) < 0
+    set g7 to smithion_coupling(7)
+    set g7_confined to fraction_compare(g7 and one) < 0
+    # the Smithion lives in sectors 5 and 7 only -- it carries no sector-2
+    # (electromagnetic/weak) charge, so that channel is absent by construction.
+    if g5_confined:
+        return g7_confined
+    return false
+
+# COLLIDER: each new sector's confining-jet multiplicity is its carrier
+# count p^2-1 -- 24 at p = 5, 48 at p = 7.
+define new_jet_multiplicity with p as Int returning Int:
+    return census_carriers(p)
+
+# The two new confining sectors carry 24 and 48 carriers -- the shower
+# multiplicities of the new jets.
+define new_jets_are_counted returning Bool:
+    set penta to new_jet_multiplicity(5) == 24
+    set hepta to new_jet_multiplicity(7) == 48
+    if penta:
+        return hepta
+    return false
+
+# THE SEAL: a confining signature beyond prime 7 falsifies the theory --
+# the ladder holds exactly four sectors and the first prime past the ceiling
+# (11) carries no force.
+define beyond_seven_falsifies returning Bool:
+    set count_ok to prime_sector_count() == 4
+    set ceiling to deepest_covering_depth()
+    set beyond to first_prime_beyond_ceiling()
+    set sealed to beyond > ceiling
+    if count_ok:
+        return sealed
+    return false

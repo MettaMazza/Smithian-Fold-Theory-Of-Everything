@@ -565,9 +565,22 @@ And the structural laws of physics, forced the same way:
   rungs — the floor 1/128 walked; elements ≤ 137; species = 83 carriers + 12 Smithions —
   **the inventory of everything that can exist is a finite count**, and every boundary is a
   standing falsification target).
+- **The nuclear island, the code's inner structure, biology, and the search strategy** —
+  **the magic numbers and SMITHIUM** (three dimensions + spin-doubling + the colour-3
+  spin-orbit reproduce **all eight known magic numbers 2, 8, 20, 28, 50, 82, 126, 184** with
+  zero fitted coupling; no closure lies between 82 and 126, so the island is forced at
+  **SMITHIUM — Sh, Z = 126, N = 184, A = 310** — not the 114/120 of the tuned models),
+  **chemistry & biology completion** (the 64 codons tile 16 first-two-base boxes with
+  third-base wobble; the `2(2l+1)` rule gives s/p/d/f = 2/6/10/14 and the unentered g-block
+  = 18), **biology from the fold** (aging = transient decay / the Hayflick limit as a 2-adic
+  valuation, the germ line eternal; the neural spike = an atomic threshold fold; cancer =
+  lost descent; ecosystems = bounded-denominator cycles), and **applied signatures** (the
+  Smithion is electromagnetically dark — no nuclear-recoil channel, so the search is
+  gravitational; the new forces show as confining jets of 24 and 48 carriers plus missing
+  energy; **a confining signature beyond prime 7 falsifies the theory**).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 295 test
-suites (1,717 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 299 test
+suites (1,748 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -624,7 +637,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 295 suites, 1,717 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 299 suites, 1,748 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

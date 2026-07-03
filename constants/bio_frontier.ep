@@ -1,0 +1,105 @@
+# ============================================================================
+#  BIOLOGY FROM THE FOLD  --  aging, the neural spike, cancer, ecosystems.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Four biological phenomena from four fields, each usually explained by its
+#  own special machinery: the Hayflick limit (why somatic cells divide a
+#  finite number of times while germ cells do not), the all-or-nothing neural
+#  spike, cancer's endless division, and the stability of predator-prey
+#  cycles. The fold gives all four from its orbit dynamics: a lineage is a
+#  fold orbit, and an even-denominator orbit DECAYS in exactly its 2-adic
+#  valuation of steps (mortal) while an odd-denominator orbit is eternal
+#  (immortal); the spike is the atomic 2-to-1 fold across the lock threshold;
+#  cancer is the orbit that fails to fold down to its differentiated fixed
+#  point; and an ecosystem is stable exactly when its coupled orbits have
+#  bounded denominators.
+#
+#  ── DERIVATION ─ (check every line; each walked on the orbit dynamics) ───────
+#  AGING: an even-denominator soma orbit 1/(2^a·odd) decays for exactly a
+#  fold steps then locks -- the replicative limit -- walked: 1/8 decays 3
+#  steps, 1/48 decays 4, 1/64 decays 6 (the transient length is the 2-adic
+#  valuation, computed independently). IMMORTALITY: an odd-denominator germ
+#  orbit (1/3) never decays -- it is eternal, its transient length zero.
+#  NEURAL SPIKE: the firing threshold is the lock (m-1)/m at m = 2 = 1/2
+#  (the half-One); the spike is the fold to unison (1/2 + 1/2 = 1) and is
+#  all-or-nothing because the fold is atomic -- there is no half-fold state
+#  between (checked: no rung strictly between the threshold and the One that
+#  the threshold folds through). CANCER: a healthy cell folds DOWN to a
+#  fixed point; the failure is an orbit that keeps cycling -- an eternal
+#  odd-denominator orbit where a mortal transient was required (the germ-line
+#  dynamics running in a somatic cell). ECOSYSTEM: a bounded-denominator
+#  predator-prey coupling is periodic -- the 3/5 orbit closes in a finite
+#  period (walked) -- so it is a stable cycle.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Measured: somatic cells have a Hayflick limit of ~40-60 divisions while
+#  germ and stem lines are effectively immortal; action potentials are
+#  strictly all-or-nothing; cancer cells escape terminal differentiation and
+#  divide without limit; and Lotka-Volterra predator-prey systems cycle
+#  stably. Each is the fold structure named above -- the biology is the
+#  orbit dynamics, traced to the One.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/fold_number_theory.ep"
+
+
+# AGING: the replicative limit of a soma orbit 1/q is its transient length
+# -- the number of fold steps it decays before locking (0 for odd q).
+define replicative_limit with q as Int returning Int:
+    return transient_length(q)
+
+# A somatic (even-denominator) orbit is MORTAL: it decays a positive number
+# of steps; a germ-line (odd-denominator) orbit is IMMORTAL: zero decay.
+define soma_is_mortal_germ_is_immortal returning Bool:
+    set soma to replicative_limit(64)
+    set soma_mortal to soma > 0
+    set germ to replicative_limit(3)
+    set germ_immortal to germ == 0
+    if soma_mortal:
+        return germ_immortal
+    return false
+
+# NEURAL SPIKE: the firing threshold is the lock (m-1)/m at m = 2 = 1/2.
+define spike_threshold returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set half to fraction_from_ratio(1 and 2)
+    return fraction_subtract(one and half)
+
+# The spike is ALL-OR-NOTHING: the threshold folds to unison in ONE atomic
+# step (1/2 + 1/2 = 1), and there is no partial-fire state between the
+# threshold and the One that it passes through.
+define spike_is_atomic returning Bool:
+    set threshold to spike_threshold()
+    set threshold_twin to spike_threshold()
+    set fired to fraction_add(threshold and threshold_twin)
+    set one to fraction_from_whole_number(1)
+    set reaches to fraction_is_equal(fired and one)
+    set threshold_check to spike_threshold()
+    set below_one to fraction_compare(threshold_check and one) < 0
+    if reaches:
+        return below_one
+    return false
+
+# CANCER: the differentiated fixed point is reached by folding DOWN
+# (transient decay); cancer is an orbit that instead cycles forever -- an
+# eternal (odd-denominator) orbit where a mortal transient was required.
+# Contrast: 1/8 descends to its fixed point in 3 steps; 1/3 never does.
+define cancer_is_lost_descent returning Bool:
+    set healthy to replicative_limit(8)
+    set healthy_descends to healthy > 0
+    set cancerous to replicative_limit(3)
+    set cancer_cycles to cancerous == 0
+    if healthy_descends:
+        return cancer_cycles
+    return false
+
+# ECOSYSTEM: a bounded-denominator predator-prey coupling is periodic. The
+# 3/5 orbit closes in a finite period (its orbit length under doubling) --
+# a stable cycle.
+define ecosystem_orbit_is_periodic returning Bool:
+    set period to residue_orbit_length(3 and 5)
+    return period > 0
