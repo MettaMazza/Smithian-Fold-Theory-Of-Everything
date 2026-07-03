@@ -373,6 +373,42 @@ define push_pawn_move with moves and from_sq as Int and to_sq as Int and side as
 define pseudo_moves with state:
     set moves to create_list()
     set side to get_list(state and 64)
+    set deltas_r to create_list()
+    set deltas_f to create_list()
+    set ok to append_list(deltas_r and 2)
+    set ok to append_list(deltas_f and 1)
+    set ok to append_list(deltas_r and 2)
+    set ok to append_list(deltas_f and 0 - 1)
+    set ok to append_list(deltas_r and 0 - 2)
+    set ok to append_list(deltas_f and 1)
+    set ok to append_list(deltas_r and 0 - 2)
+    set ok to append_list(deltas_f and 0 - 1)
+    set ok to append_list(deltas_r and 1)
+    set ok to append_list(deltas_f and 2)
+    set ok to append_list(deltas_r and 1)
+    set ok to append_list(deltas_f and 0 - 2)
+    set ok to append_list(deltas_r and 0 - 1)
+    set ok to append_list(deltas_f and 2)
+    set ok to append_list(deltas_r and 0 - 1)
+    set ok to append_list(deltas_f and 0 - 2)
+    set ray_dr to create_list()
+    set ray_df to create_list()
+    set ok to append_list(ray_dr and 1)
+    set ok to append_list(ray_df and 1)
+    set ok to append_list(ray_dr and 1)
+    set ok to append_list(ray_df and 0 - 1)
+    set ok to append_list(ray_dr and 0 - 1)
+    set ok to append_list(ray_df and 1)
+    set ok to append_list(ray_dr and 0 - 1)
+    set ok to append_list(ray_df and 0 - 1)
+    set ok to append_list(ray_dr and 1)
+    set ok to append_list(ray_df and 0)
+    set ok to append_list(ray_dr and 0 - 1)
+    set ok to append_list(ray_df and 0)
+    set ok to append_list(ray_dr and 0)
+    set ok to append_list(ray_df and 1)
+    set ok to append_list(ray_dr and 0)
+    set ok to append_list(ray_df and 0 - 1)
     set sq to 0
     repeat while sq < 64:
         set code to get_list(state and sq)
@@ -427,24 +463,6 @@ define pseudo_moves with state:
                                             set moves to push_pawn_move(moves and sq and target and side)
                     set capture_file to capture_file + 1
             if kind == 2:
-                set deltas_r to create_list()
-                set deltas_f to create_list()
-                set ok to append_list(deltas_r and 2)
-                set ok to append_list(deltas_f and 1)
-                set ok to append_list(deltas_r and 2)
-                set ok to append_list(deltas_f and 0 - 1)
-                set ok to append_list(deltas_r and 0 - 2)
-                set ok to append_list(deltas_f and 1)
-                set ok to append_list(deltas_r and 0 - 2)
-                set ok to append_list(deltas_f and 0 - 1)
-                set ok to append_list(deltas_r and 1)
-                set ok to append_list(deltas_f and 2)
-                set ok to append_list(deltas_r and 1)
-                set ok to append_list(deltas_f and 0 - 2)
-                set ok to append_list(deltas_r and 0 - 1)
-                set ok to append_list(deltas_f and 2)
-                set ok to append_list(deltas_r and 0 - 1)
-                set ok to append_list(deltas_f and 0 - 2)
                 set j to 0
                 repeat while j < 8:
                     set r to rank + get_list(deltas_r and j)
@@ -466,24 +484,6 @@ define pseudo_moves with state:
                     set j to j + 1
             if kind > 2:
                 if kind < 6:
-                    set ray_dr to create_list()
-                    set ray_df to create_list()
-                    set ok to append_list(ray_dr and 1)
-                    set ok to append_list(ray_df and 1)
-                    set ok to append_list(ray_dr and 1)
-                    set ok to append_list(ray_df and 0 - 1)
-                    set ok to append_list(ray_dr and 0 - 1)
-                    set ok to append_list(ray_df and 1)
-                    set ok to append_list(ray_dr and 0 - 1)
-                    set ok to append_list(ray_df and 0 - 1)
-                    set ok to append_list(ray_dr and 1)
-                    set ok to append_list(ray_df and 0)
-                    set ok to append_list(ray_dr and 0 - 1)
-                    set ok to append_list(ray_df and 0)
-                    set ok to append_list(ray_dr and 0)
-                    set ok to append_list(ray_df and 1)
-                    set ok to append_list(ray_dr and 0)
-                    set ok to append_list(ray_df and 0 - 1)
                     set ray_start to 0
                     set ray_end to 8
                     if kind == 3:
@@ -1008,29 +1008,45 @@ define ordered_moves with state:
 # terminates structurally -- no depth knob. Returns the exact value pair.
 define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
     set result to create_list()
-    set stand_num to share_numerator(state)
-    set stand_den to share_denominator(state)
-    if stand_num * beta_den > beta_num * stand_den:
-        set ok to append_list(result and stand_num)
-        set ok to append_list(result and stand_den)
-        return result
-    set best_num to stand_num
-    set best_den to stand_den
-    set a_num to alpha_num
-    set a_den to alpha_den
-    if stand_num * a_den > a_num * stand_den:
-        set a_num to stand_num
-        set a_den to stand_den
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
+    set checked to square_attacked(state and king_from and 1 - side)
+    set best_num to 0
+    set best_den to 1
+    set a_num to alpha_num
+    set a_den to alpha_den
+    if checked:
+        set best_num to best_num
+    else:
+        set stand_num to share_numerator(state)
+        set stand_den to share_denominator(state)
+        if stand_num * beta_den > beta_num * stand_den:
+            set ok to append_list(result and stand_num)
+            set ok to append_list(result and stand_den)
+            return result
+        set best_num to stand_num
+        set best_den to stand_den
+        if stand_num * a_den > a_num * stand_den:
+            set a_num to stand_num
+            set a_den to stand_den
+    set legal_seen to 0
     set pseudo to pseudo_moves(state)
     set count to length_list(pseudo)
+    set bucket_end to 2
+    if checked:
+        set bucket_end to 3
     set bucket to 0
-    repeat while bucket < 2:
+    repeat while bucket < bucket_end:
         set i to 0
         repeat while i < count:
             set move to get_list(pseudo and i)
-            if move_is_capture(state and move):
+            set taking to move_is_capture(state and move)
+            set examine to 0
+            if taking:
+                set examine to 1
+            if checked:
+                set examine to 1
+            if examine == 1:
                 set rest to move - (move / 4096) * 4096
                 set from_sq to rest / 64
                 set to_sq to rest - from_sq * 64
@@ -1041,10 +1057,17 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                         set heavy to 1
                 set wanted to 0
                 if bucket == 0:
-                    if heavy == 1:
-                        set wanted to 1
-                else:
-                    if heavy == 0:
+                    if taking:
+                        if heavy == 1:
+                            set wanted to 1
+                if bucket == 1:
+                    if taking:
+                        if heavy == 0:
+                            set wanted to 1
+                if bucket == 2:
+                    if taking:
+                        set wanted to 0
+                    else:
                         set wanted to 1
                 if wanted == 1:
                     set child to make_move(state and move)
@@ -1055,6 +1078,7 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                     if exposed:
                         set exposed to exposed
                     else:
+                        set legal_seen to legal_seen + 1
                         set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den)
                         set child_num to get_list(deeper and 0)
                         set child_den to get_list(deeper and 1)
@@ -1072,6 +1096,11 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                             set a_den to my_den
             set i to i + 1
         set bucket to bucket + 1
+    if checked:
+        if legal_seen == 0:
+            set ok to append_list(result and 1)
+            set ok to append_list(result and 1024)
+            return result
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
     return result
@@ -1175,6 +1204,10 @@ define state_signature with state returning Str:
 # the rule's own value, no knob anywhere.
 define search_best_seen with state and depth as Int and seen as Str:
     set result to create_list()
+    set pre_move to 0 - 1
+    if depth > 3:
+        set shallow to search_best_seen(state and depth - 2 and seen)
+        set pre_move to get_list(shallow and 0)
     set moves to ordered_moves(state)
     set count to length_list(moves)
     if count == 0:
@@ -1190,25 +1223,37 @@ define search_best_seen with state and depth as Int and seen as Str:
     set best_move to get_list(moves and 0)
     set best_num to 0
     set best_den to 1
-    set i to 0
+    set i to 0 - 1
     repeat while i < count:
-        set move to get_list(moves and i)
-        set child to make_move(state and move)
-        set my_num to 1
-        set my_den to 2
-        set signature to state_signature(child)
-        set visited to string_index_of(seen and signature)
-        if visited < 0:
-            set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
-            set child_num to get_list(deeper and 0)
-            set child_den to get_list(deeper and 1)
-            set my_num to child_den - child_num
-            set my_den to child_den
-        if my_num * best_den > best_num * my_den:
-            set best_num to my_num
-            set best_den to my_den
-            set best_move to move
-        set i to i + 1
+        set move to pre_move
+        if i > 0 - 1:
+            set move to get_list(moves and i)
+        set skip_this to 0
+        if i < 0:
+            if pre_move < 0:
+                set skip_this to 1
+        else:
+            if move == pre_move:
+                set skip_this to 1
+        if skip_this == 1:
+            set i to i + 1
+        else:
+            set child to make_move(state and move)
+            set my_num to 1
+            set my_den to 2
+            set signature to state_signature(child)
+            set visited to string_index_of(seen and signature)
+            if visited < 0:
+                set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
+                set child_num to get_list(deeper and 0)
+                set child_den to get_list(deeper and 1)
+                set my_num to child_den - child_num
+                set my_den to child_den
+            if my_num * best_den > best_num * my_den:
+                set best_num to my_num
+                set best_den to my_den
+                set best_move to move
+            set i to i + 1
     set ok to append_list(result and best_move)
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
