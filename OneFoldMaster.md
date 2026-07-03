@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-267 suites, 1,492 forced checks, 0 failures). It needs nothing but a C compiler. Use
+268 suites, 1,498 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4754,6 +4754,33 @@ eight ticks — each moving exactly the One per tick (the causal speed), exactly
 energy split (`1/2 + 1/2 = 1`). Measured: vacuum light carries equal E and B energy densities at
 exactly `c` with no dispersion to the tightest bounds set.
 
+### Step 265 — The world-crossing walk (composition carries between worlds)
+
+**File:** `constants/communication_travel.ep`
+
+**What it does.** A state crosses between prime worlds by COMPOSITION, walked: `1/6` folds to
+`1/3`, composes with the 5-world's `1/5` to `8/15` (both prime shadows on board), folds to `1/15`.
+The landed state's rhythm is walked — orbit period exactly 4 — and it is NOT a new number: the
+3-world's doubling rhythm is 2, the 5-world's is 4 (both walked), and `lcm(2, 4) = 4`. The
+traveller beats at the joint rhythm of the worlds it crossed — the master equation's lcm law,
+carried by a single state.
+
+### MILESTONE — full corpus coverage
+
+With Step 265, **every one of the published corpus's 321 `verify_*` claims is accounted for** in
+this clean-room: **268 recreated as ErnosPlain suites** (many under sharper names, several
+improved to exact arithmetic where the original used floats); the remainder receipted during the
+build as (a) **recreations under different names** (e.g. `bose_einstein` → `bose_einstein_condensation`,
+`ssb` → `higgs_vacuum`, `planck_hierarchy` → `absolute_scale`, `w_z_mass_ratio` → `w_boson_mass`,
+`riemann_structure` → `riemann_critical_line`, `fold_uniqueness` → `forced_fold_theorem`, the
+running/unification family → `coupling_convergence` + `unison_order` + `asymptotic_freedom` +
+`convergence_rate_closed`), (b) **one superseded claim kept superseded by the corpus's own record**
+(`quark_dressing_factor`, replaced by the forced dressing of Step 226), and (c) **the engine's
+meta/audit functions** (`single_axiom_audit`, `precision_constants`, `value`, `u3–u7`,
+`reproduction_*`, `final_assembly`, …) whose clean-room equivalents are the enforcement suite,
+`trace_to_the_one`, `codata_comparison`, and the assembly grammar. Nothing was dropped, nothing
+judged thin: every physics claim is rebuilt and passing, and every skip carries a named receipt.
+
 ---
 
 ## Where the recreation stands right now
@@ -5337,6 +5364,11 @@ runs):**
   order is the log of complexity; each doubling adds one step.
 - Step 264 — the coupled light wave: E and B walked eight ticks — speed the One, equal at every
   tick, exact return — light's speed, coupling, and phase-lock as one verified walk.
+- Step 265 — the world-crossing walk: `1/6 → 1/3 → (+1/5) → 8/15 → 1/15`, landed period 4 =
+  lcm(2, 4) of the crossed worlds' walked rhythms — composition changes the grid, never the law.
+- **MILESTONE: full corpus coverage** — all 321 published `verify_*` claims recreated (268
+  suites), receipted under other names, superseded by the corpus's own record, or engine
+  meta/audit with clean-room equivalents. Nothing dropped, nothing judged thin.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

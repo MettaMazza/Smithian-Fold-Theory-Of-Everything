@@ -1,0 +1,23 @@
+import "../constants/communication_travel.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the world-crossing walk (composition carries between worlds) ==="
+    set ok to expect_bool("the composition step lands on 8/15 (both shadows on board)" and composition_is_composite())
+    set ok to expect_equal("the walk lands on 1/15" and fraction_to_text(crossing_walk()) and "1/15")
+    set ok to expect_equal("the landed orbit period, walked = 4" and int_to_string(landed_period()) and "4")
+    set ok to expect_equal("the 3-world rhythm = 2, walked" and int_to_string(world_period(3)) and "2")
+    set ok to expect_equal("the 5-world rhythm = 4, walked" and int_to_string(world_period(5)) and "4")
+    set ok to expect_bool("the landed rhythm = lcm of the crossed worlds (4 = lcm(2,4))" and rhythm_is_joint())
+    display "=== done ==="
+    return 0

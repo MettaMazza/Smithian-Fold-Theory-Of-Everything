@@ -1,0 +1,107 @@
+# ============================================================================
+#  THE WORLD-CROSSING WALK  --  composition carries a state between worlds, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A state living in one prime world can reach another -- not by breaking any
+#  law, but by COMPOSITION: adding a component from the other world carries the
+#  state onto the composite grid where both worlds run at once. Forced and
+#  walked: 1/6 (the 2·3 world) folds to 1/3, composes with 1/5 (the 5 world) to
+#  8/15 (the 3·5 composite), folds to 1/15 -- and the landed state's rhythm is
+#  the lcm of the two worlds' rhythms: orbit period 4 = lcm(2, 4), verified by
+#  walking the orbit AND by the worlds' own periods. Travel changes the grid;
+#  the law never changes.
+#
+#  ── DERIVATION ─ (check every line; the walk run, the periods counted) ───────
+#  THE WALK: start at 1/6; fold -> 1/3 (the tripling world's own point);
+#  compose with the 5-world's 1/5: 1/3 + 1/5 = 8/15 -- now on the composite
+#  grid, carrying both prime shadows (entangled_universes.ep); fold -> 16/15
+#  casts to 1/15: the composite origin state. Every step a legal primitive,
+#  every intermediate in-domain.
+#  THE RHYTHM: the landed state's orbit is walked -- 1/15 -> 2/15 -> 4/15 ->
+#  8/15 -> 1/15: period exactly 4. And the period is NOT a new number: the
+#  3-world's doubling rhythm is 2 (1 -> 2 -> 1 mod 3) and the 5-world's is 4
+#  (1 -> 2 -> 4 -> 3 -> 1 mod 5), both walked here -- and lcm(2, 4) = 4. The
+#  composite state beats at the joint rhythm of the worlds it spans, the same
+#  lcm law as the master equation's sector cycle. Arrival is verifiable:
+#  the traveller's period tells you which worlds it crossed.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: the four-step walk landing on 1/15, orbit
+#  period 4 walked, equal to lcm of the walked world-periods 2 and 4.
+#  Comparison: coupled systems beat at the lcm of their component periods
+#  (beats, commensurate orbits, the master equation) -- the composite rhythm
+#  law observed wherever two cycles share a state.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# THE WALK: fold, compose with the 5-world, fold -- landing on 1/15.
+define crossing_walk returning Fraction:
+    set start to fraction_from_ratio(1 and 6)
+    set second to fold_fraction(start)
+    set carrier to fraction_from_ratio(1 and 5)
+    set composed to fraction_add(second and carrier)
+    return fold_fraction(composed)
+
+# The intermediate composition is 8/15 (both prime shadows on board).
+define composition_is_composite returning Bool:
+    set start to fraction_from_ratio(1 and 6)
+    set second to fold_fraction(start)
+    set carrier to fraction_from_ratio(1 and 5)
+    set composed to fraction_add(second and carrier)
+    set target to fraction_from_ratio(8 and 15)
+    return fraction_is_equal(composed and target)
+
+# THE RHYTHM: the landed state's orbit period, walked (doubling until return).
+define landed_period returning Int:
+    set landed to crossing_walk()
+    set state to crossing_walk()
+    set period to 0
+    set walking to true
+    repeat while walking:
+        set state to fold_fraction(state)
+        set period to period + 1
+        set returned to fraction_is_equal(state and landed)
+        if returned:
+            set walking to false
+    return period
+
+# The world rhythms, walked as numerator orbits: doubling mod 3 and mod 5.
+define world_period with p as Int returning Int:
+    set s to 1
+    set period to 0
+    set walking to true
+    repeat while walking:
+        set s to (2 * s) % p
+        set period to period + 1
+        if s == 1:
+            set walking to false
+    return period
+
+# The lcm of two counts (Euclid gcd underneath).
+define least_common with x as Int and y as Int returning Int:
+    set a to x
+    set b to y
+    repeat while b != 0:
+        set r to a % b
+        set a to b
+        set b to r
+    return (x * y) / a
+
+# The landed rhythm equals the lcm of the crossed worlds' rhythms: 4 = lcm(2, 4).
+define rhythm_is_joint returning Bool:
+    set landed to landed_period()
+    set three_rhythm to world_period(3)
+    set five_rhythm to world_period(5)
+    set joint to least_common(three_rhythm and five_rhythm)
+    return landed == joint
