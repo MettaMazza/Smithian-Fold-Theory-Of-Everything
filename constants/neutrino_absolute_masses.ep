@@ -1,0 +1,99 @@
+# ============================================================================
+#  ABSOLUTE NEUTRINO MASSES  --  the cosmological sum, a forced prediction.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Oscillations measure mass DIFFERENCES; nothing in the Standard Model gives
+#  the absolute neutrino masses or their cosmological sum -- the number the
+#  next generation of surveys will weigh. Forced: the splitting ratio is fixed
+#  by the corpus (the down-depth tower with the M25 scale), one measured
+#  splitting anchors the absolute scale exactly as the corpus anchors the
+#  leptons, the fold forbids a massless state (No-Zero: the lightest sits at
+#  its floor), and the sum follows: Sigma m_nu ~ 0.058 eV -- under Planck's
+#  bound of 0.12 and squarely inside the reach of upcoming surveys. A dated,
+#  falsifiable number where the SM has none.
+#
+#  ── DERIVATION ─ (check every line; ratio forced, anchor comparison-side) ────
+#  THE FORCED RATIO: the single-handed splittings sit on the binary tower at
+#  the down-depth five -- 1/2^5 = 1/32 -- with the M25 scale, one part in the
+#  covering prime's square withheld: (5^2 - 1)/5^2 = 24/25. Composed:
+#      dm21^2/dm31^2 = (1/32)(24/25) = 3/100  -- the ratio 33, exactly.
+#  THE ANCHOR (Route B, comparison side): the measured solar splitting enters
+#  as an argument from the test -- never inside the derivation -- and the
+#  atmospheric splitting is FORCED from it by the ratio: dm31^2 = anchor·100/3.
+#  THE MASSES (normal ordering): the lightest sits at its floor (the fold
+#  forbids exactly zero; the floor is the limit), so m2 = sqrt(dm21^2) and
+#  m3 = sqrt(dm31^2) -- both pinned here by EXACT rational bisection (40
+#  halvings), no floating point. The sum m2 + m3 is one exact enclosure.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  With the measured solar anchor 7.42e-5 eV^2: the forced atmospheric
+#  splitting is 2.47e-3 eV^2 (measured ~2.51e-3 -- the ratio landing again),
+#  and the PREDICTION: Sigma m_nu = 0.0583 eV, normal ordering -- under the
+#  Planck bound (< 0.12 eV) and testable by surveys reaching ~0.02 eV.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+
+
+# The forced tower ratio at the down-depth: 1/2^5 = 1/32.
+define tower_ratio returning Fraction:
+    set depth to minimal_binary_cover(whole_power(colour_count() and 3))
+    set volume to whole_power(binary_count() and depth)
+    return fraction_from_ratio(1 and volume)
+
+# The M25 scale: one part in the covering prime's square withheld, (25-1)/25.
+define m25_scale returning Fraction:
+    set prime to binary_count() + colour_count()
+    set square to prime * prime
+    return fraction_from_ratio(square - 1 and square)
+
+# The forced splitting ratio: (1/32)(24/25) = 3/100.
+define forced_splitting_ratio returning Fraction:
+    set tower to tower_ratio()
+    set scale to m25_scale()
+    return fraction_multiply(tower and scale)
+
+# The atmospheric splitting FORCED from the (comparison-side) solar anchor.
+define atmospheric_from_anchor with a_num as Int and a_den as Int returning Fraction:
+    set anchor to fraction_from_ratio(a_num and a_den)
+    set ratio to forced_splitting_ratio()
+    return fraction_divide(anchor and ratio)
+
+# Exact square-root enclosure: bisect x^2 - target in [lo, hi], 40 halvings.
+define mass_root with t as Fraction and lo_num as Int and lo_den as Int and hi_num as Int and hi_den as Int returning Fraction:
+    set lo to fraction_from_ratio(lo_num and lo_den)
+    set hi to fraction_from_ratio(hi_num and hi_den)
+    set two_fraction to fraction_from_whole_number(2)
+    set count to 0
+    repeat while count < 40:
+        set bracket_sum to fraction_add(lo and hi)
+        set mid to fraction_divide(bracket_sum and two_fraction)
+        set mid_twin to fraction_make(fraction_numerator(mid) and fraction_denominator(mid))
+        set mid_squared to fraction_multiply(mid and mid_twin)
+        set comparison to fraction_compare(mid_squared and t)
+        if comparison < 0:
+            set lo to mid
+        else:
+            set hi to mid
+        set count to count + 1
+    set final_sum to fraction_add(lo and hi)
+    return fraction_divide(final_sum and two_fraction)
+
+# The middle mass from the solar anchor: m2 = sqrt(dm21^2), exact enclosure.
+define middle_mass with a_num as Int and a_den as Int returning Fraction:
+    set anchor to fraction_from_ratio(a_num and a_den)
+    return mass_root(anchor and 1 and 1000 and 2 and 100)
+
+# The heavy mass from the forced atmospheric splitting: m3 = sqrt(dm31^2).
+define heavy_mass with a_num as Int and a_den as Int returning Fraction:
+    set atmospheric to atmospheric_from_anchor(a_num and a_den)
+    return mass_root(atmospheric and 1 and 100 and 1 and 10)
+
+# THE PREDICTION: the cosmological sum (lightest at its floor, normal ordering).
+define mass_sum with a_num as Int and a_den as Int returning Fraction:
+    set m2 to middle_mass(a_num and a_den)
+    set m3 to heavy_mass(a_num and a_den)
+    return fraction_add(m2 and m3)

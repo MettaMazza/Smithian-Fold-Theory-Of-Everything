@@ -469,9 +469,16 @@ And the structural laws of physics, forced the same way:
   opens at 121; **Smithium (Z = 126) = [Og] 8s² 5g⁶, eight valence electrons, oxidation +2
   through +8** — the chemistry of an element decided before its synthesis, cut at 137 by the
   unity threshold).
+- **The neutrino sector closed: the sum weighed, the antiparticle question answered** —
+  **absolute neutrino masses** (the forced ratio `3/100` + one comparison-side anchor + the
+  No-Zero floor → forced atmospheric `2.4733e-3` vs measured `2.51e-3`, and the PREDICTION
+  **`Σ mᵥ = 0.0583 eV`**, normal ordering — under Planck's 0.12, testable at ~0.02), and
+  **the neutrino is Majorana** (one hand → no Dirac mass; the only self-coupling exists at the
+  self-antipodal lock, the generic hand verifiably excluded → **0νββ MUST occur** — LEGEND/nEXO
+  territory; a proven Dirac neutrino falsifies the corpus outright).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 270 test
-suites (1,511 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 272 test
+suites (1,523 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -528,7 +535,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 270 suites, 1,511 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 272 suites, 1,523 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

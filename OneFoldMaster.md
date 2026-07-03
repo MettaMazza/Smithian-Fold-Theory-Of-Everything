@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-270 suites, 1,511 forced checks, 0 failures). It needs nothing but a C compiler. Use
+272 suites, 1,523 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4811,6 +4811,32 @@ eight valence electrons, oxidation states +2 through +8**, a g-block superactini
 chemistry is decided before its synthesis, with the block cut at 137 by the unity threshold.
 Elements 1–118 all follow this walk (the known table IS its output); 119+ is the standing
 prediction.
+
+### Step 268 — Absolute neutrino masses (the cosmological sum, predicted)
+
+**File:** `constants/neutrino_absolute_masses.ep`
+
+**What it does.** The number the SM cannot supply, forced and dated: the splitting ratio is fixed
+(the counted down-depth tower `1/32` with the M25 scale `(5²−1)/5² = 24/25` → `3/100`), one
+measured splitting anchors the scale (comparison-side, passed from the test — never inside the
+derivation), and the fold forbids a massless state (No-Zero: the lightest at its floor). The
+forced atmospheric splitting lands at `2.4733e-3` vs measured `2.51e-3` (within 2%), the masses
+are exact square-root enclosures (40 halvings, no floats), and the PREDICTION:
+**`Σ mᵥ = 0.0583 eV`, normal ordering** — under Planck's `< 0.12 eV` bound and inside the reach
+of surveys at `~0.02 eV`.
+
+### Step 269 — The neutrino is Majorana (0νββ must occur)
+
+**File:** `constants/neutrino_majorana.ep`
+
+**What it does.** The lepton sector's deepest open question, forced closed: a Dirac mass is the
+coupling of TWO hands (`3/4 − 1/4 = 1/2`, verified) — the neutrino has ONE, so Dirac is
+impossible; yet it has mass, and the only coupling available to a single hand is to ITS OWN
+antipode — which exists only at the self-antipodal lock (verified: `1 − 1/2 = 1/2`, and the
+generic hand `1/4` is verifiably NOT self-paired — the exclusion). Mass + one hand + the unique
+self-paired point = **MAJORANA: the neutrino is its own antiparticle, so neutrinoless double-beta
+decay MUST occur** — the target of LEGEND and nEXO, at the few-meV effective mass the forced
+masses set. Observation confirms; a proven Dirac neutrino falsifies the corpus outright.
 
 ---
 

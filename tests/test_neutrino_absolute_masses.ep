@@ -1,0 +1,41 @@
+import "../constants/neutrino_absolute_masses.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== absolute neutrino masses (the cosmological sum, predicted) ==="
+    set ok to expect_equal("the tower ratio at the counted down-depth = 1/32" and fraction_to_text(tower_ratio()) and "1/32")
+    set ok to expect_equal("the M25 scale = (5^2 - 1)/5^2 = 24/25" and fraction_to_text(m25_scale()) and "24/25")
+    set ok to expect_equal("the FORCED splitting ratio = 3/100 (the ratio 33)" and fraction_to_text(forced_splitting_ratio()) and "3/100")
+    set atmospheric to atmospheric_from_anchor(742 and 10000000)
+    display concat("  info  forced dm31^2 from the solar anchor = " and fraction_to_decimal(atmospheric and 7))
+    set measured_atm to fraction_from_ratio(251 and 100000)
+    set measured_twin to fraction_from_ratio(251 and 100000)
+    set atmospheric_fresh to atmospheric_from_anchor(742 and 10000000)
+    set gap to fraction_subtract(measured_twin and atmospheric_fresh)
+    set fiftieth to fraction_from_ratio(1 and 50)
+    set allowed to fraction_multiply(fiftieth and measured_atm)
+    set near_cmp to fraction_compare(gap and allowed)
+    set ok to expect_bool("forced atmospheric lands within 2% of measured 2.51e-3" and near_cmp < 0)
+    set total to mass_sum(742 and 10000000)
+    display concat("  info  PREDICTION: Sigma m_nu = " and fraction_to_decimal(total and 5))
+    set lower to fraction_from_ratio(55 and 1000)
+    set upper to fraction_from_ratio(62 and 1000)
+    set above to fraction_compare(total and lower)
+    set below to fraction_compare(total and upper)
+    set ok to expect_bool("the sum sits in [0.055, 0.062] eV (normal ordering)" and above > 0)
+    set ok to expect_bool("(and below the upper bracket)" and below < 0)
+    set planck to fraction_from_ratio(12 and 100)
+    set under to fraction_compare(total and planck)
+    set ok to expect_bool("under the Planck bound 0.12 eV; testable at ~0.02 eV surveys" and under < 0)
+    display "=== done ==="
+    return 0

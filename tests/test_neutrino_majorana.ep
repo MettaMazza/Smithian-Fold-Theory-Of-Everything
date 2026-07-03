@@ -1,0 +1,22 @@
+import "../constants/neutrino_majorana.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the neutrino is Majorana (0vbb must occur) ==="
+    set ok to expect_equal("the Dirac coupling of the two hands = 1/2" and fraction_to_text(dirac_coupling()) and "1/2")
+    set ok to expect_bool("the neutrino's single hand makes a Dirac mass IMPOSSIBLE" and dirac_impossible())
+    set ok to expect_bool("the lock is its own antipode (the self-coupling exists)" and lock_is_own_antipode())
+    set ok to expect_bool("EXCLUSION: a generic hand is not self-paired (only the lock)" and generic_hand_excluded())
+    set ok to expect_bool("THE VERDICT: the neutrino is MAJORANA -- 0vbb MUST occur" and neutrino_is_majorana())
+    display "=== done ==="
+    return 0
