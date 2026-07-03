@@ -245,6 +245,116 @@ define square_attacked with state and square as Int and by_black as Int returnin
         set dr to dr + 1
     return false
 
+# Is the piece on `square` (reach `defender_reach`) attacked by an enemy
+# piece of SMALLER counted reach? Such a piece is HOSTAGE: its moves are
+# not free -- it must resolve the threat or be lost for less. A counted
+# condition gating a count; no weight anywhere.
+define lesser_attacker_exists with state and square as Int and defender_reach as Int and by_black as Int returning Bool:
+    set rank to square / 8
+    set file to square - rank * 8
+    set dr to 0 - 2
+    repeat while dr < 3:
+        set df to 0 - 2
+        repeat while df < 3:
+            set dr_size to dr
+            if dr_size < 0:
+                set dr_size to 0 - dr_size
+            set df_size to df
+            if df_size < 0:
+                set df_size to 0 - df_size
+            if dr_size + df_size == 3:
+                if dr_size > 0:
+                    if df_size > 0:
+                        set r to rank + dr
+                        set f to file + df
+                        if r > 0 - 1:
+                            if r < 8:
+                                if f > 0 - 1:
+                                    if f < 8:
+                                        set code to get_list(state and r * 8 + f)
+                                        if piece_kind(code) == 2:
+                                            set right_colour to 0
+                                            if by_black == 1:
+                                                if piece_is_black(code):
+                                                    set right_colour to 1
+                                            if by_black == 0:
+                                                if piece_is_white(code):
+                                                    set right_colour to 1
+                                            if right_colour == 1:
+                                                if counted_reach(2 and r * 8 + f and by_black) < defender_reach:
+                                                    return true
+            set df to df + 1
+        set dr to dr + 1
+    set dr to 0 - 1
+    repeat while dr < 2:
+        set df to 0 - 1
+        repeat while df < 2:
+            set live to 1
+            if dr == 0:
+                if df == 0:
+                    set live to 0
+            if live == 1:
+                set diagonal to 0
+                if dr == 0:
+                    set diagonal to 0
+                else:
+                    if df == 0:
+                        set diagonal to 0
+                    else:
+                        set diagonal to 1
+                set r to rank + dr
+                set f to file + df
+                set steps to 1
+                set walking to 1
+                repeat while walking == 1:
+                    set walking to 0
+                    if r > 0 - 1:
+                        if r < 8:
+                            if f > 0 - 1:
+                                if f < 8:
+                                    set code to get_list(state and r * 8 + f)
+                                    if code == 0:
+                                        set r to r + dr
+                                        set f to f + df
+                                        set steps to steps + 1
+                                        set walking to 1
+                                    else:
+                                        set right_colour to 0
+                                        if by_black == 1:
+                                            if piece_is_black(code):
+                                                set right_colour to 1
+                                        if by_black == 0:
+                                            if piece_is_white(code):
+                                                set right_colour to 1
+                                        if right_colour == 1:
+                                            set kind to piece_kind(code)
+                                            set attacks to 0
+                                            if kind == 5:
+                                                set attacks to 1
+                                            if diagonal == 1:
+                                                if kind == 3:
+                                                    set attacks to 1
+                                            else:
+                                                if kind == 4:
+                                                    set attacks to 1
+                                            if steps == 1:
+                                                if kind == 6:
+                                                    set attacks to 1
+                                                if diagonal == 1:
+                                                    if kind == 1:
+                                                        if by_black == 1:
+                                                            if dr == 1:
+                                                                set attacks to 1
+                                                        if by_black == 0:
+                                                            if dr == 0 - 1:
+                                                                set attacks to 1
+                                            if attacks == 1:
+                                                if counted_reach(kind and r * 8 + f and by_black) < defender_reach:
+                                                    return true
+            set df to df + 1
+        set dr to dr + 1
+    return false
+
 define king_square with state and black_king as Int returning Int:
     set wanted to 6
     if black_king == 1:
@@ -745,6 +855,12 @@ define mobility_count with state and for_black as Int returning Int:
             set kind to piece_kind(code)
             set rank to sq / 8
             set file to sq - rank * 8
+            if kind < 6:
+                if kind > 1:
+                    set own_reach to counted_reach(kind and sq and for_black)
+                    set hostage to lesser_attacker_exists(state and sq and own_reach and 1 - for_black)
+                    if hostage:
+                        set kind to 0
             if kind == 1:
                 set forward to 8
                 set home_rank to 1

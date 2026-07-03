@@ -4956,6 +4956,7 @@ long long candidate_generates(long long);
 long long number_of_generators();
 long long unique_generator_tag();
 long long unique_generator_is_the_fold();
+long long generator_covers_full_class();
 long long smallest_fold_period_above(long long);
 long long binary_count();
 long long colour_count();
@@ -5025,6 +5026,20 @@ long long forbid_selection(long long);
 long long forbid_target_input(long long, long long);
 long long forced_unique(long long, long long, long long);
 long long forced_to_be(long long, long long, long long);
+long long common_divisor(long long, long long);
+long long order_of_two(long long);
+long long euler_phi(long long);
+long long residue_orbit_length(long long, long long);
+long long orbit_length_law_to(long long);
+long long orbit_census(long long);
+long long orbit_count_law_to(long long);
+long long antipodal_law_to(long long);
+long long transient_length(long long);
+long long eternal_core(long long);
+long long transient_law_to(long long);
+long long q_is_prime(long long);
+long long fully_ergodic_count_to(long long);
+long long odd_prime_count_to(long long);
 
 
 
@@ -5110,6 +5125,7 @@ long long _main() {
     ok = expect_equal((long long)"number of generators among the four", int_to_string(number_of_generators()), int_to_string(1));
     ok = expect_equal((long long)"the unique generator's tag (4 = the fold)", int_to_string(unique_generator_tag()), int_to_string(4));
     ok = expect_true((long long)"the unique generator IS cast_out(x + x)", unique_generator_is_the_fold());
+    ok = expect_true((long long)"STRENGTHENED: the generator covers the FULL residue class (census, q=3 and q=5)", generator_covers_full_class());
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
@@ -5399,6 +5415,23 @@ L_cleanup:
     by_fold = 0;
     free_struct_Fraction(by_winner);
     by_winner = 0;
+    return ret_val;
+}
+
+long long generator_covers_full_class() {
+    long long at_five = 0;
+    long long at_three = 0;
+    long long ret_val = 0;
+
+    at_three = orbit_census(3) == 1;
+    at_five = orbit_census(5) == 1;
+    if (at_three) {
+    ret_val = at_five;
+    goto L_cleanup;
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
     return ret_val;
 }
 
@@ -7271,6 +7304,517 @@ long long forced_to_be(long long label, long long derived, long long independent
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long common_divisor(long long a, long long b) {
+    long long big = 0;
+    long long quotient = 0;
+    long long remainder = 0;
+    long long small = 0;
+    long long ret_val = 0;
+
+    big = a;
+    small = b;
+    while (small > 0) {
+    quotient = (big / small);
+    remainder = (big - (quotient * small));
+    big = small;
+    small = remainder;
+    }
+    ret_val = big;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long order_of_two(long long q) {
+    long long doubled = 0;
+    long long k = 0;
+    long long r = 0;
+    long long ret_val = 0;
+
+    k = 1;
+    r = (2 - ((2 / q) * q));
+    while (r > 1) {
+    doubled = (r + r);
+    r = (doubled - ((doubled / q) * q));
+    k = (k + 1);
+    }
+    ret_val = k;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long euler_phi(long long q) {
+    long long a = 0;
+    long long count = 0;
+    long long shared = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&a);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    count = 0;
+    a = 1;
+    while (a < (q + 1)) {
+    shared = common_divisor(a, q);
+    if (shared == 1) {
+    count = (count + 1);
+    }
+    a = (a + 1);
+    }
+    ret_val = count;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long residue_orbit_length(long long p, long long q) {
+    long long doubled = 0;
+    long long r = 0;
+    long long started = 0;
+    long long steps = 0;
+    long long ret_val = 0;
+
+    steps = 0;
+    r = p;
+    started = 0;
+    while (started == 0) {
+    doubled = (r + r);
+    r = (doubled - ((doubled / q) * q));
+    steps = (steps + 1);
+    if (r == p) {
+    started = 1;
+    }
+    }
+    ret_val = steps;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long orbit_length_law_to(long long bound) {
+    long long all_hold = 0;
+    long long expected = 0;
+    long long p = 0;
+    long long q = 0;
+    long long shared = 0;
+    long long walked = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&p);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    all_hold = 1LL;
+    q = 3;
+    while (q < (bound + 1)) {
+    expected = order_of_two(q);
+    p = 1;
+    while (p < q) {
+    shared = common_divisor(p, q);
+    if (shared == 1) {
+    walked = residue_orbit_length(p, q);
+    if (walked == expected) {
+    all_hold = all_hold;
+    } else {
+    all_hold = 0LL;
+    }
+    }
+    p = (p + 1);
+    }
+    q = (q + 2);
+    }
+    ret_val = all_hold;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long orbit_census(long long q) {
+    long long already = 0;
+    long long covered = 0;
+    long long divides = 0;
+    long long doubled = 0;
+    long long expected = 0;
+    long long i = 0;
+    long long ok = 0;
+    long long orbits = 0;
+    long long phi = 0;
+    long long r = 0;
+    long long seen = 0;
+    long long shared = 0;
+    long long start = 0;
+    long long visited = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&seen);
+    ep_gc_push_root(&start);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    seen = create_list();
+    i = 0;
+    while (i < q) {
+    ok = append_list(seen, 0);
+    i = (i + 1);
+    }
+    orbits = 0;
+    covered = 0;
+    start = 1;
+    while (start < q) {
+    shared = common_divisor(start, q);
+    if (shared == 1) {
+    already = get_list(seen, start);
+    if (already == 0) {
+    orbits = (orbits + 1);
+    r = start;
+    walking = 1;
+    while (walking == 1) {
+    ok = set_list(seen, r, 1);
+    covered = (covered + 1);
+    doubled = (r + r);
+    r = (doubled - ((doubled / q) * q));
+    visited = get_list(seen, r);
+    if (visited == 1) {
+    walking = 0;
+    }
+    }
+    }
+    }
+    start = (start + 1);
+    }
+    phi = euler_phi(q);
+    expected = (phi / order_of_two(q));
+    divides = (phi - (expected * order_of_two(q)));
+    if (divides == 0) {
+    if (covered == phi) {
+    if (orbits == expected) {
+    ret_val = orbits;
+    goto L_cleanup;
+    }
+    }
+    }
+    ret_val = -1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_list(seen);
+    seen = 0;
+    return ret_val;
+}
+
+long long orbit_count_law_to(long long bound) {
+    long long all_hold = 0;
+    long long census = 0;
+    long long q = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    all_hold = 1LL;
+    q = 3;
+    while (q < (bound + 1)) {
+    census = orbit_census(q);
+    if (census > 0) {
+    all_hold = all_hold;
+    } else {
+    all_hold = 0LL;
+    }
+    q = (q + 2);
+    }
+    ret_val = all_hold;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long antipodal_law_to(long long bound) {
+    long long all_fixed_are_half = 0;
+    long long all_sum = 0;
+    long long candidate = 0;
+    long long far = 0;
+    long long far_twin = 0;
+    long long fixed_points = 0;
+    long long half = 0;
+    long long is_half = 0;
+    long long j = 0;
+    long long near = 0;
+    long long near_twin = 0;
+    long long one = 0;
+    long long q = 0;
+    long long self_paired = 0;
+    long long sums = 0;
+    long long total = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&candidate);
+    ep_gc_push_root(&far);
+    ep_gc_push_root(&far_twin);
+    ep_gc_push_root(&half);
+    ep_gc_push_root(&j);
+    ep_gc_push_root(&near);
+    ep_gc_push_root(&near_twin);
+    ep_gc_push_root(&one);
+    ep_gc_push_root(&q);
+    ep_gc_push_root(&total);
+
+    ep_gc_maybe_collect();
+
+    all_sum = 1LL;
+    fixed_points = 0;
+    all_fixed_are_half = 1LL;
+    q = 2;
+    while (q < (bound + 1)) {
+    j = 1;
+    while (j < q) {
+    near = fraction_from_ratio(j, q);
+    far = fraction_from_ratio((q - j), q);
+    total = fraction_add(near, far);
+    one = fraction_from_whole_number(1);
+    sums = fraction_compare(total, one) == 0;
+    if (sums) {
+    all_sum = all_sum;
+    } else {
+    all_sum = 0LL;
+    }
+    near_twin = fraction_from_ratio(j, q);
+    far_twin = fraction_from_ratio((q - j), q);
+    self_paired = fraction_compare(near_twin, far_twin) == 0;
+    if (self_paired) {
+    fixed_points = (fixed_points + 1);
+    candidate = fraction_from_ratio(j, q);
+    half = fraction_from_ratio(1, 2);
+    is_half = fraction_compare(candidate, half) == 0;
+    if (is_half) {
+    all_fixed_are_half = all_fixed_are_half;
+    } else {
+    all_fixed_are_half = 0LL;
+    }
+    }
+    j = (j + 1);
+    }
+    q = (q + 1);
+    }
+    if (all_sum) {
+    if (fixed_points > 0) {
+    ret_val = all_fixed_are_half;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(10);
+    free_struct_Fraction(candidate);
+    candidate = 0;
+    free_struct_Fraction(far_twin);
+    far_twin = 0;
+    free_struct_Fraction(half);
+    half = 0;
+    free_struct_Fraction(near_twin);
+    near_twin = 0;
+    free_struct_Fraction(one);
+    one = 0;
+    free_struct_Fraction(total);
+    total = 0;
+    return ret_val;
+}
+
+long long transient_length(long long q) {
+    long long a = 0;
+    long long half = 0;
+    long long halving = 0;
+    long long qq = 0;
+    long long remainder = 0;
+    long long ret_val = 0;
+
+    a = 0;
+    qq = q;
+    halving = 1;
+    while (halving == 1) {
+    half = (qq / 2);
+    remainder = (qq - (half + half));
+    if (remainder == 0) {
+    qq = half;
+    a = (a + 1);
+    } else {
+    halving = 0;
+    }
+    }
+    ret_val = a;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long eternal_core(long long q) {
+    long long a = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&a);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    a = transient_length(q);
+    ret_val = (q / whole_power(2, a));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long transient_law_to(long long bound) {
+    long long a = 0;
+    long long all_hold = 0;
+    long long core = 0;
+    long long den = 0;
+    long long landed_half = 0;
+    long long landed_odd = 0;
+    long long num = 0;
+    long long q = 0;
+    long long shared = 0;
+    long long step = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&den);
+    ep_gc_push_root(&num);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    all_hold = 1LL;
+    q = 2;
+    while (q < (bound + 1)) {
+    a = transient_length(q);
+    core = eternal_core(q);
+    num = 1;
+    den = q;
+    step = 0;
+    while (step < a) {
+    num = (num + num);
+    if (num > den) {
+    num = (num - den);
+    }
+    shared = common_divisor(num, den);
+    num = (num / shared);
+    den = (den / shared);
+    step = (step + 1);
+    }
+    landed_half = (den / 2);
+    landed_odd = (den - (landed_half + landed_half));
+    if (landed_odd == 1) {
+    all_hold = all_hold;
+    } else {
+    all_hold = 0LL;
+    }
+    if (den == core) {
+    all_hold = all_hold;
+    } else {
+    all_hold = 0LL;
+    }
+    q = (q + 2);
+    }
+    ret_val = all_hold;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long q_is_prime(long long n) {
+    long long divisor = 0;
+    long long quotient = 0;
+    long long remainder = 0;
+    long long ret_val = 0;
+
+    if (n < 2) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    divisor = 2;
+    while ((divisor * divisor) < (n + 1)) {
+    quotient = (n / divisor);
+    remainder = (n - (quotient * divisor));
+    if (remainder == 0) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    divisor = (divisor + 1);
+    }
+    ret_val = 1LL;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long fully_ergodic_count_to(long long bound) {
+    long long count = 0;
+    long long order = 0;
+    long long prime = 0;
+    long long q = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    count = 0;
+    q = 3;
+    while (q < (bound + 1)) {
+    prime = q_is_prime(q);
+    if (prime) {
+    order = order_of_two(q);
+    if (order == (q - 1)) {
+    count = (count + 1);
+    }
+    }
+    q = (q + 2);
+    }
+    ret_val = count;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long odd_prime_count_to(long long bound) {
+    long long count = 0;
+    long long prime = 0;
+    long long q = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    count = 0;
+    q = 3;
+    while (q < (bound + 1)) {
+    prime = q_is_prime(q);
+    if (prime) {
+    count = (count + 1);
+    }
+    q = (q + 2);
+    }
+    ret_val = count;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
     return ret_val;
 }
 

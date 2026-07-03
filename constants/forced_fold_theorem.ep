@@ -43,6 +43,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/the_one_and_the_fold.ep"
 import "../foundation/enforcement.ep"
+import "../constants/fold_number_theory.ep"
 
 
 # ----------------------------------------------------------------------------
@@ -169,3 +170,16 @@ define unique_generator_is_the_fold returning Bool:
     set doubled to fraction_add(fold_point and fold_twin)
     set by_fold to cast_out_whole_ones(doubled)
     return fraction_is_equal(by_winner and by_fold)
+
+# STRENGTHENING (beyond the operational proxy): the unique generator's
+# orbit covers the ENTIRE residue class at the counted generator periods
+# -- proven by the independent orbit machinery (fold_number_theory.ep):
+# at q = 3 and q = 5 the census phi(q)/ord_q(2) = 1, i.e. a SINGLE orbit
+# visits every reduced residue, tiling verified residue by residue.
+# "Generates" is not a proxy here; full-class coverage is machine-checked.
+define generator_covers_full_class returning Bool:
+    set at_three to orbit_census(3) == 1
+    set at_five to orbit_census(5) == 1
+    if at_three:
+        return at_five
+    return false

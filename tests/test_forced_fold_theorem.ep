@@ -46,6 +46,7 @@ define main:
     set ok to expect_number("the unique generator's tag (4 = the fold)" and unique_generator_tag() and 4)
     set ok to expect_true("the unique generator IS cast_out(x + x)" and unique_generator_is_the_fold())
 
+    set ok to expect_true("STRENGTHENED: the generator covers the FULL residue class (census, q=3 and q=5)" and generator_covers_full_class())
     display "=== done ==="
     return 0
 
