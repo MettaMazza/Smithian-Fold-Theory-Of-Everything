@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-305 suites, 1,813 forced checks, 0 failures). It needs nothing but a C compiler. Use
+306 suites, 1,826 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5340,6 +5340,29 @@ systematics). Pre-registered in `PREDICTIONS.md`. Not a series and not a correct
 scheme: one finite counted object, read to the end of its own structure — to our
 knowledge the first exact closed value of α ever stated.
 
+### Step 303 — The fold chess bot (whole-board play from counted values)
+
+**File:** `constants/fold_chess_bot.ep`
+
+**What it does.** A complete legal chess player — castling, en passant, promotion, check,
+mate, stalemate — with **zero fitted parameters anywhere**. Every engine on earth carries
+tuned numbers (piece values 1/3/3/5/9, positional tables, trained weights); this one
+carries only counts. THE RULES are certified against the published perft oracle — the
+universally agreed move census of chess itself: **20 / 400 / 8,902 at depths 1–3, zero
+disagreements** (the same oracle-certification pattern as the solver against Bouton). THE
+MATERIAL is counted from the board's own geometry: a piece's worth is the number of squares
+it commands from where it stands on an empty board (knight: 2 in the corner, 8 in the
+centre; rook: 14 anywhere; queen: 21 to 27 — verified as counts). THE VALUE is the mover's
+exact share of the One — and the starting position evaluates to **exactly the half-One**:
+perfect balance at the self-antipodal lock, checked. THE SEARCH is exact negamax whose
+minimax step is the fold's own involution (my value = the antipode of yours, 1 − theirs),
+with mate approaching the One and being mated at the floor, ordered by exact
+cross-multiplication. Demonstrated: the bot finds the fool's-mate strike Qd8–h4 (carrying a
+mate value above every live share), the strike is verified to BE mate on the board, and it
+plays twenty plies of legal self-play ending in a verified-legal position — all in under a
+second. The corpus's chess campaign derived laws from solved fields; **this plays the whole
+board.** The fold does not just derive — it plays.
+
 ---
 
 ## Where the recreation stands right now
@@ -6020,6 +6043,10 @@ runs):**
   per rung, 5³ → 5²·7 → 5·7² → 7³, then NONE — four rungs = colour + 1) so the construction
   ENDS: **1/α = 503846395469/3676744786 = 137.035999177180855… exactly** (0.009σ); the
   digits **…177181** and the Rb/Cs resolution called in advance (`PREDICTIONS.md`).
+- Step 303 — the fold chess bot: complete legal chess, ZERO fitted parameters — rules
+  certified against the perft oracle (**20/400/8,902**, zero disagreements), material
+  counted from geometry, the start position EXACTLY the half-One, minimax = the antipode;
+  finds and proves the fool's mate, plays legal self-play. **The fold plays.**
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

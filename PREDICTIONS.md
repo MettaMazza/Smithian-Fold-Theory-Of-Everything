@@ -203,5 +203,5 @@ A counterexample to any of these falsifies the fold frame itself.
 ---
 
 *Every value on this page is forced — never fitted, never chosen — and recomputes
-from the One in one command: `make -C verify prove` (305 suites, 1,813 forced
+from the One in one command: `make -C verify prove` (306 suites, 1,826 forced
 checks). The git log timestamps this ledger. — Maria Smith, Ernos Labs.*
