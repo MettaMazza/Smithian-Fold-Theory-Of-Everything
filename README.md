@@ -19,6 +19,12 @@ or chosen value is introduced. Nothing slips through.
 > and why "nothing is chosen" is here a *runnable, enforced* fact, not an
 > unprovable negative.
 
+> **Where the theory stakes its life:** [`PREDICTIONS.md`](PREDICTIONS.md) — the
+> pre-registered ledger of every standing prediction, ordered by decision date,
+> each with its forced value, its proving module, the experiment that decides it,
+> and exactly what outcome falsifies. Timestamped by the git history, verifiable
+> in one command.
+
 ---
 
 ## The claim, stated plainly
