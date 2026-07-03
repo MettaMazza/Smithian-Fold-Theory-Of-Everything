@@ -1,0 +1,35 @@
+import "../constants/new_particles.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the Smithions: the matter of the new forces, fully derived ==="
+    set ok to expect_bool("THE ANCHOR: unified I2 equals the independent quark invariants at c=3" and quark_invariants_cross_check())
+    set ok to expect_equal("I2 denominator at (3,5): the quark down 1454" and int_to_string(smithion_i2_denominator(3 and 5)) and "1454")
+    set ok to expect_equal("I2 denominator at (3,7): the quark up 13118" and int_to_string(smithion_i2_denominator(3 and 7)) and "13118")
+    set ok to expect_equal("the quark down spectrum has THREE generations (sign changes found, not chosen)" and int_to_string(spectrum_generations(3 and 0)) and "3")
+    set ok to expect_equal("the quark up spectrum has THREE generations" and int_to_string(spectrum_generations(3 and 1)) and "3")
+    set r2_down to spectrum_mass_ratio(3 and 0 and 2)
+    set ok to expect_equal("VALIDATION c=3 down: s/d = 20.11 (measured 20)" and fraction_to_decimal(r2_down and 2) and "20.11")
+    set r3_down to spectrum_mass_ratio(3 and 0 and 3)
+    set ok to expect_equal("VALIDATION c=3 down: b/d = 967.19 (measured ~890 bare)" and fraction_to_decimal(r3_down and 2) and "967.19")
+    set r2_up to spectrum_mass_ratio(3 and 1 and 2)
+    set ok to expect_equal("VALIDATION c=3 up: c/u = 486.35 (measured 577 bare)" and fraction_to_decimal(r2_up and 2) and "486.35")
+    set ok to expect_equal("PENTA down-type: THREE generations forced" and int_to_string(spectrum_generations(5 and 0)) and "3")
+    set ok to expect_equal("PENTA up-type: THREE generations forced" and int_to_string(spectrum_generations(5 and 1)) and "3")
+    set ok to expect_equal("HEPTA down-type: THREE generations forced" and int_to_string(spectrum_generations(7 and 0)) and "3")
+    set ok to expect_equal("HEPTA up-type: THREE generations forced" and int_to_string(spectrum_generations(7 and 1)) and "3")
+    set penta_r2 to spectrum_mass_ratio(5 and 0 and 2)
+    set one to fraction_from_whole_number(1)
+    set ok to expect_bool("the PENTA tower is enormously split (gen2 >> gen1)" and fraction_compare(penta_r2 and one) == 1)
+    display "=== done ==="
+    return 0

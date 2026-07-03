@@ -1,0 +1,23 @@
+import "../constants/alpha_forced.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== alpha is forced, assembly and all: mutations and mis-builds ==="
+    set ok to expect_bool("THE ANCHOR: alpha(2,3) equals the forced 34259/250 (two modules, one number)" and anchor_agrees())
+    set ok to expect_equal("the depths re-counted at (3,3): base-3 cover of 27" and int_to_string(covering_depth_base(27 and 3)) and "3")
+    set ok to expect_equal("mutation (2,4): 1/alpha moves to 7345/27" and fraction_to_text(alpha_of_generators(2 and 4)) and "7345/27")
+    set ok to expect_equal("mutation (3,3): 1/alpha moves to 811/9" and fraction_to_text(alpha_of_generators(3 and 3)) and "811/9")
+    set ok to expect_bool("EVERY generator mutation moves 1/alpha (nothing frozen)" and mutations_move())
+    set ok to expect_bool("EVERY covering mis-build rejected (125, 500, 375, 686)" and misbuilds_rejected())
+    display "=== done ==="
+    return 0

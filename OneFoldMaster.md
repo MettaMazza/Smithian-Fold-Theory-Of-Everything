@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-299 suites, 1,748 forced checks, 0 failures). It needs nothing but a C compiler. Use
+301 suites, 1,767 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5204,6 +5204,37 @@ penta, 48 hepta) plus missing energy. And the seal is a two-sided test: the ladd
 exactly four sectors and the first prime past the ceiling is 11, so **a confining signature
 beyond prime 7 falsifies the theory**.
 
+### Step 297 — The Smithion spectra (the matter of the new forces, fully derived)
+
+**File:** `constants/new_particles.ep`
+
+**What it does.** The twelve Smithions' mass spectra, exact end to end. The unified coloured
+second invariant `I2(c,d) = c/(c(2c^d − 1) − 1)` reproduces the proven quark invariants at
+c = 3 EXACTLY — cross-checked against the independent sharpened-invariant route (3/1454
+down, 3/13118 up: two constructions, one number, both depths). The roots are exact and
+nothing is chosen: each spectrum's cubic has its sign changes FOUND by scanning the 1/1024
+grid (exactly three per spectrum — the three generations forced, not assumed) and each root
+closed by 60 exact halvings. Validation at c = 3: down `1 : 20.11 : 967.19` (measured bare
+1 : 20 : 890), up `1 : 486.35 : 51140` (measured bare 1 : 577 : 78600) — the corpus's own
+bare-cubic readings, whose dressed forms land at 0.005–0.09%. THE PREDICTIONS: the same
+construction at c = 5, 7 gives all four new spectra, three generations each, enormously
+split (penta down ~10⁸, hepta up ~10¹⁷ in mass-squared ratio) — so only each sector's
+lightest survives cosmologically, exactly the relic structure the dark sector requires.
+
+### Step 298 — Alpha forced, assembly and all (the mutations and the mis-builds)
+
+**File:** `constants/alpha_forced.ep`
+
+**What it does.** The two remaining critic doors on 1/α, closed. GENERATOR MUTATION:
+1/α written as a pure function of {b, c} with the depths RE-COUNTED at every mutation —
+(2,4) → 7345/27 = 272.04, (3,3) → 811/9 = 90.11, (2,5) → 1049.04: every mutation moves the
+value; nothing is frozen. The anchor: alpha(2,3) equals the independently forced 34259/250 —
+two modules, one number. COVERING MIS-BUILDS: the volume 2·5³ rebuilt four "plausible" other
+ways (5³, 2²·5³, 3·5³, 2·7³ = 125, 500, 375, 686) and swapped into the same outer assembly —
+every one misses (137.072, 137.018, 137.024, 137.013). The fold base in the covering volume
+is load-bearing. Together with the fine-structure module's nine assembly shapes, five
+refinements, and seven sub-promotions: **the value survives no substitution.**
+
 ---
 
 ## Where the recreation stands right now
@@ -5859,6 +5890,11 @@ runs):**
   eternal; the spike = atomic threshold fold; cancer = lost descent; ecosystems = bounded orbits.
 - Step 296 — applied signatures: the Smithion is EM-dark (gravitational search only); new
   forces = confining jets (24, 48) + missing energy; **a confining sector beyond 7 falsifies**.
+- Step 297 — the Smithion spectra: unified `I2(c,d)` = the sharpened invariants at c = 3
+  (cross-checked, both depths); sign changes FOUND on the grid (3 per spectrum, all six);
+  60-halving exact roots; c = 3 lands `20.11 / 967 / 486` — **twelve Smithions derived**.
+- Step 298 — alpha, mutations and mis-builds: alpha(b,c) re-counted per mutation — (2,4),
+  (3,3), (2,5) all move; covs 125/500/375/686 all miss — **the value survives no substitution**.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

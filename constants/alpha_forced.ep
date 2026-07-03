@@ -1,0 +1,129 @@
+# ============================================================================
+#  ALPHA IS FORCED, ASSEMBLY AND ALL  --  the mutations and the mis-builds.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The fine-structure module already forces both orders of 1/alpha and
+#  falsifies the alternative assembly SHAPES and sub-promotions
+#  (fine_structure_constant.ep -- nine shapes, five refinements, seven
+#  sub-scales, all guarded). This module closes the two remaining critic
+#  doors. FIRST, generator mutation: 1/alpha written as a pure function of
+#  the generators {b, c} -- with the depths re-counted at every mutation --
+#  must MOVE when either generator is touched; if some mutation left it at
+#  137.036 the generators would not be load-bearing. It moves, every time.
+#  SECOND, covering-volume mis-builds: the covering volume 2·5³ = 250 could
+#  be "plausibly" built four other ways from the same numbers (drop the fold
+#  base, square it, use colour, use the up-depth cube); every one is checked
+#  and every one misses 34259/250. Nothing about the assembly is decorative.
+#
+#  ── DERIVATION ─ (check every line; the function built, the doors closed) ────
+#  THE FUNCTION: alpha(b, c) = b^d_up + c²(cov+1)/cov with d_down = the
+#  minimal BASE-b cover of c³, d_up of c⁴, cov = b·d_down³ -- the depths
+#  re-counted from the mutated generators, nothing frozen. THE ANCHOR:
+#  alpha(2, 3) must equal the independently forced first-order value
+#  34259/250 (imported, not restated) -- two modules, one number. THE
+#  MUTATIONS: (b,c) = (2,4) → 7345/27; (3,3) → 811/9; (2,5) → 288010/2744
+#  -- every mutation moves the value away from 34259/250 (checked value by
+#  value). THE MIS-BUILDS: cov ∈ {5³, 2²·5³, 3·5³, 2·7³} = {125, 500, 375,
+#  686} -- each swapped into the same outer assembly, each checked NOT to
+#  give 34259/250. The fold base in the covering volume is load-bearing.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is discrimination, and it is exact: one generator pair
+#  and one covering build land on 34259/250 = 137.036 (agreeing with
+#  measured alpha to six parts per billion at leading order, 0.01 sigma at
+#  the second -- the fine-structure module's own validated readings); every
+#  neighbour in generator space and every mis-build lands elsewhere --
+#  137.072, 137.018, 137.024, 137.013, 272.04, 90.11, 1049.04. Forced means
+#  exactly this: the value survives no substitution.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/fine_structure_constant.ep"
+
+
+# The minimal base-b covering depth of a volume: least d with b^d >= volume.
+define covering_depth_base with volume as Int and base as Int returning Int:
+    set d to 1
+    set p to base
+    repeat while p < volume:
+        set d to d + 1
+        set p to p * base
+    return d
+
+# 1/alpha as a pure function of the generators (b, c), the depths
+# RE-COUNTED from the mutated generators at every call.
+define alpha_of_generators with b as Int and c as Int returning Fraction:
+    set volume_down to whole_power(c and 3)
+    set d_down to covering_depth_base(volume_down and b)
+    set volume_up to whole_power(c and 4)
+    set d_up to covering_depth_base(volume_up and b)
+    set tower to whole_power(b and d_up)
+    set tower_fraction to fraction_from_whole_number(tower)
+    set surface to whole_power(c and 2)
+    set cov to b * whole_power(d_down and 3)
+    set dilation to fraction_from_ratio(surface * (cov + 1) and cov)
+    return fraction_add(tower_fraction and dilation)
+
+# THE ANCHOR: alpha(2, 3) equals the independently forced first-order value
+# -- two modules, one number.
+define anchor_agrees returning Bool:
+    set here to alpha_of_generators(2 and 3)
+    set independent to inverse_fine_structure_first_order()
+    return fraction_is_equal(here and independent)
+
+# THE MUTATIONS: touching either generator moves 1/alpha away from the
+# forced value -- checked for (2,4), (3,3), and (2,5).
+define mutations_move returning Bool:
+    set target to inverse_fine_structure_first_order()
+    set colour_up to alpha_of_generators(2 and 4)
+    set first_same to fraction_is_equal(colour_up and target)
+    set base_up to alpha_of_generators(3 and 3)
+    set target_two to inverse_fine_structure_first_order()
+    set second_same to fraction_is_equal(base_up and target_two)
+    set colour_five to alpha_of_generators(2 and 5)
+    set target_three to inverse_fine_structure_first_order()
+    set third_same to fraction_is_equal(colour_five and target_three)
+    set all_moved to true
+    if first_same:
+        set all_moved to false
+    if second_same:
+        set all_moved to false
+    if third_same:
+        set all_moved to false
+    return all_moved
+
+# A mis-built covering volume swapped into the same outer assembly:
+# tower + colour^2 (cov+1)/cov with the given cov.
+define assembly_with_cov with cov as Int returning Fraction:
+    set tower to fraction_from_whole_number(128)
+    set dilation to fraction_from_ratio(9 * (cov + 1) and cov)
+    return fraction_add(tower and dilation)
+
+# THE MIS-BUILDS: cov = 5^3 (no fold base), 2^2 5^3 (base squared),
+# 3 5^3 (colour, not fold), 2 7^3 (up-depth cube) -- none gives 34259/250.
+define misbuilds_rejected returning Bool:
+    set target to inverse_fine_structure_first_order()
+    set no_base to assembly_with_cov(125)
+    set first_same to fraction_is_equal(no_base and target)
+    set base_squared to assembly_with_cov(500)
+    set target_two to inverse_fine_structure_first_order()
+    set second_same to fraction_is_equal(base_squared and target_two)
+    set colour_build to assembly_with_cov(375)
+    set target_three to inverse_fine_structure_first_order()
+    set third_same to fraction_is_equal(colour_build and target_three)
+    set up_cube to assembly_with_cov(686)
+    set target_four to inverse_fine_structure_first_order()
+    set fourth_same to fraction_is_equal(up_cube and target_four)
+    set all_rejected to true
+    if first_same:
+        set all_rejected to false
+    if second_same:
+        set all_rejected to false
+    if third_same:
+        set all_rejected to false
+    if fourth_same:
+        set all_rejected to false
+    return all_rejected

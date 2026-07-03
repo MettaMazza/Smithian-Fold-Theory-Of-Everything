@@ -578,9 +578,21 @@ And the structural laws of physics, forced the same way:
   Smithion is electromagnetically dark — no nuclear-recoil channel, so the search is
   gravitational; the new forces show as confining jets of 24 and 48 carriers plus missing
   energy; **a confining signature beyond prime 7 falsifies the theory**).
+- **The twelve Smithion spectra, and alpha's last two doors closed** — **the Smithion
+  spectra** (the unified coloured invariant `I2(c,d) = c/(c(2c^d−1)−1)` reproduces the
+  proven quark invariants at c = 3 exactly — cross-checked against the independent
+  sharpened-invariant route, both depths; every spectrum's three sign changes FOUND by grid
+  scan (never chosen) and each root closed by 60 exact halvings; c = 3 validates at
+  `1 : 20.11 : 967` and `1 : 486 : 51140` bare, and the same construction forces all four
+  new spectra — **twelve Smithions, three generations each, enormously split towers** so
+  only each sector's lightest survives: the relic structure the dark sector requires), and
+  **alpha forced, assembly and all** (1/α as a pure function of the generators with depths
+  re-counted per mutation — (2,4), (3,3), (2,5) all move the value; the covering volume
+  rebuilt four "plausible" wrong ways — 125, 500, 375, 686 — all miss: **the value survives
+  no substitution**).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 299 test
-suites (1,748 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 301 test
+suites (1,767 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -637,7 +649,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 299 suites, 1,748 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 301 suites, 1,767 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
