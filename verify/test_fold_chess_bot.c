@@ -4954,6 +4954,8 @@ long long ordered_moves(long long);
 long long quiescence(long long, long long, long long, long long, long long);
 long long search_value(long long, long long, long long, long long, long long, long long);
 long long state_signature(long long);
+long long root_pass(long long, long long, long long, long long);
+long long thinking_budget();
 long long search_best_seen(long long, long long, long long);
 long long search_best(long long, long long);
 long long start_is_at_the_lock();
@@ -7102,6 +7104,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long move = 0;
     long long my_den = 0;
     long long my_num = 0;
+    long long nodes = 0;
     long long ok = 0;
     long long pseudo = 0;
     long long rest = 0;
@@ -7125,6 +7128,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     ep_gc_push_root(&king_from);
     ep_gc_push_root(&king_now);
     ep_gc_push_root(&move);
+    ep_gc_push_root(&nodes);
     ep_gc_push_root(&pseudo);
     ep_gc_push_root(&result);
     ep_gc_push_root(&side);
@@ -7139,6 +7143,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     ep_gc_maybe_collect();
 
     result = create_list();
+    nodes = 1;
     side = get_list(state, 64);
     king_from = king_square(state, side);
     checked = square_attacked(state, king_from, (1 - side));
@@ -7154,6 +7159,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if ((stand_num * beta_den) > (beta_num * stand_den)) {
     ok = append_list(result, stand_num);
     ok = append_list(result, stand_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7232,6 +7238,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     deeper = quiescence(child, (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
+    nodes = (nodes + get_list(deeper, 2));
     my_num = (child_den - child_num);
     my_den = child_den;
     if ((my_num * best_den) > (best_num * my_den)) {
@@ -7241,6 +7248,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if ((my_num * beta_den) > (beta_num * my_den)) {
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7260,6 +7268,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     if (legal_seen == 0) {
     ok = append_list(result, 1);
     ok = append_list(result, 1024);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7267,11 +7276,12 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     }
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(20);
+    ep_gc_pop_roots(21);
     return ret_val;
 }
 
@@ -7297,6 +7307,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     long long move = 0;
     long long my_den = 0;
     long long my_num = 0;
+    long long nodes = 0;
     long long ok = 0;
     long long pseudo = 0;
     long long rest = 0;
@@ -7317,6 +7328,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     ep_gc_push_root(&i);
     ep_gc_push_root(&king_now);
     ep_gc_push_root(&move);
+    ep_gc_push_root(&nodes);
     ep_gc_push_root(&pseudo);
     ep_gc_push_root(&result);
     ep_gc_push_root(&side);
@@ -7336,6 +7348,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     goto L_cleanup;
     }
     result = create_list();
+    nodes = 1;
     side = get_list(state, 64);
     king_from = king_square(state, side);
     pseudo = pseudo_moves(state);
@@ -7395,6 +7408,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
+    nodes = (nodes + get_list(deeper, 2));
     my_num = (child_den - child_num);
     my_den = child_den;
     if ((my_num * best_den) > (best_num * my_den)) {
@@ -7404,6 +7418,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     if ((my_num * beta_den) > (beta_num * my_den)) {
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7466,6 +7481,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
+    nodes = (nodes + get_list(deeper, 2));
     my_num = (child_den - child_num);
     my_den = child_den;
     if ((my_num * best_den) > (best_num * my_den)) {
@@ -7475,6 +7491,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     if ((my_num * beta_den) > (beta_num * my_den)) {
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7537,6 +7554,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
+    nodes = (nodes + get_list(deeper, 2));
     my_num = (child_den - child_num);
     my_den = child_den;
     if ((my_num * best_den) > (best_num * my_den)) {
@@ -7546,6 +7564,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     if ((my_num * beta_den) > (beta_num * my_den)) {
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7568,17 +7587,19 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     ok = append_list(result, 1);
     ok = append_list(result, 2);
     }
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
     }
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(20);
+    ep_gc_pop_roots(21);
     return ret_val;
 }
 
@@ -7606,7 +7627,7 @@ L_cleanup:
     return ret_val;
 }
 
-long long search_best_seen(long long state, long long depth, long long seen) {
+long long root_pass(long long state, long long depth, long long seen, long long pre_move) {
     long long best_den = 0;
     long long best_move = 0;
     long long best_num = 0;
@@ -7621,10 +7642,9 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     long long moves = 0;
     long long my_den = 0;
     long long my_num = 0;
+    long long nodes = 0;
     long long ok = 0;
-    long long pre_move = 0;
     long long result = 0;
-    long long shallow = 0;
     long long signature = 0;
     long long skip_this = 0;
     long long visited = 0;
@@ -7638,8 +7658,8 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     ep_gc_push_root(&i);
     ep_gc_push_root(&move);
     ep_gc_push_root(&moves);
+    ep_gc_push_root(&nodes);
     ep_gc_push_root(&result);
-    ep_gc_push_root(&shallow);
     ep_gc_push_root(&signature);
     ep_gc_push_root(&state);
     ep_gc_push_root(&depth);
@@ -7648,11 +7668,7 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     ep_gc_maybe_collect();
 
     result = create_list();
-    pre_move = -1;
-    if (depth > 3) {
-    shallow = search_best_seen(state, (depth - 2), seen);
-    pre_move = get_list(shallow, 0);
-    }
+    nodes = 1;
     moves = ordered_moves(state);
     count = length_list(moves);
     if (count == 0) {
@@ -7665,6 +7681,7 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     ok = append_list(result, 1);
     ok = append_list(result, 2);
     }
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
@@ -7700,6 +7717,7 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     deeper = search_value(child, (depth - 1), 0, 1, (best_den - best_num), best_den);
     child_num = get_list(deeper, 0);
     child_den = get_list(deeper, 1);
+    nodes = (nodes + get_list(deeper, 2));
     my_num = (child_den - child_num);
     my_den = child_den;
     }
@@ -7714,11 +7732,95 @@ long long search_best_seen(long long state, long long depth, long long seen) {
     ok = append_list(result, best_move);
     ok = append_list(result, best_num);
     ok = append_list(result, best_den);
+    ok = append_list(result, nodes);
     ret_val = result;
     result = 0;
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(14);
+    return ret_val;
+}
+
+long long thinking_budget() {
+    long long base = 0;
+    long long budget = 0;
+    long long k = 0;
+    long long ret_val = 0;
+
+    base = 2;
+    budget = 1;
+    k = 0;
+    while (k < 17) {
+    budget = (budget * base);
+    k = (k + 1);
+    }
+    ret_val = budget;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long search_best_seen(long long state, long long ceiling, long long seen) {
+    long long budget = 0;
+    long long climbing = 0;
+    long long depth = 0;
+    long long final_den = 0;
+    long long final_move = 0;
+    long long final_num = 0;
+    long long ok = 0;
+    long long pass_result = 0;
+    long long pre_move = 0;
+    long long result = 0;
+    long long spent = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&final_den);
+    ep_gc_push_root(&final_move);
+    ep_gc_push_root(&final_num);
+    ep_gc_push_root(&pass_result);
+    ep_gc_push_root(&pre_move);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&seen);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    budget = thinking_budget();
+    spent = 0;
+    pre_move = -1;
+    final_move = -1;
+    final_num = 1;
+    final_den = 2;
+    depth = 2;
+    climbing = 1;
+    while (climbing == 1) {
+    pass_result = root_pass(state, depth, seen, pre_move);
+    final_move = get_list(pass_result, 0);
+    final_num = get_list(pass_result, 1);
+    final_den = get_list(pass_result, 2);
+    spent = (spent + get_list(pass_result, 3));
+    pre_move = final_move;
+    depth = (depth + 1);
+    if (depth > ceiling) {
+    climbing = 0;
+    }
+    if (spent > budget) {
+    climbing = 0;
+    }
+    if (final_move < 0) {
+    climbing = 0;
+    }
+    }
+    ok = append_list(result, final_move);
+    ok = append_list(result, final_num);
+    ok = append_list(result, final_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(9);
     return ret_val;
 }
 

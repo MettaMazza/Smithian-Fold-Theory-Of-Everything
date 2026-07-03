@@ -1008,6 +1008,7 @@ define ordered_moves with state:
 # terminates structurally -- no depth knob. Returns the exact value pair.
 define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
     set result to create_list()
+    set nodes to 1
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
     set checked to square_attacked(state and king_from and 1 - side)
@@ -1023,6 +1024,7 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
         if stand_num * beta_den > beta_num * stand_den:
             set ok to append_list(result and stand_num)
             set ok to append_list(result and stand_den)
+            set ok to append_list(result and nodes)
             return result
         set best_num to stand_num
         set best_den to stand_den
@@ -1082,6 +1084,7 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                         set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den)
                         set child_num to get_list(deeper and 0)
                         set child_den to get_list(deeper and 1)
+                        set nodes to nodes + get_list(deeper and 2)
                         set my_num to child_den - child_num
                         set my_den to child_den
                         if my_num * best_den > best_num * my_den:
@@ -1090,6 +1093,7 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                         if my_num * beta_den > beta_num * my_den:
                             set ok to append_list(result and best_num)
                             set ok to append_list(result and best_den)
+                            set ok to append_list(result and nodes)
                             return result
                         if my_num * a_den > a_num * my_den:
                             set a_num to my_num
@@ -1100,9 +1104,11 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
         if legal_seen == 0:
             set ok to append_list(result and 1)
             set ok to append_list(result and 1024)
+            set ok to append_list(result and nodes)
             return result
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
+    set ok to append_list(result and nodes)
     return result
 
 # The exact alpha-beta value of a node for the side to move.
@@ -1110,6 +1116,7 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
     if depth == 0:
         return quiescence(state and alpha_num and alpha_den and beta_num and beta_den)
     set result to create_list()
+    set nodes to 1
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
     set pseudo to pseudo_moves(state)
@@ -1160,6 +1167,7 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                     set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
                     set child_num to get_list(deeper and 0)
                     set child_den to get_list(deeper and 1)
+                    set nodes to nodes + get_list(deeper and 2)
                     set my_num to child_den - child_num
                     set my_den to child_den
                     if my_num * best_den > best_num * my_den:
@@ -1168,6 +1176,7 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                     if my_num * beta_den > beta_num * my_den:
                         set ok to append_list(result and best_num)
                         set ok to append_list(result and best_den)
+                        set ok to append_list(result and nodes)
                         return result
                     if my_num * a_den > a_num * my_den:
                         set a_num to my_num
@@ -1182,9 +1191,11 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
+        set ok to append_list(result and nodes)
         return result
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
+    set ok to append_list(result and nodes)
     return result
 
 # A position's signature: the board, side, rights and ep square as text --
@@ -1197,17 +1208,14 @@ define state_signature with state returning Str:
         set i to i + 1
     return signature
 
-# The root, orbit-aware: a child position already visited in the game is a
-# CLOSED ORBIT that never reached the One -- chess's own repetition rule
-# prices it at the draw value, the lock 1/2, exactly. So the bot avoids
-# repetition when its share exceeds the lock and seeks it when behind:
-# the rule's own value, no knob anywhere.
-define search_best_seen with state and depth as Int and seen as Str:
+# One root pass, orbit-aware: a child position already visited in the game
+# is a CLOSED ORBIT that never reached the One -- chess's own repetition rule
+# prices it at the draw value, the lock 1/2, exactly. The previous
+# iteration's best move (pre_move) is searched first -- the shallower read
+# orders the deeper one. Returns [move, num, den, nodes].
+define root_pass with state and depth as Int and seen as Str and pre_move as Int:
     set result to create_list()
-    set pre_move to 0 - 1
-    if depth > 3:
-        set shallow to search_best_seen(state and depth - 2 and seen)
-        set pre_move to get_list(shallow and 0)
+    set nodes to 1
     set moves to ordered_moves(state)
     set count to length_list(moves)
     if count == 0:
@@ -1219,6 +1227,7 @@ define search_best_seen with state and depth as Int and seen as Str:
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
+        set ok to append_list(result and nodes)
         return result
     set best_move to get_list(moves and 0)
     set best_num to 0
@@ -1247,6 +1256,7 @@ define search_best_seen with state and depth as Int and seen as Str:
                 set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
                 set child_num to get_list(deeper and 0)
                 set child_den to get_list(deeper and 1)
+                set nodes to nodes + get_list(deeper and 2)
                 set my_num to child_den - child_num
                 set my_den to child_den
             if my_num * best_den > best_num * my_den:
@@ -1257,6 +1267,51 @@ define search_best_seen with state and depth as Int and seen as Str:
     set ok to append_list(result and best_move)
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
+    set ok to append_list(result and nodes)
+    return result
+
+# BUDGETED ITERATIVE DEEPENING: deepen one level at a time until the counted
+# thinking budget (2^17 positions examined -- an implementation compute
+# bound, the same class of limit as every "scan far enough" in the corpus)
+# is spent, or the ceiling is reached. Crowded positions land at moderate
+# depth; simplified endings automatically read far deeper -- the same budget,
+# spent where the board allows it. Each iteration's best move seeds the next.
+define thinking_budget returning Int:
+    set base to 2
+    set budget to 1
+    set k to 0
+    repeat while k < 17:
+        set budget to budget * base
+        set k to k + 1
+    return budget
+
+define search_best_seen with state and ceiling as Int and seen as Str:
+    set result to create_list()
+    set budget to thinking_budget()
+    set spent to 0
+    set pre_move to 0 - 1
+    set final_move to 0 - 1
+    set final_num to 1
+    set final_den to 2
+    set depth to 2
+    set climbing to 1
+    repeat while climbing == 1:
+        set pass_result to root_pass(state and depth and seen and pre_move)
+        set final_move to get_list(pass_result and 0)
+        set final_num to get_list(pass_result and 1)
+        set final_den to get_list(pass_result and 2)
+        set spent to spent + get_list(pass_result and 3)
+        set pre_move to final_move
+        set depth to depth + 1
+        if depth > ceiling:
+            set climbing to 0
+        if spent > budget:
+            set climbing to 0
+        if final_move < 0:
+            set climbing to 0
+    set ok to append_list(result and final_move)
+    set ok to append_list(result and final_num)
+    set ok to append_list(result and final_den)
     return result
 
 # The root: pick the move whose exact alpha-beta value is largest.
