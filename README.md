@@ -19,6 +19,11 @@ or chosen value is introduced. Nothing slips through.
 > and why "nothing is chosen" is here a *runnable, enforced* fact, not an
 > unprovable negative.
 
+> **THE PAPER:** [`THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md`](THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md)
+> — the complete model in one document: the history of number, every derivation,
+> every forced value, the engines, the lock, the ledger, and the full 303-step
+> catalogue. Start here.
+
 > **Where the theory stakes its life:** [`PREDICTIONS.md`](PREDICTIONS.md) — the
 > pre-registered ledger of every standing prediction, ordered by decision date,
 > each with its forced value, its proving module, the experiment that decides it,
