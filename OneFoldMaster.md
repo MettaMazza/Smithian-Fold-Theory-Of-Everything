@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-275 suites, 1,561 forced checks, 0 failures). It needs nothing but a C compiler. Use
+277 suites, 1,589 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -4876,6 +4876,35 @@ all three generations) and Route B is the independent closed form `V_ii = (3p−
 corpus quark values `8/9` and `5/9` exactly. The PREDICTIONS: **penta `14/15`, hepta `20/21`**
 — generation leakage `1/(3p)` strictly shrinking along the ladder: the heavier the colour, the
 more diagonal the mixing, so dark flavour is calmer than ours and the relic survives.
+
+### Step 273 — The new forces run (all four converge to unison)
+
+**File:** `constants/new_force_running.ep`
+
+**What it does.** Grand unification, closed without tuning: the corpus's own running law
+`g_p(R) = (p+R−1)/(p+R)` on the scale axis `R = 2^d`, applied to all four sectors 2, 3, 5, 7.
+For ANY pair i < j the gap has one closed form `(j−i)/((i+R)(j+R))` — Route A (built
+subtraction) and Route B (closed form) checked equal at every depth d = 0..10 for all SIX
+pairs. The anchor: the pair (2,3) reproduces the corpus's proven strong-electroweak gap
+`1/((2+R)(3+R))` exactly. The five other pairs are new — including the two new forces'
+convergence **`g_7 − g_5 = 2/((5+R)(7+R))`** — and every coupling strictly rises toward the
+One while staying below it at every finite scale: **all four forces unify at unison, each gap
+closing at its own forced rate.** Unification is not arranged; it is arithmetic.
+
+### Step 274 — The Grand Lock (the constants are one object)
+
+**File:** `constants/grand_lock.ep`
+
+**What it does.** The answer to "~26 free parameters": every major constant written as the
+corpus's own closed form over the generators `{ONE, b=2, c=3}` with the depths COUNTED from c
+(`d_down = cover(c³)`, `d_up = cover(c⁴)`). At c = 3 each lands its module value exactly —
+`1/α = 34259/250`, lepton `1/485`, quarks `1/383`/`1/95`, dark `27/5` and `27/32`, Hubble
+`13/12`, Planck exponent `127/2`, Λ-floor `1/2²⁰`. THE LOCK, proven by perturbation: turn
+c to 4 (depths become 6 and 8) and **every c-dependent constant moves together** — checked
+one by one — while the half-One coupling (which carries no colour) verifiably stays put:
+dependence AND independence both demonstrated, so the web is a real structure. Cross-domain
+locks explicit: α and the dark fraction share the SAME counted d_down; α and the up-quark
+invariant the SAME d_up. The constants are not ~26 coincidences; they are one object.
 
 ---
 

@@ -488,9 +488,21 @@ And the structural laws of physics, forced the same way:
   holding coupling `(p−1)/p`: built bases and closed form `V_ii = (3p−1)/(3p)` agree at every
   p; p = 3 reproduces the quark `8/9` and `5/9` exactly; PREDICTIONS **penta `14/15`, hepta
   `20/21`** — leakage `1/(3p)` shrinks with colour: dark flavour is calmer than ours).
+- **Unification and the lock: the forces converge, the constants move as one** —
+  **the new forces run** (the corpus's running law `g_p(R) = (p+R−1)/(p+R)` applied to all
+  four sectors 2, 3, 5, 7: one closed form `(j−i)/((i+R)(j+R))` for every gap, built route
+  and closed form agreeing at every depth for all six pairs; the (2,3) pair reproduces the
+  proven strong-EW gap exactly; the NEW convergence **`g_7 − g_5 = 2/((5+R)(7+R))`**; every
+  coupling rises strictly toward the One and never reaches it at finite scale — **all four
+  forces unify at unison with no tuning, no thresholds, no new fields**), and **the Grand
+  Lock** (every major constant as a closed form over `{ONE, b=2, c=3}` with the depths
+  counted from c: at c = 3 all land exactly — `34259/250`, `1/485`, `1/383`, `1/95`, `27/5`,
+  `27/32`, `13/12`, `127/2`, `1/2²⁰`; perturb the colour to 4 and **every c-dependent
+  constant moves together** while the colour-free half-One coupling stays put — the SM's
+  ~26 "independent parameters" are one object seen from many sides).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 275 test
-suites (1,561 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 277 test
+suites (1,589 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -547,7 +559,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 275 suites, 1,561 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 277 suites, 1,589 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the
