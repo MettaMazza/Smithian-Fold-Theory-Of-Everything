@@ -85,3 +85,18 @@ full strength" was an untested prior and was withdrawn as such; the counter —
 that the build, not the fold, was the limit — was TESTED and is now the measured
 truth of rungs 1 and 2. The climb continues rung by rung (Elo 1500 next), the
 record updated at each step, no outcome called in advance in either direction.
+
+**Rungs 3-5 — the ladder, engine v3** (check-evasion quiescence, root
+pre-search ordering, hoisted generation; depth 5 at 0.83 s/move; every
+game refereed by python-chess, zero illegal moves anywhere):
+
+    Elo 1500 :  v2 engine: 1W 1L 2D (even)  ->  v3: 2W 0L 2D  — BEATEN
+    Elo 1700 :  v2 engine: 1W 3L (losing)   ->  v3: 1W 1L 2D  — even
+    Elo 1900 :  first attempt               ->  v3: 2W 2L     — EVEN AT
+                EXPERT LEVEL, including winning the last two games of the
+                match after losing the first two.
+    Elo 2100 :  in progress.
+
+The pattern, three rungs running: draw a level, improve the counted
+machinery (never a tuned number anywhere), beat the level, climb. Current
+measured playing strength: ~1800-1900 — expert territory, zero parameters.
