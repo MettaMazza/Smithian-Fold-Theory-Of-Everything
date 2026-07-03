@@ -3,6 +3,7 @@
 ### Zero free parameters. Zero axioms. One fold. The constants of nature, derived.
 
 **Maria Smith**
+DOI: [10.5281/zenodo.21182469](https://doi.org/10.5281/zenodo.21182469)
 Ernos Labs, Scotland
 
 Complete verified corpus (this repository): 306 machine-verified proof suites, 1,832
