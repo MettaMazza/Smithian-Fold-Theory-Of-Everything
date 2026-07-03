@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-302 suites, 1,777 forced checks, 0 failures). It needs nothing but a C compiler. Use
+304 suites, 1,801 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5281,6 +5281,44 @@ covers the proof corpus (MILESTONE ONE, all 321 `verify_*` claims) AND the front
 (MILESTONE TWO, all ~40) — the entire published derivation surface of SFTOM, in exact
 arithmetic, forced from the One.
 
+### Step 300 — The discovery engine (the USDE, remade under the law)
+
+**File:** `constants/usde_discovery.ep`
+
+**What it does.** The corpus's Universal Self-Discovery Engine, rebuilt exact and
+deterministic — better than the prototype on every axis the law names. The prototype ran on
+floats, matched within tolerances, and carried a probabilistic flag the corpus's own record
+holds cannot certify anything; the remake has NO floats, NO tolerance dial, NO seed, NO null
+model, and NO statistical annotation — a deterministic engine has no chance to correct for.
+THE SWEEP: [1] the standing-mode census of every m-fold map, whose union is the reduced
+fractions to the bound 128 (the tower at the depth ceiling) — **5,022 members, counted two
+independent ways** (direct enumeration = 1 + Euler-phi sum); [2] CLOSURE PROVEN, not
+iterated: every member folded by every sector prime {2,3,5,7} lands back inside — walked,
+zero escapes; [3] the orbit partition re-run (every odd class tiles into φ/ord modes);
+[4] the emergence family swept across the sectors — at m = 3 the swept `e3` IS the forced
+lepton 1/485 and the swept Koide IS 2/3 (identities against independent modules), and at
+m = 5, 7 the family forms the PREDICTED invariants 1/6249 and 1/33613; [5] THE DISCOVERIES:
+the four couplings, the mixing partition, the dark shares, the full cosmic budget, the
+reactor angle (composed from the sweep's own members), and the floor — every one an exact
+rational IDENTITY against its independently forced module value. **The constants are not
+looked up; they fall out of the sweep** — in 0.02 seconds, reproducibly, forever.
+
+### Step 301 — The certified game theorems (the chess campaign's laws, off chess)
+
+**File:** `constants/fold_theorems.ep`
+
+**What it does.** The chess campaign's two machine-certified theorems, re-proven on
+independent solved fields — completing the campaign's derivation surface without a
+chessboard. **T-1, the twin-pair law** (corpus: all 524,288 KQK/KRK coefficients equal
+their transposition twins): on two-heap Nim, the field's swap-invariance is checked state
+by state, and ALL 64 spectral coefficients exactly equal their block-swapped twins — with
+the twin structure fully visible (c_s = 8 exactly when the blocks agree, 0 otherwise).
+**T-2, the vanishing law** (corpus: all 262,144 odd-class coefficients exactly zero): on
+the subtraction field, mirror-invariance under XOR by mask 60 is checked state by state,
+and every odd-overlap coefficient is certified EXACTLY zero — 32 of 64, the storage
+corollary by count. Same theorems, third and fourth solved domains: the pipeline, not the
+board, is the instrument.
+
 ---
 
 ## Where the recreation stands right now
@@ -5948,6 +5986,15 @@ runs):**
   recreated or receipted (absolute_scale, millennium, periodic-table-complete,
   prime-force-phenomenology, gate, particle-validation; USDE out of scope by the corpus's
   own record). Proof corpus + frontier engines = the entire published derivation surface.
+- Step 300 — the discovery engine (USDE remade under the law): the sweep space counted two
+  ways (**5,022 members**), closure PROVEN under all four sector primes, the emergence family
+  swept (m = 3 lands 1/485 and Koide 2/3 as IDENTITIES; m = 5, 7 form 1/6249, 1/33613) —
+  couplings, mixing, dark shares, cosmic budget, reactor angle, floor all **fall out of the
+  sweep** as exact identities; no floats, no tolerance, no seeds, no statistics.
+- Step 301 — the certified game theorems, off chess: **T-1 twin-pair law** (all 64 Nim
+  coefficients equal their swapped twins; c_s = 8 iff blocks agree) and **T-2 vanishing law**
+  (all odd-overlap subtraction coefficients exactly zero — half the spectrum, the storage
+  corollary) — the chess campaign's laws on third and fourth solved domains.
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
   self-maps are enumerated and *run*; the fold is the unique generator, with
   `forced_unique` halting if any rival qualified. The fold's uniqueness is no

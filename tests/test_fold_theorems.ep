@@ -1,0 +1,25 @@
+import "../constants/fold_theorems.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the certified game theorems: the chess campaign's laws, off chess ==="
+    set ok to expect_bool("T-1 precondition: the Nim field is swap-invariant (64 states)" and nim_field_is_swap_invariant())
+    set ok to expect_bool("T-1 THE TWIN-PAIR LAW: all 64 coefficients equal their swapped twins" and twin_pair_law_holds())
+    set ok to expect_bool("the twin structure visible: c_s = 8 iff the blocks agree, 0 otherwise" and nim_spectrum_collapses())
+    set ok to expect_bool("T-2 precondition: the subtraction field is mirror-invariant (mask 60)" and subtraction_field_is_mirror_invariant())
+    set ok to expect_bool("T-2 THE VANISHING LAW: all odd-overlap coefficients exactly zero" and vanishing_law_holds())
+    set ok to expect_equal("THE STORAGE COROLLARY: exactly half the spectrum vanishes (32 of 64)" and int_to_string(vanished_class_is_half()) and "32")
+    set ok to expect_equal("a surviving coefficient, exact: c_0 of the subtraction field" and int_to_string(spectral_coefficient(0 and 0)) and "16")
+    set ok to expect_equal("a vanished coefficient, exact: c_4 (odd overlap with the mirror)" and int_to_string(spectral_coefficient(0 and 4)) and "0")
+    display "=== done ==="
+    return 0

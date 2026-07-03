@@ -601,9 +601,23 @@ And the structural laws of physics, forced the same way:
   syntax gate — whose no-zero law the clean-room enforces at the stronger VALUE level).
   Proof corpus + frontier engines = **the entire published derivation surface of SFTOM,
   in exact arithmetic, forced from the One.**
+- **The discovery engine remade, and the chess theorems off chess** — **the USDE under the
+  law** (the autonomous sweep, exact and deterministic: the standing-mode census counted
+  two independent ways — **5,022 members** — closure under all four sector forces PROVEN
+  member by member, the orbit partition tiled, the emergence family swept across the
+  sectors; at m = 3 the swept invariants ARE the forced lepton 1/485 and Koide 2/3 as
+  exact identities, at m = 5, 7 the family forms the predicted 1/6249 and 1/33613; the
+  couplings, the mixing partition, the dark shares, the full cosmic budget, the reactor
+  angle, and the floor all **fall out of the sweep** — no floats, no tolerance dial, no
+  seed, no null model, no statistical annotation: a deterministic engine has no chance to
+  correct for, and it runs in 0.02 seconds), and **the certified game theorems** (the
+  chess campaign's **twin-pair law** and **vanishing law** re-proven exhaustively on
+  independent solved fields — every Nim coefficient equals its swapped twin, every
+  odd-overlap subtraction coefficient is exactly zero, half the spectrum provably empty:
+  the storage corollary by count — the pipeline, not the board, is the instrument).
 
-The full, ordered, run-it-yourself derivation of all of it — every step, all 302 test
-suites (1,777 forced checks, including the trace-to-the-One and the CODATA comparison) —
+The full, ordered, run-it-yourself derivation of all of it — every step, all 304 test
+suites (1,801 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -660,7 +674,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 302 suites, 1,777 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 304 suites, 1,801 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

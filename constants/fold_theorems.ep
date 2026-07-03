@@ -1,0 +1,192 @@
+# ============================================================================
+#  THE CERTIFIED GAME THEOREMS  --  the chess campaign's laws, off chess.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The corpus's chess campaign did something no chess method has a mode for:
+#  it EMITTED THEOREMS -- exhaustively machine-certified laws about a solved
+#  field, with exact traces. Two were certified on half a million positions
+#  each: T-CHESS-1 (the twin-pair law: a symmetry of the board forces every
+#  spectral coefficient to equal its partner) and T-CHESS-2 (the vanishing
+#  law: a mirror symmetry acting as XOR by a mask forces every coefficient
+#  with odd overlap to be EXACTLY zero -- half the spectrum provably empty,
+#  halving any spectral oracle's storage by theorem). Those laws were never
+#  about chess: they are fold-spectral facts about ANY solved field with a
+#  symmetry. This module certifies both, exhaustively and exactly, on the
+#  clean-room's own solved fields -- completing the chess campaign's
+#  derivation surface without a chessboard.
+#
+#  ── DERIVATION ─ (check every line; both laws certified coefficient by
+#  coefficient) ────────────────────────────────────────────────────────────────
+#  THE SPECTRUM: a solved field's coefficient at frequency s is the exact
+#  integer sign-sum c_s = sum over all states n of f(n) chi_s(n), using the
+#  verified fold characters (compact_coords.ep -- the group law there is
+#  already certified exhaustively). T-1, THE TWIN-PAIR LAW, on two-heap Nim
+#  (64 states): the field is invariant under swapping the heaps (checked
+#  state by state first); the swap permutes each frequency's bit-blocks, and
+#  EVERY one of the 64 coefficients exactly equals its swapped twin --
+#  certified exhaustively. (The spectrum itself collapses: c_s = 8 exactly
+#  when the two blocks agree, 0 otherwise -- the twin structure visible.)
+#  T-2, THE VANISHING LAW, on the subtraction field over 64 states: the
+#  rule depends only on the low two bits, so the field is invariant under
+#  XOR by the mirror mask 60 = 111100 (checked state by state); the
+#  spectral algebra then forces every coefficient whose frequency overlaps
+#  the mask ODDLY to vanish -- ALL 32 odd-class coefficients certified
+#  exactly zero, and the count certified to be exactly half the spectrum:
+#  the storage corollary, by theorem.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The corpus certified the same two laws on KQK and KRK at 524,288 states
+#  each (all twin pairs equal; all 262,144 odd-class coefficients zero) with
+#  the fields themselves certified against Syzygy at zero error. Here the
+#  laws are re-proven from scratch on independent fields with independent
+#  oracles (the mod-4 and XOR rules of fold_solver.ep) -- same theorems,
+#  third and fourth solved domains. The pipeline, not the board, is the
+#  instrument.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/compact_coords.ep"
+
+
+# The two-heap Nim field over 3-bit heaps (64 states): loss (1) iff the
+# heaps are equal (XOR zero) -- Bouton at two heaps.
+define nim_two_field with code as Int returning Int:
+    set low_heap to code - (code / 8) * 8
+    set high_heap to code / 8
+    if low_heap == high_heap:
+        return 1
+    return 0
+
+# The subtraction field over 6 bits (64 states): loss (1) iff n mod 4 = 0.
+define subtraction_field with n as Int returning Int:
+    set quarter to n / 4
+    set remainder to n - quarter * 4
+    if remainder == 0:
+        return 1
+    return 0
+
+# The exact spectral coefficient of a field at frequency s: the integer
+# sign-sum over all 64 states. field_kind: 0 = subtraction, 1 = two-heap Nim.
+define spectral_coefficient with field_kind as Int and s as Int returning Int:
+    set total to 0
+    set n to 0
+    repeat while n < 64:
+        set value to 0
+        if field_kind == 1:
+            set value to nim_two_field(n)
+        else:
+            set value to subtraction_field(n)
+        if value == 1:
+            set sign to chi_sign(s and n)
+            set total to total + sign
+        set n to n + 1
+    return total
+
+# The heap swap on a 6-bit frequency: exchange the low and high 3-bit blocks.
+define swap_blocks with s as Int returning Int:
+    set low_block to s - (s / 8) * 8
+    set high_block to s / 8
+    return low_block * 8 + high_block
+
+# T-1 PRECONDITION: the Nim field is invariant under swapping the heaps --
+# checked state by state.
+define nim_field_is_swap_invariant returning Bool:
+    set all_match to true
+    set n to 0
+    repeat while n < 64:
+        set here to nim_two_field(n)
+        set swapped to nim_two_field(swap_blocks(n))
+        if here == swapped:
+            set all_match to all_match
+        else:
+            set all_match to false
+        set n to n + 1
+    return all_match
+
+# T-1, THE TWIN-PAIR LAW: every one of the 64 Nim coefficients exactly
+# equals its block-swapped twin -- certified exhaustively.
+define twin_pair_law_holds returning Bool:
+    set all_twin to true
+    set s to 0
+    repeat while s < 64:
+        set here to spectral_coefficient(1 and s)
+        set twin to spectral_coefficient(1 and swap_blocks(s))
+        if here == twin:
+            set all_twin to all_twin
+        else:
+            set all_twin to false
+        set s to s + 1
+    return all_twin
+
+# T-2 PRECONDITION: the subtraction field is invariant under XOR by the
+# mirror mask 60 (the rule lives in the low two bits) -- checked state by
+# state.
+define subtraction_field_is_mirror_invariant returning Bool:
+    set all_match to true
+    set n to 0
+    repeat while n < 64:
+        set here to subtraction_field(n)
+        set mirrored to subtraction_field(bit_xor(n and 60))
+        if here == mirrored:
+            set all_match to all_match
+        else:
+            set all_match to false
+        set n to n + 1
+    return all_match
+
+# T-2, THE VANISHING LAW: every coefficient whose frequency overlaps the
+# mirror mask ODDLY is exactly zero -- all 32 certified, none survives.
+define vanishing_law_holds returning Bool:
+    set all_vanish to true
+    set s to 0
+    repeat while s < 64:
+        set overlap to bit_and(s and 60)
+        set ones to popcount(overlap)
+        set parity to ones - (ones / 2) * 2
+        if parity == 1:
+            set coefficient to spectral_coefficient(0 and s)
+            if coefficient == 0:
+                set all_vanish to all_vanish
+            else:
+                set all_vanish to false
+        set s to s + 1
+    return all_vanish
+
+# THE STORAGE COROLLARY: the vanished class is exactly HALF the spectrum --
+# 32 of 64 coefficients provably empty, by count.
+define vanished_class_is_half returning Int:
+    set vanished to 0
+    set s to 0
+    repeat while s < 64:
+        set overlap to bit_and(s and 60)
+        set ones to popcount(overlap)
+        set parity to ones - (ones / 2) * 2
+        if parity == 1:
+            set vanished to vanished + 1
+        set s to s + 1
+    return vanished
+
+# The visible twin structure: the Nim coefficient is 8 exactly when the
+# two frequency blocks agree, 0 otherwise -- checked exhaustively.
+define nim_spectrum_collapses returning Bool:
+    set all_match to true
+    set s to 0
+    repeat while s < 64:
+        set low_block to s - (s / 8) * 8
+        set high_block to s / 8
+        set coefficient to spectral_coefficient(1 and s)
+        if low_block == high_block:
+            if coefficient == 8:
+                set all_match to all_match
+            else:
+                set all_match to false
+        else:
+            if coefficient == 0:
+                set all_match to all_match
+            else:
+                set all_match to false
+        set s to s + 1
+    return all_match
