@@ -116,3 +116,9 @@ measured playing strength: ~1800-1900 — expert territory, zero parameters.
     All zero-parameter; every upgrade a counted law or a lossless
     optimization; every measurement pinned-binary, 12 games, refereed,
     zero illegal moves ever.
+
+    v11 (the fifty-move law counted -- clock in state, expiry priced at
+         the lock 1/2 at every node; the rules model now COMPLETE):
+         2W 4D 2D(cap) 4L (41.7%). Cap-draws halved (4 -> 2). Combined
+         v10+v11 at Elo 1700 over 24 pinned games: 5W 12D 7L (~46%) --
+         a whisker under even, up from 29% at the arc's start.
