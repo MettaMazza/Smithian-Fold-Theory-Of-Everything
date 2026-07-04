@@ -100,3 +100,19 @@ game refereed by python-chess, zero illegal moves anywhere):
 The pattern, three rungs running: draw a level, improve the counted
 machinery (never a tuned number anywhere), beat the level, climb. Current
 measured playing strength: ~1800-1900 — expert territory, zero parameters.
+
+**Rungs continued — v8/v9/v10 (2026-07-04, pinned 12-game measurements at Elo 1700):**
+
+    v8  (safe-destination mobility -- kills the early-queen disease;
+         probe: v7 played Qh5 move 3, v8 opens d4/Nc3/e4/Bb5+):  3W 3D 6L (37.5%)
+    v9  (promotion sight: a clear passed pawn counts its future
+         queen's reach; promotions read as forcing at the horizon): 3W 3D 6L (37.5%)
+    v10 (attack-map evaluator + check pre-filter + a nesting bug
+         FIXED that had corrupted in-check horizon values since v6): 3W 6D 3L (50%)
+
+    ELO 1700 IS NOW CONTESTED EVEN. Measured strength ~1700, up from
+    ~1550 at the campaign's start. Four of v10's draws are 300-ply caps
+    -- unconverted positions: conversion remains the open frontier.
+    All zero-parameter; every upgrade a counted law or a lossless
+    optimization; every measurement pinned-binary, 12 games, refereed,
+    zero illegal moves ever.
