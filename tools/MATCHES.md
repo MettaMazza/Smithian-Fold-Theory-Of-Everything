@@ -122,3 +122,14 @@ measured playing strength: ~1800-1900 — expert territory, zero parameters.
          2W 4D 2D(cap) 4L (41.7%). Cap-draws halved (4 -> 2). Combined
          v10+v11 at Elo 1700 over 24 pinned games: 5W 12D 7L (~46%) --
          a whisker under even, up from 29% at the arc's start.
+
+    v12 (mate-gradient bug FIXED -- faster mates now strictly preferred,
+         the endgame oracle certified on KRK): 0W 6D 6L (25%) at 1700.
+         HONEST: this is BELOW v10's 50%, not progress. The bug fix is
+         provably correct (traced: mate-in-1 1024/1025 > mate-in-2
+         1023/1024) and stays; cap-draws dropped (conversion shuffle
+         eased); but wins vanished. Cause unresolved -- variance vs a
+         real over-commit-to-mate interaction. NEXT: isolate by direct
+         v12-vs-v10 head-to-head (varied openings) before any new change;
+         bisect v11/v12 if v12 lost real strength. No small-sample
+         celebration; the measurement is the referee.
