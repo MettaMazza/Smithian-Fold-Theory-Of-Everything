@@ -4946,6 +4946,7 @@ long long up_second_invariant();
 long long down_first_invariant_here();
 long long up_first_invariant_here();
 long long quark_cubic_value(long long, long long, long long);
+long long quark_cubic_sign_ei(long long, long long, long long, long long, long long, long long);
 long long quark_root_in_bracket(long long, long long, long long, long long, long long, long long);
 long long down_root(long long);
 long long up_root(long long);
@@ -5474,32 +5475,86 @@ L_cleanup:
     return ret_val;
 }
 
+long long quark_cubic_sign_ei(long long p, long long q, long long e2n, long long e2d, long long e3n, long long e3d) {
+    long long s = 0;
+    long long t1 = 0;
+    long long t2 = 0;
+    long long t3 = 0;
+    long long t4 = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&s);
+    ep_gc_push_root(&t1);
+    ep_gc_push_root(&t2);
+    ep_gc_push_root(&t3);
+    ep_gc_push_root(&t4);
+    ep_gc_push_root(&p);
+    ep_gc_push_root(&q);
+    ep_gc_push_root(&e2n);
+    ep_gc_push_root(&e2d);
+    ep_gc_push_root(&e3n);
+    ep_gc_push_root(&e3d);
+
+    ep_gc_maybe_collect();
+
+    t1 = exact_integer_multiply(p, p);
+    t1 = exact_integer_multiply(t1, p);
+    t1 = exact_integer_multiply(t1, e2d);
+    t1 = exact_integer_multiply(t1, e3d);
+    t2 = exact_integer_multiply(p, p);
+    t2 = exact_integer_multiply(t2, q);
+    t2 = exact_integer_multiply(t2, e2d);
+    t2 = exact_integer_multiply(t2, e3d);
+    t3 = exact_integer_multiply(e2n, p);
+    t3 = exact_integer_multiply(t3, q);
+    t3 = exact_integer_multiply(t3, q);
+    t3 = exact_integer_multiply(t3, e3d);
+    t4 = exact_integer_multiply(e3n, q);
+    t4 = exact_integer_multiply(t4, q);
+    t4 = exact_integer_multiply(t4, q);
+    t4 = exact_integer_multiply(t4, e2d);
+    s = exact_integer_add(t1, exact_integer_negate(t2));
+    s = exact_integer_add(s, t3);
+    s = exact_integer_add(s, exact_integer_negate(t4));
+    ret_val = ({ long long _fap = s; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; });
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(11);
+    return ret_val;
+}
+
 long long quark_root_in_bracket(long long lo_num, long long lo_den, long long hi_num, long long hi_den, long long e2, long long e3) {
     long long bracket_sum = 0;
     long long count = 0;
+    long long e2d = 0;
+    long long e2n = 0;
+    long long e3d = 0;
+    long long e3n = 0;
     long long final_sum = 0;
     long long hi = 0;
     long long lo = 0;
     long long mid = 0;
+    long long mid_den = 0;
+    long long mid_num = 0;
     long long root = 0;
     long long sign_at_lo = 0;
     long long sign_at_mid = 0;
     long long two_fraction = 0;
-    long long value_at_lo = 0;
-    long long value_at_mid = 0;
-    long long zero = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&bracket_sum);
+    ep_gc_push_root(&e2d);
+    ep_gc_push_root(&e2n);
+    ep_gc_push_root(&e3d);
+    ep_gc_push_root(&e3n);
     ep_gc_push_root(&final_sum);
     ep_gc_push_root(&hi);
     ep_gc_push_root(&lo);
     ep_gc_push_root(&mid);
+    ep_gc_push_root(&mid_den);
+    ep_gc_push_root(&mid_num);
     ep_gc_push_root(&root);
     ep_gc_push_root(&two_fraction);
-    ep_gc_push_root(&value_at_lo);
-    ep_gc_push_root(&value_at_mid);
-    ep_gc_push_root(&zero);
     ep_gc_push_root(&lo_num);
     ep_gc_push_root(&lo_den);
     ep_gc_push_root(&hi_num);
@@ -5509,18 +5564,21 @@ long long quark_root_in_bracket(long long lo_num, long long lo_den, long long hi
 
     ep_gc_maybe_collect();
 
+    e2n = exact_integer_from_sign_and_digits(({ long long _fap = e2; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = e2; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    e2d = exact_integer_from_sign_and_digits(1, ({ long long _fap = e2; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    e3n = exact_integer_from_sign_and_digits(({ long long _fap = e3; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = e3; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    e3d = exact_integer_from_sign_and_digits(1, ({ long long _fap = e3; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
     lo = fraction_from_ratio(lo_num, lo_den);
     hi = fraction_from_ratio(hi_num, hi_den);
-    zero = fraction_from_whole_number(0);
     two_fraction = fraction_from_whole_number(2);
-    value_at_lo = quark_cubic_value(lo, e2, e3);
-    sign_at_lo = fraction_compare(value_at_lo, zero);
+    sign_at_lo = quark_cubic_sign_ei(exact_integer_from_number(lo_num), exact_integer_from_number(lo_den), e2n, e2d, e3n, e3d);
     count = 0;
     while (count < 40) {
     bracket_sum = fraction_add(lo, hi);
     mid = fraction_divide(bracket_sum, two_fraction);
-    value_at_mid = quark_cubic_value(mid, e2, e3);
-    sign_at_mid = fraction_compare(value_at_mid, zero);
+    mid_num = exact_integer_from_sign_and_digits(({ long long _fap = mid; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_sign' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_sign; }), ({ long long _fap = mid; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'numerator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->numerator_digits; }));
+    mid_den = exact_integer_from_sign_and_digits(1, ({ long long _fap = mid; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'denominator_digits' on 'Fraction'\n"); exit(1); } ((EpStruct_Fraction*)(_fap))->denominator_digits; }));
+    sign_at_mid = quark_cubic_sign_ei(mid_num, mid_den, e2n, e2d, e3n, e3d);
     if (sign_at_mid == sign_at_lo) {
     lo = mid;
     } else {
@@ -5533,7 +5591,7 @@ long long quark_root_in_bracket(long long lo_num, long long lo_den, long long hi
     ret_val = root;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(16);
+    ep_gc_pop_roots(19);
     return ret_val;
 }
 

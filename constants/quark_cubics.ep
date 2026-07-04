@@ -37,6 +37,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/counted_numbers.ep"
 import "../foundation/exact_fractions.ep"
+import "../foundation/exact_integers.ep"
 
 
 # The down-sector second invariant: the colour-binary dual at reach d_up = 7 -- 1/383.
@@ -69,20 +70,49 @@ define quark_cubic_value with x as Fraction and e2 as Fraction and e3 as Fractio
     set with_linear to fraction_add(cubic_minus_square and e2_term)
     return fraction_subtract(with_linear and e3)
 
+# The SIGN of x^3 - x^2 + e2*x - e3 at x = p/q, by EXACT INTEGERS on the
+# cleared positive denominator q^3*e2d*e3d -- no fraction, no gcd:
+#   sign( p^3*e2d*e3d - p^2*q*e2d*e3d + e2n*p*q^2*e3d - e3n*q^3*e2d ).
+# All arguments are exact integers and are freely reused (verified).
+define quark_cubic_sign_ei with p and q and e2n and e2d and e3n and e3d returning Int:
+    set t1 to exact_integer_multiply(p and p)
+    set t1 to exact_integer_multiply(t1 and p)
+    set t1 to exact_integer_multiply(t1 and e2d)
+    set t1 to exact_integer_multiply(t1 and e3d)
+    set t2 to exact_integer_multiply(p and p)
+    set t2 to exact_integer_multiply(t2 and q)
+    set t2 to exact_integer_multiply(t2 and e2d)
+    set t2 to exact_integer_multiply(t2 and e3d)
+    set t3 to exact_integer_multiply(e2n and p)
+    set t3 to exact_integer_multiply(t3 and q)
+    set t3 to exact_integer_multiply(t3 and q)
+    set t3 to exact_integer_multiply(t3 and e3d)
+    set t4 to exact_integer_multiply(e3n and q)
+    set t4 to exact_integer_multiply(t4 and q)
+    set t4 to exact_integer_multiply(t4 and q)
+    set t4 to exact_integer_multiply(t4 and e2d)
+    set s to exact_integer_subtract(t1 and t2)
+    set s to exact_integer_add(s and t3)
+    set s to exact_integer_subtract(s and t4)
+    return s.sign
+
 # Exact rational bisection: 40 halvings in a sign-change bracket.
 define quark_root_in_bracket with lo_num as Int and lo_den as Int and hi_num as Int and hi_den as Int and e2 as Fraction and e3 as Fraction returning Fraction:
+    set e2n to fraction_numerator(e2)
+    set e2d to fraction_denominator(e2)
+    set e3n to fraction_numerator(e3)
+    set e3d to fraction_denominator(e3)
     set lo to fraction_from_ratio(lo_num and lo_den)
     set hi to fraction_from_ratio(hi_num and hi_den)
-    set zero to fraction_from_whole_number(0)
     set two_fraction to fraction_from_whole_number(2)
-    set value_at_lo to quark_cubic_value(lo and e2 and e3)
-    set sign_at_lo to fraction_compare(value_at_lo and zero)
+    set sign_at_lo to quark_cubic_sign_ei(exact_integer_from_number(lo_num) and exact_integer_from_number(lo_den) and e2n and e2d and e3n and e3d)
     set count to 0
     repeat while count < 40:
         set bracket_sum to fraction_add(lo and hi)
         set mid to fraction_divide(bracket_sum and two_fraction)
-        set value_at_mid to quark_cubic_value(mid and e2 and e3)
-        set sign_at_mid to fraction_compare(value_at_mid and zero)
+        set mid_num to fraction_numerator(mid)
+        set mid_den to fraction_denominator(mid)
+        set sign_at_mid to quark_cubic_sign_ei(mid_num and mid_den and e2n and e2d and e3n and e3d)
         if sign_at_mid equals sign_at_lo:
             set lo to mid
         else:
