@@ -11,6 +11,8 @@
 
 CC ?= cc
 CFLAGS ?= -O2
+NPROC := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+MAKEFLAGS += -j$(NPROC)
 SOURCES := $(wildcard test_*.c)
 BINARIES := $(SOURCES:.c=)
 
@@ -39,6 +41,9 @@ check: all
 	fi
 
 prove: all
+	@sh prove_parallel.sh
+
+prove-serial: all
 	@sh prove_all.sh
 
 online:
@@ -50,4 +55,4 @@ uniqueness:
 clean:
 	rm -f $(BINARIES)
 
-.PHONY: all check prove online uniqueness clean
+.PHONY: all check prove prove-serial online uniqueness clean
