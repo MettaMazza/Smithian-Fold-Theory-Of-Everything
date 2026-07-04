@@ -2,7 +2,13 @@
 import subprocess, sys, chess, chess.engine
 from concurrent.futures import ProcessPoolExecutor
 
-BOT = "/Users/mettamazza/Desktop/Smithian Fold Theory/tests/fold_bot_cli"
+import shutil, tempfile, atexit
+_pin = tempfile.NamedTemporaryFile(delete=False, suffix="_fold_bot")
+_pin.close()
+shutil.copy2("/Users/mettamazza/Desktop/Smithian Fold Theory/tests/fold_bot_cli", _pin.name)
+import os as _os; _os.chmod(_pin.name, 0o755)
+atexit.register(lambda: _os.unlink(_pin.name))
+BOT = _pin.name  # PINNED copy: rebuilding the live binary cannot contaminate a running match
 SF = "/opt/homebrew/bin/stockfish"
 PROMO = {chess.QUEEN:5, chess.ROOK:4, chess.BISHOP:3, chess.KNIGHT:2}
 CP = {v:k for k,v in PROMO.items()}
