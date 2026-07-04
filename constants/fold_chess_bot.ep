@@ -1044,6 +1044,61 @@ define mobility_count with state and for_black as Int returning Int:
         set sq to sq + 1
     return total
 
+# A pawn's promotion potential: if no enemy pawn stands ahead on its own or
+# the adjacent files (the counted passed-pawn condition) and its own path is
+# clear, the pawn's potential includes the queen's reach from its promotion
+# square -- the count it is walking toward. No scale factor: potential is
+# potential, exactly as every piece's reach already is.
+define pawn_promotion_potential with state and sq as Int and for_black as Int returning Int:
+    set rank to sq / 8
+    set file to sq - rank * 8
+    set step to 8
+    set promo_rank to 7
+    if for_black == 1:
+        set step to 0 - 8
+        set promo_rank to 0
+    # path directly ahead must be empty
+    set path_clear to 1
+    set probe to sq + step
+    repeat while probe > 0 - 1:
+        if probe < 64:
+            set here to get_list(state and probe)
+            if here > 0:
+                set path_clear to 0
+            set probe_rank to probe / 8
+            if probe_rank == promo_rank:
+                set probe to 0 - 100
+            else:
+                set probe to probe + step
+        else:
+            set probe to 0 - 100
+    if path_clear == 0:
+        return 0
+    # passed: no enemy pawn ahead on this file or the adjacent files
+    set enemy_pawn to 7
+    if for_black == 1:
+        set enemy_pawn to 1
+    set passed to 1
+    set lane to file - 1
+    repeat while lane < file + 2:
+        if lane > 0 - 1:
+            if lane < 8:
+                set r to rank + step / 8
+                set scanning to 1
+                repeat while scanning == 1:
+                    set scanning to 0
+                    if r > 0:
+                        if r < 7:
+                            if get_list(state and r * 8 + lane) == enemy_pawn:
+                                set passed to 0
+                            set r to r + step / 8
+                            set scanning to 1
+        set lane to lane + 1
+    if passed == 0:
+        return 0
+    set promo_sq to promo_rank * 8 + file
+    return counted_reach(5 and promo_sq and for_black)
+
 define side_units with state and for_black as Int returning Int:
     set units to 0
     set sq to 0
@@ -1057,7 +1112,10 @@ define side_units with state and for_black as Int returning Int:
             if piece_is_white(code):
                 set mine to 1
         if mine == 1:
-            set units to units + counted_reach(piece_kind(code) and sq and for_black)
+            set kind to piece_kind(code)
+            set units to units + counted_reach(kind and sq and for_black)
+            if kind == 1:
+                set units to units + pawn_promotion_potential(state and sq and for_black)
         set sq to sq + 1
     set units to units + mobility_count(state and for_black)
     return units
@@ -1086,6 +1144,8 @@ define share_denominator with state returning Int:
 # Is this move a capture (a take event -- the fold's own subtraction)?
 define move_is_capture with state and move as Int returning Bool:
     set promo to move / 4096
+    if promo > 0:
+        return true
     set rest to move - promo * 4096
     set from_sq to rest / 64
     set to_sq to rest - from_sq * 64

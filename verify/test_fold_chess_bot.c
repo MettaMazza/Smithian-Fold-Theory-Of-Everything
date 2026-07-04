@@ -4947,6 +4947,7 @@ long long legal_moves(long long);
 long long perft(long long, long long);
 long long counted_reach(long long, long long, long long);
 long long mobility_count(long long, long long);
+long long pawn_promotion_potential(long long, long long, long long);
 long long side_units(long long, long long);
 long long share_numerator(long long);
 long long share_denominator(long long);
@@ -5058,21 +5059,26 @@ L_cleanup:
 }
 
 long long _main() {
+    long long blocked_pawn = 0;
     long long endgame = 0;
     long long kiwi = 0;
     long long kiwi_three = 0;
     long long kiwi_two = 0;
+    long long lone_pawn = 0;
     long long ok = 0;
+    long long ok2 = 0;
     long long promo_pos = 0;
     long long state = 0;
     long long state_three = 0;
     long long state_two = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&blocked_pawn);
     ep_gc_push_root(&endgame);
     ep_gc_push_root(&kiwi);
     ep_gc_push_root(&kiwi_three);
     ep_gc_push_root(&kiwi_two);
+    ep_gc_push_root(&lone_pawn);
     ep_gc_push_root(&promo_pos);
     ep_gc_push_root(&state);
     ep_gc_push_root(&state_three);
@@ -5255,11 +5261,22 @@ long long _main() {
     ok = set_list(promo_pos, 68, 0);
     ok = set_list(promo_pos, 69, 64);
     ok = expect_equal((long long)"PROMOTIONS (all four pieces) depth 3: 9483", int_to_string(perft(promo_pos, 3)), (long long)"9483");
+    lone_pawn = empty_state();
+    ok2 = set_list(lone_pawn, 44, 1);
+    ok2 = set_list(lone_pawn, 4, 6);
+    ok2 = set_list(lone_pawn, 63, 12);
+    ok = expect_equal((long long)"COUNTED: a clear passed pawn carries its future queen (reach 21 from e8)", int_to_string(pawn_promotion_potential(lone_pawn, 44, 0)), (long long)"21");
+    blocked_pawn = empty_state();
+    ok2 = set_list(blocked_pawn, 44, 1);
+    ok2 = set_list(blocked_pawn, 51, 7);
+    ok = expect_equal((long long)"and a pawn facing an enemy pawn ahead carries none", int_to_string(pawn_promotion_potential(blocked_pawn, 44, 0)), (long long)"0");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(8);
+    ep_gc_pop_roots(10);
+    free_list(blocked_pawn);
+    blocked_pawn = 0;
     free_list(endgame);
     endgame = 0;
     free_list(kiwi);
@@ -5268,6 +5285,8 @@ L_cleanup:
     kiwi_three = 0;
     free_list(kiwi_two);
     kiwi_two = 0;
+    free_list(lone_pawn);
+    lone_pawn = 0;
     free_list(promo_pos);
     promo_pos = 0;
     free_list(state);
@@ -7035,14 +7054,111 @@ L_cleanup:
     return ret_val;
 }
 
+long long pawn_promotion_potential(long long state, long long sq, long long for_black) {
+    long long enemy_pawn = 0;
+    long long file = 0;
+    long long here = 0;
+    long long lane = 0;
+    long long passed = 0;
+    long long path_clear = 0;
+    long long probe = 0;
+    long long probe_rank = 0;
+    long long promo_rank = 0;
+    long long promo_sq = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long scanning = 0;
+    long long step = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&lane);
+    ep_gc_push_root(&probe);
+    ep_gc_push_root(&promo_sq);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&for_black);
+
+    ep_gc_maybe_collect();
+
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    step = 8;
+    promo_rank = 7;
+    if (for_black == 1) {
+    step = -8;
+    promo_rank = 0;
+    }
+    path_clear = 1;
+    probe = (sq + step);
+    while (probe > -1) {
+    if (probe < 64) {
+    here = get_list(state, probe);
+    if (here > 0) {
+    path_clear = 0;
+    }
+    probe_rank = (probe / 8);
+    if (probe_rank == promo_rank) {
+    probe = -100;
+    } else {
+    probe = (probe + step);
+    }
+    } else {
+    probe = -100;
+    }
+    }
+    if (path_clear == 0) {
+    ret_val = 0;
+    goto L_cleanup;
+    }
+    enemy_pawn = 7;
+    if (for_black == 1) {
+    enemy_pawn = 1;
+    }
+    passed = 1;
+    lane = (file - 1);
+    while (lane < (file + 2)) {
+    if (lane > -1) {
+    if (lane < 8) {
+    r = (rank + (step / 8));
+    scanning = 1;
+    while (scanning == 1) {
+    scanning = 0;
+    if (r > 0) {
+    if (r < 7) {
+    if (get_list(state, ((r * 8) + lane)) == enemy_pawn) {
+    passed = 0;
+    }
+    r = (r + (step / 8));
+    scanning = 1;
+    }
+    }
+    }
+    }
+    }
+    lane = (lane + 1);
+    }
+    if (passed == 0) {
+    ret_val = 0;
+    goto L_cleanup;
+    }
+    promo_sq = ((promo_rank * 8) + file);
+    ret_val = counted_reach(5, promo_sq, for_black);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
 long long side_units(long long state, long long for_black) {
     long long code = 0;
+    long long kind = 0;
     long long mine = 0;
     long long sq = 0;
     long long units = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&code);
+    ep_gc_push_root(&kind);
     ep_gc_push_root(&sq);
     ep_gc_push_root(&state);
     ep_gc_push_root(&for_black);
@@ -7064,7 +7180,11 @@ long long side_units(long long state, long long for_black) {
     }
     }
     if (mine == 1) {
-    units = (units + counted_reach(piece_kind(code), sq, for_black));
+    kind = piece_kind(code);
+    units = (units + counted_reach(kind, sq, for_black));
+    if (kind == 1) {
+    units = (units + pawn_promotion_potential(state, sq, for_black));
+    }
     }
     sq = (sq + 1);
     }
@@ -7072,7 +7192,7 @@ long long side_units(long long state, long long for_black) {
     ret_val = units;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(4);
+    ep_gc_pop_roots(5);
     return ret_val;
 }
 
@@ -7128,6 +7248,10 @@ long long move_is_capture(long long state, long long move) {
     ep_gc_maybe_collect();
 
     promo = (move / 4096);
+    if (promo > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
     rest = (move - (promo * 4096));
     from_sq = (rest / 64);
     to_sq = (rest - (from_sq * 64));

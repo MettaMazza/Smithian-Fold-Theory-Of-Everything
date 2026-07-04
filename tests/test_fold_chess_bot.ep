@@ -188,5 +188,14 @@ define main:
     set ok to set_list(promo_pos and 69 and 64)
     set ok to expect_equal("PROMOTIONS (all four pieces) depth 3: 9483" and int_to_string(perft(promo_pos and 3)) and "9483")
 
+    set lone_pawn to empty_state()
+    set ok2 to set_list(lone_pawn and 44 and 1)
+    set ok2 to set_list(lone_pawn and 4 and 6)
+    set ok2 to set_list(lone_pawn and 63 and 12)
+    set ok to expect_equal("COUNTED: a clear passed pawn carries its future queen (reach 21 from e8)" and int_to_string(pawn_promotion_potential(lone_pawn and 44 and 0)) and "21")
+    set blocked_pawn to empty_state()
+    set ok2 to set_list(blocked_pawn and 44 and 1)
+    set ok2 to set_list(blocked_pawn and 51 and 7)
+    set ok to expect_equal("and a pawn facing an enemy pawn ahead carries none" and int_to_string(pawn_promotion_potential(blocked_pawn and 44 and 0)) and "0")
     display "=== done ==="
     return 0
