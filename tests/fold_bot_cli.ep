@@ -7,14 +7,20 @@
 import "../constants/fold_chess_bot.ep"
 define main:
     set depth to read_int()
+    set kqk to load_packed_table("/Users/mettamazza/Desktop/Smithian Fold Theory/data/kqk_packed.txt")
+    set krk to load_packed_table("/Users/mettamazza/Desktop/Smithian Fold Theory/data/krk_packed.txt")
     set state to starting_state()
     set seen to state_signature(state)
     set running to 1
     repeat while running == 1:
         set token to read_int()
         if token == 8888:
-            set answer to search_best_seen(state and depth and seen)
-            display int_to_string(get_list(answer and 0))
+            set endgame to endgame_best_move(state and kqk and krk)
+            if get_list(endgame and 0) == 1:
+                display int_to_string(get_list(endgame and 1))
+            else:
+                set answer to search_best_seen(state and depth and seen)
+                display int_to_string(get_list(answer and 0))
             set running to 0
         else:
             set state to make_move(state and token)

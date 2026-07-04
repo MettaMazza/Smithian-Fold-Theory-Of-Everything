@@ -4952,6 +4952,10 @@ long long pawn_promotion_potential(long long, long long, long long);
 long long side_units(long long, long long);
 long long share_numerator(long long);
 long long share_denominator(long long);
+long long flip_rank(long long);
+long long parse_packed_token(long long);
+long long load_packed_table(long long);
+long long endgame_probe(long long, long long, long long);
 long long move_is_capture(long long, long long);
 long long ordered_moves(long long);
 long long could_check_from(long long, long long, long long, long long);
@@ -4967,6 +4971,7 @@ long long finds_fools_mate();
 long long fools_mate_is_seen_as_mate();
 long long fools_mate_is_real();
 long long self_play_plies(long long);
+long long endgame_best_move(long long, long long, long long);
 long long smallest_fold_period_above(long long);
 long long binary_count();
 long long colour_count();
@@ -7531,6 +7536,230 @@ L_cleanup:
     return ret_val;
 }
 
+long long flip_rank(long long sq) {
+    long long file = 0;
+    long long rank = 0;
+    long long ret_val = 0;
+
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    ret_val = (((7 - rank) * 8) + file);
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long parse_packed_token(long long tok) {
+    long long i = 0;
+    long long len = 0;
+    long long n = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&tok);
+
+    ep_gc_maybe_collect();
+
+    n = 0;
+    i = 0;
+    len = string_length((char*)tok);
+    while (i < len) {
+    n = ((n * 10) + (char_at(tok, i) - 48));
+    i = (i + 1);
+    }
+    ret_val = n;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long load_packed_table(long long path) {
+    long long i = 0;
+    long long n = 0;
+    long long ok = 0;
+    long long out = 0;
+    long long parts = 0;
+    long long text = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&out);
+    ep_gc_push_root(&parts);
+    ep_gc_push_root(&text);
+    ep_gc_push_root(&path);
+
+    ep_gc_maybe_collect();
+
+    text = file_read(path);
+    parts = string_split(text, (long long)" ");
+    out = create_list();
+    i = 0;
+    n = length_list(parts);
+    while (i < n) {
+    ok = append_list(out, parse_packed_token(get_list(parts, i)));
+    i = (i + 1);
+    }
+    ret_val = out;
+    out = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    return ret_val;
+}
+
+long long endgame_probe(long long state, long long kqk, long long krk) {
+    long long bk_n = 0;
+    long long black_king = 0;
+    long long code = 0;
+    long long count = 0;
+    long long covered = 0;
+    long long idx = 0;
+    long long kind = 0;
+    long long packed = 0;
+    long long r = 0;
+    long long result = 0;
+    long long sq = 0;
+    long long stm = 0;
+    long long stored_kind = 0;
+    long long stored_ply = 0;
+    long long strong_is_white = 0;
+    long long table = 0;
+    long long third_code = 0;
+    long long third_sq = 0;
+    long long too_many = 0;
+    long long white_king = 0;
+    long long wk_n = 0;
+    long long wp_n = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&black_king);
+    ep_gc_push_root(&idx);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&stored_ply);
+    ep_gc_push_root(&table);
+    ep_gc_push_root(&third_code);
+    ep_gc_push_root(&third_sq);
+    ep_gc_push_root(&white_king);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&kqk);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    if (length_list(kqk) < 2) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    white_king = 64;
+    black_king = 64;
+    third_sq = 64;
+    third_code = 0;
+    count = 0;
+    sq = 0;
+    too_many = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    if (code > 0) {
+    count = (count + 1);
+    if (count > 3) {
+    sq = 64;
+    too_many = 1;
+    } else {
+    if (code == 6) {
+    white_king = sq;
+    } else {
+    if (code == 12) {
+    black_king = sq;
+    } else {
+    third_sq = sq;
+    third_code = code;
+    }
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    if (too_many == 1) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if (count == 2) {
+    r = append_list(result, 1);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    kind = piece_kind(third_code);
+    covered = 0;
+    if (kind == 5) {
+    covered = 1;
+    }
+    if (kind == 4) {
+    covered = 1;
+    }
+    if (covered == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    stm = get_list(state, 64);
+    strong_is_white = piece_is_white(third_code);
+    idx = 0;
+    if (strong_is_white) {
+    idx = ((((((white_king * 64) + third_sq) * 64) + black_king) + ((((white_king * 64) + third_sq) * 64) + black_king)) + stm);
+    } else {
+    wk_n = flip_rank(black_king);
+    wp_n = flip_rank(third_sq);
+    bk_n = flip_rank(white_king);
+    idx = ((((((wk_n * 64) + wp_n) * 64) + bk_n) + ((((wk_n * 64) + wp_n) * 64) + bk_n)) + (1 - stm));
+    }
+    table = kqk;
+    if (kind == 4) {
+    table = krk;
+    }
+    packed = get_list(table, idx);
+    stored_kind = (packed / 64);
+    stored_ply = (packed - (stored_kind * 64));
+    r = append_list(result, 1);
+    if (stored_kind == 1) {
+    r = append_list(result, (2048 - stored_ply));
+    r = append_list(result, (2049 - stored_ply));
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if (stored_kind == 2) {
+    r = append_list(result, 1);
+    r = append_list(result, (2049 - stored_ply));
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(11);
+    return ret_val;
+}
+
 long long move_is_capture(long long state, long long move) {
     long long code = 0;
     long long from_sq = 0;
@@ -8867,6 +9096,105 @@ L_cleanup:
     answer = 0;
     free_list(moves);
     moves = 0;
+    return ret_val;
+}
+
+long long endgame_best_move(long long state, long long kqk, long long krk) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long cd = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_val = 0;
+    long long cn = 0;
+    long long count = 0;
+    long long here = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long r = 0;
+    long long replies = 0;
+    long long result = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&child_val);
+    ep_gc_push_root(&here);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&replies);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&kqk);
+    ep_gc_push_root(&krk);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    here = endgame_probe(state, kqk, krk);
+    if (get_list(here, 0) == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 0);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    moves = legal_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 0);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_move = get_list(moves, 0);
+    best_num = 0;
+    best_den = 1;
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    child = make_move(state, move);
+    child_val = endgame_probe(child, kqk, krk);
+    my_num = 1;
+    my_den = 2;
+    if (get_list(child_val, 0) == 1) {
+    cn = get_list(child_val, 1);
+    cd = get_list(child_val, 2);
+    my_num = (cd - cn);
+    my_den = cd;
+    } else {
+    replies = legal_moves(child);
+    if (length_list(replies) == 0) {
+    checked = side_in_check(child);
+    if (checked) {
+    my_num = 1;
+    my_den = 1;
+    } else {
+    my_num = 1;
+    my_den = 2;
+    }
+    }
+    }
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    i = (i + 1);
+    }
+    r = append_list(result, 1);
+    r = append_list(result, best_move);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(12);
     return ret_val;
 }
 

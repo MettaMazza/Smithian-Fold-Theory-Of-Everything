@@ -1,0 +1,213 @@
+# ============================================================================
+#  THE ENDGAME TABLES  --  perfect play as committed, in-room-certified data.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The campaign's solver certified over a billion positions at zero error
+#  against Syzygy; its three-man tables (KQK, KRK) are the fold's perfect
+#  play, complete with distance-to-mate. This module carries those tables as
+#  committed data (data/kqk_packed.txt, data/krk_packed.txt) -- and REFUSES to
+#  take them on faith: the certification suite re-proves the ENTIRE table
+#  inside the clean room, position by position, using this room's own
+#  independent, perft-certified move generator. A stored value survives only
+#  if it equals the fold's value law applied to its successors' stored
+#  values -- the retrograde fixpoint, re-verified over the full 2^19 space.
+#  Data in this room is not imported; it is re-derived.
+#
+#  ── DERIVATION ─ (check every line; the law re-proven over the whole space) ──
+#  ENCODING: index = ((wk*64 + piece)*64 + bk)*2 + stm -- identical to the
+#  campaign's and to krk_index (endgame_oracle.ep). FORMAT: 524,288
+#  space-separated packed integers, one per index -- kindnum*64 + ply, with
+#  kindnum 1 W (win) / 2 L (loss) / 3 D (draw) / 0 U (unreachable), side to
+#  move's perspective; loaded in one O(n) pass via load_packed_table.
+#  THE LAW, applied with the clean room's OWN movegen at every index:
+#  illegal placements must be U; a mover with no legal move is L(0) in check
+#  (mate) and D(0) otherwise (stalemate); a black-king capture of the strong
+#  piece resolves to the lower table (K vs K = D, the campaign's own
+#  generating law); otherwise W with ply = 1 + min over L-successors, else D
+#  if any successor draws, else L with ply = 1 + max over W-successors.
+#  EVERY stored kind and EVERY stored distance must match, over ALL 524,288
+#  indices -- and the census must land the campaign's certified record
+#  exactly: KQK 368,452 legal (W 144,508 / L 200,896 / D 23,048; 364 mates;
+#  longest mate 19 plies) and KRK 399,112 legal (W 175,168 / L 201,700 /
+#  D 22,244; 216 mates; longest mate 31 plies = the textbook 16 moves).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The same tables' lineage: certified against the Syzygy tablebases (the
+#  independent ground truth of solved chess) at zero error in the campaign
+#  record. Here the clean room adds its own end-to-end re-proof: two
+#  independent move generators, two implementations, one fixpoint. Perfect
+#  endgame play is now a verified data asset of this repository.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/fold_chess_bot.ep"
+import "../constants/endgame_oracle.ep"
+
+
+# The stored kind at an index, as its ASCII code (W=87, L=76, D=68, U=85),
+# read from the packed int list (entry = kindnum*64 + ply) loaded ONCE via
+# load_packed_table -- O(n) split, not O(index) char_at.
+define table_kind with table and idx as Int returning Int:
+    set packed to get_list(table and idx)
+    set kindnum to packed / 64
+    if kindnum == 1:
+        return 87
+    if kindnum == 2:
+        return 76
+    if kindnum == 3:
+        return 68
+    return 85
+
+# The stored distance-to-mate (plies) at an index.
+define table_ply with table and idx as Int returning Int:
+    set packed to get_list(table and idx)
+    return packed - (packed / 64) * 64
+
+# Decode an index into (wk, wp, bk, stm) -- returns a component by selector.
+define index_part with idx as Int and part as Int returning Int:
+    set stm to idx - (idx / 2) * 2
+    set rest to idx / 2
+    set bk to rest - (rest / 64) * 64
+    set rest to rest / 64
+    set wp to rest - (rest / 64) * 64
+    set wk to rest / 64
+    if part == 0:
+        return wk
+    if part == 1:
+        return wp
+    if part == 2:
+        return bk
+    return stm
+
+# Find the three piece squares of a 3-man child state, and re-encode its
+# index. piece_code is the strong piece's code (5 queen / 4 rook).
+define child_index with child and piece_code as Int returning Int:
+    set wk to 64
+    set wp to 64
+    set bk to 64
+    set sq to 0
+    repeat while sq < 64:
+        set code to get_list(child and sq)
+        if code == 6:
+            set wk to sq
+        if code == piece_code:
+            set wp to sq
+        if code == 12:
+            set bk to sq
+        set sq to sq + 1
+    if wp == 64:
+        return 0 - 1
+    return ((wk * 64 + wp) * 64 + bk) * 2 + get_list(child and 64)
+
+# THE FULL CERTIFICATION of one table: every index re-proven by the clean
+# room's own movegen against the fold's value law, and the census collected.
+# Returns a list [ok, legal, wins, losses, draws, mates, max_ply].
+define certify_table with table and piece_code as Int:
+    set report to create_list()
+    set ok to 1
+    set legal_count to 0
+    set wins to 0
+    set losses to 0
+    set draws to 0
+    set mates to 0
+    set max_ply to 0
+    set idx to 0
+    repeat while idx < 524288:
+        set wk to index_part(idx and 0)
+        set wp to index_part(idx and 1)
+        set bk to index_part(idx and 2)
+        set stm to index_part(idx and 3)
+        set placement_legal to krk_position_legal(wk and wp and bk and stm and piece_code and 1)
+        set stored_kind to table_kind(table and idx)
+        set stored_ply to table_ply(table and idx)
+        if placement_legal:
+            set legal_count to legal_count + 1
+            if stored_kind == 87:
+                set wins to wins + 1
+            if stored_kind == 76:
+                set losses to losses + 1
+                if stored_ply == 0:
+                    set mates to mates + 1
+            if stored_kind == 68:
+                set draws to draws + 1
+            if stored_ply > max_ply:
+                set max_ply to stored_ply
+            set state to krk_state(wk and wp and bk and stm and piece_code and 1)
+            set moves to legal_moves(state)
+            set move_count to length_list(moves)
+            set law_kind to 0
+            set law_ply to 0
+            if move_count == 0:
+                set checked to side_in_check(state)
+                if checked:
+                    set law_kind to 76
+                else:
+                    set law_kind to 68
+            else:
+                set best_loss_ply to 100000
+                set worst_win_ply to 0 - 1
+                set has_draw to 0
+                set i to 0
+                repeat while i < move_count:
+                    set move to get_list(moves and i)
+                    set to_sq to move - (move / 64) * 64
+                    set succ_kind to 68
+                    set succ_ply to 0
+                    if stm == 1:
+                        if to_sq == wp:
+                            set succ_kind to 68
+                        else:
+                            set child to make_move(state and move)
+                            set cidx to child_index(child and piece_code)
+                            set succ_kind to table_kind(table and cidx)
+                            set succ_ply to table_ply(table and cidx)
+                    else:
+                        set child to make_move(state and move)
+                        set cidx to child_index(child and piece_code)
+                        set succ_kind to table_kind(table and cidx)
+                        set succ_ply to table_ply(table and cidx)
+                    if succ_kind == 76:
+                        if succ_ply < best_loss_ply:
+                            set best_loss_ply to succ_ply
+                    if succ_kind == 68:
+                        set has_draw to 1
+                    if succ_kind == 87:
+                        if succ_ply > worst_win_ply:
+                            set worst_win_ply to succ_ply
+                    set i to i + 1
+                if best_loss_ply < 100000:
+                    set law_kind to 87
+                    set law_ply to best_loss_ply + 1
+                else:
+                    if has_draw == 1:
+                        set law_kind to 68
+                    else:
+                        set law_kind to 76
+                        set law_ply to worst_win_ply + 1
+            if stored_kind == law_kind:
+                set ok to ok
+            else:
+                set ok to 0
+            if law_kind == 68:
+                set ok to ok
+            else:
+                if stored_ply == law_ply:
+                    set ok to ok
+                else:
+                    set ok to 0
+        else:
+            if stored_kind == 85:
+                set ok to ok
+            else:
+                set ok to 0
+        set idx to idx + 1
+    set r to append_list(report and ok)
+    set r to append_list(report and legal_count)
+    set r to append_list(report and wins)
+    set r to append_list(report and losses)
+    set r to append_list(report and draws)
+    set r to append_list(report and mates)
+    set r to append_list(report and max_ply)
+    return report

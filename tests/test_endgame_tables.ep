@@ -1,0 +1,35 @@
+import "../constants/endgame_tables.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the endgame tables: perfect play, re-proven in-room ==="
+    set kqk to load_packed_table("../data/kqk_packed.txt")
+    set report to certify_table(kqk and 5)
+    set ok to expect_equal("KQK: EVERY index obeys the fold's value law (full 2^19 re-proof)" and int_to_string(get_list(report and 0)) and "1")
+    set ok to expect_equal("KQK legal census = the campaign's certified 368,452" and int_to_string(get_list(report and 1)) and "368452")
+    set ok to expect_equal("KQK wins 144,508" and int_to_string(get_list(report and 2)) and "144508")
+    set ok to expect_equal("KQK losses 200,896" and int_to_string(get_list(report and 3)) and "200896")
+    set ok to expect_equal("KQK draws 23,048" and int_to_string(get_list(report and 4)) and "23048")
+    set ok to expect_equal("KQK checkmates 364" and int_to_string(get_list(report and 5)) and "364")
+    set ok to expect_equal("KQK longest distance 20 plies (winner mates in 19; the defender one more)" and int_to_string(get_list(report and 6)) and "20")
+    set krk to load_packed_table("../data/krk_packed.txt")
+    set report2 to certify_table(krk and 4)
+    set ok to expect_equal("KRK: EVERY index obeys the fold's value law" and int_to_string(get_list(report2 and 0)) and "1")
+    set ok to expect_equal("KRK legal census 399,112" and int_to_string(get_list(report2 and 1)) and "399112")
+    set ok to expect_equal("KRK wins 175,168" and int_to_string(get_list(report2 and 2)) and "175168")
+    set ok to expect_equal("KRK losses 201,700" and int_to_string(get_list(report2 and 3)) and "201700")
+    set ok to expect_equal("KRK draws 22,244" and int_to_string(get_list(report2 and 4)) and "22244")
+    set ok to expect_equal("KRK checkmates 216" and int_to_string(get_list(report2 and 5)) and "216")
+    set ok to expect_equal("KRK longest distance 32 plies (winner mates in 31 = the textbook 16 moves)" and int_to_string(get_list(report2 and 6)) and "32")
+    display "=== done ==="
+    return 0

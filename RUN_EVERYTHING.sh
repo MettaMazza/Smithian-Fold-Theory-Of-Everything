@@ -7,7 +7,7 @@
 #
 #  Sections (each reports PASS, FAIL, or SKIPPED-with-reason — a skip is
 #  loud, never silent):
-#    1. THE PROOF CORPUS   — all 306 suites / 1,836 forced checks, from the
+#    1. THE PROOF CORPUS   — all 307 suites / 1,844 forced checks, from the
 #                            axiom to every measured comparison (C compiler
 #                            only; committed self-contained C).
 #    2. THE TAMPER TEST    — mutate one forced constant and PROVE the engine
@@ -39,7 +39,7 @@ note() { MANIFEST="$MANIFEST\n  $1"; }
 say()  { printf '\n============================================================\n %s\n============================================================\n' "$1"; }
 
 # ---- 1. THE PROOF CORPUS ---------------------------------------------------
-say "1/6 THE PROOF CORPUS (306 suites, C compiler only)"
+say "1/6 THE PROOF CORPUS (307 suites, C compiler only)"
 if make -C verify prove; then
   note "1 PROOF CORPUS ........ PASS (all suites, all forced checks)"
 else
