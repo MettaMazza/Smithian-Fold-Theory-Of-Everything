@@ -103,16 +103,6 @@ define krk_position_legal with strong_king as Int and strong_piece as Int and we
         return false
     return true
 
-# The exact value of a 3-man position by ON-DEMAND retrograde search: the
-# minimax value with mate-distance, read by the bot's own exact search taken
-# deep enough to reach mate (the branching factor of a 3-man ending is tiny,
-# so the exact search IS the retrograde value within reach). Returns the
-# value pair [num, den]; a win approaches the One, a loss the floor, a draw
-# is the lock. depth is the reach in plies.
-define endgame_exact_value with state and depth as Int:
-    set one to 1 - 1
-    return search_value(state and depth and one and 1 and 1 and 1)
-
 # CERTIFICATION (the chess analogue of fold_solver's Bouton/mod-4 checks):
 # the fold's exact search plays won KRK endings TO MATE -- the live,
 # deployable form of the retrograde result. Positions are ground-truth

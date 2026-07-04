@@ -4932,7 +4932,6 @@ long long krk_index(long long, long long, long long, long long);
 long long krk_state(long long, long long, long long, long long, long long, long long);
 long long squares_adjacent(long long, long long);
 long long krk_position_legal(long long, long long, long long, long long, long long, long long);
-long long endgame_exact_value(long long, long long);
 long long krk_mate_in_one_position();
 long long krk_finds_the_mate();
 long long krk_mate_is_valued();
@@ -5191,24 +5190,6 @@ long long krk_position_legal(long long strong_king, long long strong_piece, long
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(8);
-    return ret_val;
-}
-
-long long endgame_exact_value(long long state, long long depth) {
-    long long one = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&state);
-    ep_gc_push_root(&depth);
-
-    ep_gc_maybe_collect();
-
-    one = 0;
-    ret_val = search_value(state, depth, one, 1, 1, 1);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
     return ret_val;
 }
 

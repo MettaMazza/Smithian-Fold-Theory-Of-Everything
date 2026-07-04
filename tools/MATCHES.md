@@ -133,3 +133,8 @@ measured playing strength: ~1800-1900 — expert territory, zero parameters.
          v12-vs-v10 head-to-head (varied openings) before any new change;
          bisect v11/v12 if v12 lost real strength. No small-sample
          celebration; the measurement is the referee.
+
+**Isolation verdict (v12 vs v10, pinned, varied openings, 12 games):
+v12 WINS 3-2 with 7 draws.** The 25% SF-1700 sample was noise, not
+regression -- the mate-gradient fix and endgame certifications stand as
+strength. The campaign builds on v12.
