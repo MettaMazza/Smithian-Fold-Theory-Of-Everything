@@ -4937,6 +4937,7 @@ long long copy_state(long long);
 long long empty_state();
 long long square_attacked(long long, long long, long long);
 long long lesser_attacker_exists(long long, long long, long long, long long);
+long long attack_min_reach_map(long long, long long);
 long long king_square(long long, long long);
 long long side_in_check(long long);
 long long make_move(long long, long long);
@@ -4946,13 +4947,14 @@ long long pseudo_moves(long long);
 long long legal_moves(long long);
 long long perft(long long, long long);
 long long counted_reach(long long, long long, long long);
-long long mobility_count(long long, long long);
+long long mobility_count(long long, long long, long long);
 long long pawn_promotion_potential(long long, long long, long long);
 long long side_units(long long, long long);
 long long share_numerator(long long);
 long long share_denominator(long long);
 long long move_is_capture(long long, long long);
 long long ordered_moves(long long);
+long long could_check_from(long long, long long, long long, long long);
 long long quiescence(long long, long long, long long, long long, long long, long long);
 long long search_value(long long, long long, long long, long long, long long, long long);
 long long state_signature(long long);
@@ -5060,6 +5062,7 @@ L_cleanup:
 
 long long _main() {
     long long blocked_pawn = 0;
+    long long clock_state = 0;
     long long endgame = 0;
     long long kiwi = 0;
     long long kiwi_three = 0;
@@ -5074,6 +5077,7 @@ long long _main() {
     long long ret_val = 0;
 
     ep_gc_push_root(&blocked_pawn);
+    ep_gc_push_root(&clock_state);
     ep_gc_push_root(&endgame);
     ep_gc_push_root(&kiwi);
     ep_gc_push_root(&kiwi_three);
@@ -5270,11 +5274,16 @@ long long _main() {
     ok2 = set_list(blocked_pawn, 44, 1);
     ok2 = set_list(blocked_pawn, 51, 7);
     ok = expect_equal((long long)"and a pawn facing an enemy pawn ahead carries none", int_to_string(pawn_promotion_potential(blocked_pawn, 44, 0)), (long long)"0");
+    clock_state = starting_state();
+    clock_state = make_move(clock_state, 405);
+    ok = expect_equal((long long)"the fifty-move clock counts a quiet knight move", int_to_string(get_list(clock_state, 70)), (long long)"1");
+    clock_state = make_move(clock_state, 3364);
+    ok = expect_equal((long long)"and RESETS on a pawn move (the rule?s own reset)", int_to_string(get_list(clock_state, 70)), (long long)"0");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(10);
+    ep_gc_pop_roots(11);
     free_list(blocked_pawn);
     blocked_pawn = 0;
     free_list(endgame);
@@ -5407,6 +5416,7 @@ long long starting_state() {
     ok = append_list(state, 1);
     right = 4;
     ok = append_list(state, 64);
+    ok = append_list(state, 0);
     ret_val = state;
     state = 0;
     goto L_cleanup;
@@ -5429,7 +5439,7 @@ long long copy_state(long long state) {
 
     fresh = create_list();
     i = 0;
-    while (i < 70) {
+    while (i < 71) {
     ok = append_list(fresh, get_list(state, i));
     i = (i + 1);
     }
@@ -5465,6 +5475,7 @@ long long empty_state() {
     ok = append_list(state, 0);
     right = 4;
     ok = append_list(state, 64);
+    ok = append_list(state, 0);
     ret_val = state;
     state = 0;
     goto L_cleanup;
@@ -5844,6 +5855,268 @@ L_cleanup:
     return ret_val;
 }
 
+long long attack_min_reach_map(long long state, long long by_black) {
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long forward = 0;
+    long long i = 0;
+    long long kind = 0;
+    long long mine = 0;
+    long long moved = 0;
+    long long ok = 0;
+    long long old = 0;
+    long long on_ray = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long reach = 0;
+    long long reach_map = 0;
+    long long sq = 0;
+    long long target = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&reach);
+    ep_gc_push_root(&reach_map);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&target);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&by_black);
+
+    ep_gc_maybe_collect();
+
+    reach_map = create_list();
+    i = 0;
+    while (i < 64) {
+    ok = append_list(reach_map, 0);
+    i = (i + 1);
+    }
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    mine = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    mine = 1;
+    }
+    } else {
+    if (piece_is_white(code)) {
+    mine = 1;
+    }
+    }
+    if (mine == 1) {
+    kind = piece_kind(code);
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    reach = counted_reach(kind, sq, by_black);
+    if (kind == 1) {
+    forward = 1;
+    if (by_black == 1) {
+    forward = -1;
+    }
+    r = (rank + forward);
+    if (r > -1) {
+    if (r < 8) {
+    df = -1;
+    while (df < 2) {
+    if (df == 0) {
+    df = df;
+    } else {
+    f = (file + df);
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    }
+    }
+    }
+    if (kind == 2) {
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    if (kind > 2) {
+    if (kind < 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    on_ray = 0;
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    } else {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    }
+    } else {
+    if (df == 0) {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    } else {
+    if (kind == 3) {
+    on_ray = 1;
+    }
+    if (kind == 5) {
+    on_ray = 1;
+    }
+    }
+    }
+    if (kind == 4) {
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    }
+    } else {
+    if (df == 0) {
+    on_ray = 1;
+    } else {
+    on_ray = 0;
+    }
+    }
+    }
+    if (on_ray == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    if (get_list(state, target) == 0) {
+    r = (r + dr);
+    f = (f + df);
+    walking = 1;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    if (kind == 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    moved = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    moved = 0;
+    }
+    }
+    if (moved == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    ret_val = reach_map;
+    reach_map = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
 long long king_square(long long state, long long black_king) {
     long long sq = 0;
     long long wanted = 0;
@@ -5897,6 +6170,7 @@ L_cleanup:
 }
 
 long long make_move(long long state, long long move) {
+    long long clock = 0;
     long long code = 0;
     long long ep_square = 0;
     long long fresh = 0;
@@ -5913,6 +6187,7 @@ long long make_move(long long state, long long move) {
     long long to_sq = 0;
     long long ret_val = 0;
 
+    ep_gc_push_root(&clock);
     ep_gc_push_root(&code);
     ep_gc_push_root(&fresh);
     ep_gc_push_root(&from_sq);
@@ -5932,6 +6207,14 @@ long long make_move(long long state, long long move) {
     side = get_list(fresh, 64);
     kind = piece_kind(code);
     ep_square = get_list(fresh, 69);
+    clock = (get_list(fresh, 70) + 1);
+    if (kind == 1) {
+    clock = 0;
+    }
+    if (get_list(fresh, to_sq) > 0) {
+    clock = 0;
+    }
+    ok = set_list(fresh, 70, clock);
     if (kind == 1) {
     if (to_sq == ep_square) {
     if (side == 0) {
@@ -6020,7 +6303,7 @@ long long make_move(long long state, long long move) {
     fresh = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(7);
+    ep_gc_pop_roots(8);
     return ret_val;
 }
 
@@ -6712,7 +6995,7 @@ L_cleanup:
     return ret_val;
 }
 
-long long mobility_count(long long state, long long for_black) {
+long long mobility_count(long long state, long long for_black, long long enemy_map) {
     long long ahead = 0;
     long long blocked = 0;
     long long code = 0;
@@ -6726,21 +7009,20 @@ long long mobility_count(long long state, long long for_black) {
     long long file = 0;
     long long forward = 0;
     long long home_rank = 0;
-    long long hostage = 0;
     long long kind = 0;
     long long mine = 0;
     long long moved = 0;
-    long long offered_down = 0;
     long long on_ray = 0;
     long long own_reach = 0;
     long long r = 0;
     long long rank = 0;
+    long long safe = 0;
     long long sq = 0;
     long long takes = 0;
     long long target = 0;
     long long target_rank = 0;
+    long long threat = 0;
     long long total = 0;
-    long long unsafe = 0;
     long long victim = 0;
     long long walking = 0;
     long long ret_val = 0;
@@ -6750,13 +7032,13 @@ long long mobility_count(long long state, long long for_black) {
     ep_gc_push_root(&f);
     ep_gc_push_root(&forward);
     ep_gc_push_root(&kind);
-    ep_gc_push_root(&own_reach);
     ep_gc_push_root(&r);
     ep_gc_push_root(&sq);
     ep_gc_push_root(&target);
     ep_gc_push_root(&victim);
     ep_gc_push_root(&state);
     ep_gc_push_root(&for_black);
+    ep_gc_push_root(&enemy_map);
 
     ep_gc_maybe_collect();
 
@@ -6782,9 +7064,11 @@ long long mobility_count(long long state, long long for_black) {
     if (kind < 6) {
     if (kind > 1) {
     own_reach = counted_reach(kind, sq, for_black);
-    hostage = lesser_attacker_exists(state, sq, own_reach, (1 - for_black));
-    if (hostage) {
+    threat = get_list(enemy_map, sq);
+    if (threat > 0) {
+    if (threat < own_reach) {
     kind = 0;
+    }
     }
     }
     }
@@ -6883,10 +7167,14 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (blocked == 0) {
-    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
-    if (offered_down) {
-    offered_down = offered_down;
-    } else {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
     total = (total + 1);
     }
     }
@@ -6956,10 +7244,14 @@ long long mobility_count(long long state, long long for_black) {
     if (f < 8) {
     victim = get_list(state, ((r * 8) + f));
     if (victim == 0) {
-    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
-    if (offered_down) {
-    offered_down = offered_down;
-    } else {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
     total = (total + 1);
     }
     r = (r + dr);
@@ -6977,10 +7269,14 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (enemy == 1) {
-    offered_down = lesser_attacker_exists(state, ((r * 8) + f), own_reach, (1 - for_black));
-    if (offered_down) {
-    offered_down = offered_down;
-    } else {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
     total = (total + 1);
     }
     }
@@ -7027,9 +7323,8 @@ long long mobility_count(long long state, long long for_black) {
     }
     }
     if (blocked == 0) {
-    unsafe = square_attacked(state, ((r * 8) + f), (1 - for_black));
-    if (unsafe) {
-    unsafe = unsafe;
+    if (get_list(enemy_map, ((r * 8) + f)) > 0) {
+    total = total;
     } else {
     total = (total + 1);
     }
@@ -7151,6 +7446,7 @@ L_cleanup:
 
 long long side_units(long long state, long long for_black) {
     long long code = 0;
+    long long enemy_map = 0;
     long long kind = 0;
     long long mine = 0;
     long long sq = 0;
@@ -7158,6 +7454,7 @@ long long side_units(long long state, long long for_black) {
     long long ret_val = 0;
 
     ep_gc_push_root(&code);
+    ep_gc_push_root(&enemy_map);
     ep_gc_push_root(&kind);
     ep_gc_push_root(&sq);
     ep_gc_push_root(&state);
@@ -7188,11 +7485,14 @@ long long side_units(long long state, long long for_black) {
     }
     sq = (sq + 1);
     }
-    units = (units + mobility_count(state, for_black));
+    enemy_map = attack_min_reach_map(state, (1 - for_black));
+    units = (units + mobility_count(state, for_black, enemy_map));
     ret_val = units;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(5);
+    ep_gc_pop_roots(6);
+    free_list(enemy_map);
+    enemy_map = 0;
     return ret_val;
 }
 
@@ -7432,6 +7732,75 @@ L_cleanup:
     return ret_val;
 }
 
+long long could_check_from(long long kind, long long to_sq, long long enemy_king, long long for_black) {
+    long long adf = 0;
+    long long adr = 0;
+    long long df = 0;
+    long long dr = 0;
+    long long ret_val = 0;
+
+    dr = ((enemy_king / 8) - (to_sq / 8));
+    df = ((enemy_king - ((enemy_king / 8) * 8)) - (to_sq - ((to_sq / 8) * 8)));
+    adr = dr;
+    if (adr < 0) {
+    adr = (0 - adr);
+    }
+    adf = df;
+    if (adf < 0) {
+    adf = (0 - adf);
+    }
+    if (kind == 2) {
+    if ((adr + adf) == 3) {
+    if (adr > 0) {
+    if (adf > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    if (kind == 3) {
+    ret_val = adr == adf;
+    goto L_cleanup;
+    }
+    if (kind == 4) {
+    if (adr == 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = adf == 0;
+    goto L_cleanup;
+    }
+    if (kind == 5) {
+    if (adr == adf) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    if (adr == 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = adf == 0;
+    goto L_cleanup;
+    }
+    if (kind == 1) {
+    if (adf == 1) {
+    if (for_black == 1) {
+    ret_val = dr == -1;
+    goto L_cleanup;
+    }
+    ret_val = dr == 1;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
 long long quiescence(long long state, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den, long long fresh) {
     long long a_den = 0;
     long long a_num = 0;
@@ -7443,6 +7812,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long child = 0;
     long long child_den = 0;
     long long child_num = 0;
+    long long could = 0;
     long long count = 0;
     long long deeper = 0;
     long long enemy_king = 0;
@@ -7456,6 +7826,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long king_now = 0;
     long long legal_seen = 0;
     long long move = 0;
+    long long mover_kind = 0;
     long long my_den = 0;
     long long my_num = 0;
     long long nodes = 0;
@@ -7473,6 +7844,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     long long to_sq = 0;
     long long victim = 0;
     long long wanted = 0;
+    long long worth_building = 0;
     long long ret_val = 0;
 
     ep_gc_push_root(&a_den);
@@ -7482,10 +7854,12 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     ep_gc_push_root(&child);
     ep_gc_push_root(&deeper);
     ep_gc_push_root(&enemy_king);
+    ep_gc_push_root(&from_sq);
     ep_gc_push_root(&i);
     ep_gc_push_root(&king_from);
     ep_gc_push_root(&king_now);
     ep_gc_push_root(&move);
+    ep_gc_push_root(&mover_kind);
     ep_gc_push_root(&nodes);
     ep_gc_push_root(&pseudo);
     ep_gc_push_root(&result);
@@ -7502,6 +7876,14 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
 
     result = create_list();
     nodes = 1;
+    if (get_list(state, 70) > 99) {
+    ok = append_list(result, 1);
+    ok = append_list(result, 2);
+    ok = append_list(result, nodes);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
     side = get_list(state, 64);
     king_from = king_square(state, side);
     checked = square_attacked(state, king_from, (1 - side));
@@ -7592,6 +7974,25 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     }
     }
     if (wanted == 1) {
+    worth_building = 1;
+    if (taking) {
+    worth_building = 1;
+    } else {
+    if (checked) {
+    worth_building = 1;
+    } else {
+    mover_kind = piece_kind(get_list(state, from_sq));
+    could = could_check_from(mover_kind, to_sq, enemy_king, side);
+    if (could) {
+    worth_building = 1;
+    } else {
+    worth_building = 0;
+    }
+    }
+    }
+    if (worth_building == 0) {
+    worth_building = worth_building;
+    } else {
     child = make_move(state, move);
     king_now = king_from;
     if (from_sq == king_from) {
@@ -7646,6 +8047,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     }
     }
     }
+    }
     i = (i + 1);
     }
     bucket = (bucket + 1);
@@ -7667,7 +8069,7 @@ long long quiescence(long long state, long long alpha_num, long long alpha_den, 
     result = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(22);
+    ep_gc_pop_roots(24);
     return ret_val;
 }
 
@@ -7683,6 +8085,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     long long child_num = 0;
     long long count = 0;
     long long deeper = 0;
+    long long drawn = 0;
     long long exposed = 0;
     long long from_sq = 0;
     long long heavy = 0;
@@ -7711,6 +8114,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     ep_gc_push_root(&best_num);
     ep_gc_push_root(&child);
     ep_gc_push_root(&deeper);
+    ep_gc_push_root(&drawn);
     ep_gc_push_root(&i);
     ep_gc_push_root(&king_now);
     ep_gc_push_root(&move);
@@ -7729,6 +8133,15 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
 
     ep_gc_maybe_collect();
 
+    if (get_list(state, 70) > 99) {
+    drawn = create_list();
+    ok = append_list(drawn, 1);
+    ok = append_list(drawn, 2);
+    ok = append_list(drawn, 1);
+    ret_val = drawn;
+    drawn = 0;
+    goto L_cleanup;
+    }
     if (depth == 0) {
     ret_val = quiescence(state, alpha_num, alpha_den, beta_num, beta_den, 1);
     goto L_cleanup;
@@ -7985,7 +8398,7 @@ long long search_value(long long state, long long depth, long long alpha_num, lo
     result = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(21);
+    ep_gc_pop_roots(22);
     return ret_val;
 }
 

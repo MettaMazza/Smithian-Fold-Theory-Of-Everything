@@ -197,5 +197,10 @@ define main:
     set ok2 to set_list(blocked_pawn and 44 and 1)
     set ok2 to set_list(blocked_pawn and 51 and 7)
     set ok to expect_equal("and a pawn facing an enemy pawn ahead carries none" and int_to_string(pawn_promotion_potential(blocked_pawn and 44 and 0)) and "0")
+    set clock_state to starting_state()
+    set clock_state to make_move(clock_state and (6 * 64) + 21)
+    set ok to expect_equal("the fifty-move clock counts a quiet knight move" and int_to_string(get_list(clock_state and 70)) and "1")
+    set clock_state to make_move(clock_state and (52 * 64) + 36)
+    set ok to expect_equal("and RESETS on a pawn move (the rule?s own reset)" and int_to_string(get_list(clock_state and 70)) and "0")
     display "=== done ==="
     return 0

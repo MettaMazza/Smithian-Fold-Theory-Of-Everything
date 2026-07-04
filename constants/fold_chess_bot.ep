@@ -117,12 +117,13 @@ define starting_state:
         set ok to append_list(state and 1)
         set right to right + 1
     set ok to append_list(state and 64)
+    set ok to append_list(state and 0)
     return state
 
 define copy_state with state:
     set fresh to create_list()
     set i to 0
-    repeat while i < 70:
+    repeat while i < 71:
         set ok to append_list(fresh and get_list(state and i))
         set i to i + 1
     return fresh
@@ -140,6 +141,7 @@ define empty_state:
         set ok to append_list(state and 0)
         set right to right + 1
     set ok to append_list(state and 64)
+    set ok to append_list(state and 0)
     return state
 
 # ---------- attack detection ------------------------------------------------
@@ -544,6 +546,12 @@ define make_move with state and move as Int:
     set side to get_list(fresh and 64)
     set kind to piece_kind(code)
     set ep_square to get_list(fresh and 69)
+    set clock to get_list(fresh and 70) + 1
+    if kind == 1:
+        set clock to 0
+    if get_list(fresh and to_sq) > 0:
+        set clock to 0
+    set ok to set_list(fresh and 70 and clock)
     # en passant capture: pawn moves diagonally onto the empty ep square
     if kind == 1:
         if to_sq == ep_square:
@@ -1407,6 +1415,11 @@ define could_check_from with kind as Int and to_sq as Int and enemy_king as Int 
 define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int and fresh as Int:
     set result to create_list()
     set nodes to 1
+    if get_list(state and 70) > 99:
+        set ok to append_list(result and 1)
+        set ok to append_list(result and 2)
+        set ok to append_list(result and nodes)
+        return result
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
     set checked to square_attacked(state and king_from and 1 - side)
@@ -1549,6 +1562,12 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
 
 # The exact alpha-beta value of a node for the side to move.
 define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
+    if get_list(state and 70) > 99:
+        set drawn to create_list()
+        set ok to append_list(drawn and 1)
+        set ok to append_list(drawn and 2)
+        set ok to append_list(drawn and 1)
+        return drawn
     if depth == 0:
         return quiescence(state and alpha_num and alpha_den and beta_num and beta_den and 1)
     set result to create_list()
