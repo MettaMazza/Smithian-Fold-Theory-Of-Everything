@@ -41,6 +41,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/counted_numbers.ep"
 import "../foundation/exact_fractions.ep"
+import "../foundation/exact_integers.ep"
 import "../constants/quark_mass_confinement_lift.ep"
 
 
@@ -79,13 +80,38 @@ define smithion_cubic with y as Fraction and i1_num as Int and i1_den as Int and
     return fraction_subtract(with_linear and i2)
 
 # The sign of the cubic at grid point k/1024 (1 above zero, -1 below).
+# The SIGN of the cubic y^3 - y^2 + i1*y - i2 at y = p/q, by EXACT INTEGERS
+# on the cleared positive common denominator q^3*i1d*i2d -- no fraction, no
+# gcd reduction anywhere (that reduction was the whole cost of the scan):
+#   sign( p^3*i1d*i2d - p^2*q*i1d*i2d + i1n*p*q^2*i2d - i2n*q^3*i1d )
+define cubic_sign_int with i1n as Int and i1d as Int and i2n as Int and i2d as Int and p as Int and q as Int returning Int:
+    set t1 to exact_integer_from_number(p)
+    set t1 to exact_integer_multiply(t1 and exact_integer_from_number(p))
+    set t1 to exact_integer_multiply(t1 and exact_integer_from_number(p))
+    set t1 to exact_integer_multiply(t1 and exact_integer_from_number(i1d))
+    set t1 to exact_integer_multiply(t1 and exact_integer_from_number(i2d))
+    set t2 to exact_integer_from_number(p)
+    set t2 to exact_integer_multiply(t2 and exact_integer_from_number(p))
+    set t2 to exact_integer_multiply(t2 and exact_integer_from_number(q))
+    set t2 to exact_integer_multiply(t2 and exact_integer_from_number(i1d))
+    set t2 to exact_integer_multiply(t2 and exact_integer_from_number(i2d))
+    set t3 to exact_integer_from_number(i1n)
+    set t3 to exact_integer_multiply(t3 and exact_integer_from_number(p))
+    set t3 to exact_integer_multiply(t3 and exact_integer_from_number(q))
+    set t3 to exact_integer_multiply(t3 and exact_integer_from_number(q))
+    set t3 to exact_integer_multiply(t3 and exact_integer_from_number(i2d))
+    set t4 to exact_integer_from_number(i2n)
+    set t4 to exact_integer_multiply(t4 and exact_integer_from_number(q))
+    set t4 to exact_integer_multiply(t4 and exact_integer_from_number(q))
+    set t4 to exact_integer_multiply(t4 and exact_integer_from_number(q))
+    set t4 to exact_integer_multiply(t4 and exact_integer_from_number(i1d))
+    set s to exact_integer_subtract(t1 and t2)
+    set s to exact_integer_add(s and t3)
+    set s to exact_integer_subtract(s and t4)
+    return s.sign
+
 define smithion_grid_sign with k as Int and i1_num as Int and i1_den as Int and i2_num as Int and i2_den as Int returning Int:
-    if k == 0:
-        return 0 - 1
-    set y to fraction_from_ratio(k and 1024)
-    set value to smithion_cubic(y and i1_num and i1_den and i2_num and i2_den)
-    set zero to fraction_from_whole_number(0)
-    return fraction_compare(value and zero)
+    return cubic_sign_int(i1_num and i1_den and i2_num and i2_den and k and 1024)
 
 # NO BRACKET IS CHOSEN: the sign changes of the cubic are FOUND by scanning
 # the 1/1024 grid across (0, 1] -- every spectrum must show exactly three.

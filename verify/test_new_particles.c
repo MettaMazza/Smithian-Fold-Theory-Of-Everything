@@ -4951,6 +4951,7 @@ long long smithion_up_depth(long long);
 long long smithion_i1_up_denominator(long long);
 long long smithion_i1_down_denominator();
 long long smithion_cubic(long long, long long, long long, long long, long long);
+long long cubic_sign_int(long long, long long, long long, long long, long long, long long);
 long long smithion_grid_sign(long long, long long, long long, long long, long long);
 long long smithion_sign_changes(long long, long long, long long, long long);
 long long smithion_nth_change(long long, long long, long long, long long, long long);
@@ -5243,15 +5244,61 @@ L_cleanup:
     return ret_val;
 }
 
-long long smithion_grid_sign(long long k, long long i1_num, long long i1_den, long long i2_num, long long i2_den) {
-    long long value = 0;
-    long long y = 0;
-    long long zero = 0;
+long long cubic_sign_int(long long i1n, long long i1d, long long i2n, long long i2d, long long p, long long q) {
+    long long s = 0;
+    long long t1 = 0;
+    long long t2 = 0;
+    long long t3 = 0;
+    long long t4 = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&value);
-    ep_gc_push_root(&y);
-    ep_gc_push_root(&zero);
+    ep_gc_push_root(&s);
+    ep_gc_push_root(&t1);
+    ep_gc_push_root(&t2);
+    ep_gc_push_root(&t3);
+    ep_gc_push_root(&t4);
+    ep_gc_push_root(&i1n);
+    ep_gc_push_root(&i1d);
+    ep_gc_push_root(&i2n);
+    ep_gc_push_root(&i2d);
+    ep_gc_push_root(&p);
+    ep_gc_push_root(&q);
+
+    ep_gc_maybe_collect();
+
+    t1 = exact_integer_from_number(p);
+    t1 = exact_integer_multiply(t1, exact_integer_from_number(p));
+    t1 = exact_integer_multiply(t1, exact_integer_from_number(p));
+    t1 = exact_integer_multiply(t1, exact_integer_from_number(i1d));
+    t1 = exact_integer_multiply(t1, exact_integer_from_number(i2d));
+    t2 = exact_integer_from_number(p);
+    t2 = exact_integer_multiply(t2, exact_integer_from_number(p));
+    t2 = exact_integer_multiply(t2, exact_integer_from_number(q));
+    t2 = exact_integer_multiply(t2, exact_integer_from_number(i1d));
+    t2 = exact_integer_multiply(t2, exact_integer_from_number(i2d));
+    t3 = exact_integer_from_number(i1n);
+    t3 = exact_integer_multiply(t3, exact_integer_from_number(p));
+    t3 = exact_integer_multiply(t3, exact_integer_from_number(q));
+    t3 = exact_integer_multiply(t3, exact_integer_from_number(q));
+    t3 = exact_integer_multiply(t3, exact_integer_from_number(i2d));
+    t4 = exact_integer_from_number(i2n);
+    t4 = exact_integer_multiply(t4, exact_integer_from_number(q));
+    t4 = exact_integer_multiply(t4, exact_integer_from_number(q));
+    t4 = exact_integer_multiply(t4, exact_integer_from_number(q));
+    t4 = exact_integer_multiply(t4, exact_integer_from_number(i1d));
+    s = exact_integer_add(t1, exact_integer_negate(t2));
+    s = exact_integer_add(s, t3);
+    s = exact_integer_add(s, exact_integer_negate(t4));
+    ret_val = ({ long long _fap = s; if (_fap == 0) { fprintf(stderr, "Error: Null pointer when accessing field 'sign' on 'ExactInteger'\n"); exit(1); } ((EpStruct_ExactInteger*)(_fap))->sign; });
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(11);
+    return ret_val;
+}
+
+long long smithion_grid_sign(long long k, long long i1_num, long long i1_den, long long i2_num, long long i2_den) {
+    long long ret_val = 0;
+
     ep_gc_push_root(&k);
     ep_gc_push_root(&i1_num);
     ep_gc_push_root(&i1_den);
@@ -5260,17 +5307,10 @@ long long smithion_grid_sign(long long k, long long i1_num, long long i1_den, lo
 
     ep_gc_maybe_collect();
 
-    if (k == 0) {
-    ret_val = -1;
-    goto L_cleanup;
-    }
-    y = fraction_from_ratio(k, 1024);
-    value = smithion_cubic(y, i1_num, i1_den, i2_num, i2_den);
-    zero = fraction_from_whole_number(0);
-    ret_val = fraction_compare(value, zero);
+    ret_val = cubic_sign_int(i1_num, i1_den, i2_num, i2_den, k, 1024);
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(8);
+    ep_gc_pop_roots(5);
     return ret_val;
 }
 
@@ -5290,10 +5330,10 @@ long long smithion_sign_changes(long long i1_num, long long i1_den, long long i2
     ep_gc_maybe_collect();
 
     changes = 0;
-    previous = smithion_grid_sign(0, i1_num, i1_den, i2_num, i2_den);
+    previous = cubic_sign_int(i1_num, i1_den, i2_num, i2_den, 0, 1024);
     k = 1;
     while (k < 1025) {
-    current = smithion_grid_sign(k, i1_num, i1_den, i2_num, i2_den);
+    current = cubic_sign_int(i1_num, i1_den, i2_num, i2_den, k, 1024);
     if (current == previous) {
     changes = changes;
     } else {
@@ -5325,10 +5365,10 @@ long long smithion_nth_change(long long i1_num, long long i1_den, long long i2_n
     ep_gc_maybe_collect();
 
     seen = 0;
-    previous = smithion_grid_sign(0, i1_num, i1_den, i2_num, i2_den);
+    previous = cubic_sign_int(i1_num, i1_den, i2_num, i2_den, 0, 1024);
     k = 1;
     while (k < 1025) {
-    current = smithion_grid_sign(k, i1_num, i1_den, i2_num, i2_den);
+    current = cubic_sign_int(i1_num, i1_den, i2_num, i2_den, k, 1024);
     if (current == previous) {
     seen = seen;
     } else {
