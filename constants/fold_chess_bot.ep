@@ -1642,7 +1642,7 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
         set checked to side_in_check(state)
         if checked:
             set ok to append_list(result and 1)
-            set ok to append_list(result and 1024 - depth)
+            set ok to append_list(result and 1024 + depth)
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
@@ -1678,7 +1678,7 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
         set ok to append_list(result and 0 - 1)
         if checked:
             set ok to append_list(result and 1)
-            set ok to append_list(result and 1024 - depth)
+            set ok to append_list(result and 1024 + depth)
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
@@ -1779,7 +1779,7 @@ define search_best with state and depth as Int:
         set ok to append_list(result and 0 - 1)
         if checked:
             set ok to append_list(result and 1)
-            set ok to append_list(result and 1024 - depth)
+            set ok to append_list(result and 1024 + depth)
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)

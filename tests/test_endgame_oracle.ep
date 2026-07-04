@@ -1,0 +1,19 @@
+import "../constants/endgame_oracle.ep"
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the endgame oracle: the fold plays won endings to mate ==="
+    set ok to expect_bool("KRK index is well-formed (2^19 space): 46*8192+48*128+63*2" and krk_index(46 and 48 and 63 and 0) == 383102)
+    set ok to expect_bool("kings e4/e5 are adjacent (illegal to touch)" and squares_adjacent(28 and 36))
+    set ok to expect_bool("a legal KRK placement is accepted" and krk_position_legal(46 and 48 and 63 and 0 and 4 and 1))
+    set ok to expect_bool("two touching kings rejected" and krk_position_legal(28 and 0 and 36 and 0 and 4 and 1) == false)
+    set ok to expect_bool("CERTIFIED: the fold FINDS the KRK mate (Ra8#)" and krk_finds_the_mate())
+    set ok to expect_bool("CERTIFIED: with a mate value (the One-ward band)" and krk_mate_is_valued())
+    set ok to expect_bool("CERTIFIED: and it IS mate on the board (no reply, king in check)" and krk_mate_is_real())
+    set ok to expect_bool("CERTIFIED: the fold drives the mate NET (sees the forced mate-in-two)" and krk_drives_the_net())
+    display "=== done ==="
+    return 0

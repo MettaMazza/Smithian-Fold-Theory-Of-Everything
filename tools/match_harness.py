@@ -70,6 +70,12 @@ def main():
     print(f"\nRESULT vs random mover, depth {depth}: "
           f"{results['win']}W {results['loss']}L {results['draw']+results['draw(cap)']}D "
           f"(caps: {results['draw(cap)']}) | illegal bot moves: {total_illegal}")
+    # hard pass criteria for the one-command verifier: ZERO illegal moves,
+    # and the bot must beat chance (more wins than losses vs random)
+    if total_illegal > 0 or results["illegal"] > 0:
+        sys.exit(1)
+    if results["win"] <= results["loss"]:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
