@@ -186,3 +186,11 @@ cutoffs, no weights). Measured: depth-6 middlegame pass 5.86M -> 3.74M
 nodes, 250K nodes/s, identical move choices at equal depth. Budget
 2^22 (the clock) buys COMPLETE depth 6 -- one full ply over v13 --
 at ~15s/move, hard-bounded. Next: SF-1900, the 20.8% to erase.
+
+    v14 at SF-1900 (pinned 12-game, refereed): 6W 3D 3L = 62.5% --
+    THE RUNG IS TAKEN, and emphatically: v13 scored 20.8% here one
+    release ago. The autopsy's diagnosis (losses = tactics 1-3 plies
+    past the horizon) is CONFIRMED by the rematch: one complete extra
+    ply turned the same opponent from a wall into a losing record.
+    Both colours won (4 of 6 wins as Black). Ladder: 1700 held (54.2%),
+    1900 held (62.5%). NEXT RUNG: 2100.
