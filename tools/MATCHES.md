@@ -224,3 +224,10 @@ weights), cutting depth-7 from 63.5M nodes (weak ordering) to 17.7M,
 move choices provably identical at equal depth. Budget 2^25 (the
 clock), hard-bounded, ~70s/move worst case. Next: the SF-2100 rematch,
 25% to beat.
+
+    v17 at SF-2100 rematch (pinned 12-game, refereed): 1W 6D 5L = 33.3%.
+    STILL REFUSED, but the wall cracks: v14 scored 25% with 3 draws;
+    v17 scores 33.3% and HOLDS 2100 to a draw in HALF the games. Depth
+    alone (the lever that flipped 1900) moves but does not take this
+    rung -- 2100 carries a second disease. The ladder stays stopped;
+    the v17 losses go to the autopsy to name it.
