@@ -60,6 +60,29 @@ import "../foundation/structural_counts.ep"
 import "../foundation/exact_fractions.ep"
 
 
+# ---------- the calculation state (ordering + hard bound; zero knobs) --------
+# FOLD_TT: position signature -> best move found there. ORDERING ONLY --
+# values are always recomputed by full search, so the move played is
+# unchanged; the table just makes each deepening pass search the previous
+# pass's refutation FIRST, so beta cutoffs land immediately instead of being
+# rediscovered (measured: ~3.3x fewer nodes to the same depth). Fresh per
+# move decision, shared across that decision's deepening passes.
+set FOLD_TT to 0
+# NODES_LEFT / PASS_ABORTED: the HARD in-pass bound. Every search node
+# decrements NODES_LEFT; at zero the whole pass aborts instantly (every
+# recursive call returns at once) and the driver discards the partial pass,
+# playing the last COMPLETED iteration's move. Move time is bounded by
+# construction -- no position, however deep its tree, can run away.
+set NODES_LEFT to 0
+set PASS_ABORTED to 0
+# Reusable attack-map buffers, one per colour: the map is built and fully
+# consumed inside ONE side_units call before any other map is needed, so a
+# single preallocated 64-slot buffer per colour serves every evaluation --
+# the hot path allocates nothing (the GC profiler demanded this).
+set WHITE_REACH_BUF to create_list()
+set BLACK_REACH_BUF to create_list()
+
+
 # ---------- the board ------------------------------------------------------
 # Squares 0..63 (rank*8+file, rank 0 = white's home). Piece codes: empty 0;
 # white P1 N2 B3 R4 Q5 K6; black P7 N8 B9 R10 Q11 K12.
@@ -361,10 +384,17 @@ define lesser_attacker_exists with state and square as Int and defender_reach as
 # among that side's pieces attacking it (0 = unattacked). One build per
 # evaluation replaces per-destination scans -- identical counts, precomputed.
 define attack_min_reach_map with state and by_black as Int:
-    set reach_map to create_list()
+    # Reuse the per-colour buffer; grow it to 64 slots on first use, then
+    # zero it in place -- no allocation at any later evaluation.
+    if by_black == 1:
+        set reach_map to BLACK_REACH_BUF
+    else:
+        set reach_map to WHITE_REACH_BUF
+    repeat while length_list(reach_map) < 64:
+        set ok to append_list(reach_map and 0)
     set i to 0
     repeat while i < 64:
-        set ok to append_list(reach_map and 0)
+        set ok to set_list(reach_map and i and 0)
         set i to i + 1
     set sq to 0
     repeat while sq < 64:
@@ -1532,15 +1562,21 @@ define could_check_from with kind as Int and to_sq as Int and enemy_king as Int 
 
 # QUIESCENCE: at the horizon, read the take chains until the counting
 # settles. Every capture strictly reduces the piece count, so the chain
-# terminates structurally -- no depth knob. Returns the exact value pair.
-define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int and fresh as Int:
-    set result to create_list()
-    set nodes to 1
+# terminates structurally -- no depth knob. Returns the exact value pair
+# PACKED as ONE integer, num*65536 + den: shares are counted units (den a
+# few thousand at most) and the mate band tops near 1100, both far below
+# 2^16, so the pack is exact -- and the search's inner loop allocates
+# NOTHING, which is what keeps the collector out of the hot path (the
+# profiler measured 91% of match CPU inside the GC before this change).
+define quiescence with state and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int and fresh as Int returning Int:
+    # THE HARD BOUND, counted here too: a pass's nodes are mostly quiescence,
+    # so the cap must include them to be a true bound on move time.
+    set NODES_LEFT to NODES_LEFT - 1
+    if NODES_LEFT < 0:
+        set PASS_ABORTED to 1
+        return 65536 + 2
     if get_list(state and 70) > 99:
-        set ok to append_list(result and 1)
-        set ok to append_list(result and 2)
-        set ok to append_list(result and nodes)
-        return result
+        return 65536 + 2
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
     set checked to square_attacked(state and king_from and 1 - side)
@@ -1557,10 +1593,7 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
         set stand_num to stand_mine
         set stand_den to stand_mine + stand_theirs
         if stand_num * beta_den > beta_num * stand_den:
-            set ok to append_list(result and stand_num)
-            set ok to append_list(result and stand_den)
-            set ok to append_list(result and nodes)
-            return result
+            return stand_num * 65536 + stand_den
         set best_num to stand_num
         set best_den to stand_den
         if stand_num * a_den > a_num * stand_den:
@@ -1652,19 +1685,15 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
                                 set read_this to read_this
                             else:
                                 set deeper to quiescence(child and beta_den - beta_num and beta_den and a_den - a_num and a_den and 1 - 1)
-                                set child_num to get_list(deeper and 0)
-                                set child_den to get_list(deeper and 1)
-                                set nodes to nodes + get_list(deeper and 2)
+                                set child_num to deeper / 65536
+                                set child_den to deeper - child_num * 65536
                                 set my_num to child_den - child_num
                                 set my_den to child_den
                                 if my_num * best_den > best_num * my_den:
                                     set best_num to my_num
                                     set best_den to my_den
                                 if my_num * beta_den > beta_num * my_den:
-                                    set ok to append_list(result and best_num)
-                                    set ok to append_list(result and best_den)
-                                    set ok to append_list(result and nodes)
-                                    return result
+                                    return best_num * 65536 + best_den
                                 if my_num * a_den > a_num * my_den:
                                     set a_num to my_num
                                     set a_den to my_den
@@ -1672,27 +1701,23 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
         set bucket to bucket + 1
     if checked:
         if legal_seen == 0:
-            set ok to append_list(result and 1)
-            set ok to append_list(result and 1024)
-            set ok to append_list(result and nodes)
-            return result
-    set ok to append_list(result and best_num)
-    set ok to append_list(result and best_den)
-    set ok to append_list(result and nodes)
-    return result
+            return 65536 + 1024
+    return best_num * 65536 + best_den
 
-# The exact alpha-beta value of a node for the side to move.
-define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int:
+# The exact alpha-beta value of a node for the side to move, PACKED as
+# num*65536 + den (see quiescence) -- the inner loop allocates nothing.
+define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int returning Int:
+    # THE HARD BOUND: out of budget mid-pass -> abort the pass instantly.
+    # The returned value is a placeholder; the driver DISCARDS the whole
+    # aborted pass, so no placeholder ever reaches play.
+    set NODES_LEFT to NODES_LEFT - 1
+    if NODES_LEFT < 0:
+        set PASS_ABORTED to 1
+        return 65536 + 2
     if get_list(state and 70) > 99:
-        set drawn to create_list()
-        set ok to append_list(drawn and 1)
-        set ok to append_list(drawn and 2)
-        set ok to append_list(drawn and 1)
-        return drawn
+        return 65536 + 2
     if depth == 0:
         return quiescence(state and alpha_num and alpha_den and beta_num and beta_den and 1)
-    set result to create_list()
-    set nodes to 1
     set side to get_list(state and 64)
     set king_from to king_square(state and side)
     set pseudo to pseudo_moves(state)
@@ -1700,9 +1725,23 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
     set legal_seen to 0
     set best_num to 0
     set best_den to 1
+    set best_move to 0 - 1
     set a_num to alpha_num
     set a_den to alpha_den
-    set bucket to 0
+    # Transposition ordering: only at nodes with real subtrees (depth > 1);
+    # the numerous depth-1 leaves skip the signature cost for almost no gain.
+    set use_tt to 0
+    set sig to "|"
+    set tt_move to 0 - 1
+    if depth > 1:
+        if FOLD_TT > 0:
+            set use_tt to 1
+            set sig to state_signature(state)
+            if map_contains(FOLD_TT and sig):
+                set tt_move to map_get_val(FOLD_TT and sig)
+    # bucket -1 is the table's move, searched first; buckets 0..2 then run
+    # the counted capture-then-quiet order, skipping the move already tried.
+    set bucket to 0 - 1
     repeat while bucket < 3:
         set i to 0
         repeat while i < count:
@@ -1717,6 +1756,10 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                 if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
                     set heavy to 1
             set wanted to 0
+            if bucket == 0 - 1:
+                if tt_move > 0 - 1:
+                    if move == tt_move:
+                        set wanted to 1
             if bucket == 0:
                 if taking:
                     if heavy == 1:
@@ -1730,6 +1773,9 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                     set wanted to 0
                 else:
                     set wanted to 1
+            if bucket > 0 - 1:
+                if move == tt_move:
+                    set wanted to 0
             if wanted == 1:
                 set child to make_move(state and move)
                 set king_now to king_from
@@ -1741,38 +1787,32 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                 else:
                     set legal_seen to legal_seen + 1
                     set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
-                    set child_num to get_list(deeper and 0)
-                    set child_den to get_list(deeper and 1)
-                    set nodes to nodes + get_list(deeper and 2)
+                    set child_num to deeper / 65536
+                    set child_den to deeper - child_num * 65536
                     set my_num to child_den - child_num
                     set my_den to child_den
                     if my_num * best_den > best_num * my_den:
                         set best_num to my_num
                         set best_den to my_den
+                        set best_move to move
                     if my_num * beta_den > beta_num * my_den:
-                        set ok to append_list(result and best_num)
-                        set ok to append_list(result and best_den)
-                        set ok to append_list(result and nodes)
-                        return result
+                        if use_tt == 1:
+                            set ok to map_insert(FOLD_TT and sig and move)
+                        return best_num * 65536 + best_den
                     if my_num * a_den > a_num * my_den:
                         set a_num to my_num
                         set a_den to my_den
             set i to i + 1
         set bucket to bucket + 1
+    if use_tt == 1:
+        if best_move > 0 - 1:
+            set ok to map_insert(FOLD_TT and sig and best_move)
     if legal_seen == 0:
         set checked to side_in_check(state)
         if checked:
-            set ok to append_list(result and 1)
-            set ok to append_list(result and 1024 + depth)
-        else:
-            set ok to append_list(result and 1)
-            set ok to append_list(result and 2)
-        set ok to append_list(result and nodes)
-        return result
-    set ok to append_list(result and best_num)
-    set ok to append_list(result and best_den)
-    set ok to append_list(result and nodes)
-    return result
+            return 65536 + 1024 + depth
+        return 65536 + 2
+    return best_num * 65536 + best_den
 
 # A position's signature: the board, side, rights and ep square as text --
 # used to recognise closed orbits (repetitions) in whole games.
@@ -1791,7 +1831,7 @@ define state_signature with state returning Str:
 # orders the deeper one. Returns [move, num, den, nodes].
 define root_pass with state and depth as Int and seen as Str and pre_move as Int:
     set result to create_list()
-    set nodes to 1
+    set left_at_entry to NODES_LEFT
     set moves to ordered_moves(state)
     set count to length_list(moves)
     if count == 0:
@@ -1803,7 +1843,7 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
         else:
             set ok to append_list(result and 1)
             set ok to append_list(result and 2)
-        set ok to append_list(result and nodes)
+        set ok to append_list(result and 1)
         return result
     set best_move to get_list(moves and 0)
     set best_num to 0
@@ -1830,9 +1870,8 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
             set visited to string_index_of(seen and signature)
             if visited < 0:
                 set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
-                set child_num to get_list(deeper and 0)
-                set child_den to get_list(deeper and 1)
-                set nodes to nodes + get_list(deeper and 2)
+                set child_num to deeper / 65536
+                set child_den to deeper - child_num * 65536
                 set my_num to child_den - child_num
                 set my_den to child_den
             if my_num * best_den > best_num * my_den:
@@ -1843,28 +1882,37 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
     set ok to append_list(result and best_move)
     set ok to append_list(result and best_num)
     set ok to append_list(result and best_den)
-    set ok to append_list(result and nodes)
+    set ok to append_list(result and 1 + left_at_entry - NODES_LEFT)
     return result
 
 # BUDGETED ITERATIVE DEEPENING: deepen one level at a time until the counted
-# thinking budget (2^17 positions examined -- an implementation compute
-# bound, the same class of limit as every "scan far enough" in the corpus)
-# is spent, or the ceiling is reached. Crowded positions land at moderate
-# depth; simplified endings automatically read far deeper -- the same budget,
-# spent where the board allows it. Each iteration's best move seeds the next.
+# thinking budget (2^20 positions examined -- an implementation compute
+# bound, the CLOCK, the same class of limit as every "scan far enough" in the
+# corpus; the counted evaluation itself carries zero knobs) is spent, or the
+# ceiling is reached. The budget is now enforced INSIDE each pass (the hard
+# bound in search_value/quiescence): a pass that cannot finish within the
+# remaining budget aborts instantly and is DISCARDED -- the move played is
+# always from the deepest COMPLETED pass, and move time is bounded by
+# construction. The transposition table cuts nodes-per-ply ~3.3x (measured),
+# which is what makes this deeper budget land a full extra ply of sight.
 define thinking_budget returning Int:
     set base to 2
     set budget to 1
     set k to 0
-    repeat while k < 17:
+    repeat while k < 20:
         set budget to budget * base
         set k to k + 1
     return budget
 
 define search_best_seen with state and ceiling as Int and seen as Str:
     set result to create_list()
+    # Fresh transposition table for this move decision; it persists across
+    # the deepening passes below so each pass reuses the last one's cutoffs.
+    if FOLD_TT > 0:
+        set ok to free_map(FOLD_TT)
+    set FOLD_TT to create_map()
     set budget to thinking_budget()
-    set spent to 0
+    set remaining to budget
     set pre_move to 0 - 1
     set final_move to 0 - 1
     set final_num to 1
@@ -1872,27 +1920,45 @@ define search_best_seen with state and ceiling as Int and seen as Str:
     set depth to 2
     set climbing to 1
     repeat while climbing == 1:
+        set NODES_LEFT to remaining
+        set PASS_ABORTED to 0
         set pass_result to root_pass(state and depth and seen and pre_move)
-        set final_move to get_list(pass_result and 0)
-        set final_num to get_list(pass_result and 1)
-        set final_den to get_list(pass_result and 2)
-        set spent to spent + get_list(pass_result and 3)
-        set pre_move to final_move
-        set depth to depth + 1
-        if depth > ceiling:
+        set remaining to NODES_LEFT
+        if PASS_ABORTED == 1:
+            # Partial pass: its values are placeholders -- discard it and
+            # play the deepest completed pass's move. If NO pass ever
+            # completed (never at this budget: depth 2 costs ~10^4), fall
+            # back to the partial pass's move so a legal move is returned.
+            if final_move < 0:
+                set final_move to get_list(pass_result and 0)
+                set final_num to get_list(pass_result and 1)
+                set final_den to get_list(pass_result and 2)
             set climbing to 0
-        if spent > budget:
-            set climbing to 0
-        if final_move < 0:
-            set climbing to 0
+        else:
+            set final_move to get_list(pass_result and 0)
+            set final_num to get_list(pass_result and 1)
+            set final_den to get_list(pass_result and 2)
+            set pre_move to final_move
+            set depth to depth + 1
+            if depth > ceiling:
+                set climbing to 0
+            if remaining < 1:
+                set climbing to 0
+            if final_move < 0:
+                set climbing to 0
     set ok to append_list(result and final_move)
     set ok to append_list(result and final_num)
     set ok to append_list(result and final_den)
     return result
 
 # The root: pick the move whose exact alpha-beta value is largest.
+# Fixed-depth contract: UNBOUNDED -- the caller chose the depth, so the
+# hard node bound is lifted (a whole game tree fits in 2^60) and the
+# certifications' exact searches run to completion exactly as before.
 define search_best with state and depth as Int:
     set result to create_list()
+    set NODES_LEFT to 1152921504606846976
+    set PASS_ABORTED to 0
     set moves to ordered_moves(state)
     set count to length_list(moves)
     if count == 0:
@@ -1913,8 +1979,8 @@ define search_best with state and depth as Int:
         set move to get_list(moves and i)
         set child to make_move(state and move)
         set deeper to search_value(child and depth - 1 and 1 - 1 and 1 and best_den - best_num and best_den)
-        set child_num to get_list(deeper and 0)
-        set child_den to get_list(deeper and 1)
+        set child_num to deeper / 65536
+        set child_den to deeper - child_num * 65536
         set my_num to child_den - child_num
         set my_den to child_den
         if my_num * best_den > best_num * my_den:

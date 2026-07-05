@@ -138,3 +138,24 @@ measured playing strength: ~1800-1900 — expert territory, zero parameters.
 v12 WINS 3-2 with 7 draws.** The 25% SF-1700 sample was noise, not
 regression -- the mate-gradient fix and endgame certifications stand as
 strength. The campaign builds on v12.
+
+    Phase 1 bot (v12 + PERFECT 3-man endgames: certified KQK/KRK tables
+    probed at the root, in-room re-proof of all 524,288 stored values
+    per table): 1W 6D 2D(cap) 3L (41.7%) at SF-1700, pinned 12-game.
+    Within noise of the v10-v12 band (42-50%) -- as expected: few games
+    against 1700 simplify to a covered 3-man ending, so perfect
+    conversion there cannot move the full-board number. The lever that
+    moves it is depth/evaluation on the FULL board; endgame perfection
+    is banked for the conversion phase of stronger rungs.
+
+**Gate verdict (v13 vs v12+tables, pinned, varied openings, 12 games):
+v13 WINS 4-2 with 6 draws (58.3%).** v13 = the calculation release:
+the search's hot path allocates NOTHING (the profiler had caught the
+runtime GC eating 91% of match CPU -- packed integer returns + reused
+attack-map buffers killed it), a transposition table orders each pass
+by the previous pass's refutation (measured ~3.3x fewer nodes to the
+same depth), and the 2^20 thinking budget is enforced INSIDE every
+pass -- a pass that can't finish aborts instantly and the deepest
+COMPLETED pass plays, so move time is bounded by construction.
+Middlegame sight: depth 5-6 (was 4). Same counted evaluation,
+zero knobs throughout. Next: SF-1700, the 41.7% to beat.
