@@ -194,3 +194,9 @@ at ~15s/move, hard-bounded. Next: SF-1900, the 20.8% to erase.
     ply turned the same opponent from a wall into a losing record.
     Both colours won (4 of 6 wins as Black). Ladder: 1700 held (54.2%),
     1900 held (62.5%). NEXT RUNG: 2100.
+
+    v14 at SF-2100 (pinned 12-game, refereed): 1W 3D 1D(cap) 7L = 25%.
+    THE RUNG REFUSES: a losing run; the ladder STOPS per the standing
+    rule. Held ground stands (1700: 54.2%; 1900: 62.5%). The 2100
+    losses go to the autopsy before any engine change -- the same
+    discipline that turned 1900 from 20.8% into 62.5%.
