@@ -61,13 +61,27 @@ import "../foundation/exact_fractions.ep"
 
 
 # ---------- the calculation state (ordering + hard bound; zero knobs) --------
-# FOLD_TT: position signature -> best move found there. ORDERING ONLY --
+# THE TRANSPOSITION TABLE: position -> best move found there. ORDERING ONLY --
 # values are always recomputed by full search, so the move played is
 # unchanged; the table just makes each deepening pass search the previous
 # pass's refutation FIRST, so beta cutoffs land immediately instead of being
-# rediscovered (measured: ~3.3x fewer nodes to the same depth). Fresh per
-# move decision, shared across that decision's deepening passes.
-set FOLD_TT to 0
+# rediscovered (measured: ~3.3x fewer nodes to the same depth). Keys are a
+# rolling INTEGER hash of the position (pure arithmetic, zero allocation --
+# the earlier string-signature keys built ~140 heap strings per stored node,
+# which the GC profiler exposed as the hot path's biggest remaining cost).
+# Open-addressed, single-probe: a hash collision merely tries a different
+# move first, so correctness is untouched by construction. A generation
+# stamp makes the per-decision reset O(1) instead of a 2^18-slot sweep.
+set TT_KEYS to create_list()
+set TT_MOVES to create_list()
+set TT_STAMP to create_list()
+set TT_GEN to 0
+# KILLER MOVES: per-depth, the last two QUIET moves that refuted a sibling
+# line (caused a beta cutoff). Tried right after the captures -- the same
+# refutation usually kills the neighbouring lines too. Pure bookkeeping of
+# the search's own cutoffs: no weights, no constants, ordering only.
+set KILLER_A to create_list()
+set KILLER_B to create_list()
 # NODES_LEFT / PASS_ABORTED: the HARD in-pass bound. Every search node
 # decrements NODES_LEFT; at zero the whole pass aborts instantly (every
 # recursive call returns at once) and the driver discards the partial pass,
@@ -1704,6 +1718,29 @@ define quiescence with state and alpha_num as Int and alpha_den as Int and beta_
             return 65536 + 1024
     return best_num * 65536 + best_den
 
+# The rolling integer key of a position: slots 0..69 (board, side, rights,
+# en-passant) folded by multiply-add, reduced mod a prime below 2^55 so the
+# product never overflows 64 bits. Pure integer arithmetic, no allocation.
+define tt_key with state returning Int:
+    set k to 0
+    set i to 0
+    repeat while i < 70:
+        set k to k * 131 + get_list(state and i)
+        set k to k - (k / 36028797018963913) * 36028797018963913
+        set i to i + 1
+    return k
+
+# Grow the table to its 2^18 slots once; every later call is a no-op.
+define tt_ensure:
+    repeat while length_list(TT_KEYS) < 262144:
+        set ok to append_list(TT_KEYS and 0)
+        set ok to append_list(TT_MOVES and 0)
+        set ok to append_list(TT_STAMP and 0)
+    repeat while length_list(KILLER_A) < 64:
+        set ok to append_list(KILLER_A and 0 - 1)
+        set ok to append_list(KILLER_B and 0 - 1)
+    return 0
+
 # The exact alpha-beta value of a node for the side to move, PACKED as
 # num*65536 + den (see quiescence) -- the inner loop allocates nothing.
 define search_value with state and depth as Int and alpha_num as Int and alpha_den as Int and beta_num as Int and beta_den as Int returning Int:
@@ -1729,20 +1766,29 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
     set a_num to alpha_num
     set a_den to alpha_den
     # Transposition ordering: only at nodes with real subtrees (depth > 1);
-    # the numerous depth-1 leaves skip the signature cost for almost no gain.
+    # the numerous depth-1 leaves skip the key cost for almost no gain.
     set use_tt to 0
-    set sig to "|"
+    set key to 0
+    set slot to 0
     set tt_move to 0 - 1
     if depth > 1:
-        if FOLD_TT > 0:
+        if TT_GEN > 0:
             set use_tt to 1
-            set sig to state_signature(state)
-            if map_contains(FOLD_TT and sig):
-                set tt_move to map_get_val(FOLD_TT and sig)
-    # bucket -1 is the table's move, searched first; buckets 0..2 then run
-    # the counted capture-then-quiet order, skipping the move already tried.
+            set key to tt_key(state)
+            set slot to key - (key / 262144) * 262144
+            if get_list(TT_STAMP and slot) == TT_GEN:
+                if get_list(TT_KEYS and slot) == key:
+                    set tt_move to get_list(TT_MOVES and slot)
+    # The killer pair for this depth (quiet refuters of sibling lines).
+    set k1 to 0 - 1
+    set k2 to 0 - 1
+    if length_list(KILLER_A) > 63:
+        set k1 to get_list(KILLER_A and depth)
+        set k2 to get_list(KILLER_B and depth)
+    # bucket -1 is the table's move, searched first; 0..1 the counted
+    # captures (heavy then light); 2 the killers; 3 the remaining quiets.
     set bucket to 0 - 1
-    repeat while bucket < 3:
+    repeat while bucket < 4:
         set i to 0
         repeat while i < count:
             set move to get_list(pseudo and i)
@@ -1772,7 +1818,19 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                 if taking:
                     set wanted to 0
                 else:
+                    if move == k1:
+                        set wanted to 1
+                    if move == k2:
+                        set wanted to 1
+            if bucket == 3:
+                if taking:
+                    set wanted to 0
+                else:
                     set wanted to 1
+                if move == k1:
+                    set wanted to 0
+                if move == k2:
+                    set wanted to 0
             if bucket > 0 - 1:
                 if move == tt_move:
                     set wanted to 0
@@ -1786,7 +1844,22 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                     set exposed to exposed
                 else:
                     set legal_seen to legal_seen + 1
-                    set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                    # PVS: the first legal move is read with the full window;
+                    # every later sibling gets a ZERO-WIDTH probe at alpha --
+                    # with strict cutoffs, probe <= alpha PROVES the move
+                    # cannot improve on the best (no re-search), and probe >
+                    # alpha triggers the full-window re-search. The final
+                    # value is identical to the plain search: lossless, and
+                    # not one constant introduced.
+                    set deeper to 0
+                    if legal_seen == 1:
+                        set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                    else:
+                        set deeper to search_value(child and depth - 1 and a_den - a_num and a_den and a_den - a_num and a_den)
+                        set probe_num to (deeper - (deeper / 65536) * 65536) - deeper / 65536
+                        set probe_den to deeper - (deeper / 65536) * 65536
+                        if probe_num * a_den > a_num * probe_den:
+                            set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
                     set child_num to deeper / 65536
                     set child_den to deeper - child_num * 65536
                     set my_num to child_den - child_num
@@ -1797,7 +1870,18 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
                         set best_move to move
                     if my_num * beta_den > beta_num * my_den:
                         if use_tt == 1:
-                            set ok to map_insert(FOLD_TT and sig and move)
+                            set ok to set_list(TT_KEYS and slot and key)
+                            set ok to set_list(TT_MOVES and slot and move)
+                            set ok to set_list(TT_STAMP and slot and TT_GEN)
+                        if taking:
+                            set taking to taking
+                        else:
+                            if length_list(KILLER_A) > 63:
+                                if move == k1:
+                                    set k1 to k1
+                                else:
+                                    set ok to set_list(KILLER_B and depth and k1)
+                                    set ok to set_list(KILLER_A and depth and move)
                         return best_num * 65536 + best_den
                     if my_num * a_den > a_num * my_den:
                         set a_num to my_num
@@ -1806,7 +1890,9 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
         set bucket to bucket + 1
     if use_tt == 1:
         if best_move > 0 - 1:
-            set ok to map_insert(FOLD_TT and sig and best_move)
+            set ok to set_list(TT_KEYS and slot and key)
+            set ok to set_list(TT_MOVES and slot and best_move)
+            set ok to set_list(TT_STAMP and slot and TT_GEN)
     if legal_seen == 0:
         set checked to side_in_check(state)
         if checked:
@@ -1886,31 +1972,34 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
     return result
 
 # BUDGETED ITERATIVE DEEPENING: deepen one level at a time until the counted
-# thinking budget (2^20 positions examined -- an implementation compute
+# thinking budget (2^22 positions examined -- an implementation compute
 # bound, the CLOCK, the same class of limit as every "scan far enough" in the
 # corpus; the counted evaluation itself carries zero knobs) is spent, or the
-# ceiling is reached. The budget is now enforced INSIDE each pass (the hard
+# ceiling is reached. The budget is enforced INSIDE each pass (the hard
 # bound in search_value/quiescence): a pass that cannot finish within the
 # remaining budget aborts instantly and is DISCARDED -- the move played is
 # always from the deepest COMPLETED pass, and move time is bounded by
-# construction. The transposition table cuts nodes-per-ply ~3.3x (measured),
-# which is what makes this deeper budget land a full extra ply of sight.
+# construction. 2^22 is set from the measured curve: with the transposition
+# table + killer ordering (both lossless), a full crowded-middlegame
+# depth-6 pass costs 3.74M nodes -- one whole ply beyond the 2^20 budget's
+# sight, ~15s/move at the measured 250K nodes/s; simplified positions
+# automatically read far deeper on the same budget.
 define thinking_budget returning Int:
     set base to 2
     set budget to 1
     set k to 0
-    repeat while k < 20:
+    repeat while k < 22:
         set budget to budget * base
         set k to k + 1
     return budget
 
 define search_best_seen with state and ceiling as Int and seen as Str:
     set result to create_list()
-    # Fresh transposition table for this move decision; it persists across
-    # the deepening passes below so each pass reuses the last one's cutoffs.
-    if FOLD_TT > 0:
-        set ok to free_map(FOLD_TT)
-    set FOLD_TT to create_map()
+    # Fresh transposition generation for this move decision (O(1) reset);
+    # the table persists across the deepening passes below so each pass
+    # reuses the last one's cutoff moves.
+    set ok to tt_ensure()
+    set TT_GEN to TT_GEN + 1
     set budget to thinking_budget()
     set remaining to budget
     set pre_move to 0 - 1

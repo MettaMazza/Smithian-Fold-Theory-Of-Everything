@@ -165,3 +165,24 @@ zero knobs throughout. Next: SF-1700, the 41.7% to beat.
     1700 (v10 50%, v11 41.7%, v12+tables 41.7%), and a winning record
     (3W vs 2L, both colours scoring). Two extra plies of counted sight
     did exactly what the gate said they would. NEXT RUNG: 1900.
+
+    v13 at SF-1900 (pinned 12-game, refereed): 1W 2D 1D(cap) 8L = 20.8%.
+    THE RUNG REFUSES: a losing run. Per the campaign's standing rule the
+    ladder STOPS here -- no rung-grinding. The 200-Elo step exposes what
+    1700 did not; the losses get full-strength-Stockfish autopsies before
+    any engine change. 1700 remains held (54.2%).
+
+**Gate verdict (v14 vs v13, pinned, varied openings, 12 games):
+v14 WINS 9-1 with 2 draws (83.3%) -- the campaign's widest gate margin.**
+v14 = the horizon release, built from the 1900 autopsy (new tool,
+tools/autopsy.py: every loss judged move-by-move by full-strength
+Stockfish). The autopsy's verdict: every loss class was tactics sitting
+1-3 plies past our sight (opening piece-sortie traps punished 6-8 plies
+out; midgame punctures). The levers, all ordering-only and lossless:
+integer-keyed transposition table (zero-allocation probes), PVS
+null-window siblings, KILLER ordering (each depth's quiet refuters
+tried right after captures -- pure bookkeeping of the search's own
+cutoffs, no weights). Measured: depth-6 middlegame pass 5.86M -> 3.74M
+nodes, 250K nodes/s, identical move choices at equal depth. Budget
+2^22 (the clock) buys COMPLETE depth 6 -- one full ply over v13 --
+at ~15s/move, hard-bounded. Next: SF-1900, the 20.8% to erase.
