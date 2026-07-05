@@ -200,3 +200,15 @@ at ~15s/move, hard-bounded. Next: SF-1900, the 20.8% to erase.
     rule. Held ground stands (1700: 54.2%; 1900: 62.5%). The 2100
     losses go to the autopsy before any engine change -- the same
     discipline that turned 1900 from 20.8% into 62.5%.
+
+**The king-material line: tried by law, refused by the gate, closed.**
+The 2100 autopsy caught early king walks (Ke7/Kd7 by move 10) starting
+three losing slides -- raw geometric reach prices the centre-bound king
+as a GAIN. Two rules-grounded cures were gated: v15 (the king carries
+no material term) lost to v14 1-4-7; v16 (the king's material = its
+LEGAL reach, squares the enemy does not cover -- phase behaviour
+emerging from legality itself) lost narrowly, 4-5-3. Neither ships.
+No third variant will be match-tuned -- iterating evaluations against
+tournament results is fitting by another name. v14's counted
+evaluation stands; the king-walk disease is left to the horizon lever
+(depth sees the punishment directly), which is the next release.
