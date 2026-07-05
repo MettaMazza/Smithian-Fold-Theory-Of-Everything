@@ -212,3 +212,15 @@ No third variant will be match-tuned -- iterating evaluations against
 tournament results is fitting by another name. v14's counted
 evaluation stands; the king-walk disease is left to the horizon lever
 (depth sees the punishment directly), which is the next release.
+
+**Gate verdict (v17 vs v14, pinned, varied openings, 12 games):
+v17 WINS 10-1 with 1 draw (87.5%) -- the campaign's widest gate margin.**
+v17 = the second horizon release: v14's counted evaluation untouched
+(the eval line stays closed), the search now reading a COMPLETE depth 7
+everywhere -- two plies past the 1700-taker -- paid for entirely by
+lossless ordering: the HISTORY census joins the killers (quiets searched
+in descending measured-refutation count; every increment is 1, no
+weights), cutting depth-7 from 63.5M nodes (weak ordering) to 17.7M,
+move choices provably identical at equal depth. Budget 2^25 (the
+clock), hard-bounded, ~70s/move worst case. Next: the SF-2100 rematch,
+25% to beat.

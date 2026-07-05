@@ -82,6 +82,11 @@ set TT_GEN to 0
 # the search's own cutoffs: no weights, no constants, ordering only.
 set KILLER_A to create_list()
 set KILLER_B to create_list()
+# HISTORY: per (from,to) square path, HOW MANY TIMES a quiet move along it
+# has refuted a line -- remaining quiets are then searched in descending
+# refutation count. A counted census of the search's own cutoffs (every
+# increment is 1): no weights, ordering only, lossless.
+set HIST to create_list()
 # NODES_LEFT / PASS_ABORTED: the HARD in-pass bound. Every search node
 # decrements NODES_LEFT; at zero the whole pass aborts instantly (every
 # recursive call returns at once) and the driver discards the partial pass,
@@ -1739,6 +1744,8 @@ define tt_ensure:
     repeat while length_list(KILLER_A) < 64:
         set ok to append_list(KILLER_A and 0 - 1)
         set ok to append_list(KILLER_B and 0 - 1)
+    repeat while length_list(HIST) < 4096:
+        set ok to append_list(HIST and 0)
     return 0
 
 # The exact alpha-beta value of a node for the side to move, PACKED as
@@ -1785,108 +1792,144 @@ define search_value with state and depth as Int and alpha_num as Int and alpha_d
     if length_list(KILLER_A) > 63:
         set k1 to get_list(KILLER_A and depth)
         set k2 to get_list(KILLER_B and depth)
+    set hist_ready to 0
+    if length_list(HIST) > 4095:
+        set hist_ready to 1
     # bucket -1 is the table's move, searched first; 0..1 the counted
-    # captures (heavy then light); 2 the killers; 3 the remaining quiets.
+    # captures (heavy then light); 2 the killers; 3 the remaining quiets in
+    # DESCENDING refutation count (the history census): each pass selects
+    # the unsearched quiet with the highest count and marks it done in the
+    # node's own move list -- best-refuter-first, no allocation, no weights.
     set bucket to 0 - 1
     repeat while bucket < 4:
         set i to 0
         repeat while i < count:
             set move to get_list(pseudo and i)
-            set rest to move - (move / 4096) * 4096
-            set from_sq to rest / 64
-            set to_sq to rest - from_sq * 64
-            set victim to get_list(state and to_sq)
-            set taking to move_is_capture(state and move)
-            set heavy to 0
-            if victim > 0:
-                if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
-                    set heavy to 1
-            set wanted to 0
-            if bucket == 0 - 1:
-                if tt_move > 0 - 1:
-                    if move == tt_move:
-                        set wanted to 1
-            if bucket == 0:
-                if taking:
-                    if heavy == 1:
-                        set wanted to 1
-            if bucket == 1:
-                if taking:
-                    if heavy == 0:
-                        set wanted to 1
-            if bucket == 2:
-                if taking:
-                    set wanted to 0
-                else:
-                    if move == k1:
-                        set wanted to 1
-                    if move == k2:
-                        set wanted to 1
             if bucket == 3:
-                if taking:
-                    set wanted to 0
-                else:
-                    set wanted to 1
-                if move == k1:
-                    set wanted to 0
-                if move == k2:
-                    set wanted to 0
-            if bucket > 0 - 1:
-                if move == tt_move:
-                    set wanted to 0
-            if wanted == 1:
-                set child to make_move(state and move)
-                set king_now to king_from
-                if from_sq == king_from:
-                    set king_now to to_sq
-                set exposed to square_attacked(child and king_now and 1 - side)
-                if exposed:
-                    set exposed to exposed
-                else:
-                    set legal_seen to legal_seen + 1
-                    # PVS: the first legal move is read with the full window;
-                    # every later sibling gets a ZERO-WIDTH probe at alpha --
-                    # with strict cutoffs, probe <= alpha PROVES the move
-                    # cannot improve on the best (no re-search), and probe >
-                    # alpha triggers the full-window re-search. The final
-                    # value is identical to the plain search: lossless, and
-                    # not one constant introduced.
-                    set deeper to 0
-                    if legal_seen == 1:
-                        set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
-                    else:
-                        set deeper to search_value(child and depth - 1 and a_den - a_num and a_den and a_den - a_num and a_den)
-                        set probe_num to (deeper - (deeper / 65536) * 65536) - deeper / 65536
-                        set probe_den to deeper - (deeper / 65536) * 65536
-                        if probe_num * a_den > a_num * probe_den:
-                            set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
-                    set child_num to deeper / 65536
-                    set child_den to deeper - child_num * 65536
-                    set my_num to child_den - child_num
-                    set my_den to child_den
-                    if my_num * best_den > best_num * my_den:
-                        set best_num to my_num
-                        set best_den to my_den
-                        set best_move to move
-                    if my_num * beta_den > beta_num * my_den:
-                        if use_tt == 1:
-                            set ok to set_list(TT_KEYS and slot and key)
-                            set ok to set_list(TT_MOVES and slot and move)
-                            set ok to set_list(TT_STAMP and slot and TT_GEN)
-                        if taking:
-                            set taking to taking
+                set move to 0 - 1
+                set best_h to 0 - 1
+                set sel_j to 0 - 1
+                set j to 0
+                repeat while j < count:
+                    set cand to get_list(pseudo and j)
+                    if cand > 0 - 1:
+                        if cand == tt_move:
+                            set j to j
                         else:
-                            if length_list(KILLER_A) > 63:
-                                if move == k1:
-                                    set k1 to k1
+                            if cand == k1:
+                                set j to j
+                            else:
+                                if cand == k2:
+                                    set j to j
                                 else:
-                                    set ok to set_list(KILLER_B and depth and k1)
-                                    set ok to set_list(KILLER_A and depth and move)
-                        return best_num * 65536 + best_den
-                    if my_num * a_den > a_num * my_den:
-                        set a_num to my_num
-                        set a_den to my_den
-            set i to i + 1
+                                    set cand_taking to move_is_capture(state and cand)
+                                    if cand_taking:
+                                        set j to j
+                                    else:
+                                        set h to 0
+                                        if hist_ready == 1:
+                                            set h to get_list(HIST and cand - (cand / 4096) * 4096)
+                                        if h > best_h:
+                                            set best_h to h
+                                            set move to cand
+                                            set sel_j to j
+                    set j to j + 1
+                if sel_j > 0 - 1:
+                    set ok to set_list(pseudo and sel_j and 0 - 1)
+            if move < 0:
+                set i to i + 1
+            else:
+                set rest to move - (move / 4096) * 4096
+                set from_sq to rest / 64
+                set to_sq to rest - from_sq * 64
+                set victim to get_list(state and to_sq)
+                set taking to move_is_capture(state and move)
+                set heavy to 0
+                if victim > 0:
+                    if counted_reach(piece_kind(victim) and to_sq and 0) > 8:
+                        set heavy to 1
+                set wanted to 0
+                if bucket == 0 - 1:
+                    if tt_move > 0 - 1:
+                        if move == tt_move:
+                            set wanted to 1
+                if bucket == 0:
+                    if taking:
+                        if heavy == 1:
+                            set wanted to 1
+                if bucket == 1:
+                    if taking:
+                        if heavy == 0:
+                            set wanted to 1
+                if bucket == 2:
+                    if taking:
+                        set wanted to 0
+                    else:
+                        if move == k1:
+                            set wanted to 1
+                        if move == k2:
+                            set wanted to 1
+                if bucket == 3:
+                    set wanted to 1
+                if bucket > 0 - 1:
+                    if move == tt_move:
+                        set wanted to 0
+                if wanted == 1:
+                    set child to make_move(state and move)
+                    set king_now to king_from
+                    if from_sq == king_from:
+                        set king_now to to_sq
+                    set exposed to square_attacked(child and king_now and 1 - side)
+                    if exposed:
+                        set exposed to exposed
+                    else:
+                        set legal_seen to legal_seen + 1
+                        # PVS: the first legal move is read with the full
+                        # window; every later sibling gets a ZERO-WIDTH probe
+                        # at alpha -- with strict cutoffs, probe <= alpha
+                        # PROVES the move cannot improve on the best (no
+                        # re-search), and probe > alpha triggers the full
+                        # re-search. The final value is identical to the
+                        # plain search: lossless, not one constant added.
+                        set deeper to 0
+                        if legal_seen == 1:
+                            set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                        else:
+                            set deeper to search_value(child and depth - 1 and a_den - a_num and a_den and a_den - a_num and a_den)
+                            set probe_num to (deeper - (deeper / 65536) * 65536) - deeper / 65536
+                            set probe_den to deeper - (deeper / 65536) * 65536
+                            if probe_num * a_den > a_num * probe_den:
+                                set deeper to search_value(child and depth - 1 and beta_den - beta_num and beta_den and a_den - a_num and a_den)
+                        set child_num to deeper / 65536
+                        set child_den to deeper - child_num * 65536
+                        set my_num to child_den - child_num
+                        set my_den to child_den
+                        if my_num * best_den > best_num * my_den:
+                            set best_num to my_num
+                            set best_den to my_den
+                            set best_move to move
+                        if my_num * beta_den > beta_num * my_den:
+                            if use_tt == 1:
+                                set ok to set_list(TT_KEYS and slot and key)
+                                set ok to set_list(TT_MOVES and slot and move)
+                                set ok to set_list(TT_STAMP and slot and TT_GEN)
+                            if taking:
+                                set taking to taking
+                            else:
+                                if length_list(KILLER_A) > 63:
+                                    if move == k1:
+                                        set k1 to k1
+                                    else:
+                                        set ok to set_list(KILLER_B and depth and k1)
+                                        set ok to set_list(KILLER_A and depth and move)
+                                if hist_ready == 1:
+                                    set hslot to move - (move / 4096) * 4096
+                                    set ok to set_list(HIST and hslot and get_list(HIST and hslot) + 1)
+                            return best_num * 65536 + best_den
+                        if my_num * a_den > a_num * my_den:
+                            set a_num to my_num
+                            set a_den to my_den
+                set i to i + 1
         set bucket to bucket + 1
     if use_tt == 1:
         if best_move > 0 - 1:
@@ -1972,23 +2015,24 @@ define root_pass with state and depth as Int and seen as Str and pre_move as Int
     return result
 
 # BUDGETED ITERATIVE DEEPENING: deepen one level at a time until the counted
-# thinking budget (2^22 positions examined -- an implementation compute
+# thinking budget (2^25 positions examined -- an implementation compute
 # bound, the CLOCK, the same class of limit as every "scan far enough" in the
 # corpus; the counted evaluation itself carries zero knobs) is spent, or the
 # ceiling is reached. The budget is enforced INSIDE each pass (the hard
 # bound in search_value/quiescence): a pass that cannot finish within the
 # remaining budget aborts instantly and is DISCARDED -- the move played is
 # always from the deepest COMPLETED pass, and move time is bounded by
-# construction. 2^22 is set from the measured curve: with the transposition
-# table + killer ordering (both lossless), a full crowded-middlegame
-# depth-6 pass costs 3.74M nodes -- one whole ply beyond the 2^20 budget's
-# sight, ~15s/move at the measured 250K nodes/s; simplified positions
-# automatically read far deeper on the same budget.
+# construction. 2^25 is set from the measured curve: with the transposition
+# table + killer + HISTORY ordering (all lossless; depth-7 nodes measured
+# 63.5M -> 17.7M as the ordering sharpened), a complete crowded-middlegame
+# depth-7 pass costs 17.7M nodes -- a second whole ply beyond the 2^20
+# budget's sight, ~70s/move worst case at the measured 258K nodes/s;
+# simplified positions automatically read far deeper on the same budget.
 define thinking_budget returning Int:
     set base to 2
     set budget to 1
     set k to 0
-    repeat while k < 22:
+    repeat while k < 25:
         set budget to budget * base
         set k to k + 1
     return budget
