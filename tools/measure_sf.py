@@ -1,5 +1,6 @@
-"""12 games vs SF-1700, ALL IN PARALLEL (one process per game)."""
+"""12 games vs SF at a given Elo (argv[1], default 1700), ALL IN PARALLEL."""
 import subprocess, sys, chess, chess.engine
+ELO = int(sys.argv[1]) if len(sys.argv) > 1 else 1700
 from concurrent.futures import ProcessPoolExecutor
 
 import shutil, tempfile, atexit
@@ -23,7 +24,7 @@ def bot_move(depth, hist):
 def play_one(g):
     bot_white = g % 2 == 0
     eng = chess.engine.SimpleEngine.popen_uci(SF)
-    eng.configure({"UCI_LimitStrength": True, "UCI_Elo": 1700})
+    eng.configure({"UCI_LimitStrength": True, "UCI_Elo": ELO})
     board = chess.Board(); hist = []
     while not board.is_game_over(claim_draw=True) and len(hist) < 240:
         if (board.turn == chess.WHITE) == bot_white:
@@ -46,4 +47,4 @@ if __name__ == "__main__":
         for g, r in pool.map(play_one, range(12)):
             tally[r] = tally.get(r, 0) + 1
             print(f"game {g+1} ({'White' if g%2==0 else 'Black'}): {r}", flush=True)
-    print("MEASUREMENT 1700 (12 games):", tally)
+    print(f"MEASUREMENT {ELO} (12 games):", tally)

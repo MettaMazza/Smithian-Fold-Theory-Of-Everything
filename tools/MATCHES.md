@@ -159,3 +159,9 @@ pass -- a pass that can't finish aborts instantly and the deepest
 COMPLETED pass plays, so move time is bounded by construction.
 Middlegame sight: depth 5-6 (was 4). Same counted evaluation,
 zero knobs throughout. Next: SF-1700, the 41.7% to beat.
+
+    v13 at SF-1700 (pinned 12-game, refereed): 3W 7D 2L = 54.2% --
+    THE RUNG IS TAKEN: the campaign's first above-even measurement at
+    1700 (v10 50%, v11 41.7%, v12+tables 41.7%), and a winning record
+    (3W vs 2L, both colours scoring). Two extra plies of counted sight
+    did exactly what the gate said they would. NEXT RUNG: 1900.
