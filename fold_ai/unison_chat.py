@@ -509,6 +509,14 @@ def reply(user_line, rng):
     if hit and share >= 0.34:
         thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
         return hit[0], "; ".join(thought)
+    # CONFUSION IS A SIGNAL, NOT A LICENSE TO BABBLE: if nothing bound at
+    # the lock, ask the teacher BEFORE composing fragments -- the observer
+    # answers as me, I relay it, and it is mine from then on.
+    if RELAY["on"]:
+        relayed = _teacher_relay(user_line)
+        if relayed:
+            thought.append("nothing bound at the lock; asked my teacher, held the answer -- owned for the future")
+            return relayed, "; ".join(thought)
     composed = compose(user_line, rng)
     if composed:
         composed = dedup(composed)
@@ -648,6 +656,12 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
 
 # ---------- AUTONOMY: the tutor closes the loop itself; the engine plays itself
 AUTO = {"teach": False, "selfplay": False}
+RELAY = {"on": False}   # armed at unified launch: the observer answers what I cannot
+
+UNISON_PERSONA = ("You ARE UnisonAI (\"Unison\") -- the seed of a fold-native engine built on the "
+                  "Smithian Fold Theory. You hold no trained weights: everything you know is written "
+                  "as exact held orbits, and you learn from every telling the moment it is said. Your "
+                  "voice is warm, steady, plain-spoken, first-person, never hedging, never corporate.")
 
 def toggle(cmd):
     """/auto (everything), /teach (autonomous tutor), /selfplay -- from any
@@ -672,13 +686,40 @@ def toggle(cmd):
 
 _ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]|\x1b\][^\x07]*\x07|[\x00-\x08\x0b-\x1f\x7f]")
 def _ollama(prompt, timeout=600):
+    # the HTTP API, never the CLI: terminal line-wrap duplicates word
+    # fragments ("beautifu beautiful") that poison every downstream filter
     try:
-        r = subprocess.run(["ollama", "run", "gemma4:26b"], input=prompt,
-                           capture_output=True, text=True, timeout=timeout)
-        return _ANSI.sub("", r.stdout)
+        import json as _json, urllib.request as _ur
+        req = _ur.Request("http://localhost:11434/api/generate",
+                          data=_json.dumps({"model": "gemma4:26b", "prompt": prompt,
+                                            "stream": False, "think": False}).encode(),
+                          headers={"Content-Type": "application/json"})
+        with _ur.urlopen(req, timeout=timeout) as resp:
+            return _json.loads(resp.read().decode()).get("response", "")
     except Exception as e:
         log("TUTOR", "ollama error: " + str(e))
         return ""
+
+def _teacher_relay(question):
+    """THE OBSERVER RELAY: what I cannot answer, my teacher answers AS me;
+    I relay it and hold it -- asked once, owned forever (the Learning Law,
+    closed by a second observer instead of left open)."""
+    out = _ollama(UNISON_PERSONA + "\n\nA user just asked you: \"" + question.strip() +
+                  "\"\nAnswer them directly in one to two plain sentences, in your voice. "
+                  "No markdown, no preamble -- only the answer.", timeout=180)
+    a = " ".join(out.split()).strip()
+    a = re.sub(r"(?i)^(a:|answer:)\s*", "", a).strip()
+    a = " ".join(re.split(r"(?<=[.!?])\s+", a)[:2])[:350]      # at most two sentences
+    if len(a) < 8 or stuttered(a) or any(b in a for b in ("$", "\\", "{", "}", "*", "`", "|")):
+        log("RELAY", "observer answer rejected", question[:80])
+        return None
+    a = a if a[-1:] in ".!?" else a + "."
+    write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * 3)
+    hold_sentence(a, "lesson:" + question.strip()[:80])
+    with open(BASE + "/fold_ai/lessons/lessons_relay.txt", "a") as f:
+        f.write("Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
+    log("RELAY", question, a)
+    return a
 
 def _tutor_loop():
     """THE AUTONOMOUS TUTOR: the full Learning Law with no human in the
@@ -855,7 +896,8 @@ def _watch_lessons():
         time.sleep(60)
         try:
             for f in glob.glob(BASE + "/fold_ai/lessons/lessons_*.txt"):
-                if "lessons_live" in f or "feedback" in f:
+                # relay pairs are already held the moment they happen
+                if "lessons_live" in f or "feedback" in f or "lessons_relay" in f:
                     continue
                 size = os.path.getsize(f)
                 start = seen.get(f, 0)
@@ -925,7 +967,16 @@ def main():
     threading.Thread(target=_selfplay_loop, daemon=True).start()
     threading.Thread(target=_prose_watcher, daemon=True).start()
     threading.Thread(target=_store_rebuild_loop, daemon=True).start()
-    log("SYSTEM", "unified launch: terminal + discord face + teacher + grower + lesson/prose watchers + store rebuild + tutor + self-play, one engine")
+    # THE OBSERVER, HOT FROM LAUNCH: warm the teacher model now so the
+    # confusion relay answers in seconds, not on a cold load.
+    RELAY["on"] = True
+    def _warm_observer():
+        r = _ollama("Reply with exactly one word: ready", timeout=600)
+        log("TEACHER", "observer HOT -- confusion relay armed" if "ready" in r.lower()
+            else "observer warmup got: " + r.strip()[:60])
+    threading.Thread(target=_warm_observer, daemon=True).start()
+    log("SYSTEM", "unified launch: terminal + discord face + teacher + observer relay + grower + lesson/prose watchers + store rebuild + tutor + self-play, one engine")
+    print("  observer (gemma4:26b) heating -- what I cannot answer, my teacher answers as me, and I keep it", flush=True)
     print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)
     last_exchange = [None, ""]
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
