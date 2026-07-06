@@ -260,7 +260,10 @@ def dedup(s):
     for t in s.split():
         if not out or out[-1].lower() != t.lower():
             out.append(t)
-    return re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out))
+    s = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out))
+    # contractions rejoin: What ' s -> What's (word char on BOTH sides,
+    # so quote marks around words stay untouched)
+    return re.sub(r"(\w)\s*'\s*(s|t|re|ve|ll|d|m)\b", r"\1'\2", s)
 
 def continue_orbit(ctx_tokens, rng, max_tokens=60):
     ctx = list(ctx_tokens)
@@ -499,8 +502,8 @@ def flip_perspective(s):
     for t in tok_display(s):
         f = FLIP.get(t.lower())
         out.append((f.capitalize() if t[:1].isupper() else f) if f else t)
-    s2 = " ".join(out)
-    return re.sub(r"\s+([.,!?;:])", r"\1", s2)
+    s2 = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out))
+    return re.sub(r"(\w)\s*'\s*(s|t|re|ve|ll|d|m)\b", r"\1'\2", s2)
 
 CORRECTIONS = {}          # qkey -> exact taught answer (wins over everything)
 CORR_LOG = BASE + "/fold_ai/lessons/corrections.tsv"
