@@ -961,6 +961,13 @@ def toggle(cmd):
         return "self-play " + onoff(AUTO["selfplay"]) + "."
     if c in ("bench", "benchmark"):
         return run_benchmark()
+    if c.startswith("sota"):
+        extra = [m for m in cmd.replace("/", " ").split()[1:] if ":" in m or m.isalnum()]
+        models = (["gemma4:26b"] + extra) if extra else None
+        threading.Thread(target=run_sota_bench, kwargs={"models": models}, daemon=True).start()
+        return ("SOTA 1-1 bench started on the public MMLU test subset -- Unison (own channels) vs "
+                + (", ".join(models) if models else "gemma4:26b")
+                + ". Each system's row posts here as it finishes.")
     if c in ("score", "status"):
         wins = sum(w for w, l in GRAD.values())
         losses = sum(l for w, l in GRAD.values())
@@ -971,15 +978,15 @@ def toggle(cmd):
     return None
 
 _ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]|\x1b\][^\x07]*\x07|[\x00-\x08\x0b-\x1f\x7f]")
-def _ollama(prompt, timeout=600):
+def _ollama(prompt, timeout=600, model="gemma4:26b", num_ctx=131072):
     # the HTTP API, never the CLI: terminal line-wrap duplicates word
     # fragments ("beautifu beautiful") that poison every downstream filter
     try:
         import json as _json, urllib.request as _ur
         req = _ur.Request("http://localhost:11434/api/generate",
-                          data=_json.dumps({"model": "gemma4:26b", "prompt": prompt,
+                          data=_json.dumps({"model": model, "prompt": prompt,
                                             "stream": False, "think": False,
-                                            "options": {"num_ctx": 131072}}).encode(),
+                                            "options": {"num_ctx": num_ctx}}).encode(),
                           headers={"Content-Type": "application/json"})
         with _ur.urlopen(req, timeout=timeout) as resp:
             return _json.loads(resp.read().decode()).get("response", "")
@@ -1846,6 +1853,89 @@ def run_benchmark(rng=None):
         except Exception as e:
             log("BENCH", "announce error: " + str(e))
     return summary
+
+SOTA_LOG = BASE + "/fold_ai/benchmarks_sota.tsv"
+
+def _fetch_mmlu(n=GEN_B ** 6):
+    """Real items from the PUBLIC MMLU test set (cais/mmlu via the HF
+    datasets server), cached once -- the same set SOTA numbers are
+    published on, so every score here is directly comparable to the
+    published table (subset size recorded per row)."""
+    import json as _j, urllib.request as _u
+    cache = BASE + "/fold_ai/mmlu_probe.json"
+    if os.path.exists(cache):
+        got = _j.load(open(cache))
+        if len(got) >= n:
+            return got[:n]
+    # a FIXED, diverse probe set: 2^4 items at each of 2^3 evenly-spaced
+    # offsets across the ~14k-item public test split -- deterministic,
+    # subject-diverse, cached once, identical for every system forever
+    probes = []
+    for k in range(GEN_B ** 3):
+        url = ("https://datasets-server.huggingface.co/rows?dataset=cais%2Fmmlu"
+               "&config=all&split=test&offset=" + str(k * 1750) + "&length=" + str(GEN_B ** 4))
+        rows = _j.loads(_u.urlopen(url, timeout=120).read().decode())["rows"]
+        probes += [{"q": r["row"]["question"], "choices": r["row"]["choices"],
+                    "a": int(r["row"]["answer"])} for r in rows]
+    _j.dump(probes, open(cache, "w"))
+    return probes[:n]
+
+def _mc_prompt(p):
+    return (p["q"] + "\n" + "\n".join(chr(65 + i) + ") " + c for i, c in enumerate(p["choices"]))
+            + "\nAnswer with exactly one letter: A, B, C or D.")
+
+def _mc_score(answer_text, p):
+    """Counted scoring, no judge: the stated letter, or the correct choice's
+    own words contained in the answer."""
+    t = " ".join(str(answer_text).split())
+    ms = re.findall(r"\b([ABCD])\b", t.upper())
+    if ms:
+        return (ord(ms[-1]) - 65) == p["a"]   # the FINAL stated letter is the verdict
+    return p["choices"][p["a"]].lower() in t.lower()
+
+def run_sota_bench(models=None, n=GEN_B ** 6):
+    """THE 1-1 LADDER: the same public test items put to Unison (own
+    channels, no teacher), to Unison+teacher, and to every named local
+    model, on this machine, counted scoring -- one row per system per run,
+    appended forever. Directly comparable to published MMLU numbers."""
+    rng = np.random.default_rng()
+    try:
+        probes = _fetch_mmlu(n)
+    except Exception as e:
+        log("SOTA", "probe fetch failed: " + str(e))
+        return "SOTA bench: could not fetch the public probe set (" + str(e) + ")"
+    if models is None:
+        models = ["gemma4:26b"]
+    if not os.path.exists(SOTA_LOG):
+        with open(SOTA_LOG, "w") as f:
+            f.write("time\tsuite\tn\tsystem\tcorrect\tpct\n")
+    out = []
+    systems = [("unison-own", None)] + [(m, m) for m in models]
+    for name, model in systems:
+        correct = 0
+        for p in probes:
+            try:
+                if model is None:
+                    ans, _th = reply(_mc_prompt(p), rng)     # OWN channels only
+                else:
+                    ans = _ollama(_mc_prompt(p), timeout=180, model=model, num_ctx=8192)
+                if _mc_score(ans, p):
+                    correct += 1
+            except Exception:
+                pass
+        pct = round(100 * correct / max(len(probes), 1), 1)
+        with open(SOTA_LOG, "a") as f:
+            f.write("\t".join(str(x) for x in (time.strftime("%Y-%m-%d %H:%M"), "MMLU-test-subset",
+                                               len(probes), name, correct, pct)) + "\n")
+        line = f"SOTA 1-1 [MMLU public test, n={len(probes)}]: {name} = {correct}/{len(probes)} ({pct}%)"
+        log("SOTA", line)
+        out.append(line)
+        if ANNOUNCE[0]:
+            try:
+                ANNOUNCE[0]("🏁 " + line)
+            except Exception:
+                pass
+    return "\n".join(out) + "\nAppended to benchmarks_sota.tsv -- rows are directly comparable to published MMLU tables."
 
 def _bench_loop():
     """THE MONITOR IS NOT A TOGGLE: the progress instrument fires hourly
