@@ -106,6 +106,13 @@ gates internal, ladder retired to on-demand calibration.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (later): RUNG 3 + 3b REFUSED (compression through the raw
+  Walsh basis closed; detection stands). RUNG 4 REFUSED (learned wpe beats
+  frozen Walsh positional code at tiny scale, 1.888 vs 2.027; scale caveat
+  recorded). SCALING SURVEY (4B -> 1T, Maria's library) RUNNING. Paper
+  v0.2 PUBLISHED: DOI 10.5281/zenodo.21217279. Next: the attention gate
+  from the unit-capacity theorem.
+
 - 2026-07-06: fold_ai opened. **RUNG 1 VERDICT: STRUCTURE, 18/18** --
   validated objects (SD1.5, SDXL, Kokoro; Maria's SAE demoted to
   exploratory by her own catch -- untested run), every tensor at every
