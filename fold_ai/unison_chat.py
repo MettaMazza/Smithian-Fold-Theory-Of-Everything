@@ -18,9 +18,18 @@ from collections import defaultdict, Counter
 CTX_MAX = 6
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
 LESSONS = sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
+# THE DIET LAW: the engine reads the THEORY (the corpus and its lessons) --
+# never its own build documents (fold_ai plans, protocols, derivation maps,
+# papers about itself). Architecture direction is for the builder, not food
+# for the built (Maria, 2026-07-06).
+EXCLUDE = ("/fold_ai/", "/additional papers/", "From_One_Axiom", "PROTOCOL",
+           "FOLD_AI_PLAN", "CONSCIOUSNESS_DERIVATIONS", "SUMMIT_PROTOCOL",
+           "/tools/", "/probe_reports/", "MATCHES")
 CORPUS = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
-          sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/**/*.md", recursive=True))
-          if "/language/" not in f and "/.git/" not in f]
+          sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/papers/*.md")) +
+          sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/*.md"))
+          if "/language/" not in f and "/.git/" not in f
+          and not any(x in f for x in EXCLUDE)]
 
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
