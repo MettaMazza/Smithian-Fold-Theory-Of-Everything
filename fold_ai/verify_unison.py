@@ -208,6 +208,21 @@ if _w1:
 else:
     check("E24 native ear after one hearing", False, "no clip")
 
+# E25 the agent toolkit (offline, deterministic)
+r1 = uc2._run_tool("grep_file", {"path": BASE + "/unison_chat.py", "pattern": "def fold_see"})
+r2 = uc2._run_tool("find_files", {"name": "MATURATION"})
+r3 = uc2._run_tool("read_file", {"path": "/etc/passwd"})
+uc2._run_tool("scratch_write", {"name": "vu-note", "content": "the fold holds"})
+r4 = uc2._run_tool("scratch_read", {"name": "vu-note"})
+check("E25 agent toolkit + path jail", "def fold_see" in r1 and "MATURATION_PLAN" in r2
+      and "not readable" in r3 and r4 == "the fold holds")
+os.unlink("scratchpad/vu-note")
+# E26 benchmark instruments write persistent rows
+_before = open("benchmarks.tsv").read().count("\n") if os.path.exists("benchmarks.tsv") else 0
+uc2.run_benchmark()
+_after = open("benchmarks.tsv").read().count("\n")
+check("E26 progress instrument appends", _after == _before + (1 if _before else 2))
+
 # E21 M5 bounded store round-trip
 B = 101
 def bkey(tup): return (zlib.crc32(" ".join(tup).encode()) % B,)

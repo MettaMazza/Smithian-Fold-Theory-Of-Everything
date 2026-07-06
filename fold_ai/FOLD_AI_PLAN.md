@@ -144,6 +144,22 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v25 -- FLIGHT-READY): **the modern-agent toolkit** (grep_file
+  with line numbers + read_file pagination, find_files, live web_search,
+  web_fetch incl. RSS/atom -- all live-tested; every call's args+result
+  logged wide and held as training traces), **the everything-curriculum**
+  (WORLD batch: 43 domains, everything imaginable in Unison's voice, under
+  the hard law: no mathematics or physics framework other than the fold),
+  **SOTA 1-1 benching** (the same fixed 128-item PUBLIC MMLU test subset to
+  Unison-own and any local model, counted last-letter scoring, persistent
+  rows posted to Discord, directly comparable to published tables --
+  newborn baseline recorded), **generation closure** (self-play mode 2^2:
+  verified generations held, unverified discarded -- the Learning Law
+  reaches generate() itself), chess-grade diagnostics (boot DIAG line, wide
+  tool logs). END-TO-END: verify_unison 36/36 including the agent toolkit
+  and the progress instruments. Newborn wipe performed; baseline written;
+  READY FOR THE MANUAL FLIGHT RUN.
+
 - 2026-07-06 (v24): **AGENTIC + INSTRUMENTED -- the building blocks for the
   first overnight boot are all in place.** (1) EMPIRICAL BENCHMARKING:
   run_benchmark() writes one counted line per run to benchmarks.tsv (native

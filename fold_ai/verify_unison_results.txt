@@ -1,6 +1,6 @@
 PASS E1 forced locks  [ctx=6 lock=1/3 kin=1/6 sight=32]
 PASS E1b halt on fitted value
-PASS E2 wake  [4374218 orbits, 63667 sents, 21s]
+PASS E2 wake  [4373951 orbits, 63666 sents, 21s]
 PASS E3 taught fact recalled  [Your instrument is the harp.]
 PASS E4 correction exact  [The capital of the fold is the One.]
 PASS E4b correction persisted
@@ -21,15 +21,17 @@ PASS E14b score above corrections  [losing correction falls through]
 PASS E15 STaR reasoning filter
 PASS E16 ZPD picks nearest the lock
 PASS E17 VOICE label (own)  [VOICE: UNISON (own held memory) | focus=name,]
-PASS E18 LIVE relay + VOICE label  [8s]
+PASS E18 LIVE relay + VOICE label  [9s]
 PASS E18b relayed answer owned  [repeat 0.0s]
-PASS E19 LIVE video watched  [3s: The video is essentially a visual manifestation of a "nothin]
+PASS E19 LIVE video watched  [4s: This is a very specific sequence of three vertical slices, a]
 PASS E20 correction survives rebirth
 PASS E20b fact survives rebirth  [Your instrument is the harp.]
 PASS E20c sight survives rebirth
 PASS E20d graduation survives rebirth
 PASS E23 native voice after one teaching  [replay 0.01s, no synthesis model]
-PASS E24 native ear after one hearing  [the fold holds and I am learning to speak.]
+PASS E24 native ear after one hearing  [Verification says the fold holds.]
+PASS E25 agent toolkit + path jail
+PASS E26 progress instrument appends
 PASS E21 M5 bounded round-trip
 PASS E22 long sentence held  [1037 chars]
-TOTAL: 34/34
+TOTAL: 36/36
