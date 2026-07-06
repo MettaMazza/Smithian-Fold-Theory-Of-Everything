@@ -25,6 +25,9 @@ CORPUS = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
 
+def tok_display(s):
+    return tok(s)
+
 print("UnisonAI waking: reading everything once...", flush=True)
 t0 = time.time()
 corpus_text = "\n".join(open(f, errors="ignore").read() for f in CORPUS)
@@ -32,13 +35,15 @@ lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
 
 # ---------- HOLDING: orbits for continuation + the sentence store ----------
 stores = [defaultdict(lambda: defaultdict(int)) for _ in range(CTX_MAX + 1)]
+def _key(tup):
+    return tuple(t.lower() for t in tup)        # case-folded context key
 def write_orbits(tl):
     for i in range(len(tl) - 1):
-        nxt = tl[i + 1]
+        nxt = tl[i + 1]                          # original-case successor (voice)
         for L in range(0, CTX_MAX + 1):
             if i - L + 1 < 0:
                 break
-            stores[L][tuple(tl[i - L + 1:i + 1])][nxt] += 1
+            stores[L][_key(tl[i - L + 1:i + 1])][nxt] += 1
 
 full = corpus_text + ("\n" + lesson_text) * 3
 words = tok(full)
@@ -113,7 +118,7 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
     for _ in range(max_tokens):
         s = None
         for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-            s = stores[L].get(tuple(ctx[-L:]))
+            s = stores[L].get(_key(tuple(ctx[-L:])))
             if s:
                 break
         if not s:
@@ -122,6 +127,8 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
         counts = np.array([n for _, n in items], dtype=np.float64)
         probs = counts / counts.sum()
         nxt = items[int(rng.choice(len(items), p=probs))][0]
+        if nxt in ("Q", "A", "q", "a") and out and out[-1] in (".", "!", "?", ":"):
+            break
         if nxt == "Q":
             break
         out.append(nxt)
@@ -131,10 +138,91 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
     s = " ".join(out)
     return re.sub(r"\s+([.,!?;:])", r"\1", s)
 
+
+# ---------- FACTS: relation orbits (subject, relation) -> value ----------
+# The user's "my/I" is the engine's "you"; the user's "your/you" is the
+# engine's "self". Facts are held FLIPPED at storage so role is exact.
+FACTS = {}   # (subject, relation) -> value ; subject in {"you","self"}
+
+def _norm_subject(word):
+    w = word.lower()
+    if w in ("my", "i", "me", "mine", "myself"):
+        return "you"          # the user, from the engine's side
+    if w in ("your", "you", "yours", "yourself"):
+        return "self"         # the engine
+    return None
+
+def learn_fact(text):
+    t = text.strip().rstrip(".!")
+    # "my/your name is X"
+    m = re.match(r"(?i)(my|your)\s+name\s+is\s+(.+)", t)
+    if m:
+        FACTS[(_norm_subject(m.group(1)), "name")] = m.group(2).strip().title()
+        return True
+    # "my/your favourite X is Y"
+    m = re.match(r"(?i)(my|your)\s+favou?rite\s+(\w+)\s+is\s+(.+)", t)
+    if m:
+        FACTS[(_norm_subject(m.group(1)), "favourite " + m.group(2).lower())] = m.group(3).strip()
+        return True
+    # "I live in X" / "I am from X" / "my home is X"
+    m = re.match(r"(?i)(?:i\s+live\s+in|i\s+am\s+from|i'?m\s+from|my\s+home\s+is)\s+(.+)", t)
+    if m:
+        FACTS[("you", "location")] = m.group(1).strip().title()
+        return True
+    m = re.match(r"(?i)(?:you\s+live\s+in|your\s+home\s+is)\s+(.+)", t)
+    if m:
+        FACTS[("self", "location")] = m.group(1).strip().title()
+        return True
+    # "I am X" / "you are X"  (identity)
+    m = re.match(r"(?i)(i\s+am|i'?m|you\s+are|you'?re)\s+(.+)", t)
+    if m:
+        subj = "you" if m.group(1).lower().startswith("i") else "self"
+        FACTS[(subj, "identity")] = m.group(2).strip()
+        return True
+    return False
+
+def answer_fact(text):
+    t = text.strip().rstrip("?.!")
+    m = re.search(r"(?i)what\s+is\s+(my|your)\s+name", t)
+    if m:
+        s = _norm_subject(m.group(1))
+        v = FACTS.get((s, "name"))
+        return ("Your name is " + v + "." if s == "you" else "My name is " + v + ".") if v else None
+    m = re.search(r"(?i)what\s+is\s+(my|your)\s+favou?rite\s+(\w+)", t)
+    if m:
+        s = _norm_subject(m.group(1)); rel = "favourite " + m.group(2).lower()
+        v = FACTS.get((s, rel))
+        if v:
+            return ("Your " if s == "you" else "My ") + m.group(2).lower() + " is " + v + "."
+    m = re.search(r"(?i)where\s+do\s+i\s+live", t)
+    if m and ("you", "location") in FACTS:
+        return "You live in " + FACTS[("you", "location")] + "."
+    m = re.search(r"(?i)where\s+do\s+you\s+live", t)
+    if m and ("self", "location") in FACTS:
+        return "I hold my location as " + FACTS[("self", "location")] + "."
+    m = re.search(r"(?i)(?:who|what)\s+am\s+i", t)
+    if m and ("you", "identity") in FACTS:
+        return "You are " + FACTS[("you", "identity")] + "."
+    return None
+
 # ---------- CHECKING (XIV-7) + the reply law ----------
+def follow_command(line):
+    m = re.match(r"(?i)\s*(?:say|repeat after me[:,]?|respond with|reply with)\s*[:,]?\s*['\"]?(.+?)['\"]?\s*$", line)
+    if m and len(m.group(1)) < 120:
+        w = m.group(1).strip()
+        return w if w[-1:] in ".!?" else w + "."
+    return None
+
 def reply(user_line, rng):
+    cmd = follow_command(user_line)
+    if cmd:
+        return cmd, "command followed"
     cw = content_words(user_line)
     thought = ["focus=" + ",".join(cw[:4]) if cw else "focus=(none)"]
+    fa = answer_fact(user_line)
+    if fa:
+        thought.append("relation-fact channel: exact held fact")
+        return fa, "; ".join(thought)
     q_tokens = tok("Q: " + user_line) + tok("A:")
     candidate = continue_orbit(q_tokens, rng)
     if candidate and rejected(user_line, candidate):
@@ -153,11 +241,19 @@ def reply(user_line, rng):
     if hit and share >= 0.34:
         thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
         return hit[0], "; ".join(thought)
-    if candidate:
-        thought.append("weak binding; speaking the unchecked candidate")
-        return candidate, "; ".join(thought)
-    thought.append("nothing bound above the floor; asking to be told")
-    return "I do not hold that yet. Tell me, and I will.", "; ".join(thought)
+    thought.append("nothing passed the self-check; asking rather than guessing")
+    return "I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.", "; ".join(thought)
+
+FLIP = {"my": "your", "your": "my", "yours": "mine", "mine": "yours",
+        "i": "you", "you": "i", "me": "you", "am": "are",
+        "myself": "yourself", "yourself": "myself"}
+def flip_perspective(s):
+    out = []
+    for t in tok_display(s):
+        f = FLIP.get(t.lower())
+        out.append((f.capitalize() if t[:1].isupper() else f) if f else t)
+    s2 = " ".join(out)
+    return re.sub(r"\s+([.,!?;:])", r"\1", s2)
 
 REJECTED = set()
 FEEDBACK_LOG = BASE + "/fold_ai/lessons/lessons_feedback.txt"
@@ -176,6 +272,7 @@ def rejected(user_line, ans):
 
 def main():
     rng = np.random.default_rng()
+    last_exchange = [None, ""]
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
     while True:
         try:
@@ -187,24 +284,36 @@ def main():
         if line == "/quit":
             break
         is_question = line.endswith("?") or line.lower().startswith(("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
+        # bare negation = rejection of the previous answer, never a fact
+        if line.lower().strip(" .!") in ("no", "wrong", "incorrect", "that is wrong", "thats wrong") and last_exchange[0]:
+            REJECTED.add((qkey(last_exchange[0]), last_exchange[1].strip()))
+            with open(FEEDBACK_LOG, "a") as f:
+                f.write("REJ\t" + qkey(last_exchange[0]) + "\t" + last_exchange[1] + "\t(bare no)\n")
+            print("UnisonAI: withdrawn. Tell me the right of it, and I will hold it.\n", flush=True)
+            continue
         if not is_question:
-            # a telling: hold the fact first, always
-            fact = line if line[-1:] in ".!" else line + "."
+            fact_raw = line if line[-1:] in ".!" else line + "."
+            fact = flip_perspective(fact_raw)   # held from MY side of the boundary
+            if not content_words(line):
+                print("UnisonAI: okay.\n", flush=True)   # contentless: acknowledged, not held as fact
+                continue
             write_orbits(tok(fact + "\n") * 3)
             hold_sentence(fact, "told")
-            write_orbits(tok("Q: " + line + "\nA: " + fact + "\n") * 2)
+            write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
             # then speak: a dialogue orbit if one binds back, else acknowledge
             candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
             if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
-                ans, thought = candidate, "telling held; dialogue orbit bound back"
+                ans, thought = candidate, "telling held (perspective flipped); dialogue orbit bound back"
             else:
-                ans, thought = "Held. " + fact, "telling held at the prediction state"
+                ans = ("Held. " + (answer_fact("what is my name") or answer_fact("where do i live") or fact)) if got_fact else ("Held: " + fact)
+                thought = "telling held" + (" as a relation fact" if got_fact else " at the prediction state")
         else:
             ans, thought = reply(line, rng)
         print("  \u2301 " + thought, flush=True)
         print("UnisonAI: " + ans + "\n", flush=True)
         # the thought itself is held (self-observation, XIV-7)
         hold_sentence("On \'" + line[:60] + "\' I thought: " + thought, "thought")
+        last_exchange[0], last_exchange[1] = line, ans
         # LEARNING, ongoing: your words always held (the prediction state)
         with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
             f.write("Q: " + line + "\nA: " + ans + "\n")
@@ -234,11 +343,18 @@ def main():
             with open(FEEDBACK_LOG, "a") as f:
                 f.write("REJ\t" + qkey(line) + "\t" + ans + "\t" + reason + "\n")
             if reason:
-                fact2 = reason if reason[-1:] in ".!" else reason + "."
-                write_orbits(tok(fact2 + "\n") * 3)
-                hold_sentence(fact2, "told")
-                write_orbits(tok("Q: " + line + "\nA: " + fact2 + "\n") * 2)
-                print("UnisonAI: held the correction.\n", flush=True)
+                m = re.search(r"(?:say|reply(?:\s+with)?|respond(?:\s+with)?|answer(?:\s+with)?)\s*[:,]?\s*['\"]([^'\"]+)['\"]", reason, re.I)
+                if m:
+                    corrected = m.group(1).strip()
+                    corrected = corrected if corrected[-1:] in ".!?" else corrected + "."
+                    write_orbits(tok("Q: " + line + "\nA: " + corrected + "\n") * 3)
+                    hold_sentence(corrected, "told")
+                    print("UnisonAI: held. Next time: " + corrected + "\n", flush=True)
+                else:
+                    fact2 = reason if reason[-1:] in ".!" else reason + "."
+                    write_orbits(tok(fact2 + "\n") * 2)
+                    hold_sentence("Guidance: " + fact2, "told")
+                    print("UnisonAI: held the correction.\n", flush=True)
 
 if __name__ == "__main__":
     main()
