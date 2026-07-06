@@ -84,6 +84,15 @@ def run(uc, rng=None):
                 await msg.reply((desc or "I could not watch that clearly. Tell me what it shows and I will hold it.")[:1900],
                                 mention_author=False)
                 return
+        # DOCUMENTS: any non-media file is READING -- inboxed, eaten once,
+        # held forever, revisitable by the observer's own tools
+        for att in msg.attachments[:2]:
+            ct = att.content_type or ""
+            if not ct.startswith(("image/", "audio/", "video/")):
+                safe, summary = await asyncio.to_thread(uc.ingest_document, att.filename,
+                                                        await att.read(), line)
+                await msg.reply(summary[:1900], mention_author=False)
+                return
         # VISION: images flow to the observer, described in Unison's voice,
         # held as memory (multimodality is foundational, not bolted on)
         imgs = []

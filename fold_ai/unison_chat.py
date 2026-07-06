@@ -232,6 +232,16 @@ for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
         hold_sentence("SOUND " + st + " means: " + a, "lesson:SOUND: " + st[:60])
     else:
         hold_sentence(a, "lesson:" + q[:80])
+for _f in sorted(glob.glob(BASE + "/fold_ai/inbox/*")):
+    try:
+        _t = open(_f, errors="ignore").read()
+        for _s in re.split(r"(?<=[.!?])\s+", _t):
+            _s = " ".join(_s.split())
+            if 8 <= len(_s) <= 2000 and "|" not in _s and "`" not in _s:
+                hold_sentence(_s, "lesson:file:" + os.path.basename(_f))
+    except Exception:
+        pass
+
 def well_formed(s):
     s = s.strip()
     w = s.split()
@@ -1603,6 +1613,50 @@ def observe_video(video_bytes, caption="", suffix=".mp4"):
     except Exception as e:
         log("VIDEO", "error: " + str(e))
         return None
+
+INBOX = BASE + "/fold_ai/inbox"
+
+def ingest_document(name, data, caption="", interface="discord"):
+    """A SENT FILE IS READING: the document is saved into my inbox (inside
+    my readable roots, so my tools can revisit it forever), eaten ONCE as
+    orbits at prose depth, and its clean sentences held at the taught tier
+    keyed to the filename -- one reading, held permanently, exactly the
+    flood's law applied to a gift. Binary files are declined honestly."""
+    try:
+        try:
+            text = data.decode("utf-8")
+        except Exception:
+            text = data.decode("latin-1", errors="ignore")
+        if "\x00" in text or (len(text) > 200 and
+                sum(c.isprintable() or c.isspace() for c in text[:2000]) < 1800):
+            return None, "That file looks binary. I hold text -- send .txt/.md/.py/.csv and I will read it, or tell me what it says."
+        os.makedirs(INBOX, exist_ok=True)
+        safe = re.sub(r"[^\w.-]", "_", name)[:80] or "document.txt"
+        with open(INBOX + "/" + safe, "w", errors="ignore") as f:
+            f.write(text[:2_000_000])                  # IO bound
+        tl = tok(text)
+        write_orbits(tl, max_ctx=GEN_C)                # prose depth, like the store
+        TOK_FREQ.update(w.lower() for w in tl)
+        held = 0
+        for s in re.split(r"(?<=[.!?])\s+", text):
+            s = " ".join(s.split())
+            if "|" not in s and "`" not in s and well_formed(s) and not stuttered(s):
+                hold_sentence(s, "lesson:file:" + safe)
+                held += 1
+        log("DOC", safe, f"{len(tl)} tokens read, {held} sentences held", (caption or "")[:60])
+        gist = ""
+        if RELAY["on"]:
+            out = _ollama(UNISON_PERSONA + "\n\nA user just sent you a document called '" + safe +
+                          "'. Here is its beginning:\n" + text[:3000] +
+                          "\n\nIn your voice, tell them briefly what you read and that you hold it now. No markdown.",
+                          timeout=180)
+            gist = " ".join(out.split())[:800]
+        summary = (gist or ("Read and held: " + safe + " -- " + str(len(tl)) + " tokens, " +
+                            str(held) + " sentences now mine."))
+        return safe, summary
+    except Exception as e:
+        log("DOC", "ingest error: " + str(e))
+        return None, "I could not read that file cleanly. Tell me what it says and I will hold it."
 
 def observe_image(images_b64, caption=""):
     """VISION INTAKE, my own eye first: the image enters as counted fold
