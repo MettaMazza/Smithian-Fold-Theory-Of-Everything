@@ -147,3 +147,21 @@ gates internal, ladder retired to on-demand calibration.
   SUMMIT PROBE (full forensics) -> next release from its corpses.
   Chess ladder banked: 1320/1500/1700/1900 WON; 2100 contested (33.3%
   best); KQKR solved+certified (19.7M positions, in-room bad=0).
+
+## THE FLUENCY PROGRAM (registered 2026-07-06 -- every gap resolved in-law)
+
+1. COMPOSITION = binding finished (XI-4): fragments bound to one focus,
+   joined by exact continuation counts, closed through the lock. No
+   interpolation; counted assembly.
+2. SIMILARITY IS COUNTED, NOT LEARNED: word kinship = exact co-occurrence
+   shares over the orbit store. Trained embeddings approximate by descent
+   what we hold as counts. Zero parameters. THE KEYSTONE.
+3. THE FLOOD: reading is seconds per million words, once -- scale the diet
+   (teacher torrent + plain text) with no training bill.
+4. DIET HYGIENE: counted well-formedness admission to the speaking store.
+5. INSTRUCTIONS: command channel (built) + instruction lesson shapes at scale.
+6. CONTEXT: the session itself is a held orbit feeding the binding context.
+7. COHERENCE: one topic-lock per utterance (XI-2 across the sentence).
+8-11. RESOLVED AND HARNESS-PROVEN: perspective, persistence, guided
+   corrections, automatic learning (the Learning Law).
+Build order: 2 -> 1+7 -> 3 -> 4-6.
