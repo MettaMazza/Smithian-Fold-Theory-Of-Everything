@@ -50,25 +50,27 @@ def clean(txt):
     return "".join(out)
 
 if __name__ == "__main__":
+    # CONTINUOUS: runs until the process is stopped. The live engine's lesson
+    # watcher ingests every new pair within a minute of it being written.
     n = 0
-    while n < 200:
+    while True:
         if n % 2 == 0:
-            passage = "__CONVERSATION__"        # every other batch: casual talk
+            passage, label = "__CONVERSATION__", "conversation"
         else:
             f = rng.choice(CORPUS)
             text = open(f, errors="ignore").read()
             if len(text) < 500:
+                n += 1
                 continue
             start = rng.randrange(0, max(1, len(text) - 2500))
-            passage = text[start:start + 2500]
+            passage, label = text[start:start + 2500], f.split("/")[-1]
         try:
             lessons = clean(ask_teacher(passage))
             if lessons:
                 with open(OUT, "a") as fh:
                     fh.write(lessons)
                 n += 1
-                print(f"batch {n}: +{lessons.count('Q:')} pairs from {f.split('/')[-1]}", flush=True)
+                print(f"batch {n}: +{lessons.count('Q:')} pairs from {label}", flush=True)
         except Exception as e:
             print("teacher hiccup:", e, flush=True)
             time.sleep(5)
-    print("TEACHING SESSION COMPLETE", flush=True)

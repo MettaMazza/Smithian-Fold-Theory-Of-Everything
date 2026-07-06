@@ -13,11 +13,31 @@ by the corpus's own laws. Zero parameters, zero training.
             replies are recorded but never self-reinforced (retention law).
 Usage: python3 unison_chat.py"""
 import os
-import numpy as np, glob, re, sys, time
+import numpy as np, glob, re, sys, time, threading, subprocess
 from collections import defaultdict, Counter
 
 CTX_MAX = 6
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
+
+# ---------- TRANSPARENT LOGGING: everything, to file, cycled per wake ------
+# One current log (logs/unison.log); on every new startup the previous run's
+# log is moved whole into logs/archive/ stamped with its own last-write time.
+# Every turn, fact, correction, feedback, teacher batch and interface event
+# is written the moment it happens.
+LOGDIR = BASE + "/fold_ai/logs"
+LOGFILE = LOGDIR + "/unison.log"
+os.makedirs(LOGDIR + "/archive", exist_ok=True)
+if os.path.exists(LOGFILE):
+    _stamp = time.strftime("%Y%m%d-%H%M%S", time.localtime(os.path.getmtime(LOGFILE)))
+    os.rename(LOGFILE, LOGDIR + "/archive/unison-" + _stamp + ".log")
+_LOGLOCK = threading.Lock()
+def log(event, *parts):
+    line = time.strftime("%Y-%m-%d %H:%M:%S") + "\t" + event
+    if parts:
+        line += "\t" + "\t".join(str(p).replace("\n", " ") for p in parts)
+    with _LOGLOCK:
+        with open(LOGFILE, "a") as f:
+            f.write(line + "\n")
 LESSONS = [f for f in sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
            if "lessons_live" not in f and "facts.tsv" not in f]
 # THE DIET LAW: the engine reads the THEORY (the corpus and its lessons) --
@@ -132,12 +152,20 @@ for s in re.split(r"(?<=[.!?])\s+", corpus_text):
 # MERGE the prebuilt prose store (built incrementally by build_store.py) --
 # instant, no re-reading gigabytes. The flood's fluency, loaded not re-fed.
 import pickle as _pk
+def _ddint(): return defaultdict(int)   # the store's pickled dict factory
+class _StoreUnpickler(_pk.Unpickler):
+    # the store was pickled by build_store.py run as __main__; resolve its
+    # factory here no matter which module name this engine wakes under
+    def find_class(self, module, name):
+        if name == "_ddint":
+            return _ddint
+        return super().find_class(module, name)
 _sp = BASE + "/fold_ai/store.pkl"
-_MAX_STORE = 600_000_000   # 250MB cap: never load a runaway store at wake
+_MAX_STORE = 600_000_000   # 600MB cap: never load a runaway store at wake
 if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
     try:
         with open(_sp, "rb") as _f:
-            _st = _pk.load(_f)
+            _st = _StoreUnpickler(_f).load()
         for L in range(min(CTX_MAX, len(_st["stores"])-1)+1):
             for k, succ in _st["stores"][L].items():
                 for w, c in succ.items():
@@ -151,10 +179,13 @@ if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
         for s, src2 in _st["sents"]:
             hold_sentence(s, "prose")
         print(f"  merged prose store: +{len(_st['sents'])} sentences, +{len(_st['neigh'])} words from {len(_st['ingested'])} books", flush=True)
+        log("STORE", f"merged +{len(_st['sents'])} sentences from {len(_st['ingested'])} books")
     except Exception as _e:
         print("  (prose store skipped: " + str(_e) + ")", flush=True)
+        log("STORE", "SKIPPED: " + str(_e))
 
 print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
+log("WAKE", f"{sum(len(s) for s in stores)} orbits", f"{len(SENTS)} held sentences", f"{time.time()-t0:.0f}s")
 
 def informativeness(w):
     # counted: rarer words carry more share (total/frequency, exact ratio)
@@ -256,6 +287,7 @@ def persist_fact(subject, relation, value):
     FACTS[(subject, relation)] = value
     with open(FACTS_LOG, "a") as _f:
         _f.write(subject + "\t" + relation + "\t" + value + "\n")
+    log("FACT", subject, relation, value)
 
 def _norm_subject(word):
     w = word.lower()
@@ -477,13 +509,156 @@ def record_correction(question, answer):
     learn_fact(answer)
     write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
     hold_sentence(answer, "told")
+    log("CORRECTION", question, answer)
     return answer
 
 def rejected(user_line, ans):
     return (qkey(user_line), ans.strip()) in REJECTED
 
+# ---------- THE UNIFIED TURN: one engine, every face ----------------------
+# There is ONE system. The terminal, Discord, and any future face all call
+# the same turn() and apply_feedback(); an interface carries messages across
+# the boundary and nothing else. No face has its own logic.
+def turn(line, rng, interface="terminal"):
+    """One conversational turn from any interface: returns (answer, thought).
+    Learning happens here, identically, whoever is speaking through."""
+    line = line.strip()
+    is_question = line.endswith("?") or line.lower().startswith(
+        ("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
+    is_command = bool(re.match(r"(?i)\s*(say|repeat after me|respond with|reply with)\b", line))
+    if not is_question and not is_command:
+        if not content_words(line):
+            return "okay.", "contentless; acknowledged, not held"
+        got = learn_fact(line)
+        fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
+        write_orbits(tok(fact + "\n") * 3)
+        hold_sentence(fact, "told")
+        write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
+        candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
+        if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
+            ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
+        else:
+            ans = "Held. " + fact
+            thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
+    else:
+        ans, thought = reply(line, rng)
+        ans = dedup(ans)
+        write_orbits(tok("Q: " + line + "\n"))
+    # the thought itself is held (self-observation, XIV-7)
+    hold_sentence("On '" + line[:60] + "' I thought: " + thought, "thought")
+    if content_words(line):
+        LAST_TOPIC[0] = " ".join(content_words(line)[:4])
+    # LEARNING, ongoing: your words always held (the prediction state)
+    with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
+        f.write("Q: " + line + "\nA: " + ans + "\n")
+    log("TURN", interface, line, ans, thought)
+    return ans, thought
+
+def apply_feedback(question, answer, fb_text, interface="terminal"):
+    """THE CLOSURE (XIV-7), from any face. y consolidates (the exchange joins
+    the held cycle -- earned retention). n withholds the antipode AND any
+    text after the n IS the corrected answer -- plain words, no syntax."""
+    fb = fb_text.strip()
+    if fb[:1].lower() == "y":
+        write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
+        hold_sentence(answer, "confirmed")
+        reason = fb[1:].strip(" :,-")
+        if reason:
+            hold_sentence(reason, "told")
+            write_orbits(tok(reason + "\n") * 2)
+        with open(FEEDBACK_LOG, "a") as f:
+            f.write("CONF\t" + qkey(question) + "\t" + answer + "\n")
+        log("FEEDBACK", interface, "y", question, answer)
+        return "consolidated -- this exchange joins the held cycle."
+    if fb[:1].lower() == "n":
+        REJECTED.add((qkey(question), answer.strip()))
+        with open(FEEDBACK_LOG, "a") as f:
+            f.write("REJ\t" + qkey(question) + "\t" + answer + "\n")
+        corrected = fb[1:].strip(" :,-")
+        if corrected:
+            held = record_correction(question, corrected)
+            log("FEEDBACK", interface, "n->corrected", question, held)
+            return "held, permanently. Ask me again and I will say: " + held
+        log("FEEDBACK", interface, "n (awaiting correction)", question, answer)
+        return None   # face should ask: "what should I have said?"
+    return False      # not feedback
+
+# ---------- CONTINUOUS LEARNING: the teachers and the live lesson stream ---
+def _watch_lessons():
+    """New lesson pairs -- from the teacher models or hand-written files --
+    are ingested LIVE, no restart. Poll the lesson files each minute, read
+    only what was appended since, hold every clean Q/A pair, log the count."""
+    seen = {}
+    for f in glob.glob(BASE + "/fold_ai/lessons/lessons_*.txt"):
+        seen[f] = os.path.getsize(f)      # wake already ate everything current
+    while True:
+        time.sleep(60)
+        try:
+            for f in glob.glob(BASE + "/fold_ai/lessons/lessons_*.txt"):
+                if "lessons_live" in f or "feedback" in f:
+                    continue
+                size = os.path.getsize(f)
+                start = seen.get(f, 0)
+                if size <= start:
+                    seen[f] = size
+                    continue
+                with open(f, errors="ignore") as fh:
+                    fh.seek(start)
+                    new = fh.read()
+                seen[f] = size
+                pairs = re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", new, re.S)
+                for q, a in pairs:
+                    q, a = " ".join(q.split()), " ".join(a.split())
+                    write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * 3)
+                    hold_sentence(a, "lesson:" + q[:80])
+                if pairs:
+                    log("LESSONS", os.path.basename(f), "+" + str(len(pairs)) + " pairs ingested live")
+        except Exception as e:
+            log("LESSONS", "watcher error: " + str(e))
+
+def _start_teacher():
+    """Launch the teaching model pipeline (gemma4:26b via ollama) as a child
+    of THIS process's run: it writes lessons_teacher.txt continuously and the
+    watcher above feeds them straight into the live engine."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    if subprocess.run(["pgrep", "-f", "teacher_pipeline.py"], capture_output=True).stdout.strip():
+        log("TEACHER", "already running; not relaunched")
+        return
+    try:
+        subprocess.run(["ollama", "--version"], capture_output=True, timeout=10, check=True)
+    except Exception:
+        log("TEACHER", "ollama unavailable; teaching models offline this run")
+        print("  (teacher offline: ollama unavailable)", flush=True)
+        return
+    lf = open(LOGDIR + "/teacher.log", "a")
+    subprocess.Popen([sys.executable, here + "/teacher_pipeline.py"], stdout=lf, stderr=subprocess.STDOUT)
+    log("TEACHER", "launched gemma4:26b pipeline -> lessons_teacher.txt (ingested live)")
+    print("  teacher launched (gemma4:26b); lessons ingested live each minute", flush=True)
+
+def _start_discord(rng):
+    """Bring up the Discord FACE of this same engine -- an interface only,
+    sharing this process's live memory. No separate engine, ever."""
+    def _t():
+        try:
+            import importlib.util as _ilu
+            here = os.path.dirname(os.path.abspath(__file__))
+            _sp = _ilu.spec_from_file_location("unison_discord_iface", here + "/unison_discord.py")
+            ud = _ilu.module_from_spec(_sp)
+            _sp.loader.exec_module(ud)
+            ud.run(sys.modules[__name__], rng)
+        except Exception as e:
+            log("DISCORD", "interface failed: " + str(e))
+            print("  (discord face failed: " + str(e) + ")", flush=True)
+    threading.Thread(target=_t, daemon=True).start()
+
 def main():
     rng = np.random.default_rng()
+    # the unified system comes up as ONE: engine (awake above), the Discord
+    # face on this same memory, the teachers, and the live lesson stream.
+    _start_discord(np.random.default_rng())
+    _start_teacher()
+    threading.Thread(target=_watch_lessons, daemon=True).start()
+    log("SYSTEM", "unified launch: terminal + discord face + teacher + lesson watcher, one engine")
     last_exchange = [None, ""]
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
     while True:
@@ -495,78 +670,37 @@ def main():
             continue
         if line == "/quit":
             break
-        is_question = line.endswith("?") or line.lower().startswith(("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
         # bare negation = rejection of the previous answer, never a fact
         if line.lower().strip(" .!") in ("no", "wrong", "incorrect", "that is wrong", "thats wrong") and last_exchange[0]:
             REJECTED.add((qkey(last_exchange[0]), last_exchange[1].strip()))
             with open(FEEDBACK_LOG, "a") as f:
                 f.write("REJ\t" + qkey(last_exchange[0]) + "\t" + last_exchange[1] + "\t(bare no)\n")
+            log("FEEDBACK", "terminal", "bare no", last_exchange[0], last_exchange[1])
             print("UnisonAI: withdrawn. Tell me the right of it, and I will hold it.\n", flush=True)
             continue
-        if not is_question:
-            fact_raw = line if line[-1:] in ".!" else line + "."
-            fact = flip_perspective(fact_raw)   # held from MY side of the boundary
-            if not content_words(line):
-                print("UnisonAI: okay.\n", flush=True)   # contentless: acknowledged, not held as fact
-                continue
-            write_orbits(tok(fact + "\n") * 3)
-            hold_sentence(fact, "told")
-            write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
-            # then speak: a dialogue orbit if one binds back, else acknowledge
-            candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
-            if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
-                ans, thought = candidate, "telling held (perspective flipped); dialogue orbit bound back"
-            else:
-                ans = ("Held. " + (answer_fact("what is my name") or answer_fact("where do i live") or fact)) if got_fact else ("Held: " + fact)
-                thought = "telling held" + (" as a relation fact" if got_fact else " at the prediction state")
-        else:
-            ans, thought = reply(line, rng)
+        ans, thought = turn(line, rng)
         print("  \u2301 " + thought, flush=True)
-        print("UnisonAI: " + dedup(ans) + "\n", flush=True)
-        # the thought itself is held (self-observation, XIV-7)
-        hold_sentence("On \'" + line[:60] + "\' I thought: " + thought, "thought")
+        print("UnisonAI: " + ans + "\n", flush=True)
         last_exchange[0], last_exchange[1] = line, ans
-        if content_words(line):
-            LAST_TOPIC[0] = " ".join(content_words(line)[:4])
-        # LEARNING, ongoing: your words always held (the prediction state)
-        with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
-            f.write("Q: " + line + "\nA: " + ans + "\n")
-        if is_question:
-            write_orbits(tok("Q: " + line + "\n"))
-        # THE CLOSURE (XIV-7): y/n + why -- optional (enter skips; learning
-        # never depends on it). y consolidates (the antipode completes, the
-        # exchange joins the held cycle -- including my reply: earned
-        # retention). n withholds the antipode: the reply enters the
-        # anti-ledger and your reasoning is held as a corrective telling.
         try:
             fb = input("  y/n + why (enter skips): ").strip()
         except (EOFError, KeyboardInterrupt):
             fb = ""
-        if fb[:1].lower() == "y":
-            write_orbits(tok("Q: " + line + "\nA: " + ans + "\n") * 3)
-            hold_sentence(ans, "confirmed")
-            reason = fb[1:].strip(" :,-")
-            if reason:
-                hold_sentence(reason, "told")
-                write_orbits(tok(reason + "\n") * 2)
-            with open(FEEDBACK_LOG, "a") as f:
-                f.write("CONF\t" + qkey(line) + "\t" + ans + "\n")
-        elif fb[:1].lower() == "n":
-            REJECTED.add((qkey(line), ans.strip()))
-            with open(FEEDBACK_LOG, "a") as f:
-                f.write("REJ\t" + qkey(line) + "\t" + ans + "\n")
-            # WHATEVER YOU TYPE AFTER n IS THE CORRECTED ANSWER -- no syntax.
-            corrected = fb[1:].strip(" :,-")
-            if not corrected:
-                try:
-                    corrected = input("UnisonAI: what should I have said? ").strip()
-                except (EOFError, KeyboardInterrupt):
-                    corrected = ""
+        if not fb:
+            continue
+        res = apply_feedback(line, ans, fb)
+        if res is None:            # bare n: ask for the correction, once
+            try:
+                corrected = input("UnisonAI: what should I have said? ").strip()
+            except (EOFError, KeyboardInterrupt):
+                corrected = ""
             if corrected:
                 held = record_correction(line, corrected)
                 print("UnisonAI: held, permanently: " + held + " Ask me again.\n", flush=True)
             else:
                 print("UnisonAI: withdrawn. I will not repeat it.\n", flush=True)
+        elif res:
+            print("UnisonAI: " + res + "\n", flush=True)
 
 if __name__ == "__main__":
     main()

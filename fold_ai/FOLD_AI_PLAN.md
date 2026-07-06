@@ -106,6 +106,25 @@ gates internal, ladder retired to on-demand calibration.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (latest): **THE UNIFIED SYSTEM IS UP -- one engine, many faces.**
+  `python3 unison_chat.py` is the single launch: the engine wakes (theory +
+  lessons + the 317MB prebuilt prose store: 4.47M orbits, 64,924 held
+  sentences, 22s), then brings up ITS OWN faces and organs -- the Discord
+  interface (unison_discord.py is a pure face: no engine of its own, it
+  carries messages to the live process's turn()/apply_feedback and nothing
+  else), the teaching pipeline (gemma4:26b writing lessons continuously),
+  and the live lesson watcher (new teacher/hand-written pairs ingested
+  within a minute, no restart -- measured: +9 pairs live in the first
+  minute). CORRECTIONS channel shipped: `n <the right answer>` in any face
+  is held permanently, wins over everything, survives restarts
+  (corrections.tsv). Identity seeded and persistent (facts.tsv). FULL
+  TRANSPARENT LOGGING: logs/unison.log records every turn, fact,
+  correction, feedback, teacher batch and interface event as it happens;
+  cycled whole into logs/archive/ on every new startup. Harness 9/9.
+  REMAINING to Unison-complete: fluency to small-model level (diet keeps
+  growing; store rebuilt as diet/ grows), then audio/image/video/sensory
+  modalities, real-time P2P substrate, ErnosPlain port.
+
 - 2026-07-06 (continuing): **RUNG 5-NATIVE TAKEN — THE FOLD-NATIVE SEED
   BEATS THE TRAINED TRANSFORMER ON THE TASK: 1.2891 vs 1.8878** (held-out
   cross-entropy, same arena; widest gate margin of the campaign). The
