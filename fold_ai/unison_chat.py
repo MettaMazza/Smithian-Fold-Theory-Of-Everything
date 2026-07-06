@@ -542,6 +542,7 @@ def reply(user_line, rng, face=None):
             strong = bool(cw) and len(lq & set(cw)) * 2 >= len(set(cw))
         else:
             strong = hit[1] in ("told", "confirmed")
+        strong = strong or graduated(user_line)   # a graduated territory is mine
         if strong or face not in _RELAY_FACES or not RELAY["on"]:
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
             return hit[0], "; ".join(thought)
@@ -553,7 +554,7 @@ def reply(user_line, rng, face=None):
             return a, "; ".join(thought)
         thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
         return hit[0], "; ".join(thought)
-    if RELAY["on"] and face in _RELAY_FACES:
+    if RELAY["on"] and face in _RELAY_FACES and not graduated(user_line):
         relayed = _teacher_relay(user_line)
         if relayed:
             a, reasoning = relayed
@@ -616,6 +617,33 @@ if os.path.exists(CORR_LOG):
         _p = _ln.rstrip("\n").split("\t", 1)
         if len(_p) == 2:
             CORRECTIONS[_p[0]] = _p[1]
+
+# ---------- GRADUATION: the score that carries me past my teacher ---------
+# Every autonomous tutor cycle is a HEAD-TO-HEAD: my own answer vs my
+# teacher's, judged. The tally is per question-territory and counted; when
+# my wins pass my losses in a territory (the lock, 1/2, crossed by majority)
+# I answer there MYSELF -- the teacher steps back one territory at a time,
+# measured, never scheduled. The same gate discipline that climbed chess.
+GRAD = {}   # qkey -> [wins, losses]
+GRAD_LOG = BASE + "/fold_ai/lessons/graduation.tsv"
+if os.path.exists(GRAD_LOG):
+    for _ln in open(GRAD_LOG):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) == 3:
+            GRAD[_p[0]] = [int(_p[1]), int(_p[2])]
+
+def record_grad(k, won):
+    w, l = GRAD.get(k, [0, 0])
+    GRAD[k] = [w + (1 if won else 0), l + (0 if won else 1)]
+    with open(GRAD_LOG + ".tmp", "w") as f:
+        for kk, (ww, ll) in GRAD.items():
+            f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\n")
+    os.replace(GRAD_LOG + ".tmp", GRAD_LOG)
+    log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}")
+
+def graduated(user_line):
+    w, l = GRAD.get(qkey(user_line), (0, 0))
+    return w > l   # majority: my answer beats my teacher's in this territory
 
 def record_correction(question, answer):
     answer = answer.strip()
@@ -794,6 +822,13 @@ def toggle(cmd):
         AUTO["selfplay"] = not AUTO["selfplay"]
         log("TOGGLE", "selfplay", onoff(AUTO["selfplay"]))
         return "self-play " + onoff(AUTO["selfplay"]) + "."
+    if c in ("score", "status"):
+        wins = sum(w for w, l in GRAD.values())
+        losses = sum(l for w, l in GRAD.values())
+        grads = sum(1 for w, l in GRAD.values() if w > l)
+        return (f"graduation score vs my teacher: {wins} wins, {losses} losses across {len(GRAD)} "
+                f"question territories; {grads} graduated (I answer those myself). "
+                f"Held: {len(SENTS)} sentences, {len(CORRECTIONS)} taught answers, {len(FACTS)} facts.")
     return None
 
 _ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]|\x1b\][^\x07]*\x07|[\x00-\x08\x0b-\x1f\x7f]")
@@ -1048,17 +1083,24 @@ def _tutor_loop():
             if not q.rstrip().endswith("?"):
                 log("TUTOR", "cycle rejected: not a question", q[:80])
                 continue
+            # HEAD-TO-HEAD (the graduation score): my own answer vs my
+            # teacher's, judged blind. A win tallies toward graduating this
+            # territory; a loss holds the teacher's answer as a correction,
+            # so the same territory answers with it -- and wins -- next time.
             ans, _ = turn(q, rng, "tutor")
-            verdict = _ollama("QUESTION: " + q + "\nREFERENCE ANSWER: " + ref +
-                              "\nSTUDENT ANSWER: " + ans +
-                              "\nDoes the student answer convey the reference answer's meaning? "
-                              "Reply with exactly one word: YES or NO.", timeout=300)
-            if re.search(r"\bYES\b", verdict.upper()):
+            verdict = _ollama("QUESTION: " + q + "\nANSWER A: " + ans + "\nANSWER B: " + ref +
+                              "\nWhich answer better serves the person asking? "
+                              "Reply with exactly one letter: A or B.", timeout=300)
+            v = re.search(r"\b([AB])\b", verdict.upper())
+            k = qkey(q)
+            if v and v.group(1) == "A":
+                record_grad(k, True)
                 apply_feedback(q, ans, "y", "tutor")
-                log("TUTOR", "y", q)
+                log("TUTOR", "engine WON head-to-head", q)
             else:
+                record_grad(k, False)
                 apply_feedback(q, ans, "n " + ref, "tutor")
-                log("TUTOR", "n->corrected", q, ref)
+                log("TUTOR", "teacher won; correction held", q)
         except Exception as e:
             log("TUTOR", "error: " + str(e))
         time.sleep(20)
