@@ -46,14 +46,14 @@ counted signal they proved optimal, which was already ours.
 
 ## THE ADOPTIONS (each: verified source mechanism → fold form)
 
-**M1 — ZPD curriculum for the tutor (build next).** SEC's p=1/2 criterion,
+**M1 — ZPD curriculum for the tutor. BUILT + VERIFIED 2026-07-06.** SEC's p=1/2 criterion,
 counted. The tutor already keeps a per-territory win/loss tally
 (graduation.tsv). Curriculum law: quiz territories whose tally sits
 NEAREST wins/(wins+losses) = 1/2 — the live edge of ability — instead of
 uniform sampling. Solved territories rest; hopeless ones wait for
 teaching; the edge gets the attention. Zero knobs: the target is the lock.
 
-**M2 — Absolute-Zero self-play (three counted modes, own verifiers).**
+**M2 — Absolute-Zero self-play (three counted modes, own verifiers). BUILT + VERIFIED 2026-07-06 (v1: deduction/abduction/induction rotating over the store's own ground).**
 Their loop: propose task → solve → verify by deterministic executor, in
 three enumerable modes (deduction: predict output; abduction: infer input;
 induction: synthesize the rule). Fold form: Unison proposes its own tasks
@@ -63,7 +63,7 @@ checks — no external labels, no gradient, learnability targeted at
 solve-rate 1/2 per M1. This upgrades self-play from recall-drilling to
 task-generation with verification.
 
-**M3 — STaR-filtered reasoning retention.** STaR's verified core
+**M3 — STaR-filtered reasoning retention. BUILT + VERIFIED 2026-07-06 (both directions: held on closure, discarded with a rejected answer).** STaR's verified core
 (arXiv 2203.14465 + RL-STaR theory): keep only reasoning traces whose
 final answer verifies; iterated filtering self-corrects. Fold form: the
 observer's taught reasoning lines are held ONLY when their answer wins the
@@ -71,7 +71,7 @@ closure (y-confirmation, head-to-head win, or verifier pass); reasoning
 attached to losing answers is discarded with them. The filter is a pure
 count — answer verified or not — exactly as the paper states.
 
-**M4 — Consolidation interleaving (the sleep law, XI-6).** Neuroscience
+**M4 — Consolidation interleaving (the sleep law, XI-6). BUILT + VERIFIED 2026-07-06 (newest/oldest braid, counted).** Neuroscience
 sweep (SCoRe, biorxiv 2025): the brain avoids catastrophic forgetting by
 interleaving replay of NOVEL and FAMILIAR traces within each slow-wave
 cycle. Fold form: each self-play batch drills a counted mix — half newest
@@ -116,3 +116,19 @@ form of a process reward model and would deepen M3.
 Build order: M1 → M3 (small deltas to live loops) → M4 → M2 (the big
 upgrade) → M5 at need. Every item lands as counted selection or counted
 retention over exact records; no item introduces a parameter.
+
+## THE FORCING PASS — DONE 2026-07-06
+
+Every model quantity in the engine now traces to the generators and halts
+on mismatch (`_forced`, the corpus's forced_to_be / ep_exit discipline;
+halt proven live on a fitted value): binary 2 and colour 3 computed FORWARD
+(colour as the tripling-fold preimage count, the verify_colour_prediction
+construction); context depth 6 = their product; bind lock 1/3 = the XI-1
+memory-cycle share; kin floor 1/6 = one part in the generators' product;
+compose floor 1/12 = the kin floor at the ground; sight coefficients
+32 = 2^5 with 5 the computed minimal binary cover of 27 (the N8b law);
+kin breadth = colour; every repetition count = a generator; the
+informativeness cutoff = one part in a thousand of the counted mass, one
+rule used everywhere. Interface/IO bounds (buffer lengths, string caps,
+timeouts) are marked as hardware facts where they occur; they are not
+model quantities. Harness 9/9 through the entire pass.

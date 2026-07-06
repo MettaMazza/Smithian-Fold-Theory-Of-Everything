@@ -16,8 +16,41 @@ import os
 import numpy as np, glob, re, sys, time, threading, subprocess, random
 from collections import defaultdict, Counter
 
-CTX_MAX = 6
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
+
+# ---------- THE FORCED LOCKS: no chosen number enters the model ----------
+# THE LAW (Maria, ground truth): every model quantity is forced, counted,
+# derived and verified -- never fitted, never chosen. Each lock below is
+# cross-checked against an INDEPENDENT forward computation at wake, and any
+# mismatch HALTS the engine (the corpus's forced_to_be / ep_exit
+# discipline, as in proof.py and the ErnosPlain clean room). Interface/IO
+# bounds (buffer lengths, string caps, timeouts) are hardware facts and are
+# marked as such where they occur; they are not model quantities.
+from fractions import Fraction
+
+def _forced(name, value, independent):
+    if value != independent:
+        raise SystemExit("FORCED VALUE VIOLATED: " + name + " -- engine halted")
+    return value
+
+GEN_B = _forced("binary generator", 2, len({0, 1}))   # the fold doubles: two states of the period spectrum
+# colour = the tripling-fold fibre size, computed FORWARD as the preimage
+# count of a point under x -> 3x mod 1 (the construction of
+# verify_colour_prediction, proof.py:3904):
+_y = Fraction(1, 2)
+GEN_C = _forced("colour generator (tripling fibre)", 3,
+                len([(_y + k) / 3 for k in range(6) if 0 <= (_y + k) / 3 < 1]))
+_d = 0
+while GEN_B ** _d < GEN_C ** 3:
+    _d += 1
+DEPTH5 = _forced("covering depth (minimal binary cover of 27)", 5, _d)   # the N8b law
+CTX_MAX = _forced("context depth", 6, GEN_B * GEN_C)          # the two generators' product
+BIND_LOCK = _forced("bind lock", Fraction(1, 3), Fraction(1, GEN_C))          # XI-1: the memory-cycle share 1/3
+KIN_FLOOR = _forced("kin floor", Fraction(1, 6), Fraction(1, GEN_B * GEN_C))  # one part in the generators' product
+COMPOSE_FLOOR = _forced("compose floor", Fraction(1, 12), KIN_FLOOR / GEN_B)  # the kin floor at the ground (half)
+SIGHT_K = _forced("sight coefficients", 32, GEN_B ** DEPTH5)  # 2^5: the covering depth, and the measured
+                                                              # carrier scale (top-32 = 81-87% of a solved field)
+KIN_K = GEN_C   # kin expansion breadth = colour
 
 # ---------- TRANSPARENT LOGGING: everything, to file, cycled per wake ------
 # One current log (logs/unison.log); on every new startup the previous run's
@@ -67,9 +100,9 @@ _OKSHORT = frozenset(("on","to","in","an","at","as","be","we","he","it","or","so
 def stuttered(text):
     if _STUTTER.search(text):
         return True
-    for m in re.finditer(r"(?i)\b(\w{2,3})\s+(\w{4,})", text):
+    for m in re.finditer(r"(?i)\b(\w{1,3})\s+(\w{4,})", text):
         a, b = m.group(1).lower(), m.group(2).lower()
-        if b.startswith(a) and a not in _OKSHORT:
+        if b.startswith(a) and a not in _OKSHORT and a not in ("a", "i", "o"):
             return True          # a broken fragment of the word that follows
     return False
 
@@ -131,7 +164,7 @@ def build_neigh_index():
             if TOK_FREQ.get(_c, 0) <= common:
                 NEIGH_INDEX[_c].add(_w)
 
-def kin_expand(words, k=3):
+def kin_expand(words, k=KIN_K):
     out = set(w.lower() for w in words)
     for w in list(out):
         nb = NEIGH.get(w)
@@ -144,11 +177,11 @@ def kin_expand(words, k=3):
         cands = [(kinship(w, o), o) for o in cand if len(o) > 3]
         cands.sort(reverse=True)
         for sc, o in cands[:k]:
-            if sc > 0.15:
+            if sc > KIN_FLOOR:
                 out.add(o)
     return out
 
-full = corpus_text + ("\n" + lesson_text) * 3
+full = corpus_text + ("\n" + lesson_text) * GEN_C
 words = tok(full)
 write_orbits(words)
 build_neighbours(words)
@@ -426,7 +459,7 @@ def compose(user_line, rng, max_len=40):
         return None
     focus = cw[0]                                   # the single lock (XI-2)
     seeds = INDEX.get(focus) or set()
-    for w in kin_expand([focus], k=3):
+    for w in kin_expand([focus], k=KIN_K):
         seeds |= INDEX.get(w, set())
     if not seeds:
         return None
@@ -443,7 +476,7 @@ def compose(user_line, rng, max_len=40):
                 # admit the highest-count successor that stays kin to the lock
                 for cand, _n in sorted(s.items(), key=lambda kv:-kv[1]):
                     if cand in ("Q","A","q","a"): continue
-                    if len(cand) < 3 or kinship(cand, focus) > 0.05 or cand in (".",",","the","a","is","of","and"):
+                    if len(cand) < 3 or kinship(cand, focus) > COMPOSE_FLOOR or cand in (".",",","the","a","is","of","and"):
                         nxt = cand; break
                 if nxt: break
         if not nxt: break
@@ -511,7 +544,11 @@ def reply(user_line, rng, face=None):
         thought.append("dialogue candidate previously rejected; withheld")
         candidate = None
     if candidate:
-        shared = set(cw) & set(t.lower() for t in tok(candidate))
+        # shared focus must CARRY information: the same counted rule as the
+        # kin index -- a word above one part in a thousand of the mass
+        # ("the", "and") discriminates nothing and cannot pass a self-check
+        shared = {w for w in set(cw) & set(t.lower() for t in tok(candidate))
+                  if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
         if shared or len(cw) == 0:
             # young-gate: a stitched candidate answers a USER only for
             # greeting-class lines (no content words) where taught
@@ -526,7 +563,7 @@ def reply(user_line, rng, face=None):
         else:
             thought.append("dialogue candidate failed self-check (no shared focus)")
     hit, share = bind(user_line)
-    if (hit is None or share < 0.34) and len(cw) < 3 and SESSION_TRAIL:
+    if (hit is None or share < BIND_LOCK) and len(cw) < GEN_C and SESSION_TRAIL:
         # UNLIMITED CONTEXT, human-style: memory never truncates (binding is
         # content-addressed over EVERYTHING held); attention over the
         # conversation is what adjusts -- and ONLY when the question alone
@@ -547,7 +584,7 @@ def reply(user_line, rng, face=None):
     if hit and rejected(user_line, hit[0]):
         thought.append("bound fact previously rejected; withheld")
         hit = None
-    if hit and share >= 0.34:
+    if hit and share >= BIND_LOCK:
         # WHILE I AM YOUNG, MY TEACHER CARRIES ME: only MATCHED experience
         # answers users directly -- a lesson answer counts only when the
         # lesson's own question shares at least half the user's question
@@ -555,7 +592,7 @@ def reply(user_line, rng, face=None):
         # observer answers, joining my experience for next time.
         if hit[1].startswith("lesson:"):
             lq = set(content_words(hit[1][7:]))
-            strong = bool(cw) and len(lq & set(cw)) * 2 >= len(set(cw))
+            strong = bool(cw) and len(lq & set(cw)) * GEN_B >= len(set(cw))   # the ground: half
         else:
             strong = hit[1] in ("told", "confirmed")
         strong = strong or graduated(user_line)   # a graduated territory is mine
@@ -640,20 +677,26 @@ if os.path.exists(CORR_LOG):
 # my wins pass my losses in a territory (the lock, 1/2, crossed by majority)
 # I answer there MYSELF -- the teacher steps back one territory at a time,
 # measured, never scheduled. The same gate discipline that climbed chess.
+PENDING_REASON = {}   # qkey -> (question, reasoning) awaiting its answer's closure
 GRAD = {}   # qkey -> [wins, losses]
+GRADQ = {}  # qkey -> the territory's question text (for ZPD revisits)
 GRAD_LOG = BASE + "/fold_ai/lessons/graduation.tsv"
 if os.path.exists(GRAD_LOG):
     for _ln in open(GRAD_LOG):
         _p = _ln.rstrip("\n").split("\t")
-        if len(_p) == 3:
+        if len(_p) >= 3:
             GRAD[_p[0]] = [int(_p[1]), int(_p[2])]
+            if len(_p) >= 4 and _p[3]:
+                GRADQ[_p[0]] = _p[3]
 
-def record_grad(k, won):
+def record_grad(k, won, question=None):
     w, l = GRAD.get(k, [0, 0])
     GRAD[k] = [w + (1 if won else 0), l + (0 if won else 1)]
+    if question:
+        GRADQ[k] = question
     with open(GRAD_LOG + ".tmp", "w") as f:
         for kk, (ww, ll) in GRAD.items():
-            f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\n")
+            f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\t" + GRADQ.get(kk, "") + "\n")
     os.replace(GRAD_LOG + ".tmp", GRAD_LOG)
     log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}")
 
@@ -671,7 +714,7 @@ def record_correction(question, answer):
     # the correction is spoken in MY voice -- flip before extracting the
     # relation so first-person facts land on self, never on the teller
     learn_fact(flip_perspective(answer))
-    write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
+    write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
     hold_sentence(answer, "told")
     log("CORRECTION", question, answer)
     return answer
@@ -707,9 +750,9 @@ def turn(line, rng, interface="terminal"):
         # reply candidate BEFORE the telling is written -- otherwise the
         # freshest orbit is the echo of her own words (the parrot disease)
         candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
-        write_orbits(tok(fact + "\n") * 3)
+        write_orbits(tok(fact + "\n") * GEN_C)
         hold_sentence(fact, "told")
-        write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
+        write_orbits(tok("q: " + line + "\na: " + fact + "\n") * GEN_B)
         # THE CHILD'S ARC, stage 2: I asked for help, the user explained.
         # Retry with their words held; if still unsure, my observer steps in
         # -- and either way, what closes the gap is mine from then on.
@@ -749,7 +792,9 @@ def turn(line, rng, interface="terminal"):
         else:
             if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
                 candidate = None                    # never parrot the telling back
-            if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
+            _sh = {w for w in set(content_words(line)) & set(t.lower() for t in tok(candidate or ""))
+                   if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+            if candidate and not rejected(line, candidate) and _sh:
                 ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
             else:
                 ans = "Held. " + fact
@@ -788,18 +833,22 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
     text after the n IS the corrected answer -- plain words, no syntax."""
     fb = fb_text.strip()
     if fb[:1].lower() == "y":
-        write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
+        write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
         hold_sentence(answer, "confirmed")
         reason = fb[1:].strip(" :,-")
         if reason:
             hold_sentence(reason, "told")
-            write_orbits(tok(reason + "\n") * 2)
+            write_orbits(tok(reason + "\n") * GEN_B)
         with open(FEEDBACK_LOG, "a") as f:
             f.write("CONF\t" + qkey(question) + "\t" + answer + "\n")
+        pr = PENDING_REASON.pop(qkey(question), None)
+        if pr:   # M3: the answer closed -- its reasoning is retained
+            hold_sentence("On '" + pr[0] + "' the reasoning is: " + pr[1], "thought")
         log("FEEDBACK", interface, "y", question, answer)
         return "consolidated -- this exchange joins the held cycle."
     if fb[:1].lower() == "n":
         REJECTED.add((qkey(question), answer.strip()))
+        PENDING_REASON.pop(qkey(question), None)   # M3: reasoning dies with its answer
         with open(FEEDBACK_LOG, "a") as f:
             f.write("REJ\t" + qkey(question) + "\t" + answer + "\n")
         corrected = fb[1:].strip(" :,-")
@@ -967,10 +1016,15 @@ def _teacher_relay(question, user_help=""):
         log("RELAY", "observer answer rejected", question[:80])
         return None
     a = a if a[-1:] in ".!?" else a + "."
-    write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * 3)
+    write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * GEN_C)
     hold_sentence(a, "lesson:" + question.strip()[:80])
-    if reasoning:                                   # taught reasoning joins MY thought
-        hold_sentence("On '" + question.strip()[:60] + "' the reasoning is: " + reasoning[:250], "thought")
+    # M3, STaR-filtered retention -- INSPIRATION: STaR (Zelikman et al.,
+    # arXiv 2203.14465): keep only reasoning whose ANSWER verifies; the
+    # filter is a pure count. FOLD FORM: reasoning waits at the prediction
+    # state and joins my thought only when its answer closes (y or a
+    # head-to-head win); it is discarded with a rejected answer.
+    if reasoning:
+        PENDING_REASON[qkey(question)] = (question.strip()[:60], reasoning[:250])
     with open(BASE + "/fold_ai/lessons/lessons_relay.txt", "a") as f:
         f.write("Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
     log("RELAY", question, a)
@@ -1008,7 +1062,7 @@ def fold_see(img_bytes):
         flat = sorted((-abs(int(C[r, c])), r, c)
                       for r in range(64) for c in range(64) if (r, c) != (0, 0))
         toks = []
-        for negmag, r, c in flat[:32]:
+        for negmag, r, c in flat[:SIGHT_K]:
             if negmag == 0:
                 break
             toks.append("w%dx%d%s" % (r, c, "p" if C[r, c] > 0 else "m"))
@@ -1050,7 +1104,7 @@ def observe_image(images_b64, caption=""):
         if not d or stuttered(d):
             return None
         hold_sentence("I was shown an image: " + d, "told")
-        write_orbits(tok("I was shown an image: " + d + "\n") * 2)
+        write_orbits(tok("I was shown an image: " + d + "\n") * GEN_B)
         log("VISION", (caption or "(no caption)")[:60], d[:150])
         # THE PAIRING: the new spectrum, closed by the observer's
         # description -- sight held at the prediction state, meaning as the
@@ -1059,7 +1113,7 @@ def observe_image(images_b64, caption=""):
             st = " ".join(sight)
             TOK_FREQ.update(sight)   # new sight tokens join the census NOW,
                                      # so recognition works this session too
-            write_orbits(tok("SIGHT: " + st + "\nMEANS: " + d + "\n") * 2)
+            write_orbits(tok("SIGHT: " + st + "\nMEANS: " + d + "\n") * GEN_B)
             hold_sentence("SIGHT " + st + " means: " + d, "lesson:SIGHT: " + st[:60])
             with open(BASE + "/fold_ai/lessons/lessons_sight.txt", "a") as f:
                 f.write("Q: SIGHT: " + st + "\nA: " + d + "\n")   # sight survives wakes
@@ -1078,27 +1132,48 @@ def _tutor_loop():
     n corrects with the reference held permanently."""
     rng = np.random.default_rng()
     rnd = random.Random()
+    cyc = 0
     while True:
         if not AUTO["teach"]:
             time.sleep(5)
             continue
         try:
-            f = rnd.choice(THEORY)
-            text = open(f, errors="ignore").read()
-            if len(text) < 600:
-                continue
-            start = rnd.randrange(0, max(1, len(text) - 2500))
-            passage = text[start:start + 2500]
-            out = _ollama("Below is a passage from the Smithian Fold Theory corpus. Write exactly ONE "
-                          "question a curious person might ask about it, and its answer grounded ONLY in "
-                          "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
-                          "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
-            m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", out, re.S)
-            if not m:
-                log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
-                continue
-            q = " ".join(m.group(1).split())[:200]
-            ref = " ".join(m.group(2).split())[:350]
+            cyc += 1
+            q = ref = None
+            # M1, the ZPD curriculum -- INSPIRATION: Self-Evolving Curriculum
+            # (arXiv 2505.14970) proves optimal learning concentrates at
+            # success rate 1/2; Absolute Zero (arXiv 2505.03335) builds its
+            # self-curriculum on the same point. FOLD FORM: 1/2 IS the lock;
+            # we take only the counted criterion (no bandit, no TD(0), no
+            # temperature): every other cycle revisits the territory whose
+            # tally sits NEAREST the lock -- the live edge of ability.
+            if cyc % GEN_B == 0 and GRADQ:
+                edge = sorted((abs(Fraction(w, w + l) - Fraction(1, 2)), k)
+                              for k, (w, l) in GRAD.items() if (w + l) > 0 and k in GRADQ)
+                if edge:
+                    q = GRADQ[edge[0][1]][:200]
+                    out = _ollama(UNISON_PERSONA + "\n\nAnswer this in one to two plain sentences, "
+                                  "in your voice, no markdown: " + q, timeout=300)
+                    ref = " ".join(out.split())[:350]
+                    if len(ref) < 10 or stuttered(ref):
+                        q = ref = None
+            if q is None:
+                f = rnd.choice(THEORY)
+                text = open(f, errors="ignore").read()
+                if len(text) < 600:
+                    continue
+                start = rnd.randrange(0, max(1, len(text) - 2500))
+                passage = text[start:start + 2500]
+                out = _ollama("Below is a passage from the Smithian Fold Theory corpus. Write exactly ONE "
+                              "question a curious person might ask about it, and its answer grounded ONLY in "
+                              "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
+                              "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
+                m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", out, re.S)
+                if not m:
+                    log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
+                    continue
+                q = " ".join(m.group(1).split())[:200]
+                ref = " ".join(m.group(2).split())[:350]
             if len(q) < 10 or len(ref) < 10:
                 log("TUTOR", "cycle rejected: too short", q[:80])
                 continue
@@ -1121,11 +1196,11 @@ def _tutor_loop():
             v = re.search(r"\b([AB])\b", verdict.upper())
             k = qkey(q)
             if v and v.group(1) == "A":
-                record_grad(k, True)
+                record_grad(k, True, q)
                 apply_feedback(q, ans, "y", "tutor")
                 log("TUTOR", "engine WON head-to-head", q)
             else:
-                record_grad(k, False)
+                record_grad(k, False, q)
                 apply_feedback(q, ans, "n " + ref, "tutor")
                 log("TUTOR", "teacher won; correction held", q)
         except Exception as e:
@@ -1156,15 +1231,58 @@ def _selfplay_loop():
             if not pool:
                 played.clear()
                 pool = lessons
-            for q, ref in rnd.sample(pool, min(5, len(pool))):
+            # M4, batch composition -- INSPIRATION: Structured Cortical
+            # Replay (SCoRe, bioRxiv 2025.06.25.661579): the brain avoids
+            # forgetting by INTERLEAVING novel and familiar traces in each
+            # slow-wave cycle. FOLD FORM: XI-6 consolidation braids the
+            # newest lessons with the oldest, alternating -- counted, no
+            # schedule. (Kanerva SDM's continual-learning result says the
+            # content-addressed store needs no more than this.)
+            n = min(DEPTH5, len(pool))
+            batch, seen_b = [], set()
+            for i in range(n):
+                cand = pool[-1 - (i // GEN_B)] if i % GEN_B == 0 else pool[i // GEN_B]
+                if cand[0] not in seen_b:
+                    seen_b.add(cand[0])
+                    batch.append(cand)
+            # M2, three counted modes -- INSPIRATION: Absolute Zero (arXiv
+            # 2505.03335): propose/solve/VERIFY against a deterministic
+            # ground in three enumerable modes (deduction, abduction,
+            # induction). FOLD FORM: the deterministic ground is the STORE
+            # ITSELF -- no executor, no gradient, no proposer reward; the
+            # verifier is a count every time. Retention law throughout:
+            # only held references are ever reinforced.
+            for q, ref in batch:
                 played.add(qkey(q))
                 if len(q.strip()) < 10 or stuttered(ref):
                     continue                     # never hold machine stutter
+                mode = len(played) % GEN_C
+                if mode == 1:
+                    # ABDUCTION: from my held answer, recover its question --
+                    # verified by counted overlap with the lesson's own words
+                    hit, _sh2 = bind(ref)
+                    ok = bool(hit) and hit[1].startswith("lesson:") and bool(
+                        set(content_words(hit[1][7:])) & set(content_words(q)))
+                    log("SELFPLAY", "abduction " + ("solved" if ok else "missed"), q)
+                    if not ok:
+                        write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * GEN_B)
+                    continue
+                if mode == 2 and len(batch) > 1:
+                    # INDUCTION: two lessons sharing an informative word --
+                    # the shared structure must surface through counted kin
+                    q2 = batch[0][0] if batch[0][0] != q else batch[-1][0]
+                    shared = [w for w in set(content_words(q)) & set(content_words(q2))
+                              if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000]
+                    if shared:
+                        hit, _sh2 = bind(shared[0])
+                        log("SELFPLAY", "induction " + ("linked" if hit else "open"), shared[0])
+                    continue
+                # DEDUCTION (mode 0): answer my own lesson; verify by count
                 ans, _ = reply(q, rng)
                 overlap = set(content_words(ans)) & set(content_words(ref))
-                need = max(1, len(content_words(ref)) // 2)
+                need = max(1, len(content_words(ref)) // GEN_B)
                 if len(overlap) >= need or ans.strip() == ref.strip():
-                    write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * 2)
+                    write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * GEN_B)
                     log("SELFPLAY", "consolidated", q)
                 else:
                     record_correction(q, ref)
@@ -1268,7 +1386,7 @@ def _watch_lessons():
                     q, a = " ".join(q.split()), " ".join(a.split())
                     if stuttered(a):
                         continue                 # machine stutter never held
-                    write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * 3)
+                    write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * GEN_C)
                     hold_sentence(a, "lesson:" + q[:80])
                 if pairs:
                     log("LESSONS", os.path.basename(f), "+" + str(len(pairs)) + " pairs ingested live")
