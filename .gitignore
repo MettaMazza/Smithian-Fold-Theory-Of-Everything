@@ -16,3 +16,4 @@ language/
 data/kqkr_cache.txt
 tests/kqkr_cert
 tests/kqkr_spot
+fold_ai/gpt2_model.safetensors
