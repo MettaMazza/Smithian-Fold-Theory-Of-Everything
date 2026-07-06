@@ -12,6 +12,7 @@ by the corpus's own laws. Zero parameters, zero training.
             (statements become facts at the moment of telling); its own
             replies are recorded but never self-reinforced (retention law).
 Usage: python3 unison_chat.py"""
+import os
 import numpy as np, glob, re, sys, time
 from collections import defaultdict, Counter
 
@@ -31,10 +32,11 @@ THEORY = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
           sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/*.md"))
           if "/language/" not in f and "/.git/" not in f
           and not any(x in f for x in EXCLUDE)]
-# THE FLOOD: the continuously-growing clean-prose diet (corpus_grower.py).
-# Cap per wake so startup stays bounded; the store grows as the flood does.
-DIET_FILES = sorted(glob.glob(BASE + "/fold_ai/diet/*.txt"))
-CORPUS = THEORY + DIET_FILES[:400]
+# THE FLOOD lives in the PREBUILT STORE ONLY (build_store.py ingests diet/
+# incrementally). Wake never re-reads raw books -- theory + lessons here,
+# prose merged from store.pkl below. One ingestion, ever, per book.
+DIET_FILES = []
+CORPUS = THEORY
 
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
@@ -45,7 +47,7 @@ def tok_display(s):
 print("UnisonAI waking: reading everything once...", flush=True)
 t0 = time.time()
 corpus_text = "\n".join(open(f, errors="ignore").read() for f in CORPUS)
-print(f"  diet: {len(THEORY)} theory + {min(len(DIET_FILES),400)}/{len(DIET_FILES)} prose files", flush=True)
+print(f"  diet: {len(THEORY)} theory files at wake; prose arrives via the prebuilt store", flush=True)
 lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
 
 # ---------- HOLDING: orbits for continuation + the sentence store ----------
@@ -126,6 +128,31 @@ def well_formed(s):
 for s in re.split(r"(?<=[.!?])\s+", corpus_text):
     if "|" not in s and "#" not in s and "`" not in s and s.count("=") < 2 and well_formed(s):
         hold_sentence(s, "corpus")
+
+# MERGE the prebuilt prose store (built incrementally by build_store.py) --
+# instant, no re-reading gigabytes. The flood's fluency, loaded not re-fed.
+import pickle as _pk
+_sp = BASE + "/fold_ai/store.pkl"
+_MAX_STORE = 600_000_000   # 250MB cap: never load a runaway store at wake
+if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
+    try:
+        with open(_sp, "rb") as _f:
+            _st = _pk.load(_f)
+        for L in range(min(CTX_MAX, len(_st["stores"])-1)+1):
+            for k, succ in _st["stores"][L].items():
+                for w, c in succ.items():
+                    stores[L][k][w] += c
+        for w, nb in _st["neigh"].items():
+            for o, c in nb.items():
+                NEIGH[w][o] += c
+        for w, c in _st["freq"].items():
+            TOK_FREQ[w] += c
+        TOTAL_TOKS = sum(TOK_FREQ.values())
+        for s, src2 in _st["sents"]:
+            hold_sentence(s, "prose")
+        print(f"  merged prose store: +{len(_st['sents'])} sentences, +{len(_st['neigh'])} words from {len(_st['ingested'])} books", flush=True)
+    except Exception as _e:
+        print("  (prose store skipped: " + str(_e) + ")", flush=True)
 
 print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
 
@@ -219,6 +246,12 @@ if _os.path.exists(FACTS_LOG):
         if len(_p) == 3:
             FACTS[(_p[0], _p[1])] = _p[2]
 
+# seed the engine's own identity (only if not already taught/persisted)
+if ("self", "name") not in FACTS:
+    FACTS[("self", "name")] = "Unison"
+if ("self", "identity") not in FACTS:
+    FACTS[("self", "identity")] = "the seed of UnisonAI, a fold native engine"
+
 def persist_fact(subject, relation, value):
     FACTS[(subject, relation)] = value
     with open(FACTS_LOG, "a") as _f:
@@ -263,7 +296,7 @@ def learn_fact(text):
 
 def answer_fact(text):
     t = text.strip().rstrip("?.!")
-    m = re.search(r"(?i)what\s+is\s+(my|your)\s+name", t)
+    m = re.search(r"(?i)(?:what\s*is|what'?s|do\s+you\s+know)\s+(my|your)\s+(?:own\s+)?name", t)
     if m:
         s = _norm_subject(m.group(1))
         v = FACTS.get((s, "name"))
@@ -323,6 +356,33 @@ def compose(user_line, rng, max_len=40):
     out = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(ctx))
     return out if len(out) > 15 else None
 
+
+def generate(seed_tokens, rng, min_words=8, max_words=40):
+    """Fluent Markov composition over the prose+corpus orbit store: sample
+    the next word from exact counts, back off context length when unseen,
+    stop at a sentence boundary. Novel sentences, not retrieved ones."""
+    ctx = list(seed_tokens)
+    out = []
+    for step in range(max_words):
+        succ = None
+        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
+            succ = stores[L].get(_key(tuple(ctx[-L:])))
+            if succ and (len(succ) > 1 or L == 1):
+                break
+        if not succ:
+            break
+        items = [(w, c) for w, c in succ.items() if w not in ("Q", "A")]
+        if not items:
+            break
+        ws = np.array([c for _, c in items], dtype=np.float64)
+        nxt = items[int(rng.choice(len(items), p=ws / ws.sum()))][0]
+        out.append(nxt)
+        ctx.append(nxt)
+        if nxt in (".", "!", "?") and len(out) >= min_words:
+            break
+    s = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out)).strip()
+    return dedup(s) if len(s.split()) >= min_words else None
+
 # ---------- CHECKING (XIV-7) + the reply law ----------
 def follow_command(line):
     m = re.match(r"(?i)\s*(?:say|repeat after me[:,]?|respond with|reply with)\s*[:,]?\s*['\"]?(.+?)['\"]?\s*$", line)
@@ -333,6 +393,9 @@ def follow_command(line):
 
 LAST_TOPIC = [""]
 def reply(user_line, rng):
+    ck = qkey(user_line)
+    if ck in CORRECTIONS:
+        return CORRECTIONS[ck], "taught answer (held correction)"
     cmd = follow_command(user_line)
     if cmd:
         return cmd, "command followed"
@@ -383,6 +446,8 @@ def flip_perspective(s):
     s2 = " ".join(out)
     return re.sub(r"\s+([.,!?;:])", r"\1", s2)
 
+CORRECTIONS = {}          # qkey -> exact taught answer (wins over everything)
+CORR_LOG = BASE + "/fold_ai/lessons/corrections.tsv"
 REJECTED = set()
 FEEDBACK_LOG = BASE + "/fold_ai/lessons/lessons_feedback.txt"
 import os
@@ -394,6 +459,25 @@ if os.path.exists(FEEDBACK_LOG):
 
 def qkey(user_line):
     return ",".join(sorted(content_words(user_line)[:4]))
+
+if os.path.exists(CORR_LOG):
+    for _ln in open(CORR_LOG):
+        _p = _ln.rstrip("\n").split("\t", 1)
+        if len(_p) == 2:
+            CORRECTIONS[_p[0]] = _p[1]
+
+def record_correction(question, answer):
+    answer = answer.strip()
+    answer = answer if answer[-1:] in ".!?" else answer + "."
+    k = qkey(question)
+    CORRECTIONS[k] = answer
+    with open(CORR_LOG, "a") as f:
+        f.write(k + "\t" + answer + "\n")
+    # also learn it as a relation fact if it is one (self/your name etc.)
+    learn_fact(answer)
+    write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
+    hold_sentence(answer, "told")
+    return answer
 
 def rejected(user_line, ans):
     return (qkey(user_line), ans.strip()) in REJECTED
@@ -469,28 +553,18 @@ def main():
                 f.write("CONF\t" + qkey(line) + "\t" + ans + "\n")
         elif fb[:1].lower() == "n":
             REJECTED.add((qkey(line), ans.strip()))
-            reason = fb[1:].strip(" :,-")
-            if not reason:
-                try:
-                    reason = input("UnisonAI: why was that wrong? ").strip()
-                except (EOFError, KeyboardInterrupt):
-                    reason = ""
-            if reason:
-                hold_sentence("Guidance: " + (reason if reason[-1:] in ".!" else reason + "."), "told")
-                write_orbits(tok(reason + "\n") * 2)
-            try:
-                corrected = input("UnisonAI: what should I have said? ").strip()
-            except (EOFError, KeyboardInterrupt):
-                corrected = ""
             with open(FEEDBACK_LOG, "a") as f:
-                f.write("REJ\t" + qkey(line) + "\t" + ans + "\t" + reason + "\n")
+                f.write("REJ\t" + qkey(line) + "\t" + ans + "\n")
+            # WHATEVER YOU TYPE AFTER n IS THE CORRECTED ANSWER -- no syntax.
+            corrected = fb[1:].strip(" :,-")
+            if not corrected:
+                try:
+                    corrected = input("UnisonAI: what should I have said? ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    corrected = ""
             if corrected:
-                corrected = corrected if corrected[-1:] in ".!?" else corrected + "."
-                write_orbits(tok("Q: " + line + "\nA: " + corrected + "\n") * 3)
-                hold_sentence(corrected, "told")
-                with open(BASE + "/fold_ai/lessons/lessons_corrections.txt", "a") as f:
-                    f.write("Q: " + line + "\nA: " + corrected + "\n")
-                print("UnisonAI: held, permanently. Ask me again.\n", flush=True)
+                held = record_correction(line, corrected)
+                print("UnisonAI: held, permanently: " + held + " Ask me again.\n", flush=True)
             else:
                 print("UnisonAI: withdrawn. I will not repeat it.\n", flush=True)
 
