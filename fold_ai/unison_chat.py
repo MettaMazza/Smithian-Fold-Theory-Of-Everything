@@ -1175,10 +1175,10 @@ def _run_tool(name, args):
         return open(p, errors="ignore").read()[:6000] if os.path.exists(p) else "(no such note)"
     return "unknown tool"
 
-def _ollama_chat(messages, tools=None, timeout=600):
+def _ollama_chat(messages, tools=None, timeout=600, think=False):
     try:
         import json as _j, urllib.request as _u
-        body = {"model": "gemma4:26b", "messages": messages, "stream": False, "think": False,
+        body = {"model": "gemma4:26b", "messages": messages, "stream": False, "think": think,
                 "options": {"num_ctx": 131072}}   # the teacher's FULL window
         if tools:
             body["tools"] = tools
@@ -1196,6 +1196,10 @@ def _teacher_relay(question, user_help=""):
     hold as my own thought -- I relay it and keep it: asked once, owned
     forever. Returns (answer, reasoning) or None."""
     import json as _j
+    # THE REACT LAW (Maria, 2026-07-06): reason -> act -> observe -> answer,
+    # in ONE turn. Announcing an action without performing it is a broken
+    # promise; the loop below detects narrated intent and forces the act.
+    _INTENT = re.compile(r"(?i)\b(let me|i'?ll|i will|one (second|sec|moment)|hold on|give me a (moment|sec)|pulling up|taking a look)\b")
     helping = ("\nThe user explained, to help you: \"" + user_help.strip() + "\"") if user_help else ""
     # the conversation window is bounded by the MODEL's context (131072
     # tokens ~ 3 chars/token), never by a chosen turn count -- the bound IS
@@ -1212,14 +1216,27 @@ def _teacher_relay(question, user_help=""):
     msgs = [{"role": "system", "content": UNISON_PERSONA},
             {"role": "user", "content": (("The conversation so far:\n" + convo + "\n") if convo else "")
              + "A user just said to you: \"" + question.strip() + "\"" + helping +
-             "\nFirst write ONE line of stepwise reasoning beginning exactly 'Reasoning:'. "
-             "Then the reply beginning exactly 'Answer:' -- in your voice, at whatever length the "
-             "thought needs, no markdown. Use your tools when they give the exact answer."}]
+             "\nReply in your voice, at whatever length the thought needs, no markdown. "
+             "REACT LAW: if the reply needs an action (a URL to read, a fact to search, a file to "
+             "check, arithmetic), CALL THE TOOL NOW and answer from its result in this same turn -- "
+             "never say 'let me' or 'one second': there is no later."}]
     m = {}
-    for _ in range(3):                              # tool loop, bounded
-        m = _ollama_chat(msgs, tools=TOOLS)
+    native_thinking = []
+    used_tools = False
+    for _round in range(GEN_B * GEN_C):             # the ReAct loop, bounded
+        m = _ollama_chat(msgs, tools=TOOLS, think=True)
+        if m.get("thinking"):
+            native_thinking.append(" ".join(str(m["thinking"]).split()))
         calls = m.get("tool_calls") or []
         if not calls:
+            # narrated intent without an act? push the law and loop again
+            _c = " ".join((m.get("content") or "").split())
+            if _c and _INTENT.search(_c) and not used_tools and _round < GEN_B * GEN_C - 1:
+                msgs.append(m)
+                msgs.append({"role": "user", "content": "You announced an action without performing it. "
+                             "Do it NOW: call the tool, read the result, and give the final answer in "
+                             "this turn."})
+                continue
             break
         msgs.append(m)
         for c in calls:
@@ -1231,6 +1248,7 @@ def _teacher_relay(question, user_help=""):
                 except Exception:
                     args = {}
             res = _run_tool(name, args)
+            used_tools = True
             # the trace is HELD: tool use learned by watching, from day one
             hold_sentence("To answer '" + question.strip()[:50] + "' I used the tool " +
                           name + " and got: " + str(res)[:120], "thought")
@@ -1250,6 +1268,11 @@ def _teacher_relay(question, user_help=""):
         aa = dedup(" ".join(aa.split()))[:1800]    # collapse doubled words; IO bound only
         return rr, aa
     reasoning, a = _parse(out)
+    if native_thinking:
+        # THE NATIVE FIELD: gemma's actual thinking tokens -- not the reply
+        # -- are the reasoning that trains Unison's own thought channel
+        # (STaR-gated as ever: held only when the answer closes)
+        reasoning = " ".join(native_thinking)[:1500]
     # a single incidental stutter must not kill a long answer -- only EMPTY
     # or DENSELY stuttered output is rejected, and the observer is retried
     def _dense(t):
