@@ -2,7 +2,7 @@
 
 ## *Attention, it turns out, was not all you need*
 
-**Maria Smith (Ernos Labs)** — full paper v1.1, 2026-07-06
+**Maria Smith (Ernos Labs)** — full paper v1.2, 2026-07-06
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469); supersedes pre-paper v0.3 (DOI: 10.5281/zenodo.21217279)
 
 ---
@@ -88,9 +88,13 @@ The corpus's machine-verified claims on observation and learning are used here a
 
 The fold's chess program — a zero-parameter engine whose piece values are counted from board geometry and whose search is exact — is ongoing companion work to this paper. Ladder results previously reported (wins through Stockfish's 1900 setting; 2100 contested) were measured on earlier engine versions across a fast-moving campaign and are **not inherently accurate as statements about current engines**; they should be read as the campaign's historical record, not its standing strength. A complete clean re-run of all rungs on fixed current engines, under the pinned refereed protocol, will be published as a separate paper with those results.
 
+Two facts about that record must be read before any percentage in it. **First, the timescale: the entire program — the chess campaign and every AI result in this paper together — accumulated less than twenty-four hours of total build time**, on one machine, with every measurement committed and timestamped. **Second, every historical score is a floor, not a ceiling.** The engine was strengthened release by release purely by *implementing more of the same mathematics* — a deeper complete horizon paid for by lossless ordering, a solved and in-room-certified endgame class, parallel search — never by tuning, because a zero-parameter engine has nothing to tune. Each ladder percentage therefore measures how much of the engine had been *built* at that hour, not how far the approach *reaches*: the recorded trend at the single contested setting (25% → 33.3% across one release, with half the games held to draws) is a wall being taken by implementation, with named levers still unplayed at measurement time. Reading any figure in this record as an asymptote of the method — rather than as a timestamp on an engine that was hours old when it set it — is a category error the record itself refutes.
+
 ## 10. Discussion
 
 What is proved, in the strict re-runnable sense: the presence, location, causation, coordinate-dependence, and quantization-survival of dyadic placement-law in trained weights; the recipe map to one trillion parameters and the identification of loud-recipe weights with the solved-field transformation class; counted similarity; and a zero-parameter derived language architecture that defeats its trained twin on the task at matched diet. What is refused and scoped: fold-basis weight compression against production baselines; frozen transplants in SGD hosts at toy scale. What is registered as the frontier: conversational fluency as a volume phenomenon; the coordinates of the quiet recipes; the recipe ingredient that writes dyadic law (the strongest carrier is the flagship reasoning model — held as a question).
+
+One number belongs beside every result above: the accumulated build time. The instrument, the 18/18 verdict, the recipe map to one trillion parameters, counted similarity, the architecture, its task-gate victory, and the live deployed agent — together with the chess campaign of §9 — total **less than twenty-four hours of build time**. These are not the converged results of a mature program approaching its limits; they are the first hours of one, and every percentage and negative in this paper carries that timestamp as part of its meaning.
 
 The economic statement is the plainest one. The expensive triad of modern AI — parameters, data passes, training compute — purchases, at least in substantial part, structure that is *countable and derivable*: placement-law in the weights, similarity in the counts, learning in a closure law, knowledge in records. Where the fold's architecture fought as itself, one reading replaced eleven, twenty-six seconds replaced twenty-one minutes, a written record replaced a retraining run, and the derived engine won outright. The founding sentence of the field was a claim of law; the mathematics it was waiting for has arrived, and it measures.
 
@@ -102,4 +106,4 @@ All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/
 
 McCulloch & Pitts (1943), Bull. Math. Biophys. 5:115–133 · Rosenblatt (1958), Psych. Rev. 65(6) · Rumelhart, Hinton & Williams (1986), Nature 323:533–536 · Vaswani et al. (2017), NeurIPS · Kaplan et al. (2020), arXiv:2001.08361 · Hoffmann et al. (2022), arXiv:2203.15556 · Sutton (2019), *The Bitter Lesson* · Amodei (2024), *Machines of Loving Grace* · Altman (2025), *Reflections* · Public statements of Hassabis, Legg, and Sutskever (NeurIPS 2024) as cited · Smith (2026), *The Smithian Fold Theory of Everything*, DOI 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
-*Full paper v1.1. Every number is from committed, timestamped campaign records; nothing is projected.*
+*Full paper v1.2. Every number is from committed, timestamped campaign records; nothing is projected.*
