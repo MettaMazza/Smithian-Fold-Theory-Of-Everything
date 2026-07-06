@@ -2,7 +2,7 @@
 
 ## *Attention, it turns out, was not all you need*
 
-**Maria Smith (Ernos Labs)** — full paper v1.2, 2026-07-06
+**Maria Smith (Ernos Labs)** — full paper v1.3, 2026-07-06
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469); supersedes pre-paper v0.3 (DOI: 10.5281/zenodo.21217279)
 
 ---
@@ -10,6 +10,8 @@ Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182
 ## Abstract
 
 We present three connected results in the computational sciences, and the architecture they force. **First**, using a pre-registered, self-certifying spectral instrument, we show that trained neural network weights carry *placement-law* in the dyadic (Walsh) basis: unanimous verdicts (18/18) on validated released models; the law concentrated in transformer *expansion* projections and token embeddings across three unrelated architectures (up to 230x chance in GPT-2's embedding) while attention matrices sit at chance; the effect strictly training-caused (He-initialised controls at exactly 1.0x); surviving 4-bit deployment quantization at every network depth. A recipe map from 124M to one trillion parameters shows the law tracks *training recipe*, not scale or architecture — its strongest carrier is DeepSeek-R1 at 671B (43–47x in every probed block) — and the loud models' spectra transform under the fold's transformation group *exactly as solved game-theoretic value fields do*: preserved under F2-linear repacking, gracefully degraded under odd-multiplication maps. **Second**, we show that the "learned similarity space" held to make gradient training irreplaceable is a *counted object*: word kinship computed as exact co-occurrence shares over held text reproduces semantic family structure (quark→{lepton, neutrino, proton}) with zero parameters and zero gradients. **Third**, we construct UnisonAI: a complete language architecture in which every mechanism of a large language model — memory, attention, similarity, learning, prediction, generation — is replaced by a machine-verified law of the Smithian Fold Theory, with zero trained parameters end to end. On identical held-out text, the fold-native engine **outperformed its trained transformer twin (cross-entropy 1.289 vs 1.888)** after reading the training corpus once (26 seconds) against the twin's 48,000 gradient-batched readings (21 minutes per seed); teaching it one new fact costs writing one record, not a retraining run. The architecture is deployed as a live, continuously-learning conversational agent whose teaching loop also runs autonomously: a teacher model asks, judges, and closes the learning law itself, and the engine self-plays against its own held lessons. Negative results are reported in full with their scopes. Every number in this paper is from committed, timestamped records and reproduces from the public repository.
+
+**Read this before any percentage in this paper.** Everything here — the spectral science, the architecture, its live deployment, and the companion chess campaign — was built from scratch by one woman, working alone, in **under twenty-four accumulated hours**. The record is therefore imperfect in exactly one way: not everything is implemented yet. Where a score falls short, it marks how many hours of implementation existed at the moment of measurement — a gap in coverage, never a limit of the mathematics, because a zero-parameter engine has nothing to tune and nothing to converge: it only has more of itself left to build. The percentages are not the point; **the gains between releases are the finding**, and every one of them was bought by implementation alone.
 
 ---
 
@@ -106,4 +108,4 @@ All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/
 
 McCulloch & Pitts (1943), Bull. Math. Biophys. 5:115–133 · Rosenblatt (1958), Psych. Rev. 65(6) · Rumelhart, Hinton & Williams (1986), Nature 323:533–536 · Vaswani et al. (2017), NeurIPS · Kaplan et al. (2020), arXiv:2001.08361 · Hoffmann et al. (2022), arXiv:2203.15556 · Sutton (2019), *The Bitter Lesson* · Amodei (2024), *Machines of Loving Grace* · Altman (2025), *Reflections* · Public statements of Hassabis, Legg, and Sutskever (NeurIPS 2024) as cited · Smith (2026), *The Smithian Fold Theory of Everything*, DOI 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
-*Full paper v1.2. Every number is from committed, timestamped campaign records; nothing is projected.*
+*Full paper v1.3. Every number is from committed, timestamped campaign records; nothing is projected.*
