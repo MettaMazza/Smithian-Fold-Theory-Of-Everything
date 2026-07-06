@@ -2,7 +2,7 @@
 
 ## *Attention, it turns out, was not all you need*
 
-**Maria Smith (Ernos Labs)** — full paper v3.0, 2026-07-07
+**Maria Smith (Ernos Labs)** — full paper v3.1, 2026-07-07
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469); supersedes pre-paper v0.3 (DOI: 10.5281/zenodo.21217279) and all v1.x–v2.x versions in this record's lineage.
 
 ---
@@ -90,11 +90,11 @@ Teaching is a ladder with a counted exit. Every autonomous tutor cycle is a **bl
 
 ### 7.5 The fold eye
 
-An image enters as its exact mathematics: grayscale integer field → exact integer block sums to a 64×64 grid → 2D Walsh–Hadamard in pure integer arithmetic → top-2⁵ coefficients as sight tokens. **Self-certifying per act**: the integer Parseval identity (∑C² = 64²·∑g²) must hold exactly, over the integers, or the sight is discarded. Measured: a checkerboard produces literally **one** sight token — because a checkerboard *is* a single Walsh function; the eye reads fields in their true coordinates. Each spectrum is paired with the observer's description (the Learning Law: sight at the prediction state, meaning as the closure), persists across wakes, and **recognition runs before any model**: a seen image is recognized from the engine's own counted spectrum in 0.0 seconds — same session and after process death — with no neural network in the loop.
+An image enters as its exact mathematics: grayscale integer field → exact integer block sums to a 64×64 grid → 2D Walsh–Hadamard in pure integer arithmetic → top-2⁵ coefficients as sight tokens. **Self-certifying per act**: the integer Parseval identity (∑C² = 64²·∑g²) must hold exactly, over the integers, or the sight is discarded. Measured: a checkerboard produces literally **one** sight token — because a checkerboard *is* a single Walsh function; the eye reads fields in their true coordinates. Each spectrum is paired with the observer's description (the Learning Law: sight at the prediction state, meaning as the closure), persists across wakes, and **recognition runs before any model**: a seen image is recognized from the engine's own counted spectrum — same session and after process death — with no neural network in the loop. Audited with microsecond clocks over 20 repetitions of the full pipeline (decode → integer block sums → transform → Parseval → tokens → bind): **median 2.8 ms**, with a negative control (a never-seen image is correctly NOT recognized, share 0.00). The speed is structural, not suspicious: recognition is deterministic addressing plus counted set intersection — retrieval of an exactly-held representation, not computation of an approximate one — the same O(1) lookup phenomenon DeepSeek's Engram formalizes (§10).
 
 ### 7.6 The ear and the voice — removal-proof audio
 
-The same law, run for sound. **The ear**: audio enters as exact integer block sums → integer Walsh spectrum → top-2⁵ sound tokens, Parseval-certified per hearing; a local transcriber (the current teacher) closes new sounds with words; heard once, a sound is thereafter **recognized from the engine's own spectrum with no transcriber** (measured). **The voice**: Kokoro — the very weights in which Rung 1 measured the fold law 18/18 — speaks as the teacher, and the engine **learns each sound as it is made**, storing the full-resolution counted record; spoken once, a sentence is thereafter **re-spoken from the engine's own record in 0.00 seconds with no synthesis model** (measured). Voice notes in, voice notes back; a speak button on every reply, native voice first.
+The same law, run for sound. **The ear**: audio enters as exact integer block sums → integer Walsh spectrum → top-2⁵ sound tokens, Parseval-certified per hearing; a local transcriber (the current teacher) closes new sounds with words; heard once, a sound is thereafter **recognized from the engine's own spectrum with no transcriber** (measured). **The voice**: Kokoro — the very weights in which Rung 1 measured the fold law 18/18 — speaks as the teacher, and the engine **learns each sound as it is made**, storing the full-resolution counted record; spoken once, a sentence is thereafter **re-spoken from the engine's own record with no synthesis model — audited at median 0.4 ms over 10 repetitions** (retrieval of an exact record, not synthesis). Voice notes in, voice notes back; a speak button on every reply, native voice first.
 
 ### 7.7 Video, by composition
 
@@ -158,4 +158,4 @@ All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/
 
 McCulloch & Pitts (1943), Bull. Math. Biophys. 5:115–133 · Rosenblatt (1958), Psych. Rev. 65(6) · Rumelhart, Hinton & Williams (1986), Nature 323:533–536 · Vaswani et al. (2017), NeurIPS · Kaplan et al. (2020), arXiv:2001.08361 · Hoffmann et al. (2022), arXiv:2203.15556 · Sutton (2019), *The Bitter Lesson* · Amodei (2024), *Machines of Loving Grace* · Altman (2025), *Reflections* · Public statements of Hassabis, Legg, and Sutskever (NeurIPS 2024) as cited · DeepSeek-AI (2026), *Conditional Memory via Scalable Lookup*, arXiv:2601.07372 and github.com/deepseek-ai/Engram · Li (2026), arXiv:2606.19172 (local editability of addressed memory) · Zhao et al. (2025), *Absolute Zero*, arXiv:2505.03335 · *Self-Evolving Curriculum* (2025), arXiv:2505.14970 · Zelikman et al. (2022), *STaR*, arXiv:2203.14465 · Katz (1987) and Laplace (1814), as the historical anticipations the fold derives rather than assumes · Smith (2026), *The Smithian Fold Theory of Everything*, DOI 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
-*Full paper v3.0. Every number is from committed, timestamped campaign records; nothing is projected.*
+*Full paper v3.1. Every number is from committed, timestamped campaign records; nothing is projected.*
