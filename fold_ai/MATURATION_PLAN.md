@@ -132,3 +132,18 @@ informativeness cutoff = one part in a thousand of the counted mass, one
 rule used everywhere. Interface/IO bounds (buffer lengths, string caps,
 timeouts) are marked as hardware facts where they occur; they are not
 model quantities. Harness 9/9 through the entire pass.
+
+## THE SECOND SWEEP (PRM / MCTS / step-verification) — EXTRACTED, NOT YET VERIFIED
+
+Run 2026-07-06 (105 agents): search and extraction succeeded; the
+adversarial verification stage was rate-limited and EVERY claim is
+therefore UNVERIFIED — nothing below may be imported as verified fact
+until the re-run. Notable extractions (primary-source quotes fetched,
+awaiting the 3-vote panel): rStar (openreview 6aHUmotXaw) — MCTS reasoning
+with NO fine-tuning anywhere; rewards are self-consistency VOTE COUNTS and
+UCT VISIT STATISTICS (pure counts, directly fold-portable); implicit PRMs
+(arXiv 2412.01981) — step-level rewards obtained free from outcome-only
+labels; PRM-guided best-of-N reranking is gradient-free at inference
+(arXiv 2510.08049). Registered as candidate M7 (counted step-closure and
+vote-guided reasoning) PENDING verification. The refuted/confirmed split
+comes when the panel re-runs.

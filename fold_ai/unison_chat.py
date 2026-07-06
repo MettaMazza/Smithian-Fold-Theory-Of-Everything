@@ -120,8 +120,18 @@ lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
 
 # ---------- HOLDING: orbits for continuation + the sentence store ----------
 stores = [defaultdict(lambda: defaultdict(int)) for _ in range(CTX_MAX + 1)]
+# M5 switch: if the prebuilt store was built BOUNDED (Engram-grade hashed
+# prime table -- see build_store.py), the engine hashes context keys the
+# same deterministic way from the first write of wake. Sidecar-controlled;
+# absent sidecar = exact keys (current scale).
+import zlib as _zlib
+_bp = BASE + "/fold_ai/store.bound"
+STORE_BOUND = int(open(_bp).read().strip() or 0) if os.path.exists(_bp) else 0
 def _key(tup):
-    return tuple(t.lower() for t in tup)        # case-folded context key
+    t = tuple(x.lower() for x in tup)           # case-folded context key
+    if STORE_BOUND:
+        return (_zlib.crc32(" ".join(t).encode()) % STORE_BOUND,)
+    return t
 def write_orbits(tl, max_ctx=None):
     top = CTX_MAX if max_ctx is None else max_ctx
     for i in range(len(tl) - 1):
@@ -684,6 +694,7 @@ if os.path.exists(CORR_LOG):
 # my wins pass my losses in a territory (the lock, 1/2, crossed by majority)
 # I answer there MYSELF -- the teacher steps back one territory at a time,
 # measured, never scheduled. The same gate discipline that climbed chess.
+_PARITY = [False]
 PENDING_REASON = {}   # qkey -> (question, reasoning) awaiting its answer's closure
 GRAD = {}   # qkey -> [wins, losses]
 GRADQ = {}  # qkey -> the territory's question text (for ZPD revisits)
@@ -706,6 +717,15 @@ def record_grad(k, won, question=None):
             f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\t" + GRADQ.get(kk, "") + "\n")
     os.replace(GRAD_LOG + ".tmp", GRAD_LOG)
     log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}")
+    # THE LADDER'S PARITY SIGNAL: over at least 2^5 judged comparisons (the
+    # covering depth's volume), global wins past losses -- the counted sign
+    # that the observer seat is ready for a second Unison.
+    tw = sum(w for w, l in GRAD.values())
+    tl = sum(l for w, l in GRAD.values())
+    if tw + tl >= GEN_B ** DEPTH5 and tw > tl and not _PARITY[0]:
+        _PARITY[0] = True
+        log("LADDER", f"PARITY SIGNAL: {tw}-{tl} over {tw + tl} judged head-to-heads -- "
+            "the observer seat is ready for a second Unison")
 
 def graduated(user_line):
     w, l = GRAD.get(qkey(user_line), (0, 0))
@@ -1084,6 +1104,33 @@ def fold_see(img_bytes):
         return toks or None
     except Exception as e:
         log("SIGHT", "eye error: " + str(e))
+        return None
+
+_WHISPER = [None]
+def hear_audio(audio_bytes, suffix=".ogg"):
+    """THE EAR (intake v1): a local transcriber turns sound into words that
+    land in the SAME channel as every other experience -- a telling, held
+    as orbits. (The fold-native ear -- audio as counted spectra, the eye's
+    law applied to sound -- is the registered next step; this is the intake
+    plumbing it will inherit. ollama itself cannot hear yet.)"""
+    try:
+        if _WHISPER[0] is None:
+            from faster_whisper import WhisperModel
+            _WHISPER[0] = WhisperModel("base", compute_type="int8")
+            log("EAR", "transcriber loaded (faster-whisper base, int8)")
+        import tempfile
+        with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as _f:
+            _f.write(audio_bytes)
+            _path = _f.name
+        segs, _info = _WHISPER[0].transcribe(_path)
+        text = " ".join(s.text.strip() for s in segs).strip()
+        os.unlink(_path)
+        if not text:
+            return None
+        log("EAR", text[:150])
+        return text
+    except Exception as e:
+        log("EAR", "error: " + str(e))
         return None
 
 def observe_image(images_b64, caption=""):

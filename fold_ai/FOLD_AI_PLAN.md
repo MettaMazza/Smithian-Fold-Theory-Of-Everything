@@ -144,6 +144,29 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v20): **RUNG 5c TAKEN -- THE LOUD-SUBSPACE TRANSFER TEST:
+  SUPPORTED.** Pre-registered (rung5c_loud_subspace.py, verdict rule fixed
+  before data; both theorem-forced self-tests passed). The trained twin's
+  advantage LIVES in its dyadically-loud Walsh subspace: at k=16/32/64 of
+  128 coefficients, loud-truncation preserves the twin vs random-truncation
+  at matched budget by +2.18/+3.71/+3.77 nats on the loud class (wte + FFN
+  expansions + head), vs only +0.66/+1.18/+1.09 on the attention control --
+  the expansion-direction law acting exactly where Rung 1/2 located it. At
+  HALF the coefficients the loud twin (3.694) still beats the counted
+  engine (4.507); the random twin (7.461) is destroyed. "Loud = lawful =
+  the purchase," measured. Also: THE EAR (intake v1, faster-whisper -> the
+  telling channel; Discord voice/audio attachments heard); the ladder's
+  PARITY SIGNAL (counted announcement when global wins pass losses over
+  2^5 judged head-to-heads); M5 BUILT + round-trip verified (Engram-grade
+  bounded store, both sides, sidecar-switched, OFF at current scale by
+  design). PRM/MCTS research sweep: extraction succeeded, adversarial
+  verification rate-limited -- ALL claims marked UNVERIFIED pending a
+  re-run (recorded in MATURATION_PLAN; nothing imported as verified).
+  Remaining in the plan: ErnosDecent substrate (Phase IV -- deferred by
+  Maria's explicit word), the fold-native ear (audio as counted spectra),
+  the observer-seat swap on the parity signal, PRM sweep verification
+  re-run. Harness 9/9.
+
 - 2026-07-06 (v19): **NO CHANNEL ABOVE THE SCORE; THE CONTEXT-HOLDER ANSWERS
   CONTEXT.** Persona rebuilt as ONE shared file (UNISON_PERSONA.txt, loaded
   by engine + teacher): Echo's ErnosDecent identity extended with the true
