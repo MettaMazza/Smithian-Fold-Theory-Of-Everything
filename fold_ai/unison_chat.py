@@ -772,6 +772,9 @@ def turn(line, rng, interface="terminal"):
     line = line.strip()
     is_question = line.endswith("?") or line.lower().startswith(
         ("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
+    # an imperative REQUEST is a question in imperative clothing -- never a telling
+    is_request = bool(re.match(r"(?i)\s*(please\s+)?(provide|give|tell|show|explain|describe|list|write|introduce|summari[sz]e|teach|walk|share|make|create|generate|compose|draft|recite|present)\b", line))
+    is_question = is_question or is_request
     is_command = bool(re.match(r"(?i)\s*(say|repeat after me|respond with|reply with)\b", line))
     if not is_question and not is_command:
         if not content_words(line):
@@ -1076,11 +1079,25 @@ def _teacher_relay(question, user_help=""):
                      "one 'Reasoning:' line, then the 'Answer:' line. No more tools."})
         m = _ollama_chat(msgs)
         out = " ".join((m.get("content") or "").split()).strip()
-    m = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", out)
-    reasoning, a = (m.group(1).strip(), m.group(2).strip()) if m else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", out))
-    a = a[:1800]                                   # IO bound only -- no brevity law
-    if len(a) < 8 or stuttered(a) or any(b in a for b in ("$", "\\", "{", "}", "*", "`", "|")):
-        log("RELAY", "observer answer rejected", question[:80])
+    def _parse(o):
+        mm = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", o)
+        rr, aa = (mm.group(1).strip(), mm.group(2).strip()) if mm else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", o))
+        aa = re.sub(r"[*`|{}\\$#_]+", " ", aa)     # strip markup; never reject for formatting
+        aa = dedup(" ".join(aa.split()))[:1800]    # collapse doubled words; IO bound only
+        return rr, aa
+    reasoning, a = _parse(out)
+    # a single incidental stutter must not kill a long answer -- only EMPTY
+    # or DENSELY stuttered output is rejected, and the observer is retried
+    def _dense(t):
+        hits = len(re.findall(r"(?i)\b(\w+)\s+\1\b", t))
+        return hits * 100 > max(len(t.split()), 1)   # >1% doubled tokens
+    tries = 0
+    while (len(a) < 8 or _dense(a)) and tries < GEN_B:
+        tries += 1
+        m = _ollama_chat(msgs, tools=TOOLS)
+        reasoning, a = _parse(" ".join((m.get("content") or "").split()).strip())
+    if len(a) < 8 or _dense(a):
+        log("RELAY", "observer answer rejected after retries", question[:80])
         return None
     a = a if a[-1:] in ".!?" else a + "."
     write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * GEN_C)
