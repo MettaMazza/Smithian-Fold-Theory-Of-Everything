@@ -1627,8 +1627,9 @@ def ingest_document(name, data, caption="", interface="discord"):
             text = data.decode("utf-8")
         except Exception:
             text = data.decode("latin-1", errors="ignore")
-        if "\x00" in text or (len(text) > 200 and
-                sum(c.isprintable() or c.isspace() for c in text[:2000]) < 1800):
+        _w = text[:2000]
+        if "\x00" in text or (_w and
+                sum(c.isprintable() or c.isspace() for c in _w) < len(_w) * 9 // 10):
             return None, "That file looks binary. I hold text -- send .txt/.md/.py/.csv and I will read it, or tell me what it says."
         os.makedirs(INBOX, exist_ok=True)
         safe = re.sub(r"[^\w.-]", "_", name)[:80] or "document.txt"
