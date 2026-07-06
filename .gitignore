@@ -17,3 +17,9 @@ data/kqkr_cache.txt
 tests/kqkr_cert
 tests/kqkr_spot
 fold_ai/gpt2_model.safetensors
+fold_ai/diet/
+fold_ai/grower_log.txt
+fold_ai/teacher_log.txt
+fold_ai/lessons/lessons_live.txt
+fold_ai/lessons/facts.tsv
+fold_ai/lessons/lessons_feedback.txt

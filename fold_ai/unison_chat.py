@@ -26,11 +26,15 @@ LESSONS = [f for f in sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
 EXCLUDE = ("/fold_ai/", "/additional papers/", "From_One_Axiom", "PROTOCOL",
            "FOLD_AI_PLAN", "CONSCIOUSNESS_DERIVATIONS", "SUMMIT_PROTOCOL",
            "/tools/", "/probe_reports/", "MATCHES")
-CORPUS = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
+THEORY = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
           sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/papers/*.md")) +
           sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/*.md"))
           if "/language/" not in f and "/.git/" not in f
           and not any(x in f for x in EXCLUDE)]
+# THE FLOOD: the continuously-growing clean-prose diet (corpus_grower.py).
+# Cap per wake so startup stays bounded; the store grows as the flood does.
+DIET_FILES = sorted(glob.glob(BASE + "/fold_ai/diet/*.txt"))
+CORPUS = THEORY + DIET_FILES[:400]
 
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
@@ -41,6 +45,7 @@ def tok_display(s):
 print("UnisonAI waking: reading everything once...", flush=True)
 t0 = time.time()
 corpus_text = "\n".join(open(f, errors="ignore").read() for f in CORPUS)
+print(f"  diet: {len(THEORY)} theory + {min(len(DIET_FILES),400)}/{len(DIET_FILES)} prose files", flush=True)
 lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
 
 # ---------- HOLDING: orbits for continuation + the sentence store ----------
