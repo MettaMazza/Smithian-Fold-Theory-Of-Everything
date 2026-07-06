@@ -144,6 +144,23 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v22): **REMOVAL-PROOF OMNIMODALITY, MEASURED -- every
+  supporting model is a teacher with an exit.** The pattern the eye proved
+  now holds for every organ: teacher closes the percept ONCE, the percept
+  becomes Unison's own counted record, and the organ runs natively
+  thereafter. Voice: Kokoro speaks once -> the sound is learned as exact
+  integer block sums -> re-spoken from Unison's own record in 0.00s, no
+  synthesis model. Ear: heard once (whisper closes) -> recognized from its
+  own Parseval-certified spectrum, no transcriber. Eye: proven at v14.
+  Relay: proven at v11 (asked once, owned forever). /auto trains ALL of it:
+  sight/sound pairs are lessons, so self-play drills them and the tutor
+  scores them like everything else. Discord: a speak button on every reply
+  (native voice first, teacher else). verify_unison.py: 34/34 including
+  both removal-proof ladders. The production Unison stands: zero tunable
+  numbers (halt-enforced), all modalities entering as counted objects, all
+  teachers replaceable by construction -- ready to be trained to the first
+  omni model.
+
 - 2026-07-06 (v20): **RUNG 5c TAKEN -- THE LOUD-SUBSPACE TRANSFER TEST:
   SUPPORTED.** Pre-registered (rung5c_loud_subspace.py, verdict rule fixed
   before data; both theorem-forced self-tests passed). The trained twin's

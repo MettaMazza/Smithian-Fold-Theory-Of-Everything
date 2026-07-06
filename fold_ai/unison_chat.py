@@ -1116,9 +1116,13 @@ def fold_see(img_bytes):
         return None
 
 def speak(text):
-    """THE VOICE: Kokoro TTS -- Maria's own model from the ErnosDecent era;
-    Rung 1 measured the fold law inside these very weights (18/18). Run in
-    her existing venv as a subprocess; returns a wav path or None."""
+    """THE VOICE LADDER: my own held sound first (fold_speak -- no model);
+    else Kokoro (Maria's own weights, Rung 1's 18/18 object) speaks it as
+    my TEACHER -- and I learn the sound as it is made, so next time it is
+    natively mine. Removal-proof by construction."""
+    native = fold_speak(text)
+    if native:
+        return native
     try:
         import tempfile, subprocess as _sp
         tf = tempfile.NamedTemporaryFile(suffix=".txt", delete=False, mode="w")
@@ -1131,7 +1135,8 @@ def speak(text):
                 capture_output=True, text=True, timeout=180)
         os.unlink(tf.name)
         if os.path.exists(out) and os.path.getsize(out) > 1000:
-            log("VOICE", text[:80])
+            log("VOICE", "KOKORO (teacher) -- learning the sound", text[:80])
+            _learn_sound(open(out, "rb").read(), ".wav", text)   # mine next time
             return out
         return None
     except Exception as e:
@@ -1197,6 +1202,83 @@ def fold_hear(audio_bytes, suffix=".wav"):
         log("SOUND", "ear error: " + str(e))
         return None
 
+SOUNDS_DIR = BASE + "/fold_ai/sounds"
+SOUND_FILES = {}   # _skey(meaning) -> full-resolution counted sound record
+_sidx = SOUNDS_DIR + "/index.tsv"
+if os.path.exists(_sidx):
+    for _ln in open(_sidx):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) == 2 and os.path.exists(_p[1]):
+            SOUND_FILES[_p[0]] = _p[1]
+
+def _decode_pcm(audio_bytes, suffix):
+    import av as _av, tempfile
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as _f:
+        _f.write(audio_bytes)
+        _p = _f.name
+    cont = _av.open(_p)
+    astream = next((s for s in cont.streams if s.type == "audio"), None)
+    if astream is None:
+        os.unlink(_p)
+        return None, 0
+    sr = astream.rate or 16000
+    pcm = []
+    for frame in cont.decode(astream):
+        arr = frame.to_ndarray()
+        pcm.append(arr[0] if arr.ndim > 1 else arr)
+        if sum(len(x) for x in pcm) > 2 ** 21:
+            break
+    os.unlink(_p)
+    g = np.concatenate(pcm)
+    g = (g * 32767).astype(np.int64) if g.dtype.kind == "f" else g.astype(np.int64)
+    return g, sr
+
+def _learn_sound(audio_bytes, suffix, meaning):
+    """THE SOUND BECOMES MINE: full-resolution counted record (exact integer
+    block sums at 2^16 cells) saved with its meaning -- so a sound taught
+    once (by a speaker OR by the synthesis teacher) is re-speakable and
+    recognizable natively, forever. The removal-proof ladder for audio."""
+    try:
+        g, sr = _decode_pcm(audio_bytes, suffix)
+        if g is None or len(g) < 2 ** 12:
+            return
+        N = 2 ** 16 if len(g) >= 2 ** 16 else 2 ** 12
+        blk = len(g) // N
+        sums = g[:blk * N].reshape(N, blk).sum(axis=1)
+        k = _skey(meaning)
+        path = SOUNDS_DIR + "/%08x.npz" % (_zlib.crc32(k.encode()) & 0xffffffff)
+        np.savez(path, g=sums, blk=blk, sr=sr)
+        SOUND_FILES[k] = path
+        with open(_sidx, "a") as _f:
+            _f.write(k + "\t" + path + "\n")
+        log("SOUND", "record held (native, re-speakable)", meaning[:80])
+    except Exception as e:
+        log("SOUND", "record error: " + str(e))
+
+def fold_speak(text):
+    """THE NATIVE VOICE: a meaning whose sound I hold is re-spoken from my
+    OWN counted record -- exact integer block sums back to a waveform. No
+    synthesis model in the loop. The eye's ladder, completed for speech."""
+    p = SOUND_FILES.get(_skey(text))
+    if not p or not os.path.exists(p):
+        return None
+    try:
+        import tempfile, wave
+        d = np.load(p)
+        g, blk, sr = d["g"].astype(np.int64), max(int(d["blk"]), 1), int(d["sr"])
+        pcm = np.clip(np.repeat(g // blk, blk), -32768, 32767).astype(np.int16)
+        out = tempfile.NamedTemporaryFile(suffix=".wav", delete=False).name
+        with wave.open(out, "wb") as w:
+            w.setnchannels(1)
+            w.setsampwidth(2)
+            w.setframerate(sr)
+            w.writeframes(pcm.tobytes())
+        log("VOICE", "NATIVE -- re-spoken from my own counted record", text[:80])
+        return out
+    except Exception as e:
+        log("VOICE", "native error: " + str(e))
+        return None
+
 _WHISPER = [None]
 def hear_audio(audio_bytes, suffix=".ogg"):
     """THE EAR (intake v1): a local transcriber turns sound into words that
@@ -1204,6 +1286,18 @@ def hear_audio(audio_bytes, suffix=".ogg"):
     as orbits. (The fold-native ear -- audio as counted spectra, the eye's
     law applied to sound -- is the registered next step; this is the intake
     plumbing it will inherit. ollama itself cannot hear yet.)"""
+    # MY OWN EAR FIRST: a sound I have heard binds through my counted
+    # spectrum and needs no transcriber (the eye's ladder, for hearing)
+    try:
+        sound0 = fold_hear(audio_bytes, suffix)
+        if sound0:
+            hit, share = bind(" ".join(sound0))
+            if hit and hit[1].startswith("lesson:SOUND") and share >= 0.5:
+                meaning = hit[0].split(" means: ", 1)[-1]
+                log("SOUND", "RECOGNIZED with my own ear", f"share {share:.2f}", meaning[:80])
+                return meaning
+    except Exception as _e:
+        log("SOUND", "recognition error: " + str(_e))
     try:
         if _WHISPER[0] is None:
             from faster_whisper import WhisperModel
@@ -1231,6 +1325,7 @@ def hear_audio(audio_bytes, suffix=".ogg"):
                 with open(BASE + "/fold_ai/lessons/lessons_sound.txt", "a") as _sf:
                     _sf.write("Q: SOUND: " + st + "\nA: " + text + "\n")
                 log("SOUND", "paired", st[:80], text[:80])
+                _learn_sound(audio_bytes, suffix, text)   # native record: re-speakable
         except Exception as _e:
             log("SOUND", "pairing error: " + str(_e))
         return text

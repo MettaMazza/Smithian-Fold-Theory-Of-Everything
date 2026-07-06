@@ -99,8 +99,24 @@ def run(uc, rng=None):
             return
         heard_voice = any((att.content_type or "").startswith("audio/") for att in msg.attachments)
         ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord")
-        # answer clean in the channel -- CHUNKED, never truncated
-        await msg.reply(ans[:1900], mention_author=False)
+
+        class SpeakView(discord.ui.View):
+            def __init__(self, text):
+                super().__init__(timeout=900)
+                self.text = text
+            @discord.ui.button(label="🔊 speak", style=discord.ButtonStyle.secondary)
+            async def speak_btn(self, interaction, button):
+                await interaction.response.defer(thinking=False)
+                wav = await asyncio.to_thread(uc.speak, self.text)
+                if wav:
+                    await interaction.channel.send(file=discord.File(wav, filename="unison.wav"))
+                    os.unlink(wav)
+                else:
+                    await interaction.channel.send("I could not speak that.")
+
+        # answer clean in the channel -- CHUNKED, never truncated; every
+        # message carries the speak button (native voice first, teacher else)
+        await msg.reply(ans[:1900], mention_author=False, view=SpeakView(ans))
         for i in range(1900, len(ans), 1900):
             await msg.channel.send(ans[i:i + 1900])
         # spoken in, spoken back: THE VOICE replies in kind (Kokoro)

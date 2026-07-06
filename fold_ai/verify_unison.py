@@ -188,6 +188,26 @@ hit, share = uc2.bind(" ".join(uc2.fold_see(checker)))
 check("E20c sight survives rebirth", bool(hit) and "checkerboard" in hit[0])
 check("E20d graduation survives rebirth", uc2.GRAD.get(TK) == [1, 2])
 
+# E23 THE REMOVAL-PROOF VOICE: teacher once, native forever
+_vt = "Verification says the fold holds."
+_w1 = uc2.speak(_vt)
+t0 = time.time()
+_w2 = uc2.speak(_vt)
+_lg = open("logs/unison.log").read()
+check("E23 native voice after one teaching", "NATIVE -- re-spoken" in _lg and time.time() - t0 < 1,
+      f"replay {time.time()-t0:.2f}s, no synthesis model")
+# E24 THE REMOVAL-PROOF EAR: heard once, recognized natively after
+if _w1:
+    uc2.hear_audio(open(_w1, "rb").read(), ".wav")
+    _h2 = uc2.hear_audio(open(_w1, "rb").read(), ".wav")
+    check("E24 native ear after one hearing", "RECOGNIZED with my own ear" in open("logs/unison.log").read(),
+          str(_h2)[:50])
+    for _w in (_w1, _w2):
+        if _w and os.path.exists(_w):
+            os.unlink(_w)
+else:
+    check("E24 native ear after one hearing", False, "no clip")
+
 # E21 M5 bounded store round-trip
 B = 101
 def bkey(tup): return (zlib.crc32(" ".join(tup).encode()) % B,)
@@ -214,6 +234,9 @@ try:
         if os.path.exists(fn):
             kept = [ln for ln in open(fn).read().splitlines() if marker not in ln]
             open(fn, "w").write("\n".join(kept) + ("\n" if kept else ""))
+    for fn in list(__import__("glob").glob("sounds/*.npz")) + ["sounds/index.tsv"]:
+        if os.path.exists(fn):
+            os.unlink(fn)
     for fn in ("lessons/lessons_live.txt", "lessons/lessons_feedback.txt"):
         if os.path.exists(fn):
             os.unlink(fn)
