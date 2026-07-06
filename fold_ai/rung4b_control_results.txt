@@ -1,0 +1,2 @@
+corpus: 541358 chars, vocab 164
+FROZEN-SOFTMAX seed=1  val=2.4336  (409s)

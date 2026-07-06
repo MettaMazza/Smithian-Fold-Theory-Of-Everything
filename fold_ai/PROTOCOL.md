@@ -200,3 +200,114 @@ at every scale" REFUTED as stated -- the fingerprint is per-recipe, not
 universal; "margin does not vanish with scale" CONFIRMED within loud
 recipes (R1). Maria's principle codified: the approach varies with the
 object; the object is the recipe.
+
+## RUNG 3c REGISTRATION (2026-07-06, from the deflation audit): compression
+was refused on GPT-2 (12.7x-class objects) BEFORE the recipe map revealed
+R1-class objects at 43-47x every-block. The refusal's scope is GPT-2/raw
+basis only; it was never a verdict on loud-recipe models. TEST: fold-basis
+truncation quality on DeepSeek-R1's loudest tensors (dense gate + shexp,
+the 43-47x class) -- reconstruction error vs matched-budget quantization at
+keep = 0.25/0.125 (weight-space MSE + energy retained; R1 is too large for
+full-model forward passes on this machine, so the registered metric is
+reconstruction fidelity, stated as such). Verdict: fold beats quantization
+on reconstruction at either budget = compression REOPENED for loud recipes.
+
+## EPISTEMIC CORRECTION (2026-07-06, Maria's -- overriding the 2f wording):
+"Silent" models do NOT lack law -- that reading is incoherent (a working
+computation is a lawful object) and contradicts the campaign's own
+standing exhibit (chess Rung 2.5: a fully lawful formula-generated field
+certifies at chance to this probe; a chance verdict is a verdict on the
+PROBE'S COORDINATES, never on law-presence). CORRECTED READING: the recipe
+map is a map of BASIS-ALIGNMENT -- which training recipes express their
+law in the dyadic coordinates this instrument sees. R1's recipe writes
+dyadically; the others express theirs in coordinates not yet probed.
+
+## RUNG 2g REGISTRATION (the basis hunt): probe the dyadically-quiet
+models under the fold-universe's own transformation group before any
+further characterization -- the chess invariance class: F2-linear
+repackings, odd-multiplication reorderings (x3, x5), affine maps, plus
+transposed and expert-axis packings. Objects: one hot-class tensor each
+from Qwen3-27B and Kimi-K2.6, vs the same battery. Any transformation
+that wakes a quiet tensor identifies the coordinates that recipe writes
+in. Registered prediction (the fold's): law is present in every working
+model; the hunt is for its coordinates.
+
+## RUNG 3c-II REGISTRATION (production baseline): same R1 tensors, same
+row-block metric; baseline upgraded to PER-BLOCK SCALED 4-bit quantization
+(blocks of 32, absmax fp16 scale each => 4.5 effective bits/weight -- the
+K-quant construction class). Fold at matched storage (keep = 4.5 bits /
+(log2 n + 16)). Fold wins median relMSE on >=2 of 3 tensors = deployable-
+class compression claim; loses = directional-only, recorded.
+
+## RUNG 2g MENU (fixed): data-independent reorderings only (data-dependent
+sorts are cheating and banned): bit-reversal (F2 self-test, must preserve),
+gray-code, x3 and x5 index maps, affine 3i+1, transpose, block-transpose
+(64 and 4096), expert-axis flatten order. Wake = margin > 2x under any map.
+
+## RUNG 4b REGISTRATION — THE ATTENTION GATE (2026-07-06, before any run)
+
+FROM THE THEOREM (verify_attention_capacity, Claim XI-2, read firsthand):
+attention is selection of ONE integrated orbit at the lock threshold; the
+top focus holds 1/2 (self-antipodal, folds to unison); each successive
+focus holds the lock of the REMAINDER. The forced distribution over ranked
+candidates is therefore the DYADIC CASCADE: 1/2, 1/4, 1/8, ..., with the
+final candidate taking the closing remainder so the total is exactly ONE
+(the fold's own telescoping). Fully forced: no temperature, no sqrt(d), no
+exponential -- ranking is scale-free, so no normalization choice exists to
+make. Softmax, by contrast, carries base-e and a temperature.
+- CHALLENGER: cascade attention. Scores = raw QK dot products used ONLY
+  for ranking; weights = the cascade; V and all other components train
+  normally. Q,K receive no gradient through hard ranks and stay at their
+  seeded random init -- recorded openly: the challenger tests whether the
+  DERIVED SELECTION LAW over random comparison directions suffices.
+- BASELINE: the recorded Rung-4 LEARNED-wpe runs (identical architecture,
+  data, steps, seeds; trained softmax attention): mean val 1.8878.
+- METRIC: held-out cross-entropy, 3 seeds, mean decides, +-0.005 tie band.
+
+## RUNG 4b OUTCOME (recorded): REFUSED. Cascade 2.6010 vs trained softmax
+1.8878 (3 seeds). The challenger bundled two differences (cascade law +
+frozen random Q,K -- hard ranks pass no gradient); the gap is real but
+unattributed. DECOMPOSITION CONTROL registered (not variant-grinding; it
+attributes the recorded loss): identical model, softmax attention, Q,K
+frozen at the same seeded init. Gap(frozen-softmax vs trained-softmax) =
+cost of frozen directions; Gap(cascade vs frozen-softmax) = cost of the
+cascade law itself.
+
+## RUNG 2h REGISTRATION — THE RECIPE ISOLATION (before any spectrum):
+Natural experiment on-drive: DeepSeek-R1-Distill-Qwen-32B (Qwen-32B
+trained on R1 reasoning traces) vs qwen2.5-coder-32b (non-reasoning
+sibling, same family/scale/architecture class). Same corrected battery
+(row-block medians, weights-only, gate/up class, 3 depths). REGISTERED
+PREDICTION (the reasoning hypothesis): the distill reads louder than the
+sibling. Distill loud + sibling quiet = reasoning-training writes dyadic
+law within a fixed architecture. Both quiet = the R1 signal traces to its
+base pretraining, not the reasoning stage -- recorded either way.
+
+## SCOPE CORRECTION + THE NATIVE GATE (2026-07-06, Maria's -- overriding)
+
+The Rung 4/4b refusals are RE-SCOPED to what they actually measured: fold
+objects as frozen TRANSPLANTS inside SGD-transformer hosts at toy scale --
+the host's home game (its inits, normalization, optimizer, and step budget
+all co-evolved for trained components). They are not verdicts on fold-
+native construction, and the guardrail audit (the record's 7/7 biased-
+construction lesson) was not run on them before their verdicts were
+generalized -- that failure is recorded here. The chess method is the
+binding precedent: the fold fights AS ITSELF on the task, never as a
+transplant in the incumbent's machine.
+
+## RUNG 5-NATIVE REGISTRATION — THE FOLD-NATIVE SEED (before any run)
+
+- ENGINE (all machinery derived, all knowledge stored): contexts observed
+  ONCE and recorded as exact held orbits (the corpus's memory law -- the
+  tablebase pattern applied to text); prediction = unit-capacity selection
+  over matching stored orbits (longest-context-first, the attention
+  theorem as the mechanism); values = exact rational shares of observed
+  continuations; unseen-context fallback = the orbit hierarchy (fold to
+  the longest held suffix). Zero gradient steps. Zero trained parameters.
+  Live-learning = writing orbits.
+- OPPONENT: the recorded trained transformer twin (1.8878 mean val), which
+  consumed the corpus ~11x over in 48,000 gradient-batched readings.
+- ARENA: identical held-out split, identical metric (cross-entropy).
+  The fold engine reads the training text ONCE.
+- Registered comparison axes: quality (loss), experience-efficiency
+  (passes over data), wall-time to build, and edit-cost of adding a fact.
