@@ -1,0 +1,7 @@
+waking the seed (one-time read)...
+se store skipped: Can't get attribute '_ddint' on <module '__main__' from '/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/unison_discord.py'>)
+awake: 1228886 orbits, 4833 held sentences, in 5s
+[2026-07-06 16:02:16] [INFO    ] discord.client: logging in using static token
+[2026-07-06 16:02:17] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 330f0d4311796ed2c149c9430cb3a614).
+UnisonAI is live as Unison#1803
+thread error: 400 Bad Request (error code: 160004): A thread has already been created for this message

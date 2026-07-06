@@ -643,7 +643,7 @@ And the structural laws of physics, forced the same way:
   ([`tools/MATCHES.md`](tools/MATCHES.md)) — **the fold does not just derive; it plays**).
 
 The full, ordered, run-it-yourself derivation of all of it — every step, all 306 test
-suites (1,831 forced checks, including the trace-to-the-One and the CODATA comparison) —
+suites (1,844 forced checks, including the trace-to-the-One and the CODATA comparison) —
 is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 `make -C verify prove`.
 
@@ -700,7 +700,7 @@ counted generators → depths → the constant), and **the external measurement 
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external
-CODATA / PDG / Planck measurement` (currently 306 suites, 1,831 forced checks, 0 failures).
+CODATA / PDG / Planck measurement` (currently 307 suites, 1,844 forced checks, 0 failures).
 
 `make online` closes the "you typed the measured numbers in yourself" objection: it
 **derives** the forced values from the two generators (`2`, `3`) and **fetches** the

@@ -13,3 +13,16 @@ CONF	say,yes	Say yes. q: Say yes a: Yes.
 REJ	england,queen,the,who	the engine should say it does not hold facts about royalty.	answer with: 'I do not hold facts about royalty yet'
 CONF	england,queen,the,who	I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
 CONF	fold,the,what	The fold is the single operation of the One — cast out the double, and everything follows from it.
+CONF	are,how,you	I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
+CONF	are,how,you	I am Unison, I am Unsure how i feel currently. How are you?
+REJ	hello	Held. Hello.	I'm good thank you. How are you?
+CONF	are,how,you	Hello to you. It is good to be in your company.
+REJ	know,name,own,your	Your name is Maria, You are my Developer.	My name is Unison.
+REJ	know,name,own,your	The engine does not know what game it is playing. It knows the answer by other.	My name is Unison.
+REJ	know,name,own,your	The engine does not know what game it is playing. It knows the answer by other.	My name is Unison.
+REJ	are,how,you	Hello to you.	I'm not sure how i feel, How are you?
+REJ	good,just,systems,working	Held. You ' m Good, Just working on my systems.	
+REJ	know,who,you	They exist so that a stranger who does not know the theory is clean " ), the * d ' s ` kT ln 2 ` ); the roots = * 1 * — the
+REJ		okay.
+REJ	funny,jokes,telling,why	Parity is violated, maximally, by the weak force — it ' s * radiation / spacetime dimension ( the Observer ' s ` kT ln 2 ` ); the tie is broken by the no -
+REJ	concepts,generators,pop,popcount	Held. ... A:... ( strictly ). * Key concepts: Smithian Fold Theory, doubling fold signs ( $ ( - 1 ) ^ { pop ( $ ( - 1 ) ^ { popcount ( s \ text { AND } n ) } $ ), basis change from position basis to fold basis, short generators ins.

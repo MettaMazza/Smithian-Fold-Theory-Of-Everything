@@ -9,6 +9,8 @@ self-deletes after 2 minutes so chat stays clear."""
 import asyncio, os
 
 TOKEN_PATH = os.path.expanduser("~/.unison_discord_token")
+CHANNEL = 1523685773998555227   # Unison listens ONLY here (plus its own
+                                # thinking threads), never the whole server
 
 def run(uc, rng=None):
     """Run the Discord face on an already-awake engine module `uc`."""
@@ -52,8 +54,14 @@ def run(uc, rng=None):
             return
         if isinstance(msg.channel, discord.Thread):
             return
+        if msg.channel.id != CHANNEL:     # locked: this channel only
+            return
         line = msg.content.strip()
         if not line:
+            return
+        if line.startswith("/"):
+            t = uc.toggle(line)
+            await msg.reply(t or "commands: /auto /teach /selfplay", mention_author=False)
             return
         ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord")
         # answer clean in the channel

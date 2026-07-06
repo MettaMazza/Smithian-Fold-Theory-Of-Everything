@@ -13,7 +13,7 @@ by the corpus's own laws. Zero parameters, zero training.
             replies are recorded but never self-reinforced (retention law).
 Usage: python3 unison_chat.py"""
 import os
-import numpy as np, glob, re, sys, time, threading, subprocess
+import numpy as np, glob, re, sys, time, threading, subprocess, random
 from collections import defaultdict, Counter
 
 CTX_MAX = 6
@@ -102,10 +102,30 @@ def kinship(a, b):
     inter = sum(min(na.get(k,0), nb.get(k,0)) for k in keys)
     union = sum(max(na.get(k,0), nb.get(k,0)) for k in keys)
     return inter / union if union else 0.0
+NEIGH_INDEX = defaultdict(set)   # context word -> words holding it as neighbour
+def build_neigh_index():
+    # inverted kinship index: kin candidates are found through SHARED
+    # contexts (the only way kinship can be nonzero) instead of scanning
+    # every held word. Contexts carrying less than one part in a thousand
+    # of the count mass ("the", "and") discriminate nothing and are skipped.
+    NEIGH_INDEX.clear()
+    common = TOTAL_TOKS / 1000
+    for _w, _nb in NEIGH.items():
+        for _c in _nb:
+            if TOK_FREQ.get(_c, 0) <= common:
+                NEIGH_INDEX[_c].add(_w)
+
 def kin_expand(words, k=3):
     out = set(w.lower() for w in words)
     for w in list(out):
-        cands = [(kinship(w, o), o) for o in NEIGH if o != w and len(o) > 3]
+        nb = NEIGH.get(w)
+        if not nb:
+            continue
+        cand = set()
+        for c in sorted(nb, key=lambda c: TOK_FREQ.get(c, 1))[:12]:
+            cand |= NEIGH_INDEX.get(c, set())
+        cand.discard(w)
+        cands = [(kinship(w, o), o) for o in cand if len(o) > 3]
         cands.sort(reverse=True)
         for sc, o in cands[:k]:
             if sc > 0.15:
@@ -184,6 +204,7 @@ if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
         print("  (prose store skipped: " + str(_e) + ")", flush=True)
         log("STORE", "SKIPPED: " + str(_e))
 
+build_neigh_index()   # after ALL neighbours are in (corpus + prose store)
 print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
 log("WAKE", f"{sum(len(s) for s in stores)} orbits", f"{len(SENTS)} held sentences", f"{time.time()-t0:.0f}s")
 
@@ -583,6 +604,126 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
         return None   # face should ask: "what should I have said?"
     return False      # not feedback
 
+# ---------- AUTONOMY: the tutor closes the loop itself; the engine plays itself
+AUTO = {"teach": False, "selfplay": False}
+
+def toggle(cmd):
+    """/auto (everything), /teach (autonomous tutor), /selfplay -- from any
+    face. Each returns a confirmation line, or None if not a toggle."""
+    c = re.sub(r"[\s/_-]", "", cmd.lower())
+    def onoff(v): return "ON" if v else "OFF"
+    if c == "auto":
+        new = not (AUTO["teach"] and AUTO["selfplay"])
+        AUTO["teach"] = AUTO["selfplay"] = new
+        log("TOGGLE", "auto", onoff(new))
+        return ("full autonomy " + onoff(new) + " -- the tutor asks, judges and closes y/n itself, "
+                "and I play myself between lessons. Watch logs/unison.log.")
+    if c in ("teach", "tutor", "teacher"):
+        AUTO["teach"] = not AUTO["teach"]
+        log("TOGGLE", "teach", onoff(AUTO["teach"]))
+        return "autonomous tutor " + onoff(AUTO["teach"]) + "."
+    if c in ("selfplay", "play"):
+        AUTO["selfplay"] = not AUTO["selfplay"]
+        log("TOGGLE", "selfplay", onoff(AUTO["selfplay"]))
+        return "self-play " + onoff(AUTO["selfplay"]) + "."
+    return None
+
+_ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]|\x1b\][^\x07]*\x07|[\x00-\x08\x0b-\x1f\x7f]")
+def _ollama(prompt, timeout=600):
+    try:
+        r = subprocess.run(["ollama", "run", "gemma4:26b"], input=prompt,
+                           capture_output=True, text=True, timeout=timeout)
+        return _ANSI.sub("", r.stdout)
+    except Exception as e:
+        log("TUTOR", "ollama error: " + str(e))
+        return ""
+
+def _tutor_loop():
+    """THE AUTONOMOUS TUTOR: the full Learning Law with no human in the
+    loop. Each cycle the teaching model writes one grounded question and
+    reference answer from a corpus passage, the engine answers it, the
+    teaching model judges the answer against the reference, and the y/n
+    closure is applied EXACTLY as if a user had typed it -- y consolidates,
+    n corrects with the reference held permanently."""
+    rng = np.random.default_rng()
+    rnd = random.Random()
+    while True:
+        if not AUTO["teach"]:
+            time.sleep(5)
+            continue
+        try:
+            f = rnd.choice(THEORY)
+            text = open(f, errors="ignore").read()
+            if len(text) < 600:
+                continue
+            start = rnd.randrange(0, max(1, len(text) - 2500))
+            passage = text[start:start + 2500]
+            out = _ollama("Below is a passage from the Smithian Fold Theory corpus. Write exactly ONE "
+                          "question a curious person might ask about it, and its answer grounded ONLY in "
+                          "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
+                          "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
+            m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", out, re.S)
+            if not m:
+                continue
+            q = " ".join(m.group(1).split())[:200]
+            ref = " ".join(m.group(2).split())[:350]
+            if len(q) < 10 or len(ref) < 10:
+                continue
+            # diet hygiene: a quiz on leaked markup teaches nothing
+            if any(b in q + ref for b in ("$", "\\", "{", "}", "*", "`", "|", "Q:", "A:", "PASSAGE", "..")):
+                continue
+            if not q.rstrip().endswith("?"):
+                continue
+            ans, _ = turn(q, rng, "tutor")
+            verdict = _ollama("QUESTION: " + q + "\nREFERENCE ANSWER: " + ref +
+                              "\nSTUDENT ANSWER: " + ans +
+                              "\nDoes the student answer convey the reference answer's meaning? "
+                              "Reply with exactly one word: YES or NO.", timeout=300)
+            if re.search(r"\bYES\b", verdict.upper()):
+                apply_feedback(q, ans, "y", "tutor")
+                log("TUTOR", "y", q)
+            else:
+                apply_feedback(q, ans, "n " + ref, "tutor")
+                log("TUTOR", "n->corrected", q, ref)
+        except Exception as e:
+            log("TUTOR", "error: " + str(e))
+        time.sleep(20)
+
+def _selfplay_loop():
+    """SELF-PLAY (XI-6 consolidation + XIV-7 self-observation closure): the
+    engine quizzes ITSELF on its own held lessons, checks its answer against
+    the held reference by counted overlap, and closes its own loop --
+    consolidating what it can already say, correcting itself from its own
+    store where it cannot. No external model; the closure is its own.
+    Retention law kept: only the held reference is reinforced, never its
+    own unconfirmed reply."""
+    rng = np.random.default_rng()
+    rnd = random.Random()
+    while True:
+        if not AUTO["selfplay"]:
+            time.sleep(5)
+            continue
+        try:
+            lessons = [(src[7:], s) for s, src in SENTS if src.startswith("lesson:")]
+            if not lessons:
+                time.sleep(30)
+                continue
+            for q, ref in rnd.sample(lessons, min(5, len(lessons))):
+                if len(q.strip()) < 10:
+                    continue
+                ans, _ = reply(q, rng)
+                overlap = set(content_words(ans)) & set(content_words(ref))
+                need = max(1, len(content_words(ref)) // 2)
+                if len(overlap) >= need or ans.strip() == ref.strip():
+                    write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * 2)
+                    log("SELFPLAY", "consolidated", q)
+                else:
+                    record_correction(q, ref)
+                    log("SELFPLAY", "self-corrected", q)
+        except Exception as e:
+            log("SELFPLAY", "error: " + str(e))
+        time.sleep(60)
+
 # ---------- CONTINUOUS LEARNING: the teachers and the live lesson stream ---
 def _watch_lessons():
     """New lesson pairs -- from the teacher models or hand-written files --
@@ -658,7 +799,10 @@ def main():
     _start_discord(np.random.default_rng())
     _start_teacher()
     threading.Thread(target=_watch_lessons, daemon=True).start()
-    log("SYSTEM", "unified launch: terminal + discord face + teacher + lesson watcher, one engine")
+    threading.Thread(target=_tutor_loop, daemon=True).start()
+    threading.Thread(target=_selfplay_loop, daemon=True).start()
+    log("SYSTEM", "unified launch: terminal + discord face + teacher + lesson watcher + tutor + self-play, one engine")
+    print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)
     last_exchange = [None, ""]
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
     while True:
@@ -668,8 +812,12 @@ def main():
             break
         if not line:
             continue
-        if line == "/quit":
-            break
+        if line.startswith("/"):
+            if line == "/quit":
+                break
+            t = toggle(line)
+            print("UnisonAI: " + (t or "commands: /auto /teach /selfplay /quit") + "\n", flush=True)
+            continue
         # bare negation = rejection of the previous answer, never a fact
         if line.lower().strip(" .!") in ("no", "wrong", "incorrect", "that is wrong", "thats wrong") and last_exchange[0]:
             REJECTED.add((qkey(last_exchange[0]), last_exchange[1].strip()))
