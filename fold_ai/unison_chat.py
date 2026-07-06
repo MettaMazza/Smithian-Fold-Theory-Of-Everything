@@ -1022,6 +1022,18 @@ TOOLS = [
     {"type": "function", "function": {"name": "scratch_read",
         "description": "Read a named note from the scratchpad (empty name lists all notes).",
         "parameters": {"type": "object", "properties": {"name": {"type": "string"}}}}},
+    {"type": "function", "function": {"name": "grep_file",
+        "description": "Search INSIDE one file for a pattern; returns numbered matching lines (use with read_file's start for pagination).",
+        "parameters": {"type": "object", "properties": {"path": {"type": "string"}, "pattern": {"type": "string"}}, "required": ["path", "pattern"]}}},
+    {"type": "function", "function": {"name": "find_files",
+        "description": "Find files by name fragment across Unison's readable roots.",
+        "parameters": {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}}},
+    {"type": "function", "function": {"name": "web_search",
+        "description": "Search the live web; returns titles and URLs. Use web_fetch to read a result.",
+        "parameters": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}}},
+    {"type": "function", "function": {"name": "web_fetch",
+        "description": "Fetch a URL and return its readable text (tags stripped). Works for pages, RSS and atom feeds.",
+        "parameters": {"type": "object", "properties": {"url": {"type": "string"}}, "required": ["url"]}}},
 ]
 
 _READ_ROOTS = (BASE, "/Users/mettamazza/Desktop/SFTOM")
@@ -1075,6 +1087,65 @@ def _run_tool(name, args):
             return out[:6000] if out else "no matches"
         except Exception as e:
             return "grep error: " + str(e)
+    if name == "grep_file":
+        p = _safe_path(args.get("path", ""))
+        pat = str(args.get("pattern", ""))[:120]
+        if not p or not os.path.isfile(p) or not pat:
+            return "not searchable"
+        try:
+            hits = [str(i + 1) + ": " + ln for i, ln in
+                    enumerate(open(p, errors="ignore").read().splitlines())
+                    if re.search(pat, ln, re.I)][:40]
+            return "\n".join(hits)[:6000] or "no matches in " + p
+        except Exception as e:
+            return "grep_file error: " + str(e)
+    if name == "find_files":
+        frag = str(args.get("name", ""))[:80].lower()
+        if not frag:
+            return "empty name"
+        out = []
+        for root in _READ_ROOTS:
+            for dp, dns, fns in os.walk(root):
+                if any(x in dp for x in (".git", "node_modules", "/diet")):
+                    dns[:] = []
+                    continue
+                out += [os.path.join(dp, f) for f in fns if frag in f.lower()]
+                if len(out) > 40:
+                    break
+        return "\n".join(out[:40]) or "no files match"
+    if name == "web_search":
+        try:
+            import urllib.request as _u, urllib.parse as _up
+            q = str(args.get("query", ""))[:200]
+            req = _u.Request("https://lite.duckduckgo.com/lite/?q=" + _up.quote(q),
+                             headers={"User-Agent": "Mozilla/5.0"})
+            html = _u.urlopen(req, timeout=30).read().decode(errors="ignore")
+            hits = re.findall(r'<a rel="nofollow" href="([^"]+)"[^>]*>(.*?)</a>', html, re.S)[:8]
+            out = []
+            for url, title in hits:
+                title = " ".join(re.sub(r"<[^>]+>", "", title).split())
+                m = re.search(r"uddg=([^&]+)", url)
+                out.append(title + " -- " + (_up.unquote(m.group(1)) if m else url))
+            return "\n".join(out) or "no results"
+        except Exception as e:
+            return "web_search error: " + str(e)
+    if name == "web_fetch":
+        try:
+            import urllib.request as _u
+            url = str(args.get("url", ""))[:500]
+            if not url.startswith(("http://", "https://")):
+                return "only http(s) URLs"
+            req = _u.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            raw = _u.urlopen(req, timeout=45).read()[:800000].decode(errors="ignore")
+            if "<item>" in raw or "<entry" in raw:      # RSS / atom feeds
+                items = re.findall(r"<title[^>]*>(.*?)</title>", raw, re.S)[:15]
+                clean = [" ".join(re.sub(r"<!\[CDATA\[|\]\]>|<[^>]+>", " ", t).split()) for t in items]
+                return "FEED:\n" + "\n".join(c for c in clean if c)
+            txt = re.sub(r"(?s)<(script|style)[^>]*>.*?</\1>", " ", raw)
+            txt = re.sub(r"<[^>]+>", " ", txt)
+            return " ".join(txt.split())[:6000] or "empty page"
+        except Exception as e:
+            return "web_fetch error: " + str(e)
     if name == "list_dir":
         p = _safe_path(args.get("path", ""))
         if not p or not os.path.isdir(p):
@@ -1153,7 +1224,7 @@ def _teacher_relay(question, user_help=""):
             # the trace is HELD: tool use learned by watching, from day one
             hold_sentence("To answer '" + question.strip()[:50] + "' I used the tool " +
                           name + " and got: " + str(res)[:120], "thought")
-            log("TOOL", name, str(args)[:80], str(res)[:80])
+            log("TOOL", name, str(args)[:200], str(res)[:300])
             msgs.append({"role": "tool", "content": str(res), "tool_name": name})
     out = " ".join((m.get("content") or "").split()).strip()
     if not out:   # loop ended still reaching for tools: force the words out
@@ -2111,6 +2182,9 @@ def main():
         log("TEACHER", "observer HOT -- confusion relay armed" if "ready" in r.lower()
             else "observer warmup got: " + r.strip()[:60])
     threading.Thread(target=_warm_observer, daemon=True).start()
+    log("DIAG", f"locks ctx={CTX_MAX} bind={BIND_LOCK} kin={KIN_FLOOR} compose={COMPOSE_FLOOR} sight={SIGHT_K}",
+        f"orbits={sum(len(s) for s in stores)}", f"sents={len(SENTS)}", f"corrections={len(CORRECTIONS)}",
+        f"grad={len(GRAD)}", f"sounds={len(SOUND_FILES)}", f"bound={STORE_BOUND}")
     log("SYSTEM", "unified launch: terminal + discord face + teacher + observer relay + grower + lesson/prose watchers + store rebuild + tutor + self-play, one engine")
     print("  observer (gemma4:26b) heating -- what I cannot answer, my teacher answers as me, and I keep it", flush=True)
     print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)

@@ -26,6 +26,23 @@ Format STRICTLY as:
 Q: ...
 A: ..."""
 
+# THE EVERYTHING CURRICULUM: the whole imaginable world, in Unison's voice.
+# EXCLUSION (Maria's law): never teach any mathematics or physics framework
+# other than the Smithian Fold Theory -- arithmetic goes through tools.
+WORLD = ["everyday life and routines", "cooking and food", "health and the body (practical, not clinical claims)",
+    "world history", "geography and places", "art and artists", "music and musicians", "film and stories",
+    "literature and books", "poetry", "computers and programming", "the internet and technology",
+    "animals and nature", "plants and gardens", "weather and seasons", "psychology and emotions",
+    "philosophy and big questions", "friendship and relationships", "work and careers", "money and budgeting (practical)",
+    "language, grammar and words", "world cultures and customs", "travel", "sports and games", "chess",
+    "crafts and making things", "tools and how to use them well (including your OWN tools: web_search, web_fetch, read_file, grep_corpus, exact_math, recall -- write examples where you decide to use a tool and report its result)",
+    "humor and wordplay", "ethics and kindness", "children and learning", "old age and memory",
+    "cities and buildings", "the sea and ships", "farming and where food comes from", "clothing and fashion",
+    "celebrations and holidays", "sleep and dreams", "habits and self-improvement", "conversation skills",
+    "asking good questions", "explaining things simply", "admitting uncertainty gracefully", "current events awareness (how to check the live web rather than guess)"]
+
+EXCLUDE_LAW = "\nHARD RULE: never teach any mathematics or physics framework other than the Smithian Fold Theory; plain arithmetic is done with the exact_math tool."
+
 def live_examples():
     """The teacher watches the REAL conversations and writes the replies
     Unison should have given -- fed straight back as lessons."""
@@ -38,6 +55,15 @@ def live_examples():
 def ask_teacher(passage):
     if passage == "__CONVERSATION__":
         prompt = CONVO_PROMPT
+    elif passage == "__WORLD__":
+        import random as _r
+        domain = _r.choice(WORLD)
+        prompt = UNISON_SYSTEM + EXCLUDE_LAW + f"""
+
+Write exactly 8 question-and-answer pairs a curious person might ask you about: {domain}. Answer in your own voice, accurately and warmly, at natural length. No markdown.
+Format STRICTLY as:
+Q: ...
+A: ..."""
     elif passage == "__LIVE_REPLAY__":
         shown = "\n".join(f"User: {q}\nYou said: {a}" for q, a in live_examples())
         prompt = UNISON_SYSTEM + f"""
@@ -92,10 +118,12 @@ if __name__ == "__main__":
     # watcher ingests every new pair within a minute of it being written.
     n = 0
     while True:
-        if n % 3 == 0:
+        if n % 4 == 0:
             passage, label = "__CONVERSATION__", "conversation"
-        elif n % 3 == 2 and live_examples():
+        elif n % 4 == 2 and live_examples():
             passage, label = "__LIVE_REPLAY__", "live replay"
+        elif n % 4 == 3:
+            passage, label = "__WORLD__", "world curriculum"
         else:
             f = rng.choice(CORPUS)
             text = open(f, errors="ignore").read()
