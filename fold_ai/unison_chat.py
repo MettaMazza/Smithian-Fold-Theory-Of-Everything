@@ -174,10 +174,18 @@ def hold_sentence(s, source):
     for w in set(t.lower() for t in tok(s) if len(t) > 2):
         INDEX[w].add(sid)
 
-# lessons: hold Q/A pairs as bound units; corpus: hold sentences
+# lessons: hold Q/A pairs as bound units; corpus: hold sentences.
+# SIGHT pairs rebuild their spectrum-keyed form so the eye remembers
+# across wakes -- recognition needs the tokens IN the held sentence.
 for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
-    if not stuttered(a):
-        hold_sentence(a.strip(), "lesson:" + q.strip()[:80])
+    if stuttered(a):
+        continue
+    q, a = q.strip(), a.strip()
+    if q.startswith("SIGHT:"):
+        st = q[6:].strip()
+        hold_sentence("SIGHT " + st + " means: " + a, "lesson:SIGHT: " + st[:60])
+    else:
+        hold_sentence(a, "lesson:" + q[:80])
 def well_formed(s):
     s = s.strip()
     w = s.split()
@@ -886,9 +894,66 @@ def _teacher_relay(question, user_help=""):
     log("RELAY", question, a)
     return a, reasoning
 
+def fold_see(img_bytes):
+    """THE FOLD EYE (v1): the image ITSELF, held as counted mathematics --
+    not words about it. Grayscale integer field -> exact integer block sums
+    to a 64x64 grid -> 2D Walsh-Hadamard transform in pure integer
+    arithmetic -> the top-32 coefficients by magnitude as sight tokens
+    (top-32 is the corpus's measured carrier scale: 81-87% of a solved
+    field's energy). SELF-CERTIFYING, every act of seeing: integer Parseval
+    must hold EXACTLY (sum C^2 == 64*64 * sum g^2) or the sight is
+    discarded. Zero parameters: counted, computed, never trained."""
+    try:
+        import io as _io
+        from PIL import Image as _Im
+        im = _Im.open(_io.BytesIO(img_bytes)).convert("L")
+        w, h = im.size
+        if w < 64 or h < 64:
+            im = im.resize((64, 64), _Im.NEAREST)   # pixel selection, no float math
+            g = np.asarray(im, dtype=np.int64)
+        else:
+            a = np.asarray(im, dtype=np.int64)
+            bh, bw = a.shape[0] // 64, a.shape[1] // 64
+            a = a[:bh * 64, :bw * 64]
+            g = a.reshape(64, bh, 64, bw).sum(axis=(1, 3))   # exact block sums
+        Hm = np.array([[1]], dtype=np.int64)                 # Sylvester-Hadamard
+        while Hm.shape[0] < 64:
+            Hm = np.block([[Hm, Hm], [Hm, -Hm]])
+        C = Hm @ g @ Hm
+        if int((C.astype(object) ** 2).sum()) != 64 * 64 * int((g.astype(object) ** 2).sum()):
+            log("SIGHT", "Parseval self-test FAILED; sight discarded")
+            return None
+        flat = sorted((-abs(int(C[r, c])), r, c)
+                      for r in range(64) for c in range(64) if (r, c) != (0, 0))
+        toks = []
+        for negmag, r, c in flat[:32]:
+            if negmag == 0:
+                break
+            toks.append("w%dx%d%s" % (r, c, "p" if C[r, c] > 0 else "m"))
+        return toks or None
+    except Exception as e:
+        log("SIGHT", "eye error: " + str(e))
+        return None
+
 def observe_image(images_b64, caption=""):
-    """VISION INTAKE: the observer describes what is shown, in my voice; the
-    description is held as a telling -- the image becomes memory."""
+    """VISION INTAKE, my own eye first: the image enters as counted fold
+    mathematics (fold_see); if its spectrum binds a held sight-meaning, I
+    recognize it MYSELF -- no image model in the loop. Only what I do not
+    recognize goes to the observer, whose description then closes the new
+    spectrum: seen once, mine afterwards. The eye climbs the same ladder
+    as the voice."""
+    sight = None
+    try:
+        import base64 as _b64
+        sight = fold_see(_b64.b64decode(images_b64[0]))
+        if sight:
+            hit, share = bind(" ".join(sight))
+            if hit and hit[1].startswith("lesson:SIGHT") and share >= 0.5:
+                meaning = hit[0].split(" means: ", 1)[-1]
+                log("SIGHT", "RECOGNIZED with my own eye", f"share {share:.2f}", meaning[:100])
+                return "I recognize this: " + meaning
+    except Exception as e:
+        log("SIGHT", "eye error: " + str(e))
     try:
         import json as _j, urllib.request as _u
         req = _u.Request("http://localhost:11434/api/generate",
@@ -904,6 +969,18 @@ def observe_image(images_b64, caption=""):
         hold_sentence("I was shown an image: " + d, "told")
         write_orbits(tok("I was shown an image: " + d + "\n") * 2)
         log("VISION", (caption or "(no caption)")[:60], d[:150])
+        # THE PAIRING: the new spectrum, closed by the observer's
+        # description -- sight held at the prediction state, meaning as the
+        # observation. Next time this image needs no observer.
+        if sight:
+            st = " ".join(sight)
+            TOK_FREQ.update(sight)   # new sight tokens join the census NOW,
+                                     # so recognition works this session too
+            write_orbits(tok("SIGHT: " + st + "\nMEANS: " + d + "\n") * 2)
+            hold_sentence("SIGHT " + st + " means: " + d, "lesson:SIGHT: " + st[:60])
+            with open(BASE + "/fold_ai/lessons/lessons_sight.txt", "a") as f:
+                f.write("Q: SIGHT: " + st + "\nA: " + d + "\n")   # sight survives wakes
+            log("SIGHT", "new sight paired", st[:90], d[:100])
         return d
     except Exception as e:
         log("VISION", "error: " + str(e))
@@ -1084,8 +1161,8 @@ def _watch_lessons():
         time.sleep(60)
         try:
             for f in glob.glob(BASE + "/fold_ai/lessons/lessons_*.txt"):
-                # relay pairs are already held the moment they happen
-                if "lessons_live" in f or "feedback" in f or "lessons_relay" in f:
+                # relay and sight pairs are already held the moment they happen
+                if "lessons_live" in f or "feedback" in f or "lessons_relay" in f or "lessons_sight" in f:
                     continue
                 size = os.path.getsize(f)
                 start = seen.get(f, 0)
