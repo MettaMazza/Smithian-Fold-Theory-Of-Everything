@@ -13,3 +13,4 @@ verify/test_*
 
 # The ErnosPlain language itself is a separate project, kept local for reference
 language/
+data/kqkr_cache.txt
