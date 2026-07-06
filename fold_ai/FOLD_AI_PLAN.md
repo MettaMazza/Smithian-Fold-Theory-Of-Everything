@@ -144,6 +144,25 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v24): **AGENTIC + INSTRUMENTED -- the building blocks for the
+  first overnight boot are all in place.** (1) EMPIRICAL BENCHMARKING:
+  run_benchmark() writes one counted line per run to benchmarks.tsv (native
+  coverage on a probed curriculum with NO teacher, head-to-head record,
+  every owned store's size); fires hourly during /auto and on /bench -- the
+  difference between lines IS the growth rate, and majority-wins is the
+  measured moment the omni model outgrows its teachers. (2) One-tap
+  closure: thumbs up/down buttons on every Discord reply (y/n without a
+  comment) beside the speak button. (3) The persona restated as TECHNICAL
+  REALITY -- the observer speaks for a real running process and is told to
+  read the real files, never to roleplay fold mystique. (4) AGENTIC TOOLS:
+  free read access to its own codebase, data, and the whole fold theory
+  corpus (read_file / grep_corpus / list_dir, path-jailed to its roots),
+  plus a persistent read-write scratchpad -- MEASURED: asked about its own
+  fold_see, the observer read the engine source and answered from the
+  actual code. Relay parse hardened (channel-markup stripped, malformed
+  answers retried). The first-boot recipe: launch, /auto, leave it -- the
+  teachers teach, the scores tally, the benchmark curve writes itself.
+
 - 2026-07-06 (v22): **REMOVAL-PROOF OMNIMODALITY, MEASURED -- every
   supporting model is a teacher with an exit.** The pattern the eye proved
   now holds for every organ: teacher closes the percept ONCE, the percept

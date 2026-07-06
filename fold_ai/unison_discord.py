@@ -100,23 +100,33 @@ def run(uc, rng=None):
         heard_voice = any((att.content_type or "").startswith("audio/") for att in msg.attachments)
         ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord")
 
-        class SpeakView(discord.ui.View):
-            def __init__(self, text):
+        class FeedbackView(discord.ui.View):
+            def __init__(self, q, a):
                 super().__init__(timeout=900)
-                self.text = text
-            @discord.ui.button(label="🔊 speak", style=discord.ButtonStyle.secondary)
+                self.q, self.a = q, a
+            @discord.ui.button(label="🔊", style=discord.ButtonStyle.secondary)
             async def speak_btn(self, interaction, button):
                 await interaction.response.defer(thinking=False)
-                wav = await asyncio.to_thread(uc.speak, self.text)
+                wav = await asyncio.to_thread(uc.speak, self.a)
                 if wav:
                     await interaction.channel.send(file=discord.File(wav, filename="unison.wav"))
                     os.unlink(wav)
                 else:
                     await interaction.channel.send("I could not speak that.")
+            @discord.ui.button(label="👍", style=discord.ButtonStyle.success)
+            async def up_btn(self, interaction, button):
+                await interaction.response.defer(thinking=False)
+                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "y", "discord")
+                await interaction.channel.send("⌁ consolidated 👍", delete_after=8)
+            @discord.ui.button(label="👎", style=discord.ButtonStyle.danger)
+            async def dn_btn(self, interaction, button):
+                await interaction.response.defer(thinking=False)
+                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "n", "discord")
+                await interaction.channel.send("⌁ withheld 👎 (add `n <the right answer>` in the thread to teach me)", delete_after=12)
 
         # answer clean in the channel -- CHUNKED, never truncated; every
-        # message carries the speak button (native voice first, teacher else)
-        await msg.reply(ans[:1900], mention_author=False, view=SpeakView(ans))
+        # message carries speak + thumbs (one-tap closure, no comment needed)
+        await msg.reply(ans[:1900], mention_author=False, view=FeedbackView(line, ans))
         for i in range(1900, len(ans), 1900):
             await msg.channel.send(ans[i:i + 1900])
         # spoken in, spoken back: THE VOICE replies in kind (Kokoro)

@@ -952,6 +952,8 @@ def toggle(cmd):
         AUTO["selfplay"] = not AUTO["selfplay"]
         log("TOGGLE", "selfplay", onoff(AUTO["selfplay"]))
         return "self-play " + onoff(AUTO["selfplay"]) + "."
+    if c in ("bench", "benchmark"):
+        return run_benchmark()
     if c in ("score", "status"):
         wins = sum(w for w, l in GRAD.values())
         losses = sum(l for w, l in GRAD.values())
@@ -991,7 +993,31 @@ TOOLS = [
     {"type": "function", "function": {"name": "current_time",
         "description": "The current date and time, from the machine's clock.",
         "parameters": {"type": "object", "properties": {}}}},
+    {"type": "function", "function": {"name": "read_file",
+        "description": "Read a file from Unison's own codebase, data, or the Smithian Fold Theory corpus (free read access). Returns ~120 lines from the start line.",
+        "parameters": {"type": "object", "properties": {"path": {"type": "string"}, "start": {"type": "integer", "description": "1-based start line, default 1"}}, "required": ["path"]}}},
+    {"type": "function", "function": {"name": "grep_corpus",
+        "description": "Search the entire codebase and fold theory corpus for a pattern; returns matching lines with file paths.",
+        "parameters": {"type": "object", "properties": {"pattern": {"type": "string"}}, "required": ["pattern"]}}},
+    {"type": "function", "function": {"name": "list_dir",
+        "description": "List a directory inside Unison's readable roots.",
+        "parameters": {"type": "object", "properties": {"path": {"type": "string"}}, "required": ["path"]}}},
+    {"type": "function", "function": {"name": "scratch_write",
+        "description": "Write a named note to Unison's persistent scratchpad (read-write working memory).",
+        "parameters": {"type": "object", "properties": {"name": {"type": "string"}, "content": {"type": "string"}}, "required": ["name", "content"]}}},
+    {"type": "function", "function": {"name": "scratch_read",
+        "description": "Read a named note from the scratchpad (empty name lists all notes).",
+        "parameters": {"type": "object", "properties": {"name": {"type": "string"}}}}},
 ]
+
+_READ_ROOTS = (BASE, "/Users/mettamazza/Desktop/SFTOM")
+SCRATCH = BASE + "/fold_ai/scratchpad"
+
+def _safe_path(p, write=False):
+    rp = os.path.realpath(str(p))
+    roots = ((os.path.realpath(SCRATCH),) if write
+             else tuple(os.path.realpath(r) for r in _READ_ROOTS))
+    return rp if any(rp == r or rp.startswith(r + os.sep) for r in roots) else None
 
 def _run_tool(name, args):
     if name == "exact_math":
@@ -1010,6 +1036,48 @@ def _run_tool(name, args):
         return hit[0] if hit else "nothing held on that yet"
     if name == "current_time":
         return time.strftime("%A %Y-%m-%d %H:%M")
+    if name == "read_file":
+        p = _safe_path(args.get("path", ""))
+        if not p or not os.path.isfile(p):
+            return "not readable (outside my roots, or not a file)"
+        try:
+            lines = open(p, errors="ignore").read().splitlines()
+            s = max(int(args.get("start", 1) or 1), 1) - 1
+            return ("[" + p + " lines " + str(s + 1) + "-" + str(min(s + 120, len(lines))) +
+                    " of " + str(len(lines)) + "]\n" + "\n".join(lines[s:s + 120]))[:6000]
+        except Exception as e:
+            return "read error: " + str(e)
+    if name == "grep_corpus":
+        import subprocess as _sp
+        pat = str(args.get("pattern", ""))[:120]
+        if not pat:
+            return "empty pattern"
+        try:
+            r = _sp.run(["grep", "-rnI", "-m", "3", "--include=*.py", "--include=*.md",
+                         "--include=*.txt", "--include=*.tsv",
+                         "--exclude-dir=.git", "--exclude-dir=diet", "--exclude-dir=node_modules",
+                         pat, *_READ_ROOTS], capture_output=True, text=True, timeout=30)
+            out = r.stdout.strip()
+            return out[:6000] if out else "no matches"
+        except Exception as e:
+            return "grep error: " + str(e)
+    if name == "list_dir":
+        p = _safe_path(args.get("path", ""))
+        if not p or not os.path.isdir(p):
+            return "not listable"
+        return "\n".join(sorted(os.listdir(p))[:200])
+    if name == "scratch_write":
+        nm = re.sub(r"[^\w.-]", "_", str(args.get("name", "note")))[:60]
+        os.makedirs(SCRATCH, exist_ok=True)
+        with open(SCRATCH + "/" + nm, "w") as f:
+            f.write(str(args.get("content", ""))[:20000])
+        return "held in scratchpad as " + nm
+    if name == "scratch_read":
+        nm = re.sub(r"[^\w.-]", "_", str(args.get("name", "")))[:60]
+        if not nm:
+            return "\n".join(sorted(os.listdir(SCRATCH))[:100]) if os.path.isdir(SCRATCH) else "(empty)"
+        p = SCRATCH + "/" + nm
+        return open(p, errors="ignore").read()[:6000] if os.path.exists(p) else "(no such note)"
     return "unknown tool"
 
 def _ollama_chat(messages, tools=None, timeout=600):
@@ -1082,6 +1150,7 @@ def _teacher_relay(question, user_help=""):
     def _parse(o):
         mm = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", o)
         rr, aa = (mm.group(1).strip(), mm.group(2).strip()) if mm else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", o))
+        aa = re.sub(r"<[^>]{0,60}>", " ", aa)      # strip model channel-markup tags
         aa = re.sub(r"[*`|{}\\$#_]+", " ", aa)     # strip markup; never reject for formatting
         aa = dedup(" ".join(aa.split()))[:1800]    # collapse doubled words; IO bound only
         return rr, aa
@@ -1092,11 +1161,13 @@ def _teacher_relay(question, user_help=""):
         hits = len(re.findall(r"(?i)\b(\w+)\s+\1\b", t))
         return hits * 100 > max(len(t.split()), 1)   # >1% doubled tokens
     tries = 0
-    while (len(a) < 8 or _dense(a)) and tries < GEN_B:
+    def _malformed(t):
+        return len(t) < 8 or _dense(t) or t.lower().startswith(("thought", "analysis", "channel"))
+    while _malformed(a) and tries < GEN_B:
         tries += 1
         m = _ollama_chat(msgs, tools=TOOLS)
         reasoning, a = _parse(" ".join((m.get("content") or "").split()).strip())
-    if len(a) < 8 or _dense(a):
+    if _malformed(a):
         log("RELAY", "observer answer rejected after retries", question[:80])
         return None
     a = a if a[-1:] in ".!?" else a + "."
@@ -1697,6 +1768,65 @@ def _selfplay_loop():
             log("SELFPLAY", "error: " + str(e))
         time.sleep(60)
 
+# ---------- EMPIRICAL BENCHMARKING: the engine vs its teachers, over time --
+BENCH_LOG = BASE + "/fold_ai/benchmarks.tsv"
+
+def run_benchmark(rng=None):
+    """THE PROGRESS INSTRUMENT: one line of counted empirical state per run,
+    appended to benchmarks.tsv -- native coverage (how much of the probe the
+    engine answers from its OWN channels, no teacher), the judged
+    head-to-head record, and the size of every owned store. The DIFFERENCE
+    between successive lines is the growth rate; the crossover to majority
+    wins is the measured moment the omni model has outgrown its teachers."""
+    if rng is None:
+        rng = np.random.default_rng()
+    tw = sum(w for w, l in GRAD.values())
+    tl = sum(l for w, l in GRAD.values())
+    n_corr = len(CORRECTIONS)
+    n_lessons = sum(1 for s, src in SENTS if src.startswith("lesson"))
+    n_sight = sum(1 for s, src in SENTS if src.startswith("lesson:SIGHT"))
+    n_sound = sum(1 for s, src in SENTS if src.startswith("lesson:SOUND"))
+    n_voice = len(SOUND_FILES)
+    n_told = sum(1 for s, src in SENTS if src in ("told", "confirmed"))
+    # live probe: can the engine answer its own curriculum WITHOUT a teacher?
+    pool = [(src[7:], s) for s, src in SENTS
+            if src.startswith("lesson:") and not src.startswith(("lesson:SIGHT", "lesson:SOUND"))
+            and len(src) > 17]
+    rnd = random.Random(len(SENTS))
+    probe = native = 0
+    for q, ref in (rnd.sample(pool, min(GEN_B ** GEN_C, len(pool))) if pool else []):
+        if len(q.strip()) < 10:
+            continue
+        probe += 1
+        ans, th = reply(q, rng)          # face None: OWN channels only
+        if not _is_confused(th):
+            native += 1
+    orbits = sum(len(s) for s in stores)
+    if not os.path.exists(BENCH_LOG):
+        with open(BENCH_LOG, "w") as f:
+            f.write("time\torbits\tlessons\ttaught\ttold\tsights\tsounds\tvoiced\th2h_wins\th2h_losses\tprobe\tnative\n")
+    with open(BENCH_LOG, "a") as f:
+        f.write("\t".join(str(x) for x in (time.strftime("%Y-%m-%d %H:%M"), orbits, n_lessons,
+                                            n_corr, n_told, n_sight, n_sound,
+                                            n_voice, tw, tl, probe, native)) + "\n")
+    summary = (f"BENCHMARK: native coverage {native}/{probe} on probed curriculum (own channels, no teacher); "
+               f"head-to-head {tw}W-{tl}L vs the teacher; owned: {n_lessons} lessons, {n_corr} taught answers, "
+               f"{n_told} tellings, {n_sight} sights, {n_sound} sounds, {n_voice} voiced, {orbits} orbits. "
+               f"Appended to benchmarks.tsv -- the difference between lines is the growth rate.")
+    log("BENCH", summary)
+    return summary
+
+def _bench_loop():
+    """While autonomy runs, the progress instrument fires hourly -- the
+    overnight curve writes itself."""
+    while True:
+        time.sleep(3600)
+        try:
+            if AUTO["teach"] or AUTO["selfplay"]:
+                run_benchmark()
+        except Exception as e:
+            log("BENCH", "error: " + str(e))
+
 # ---------- THE GROWING BODY: prose arrives, is eaten live, and is baked in
 DIET_DIR = BASE + "/fold_ai/diet"
 _EATEN = set()   # books ingested live this session (beyond the wake store)
@@ -1844,6 +1974,7 @@ def main():
     threading.Thread(target=_watch_lessons, daemon=True).start()
     threading.Thread(target=_tutor_loop, daemon=True).start()
     threading.Thread(target=_selfplay_loop, daemon=True).start()
+    threading.Thread(target=_bench_loop, daemon=True).start()
     threading.Thread(target=_prose_watcher, daemon=True).start()
     threading.Thread(target=_store_rebuild_loop, daemon=True).start()
     # THE OBSERVER, HOT FROM LAUNCH: warm the teacher model now so the
