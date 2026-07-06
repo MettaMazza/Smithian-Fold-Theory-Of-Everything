@@ -1740,7 +1740,26 @@ def _selfplay_loop():
                 played.add(qkey(q))
                 if len(q.strip()) < 10 or stuttered(ref):
                     continue                     # never hold machine stutter
-                mode = len(played) % GEN_C
+                mode = len(played) % (GEN_B * GEN_B)   # four modes: 2^2
+                if mode == 3:
+                    # GENERATION CLOSURE (the review's found gap): the
+                    # Learning Law must reach generate() itself. The engine
+                    # GENERATES an answer from its counted distributions
+                    # (no retrieval, no teacher), verifies it against the
+                    # held reference by counted overlap, and only a
+                    # VERIFIED generation is written back as orbits --
+                    # earned retention for its own composed words. The
+                    # generative organ gets the same ratchet as every other.
+                    gen = generate(tok("Q: " + q + "\nA:"), rng, min_words=GEN_B * GEN_C)
+                    if gen and not stuttered(gen):
+                        ov = set(content_words(gen)) & set(content_words(ref))
+                        need = max(1, len(content_words(ref)) // GEN_B)
+                        if len(ov) >= need:
+                            write_orbits(tok("Q: " + q + "\nA: " + gen + "\n") * GEN_B)
+                            log("SELFPLAY", "generation VERIFIED and held", gen[:80])
+                        else:
+                            log("SELFPLAY", "generation unverified; discarded", gen[:60])
+                    continue
                 if mode == 1:
                     # ABDUCTION: from my held answer, recover its question --
                     # verified by counted overlap with the lesson's own words
