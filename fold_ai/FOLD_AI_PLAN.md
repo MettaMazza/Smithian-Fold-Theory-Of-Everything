@@ -123,6 +123,18 @@ child -> hold their words -> observer closes the original question folding
 their help in -> owned permanently (measured: ask, help, 3s close, 0.0s on
 repeat). Confusion never babbles at a user again.
 
+THE YOUNG-ENGINE GATE (built + measured): while Unison is young, only
+MATCHED experience answers users directly -- a lesson answers only when its
+own question shares half the user's question words (counted); stitched
+candidates only greet; everything thinner goes to the observer, whose
+answer joins the experience tier. The observer carries the full persona
+(Unison, made by Maria and Matthew Smith at Ernos Labs; full architectural
+and fold-theory self-knowledge; concise, honest, friendly, aligned with
+human interests) and FULL TOOLS from day one (exact_math with Fraction
+arithmetic, recall over its own memory, current_time -- gemma4 native tool
+calling); every tool trace is held, so tool use is learned by watching
+(measured: 34259/250 answered exactly through the tool in 2s, then owned).
+
 MULTIMODALITY (foundational): vision is LIVE -- images to the Discord face
 flow to the observer (gemma4 is natively multimodal), described in Unison's
 voice, held as memory (measured: generated red square described correctly

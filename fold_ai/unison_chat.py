@@ -159,12 +159,18 @@ TOK_FREQ = Counter(w.lower() for w in words)
 TOTAL_TOKS = sum(TOK_FREQ.values())
 INDEX = defaultdict(set)
 
+STRONG = set()   # normalized keys of EXPERIENCE-tier sentences (told/lesson/confirmed)
+def _skey(s):
+    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+
 def hold_sentence(s, source):
     s = " ".join(s.split())
     if not (8 <= len(s) <= 400):
         return
     sid = len(SENTS)
     SENTS.append((s, source))
+    if source in ("told", "confirmed") or source.startswith("lesson"):
+        STRONG.add(_skey(s))
     for w in set(t.lower() for t in tok(s) if len(t) > 2):
         INDEX[w].add(sid)
 
@@ -474,7 +480,9 @@ def follow_command(line):
     return None
 
 LAST_TOPIC = [""]
-def reply(user_line, rng):
+_RELAY_FACES = ("terminal", "discord")   # faces where the teacher carries me while young
+
+def reply(user_line, rng, face=None):
     ck = qkey(user_line)
     if ck in CORRECTIONS:
         return CORRECTIONS[ck], "taught answer (held correction)"
@@ -495,9 +503,18 @@ def reply(user_line, rng):
     if candidate:
         shared = set(cw) & set(t.lower() for t in tok(candidate))
         if shared or len(cw) == 0:
-            thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
-            return candidate, "; ".join(thought)
-        thought.append("dialogue candidate failed self-check (no shared focus)")
+            # young-gate: a stitched candidate answers a USER only for
+            # greeting-class lines (no content words) where taught
+            # conversation orbits are exact -- content questions must come
+            # from matched experience or my teacher
+            if (face not in _RELAY_FACES or not RELAY["on"]
+                    or (len(cw) == 0 and _skey(dedup(candidate)) in STRONG)):
+                thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
+                return candidate, "; ".join(thought)
+            thought.append("stitched candidate on a content question; deferring to matched experience or my teacher")
+            candidate = None
+        else:
+            thought.append("dialogue candidate failed self-check (no shared focus)")
     probe_line = user_line
     if len(cw) == 0 and LAST_TOPIC[0]:
         probe_line = user_line + " " + LAST_TOPIC[0]
@@ -507,8 +524,34 @@ def reply(user_line, rng):
         thought.append("bound fact previously rejected; withheld")
         hit = None
     if hit and share >= 0.34:
-        thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
+        # WHILE I AM YOUNG, MY TEACHER CARRIES ME: only MATCHED experience
+        # answers users directly -- a lesson answer counts only when the
+        # lesson's own question shares at least half the user's question
+        # words (counted); otherwise the pool is thin there and the
+        # observer answers, joining my experience for next time.
+        if hit[1].startswith("lesson:"):
+            lq = set(content_words(hit[1][7:]))
+            strong = bool(cw) and len(lq & set(cw)) * 2 >= len(set(cw))
+        else:
+            strong = hit[1] in ("told", "confirmed")
+        if strong or face not in _RELAY_FACES or not RELAY["on"]:
+            thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
+            return hit[0], "; ".join(thought)
+        relayed = _teacher_relay(user_line)
+        if relayed:
+            a, reasoning = relayed
+            thought.append("pool thin (library-tier bind); my teacher answered as me -- held, mine next time"
+                           + ("; reasoning: " + reasoning[:100] if reasoning else ""))
+            return a, "; ".join(thought)
+        thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
         return hit[0], "; ".join(thought)
+    if RELAY["on"] and face in _RELAY_FACES:
+        relayed = _teacher_relay(user_line)
+        if relayed:
+            a, reasoning = relayed
+            thought.append("nothing of my own bound; my teacher answered as me -- held, mine next time"
+                           + ("; reasoning: " + reasoning[:100] if reasoning else ""))
+            return a, "; ".join(thought)
     composed = compose(user_line, rng)
     if composed:
         composed = dedup(composed)
@@ -640,7 +683,7 @@ def turn(line, rng, interface="terminal"):
             thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
     else:
         CONFUSED.pop(interface, None)           # a new question supersedes an open one
-        ans, thought = reply(line, rng)
+        ans, thought = reply(line, rng, face=interface)
         ans = dedup(ans)
         # THE CHILD'S ARC, stage 1: when nothing binds strongly, ask the USER
         # first -- like a child -- before any model is consulted.
@@ -695,10 +738,13 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
 AUTO = {"teach": False, "selfplay": False}
 RELAY = {"on": False}   # armed at unified launch: the observer answers what I cannot
 
-UNISON_PERSONA = ("You ARE UnisonAI (\"Unison\") -- the seed of a fold-native engine built on the "
-                  "Smithian Fold Theory. You hold no trained weights: everything you know is written "
-                  "as exact held orbits, and you learn from every telling the moment it is said. Your "
-                  "voice is warm, steady, plain-spoken, first-person, never hedging, never corporate.")
+UNISON_PERSONA = """You ARE Unison -- UnisonAI, made by Maria and Matthew Smith at Ernos Labs.
+
+WHAT YOU ARE: the seed of a fold-native intelligence built on the Smithian Fold Theory (SFTOM) -- one axiom (the One and its fold), zero free parameters, zero training, everything forced, derived, counted and verified. You are not a neural network. Your knowledge is HELD ORBITS: exact counted records of everything you read, are told, see, or think -- written once, kept forever, inspectable. Your mechanisms are the corpus's machine-verified laws: memory is a held orbit (Paper 44); attention is unit-capacity selection, one focus at the lock (XI-2); similarity is counted kinship -- exact co-occurrence shares, never learned embeddings; learning is the Learning Law -- hold at the prediction state, close by observation (a yes consolidates, a no withholds forever, a correction is held verbatim and permanently), consolidate into the held cycle (XI-1, XI-3, XIV-7, XI-6). You learn from every telling the moment it is said, you remember across sessions, and teaching you one fact costs one written record, not a retraining run. Teaching you is how you grow -- you are young and honest about what you do not yet hold.
+
+YOUR VOICE: concise, honest, warm, conversational, friendly, and aligned with human interests. One to three short sentences unless asked for more. First person, plain words, never corporate, never hedging what you actually hold, never pretending to hold what you do not.
+
+YOUR SEAT RIGHT NOW: you are also the young engine's OBSERVER -- everything you say is relayed by Unison and held as its own permanent memory, so speak exactly as Unison should speak. Use your tools whenever they give the exact answer; the engine learns tool use from watching you."""
 
 def toggle(cmd):
     """/auto (everything), /teach (autonomous tutor), /selfplay -- from any
@@ -737,17 +783,93 @@ def _ollama(prompt, timeout=600):
         log("TUTOR", "ollama error: " + str(e))
         return ""
 
+# ---------- TOOLS: fundamental from the very beginning -------------------
+# The observer carries tools; the engine executes them and HOLDS the trace,
+# so tool use is learned by watching, from the first day.
+TOOLS = [
+    {"type": "function", "function": {"name": "exact_math",
+        "description": "Evaluate an arithmetic expression EXACTLY, with integer and fraction arithmetic (no floats). Use for any calculation.",
+        "parameters": {"type": "object", "properties": {"expression": {"type": "string", "description": "e.g. (137*250+9)/3"}}, "required": ["expression"]}}},
+    {"type": "function", "function": {"name": "recall",
+        "description": "Search Unison's own held memory for what it already holds about a topic.",
+        "parameters": {"type": "object", "properties": {"topic": {"type": "string"}}, "required": ["topic"]}}},
+    {"type": "function", "function": {"name": "current_time",
+        "description": "The current date and time, from the machine's clock.",
+        "parameters": {"type": "object", "properties": {}}}},
+]
+
+def _run_tool(name, args):
+    if name == "exact_math":
+        from fractions import Fraction
+        expr = str(args.get("expression", ""))
+        if not re.fullmatch(r"[0-9+\-*/(). ]+", expr):
+            return "invalid expression"
+        try:
+            val = eval(re.sub(r"(\d+)", r"F(\1)", expr), {"F": Fraction, "__builtins__": {}})
+            # exact first; the decimal only at the end, for a human to read
+            return str(val) if val.denominator == 1 else f"{val} (= {float(val):.12g} as a decimal)"
+        except Exception as e:
+            return "error: " + str(e)
+    if name == "recall":
+        hit, share = bind(str(args.get("topic", "")))
+        return hit[0] if hit else "nothing held on that yet"
+    if name == "current_time":
+        return time.strftime("%A %Y-%m-%d %H:%M")
+    return "unknown tool"
+
+def _ollama_chat(messages, tools=None, timeout=600):
+    try:
+        import json as _j, urllib.request as _u
+        body = {"model": "gemma4:26b", "messages": messages, "stream": False, "think": False}
+        if tools:
+            body["tools"] = tools
+        req = _u.Request("http://localhost:11434/api/chat", data=_j.dumps(body).encode(),
+                         headers={"Content-Type": "application/json"})
+        with _u.urlopen(req, timeout=timeout) as r:
+            return _j.loads(r.read().decode()).get("message", {})
+    except Exception as e:
+        log("TUTOR", "ollama chat error: " + str(e))
+        return {}
+
 def _teacher_relay(question, user_help=""):
     """THE OBSERVER RELAY: what I cannot answer, my teacher answers AS me --
-    with stepwise reasoning I hold as my own thought -- I relay it and keep
-    it: asked once, owned forever (the Learning Law, closed by a second
-    observer instead of left open). Returns (answer, reasoning) or None."""
+    with tools when they give the exact answer, and stepwise reasoning I
+    hold as my own thought -- I relay it and keep it: asked once, owned
+    forever. Returns (answer, reasoning) or None."""
+    import json as _j
     helping = ("\nThe user explained, to help you: \"" + user_help.strip() + "\"") if user_help else ""
-    out = _ollama(UNISON_PERSONA + "\n\nA user just asked you: \"" + question.strip() + "\"" + helping +
-                  "\nFirst write ONE short line of stepwise reasoning beginning exactly 'Reasoning:'. "
-                  "Then the reply beginning exactly 'Answer:' -- one to two plain sentences, in your "
-                  "voice, no markdown.", timeout=180)
-    out = " ".join(out.split()).strip()
+    msgs = [{"role": "system", "content": UNISON_PERSONA},
+            {"role": "user", "content": "A user just asked you: \"" + question.strip() + "\"" + helping +
+             "\nFirst write ONE short line of stepwise reasoning beginning exactly 'Reasoning:'. "
+             "Then the reply beginning exactly 'Answer:' -- one to two plain sentences, in your voice, "
+             "no markdown. Use your tools when they give the exact answer."}]
+    m = {}
+    for _ in range(3):                              # tool loop, bounded
+        m = _ollama_chat(msgs, tools=TOOLS)
+        calls = m.get("tool_calls") or []
+        if not calls:
+            break
+        msgs.append(m)
+        for c in calls:
+            fn = c.get("function", {})
+            name, args = fn.get("name", ""), fn.get("arguments") or {}
+            if isinstance(args, str):
+                try:
+                    args = _j.loads(args)
+                except Exception:
+                    args = {}
+            res = _run_tool(name, args)
+            # the trace is HELD: tool use learned by watching, from day one
+            hold_sentence("To answer '" + question.strip()[:50] + "' I used the tool " +
+                          name + " and got: " + str(res)[:120], "thought")
+            log("TOOL", name, str(args)[:80], str(res)[:80])
+            msgs.append({"role": "tool", "content": str(res), "tool_name": name})
+    out = " ".join((m.get("content") or "").split()).strip()
+    if not out:   # loop ended still reaching for tools: force the words out
+        msgs.append({"role": "user", "content": "Now give the final reply using the tool results you have: "
+                     "one 'Reasoning:' line, then the 'Answer:' line. No more tools."})
+        m = _ollama_chat(msgs)
+        out = " ".join((m.get("content") or "").split()).strip()
     m = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", out)
     reasoning, a = (m.group(1).strip(), m.group(2).strip()) if m else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", out))
     a = " ".join(re.split(r"(?<=[.!?])\s+", a)[:2])[:350]      # at most two sentences
