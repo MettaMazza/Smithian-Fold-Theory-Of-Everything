@@ -1,8 +1,10 @@
 """UNISON CHAT — the fold-native seed, talkable. Knowledge = every context
 read ONCE as exact held orbits (Maria's corpus + lesson files); reply =
 unit-capacity selection over the orbit hierarchy, exact rational shares,
-No-Zero floor. /teach <text> writes orbits LIVE and persists them.
-Usage: python3 unison_chat.py"""
+No-Zero floor. LIVE LEARNING IS AUTOMATIC (no command): every exchange --
+your words AND its own reply -- is written as orbits and persisted the
+moment it happens (the 2-to-1 self-observation closure, Claim XIV-7:
+the engine holds orbits of its own holding). Usage: python3 unison_chat.py"""
 import numpy as np, glob, re, sys, time
 from collections import defaultdict
 
@@ -87,20 +89,20 @@ def main():
         if line == "/quit":
             break
         if line.startswith("/teach "):
-            fact = line[7:].strip()
-            ts = tok("Q: " + fact + "\n")
-            write_orbits(ts * 3)
-            with open("/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/lessons_live.txt", "a") as f:
-                f.write(fact + "\n")
-            print("UnisonAI: written. I hold that orbit now.\n", flush=True)
-            continue
+            line = line[7:].strip()  # kept as a courtesy alias; learning is automatic
         q_tokens = tok("Q : " + line + " A :".replace(" : ", ": "))
         q_tokens = tok("Q: " + line) + tok("A:")
         ans = reply(q_tokens, rng)
         if not ans:
-            ans = "I have no orbit for that yet. /teach me and I will hold it."
+            ans = "I have no orbit for that yet. Tell me, and I will hold it."
         print("UnisonAI: " + ans + "\n", flush=True)
-        history = q_tokens + tok(ans)
+        # LIVE LEARNING (automatic, XIV-7 closure): the whole exchange --
+        # the user's words and the engine's own reply -- becomes held orbits
+        # and persists to the lesson ledger immediately.
+        exchange = "Q: " + line + "\nA: " + ans + "\n"
+        write_orbits(tok(exchange) * 3)
+        with open("/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/lessons_live.txt", "a") as f:
+            f.write(exchange)
 
 if __name__ == "__main__":
     main()

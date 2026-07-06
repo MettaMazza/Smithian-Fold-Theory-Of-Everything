@@ -1,0 +1,2 @@
+batch 1: +11 pairs from From_One_Axiom_To_Master_Chess_And_The_Law_Inside_Neural_Networks.md
+batch 2: +8 pairs from From_One_Axiom_To_Master_Chess_And_The_Law_Inside_Neural_Networks.md

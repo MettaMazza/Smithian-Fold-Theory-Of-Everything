@@ -1,0 +1,5 @@
+tokens 2514818, vocab 16125 (rare-mapped)
+orbit store: 3446411 orbits in 44s (one reading)
+FOLD ENGINE held-out CE: 4.5071  (eval 9s)
+TWIN seed=1 val=3.5160 (532s)
+TWIN seed=2 val=3.4607 (423s)

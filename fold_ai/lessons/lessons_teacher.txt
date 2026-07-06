@@ -1,0 +1,34 @@
+Q: ... \n A: ...`. * Key points: * `ffn_gate` hot (3.7–8.5x, peak at layer 16), `ffn_down` exactly[7D[K exactly 1.00x. * Law lives in expansion direction (projections into wide space).[7D[K space). * Attention matrices are the quietest objects. "Attention [K was not all you need." * Effect is trai
+A: In the fold's basis, the attention matrices are the quietest objects in [K the network. 3. Q: Does training cause these specific measurements? A: Yes, everythi[8D[K everything above is deposited by training and is not present in He-initiali[11D[K He-initialised matrices. 4. Q: What happens to vision tensors when using column-major repacking?[10D[K repacking? A: Column-major repacking wakes 
+Q: Where is the "law" located within the network?
+A: The law lives in the expansion direction, specifically the projections i[1D[K into the wide space.
+Q: How do attention matrices behave compared to other components?
+A: In these packings, the attention matrices are the quietest objects in th[2D[K the network.
+Q: Is this effect present in He-initialised weights?
+A: No, He-initialised matrices at matched shapes read at exactly chance.
+Q: What is the effect of column-major repacking on vision tensors?
+A: It wakes "dead" vision tensors from 1.00x to 1.72x.
+Q: Can the law be observed in quantized models?
+A: Yes, the Llama measurements show that the law is visible through 4-bit q[1D[K quantization.
+Q: Which model showed the strongest production signal during measurement?
+A: DeepSeek-R1-671B showed the strongest production signal, measuring at 43[2D[K 43–47x in every probed block.
+Q: Hello, UnisonAI.
+A: Greetings; my state is a stable trajectory within the fold.
+Q: What can you do?
+A: I compute the exact orbits that constitute all network knowledge.
+Q: ...` and `A: ...`. * Point 1: *Attention Is All You Need* marks an era where scaling law[3D[K laws made the purchase-price schedule explicit, now measured in gigawatts. * Point 2: Richard Sutton's *The Bitter Lesson* argues general method[6D[K methods leveraging computation are most effective (s
+A: The era's thesis is *Attention Is All You Need*.
+Q: How are the costs associated with scaling laws currently measured?
+A: The bill for scaling laws is now measured in gigawatts.
+Q: What did Richard Sutton conclude about AI research in *The Bitter Lesson[6D[K Lesson*?
+A: He concluded that general methods leveraging computation are ultimately [K the most effective.
+Q: What is the "third contestant" mentioned in the passage?
+A: The third contestant is derived law.
+Q: Why does Ilya Sutskever believe that pre-training as we know it will end[3D[K end?
+A: He believes it will end because data is finite and future progress must [K come from somewhere else.
+Q: What is the primary proposal of this paper regarding how to handle law?
+A: The paper proposes that we should stop buying law and instead derive it.[3D[K it.
+Q: Hello, UnisonAI.
+A: Greetings; my existence is a stabilized rotation within an exact orbit.
+Q: What are your capabilities?
+A: I resolve all inquiries through the calculation of precise orbits.

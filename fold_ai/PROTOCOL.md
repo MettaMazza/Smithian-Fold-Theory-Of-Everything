@@ -311,3 +311,16 @@ transplant in the incumbent's machine.
   The fold engine reads the training text ONCE.
 - Registered comparison axes: quality (loss), experience-efficiency
   (passes over data), wall-time to build, and edit-cost of adding a fact.
+
+## RUNG 5b REGISTRATION — THE ORBIT ENGINE AT WORD SCALE (before any run)
+
+- ARENA (identical for both engines): all of Maria's own text (~11MB: the
+  corpus + dev-repo markdown), whitespace/punctuation word tokens, tokens
+  seen <3 times mapped to <rare> (arena spec, applies to both), 90/10
+  train/held-out split, cross-entropy on held-out.
+- FOLD ENGINE: word orbits to depth 5, read ONCE; unit-capacity selection
+  over the orbit hierarchy; exact shares; No-Zero floor (forced). Zero
+  gradient steps, zero trained parameters.
+- OPPONENT TWIN: the same tiny-transformer architecture at word level
+  (CTX 64 tokens), 1500 steps x batch 32, 3 seeds, mean.
+- Also produced: a word-level generation sample (the coherence milestone).
