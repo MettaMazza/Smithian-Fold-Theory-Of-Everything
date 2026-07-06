@@ -17,7 +17,8 @@ from collections import defaultdict, Counter
 
 CTX_MAX = 6
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
-LESSONS = sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
+LESSONS = [f for f in sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
+           if "lessons_live" not in f and "facts.tsv" not in f]
 # THE DIET LAW: the engine reads the THEORY (the corpus and its lessons) --
 # never its own build documents (fold_ai plans, protocols, derivation maps,
 # papers about itself). Architecture direction is for the builder, not food
@@ -54,9 +55,40 @@ def write_orbits(tl):
                 break
             stores[L][_key(tl[i - L + 1:i + 1])][nxt] += 1
 
+
+# ---------- COUNTED SIMILARITY (the keystone: kinship = shared contexts) ----
+# Trained embeddings approximate this by descent; we hold the counts exactly.
+NEIGH = defaultdict(lambda: defaultdict(int))   # word -> neighbour -> count
+def build_neighbours(tl):
+    for i in range(1, len(tl) - 1):
+        w = tl[i].lower()
+        if len(w) < 3:
+            continue
+        NEIGH[w][tl[i-1].lower()] += 1
+        NEIGH[w][tl[i+1].lower()] += 1
+def kinship(a, b):
+    a, b = a.lower(), b.lower()
+    na, nb = NEIGH.get(a), NEIGH.get(b)
+    if not na or not nb:
+        return 0.0
+    keys = set(na) | set(nb)
+    inter = sum(min(na.get(k,0), nb.get(k,0)) for k in keys)
+    union = sum(max(na.get(k,0), nb.get(k,0)) for k in keys)
+    return inter / union if union else 0.0
+def kin_expand(words, k=3):
+    out = set(w.lower() for w in words)
+    for w in list(out):
+        cands = [(kinship(w, o), o) for o in NEIGH if o != w and len(o) > 3]
+        cands.sort(reverse=True)
+        for sc, o in cands[:k]:
+            if sc > 0.15:
+                out.add(o)
+    return out
+
 full = corpus_text + ("\n" + lesson_text) * 3
 words = tok(full)
 write_orbits(words)
+build_neighbours(words)
 
 # sentence store + inverted index (binding substrate)
 SENTS = []
@@ -76,8 +108,18 @@ def hold_sentence(s, source):
 # lessons: hold Q/A pairs as bound units; corpus: hold sentences
 for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
     hold_sentence(a.strip(), "lesson:" + q.strip()[:80])
+def well_formed(s):
+    s = s.strip()
+    w = s.split()
+    if not (5 <= len(w) <= 40): return False
+    if not s[:1].isupper(): return False              # clean sentence start
+    if s[-1] not in ".!?": return False
+    if w[0].lower() in ("no","but","and","because","so","then","yet","or","thus","hence","which","that"): return False
+    letters = sum(c.isalpha() or c.isspace() for c in s)
+    if letters / len(s) < 0.85: return False           # counted letter share
+    return True
 for s in re.split(r"(?<=[.!?])\s+", corpus_text):
-    if "|" not in s and "#" not in s and "`" not in s and s.count("=") < 2:
+    if "|" not in s and "#" not in s and "`" not in s and s.count("=") < 2 and well_formed(s):
         hold_sentence(s, "corpus")
 
 print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
@@ -94,15 +136,20 @@ def content_words(s):
     scored.sort(reverse=True)
     return [w for _, w in scored[:6]]
 
+
+
 # ---------- FINDING: binding (XI-4) ----------
 def bind(query, exclude_self=None):
     cw = content_words(query)
     if not cw:
         return None, 0.0
     votes = defaultdict(float)
-    for w in cw:
+    for w in cw:                                   # direct content words: full weight
         for sid in INDEX.get(w, ()):
             votes[sid] += informativeness(w)
+    for w in kin_expand(cw, k=2) - set(cw):        # counted kin: half weight
+        for sid in INDEX.get(w, ()):
+            votes[sid] += 0.5 * informativeness(w)
     if not votes:
         return None, 0.0
     denom = sum(informativeness(w) for w in cw)
@@ -121,6 +168,13 @@ def bind(query, exclude_self=None):
     return None, 0.0
 
 # ---------- SPEAKING: dialogue-orbit channel ----------
+def dedup(s):
+    out = []
+    for t in s.split():
+        if not out or out[-1].lower() != t.lower():
+            out.append(t)
+    return re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out))
+
 def continue_orbit(ctx_tokens, rng, max_tokens=60):
     ctx = list(ctx_tokens)
     out = []
@@ -226,6 +280,44 @@ def answer_fact(text):
         return "You are " + FACTS[("you", "identity")] + "."
     return None
 
+
+# ---------- COMPOSITION: binding many fragments under ONE topic-lock -------
+# XI-4 (many bind to one) + XI-2 (unit capacity: one focus governs). When no
+# held sentence answers, compose: take the question's strongest focus, walk
+# orbit continuations, and admit each next word only if it is KIN to the
+# focus above the floor -- counted assembly, not interpolation. Zero knobs.
+def compose(user_line, rng, max_len=40):
+    cw = content_words(user_line)
+    if not cw:
+        return None
+    focus = cw[0]                                   # the single lock (XI-2)
+    seeds = INDEX.get(focus) or set()
+    for w in kin_expand([focus], k=3):
+        seeds |= INDEX.get(w, set())
+    if not seeds:
+        return None
+    # start from a held sentence about the focus, then continue coherently
+    best = sorted(seeds, key=lambda sid: -sum(1 for t in tok(SENTS[sid][0]) if t.lower()==focus))
+    start = SENTS[best[0]][0]
+    toks = tok(start)[:12]
+    ctx = list(toks)
+    for _ in range(max_len - len(toks)):
+        nxt = None
+        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
+            s = stores[L].get(_key(tuple(ctx[-L:])))
+            if s:
+                # admit the highest-count successor that stays kin to the lock
+                for cand, _n in sorted(s.items(), key=lambda kv:-kv[1]):
+                    if cand in ("Q","A","q","a"): continue
+                    if len(cand) < 3 or kinship(cand, focus) > 0.05 or cand in (".",",","the","a","is","of","and"):
+                        nxt = cand; break
+                if nxt: break
+        if not nxt: break
+        ctx.append(nxt)
+        if nxt in (".","!","?") and len(ctx) > 8: break
+    out = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(ctx))
+    return out if len(out) > 15 else None
+
 # ---------- CHECKING (XIV-7) + the reply law ----------
 def follow_command(line):
     m = re.match(r"(?i)\s*(?:say|repeat after me[:,]?|respond with|reply with)\s*[:,]?\s*['\"]?(.+?)['\"]?\s*$", line)
@@ -267,7 +359,12 @@ def reply(user_line, rng):
     if hit and share >= 0.34:
         thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
         return hit[0], "; ".join(thought)
-    thought.append("nothing passed the self-check; asking rather than guessing")
+    composed = compose(user_line, rng)
+    if composed:
+        composed = dedup(composed)
+        thought.append("composed under the topic-lock from kin fragments")
+        return composed, "; ".join(thought)
+    thought.append("nothing bound and nothing composed; asking rather than guessing")
     return "I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.", "; ".join(thought)
 
 FLIP = {"my": "your", "your": "my", "yours": "mine", "mine": "yours",
@@ -336,7 +433,7 @@ def main():
         else:
             ans, thought = reply(line, rng)
         print("  \u2301 " + thought, flush=True)
-        print("UnisonAI: " + ans + "\n", flush=True)
+        print("UnisonAI: " + dedup(ans) + "\n", flush=True)
         # the thought itself is held (self-observation, XIV-7)
         hold_sentence("On \'" + line[:60] + "\' I thought: " + thought, "thought")
         last_exchange[0], last_exchange[1] = line, ans
