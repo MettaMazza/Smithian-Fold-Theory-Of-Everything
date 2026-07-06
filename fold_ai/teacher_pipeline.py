@@ -11,8 +11,16 @@ OUT = "/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/lessons_te
 MODEL = "gemma4:26b"
 rng = random.Random(20260706)
 
+CONVO_PROMPT = """Write exactly 10 short casual conversation pairs between a person and UnisonAI -- a warm, plain-spoken fold-native engine whose knowledge is written as exact orbits and who learns from every telling. Cover: greetings, small talk, moods, jokes asked of it, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. One to two sentences per answer, in UnisonAI's steady voice. No markdown, no lists.
+Format STRICTLY as:
+Q: ...
+A: ..."""
+
 def ask_teacher(passage):
-    prompt = f"""Below is a passage from the Smithian Fold Theory corpus. Write exactly 6 question-and-answer pairs a curious person might ask about it. Ground every answer ONLY in the passage. Keep answers to 1-2 plain sentences. Also include 2 general conversational pairs (greetings, how are you, what can you do) answered in the voice of UnisonAI, a fold-native engine whose knowledge is written as exact orbits.
+    if passage == "__CONVERSATION__":
+        prompt = CONVO_PROMPT
+    else:
+        prompt = f"""Below is a passage from the Smithian Fold Theory corpus. Write exactly 6 question-and-answer pairs a curious person might ask about it. Ground every answer ONLY in the passage. Keep answers to 1-2 plain sentences. No markdown.
 Format STRICTLY as:
 Q: ...
 A: ...
@@ -44,12 +52,15 @@ def clean(txt):
 if __name__ == "__main__":
     n = 0
     while n < 200:
-        f = rng.choice(CORPUS)
-        text = open(f, errors="ignore").read()
-        if len(text) < 500:
-            continue
-        start = rng.randrange(0, max(1, len(text) - 2500))
-        passage = text[start:start + 2500]
+        if n % 2 == 0:
+            passage = "__CONVERSATION__"        # every other batch: casual talk
+        else:
+            f = rng.choice(CORPUS)
+            text = open(f, errors="ignore").read()
+            if len(text) < 500:
+                continue
+            start = rng.randrange(0, max(1, len(text) - 2500))
+            passage = text[start:start + 2500]
         try:
             lessons = clean(ask_teacher(passage))
             if lessons:

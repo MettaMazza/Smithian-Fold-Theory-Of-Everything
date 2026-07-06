@@ -1,2 +1,15 @@
 CONF	fold,the,what	The construction uses the One on the domain ( 0, 1 ], and the fold, double - and - cast - out.
 REJ	england,queen,the,who	My name is Maria.	the engine should say it does not hold facts about royalty
+REJ	are,how,you	* * Yields	you should respond and engage
+REJ	are,how,you	the m - fold is m - to - one — every image has exactly m preimages - - an internal degree of freedom with exactly m kinds at each level.	That was unrelated to what i asksed ir u could not understand
+REJ	are,how,you	the magnetic field is " frozen into " the moving fluid, the fluid drags the field and the field pushes back.	randomly printing statments is if this then that
+CONF	hello	Held: Hello.
+REJ	are,how,you	` [ 0.	you should say 'How are you?' in return
+CONF	are,how,you	you should say 'How are you?' in return.
+REJ	are,how,you	you should say 'How are you?' in return.	
+REJ	are,how,you	1 / 3 + 1 / 2 = 5 / 6 ` ` ` * * To	
+CONF	are,how,you	I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
+CONF	say,yes	Say yes. q: Say yes a: Yes.
+REJ	england,queen,the,who	the engine should say it does not hold facts about royalty.	answer with: 'I do not hold facts about royalty yet'
+CONF	england,queen,the,who	I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
+CONF	fold,the,what	The fold is the single operation of the One — cast out the double, and everything follows from it.

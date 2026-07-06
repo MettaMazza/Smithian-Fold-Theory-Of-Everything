@@ -143,6 +143,18 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
 # The user's "my/I" is the engine's "you"; the user's "your/you" is the
 # engine's "self". Facts are held FLIPPED at storage so role is exact.
 FACTS = {}   # (subject, relation) -> value ; subject in {"you","self"}
+FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"
+import os as _os
+if _os.path.exists(FACTS_LOG):
+    for _ln in open(FACTS_LOG):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) == 3:
+            FACTS[(_p[0], _p[1])] = _p[2]
+
+def persist_fact(subject, relation, value):
+    FACTS[(subject, relation)] = value
+    with open(FACTS_LOG, "a") as _f:
+        _f.write(subject + "\t" + relation + "\t" + value + "\n")
 
 def _norm_subject(word):
     w = word.lower()
@@ -157,27 +169,27 @@ def learn_fact(text):
     # "my/your name is X"
     m = re.match(r"(?i)(my|your)\s+name\s+is\s+(.+)", t)
     if m:
-        FACTS[(_norm_subject(m.group(1)), "name")] = m.group(2).strip().title()
+        persist_fact(_norm_subject(m.group(1)), "name", m.group(2).strip().title())
         return True
     # "my/your favourite X is Y"
     m = re.match(r"(?i)(my|your)\s+favou?rite\s+(\w+)\s+is\s+(.+)", t)
     if m:
-        FACTS[(_norm_subject(m.group(1)), "favourite " + m.group(2).lower())] = m.group(3).strip()
+        persist_fact(_norm_subject(m.group(1)), "favourite " + m.group(2).lower(), m.group(3).strip())
         return True
     # "I live in X" / "I am from X" / "my home is X"
     m = re.match(r"(?i)(?:i\s+live\s+in|i\s+am\s+from|i'?m\s+from|my\s+home\s+is)\s+(.+)", t)
     if m:
-        FACTS[("you", "location")] = m.group(1).strip().title()
+        persist_fact("you", "location", m.group(1).strip().title())
         return True
     m = re.match(r"(?i)(?:you\s+live\s+in|your\s+home\s+is)\s+(.+)", t)
     if m:
-        FACTS[("self", "location")] = m.group(1).strip().title()
+        persist_fact("self", "location", m.group(1).strip().title())
         return True
     # "I am X" / "you are X"  (identity)
     m = re.match(r"(?i)(i\s+am|i'?m|you\s+are|you'?re)\s+(.+)", t)
     if m:
         subj = "you" if m.group(1).lower().startswith("i") else "self"
-        FACTS[(subj, "identity")] = m.group(2).strip()
+        persist_fact(subj, "identity", m.group(2).strip())
         return True
     return False
 
@@ -213,6 +225,7 @@ def follow_command(line):
         return w if w[-1:] in ".!?" else w + "."
     return None
 
+LAST_TOPIC = [""]
 def reply(user_line, rng):
     cmd = follow_command(user_line)
     if cmd:
@@ -234,7 +247,11 @@ def reply(user_line, rng):
             thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
             return candidate, "; ".join(thought)
         thought.append("dialogue candidate failed self-check (no shared focus)")
-    hit, share = bind(user_line)
+    probe_line = user_line
+    if len(cw) == 0 and LAST_TOPIC[0]:
+        probe_line = user_line + " " + LAST_TOPIC[0]
+        thought.append("contextless follow-up; binding through the last topic")
+    hit, share = bind(probe_line)
     if hit and rejected(user_line, hit[0]):
         thought.append("bound fact previously rejected; withheld")
         hit = None
@@ -314,6 +331,8 @@ def main():
         # the thought itself is held (self-observation, XIV-7)
         hold_sentence("On \'" + line[:60] + "\' I thought: " + thought, "thought")
         last_exchange[0], last_exchange[1] = line, ans
+        if content_words(line):
+            LAST_TOPIC[0] = " ".join(content_words(line)[:4])
         # LEARNING, ongoing: your words always held (the prediction state)
         with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
             f.write("Q: " + line + "\nA: " + ans + "\n")
@@ -340,21 +359,29 @@ def main():
         elif fb[:1].lower() == "n":
             REJECTED.add((qkey(line), ans.strip()))
             reason = fb[1:].strip(" :,-")
+            if not reason:
+                try:
+                    reason = input("UnisonAI: why was that wrong? ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    reason = ""
+            if reason:
+                hold_sentence("Guidance: " + (reason if reason[-1:] in ".!" else reason + "."), "told")
+                write_orbits(tok(reason + "\n") * 2)
+            try:
+                corrected = input("UnisonAI: what should I have said? ").strip()
+            except (EOFError, KeyboardInterrupt):
+                corrected = ""
             with open(FEEDBACK_LOG, "a") as f:
                 f.write("REJ\t" + qkey(line) + "\t" + ans + "\t" + reason + "\n")
-            if reason:
-                m = re.search(r"(?:say|reply(?:\s+with)?|respond(?:\s+with)?|answer(?:\s+with)?)\s*[:,]?\s*['\"]([^'\"]+)['\"]", reason, re.I)
-                if m:
-                    corrected = m.group(1).strip()
-                    corrected = corrected if corrected[-1:] in ".!?" else corrected + "."
-                    write_orbits(tok("Q: " + line + "\nA: " + corrected + "\n") * 3)
-                    hold_sentence(corrected, "told")
-                    print("UnisonAI: held. Next time: " + corrected + "\n", flush=True)
-                else:
-                    fact2 = reason if reason[-1:] in ".!" else reason + "."
-                    write_orbits(tok(fact2 + "\n") * 2)
-                    hold_sentence("Guidance: " + fact2, "told")
-                    print("UnisonAI: held the correction.\n", flush=True)
+            if corrected:
+                corrected = corrected if corrected[-1:] in ".!?" else corrected + "."
+                write_orbits(tok("Q: " + line + "\nA: " + corrected + "\n") * 3)
+                hold_sentence(corrected, "told")
+                with open(BASE + "/fold_ai/lessons/lessons_corrections.txt", "a") as f:
+                    f.write("Q: " + line + "\nA: " + corrected + "\n")
+                print("UnisonAI: held, permanently. Ask me again.\n", flush=True)
+            else:
+                print("UnisonAI: withdrawn. I will not repeat it.\n", flush=True)
 
 if __name__ == "__main__":
     main()

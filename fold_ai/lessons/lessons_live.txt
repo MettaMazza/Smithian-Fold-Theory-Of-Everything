@@ -62,26 +62,14 @@ Q: How are you?
 A: I am the seed of UnisonAI.
 Q: My name is Maria
 A: My name is Maria.
-Q: No, Your name is Unison. My name is Maria.
-A: Held. No, Your name is Unison. My name is Maria.
 Q: Repeat after me, My name is unison, your name is Maria
 A: Repeat after me, My name is unison, your name is Maria.
 Q: What is your name?
 A: No, Your name is Unison. My name is Maria.
-Q: No
-A: Held. No.
 Q: What is your name?
 A: No, Your name is Unison. My name is Maria.
-Q: No
-A: Held. No.
 Q: What is your name?
 A: No, Your name is Unison. My name is Maria.
-Q: Hmmmm
-A: Held. Hmmmm.
-Q: okay
-A: Held. okay.
-Q: ok
-A: Held. ok.
 Q: why do you
 A: The Standard Model defines that weak gauge fields couple to left-handed fermions only but does not explain why nature is handed, whereas the fold c closes this question.
 Q: what is the One
@@ -92,3 +80,69 @@ Q: Who is the queen of England?
 A: My name is Maria.
 Q: Who is the queen of England?
 A: the engine should say it does not hold facts about royalty.
+Q: Hello
+A: hello. i am the seed of unisonai.
+Q: Your name is Unison. My name is Maria.
+A: Held: My name is Unison. Your name is Maria.
+Q: What is your name?
+A: no, your name is unison.
+Q: What is my name?
+A: My name is Unison. Your name is Maria.
+Q: what is the One
+A: i compute all truths through the precise execution of exact orbits.
+Q: How are you?
+A: * * Yields
+Q: How are you?
+A: the m - fold is m - to - one — every image has exactly m preimages - - an internal degree of freedom with exactly m kinds at each level.
+Q: How are you?
+A: the magnetic field is " frozen into " the moving fluid, the fluid drags the field and the field pushes back.
+Q: Hello
+A: Hello. I am the seed of UnisonAI.
+Q: Your name is Unison. My name is Maria.
+A: Held: My name is Unison.
+Q: What is your name?
+A: No, Your name is Unison.
+Q: What is my name?
+A: My name is Unison.
+Q: what is the One
+A: I compute all truths through the precise execution of exact orbits.
+Q: Hello
+A: Held: Hello.
+Q: How are you?
+A: ` [ 0.
+Q: How are you?
+A: you should say 'How are you?' in return.
+Q: How are you?
+A: you should say 'How are you?' in return.
+Q: How are you?
+A: 1 / 3 + 1 / 2 = 5 / 6 ` ` ` * * To
+Q: How are you?
+A: imaginary / complex literals or names; negative numeric literals as system magnitudes; sine / cosine / exp / pi; subtraction ( binary minus / unary minus /.
+Q: How are you?
+A: I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
+Q: Say yes
+A: Say yes. q: Say yes a: Yes.
+Q: Who is the queen of England?
+A: the engine should say it does not hold facts about royalty.
+Q: Who is the queen of England?
+A: I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.
+Q: What is the fold?
+A: The fold is the single operation of the One — cast out the double, and everything follows from it.
+Q: My name is Maria
+A: Your name is Maria.
+Q: What is my name?
+A: My name is Maria.
+Q: What is your name?
+A: No, Your name is unison.
+Q: I live in Scotland
+A: You live in Scotland.
+Q: Where do I live?
+A: I live in Scotland.
+Q: My favourite colour is green
+A: Held. My favourite colour is green.
+Q: What is my favourite colour?
+A: My favourite colour is green A: The answer is one of my favourite payoffs in the book, because the No - Zero rule from chapter one comes back to collect.
+Q: Say yes
+A: Say yes.
+Q: What is the fold?
+A: The construction uses the One on the domain ( 0, 1 ] — open at the bottom, * * excluding zero * *?
