@@ -2,7 +2,7 @@
 
 ## *Attention, it turns out, was not all you need*
 
-**Maria Smith (Ernos Labs)** — full paper v2.0, 2026-07-06
+**Maria Smith (Ernos Labs)** — full paper v2.1, 2026-07-06
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469); supersedes pre-paper v0.3 (DOI: 10.5281/zenodo.21217279)
 
 ---
@@ -77,6 +77,9 @@ UnisonAI is a complete language architecture in which each mechanism of an LLM i
 | Speech synthesis | **The voice, removal-proof**: Kokoro (the very weights in which Rung 1 measured the fold law, 18/18) speaks as the TEACHER — and the engine learns each sound as it is made, re-speaking it thereafter from its own exact counted record with no synthesis model (measured: native replay in 0.00s after one teaching) | The instrument's object, made a teacher with an exit |
 | Human feedback UX | One-tap closure: thumbs up/down on every reply apply the y/n law without a comment; corrections remain plain text after `n` | XIV-7, at one tap |
 | Agency | **Free read over its own substrate**: the observer carries read/grep/list tools over the engine's source, its data ledgers, and the entire fold corpus (path-jailed), plus a persistent read-write scratchpad; every tool trace is held — measured: asked about its own `fold_see`, it read the engine source and answered from the actual code | The system that can inspect what it is |
+| ReAct loop | **Reason–act–observe, enforced**: narrated intent without an act ("let me pull that up") is detected and the act is forced within the same turn, bounded; the system's held memory of answering is ReAct-shaped from birth | An announced act either happens now or is a broken promise |
+| Reasoning training | **The native thinking field**: the observer's actual thinking tokens — not its formatted replies — are captured and train the engine's thought channel, retained only when their answer closes (the STaR filter); the full thinking of both minds streams to the user's thinking thread, untruncated | Real thought as the curriculum for thought |
+| Document intake | **A sent file is reading**: inboxed inside the engine's readable roots, eaten once as counted orbits, sentences held at the taught tier, persistent across process death, revisitable by the engine's own tools | The flood's law, applied to a gift |
 | Agentic tool use | **The full modern-agent toolkit**: paginated reading, in-file and corpus-wide grep, file finding, live web search and web/RSS fetch, scratchpad, exact arithmetic, self-recall — path-jailed; every call's arguments and result held as training traces, so tool use is itself learned; the curriculum teaches it explicitly | Agency as held experience |
 | Public-benchmark evals | **SOTA 1-1**: the same fixed subset of the public MMLU test split put to the engine (own channels, no teacher) and to any local model, counted last-letter scoring, persistent rows — directly comparable to published tables; the newborn baseline is committed before first boot | The public yardstick, the committed zero |
 | Evals / benchmarking | **The progress instrument**: one counted line per hour to a persistent append-only file — native coverage on a probed curriculum with no teacher, the judged head-to-head record, every owned store's size; runs unconditionally from boot (measurement is never a toggle); the committed pre-boot baseline is the birth line every future number is measured against | The growth curve as a ledger, not a claim |
@@ -132,4 +135,4 @@ All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/
 
 McCulloch & Pitts (1943), Bull. Math. Biophys. 5:115–133 · Rosenblatt (1958), Psych. Rev. 65(6) · Rumelhart, Hinton & Williams (1986), Nature 323:533–536 · Vaswani et al. (2017), NeurIPS · Kaplan et al. (2020), arXiv:2001.08361 · Hoffmann et al. (2022), arXiv:2203.15556 · Sutton (2019), *The Bitter Lesson* · Amodei (2024), *Machines of Loving Grace* · Altman (2025), *Reflections* · Public statements of Hassabis, Legg, and Sutskever (NeurIPS 2024) as cited · DeepSeek-AI (2026), *Conditional Memory via Scalable Lookup*, arXiv:2601.07372 and github.com/deepseek-ai/Engram · Li (2026), arXiv:2606.19172 (local editability of addressed memory) · Zhao et al. (2025), *Absolute Zero*, arXiv:2505.03335 · *Self-Evolving Curriculum* (2025), arXiv:2505.14970 · Zelikman et al. (2022), *STaR*, arXiv:2203.14465 · Smith (2026), *The Smithian Fold Theory of Everything*, DOI 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
-*Full paper v2.0. Every number is from committed, timestamped campaign records; nothing is projected.*
+*Full paper v2.1. Every number is from committed, timestamped campaign records; nothing is projected.*

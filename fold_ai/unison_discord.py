@@ -155,7 +155,9 @@ def run(uc, rng=None):
         try:
             th = await msg.create_thread(name="⌁ thinking", auto_archive_duration=60)
             PENDING[th.id] = [msg.author.id, line, ans, False]
-            await th.send(f"⌁ {thought[:1800]}\n\nreply `y` or `n <the correct answer>` -- this thread folds away in 2 minutes.")
+            _full = "⌁ " + thought + "\n\nreply `y` or `n <the correct answer>` -- this thread folds away in 2 minutes."
+            for _i in range(0, len(_full), 1800):
+                await th.send(_full[_i:_i + 1800])
             async def fold_away(t=th):
                 await asyncio.sleep(120)
                 PENDING.pop(t.id, None)

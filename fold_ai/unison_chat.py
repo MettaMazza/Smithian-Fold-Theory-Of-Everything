@@ -902,6 +902,9 @@ def turn(line, rng, interface="terminal"):
     # LEARNING, ongoing: your words always held (the prediction state)
     with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
         f.write("Q: " + line + "\nA: " + ans + "\n")
+    if THINKING:
+        thought = thought + "\n\n⌁ observer native thinking: " + " || ".join(THINKING)[:5000]
+        del THINKING[:]
     log("TURN", interface, line, ans, thought)
     return ans, thought
 
@@ -942,6 +945,7 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
 AUTO = {"teach": False, "selfplay": False}
 RELAY = {"on": False}   # armed at unified launch: the observer answers what I cannot
 ANNOUNCE = [None]       # set by the Discord face: engine threads post to the channel
+THINKING = []           # full native thinking tokens, drained into the thinking thread
 
 # THE PERSONA -- one source of truth, shared with the teacher pipeline:
 # Echo's identity from ErnosDecent, extended with the true chronology
@@ -1273,6 +1277,7 @@ def _teacher_relay(question, user_help=""):
         # -- are the reasoning that trains Unison's own thought channel
         # (STaR-gated as ever: held only when the answer closes)
         reasoning = " ".join(native_thinking)[:1500]
+        THINKING.append(" ".join(native_thinking)[:4000])   # full, for the thread
     # a single incidental stutter must not kill a long answer -- only EMPTY
     # or DENSELY stuttered output is rejected, and the observer is retried
     def _dense(t):

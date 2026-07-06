@@ -144,6 +144,20 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06/07 (v26-v28): **REACT-NATIVE, THINKING-TRANSPARENT, DOCUMENT-
+  FED.** (v26) A sent file is READING: non-media attachments inboxed inside
+  the readable roots, eaten once as prose-depth orbits, sentences held at
+  the taught tier, re-read every wake; binary declined honestly (measured
+  incl. rebirth). (v27) THE REACT LAW: the relay is a true
+  reason-act-observe loop -- narrated intent without an act is detected and
+  the act FORCED in the same turn (measured on the live failing case:
+  web_fetch acted in-turn, answer quoted the real page); gemma's NATIVE
+  THINKING tokens (think:true on the relay) pipe into Unison's thought
+  channel, STaR-gated. (v28) The FULL native thinking of the observer --
+  and Unison's own complete thought trace -- arrive in the Discord thinking
+  thread, chunked, never truncated: total transparency of both minds at
+  every turn. Summit probe rerun LIVE overnight with per-game forensics.
+
 - 2026-07-06 (v25 -- FLIGHT-READY): **the modern-agent toolkit** (grep_file
   with line numbers + read_file pagination, find_files, live web_search,
   web_fetch incl. RSS/atom -- all live-tested; every call's args+result
