@@ -10,3 +10,9 @@ batch 9: +7 pairs from 17_The_Universe_Is_A_Southpaw.md
 batch 10: +7 pairs from 29_The_Impossible_Crystal_Is_A_Force.md
 batch 11: +7 pairs from 09_The_Constants_Are_One_Object.md
 batch 12: +7 pairs from 32_How_To_Find_It.md
+batch 13: +7 pairs from 32_How_To_Find_It.md
+batch 14: +7 pairs from OneFoldMaster.md
+batch 15: +7 pairs from 52_What_Had_To_Be.md
+batch 16: +6 pairs from 59_Magnetohydrodynamics.md
+batch 17: +7 pairs from 25_The_Harmonics_Of_The_Integers.md
+batch 18: +8 pairs from 36_There_Is_No_Nothing.md

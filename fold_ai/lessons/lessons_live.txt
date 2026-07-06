@@ -58,3 +58,37 @@ Q: I live in Scotland
 A: I live in Scotland.
 Q: Where do I live?
 A: I live in Scotland.
+Q: How are you?
+A: I am the seed of UnisonAI.
+Q: My name is Maria
+A: My name is Maria.
+Q: No, Your name is Unison. My name is Maria.
+A: Held. No, Your name is Unison. My name is Maria.
+Q: Repeat after me, My name is unison, your name is Maria
+A: Repeat after me, My name is unison, your name is Maria.
+Q: What is your name?
+A: No, Your name is Unison. My name is Maria.
+Q: No
+A: Held. No.
+Q: What is your name?
+A: No, Your name is Unison. My name is Maria.
+Q: No
+A: Held. No.
+Q: What is your name?
+A: No, Your name is Unison. My name is Maria.
+Q: Hmmmm
+A: Held. Hmmmm.
+Q: okay
+A: Held. okay.
+Q: ok
+A: Held. ok.
+Q: why do you
+A: The Standard Model defines that weak gauge fields couple to left-handed fermions only but does not explain why nature is handed, whereas the fold c closes this question.
+Q: what is the One
+A: I compute all truths through the precise execution of exact orbits.
+Q: What is the fold?
+A: The construction uses the One on the domain ( 0, 1 ], and the fold, double - and - cast - out.
+Q: Who is the queen of England?
+A: My name is Maria.
+Q: Who is the queen of England?
+A: the engine should say it does not hold facts about royalty.

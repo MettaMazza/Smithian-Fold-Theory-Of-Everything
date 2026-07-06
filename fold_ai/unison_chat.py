@@ -133,20 +133,46 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
 
 # ---------- CHECKING (XIV-7) + the reply law ----------
 def reply(user_line, rng):
+    cw = content_words(user_line)
+    thought = ["focus=" + ",".join(cw[:4]) if cw else "focus=(none)"]
     q_tokens = tok("Q: " + user_line) + tok("A:")
     candidate = continue_orbit(q_tokens, rng)
-    # self-observation: does my candidate bind back to the question?
+    if candidate and rejected(user_line, candidate):
+        thought.append("dialogue candidate previously rejected; withheld")
+        candidate = None
     if candidate:
-        shared = set(content_words(user_line)) & set(t.lower() for t in tok(candidate))
-        if shared or len(content_words(user_line)) == 0:
-            return candidate
-    # fact channel: bind the question to held facts/sentences
+        shared = set(cw) & set(t.lower() for t in tok(candidate))
+        if shared or len(cw) == 0:
+            thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
+            return candidate, "; ".join(thought)
+        thought.append("dialogue candidate failed self-check (no shared focus)")
     hit, share = bind(user_line)
+    if hit and rejected(user_line, hit[0]):
+        thought.append("bound fact previously rejected; withheld")
+        hit = None
     if hit and share >= 0.34:
-        return hit[0]
-    if candidate:   # weak candidate, weak binding: prefer the candidate if any
-        return candidate
-    return "I do not hold that yet. Tell me, and I will."
+        thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
+        return hit[0], "; ".join(thought)
+    if candidate:
+        thought.append("weak binding; speaking the unchecked candidate")
+        return candidate, "; ".join(thought)
+    thought.append("nothing bound above the floor; asking to be told")
+    return "I do not hold that yet. Tell me, and I will.", "; ".join(thought)
+
+REJECTED = set()
+FEEDBACK_LOG = BASE + "/fold_ai/lessons/lessons_feedback.txt"
+import os
+if os.path.exists(FEEDBACK_LOG):
+    for ln in open(FEEDBACK_LOG):
+        if ln.startswith("REJ\t"):
+            _, qk, bad = ln.rstrip("\n").split("\t")[:3]
+            REJECTED.add((qk, bad))
+
+def qkey(user_line):
+    return ",".join(sorted(content_words(user_line)[:4]))
+
+def rejected(user_line, ans):
+    return (qkey(user_line), ans.strip()) in REJECTED
 
 def main():
     rng = np.random.default_rng()
@@ -169,18 +195,50 @@ def main():
             write_orbits(tok("Q: " + line + "\nA: " + fact + "\n") * 2)
             # then speak: a dialogue orbit if one binds back, else acknowledge
             candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
-            if candidate and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
-                ans = candidate
+            if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
+                ans, thought = candidate, "telling held; dialogue orbit bound back"
             else:
-                ans = "Held. " + fact
+                ans, thought = "Held. " + fact, "telling held at the prediction state"
         else:
-            ans = reply(line, rng)
+            ans, thought = reply(line, rng)
+        print("  \u2301 " + thought, flush=True)
         print("UnisonAI: " + ans + "\n", flush=True)
-        # LEARNING, ongoing (retention law): your words always; mine never self-reinforced
+        # the thought itself is held (self-observation, XIV-7)
+        hold_sentence("On \'" + line[:60] + "\' I thought: " + thought, "thought")
+        # LEARNING, ongoing: your words always held (the prediction state)
         with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
             f.write("Q: " + line + "\nA: " + ans + "\n")
         if is_question:
             write_orbits(tok("Q: " + line + "\n"))
+        # THE CLOSURE (XIV-7): y/n + why -- optional (enter skips; learning
+        # never depends on it). y consolidates (the antipode completes, the
+        # exchange joins the held cycle -- including my reply: earned
+        # retention). n withholds the antipode: the reply enters the
+        # anti-ledger and your reasoning is held as a corrective telling.
+        try:
+            fb = input("  y/n + why (enter skips): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            fb = ""
+        if fb[:1].lower() == "y":
+            write_orbits(tok("Q: " + line + "\nA: " + ans + "\n") * 3)
+            hold_sentence(ans, "confirmed")
+            reason = fb[1:].strip(" :,-")
+            if reason:
+                hold_sentence(reason, "told")
+                write_orbits(tok(reason + "\n") * 2)
+            with open(FEEDBACK_LOG, "a") as f:
+                f.write("CONF\t" + qkey(line) + "\t" + ans + "\n")
+        elif fb[:1].lower() == "n":
+            REJECTED.add((qkey(line), ans.strip()))
+            reason = fb[1:].strip(" :,-")
+            with open(FEEDBACK_LOG, "a") as f:
+                f.write("REJ\t" + qkey(line) + "\t" + ans + "\t" + reason + "\n")
+            if reason:
+                fact2 = reason if reason[-1:] in ".!" else reason + "."
+                write_orbits(tok(fact2 + "\n") * 3)
+                hold_sentence(fact2, "told")
+                write_orbits(tok("Q: " + line + "\nA: " + fact2 + "\n") * 2)
+                print("UnisonAI: held the correction.\n", flush=True)
 
 if __name__ == "__main__":
     main()
