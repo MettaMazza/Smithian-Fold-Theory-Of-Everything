@@ -74,10 +74,11 @@ lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
 stores = [defaultdict(lambda: defaultdict(int)) for _ in range(CTX_MAX + 1)]
 def _key(tup):
     return tuple(t.lower() for t in tup)        # case-folded context key
-def write_orbits(tl):
+def write_orbits(tl, max_ctx=None):
+    top = CTX_MAX if max_ctx is None else max_ctx
     for i in range(len(tl) - 1):
         nxt = tl[i + 1]                          # original-case successor (voice)
-        for L in range(0, CTX_MAX + 1):
+        for L in range(0, top + 1):
             if i - L + 1 < 0:
                 break
             stores[L][_key(tl[i - L + 1:i + 1])][nxt] += 1
@@ -181,7 +182,8 @@ class _StoreUnpickler(_pk.Unpickler):
             return _ddint
         return super().find_class(module, name)
 _sp = BASE + "/fold_ai/store.pkl"
-_MAX_STORE = 600_000_000   # 600MB cap: never load a runaway store at wake
+_MAX_STORE = 2_000_000_000   # 2GB cap: never load a runaway store at wake
+STORE_INGESTED = set()       # books already inside the prebuilt store
 if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
     try:
         with open(_sp, "rb") as _f:
@@ -198,6 +200,7 @@ if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
         TOTAL_TOKS = sum(TOK_FREQ.values())
         for s, src2 in _st["sents"]:
             hold_sentence(s, "prose")
+        STORE_INGESTED = set(os.path.basename(x) for x in _st["ingested"])
         print(f"  merged prose store: +{len(_st['sents'])} sentences, +{len(_st['neigh'])} words from {len(_st['ingested'])} books", flush=True)
         log("STORE", f"merged +{len(_st['sents'])} sentences from {len(_st['ingested'])} books")
     except Exception as _e:
@@ -724,6 +727,72 @@ def _selfplay_loop():
             log("SELFPLAY", "error: " + str(e))
         time.sleep(60)
 
+# ---------- THE GROWING BODY: prose arrives, is eaten live, and is baked in
+DIET_DIR = BASE + "/fold_ai/diet"
+_EATEN = set()   # books ingested live this session (beyond the wake store)
+
+def _start_grower():
+    """Launch the public-domain prose ingester: it fills diet/ continuously;
+    the prose watcher below eats each new book into the LIVE engine."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    if subprocess.run(["pgrep", "-f", "corpus_grower.py"], capture_output=True).stdout.strip():
+        log("GROWER", "already running; not relaunched")
+        return
+    lf = open(LOGDIR + "/grower.log", "a")
+    subprocess.Popen([sys.executable, here + "/corpus_grower.py"], stdout=lf, stderr=subprocess.STDOUT)
+    log("GROWER", "launched -> diet/ (new books eaten live; store rebuilt periodically)")
+
+def _prose_watcher():
+    """LIVE prose growth: any diet book not already inside the wake store is
+    read ONCE into the running engine -- orbits (prose depth), kinship
+    counts, and the sentence bank -- so fluency rises while the system is
+    up, no restart. The kin index is refreshed after each meal."""
+    global TOTAL_TOKS
+    while True:
+        time.sleep(300)
+        try:
+            new = [f for f in sorted(glob.glob(DIET_DIR + "/*.txt"))
+                   if os.path.basename(f) not in STORE_INGESTED
+                   and os.path.basename(f) not in _EATEN]
+            ate = 0
+            for f in new[:2]:                    # two books per meal, bounded
+                text = open(f, errors="ignore").read()
+                tl = tok(text)
+                write_orbits(tl, max_ctx=3)      # prose depth, like the store
+                build_neighbours(tl)
+                TOK_FREQ.update(w.lower() for w in tl)
+                TOTAL_TOKS += len(tl)
+                for s in re.split(r"(?<=[.!?])\s+", text):
+                    s = " ".join(s.split())
+                    if "|" not in s and "`" not in s and well_formed(s):
+                        hold_sentence(s, "prose")
+                _EATEN.add(os.path.basename(f))
+                ate += 1
+                log("PROSE", os.path.basename(f), f"+{len(tl)} tokens eaten live")
+            if ate:
+                build_neigh_index()
+        except Exception as e:
+            log("PROSE", "watcher error: " + str(e))
+
+def _store_rebuild_loop():
+    """Every two hours, bake the grown diet into the prebuilt store with a
+    budget that scales to the diet's size (capped so the wake stays fast) --
+    the next wake inherits everything the session ate and more."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        time.sleep(7200)
+        try:
+            if subprocess.run(["pgrep", "-f", "build_store.py"], capture_output=True).stdout.strip():
+                continue
+            total_mb = sum(os.path.getsize(f) for f in glob.glob(DIET_DIR + "/*.txt")) // 1_000_000
+            budget = min(max(90, total_mb), 250)
+            lf = open(LOGDIR + "/store_build.log", "a")
+            subprocess.run([sys.executable, here + "/build_store.py", str(budget)],
+                           stdout=lf, stderr=subprocess.STDOUT, timeout=7000)
+            log("STORE", f"periodic rebuild complete at {budget}MB budget (applies at next wake)")
+        except Exception as e:
+            log("STORE", "rebuild error: " + str(e))
+
 # ---------- CONTINUOUS LEARNING: the teachers and the live lesson stream ---
 def _watch_lessons():
     """New lesson pairs -- from the teacher models or hand-written files --
@@ -798,10 +867,13 @@ def main():
     # face on this same memory, the teachers, and the live lesson stream.
     _start_discord(np.random.default_rng())
     _start_teacher()
+    _start_grower()
     threading.Thread(target=_watch_lessons, daemon=True).start()
     threading.Thread(target=_tutor_loop, daemon=True).start()
     threading.Thread(target=_selfplay_loop, daemon=True).start()
-    log("SYSTEM", "unified launch: terminal + discord face + teacher + lesson watcher + tutor + self-play, one engine")
+    threading.Thread(target=_prose_watcher, daemon=True).start()
+    threading.Thread(target=_store_rebuild_loop, daemon=True).start()
+    log("SYSTEM", "unified launch: terminal + discord face + teacher + grower + lesson/prose watchers + store rebuild + tutor + self-play, one engine")
     print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)
     last_exchange = [None, ""]
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)

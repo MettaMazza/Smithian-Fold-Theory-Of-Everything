@@ -6,7 +6,7 @@ from collections import defaultdict, Counter
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
 STORE = BASE + "/fold_ai/store.pkl"
 PCTX = 3                      # prose orbit context length (coherence vs size)
-BUDGET_MB = 90               # prose bytes to ingest
+BUDGET_MB = int(sys.argv[1]) if len(sys.argv) > 1 else 90   # prose bytes to ingest
 def tok(s): return re.findall(r"\w+|[^\w\s]", s)
 def _ddint(): return defaultdict(int)
 def well_formed(s):
