@@ -941,6 +941,11 @@ def toggle(cmd):
     if c == "auto":
         new = not (AUTO["teach"] and AUTO["selfplay"])
         AUTO["teach"] = AUTO["selfplay"] = new
+        _fl = BASE + "/fold_ai/autonomy.on"
+        if new:
+            open(_fl, "w").write("on")     # autonomy survives restarts
+        elif os.path.exists(_fl):
+            os.unlink(_fl)
         log("TOGGLE", "auto", onoff(new))
         return ("full autonomy " + onoff(new) + " -- the tutor asks, judges and closes y/n itself, "
                 "and I play myself between lessons. Watch logs/unison.log.")
@@ -1977,6 +1982,12 @@ def main():
     threading.Thread(target=_bench_loop, daemon=True).start()
     threading.Thread(target=_prose_watcher, daemon=True).start()
     threading.Thread(target=_store_rebuild_loop, daemon=True).start()
+    # AUTONOMY SURVIVES RESTARTS: if /auto was left on, it is on at boot --
+    # the one startup command carries the whole overnight run
+    if os.path.exists(BASE + "/fold_ai/autonomy.on"):
+        AUTO["teach"] = AUTO["selfplay"] = True
+        log("TOGGLE", "auto restored ON from last session")
+        print("  autonomy: ON (restored -- tutor, self-play, hourly benchmark)", flush=True)
     # THE OBSERVER, HOT FROM LAUNCH: warm the teacher model now so the
     # confusion relay answers in seconds, not on a cold load.
     RELAY["on"] = True
