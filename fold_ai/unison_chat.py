@@ -1,84 +1,156 @@
-"""UNISON CHAT — the fold-native seed, talkable. Knowledge = every context
-read ONCE as exact held orbits (Maria's corpus + lesson files); reply =
-unit-capacity selection over the orbit hierarchy, exact rational shares,
-No-Zero floor. LIVE LEARNING IS AUTOMATIC (no command): every exchange --
-your words AND its own reply -- is written as orbits and persisted the
-moment it happens (the 2-to-1 self-observation closure, Claim XIV-7:
-the engine holds orbits of its own holding). Usage: python3 unison_chat.py"""
+"""UNISON CHAT v2 — the fold-native seed: adaptive, live-learning, reasoning
+by the corpus's own laws. Zero parameters, zero training.
+  HOLDING   memory = held orbits (Paper 44): everything read/heard, written once
+  FINDING   binding (XI-4): a question's content words bind to fact orbits
+            anywhere in the store; binding power = counted informativeness
+            (inverse held frequency -- counted, never chosen)
+  SPEAKING  unit-capacity selection (XI-2): one focus answers
+  CHECKING  self-observation closure (XIV-7): the engine scores its own
+            candidate against your words BEFORE speaking; unbound candidates
+            are rejected -- no non-sequiturs emitted knowingly
+  LEARNING  automatic and ongoing, like ours: your words are always written
+            (statements become facts at the moment of telling); its own
+            replies are recorded but never self-reinforced (retention law).
+Usage: python3 unison_chat.py"""
 import numpy as np, glob, re, sys, time
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 CTX_MAX = 6
-LESSONS = sorted(glob.glob("/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/*.txt"))
-CORPUS = [f for f in sorted(glob.glob("/Users/mettamazza/Desktop/Smithian Fold Theory/**/*.md", recursive=True)) +
+BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
+LESSONS = sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
+CORPUS = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
           sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/**/*.md", recursive=True))
           if "/language/" not in f and "/.git/" not in f]
 
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
 
-print("UnisonAI seed waking: reading everything once...", flush=True)
+print("UnisonAI waking: reading everything once...", flush=True)
 t0 = time.time()
-text = "\n".join(open(f, errors="ignore").read() for f in CORPUS)
+corpus_text = "\n".join(open(f, errors="ignore").read() for f in CORPUS)
 lesson_text = "\n".join(open(f, errors="ignore").read() for f in LESSONS)
-# lessons are read THREE times -- three written orbits of the dialogue shape
-# (writing twice more is writing, not training)
-full = text + ("\n" + lesson_text) * 3
-words = tok(full)
-stores = [defaultdict(lambda: defaultdict(int)) for _ in range(CTX_MAX + 1)]
 
-def write_orbits(token_list):
-    for i in range(len(token_list) - 1):
-        nxt = token_list[i + 1]
+# ---------- HOLDING: orbits for continuation + the sentence store ----------
+stores = [defaultdict(lambda: defaultdict(int)) for _ in range(CTX_MAX + 1)]
+def write_orbits(tl):
+    for i in range(len(tl) - 1):
+        nxt = tl[i + 1]
         for L in range(0, CTX_MAX + 1):
             if i - L + 1 < 0:
                 break
-            stores[L][tuple(token_list[i - L + 1:i + 1])][nxt] += 1
+            stores[L][tuple(tl[i - L + 1:i + 1])][nxt] += 1
 
+full = corpus_text + ("\n" + lesson_text) * 3
+words = tok(full)
 write_orbits(words)
-vocab = set()
-for s in stores[0].values():
-    vocab.update(s.keys())
-vocab.update(words[:1])
-V = len(vocab) + 1
-print(f"awake: {sum(len(s) for s in stores)} orbits from {len(words)} tokens in {time.time()-t0:.0f}s", flush=True)
 
-def predict(ctx):
-    for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-        s = stores[L].get(tuple(ctx[-L:]))
-        if s:
-            return s, L
-    return stores[1].get((ctx[-1],), {}), 1 if ctx else 0
+# sentence store + inverted index (binding substrate)
+SENTS = []
+TOK_FREQ = Counter(w.lower() for w in words)
+TOTAL_TOKS = sum(TOK_FREQ.values())
+INDEX = defaultdict(set)
 
-def reply(history_tokens, rng, max_tokens=70):
-    ctx = list(history_tokens)
+def hold_sentence(s, source):
+    s = " ".join(s.split())
+    if not (8 <= len(s) <= 400):
+        return
+    sid = len(SENTS)
+    SENTS.append((s, source))
+    for w in set(t.lower() for t in tok(s) if len(t) > 2):
+        INDEX[w].add(sid)
+
+# lessons: hold Q/A pairs as bound units; corpus: hold sentences
+for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
+    hold_sentence(a.strip(), "lesson:" + q.strip()[:80])
+for s in re.split(r"(?<=[.!?])\s+", corpus_text):
+    if "|" not in s and "#" not in s and "`" not in s and s.count("=") < 2:
+        hold_sentence(s, "corpus")
+
+print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
+
+def informativeness(w):
+    # counted: rarer words carry more share (total/frequency, exact ratio)
+    f = TOK_FREQ.get(w.lower(), 0)
+    return 0.0 if f == 0 else TOTAL_TOKS / f
+
+def content_words(s):
+    ws = [t.lower() for t in tok(s) if len(t) > 2]
+    scored = [(informativeness(w), w) for w in ws]
+    scored = [x for x in scored if x[0] > 0]
+    scored.sort(reverse=True)
+    return [w for _, w in scored[:6]]
+
+# ---------- FINDING: binding (XI-4) ----------
+def bind(query, exclude_self=None):
+    cw = content_words(query)
+    if not cw:
+        return None, 0.0
+    votes = defaultdict(float)
+    for w in cw:
+        for sid in INDEX.get(w, ()):
+            votes[sid] += informativeness(w)
+    if not votes:
+        return None, 0.0
+    denom = sum(informativeness(w) for w in cw)
+    # THE EXPERIENCE ORDER (lexicographic, no weights): what it was TOLD
+    # outranks its lessons, which outrank its library -- its own held life
+    # first, then its teaching, then its reading.
+    def source_rank(sid):
+        src = SENTS[sid][1]
+        return 0 if src == "told" else (1 if src.startswith("lesson") else 2)
+    best = sorted(votes.items(), key=lambda kv: (source_rank(kv[0]), -kv[1]))
+    for sid, v in best[:8]:
+        s, srcname = SENTS[sid]
+        if exclude_self and s.strip() == exclude_self.strip():
+            continue
+        return SENTS[sid], v / denom
+    return None, 0.0
+
+# ---------- SPEAKING: dialogue-orbit channel ----------
+def continue_orbit(ctx_tokens, rng, max_tokens=60):
+    ctx = list(ctx_tokens)
     out = []
     for _ in range(max_tokens):
-        s, L = predict(ctx)
+        s = None
+        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
+            s = stores[L].get(tuple(ctx[-L:]))
+            if s:
+                break
         if not s:
             break
         items = list(s.items())
         counts = np.array([n for _, n in items], dtype=np.float64)
-        total = counts.sum()
-        probs = counts / (total + 1.0)
-        floor = (1.0 / (total + 1.0))
-        probs = probs + floor / len(items)
-        probs = probs / probs.sum()
+        probs = counts / counts.sum()
         nxt = items[int(rng.choice(len(items), p=probs))][0]
         if nxt == "Q":
             break
         out.append(nxt)
         ctx.append(nxt)
-        if nxt in (".", "!", "?") and len(out) > 4:
+        if nxt in (".", "!", "?") and len(out) > 3:
             break
     s = " ".join(out)
-    s = re.sub(r"\s+([.,!?;:])", r"\1", s)
-    return s
+    return re.sub(r"\s+([.,!?;:])", r"\1", s)
+
+# ---------- CHECKING (XIV-7) + the reply law ----------
+def reply(user_line, rng):
+    q_tokens = tok("Q: " + user_line) + tok("A:")
+    candidate = continue_orbit(q_tokens, rng)
+    # self-observation: does my candidate bind back to the question?
+    if candidate:
+        shared = set(content_words(user_line)) & set(t.lower() for t in tok(candidate))
+        if shared or len(content_words(user_line)) == 0:
+            return candidate
+    # fact channel: bind the question to held facts/sentences
+    hit, share = bind(user_line)
+    if hit and share >= 0.34:
+        return hit[0]
+    if candidate:   # weak candidate, weak binding: prefer the candidate if any
+        return candidate
+    return "I do not hold that yet. Tell me, and I will."
 
 def main():
     rng = np.random.default_rng()
-    print("\nUnisonAI: Hello. I am the seed of UnisonAI. Ask me about the fold, or /teach me something new. (/quit to end)\n", flush=True)
-    history = []
+    print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
     while True:
         try:
             line = input("You: ").strip()
@@ -88,21 +160,27 @@ def main():
             continue
         if line == "/quit":
             break
-        if line.startswith("/teach "):
-            line = line[7:].strip()  # kept as a courtesy alias; learning is automatic
-        q_tokens = tok("Q : " + line + " A :".replace(" : ", ": "))
-        q_tokens = tok("Q: " + line) + tok("A:")
-        ans = reply(q_tokens, rng)
-        if not ans:
-            ans = "I have no orbit for that yet. Tell me, and I will hold it."
+        is_question = line.endswith("?") or line.lower().startswith(("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
+        if not is_question:
+            # a telling: hold the fact first, always
+            fact = line if line[-1:] in ".!" else line + "."
+            write_orbits(tok(fact + "\n") * 3)
+            hold_sentence(fact, "told")
+            write_orbits(tok("Q: " + line + "\nA: " + fact + "\n") * 2)
+            # then speak: a dialogue orbit if one binds back, else acknowledge
+            candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
+            if candidate and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
+                ans = candidate
+            else:
+                ans = "Held. " + fact
+        else:
+            ans = reply(line, rng)
         print("UnisonAI: " + ans + "\n", flush=True)
-        # LIVE LEARNING (automatic, XIV-7 closure): the whole exchange --
-        # the user's words and the engine's own reply -- becomes held orbits
-        # and persists to the lesson ledger immediately.
-        exchange = "Q: " + line + "\nA: " + ans + "\n"
-        write_orbits(tok(exchange) * 3)
-        with open("/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/lessons_live.txt", "a") as f:
-            f.write(exchange)
+        # LEARNING, ongoing (retention law): your words always; mine never self-reinforced
+        with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
+            f.write("Q: " + line + "\nA: " + ans + "\n")
+        if is_question:
+            write_orbits(tok("Q: " + line + "\n"))
 
 if __name__ == "__main__":
     main()

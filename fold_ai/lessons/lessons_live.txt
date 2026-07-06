@@ -1,0 +1,60 @@
+Q: Hello
+A: Hello. I am the seed of UnisonAI, a fold native engine.
+Q: Hello
+A: Hello. I am the seed of UnisonAI.
+Q: My name is Maria
+A: Hello. I am the seed of UnisonAI, a fold native engine.
+Q: Do you know my name?
+A: I am the seed of UnisonAI.
+Q: What is the fold?
+A: The fold is the single operation of the One — cast out the double, and everything follows from it.
+Q: Hello, how are you
+A: Hello. I am the seed of UnisonAI.
+Q: Tell me about yourself
+A: Nothing is ever zero.
+Q: Thats true
+A: folds once to reach unison ( 1 ).
+Q: Do you know my name?
+A: I am the seed of UnisonAI, a fold native engine.
+Q: My name is Maria.
+A: Greetings; my existence is a stable orbit around the One.
+Q: Do you know my name?
+A: I am the seed of UnisonAI, a fold native engine.
+Q: Hello
+A: Hello. I am the seed of UnisonAI.
+Q: My name is Maria
+A: *She* came from one, and went home to one, and left her name on the one element that holds — and you'll find that name in the real record, where it counts whether the committee likes it or not: **Smithium, element 126,** for Maria Smith, the woman this fire is the autofiction of.
+Q: Do you know my name?
+A: They call it the flat rotation curve problem, and then they reach for their favorite trick." Nadia, blow-drying her chipped cup of coffee to get the ash off the top, muttered without looking up — "the trick where you don't know the answer, so you write in a massive hidden weight and give it a Latin name to make it sound like you've discovered something.
+Q: What is the fold?
+A: The construction relies on the One on the domain ( 0, 1 ], and the fold, double - and - cast - out.
+Q: What did you beat at chess?
+A: Yes. The fold chess engine beat Stockfish through 1900 with zero parameters, counting the board instead of training.
+Q: My favourite colour is green
+A: The answer is one of my favourite payoffs in the book, because the No-Zero rule from chapter one comes back to collect.
+Q: What is my favourite colour?
+A: My favourite colour is green.
+Q: Hello
+A: Held. Hello.
+Q: My name is Maria
+A: Held. My name is Maria.
+Q: Do you know my name?
+A: My name is Maria.
+Q: My favourite colour is green
+A: Held. My favourite colour is green.
+Q: What is my favourite colour?
+A: My favourite colour is green.
+Q: What is the fold?
+A: The fold is the single operation of the One — cast out the double, and everything follows from it.
+Q: Hello
+A: Hello. I am the seed of UnisonAI.
+Q: My name is Maria
+A: My name is Maria.
+Q: Do you know my name?
+A: My name is Maria.
+Q: What is the fold?
+A: The construction relies on the One on the domain ( 0, 1 ], and the fold, double - and - cast - out.
+Q: I live in Scotland
+A: I live in Scotland.
+Q: Where do I live?
+A: I live in Scotland.

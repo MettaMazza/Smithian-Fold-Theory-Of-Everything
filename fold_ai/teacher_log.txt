@@ -1,2 +1,12 @@
-batch 1: +11 pairs from From_One_Axiom_To_Master_Chess_And_The_Law_Inside_Neural_Networks.md
-batch 2: +8 pairs from From_One_Axiom_To_Master_Chess_And_The_Law_Inside_Neural_Networks.md
+batch 1: +7 pairs from 03_The_Table_Has_A_Last_Door.md
+batch 2: +8 pairs from 17_The_Universe_Is_A_Southpaw.md
+batch 3: +8 pairs from 03_The_Table_Has_A_Last_Door.md
+batch 4: +7 pairs from 31_Criticality_Made_Exact.md
+batch 5: +7 pairs from 07_The_Continuum_Was_The_Bug.md
+batch 6: +7 pairs from 39_The_Dark_Relic_Abundance.md
+batch 7: +6 pairs from 05_The_Sealed_Ladder.md
+batch 8: +6 pairs from universal_discovery_engine_plain_english.md
+batch 9: +7 pairs from 17_The_Universe_Is_A_Southpaw.md
+batch 10: +7 pairs from 29_The_Impossible_Crystal_Is_A_Force.md
+batch 11: +7 pairs from 09_The_Constants_Are_One_Object.md
+batch 12: +7 pairs from 32_How_To_Find_It.md

@@ -4,7 +4,9 @@ in the exact lesson format. Runs until stopped; lessons accumulate in
 lessons/lessons_teacher.txt (the seed picks them up at next wake)."""
 import subprocess, glob, random, time, re
 
-CORPUS = [f for f in sorted(glob.glob("/Users/mettamazza/Desktop/Smithian Fold Theory/papers/*.md"))]
+CORPUS = [f for f in sorted(glob.glob("/Users/mettamazza/Desktop/SFTOM/papers/*.md")) +
+          ["/Users/mettamazza/Desktop/Smithian Fold Theory/OneFoldMaster.md",
+           "/Users/mettamazza/Desktop/Smithian Fold Theory/THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md"]]
 OUT = "/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/lessons/lessons_teacher.txt"
 MODEL = "gemma4:26b"
 rng = random.Random(20260706)
@@ -21,14 +23,22 @@ PASSAGE:
                        capture_output=True, text=True, timeout=600)
     return r.stdout
 
+ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]|\x1b\][^\x07]*\x07|[\x00-\x08\x0b-\x1f\x7f]")
 def clean(txt):
+    txt = ANSI.sub("", txt)
     pairs = re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", txt, re.S)
     out = []
     for q, a in pairs:
-        q = " ".join(q.split())[:300]
-        a = " ".join(a.split())[:400]
-        if len(q) > 5 and len(a) > 5:
-            out.append(f"Q: {q}\nA: {a}\n")
+        q = " ".join(q.split())[:200]
+        a = " ".join(a.split())[:350]
+        # strict validation: single clean pair, sentence-like, no leaked markup
+        if not (10 < len(q) and 10 < len(a)):
+            continue
+        if any(bad in q + a for bad in ("Q:", "A:", "```", "PASSAGE", "* ", "..", "\x1b")):
+            continue
+        if not q.rstrip().endswith("?") and not q[:1].isupper():
+            continue
+        out.append(f"Q: {q}\nA: {a}\n")
     return "".join(out)
 
 if __name__ == "__main__":
