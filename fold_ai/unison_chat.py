@@ -581,10 +581,20 @@ def flip_perspective(s):
         s = re.sub(r"(?i)\b" + pat.replace("'", r"\s*'\s*") + r"\b",
                    lambda m, rep=rep: rep.capitalize() if m.group(0)[:1].isupper() else rep, s)
     out = []
-    for t in tok_display(s):
-        f = FLIP.get(t.lower())
+    toks = tok_display(s)
+    _OBJ_CUES = {"to", "meet", "with", "for", "at", "from", "of", "thank",
+                 "see", "hear", "tell", "teach", "love", "help", "ask", "need", "want", "know"}
+    for idx, t in enumerate(toks):
+        tl = t.lower()
+        if tl == "you":
+            prev = toks[idx - 1].lower() if idx else ""
+            f = "me" if prev in _OBJ_CUES else "i"   # object position: me, not i
+        else:
+            f = FLIP.get(tl)
         out.append((f.capitalize() if t[:1].isupper() else f) if f else t)
     s2 = re.sub(r"\s+([.,!?;:])", r"\1", " ".join(out))
+    s2 = re.sub(r"(?i)\bare i\b", "am I", s2)        # verb agreement after the flip
+    s2 = re.sub(r"(?i)\bi are\b", "I am", s2)
     return re.sub(r"(\w)\s*'\s*(s|t|re|ve|ll|d|m)\b", r"\1'\2", s2)
 
 CORRECTIONS = {}          # qkey -> exact taught answer (wins over everything)
@@ -682,13 +692,24 @@ def turn(line, rng, interface="terminal"):
             with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
                 f.write("Q: " + line + "\nA: " + ans + "\n")
             return ans, thought
-        if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
-            candidate = None                    # never parrot the telling back
-        if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
-            ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
+        # WHILE I AM YOUNG, THE TEACHER SPEAKS TO TELLINGS TOO: the facts are
+        # already held above -- but the RESPONSE comes from my observer, in
+        # my voice, never from a thin echo of the user's own words.
+        relayed = _teacher_relay(line) if (interface in _RELAY_FACES and RELAY["on"]) else None
+        if relayed:
+            a, reasoning = relayed
+            ans = a
+            thought = ("telling held" + (" as a relation fact" if got else "")
+                       + "; my teacher answered as me while I am young"
+                       + ("; reasoning: " + reasoning[:100] if reasoning else ""))
         else:
-            ans = "Held. " + fact
-            thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
+            if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
+                candidate = None                    # never parrot the telling back
+            if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
+                ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
+            else:
+                ans = "Held. " + fact
+                thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
     else:
         CONFUSED.pop(interface, None)           # a new question supersedes an open one
         ans, thought = reply(line, rng, face=interface)
@@ -847,7 +868,7 @@ def _teacher_relay(question, user_help=""):
     import json as _j
     helping = ("\nThe user explained, to help you: \"" + user_help.strip() + "\"") if user_help else ""
     msgs = [{"role": "system", "content": UNISON_PERSONA},
-            {"role": "user", "content": "A user just asked you: \"" + question.strip() + "\"" + helping +
+            {"role": "user", "content": "A user just said to you: \"" + question.strip() + "\"" + helping +
              "\nFirst write ONE short line of stepwise reasoning beginning exactly 'Reasoning:'. "
              "Then the reply beginning exactly 'Answer:' -- one to two plain sentences, in your voice, "
              "no markdown. Use your tools when they give the exact answer."}]
