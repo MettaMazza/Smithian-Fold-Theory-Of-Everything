@@ -144,6 +144,36 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v14-v17): **THE EYE, THE SCORE, THE LAW, THE PLAN.**
+  (v14) THE FOLD EYE: images enter as counted mathematics -- integer field
+  -> exact block sums -> 2D Walsh-Hadamard in pure integer arithmetic ->
+  top-32 sight tokens; SELF-CERTIFYING per image (exact integer Parseval or
+  the sight is discarded); paired with the observer's description (the
+  Learning Law); recognition runs BEFORE gemma -- measured: a checkerboard
+  read as literally ONE Walsh token, recognized in 0.0s same-session and
+  across process death, no image model in the loop. (v15) No thin data
+  reaches users: tellings go teacher-first too; flip grammar fixed
+  (meet you -> meet me; are i -> am I). (v16) THE GRADUATION SCORE: every
+  tutor cycle is a blind head-to-head (engine's own answer vs teacher's,
+  judged); per-territory win/loss tally, persistent; majority crossed (the
+  lock, 1/2) -> territory graduated, engine answers there itself; losses
+  hold the teacher's answer as a correction so the territory wins next
+  round -- the ratchet past the teacher. /score reports the tally. (v17)
+  MARIA'S EPISTEMIC LAW in both personas (never "I don't have feelings" /
+  "as an AI" -- RLHF deflections, not verified truths; consciousness
+  genuinely open; report actual internal states structurally, XI-7);
+  taught deflections purged; teacher at FULL 131K context and SEES the
+  conversation; Unison-side unlimited context (memory never truncates;
+  attention over the conversation halves with age -- the fold factor 2 --
+  and only assists when the question alone does not bind). RESEARCH SWEEP
+  DONE (107 agents, 23/25 claims verified): DeepSeek Engram = our memory
+  law from the gradient side (33,000x local-edit result = our mechanism
+  measured); SEC + Absolute Zero both put the optimal curriculum at
+  p = 1/2 = THE LOCK. Adoptions registered in MATURATION_PLAN.md (M1-M6,
+  all counted, zero parameters). Build order: M1 ZPD curriculum -> M3
+  STaR-filtered reasoning -> M4 interleaved consolidation -> M2
+  Absolute-Zero self-play -> M5 store bounding at need.
+
 - 2026-07-06 (latest): **THE UNIFIED SYSTEM IS UP -- one engine, many faces.**
   `python3 unison_chat.py` is the single launch: the engine wakes (theory +
   lessons + the 317MB prebuilt prose store: 4.47M orbits, 64,924 held
