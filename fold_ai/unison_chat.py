@@ -757,6 +757,7 @@ def rejected(user_line, ans):
 # the same turn() and apply_feedback(); an interface carries messages across
 # the boundary and nothing else. No face has its own logic.
 CONFUSED = {}   # interface -> the question I could not answer, awaiting help
+PENDING_PERCEPT = {}   # interface -> (kind, spectrum tokens) awaiting a human closure
 _CHILD_FACES = ("terminal", "discord")   # faces where I ask like a child
 
 def _is_confused(thought):
@@ -783,6 +784,28 @@ def turn(line, rng, interface="terminal"):
         write_orbits(tok(fact + "\n") * GEN_C)
         hold_sentence(fact, "told")
         write_orbits(tok("q: " + line + "\na: " + fact + "\n") * GEN_B)
+        # A PENDING PERCEPT closes on the human's words: sight or sound,
+        # paired exactly as an observer's description would be. Learning
+        # new perceptual data requires NO model -- only an experience and
+        # a telling (the Learning Law's original form).
+        pk = PENDING_PERCEPT.pop(interface, None)
+        if pk:
+            kind, toks = pk
+            st = " ".join(toks)
+            meaning = line if line[-1:] in ".!?" else line + "."
+            TOK_FREQ.update(toks)
+            write_orbits(tok(kind + ": " + st + "\nMEANS: " + meaning + "\n") * GEN_B)
+            hold_sentence(kind + " " + st + " means: " + meaning, "lesson:" + kind + ": " + st[:60])
+            fn = "lessons_sight.txt" if kind == "SIGHT" else "lessons_sound.txt"
+            with open(BASE + "/fold_ai/lessons/" + fn, "a") as _pf:
+                _pf.write("Q: " + kind + ": " + st + "\nA: " + meaning + "\n")
+            log(kind, "closed by the HUMAN observer", meaning[:80])
+            ans = "Held. I will recognize it from now on."
+            thought = "VOICE: UNISON (own held memory) | a pending percept closed by your words -- mine now"
+            with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
+                f.write("Q: " + line + "\nA: " + ans + "\n")
+            log("TURN", interface, line, ans, thought)
+            return ans, thought
         # THE CHILD'S ARC, stage 2: I asked for help, the user explained.
         # Retry with their words held; if still unsure, my observer steps in
         # -- and either way, what closes the gap is mine from then on.
@@ -1331,6 +1354,15 @@ def hear_audio(audio_bytes, suffix=".ogg"):
         return text
     except Exception as e:
         log("EAR", "error: " + str(e))
+        try:
+            sound0 = sound0 if "sound0" in dir() else None
+        except Exception:
+            sound0 = None
+        s0 = fold_hear(audio_bytes, suffix)
+        if s0:
+            PENDING_PERCEPT["discord"] = ("SOUND", s0)
+            return ("I hear it -- its spectrum is held. Tell me what it says, "
+                    "and I will know it from now on.")
         return None
 
 def observe_video(video_bytes, caption="", suffix=".mp4"):
@@ -1427,9 +1459,19 @@ def observe_image(images_b64, caption=""):
                                         "images": images_b64, "stream": False, "think": False,
                                         "options": {"num_ctx": 131072}}).encode(),
                          headers={"Content-Type": "application/json"})
-        with _u.urlopen(req, timeout=300) as r:
-            d = " ".join(_j.loads(r.read().decode()).get("response", "").split()).strip()
+        try:
+            with _u.urlopen(req, timeout=300) as r:
+                d = " ".join(_j.loads(r.read().decode()).get("response", "").split()).strip()
+        except Exception:
+            d = ""
         if not d or stuttered(d):
+            # NO OBSERVER, NO PROBLEM: the eye already saw (native math);
+            # the human's next telling closes the percept -- the Learning
+            # Law with a person as the observer, its original form
+            if sight:
+                PENDING_PERCEPT["discord"] = ("SIGHT", sight)
+                return ("I see it -- its spectrum is held (" + " ".join(sight[:4]) +
+                        " ...). Tell me what it shows, and I will know it from now on.")
             return None
         hold_sentence("I was shown an image: " + d, "told")
         write_orbits(tok("I was shown an image: " + d + "\n") * GEN_B)
