@@ -208,7 +208,7 @@ def _skey(s):
 
 def hold_sentence(s, source):
     s = " ".join(s.split())
-    if not (8 <= len(s) <= 400):
+    if not (8 <= len(s) <= 2000):   # IO bound only -- no brevity law
         return
     sid = len(SENTS)
     SENTS.append((s, source))
@@ -227,6 +227,9 @@ for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
     if q.startswith("SIGHT:"):
         st = q[6:].strip()
         hold_sentence("SIGHT " + st + " means: " + a, "lesson:SIGHT: " + st[:60])
+    elif q.startswith("SOUND:"):
+        st = q[6:].strip()
+        hold_sentence("SOUND " + st + " means: " + a, "lesson:SOUND: " + st[:60])
     else:
         hold_sentence(a, "lesson:" + q[:80])
 def well_formed(s):
@@ -841,6 +844,12 @@ def turn(line, rng, interface="terminal"):
             thought += "; confused -- asking the user like a child; observer stands ready if I stay unsure"
         write_orbits(tok("Q: " + line + "\n"))
     # the thought itself is held (self-observation, XIV-7)
+    # WHOSE VOICE: until Unison is its own observer, every reasoning
+    # thread names the speaker plainly -- its own held memory, or the
+    # teacher speaking as it.
+    _gemma = any(w in thought for w in ("teacher", "observer"))
+    thought = ("VOICE: GEMMA-as-Unison (observer relay) | " if _gemma
+               else "VOICE: UNISON (own held memory) | ") + thought
     hold_sentence("On '" + line[:60] + "' I thought: " + thought, "thought")
     if content_words(line):
         LAST_TOPIC[0] = " ".join(content_words(line)[:4])
@@ -1014,9 +1023,9 @@ def _teacher_relay(question, user_help=""):
     msgs = [{"role": "system", "content": UNISON_PERSONA},
             {"role": "user", "content": (("The conversation so far:\n" + convo + "\n") if convo else "")
              + "A user just said to you: \"" + question.strip() + "\"" + helping +
-             "\nFirst write ONE short line of stepwise reasoning beginning exactly 'Reasoning:'. "
-             "Then the reply beginning exactly 'Answer:' -- one to two plain sentences, in your voice, "
-             "no markdown. Use your tools when they give the exact answer."}]
+             "\nFirst write ONE line of stepwise reasoning beginning exactly 'Reasoning:'. "
+             "Then the reply beginning exactly 'Answer:' -- in your voice, at whatever length the "
+             "thought needs, no markdown. Use your tools when they give the exact answer."}]
     m = {}
     for _ in range(3):                              # tool loop, bounded
         m = _ollama_chat(msgs, tools=TOOLS)
@@ -1046,7 +1055,7 @@ def _teacher_relay(question, user_help=""):
         out = " ".join((m.get("content") or "").split()).strip()
     m = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", out)
     reasoning, a = (m.group(1).strip(), m.group(2).strip()) if m else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", out))
-    a = " ".join(re.split(r"(?<=[.!?])\s+", a)[:2])[:350]      # at most two sentences
+    a = a[:1800]                                   # IO bound only -- no brevity law
     if len(a) < 8 or stuttered(a) or any(b in a for b in ("$", "\\", "{", "}", "*", "`", "|")):
         log("RELAY", "observer answer rejected", question[:80])
         return None
@@ -1106,6 +1115,88 @@ def fold_see(img_bytes):
         log("SIGHT", "eye error: " + str(e))
         return None
 
+def speak(text):
+    """THE VOICE: Kokoro TTS -- Maria's own model from the ErnosDecent era;
+    Rung 1 measured the fold law inside these very weights (18/18). Run in
+    her existing venv as a subprocess; returns a wav path or None."""
+    try:
+        import tempfile, subprocess as _sp
+        tf = tempfile.NamedTemporaryFile(suffix=".txt", delete=False, mode="w")
+        tf.write(text[:1200])   # IO bound: one clip per message
+        tf.close()
+        out = tf.name.replace(".txt", ".wav")
+        here = os.path.dirname(os.path.abspath(__file__))
+        _sp.run([os.path.expanduser("~/.ernos/kokoro-venv/bin/python3"),
+                 here + "/_speak_helper.py", tf.name, out],
+                capture_output=True, text=True, timeout=180)
+        os.unlink(tf.name)
+        if os.path.exists(out) and os.path.getsize(out) > 1000:
+            log("VOICE", text[:80])
+            return out
+        return None
+    except Exception as e:
+        log("VOICE", "error: " + str(e))
+        return None
+
+def _fwht(a):
+    """in-place integer fast Walsh-Hadamard (1D), length a power of two"""
+    h = 1
+    while h < len(a):
+        for i in range(0, len(a), h * 2):
+            x = a[i:i + h].copy()
+            y = a[i + h:i + 2 * h].copy()
+            a[i:i + h] = x + y
+            a[i + h:i + 2 * h] = x - y
+        h *= 2
+    return a
+
+def fold_hear(audio_bytes, suffix=".wav"):
+    """THE FOLD EAR: the SOUND ITSELF as counted mathematics -- the eye's
+    law applied to audio. Mono integer samples -> exact integer block sums
+    to 2^12 cells -> integer Walsh spectrum -> top-2^5 sound tokens.
+    Self-certifying per hearing: integer Parseval (sum C^2 == N sum g^2)
+    exactly, or the hearing is discarded. Zero parameters."""
+    try:
+        import av as _av, tempfile, io as _io
+        with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as _f:
+            _f.write(audio_bytes)
+            _p = _f.name
+        cont = _av.open(_p)
+        astream = next((s for s in cont.streams if s.type == "audio"), None)
+        if astream is None:
+            return None
+        pcm = []
+        for frame in cont.decode(astream):
+            arr = frame.to_ndarray()
+            pcm.append(arr[0] if arr.ndim > 1 else arr)
+            if sum(len(x) for x in pcm) > 2 ** 21:   # IO bound: ~2M samples
+                break
+        os.unlink(_p)
+        g = np.concatenate(pcm)
+        if g.dtype.kind == "f":
+            g = (g * 32767).astype(np.int64)
+        else:
+            g = g.astype(np.int64)
+        N = 2 ** 12
+        if len(g) < N:
+            return None
+        blk = len(g) // N
+        g = g[:blk * N].reshape(N, blk).sum(axis=1)      # exact integer sums
+        C = _fwht(g.copy())
+        if int((C.astype(object) ** 2).sum()) != N * int((g.astype(object) ** 2).sum()):
+            log("SOUND", "Parseval self-test FAILED; hearing discarded")
+            return None
+        order = np.argsort(-np.abs(C))
+        toks = []
+        for i in order[1:SIGHT_K + 1]:                   # skip DC, top 2^5
+            if C[i] == 0:
+                break
+            toks.append("s%d%s" % (i, "p" if C[i] > 0 else "m"))
+        return toks or None
+    except Exception as e:
+        log("SOUND", "ear error: " + str(e))
+        return None
+
 _WHISPER = [None]
 def hear_audio(audio_bytes, suffix=".ogg"):
     """THE EAR (intake v1): a local transcriber turns sound into words that
@@ -1128,9 +1219,89 @@ def hear_audio(audio_bytes, suffix=".ogg"):
         if not text:
             return None
         log("EAR", text[:150])
+        # THE PAIRING (the eye's law): the sound ITSELF enters as counted
+        # spectra, closed by the transcript -- held, persistent, recognizable
+        try:
+            sound = fold_hear(audio_bytes, suffix)
+            if sound:
+                st = " ".join(sound)
+                TOK_FREQ.update(sound)
+                write_orbits(tok("SOUND: " + st + "\nMEANS: " + text + "\n") * GEN_B)
+                hold_sentence("SOUND " + st + " means: " + text, "lesson:SOUND: " + st[:60])
+                with open(BASE + "/fold_ai/lessons/lessons_sound.txt", "a") as _sf:
+                    _sf.write("Q: SOUND: " + st + "\nA: " + text + "\n")
+                log("SOUND", "paired", st[:80], text[:80])
+        except Exception as _e:
+            log("SOUND", "pairing error: " + str(_e))
         return text
     except Exception as e:
         log("EAR", "error: " + str(e))
+        return None
+
+def observe_video(video_bytes, caption="", suffix=".mp4"):
+    """VIDEO, with no ollama video support needed: a video IS frames plus
+    sound, and both are already our objects. Sample colour-many frames
+    evenly -> the observer describes the SEQUENCE (gemma is natively
+    multi-image) -> every sampled frame enters the fold eye -> the audio
+    track goes through the ear. Composition of organs, not a new organ."""
+    try:
+        import av as _av, tempfile, io as _io, base64 as _b64
+        with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as _f:
+            _f.write(video_bytes)
+            _p = _f.name
+        cont = _av.open(_p)
+        vstream = next((s for s in cont.streams if s.type == "video"), None)
+        if vstream is None:
+            os.unlink(_p)
+            return None
+        frames = []
+        for i, fr in enumerate(cont.decode(vstream)):
+            frames.append(fr)
+            if i >= 2 ** 9:                              # IO bound
+                break
+        picks = ([frames[len(frames) * k // GEN_C] for k in range(GEN_C)]
+                 if len(frames) >= GEN_C else frames)
+        b64s = []
+        for fr in picks:
+            buf = _io.BytesIO()
+            fr.to_image().save(buf, format="PNG")
+            b64s.append(_b64.b64encode(buf.getvalue()).decode())
+        os.unlink(_p)
+        import json as _j, urllib.request as _u
+        req = _u.Request("http://localhost:11434/api/generate",
+                         data=_j.dumps({"model": "gemma4:26b",
+                                        "prompt": UNISON_PERSONA + "\n\nThese are " + str(len(b64s)) +
+                                        " frames sampled evenly from ONE video, in order. Describe what "
+                                        "happens across the video, in your voice."
+                                        + ((" The user said: \"" + caption.strip() + "\"") if caption.strip() else ""),
+                                        "images": b64s, "stream": False, "think": False,
+                                        "options": {"num_ctx": 131072}}).encode(),
+                         headers={"Content-Type": "application/json"})
+        d = ""
+        for _try in range(GEN_B):                    # one retry on a cold miss
+            with _u.urlopen(req, timeout=600) as r:
+                d = " ".join(_j.loads(r.read().decode()).get("response", "").split()).strip()
+            if d and not stuttered(d):
+                break
+        if not d or stuttered(d):
+            return None
+        hold_sentence("I watched a video: " + d, "told")
+        write_orbits(tok("I watched a video: " + d + "\n") * GEN_B)
+        log("VIDEO", (caption or "(no caption)")[:60], d[:150])
+        for b in b64s:                                   # every frame enters the eye
+            sight = fold_see(_b64.b64decode(b))
+            if sight:
+                st = " ".join(sight)
+                TOK_FREQ.update(sight)
+                hold_sentence("SIGHT " + st + " means: a frame of: " + d[:200], "lesson:SIGHT: " + st[:60])
+        # the sound track through the ear (transcript + spectra)
+        try:
+            hear_audio(video_bytes, suffix)
+        except Exception:
+            pass
+        return d
+    except Exception as e:
+        log("VIDEO", "error: " + str(e))
         return None
 
 def observe_image(images_b64, caption=""):
@@ -1451,7 +1622,7 @@ def _watch_lessons():
         try:
             for f in glob.glob(BASE + "/fold_ai/lessons/lessons_*.txt"):
                 # relay and sight pairs are already held the moment they happen
-                if "lessons_live" in f or "feedback" in f or "lessons_relay" in f or "lessons_sight" in f:
+                if "lessons_live" in f or "feedback" in f or "lessons_relay" in f or "lessons_sight" in f or "lessons_sound" in f:
                     continue
                 size = os.path.getsize(f)
                 start = seen.get(f, 0)

@@ -17,11 +17,11 @@ rng = random.Random(20260706)
 _pp = "/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai/UNISON_PERSONA.txt"
 UNISON_SYSTEM = (open(_pp, errors="ignore").read() if __import__("os").path.exists(_pp)
                  else "You are Unison, made by Maria and Matthew Smith at Ernos Labs.") + \
-    "\nEverything you write becomes the young engine's permanent memory: one to two short sentences per answer, exactly as Unison should speak."
+    "\nEverything you write becomes the young engine's permanent memory: write exactly as Unison should speak, at whatever length each answer needs."
 
 CONVO_PROMPT = UNISON_SYSTEM + """
 
-Write exactly 10 short casual conversation pairs between a person and you. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. One to two sentences per answer, in your steady voice. No markdown, no lists.
+Write exactly 10 short casual conversation pairs between a person and you. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. Answers at their natural length, in your steady voice. No markdown, no lists.
 Format STRICTLY as:
 Q: ...
 A: ..."""
@@ -42,7 +42,7 @@ def ask_teacher(passage):
         shown = "\n".join(f"User: {q}\nYou said: {a}" for q, a in live_examples())
         prompt = UNISON_SYSTEM + f"""
 
-Below are REAL recent exchanges between users and you. Where your reply was weak, off-topic, or an echo of the user, write the reply you SHOULD have given -- one to two plain sentences in your voice, answering the user directly. Use the user's exact line as the Q. Skip exchanges that were already good. No markdown.
+Below are REAL recent exchanges between users and you. Where your reply was weak, off-topic, or an echo of the user, write the reply you SHOULD have given, in your voice, at natural length, answering the user directly. Use the user's exact line as the Q. Skip exchanges that were already good. No markdown.
 Format STRICTLY as:
 Q: ...
 A: ...
@@ -52,7 +52,7 @@ EXCHANGES:
     else:
         prompt = UNISON_SYSTEM + f"""
 
-Below is a passage from the Smithian Fold Theory corpus. Write exactly 6 question-and-answer pairs a curious person might ask you about it, answered in your voice. Ground every answer ONLY in the passage. Keep answers to 1-2 plain sentences. No markdown.
+Below is a passage from the Smithian Fold Theory corpus. Write exactly 6 question-and-answer pairs a curious person might ask you about it, answered in your voice. Ground every answer ONLY in the passage. Answer at whatever length the passage supports, in plain sentences. No markdown.
 Format STRICTLY as:
 Q: ...
 A: ...
@@ -76,7 +76,7 @@ def clean(txt):
     out = []
     for q, a in pairs:
         q = " ".join(q.split())[:200]
-        a = " ".join(a.split())[:350]
+        a = " ".join(a.split())[:1500]   # IO bound only
         # strict validation: single clean pair, sentence-like, no leaked markup
         if not (10 < len(q) and 10 < len(a)):
             continue

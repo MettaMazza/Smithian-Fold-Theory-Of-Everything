@@ -69,6 +69,14 @@ def run(uc, rng=None):
                     await msg.reply("I could not hear that clearly. Say it again or type it, and I will hold it.", mention_author=False)
                     return
                 break
+        # VIDEO: frames + sound, composed from organs we already have
+        for att in msg.attachments[:1]:
+            if (att.content_type or "").startswith("video/"):
+                desc = await asyncio.to_thread(uc.observe_video, await att.read(), line,
+                                               os.path.splitext(att.filename)[1] or ".mp4")
+                await msg.reply((desc or "I could not watch that clearly. Tell me what it shows and I will hold it.")[:1900],
+                                mention_author=False)
+                return
         # VISION: images flow to the observer, described in Unison's voice,
         # held as memory (multimodality is foundational, not bolted on)
         imgs = []
@@ -89,9 +97,18 @@ def run(uc, rng=None):
             t = uc.toggle(line)
             await msg.reply(t or "commands: /auto /teach /selfplay", mention_author=False)
             return
+        heard_voice = any((att.content_type or "").startswith("audio/") for att in msg.attachments)
         ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord")
-        # answer clean in the channel
+        # answer clean in the channel -- CHUNKED, never truncated
         await msg.reply(ans[:1900], mention_author=False)
+        for i in range(1900, len(ans), 1900):
+            await msg.channel.send(ans[i:i + 1900])
+        # spoken in, spoken back: THE VOICE replies in kind (Kokoro)
+        if heard_voice:
+            wav = await asyncio.to_thread(uc.speak, ans)
+            if wav:
+                await msg.channel.send(file=discord.File(wav, filename="unison.wav"))
+                os.unlink(wav)
         # thinking thread on the user's message: CoT + feedback closure
         try:
             th = await msg.create_thread(name="⌁ thinking", auto_archive_duration=60)
