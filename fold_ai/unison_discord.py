@@ -57,6 +57,18 @@ def run(uc, rng=None):
         if msg.channel.id != CHANNEL:     # locked: this channel only
             return
         line = msg.content.strip()
+        # THE EAR: voice notes and audio attachments are transcribed locally
+        # and land in the same channel as every telling
+        for att in msg.attachments[:2]:
+            if (att.content_type or "").startswith("audio/"):
+                heard = await asyncio.to_thread(uc.hear_audio, await att.read(),
+                                                os.path.splitext(att.filename)[1] or ".ogg")
+                if heard:
+                    line = (line + " " + heard).strip()
+                else:
+                    await msg.reply("I could not hear that clearly. Say it again or type it, and I will hold it.", mention_author=False)
+                    return
+                break
         # VISION: images flow to the observer, described in Unison's voice,
         # held as memory (multimodality is foundational, not bolted on)
         imgs = []
