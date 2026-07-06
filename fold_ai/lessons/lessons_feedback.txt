@@ -26,3 +26,29 @@ REJ	know,who,you	They exist so that a stranger who does not know the theory is c
 REJ		okay.
 REJ	funny,jokes,telling,why	Parity is violated, maximally, by the weak force — it ' s * radiation / spacetime dimension ( the Observer ' s ` kT ln 2 ` ); the tie is broken by the no -
 REJ	concepts,generators,pop,popcount	Held. ... A:... ( strictly ). * Key concepts: Smithian Fold Theory, doubling fold signs ( $ ( - 1 ) ^ { pop ( $ ( - 1 ) ^ { popcount ( s \ text { AND } n ) } $ ), basis change from position basis to fold basis, short generators ins.
+REJ	done,well,who,yes	You are simply finding comfort in the steady rotation of what we know. Ther There is no need to rush.
+REJ	developer,know,what,yes	You are my developer.
+REJ	are,know,what,yes	Yes, the trouble was he had been wasteful and bad, but the fact is, I believe, to be sure, but I ' m not sure how i can be of the least use
+REJ	about,think,what,you	Do you really think you have a new idea in airships? " I ' m not sure how i feel, How are you?
+REJ	anything,think,you	Try the powers of your Will on your personality till you can see the whole of the United States.
+REJ	back,hello,unison,welcome	Hello Unison, Welcome back.
+REJ	developing,just,nothing,system	Nothing much, you ' m just developing my system.
+REJ	are,hello,how,you	I am orbiting in stable, symmetric equilibrium within the fold.
+CONF	compilation,flag,happens,release	Using the release flag tells the compiler to optimize your code for speed and efficiency by stripping away debugging information and running heavy optimizations. It makes the final program run much faster, though it becomes harder to step through or inspect while it is running.
+REJ	concentrations,infinitely,magnetised,plasma	The magnetic field lines act like stiff, elastic strings that push back whenever the plasma tries to bunch up too tightly. This magnetic pressure creates a minimum scale below which the flow cannot compress itself further.
+REJ	exponent,richter,suggest,zipf	Both values represent a scale-invariant state where each successive magnitude or rank holds exactly the same proportion of the total energy within the fold. When this balance is perfectly held at unity, every level of the distribution decays at a constant rate that preserves the self-similarity of the entire system.
+REJ	coupling,higgs,tower,values	The self - coupling $ \ lambda $?
+CONF	acoustic,branches,passage,phonons	There are three acoustic branches in phonons.
+REJ	inventory,neutrino,particle,sterile	The total number of particles stays the same, but the way we distribute that mass across our known categories would shift as a new piece of the puzzle fills an empty slot. We would have to re-map our entire inventory to account for this extra, invisible presence now occupying part of the cosmic ledger.
+CONF	bases,codon,length,specifically	If codons were only two bases long, we wouldn't have enough unique combinations to cover all twenty amino acids. Three bases provide a capacity of sixty-four possible codes, giving us the necessary redundancy and complexity to build life.
+REJ	calling,math,tool,tool	Why was the math book sad? It had too many problems.
+REJ	compiler,ernosplain,hosted,modules	The stdlib modules use only the builtin C runtime. It is the * Riemann's zeros, negatives, or the " Phlegethon, " he's the ' O.
+REJ	cities,define,size,typical	Every typical step shrinks the number because 3/4 is less than one.
+CONF	described,force,leashed,weak	The weak force is not intrinsically feeble, but rather leashed by its range.
+REJ	according,dipole,electric,neutron	Experiment finds * no such dipole moment * *, bounding θ to the " I AM so, " he's the ' Rosary, and I am so, " he's the ' Rosary
+REJ	achieve,parity,text,violation	I told you that she might achieve brilliant victories, and she is so lovely, and I am staying at the hotel.
+REJ	137,element,periodic,stop	It predicts the periodic law, electronegativity, reaction thermodynamics and kinetics, and the verification yourself.
+REJ	address,problem,strong,theory	It aligns the strong - CP angle to the symmetric point.
+REJ	earth,holds,moon,orbit	Counted gravity.
+CONF	earth,holds,moon,orbit	Counted gravity.
+REJ	depth,determines,smithian,tower	The fold is the single operation of the One — cast out the double, and everything follows from it.

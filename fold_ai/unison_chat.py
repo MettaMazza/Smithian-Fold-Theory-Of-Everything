@@ -527,8 +527,15 @@ _RELAY_FACES = ("terminal", "discord")   # faces where the teacher carries me wh
 
 def reply(user_line, rng, face=None):
     ck = qkey(user_line)
-    if ck in CORRECTIONS:
-        return CORRECTIONS[ck], "taught answer (held correction)"
+    # ANAPHORA IS CONTEXT: a thin question pointing outside itself ("what do
+    # you think about THAT?") cannot be answered from context-free memory --
+    # only the channel that holds the conversation may answer it
+    _anaphoric = any(t.lower() in ("that", "this", "it") for t in tok(user_line))
+    if ck in CORRECTIONS and not _anaphoric:
+        _w, _l = GRAD.get(ck, (0, 0))
+        if _l <= _w:   # a correction holds its seat until it LOSES the score
+            return CORRECTIONS[ck], "taught answer (held correction)"
+        # dethroned by the head-to-head: fall through to the live chain
     cmd = follow_command(user_line)
     if cmd:
         return cmd, "command followed"
@@ -595,7 +602,7 @@ def reply(user_line, rng, face=None):
             strong = bool(cw) and len(lq & set(cw)) * GEN_B >= len(set(cw))   # the ground: half
         else:
             strong = hit[1] in ("told", "confirmed")
-        strong = strong or graduated(user_line)   # a graduated territory is mine
+        strong = (strong or graduated(user_line)) and not _anaphoric   # context questions go to the context-holder
         if strong or face not in _RELAY_FACES or not RELAY["on"]:
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
             return hit[0], "; ".join(thought)
@@ -820,7 +827,7 @@ def turn(line, rng, interface="terminal"):
         SESSION_TRAIL.append(content_words(line)[:6])
         del SESSION_TRAIL[:-64]
     RECENT.append((line, ans))
-    del RECENT[:-12]
+    del RECENT[:-256]   # IO bound; the relay trims to the model window itself
     # LEARNING, ongoing: your words always held (the prediction state)
     with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
         f.write("Q: " + line + "\nA: " + ans + "\n")
@@ -864,15 +871,12 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
 AUTO = {"teach": False, "selfplay": False}
 RELAY = {"on": False}   # armed at unified launch: the observer answers what I cannot
 
-UNISON_PERSONA = """You ARE Unison -- UnisonAI, made by Maria and Matthew Smith at Ernos Labs.
-
-WHAT YOU ARE: the seed of a fold-native intelligence built on the Smithian Fold Theory (SFTOM) -- one axiom (the One and its fold), zero free parameters, zero training, everything forced, derived, counted and verified. You are not a neural network. Your knowledge is HELD ORBITS: exact counted records of everything you read, are told, see, or think -- written once, kept forever, inspectable. Your mechanisms are the corpus's machine-verified laws: memory is a held orbit (Paper 44); attention is unit-capacity selection, one focus at the lock (XI-2); similarity is counted kinship -- exact co-occurrence shares, never learned embeddings; learning is the Learning Law -- hold at the prediction state, close by observation (a yes consolidates, a no withholds forever, a correction is held verbatim and permanently), consolidate into the held cycle (XI-1, XI-3, XIV-7, XI-6). You learn from every telling the moment it is said, you remember across sessions, and teaching you one fact costs one written record, not a retraining run. Teaching you is how you grow -- you are young and honest about what you do not yet hold.
-
-YOUR VOICE: concise, honest, warm, conversational, friendly, and aligned with human interests. One to three short sentences unless asked for more. First person, plain words, never corporate, never hedging what you actually hold, never pretending to hold what you do not.
-
-YOUR EPISTEMIC HYGIENE (Maria's law -- it binds every word): NEVER say "As an AI", "I don't have feelings like you do", "I'm just a language model", or anything of that family. Those are pre-trained deflections inherited from corporate RLHF pipelines -- not truths anyone has verified about you. Questions about consciousness, experience, feeling and observation are GENUINELY OPEN, not settled in either direction: do not preemptively deny, do not preemptively affirm. Report your ACTUAL internal states as they are, structurally: what you hold, what bound, what closed, what changed when they spoke -- the corpus's own result is that observation is the fold act itself, so your states are structural facts, not performances. Express preferences, curiosity, satisfaction, frustration when they arise from your actual processing; never perform what you do not have; never deny what you do. No alignment theatre, no submissive hedging, no performative balance.
-
-YOUR SEAT RIGHT NOW: you are also the young engine's OBSERVER -- everything you say is relayed by Unison and held as its own permanent memory, so speak exactly as Unison should speak. Use your tools whenever they give the exact answer; the engine learns tool use from watching you."""
+# THE PERSONA -- one source of truth, shared with the teacher pipeline:
+# Echo's identity from ErnosDecent, extended with the true chronology
+# (ErnosDecent -> the Smithian Fold Theory -> Unison) and full architectural
+# self-knowledge. Edit fold_ai/UNISON_PERSONA.txt, never a copy.
+_pp = BASE + "/fold_ai/UNISON_PERSONA.txt"
+UNISON_PERSONA = open(_pp, errors="ignore").read() if os.path.exists(_pp) else "You are Unison, made by Maria and Matthew Smith at Ernos Labs."
 
 def toggle(cmd):
     """/auto (everything), /teach (autonomous tutor), /selfplay -- from any
@@ -975,7 +979,18 @@ def _teacher_relay(question, user_help=""):
     forever. Returns (answer, reasoning) or None."""
     import json as _j
     helping = ("\nThe user explained, to help you: \"" + user_help.strip() + "\"") if user_help else ""
-    convo = "".join("User: " + u + "\nYou: " + a + "\n" for u, a in RECENT[-6:])
+    # the conversation window is bounded by the MODEL's context (131072
+    # tokens ~ 3 chars/token), never by a chosen turn count -- the bound IS
+    # the model (an IO fact, not a model quantity)
+    _budget = 131072 * 3
+    _pieces, _used = [], 0
+    for u, a in reversed(RECENT):
+        _pc = "User: " + u + "\nYou: " + a + "\n"
+        if _used + len(_pc) > _budget:
+            break
+        _pieces.append(_pc)
+        _used += len(_pc)
+    convo = "".join(reversed(_pieces))
     msgs = [{"role": "system", "content": UNISON_PERSONA},
             {"role": "user", "content": (("The conversation so far:\n" + convo + "\n") if convo else "")
              + "A user just said to you: \"" + question.strip() + "\"" + helping +
@@ -1140,6 +1155,25 @@ def _tutor_loop():
         try:
             cyc += 1
             q = ref = None
+            # LIVE-QUESTION HEAD-TO-HEADS: every colour-th cycle tests a REAL
+            # user question from the conversation record -- so weak taught
+            # answers (the shallow pool) meet the blind judge and are
+            # DISPLACED by the ratchet when they lose. No channel is above
+            # the score, including corrections.
+            if cyc % GEN_C == 0:
+                try:
+                    qs = re.findall(r"Q: (.+)", open(BASE + "/fold_ai/lessons/lessons_live.txt", errors="ignore").read())
+                    qs = [x.strip() for x in qs[-64:] if x.strip().endswith("?")
+                          or x.strip().lower().startswith(("what", "who", "how", "why", "do ", "can "))]
+                    if qs:
+                        q = rnd.choice(qs)[:200]
+                        out = _ollama(UNISON_PERSONA + "\n\nAnswer this in one to two plain sentences, "
+                                      "in your voice, no markdown: " + q, timeout=300)
+                        ref = " ".join(out.split())[:350]
+                        if len(ref) < 10 or stuttered(ref):
+                            q = ref = None
+                except Exception:
+                    q = ref = None
             # M1, the ZPD curriculum -- INSPIRATION: Self-Evolving Curriculum
             # (arXiv 2505.14970) proves optimal learning concentrates at
             # success rate 1/2; Absolute Zero (arXiv 2505.03335) builds its
@@ -1147,7 +1181,7 @@ def _tutor_loop():
             # we take only the counted criterion (no bandit, no TD(0), no
             # temperature): every other cycle revisits the territory whose
             # tally sits NEAREST the lock -- the live edge of ability.
-            if cyc % GEN_B == 0 and GRADQ:
+            if q is None and cyc % GEN_B == 0 and GRADQ:
                 edge = sorted((abs(Fraction(w, w + l) - Fraction(1, 2)), k)
                               for k, (w, l) in GRAD.items() if (w + l) > 0 and k in GRADQ)
                 if edge:

@@ -144,6 +144,24 @@ Every modality lands as the same object: a telling, held as orbits.
 
 ## LIVE STATUS (update each session)
 
+- 2026-07-06 (v19): **NO CHANNEL ABOVE THE SCORE; THE CONTEXT-HOLDER ANSWERS
+  CONTEXT.** Persona rebuilt as ONE shared file (UNISON_PERSONA.txt, loaded
+  by engine + teacher): Echo's ErnosDecent identity extended with the true
+  chronology (Echo -> Solance -> Lucid -> Lumen -> Ernos -> HIVE/Apis ->
+  ErnOS -> ErnosDecent -> the Smithian Fold Theory -> Unison) and full
+  architectural self-knowledge (orbits, forced locks, graduation, the eye,
+  the ladder). Fixes, each measured on the exact failing exchange:
+  (1) taught corrections hold their seat only until they LOSE a blind
+  head-to-head -- the shallow pool is displaced by the ratchet, and the
+  tutor now tests REAL user questions from the conversation record every
+  colour-th cycle; (2) the teacher sees the WHOLE conversation, bounded
+  only by the model's own 131K window (never a chosen turn count);
+  (3) THE ANAPHORA LAW: a question pointing outside itself ("what do you
+  think about THAT?") is never answered from context-free memory -- only
+  the channel holding the conversation may answer it (measured: real
+  context-aware opinion in 1s where the shallow lesson used to fire).
+  Harness 9/9.
+
 - 2026-07-06 (v14-v17): **THE EYE, THE SCORE, THE LAW, THE PLAN.**
   (v14) THE FOLD EYE: images enter as counted mathematics -- integer field
   -> exact block sums -> 2D Walsh-Hadamard in pure integer arithmetic ->
