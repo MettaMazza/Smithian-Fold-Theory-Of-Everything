@@ -729,6 +729,12 @@ def record_grad(k, won, question=None):
         _PARITY[0] = True
         log("LADDER", f"PARITY SIGNAL: {tw}-{tl} over {tw + tl} judged head-to-heads -- "
             "the observer seat is ready for a second Unison")
+        if ANNOUNCE[0]:
+            try:
+                ANNOUNCE[0](f"🪜 PARITY SIGNAL: {tw}-{tl} over {tw + tl} judged head-to-heads -- "
+                            "the observer seat is ready for a second Unison.")
+            except Exception:
+                pass
 
 def graduated(user_line):
     w, l = GRAD.get(qkey(user_line), (0, 0))
@@ -925,6 +931,7 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
 # ---------- AUTONOMY: the tutor closes the loop itself; the engine plays itself
 AUTO = {"teach": False, "selfplay": False}
 RELAY = {"on": False}   # armed at unified launch: the observer answers what I cannot
+ANNOUNCE = [None]       # set by the Discord face: engine threads post to the channel
 
 # THE PERSONA -- one source of truth, shared with the teacher pipeline:
 # Echo's identity from ErnosDecent, extended with the true chronology
@@ -1814,6 +1821,11 @@ def run_benchmark(rng=None):
                f"{n_told} tellings, {n_sight} sights, {n_sound} sounds, {n_voice} voiced, {orbits} orbits. "
                f"Appended to benchmarks.tsv -- the difference between lines is the growth rate.")
     log("BENCH", summary)
+    if ANNOUNCE[0]:
+        try:
+            ANNOUNCE[0]("📊 " + summary)      # the curve arrives in the channel
+        except Exception as e:
+            log("BENCH", "announce error: " + str(e))
     return summary
 
 def _bench_loop():

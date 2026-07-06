@@ -29,6 +29,13 @@ def run(uc, rng=None):
     async def on_ready():
         uc.log("DISCORD", "live as " + str(client.user))
         print(f"UnisonAI is live on Discord as {client.user}", flush=True)
+        # engine threads (hourly benchmark, parity signal) post to the channel
+        ch = client.get_channel(CHANNEL)
+        if ch is not None:
+            def _announce(text, _ch=ch):
+                asyncio.run_coroutine_threadsafe(_ch.send(text[:1900]), client.loop)
+            uc.ANNOUNCE[0] = _announce
+            uc.log("DISCORD", "benchmark + parity announcements wired to the channel")
 
     @client.event
     async def on_message(msg):
