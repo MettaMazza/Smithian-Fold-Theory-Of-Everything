@@ -58,6 +58,21 @@ THEORY = [f for f in sorted(glob.glob(BASE + "/**/*.md", recursive=True)) +
 DIET_FILES = []
 CORPUS = THEORY
 
+# machine stutter ("nothi nothing", "wh when", "always always"): never held
+_STUTTER = re.compile(r"(?i)\b(\w+)\s+\1\b|\b(\w{4,})\s+\2\w+")
+_OKSHORT = frozenset(("on","to","in","an","at","as","be","we","he","it","or","so",
+                      "no","do","go","up","my","me","us","am","is","a","i","the",
+                      "for","are","was","can","not","but","all","one","out","who",
+                      "how","its","his","her","had","has","him","she","and","of","by"))
+def stuttered(text):
+    if _STUTTER.search(text):
+        return True
+    for m in re.finditer(r"(?i)\b(\w{2,3})\s+(\w{4,})", text):
+        a, b = m.group(1).lower(), m.group(2).lower()
+        if b.startswith(a) and a not in _OKSHORT:
+            return True          # a broken fragment of the word that follows
+    return False
+
 def tok(s):
     return re.findall(r"\w+|[^\w\s]", s)
 
@@ -155,7 +170,8 @@ def hold_sentence(s, source):
 
 # lessons: hold Q/A pairs as bound units; corpus: hold sentences
 for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
-    hold_sentence(a.strip(), "lesson:" + q.strip()[:80])
+    if not stuttered(a):
+        hold_sentence(a.strip(), "lesson:" + q.strip()[:80])
 def well_formed(s):
     s = s.strip()
     w = s.split()
@@ -284,6 +300,9 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
             break
         if nxt == "Q":
             break
+        if nxt == ":" and out and out[-1].lower() in ("q", "a"):
+            out.pop()                            # never leak a bare "a:" stub
+            break
         out.append(nxt)
         ctx.append(nxt)
         if nxt in (".", "!", "?") and len(out) > 3:
@@ -360,6 +379,10 @@ def answer_fact(text):
         s = _norm_subject(m.group(1))
         v = FACTS.get((s, "name"))
         return ("Your name is " + v + "." if s == "you" else "My name is " + v + ".") if v else None
+    m = re.search(r"(?i)(?:who|what)\s+(?:are\s+you|you\s+are)", t)
+    if m and ("self", "identity") in FACTS:
+        v = FACTS[("self", "identity")]
+        return "I am " + (v if v[-1:] in ".!?" else v + ".")
     m = re.search(r"(?i)what\s+is\s+(my|your)\s+favou?rite\s+(\w+)", t)
     if m:
         s = _norm_subject(m.group(1)); rel = "favourite " + m.group(2).lower()
@@ -497,7 +520,15 @@ def reply(user_line, rng):
 FLIP = {"my": "your", "your": "my", "yours": "mine", "mine": "yours",
         "i": "you", "you": "i", "me": "you", "am": "are",
         "myself": "yourself", "yourself": "myself"}
+_CONTRACTIONS = (("i'm", "i am"), ("you're", "you are"), ("i've", "i have"),
+                 ("you've", "you have"), ("i'll", "i will"), ("you'll", "you will"),
+                 ("i'd", "i would"), ("you'd", "you would"))
 def flip_perspective(s):
+    # expand person contractions first so the flip stays grammatical
+    # (i'm -> i am -> you are; never "you'm")
+    for pat, rep in _CONTRACTIONS:
+        s = re.sub(r"(?i)\b" + pat.replace("'", r"\s*'\s*") + r"\b",
+                   lambda m, rep=rep: rep.capitalize() if m.group(0)[:1].isupper() else rep, s)
     out = []
     for t in tok_display(s):
         f = FLIP.get(t.lower())
@@ -532,8 +563,9 @@ def record_correction(question, answer):
     CORRECTIONS[k] = answer
     with open(CORR_LOG, "a") as f:
         f.write(k + "\t" + answer + "\n")
-    # also learn it as a relation fact if it is one (self/your name etc.)
-    learn_fact(answer)
+    # the correction is spoken in MY voice -- flip before extracting the
+    # relation so first-person facts land on self, never on the teller
+    learn_fact(flip_perspective(answer))
     write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * 3)
     hold_sentence(answer, "told")
     log("CORRECTION", question, answer)
@@ -558,10 +590,14 @@ def turn(line, rng, interface="terminal"):
             return "okay.", "contentless; acknowledged, not held"
         got = learn_fact(line)
         fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
+        # reply candidate BEFORE the telling is written -- otherwise the
+        # freshest orbit is the echo of her own words (the parrot disease)
+        candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
         write_orbits(tok(fact + "\n") * 3)
         hold_sentence(fact, "told")
         write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
-        candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
+        if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
+            candidate = None                    # never parrot the telling back
         if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
             ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
         else:
@@ -670,15 +706,20 @@ def _tutor_loop():
                           "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
             m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", out, re.S)
             if not m:
+                log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
                 continue
             q = " ".join(m.group(1).split())[:200]
             ref = " ".join(m.group(2).split())[:350]
             if len(q) < 10 or len(ref) < 10:
+                log("TUTOR", "cycle rejected: too short", q[:80])
                 continue
-            # diet hygiene: a quiz on leaked markup teaches nothing
-            if any(b in q + ref for b in ("$", "\\", "{", "}", "*", "`", "|", "Q:", "A:", "PASSAGE", "..")):
+            # diet hygiene: a quiz on leaked markup or stutter teaches nothing
+            # -- and every rejection is LOGGED (a silent cap is a dead organ)
+            if any(b in q + ref for b in ("$", "\\", "{", "}", "*", "`", "|", "Q:", "A:", "PASSAGE", "..")) or stuttered(ref):
+                log("TUTOR", "cycle rejected: markup/stutter", (q + " || " + ref)[:150])
                 continue
             if not q.rstrip().endswith("?"):
+                log("TUTOR", "cycle rejected: not a question", q[:80])
                 continue
             ans, _ = turn(q, rng, "tutor")
             verdict = _ollama("QUESTION: " + q + "\nREFERENCE ANSWER: " + ref +
@@ -705,6 +746,7 @@ def _selfplay_loop():
     own unconfirmed reply."""
     rng = np.random.default_rng()
     rnd = random.Random()
+    played = set()   # rotate through ALL lessons before repeating any
     while True:
         if not AUTO["selfplay"]:
             time.sleep(5)
@@ -714,9 +756,14 @@ def _selfplay_loop():
             if not lessons:
                 time.sleep(30)
                 continue
-            for q, ref in rnd.sample(lessons, min(5, len(lessons))):
-                if len(q.strip()) < 10:
-                    continue
+            pool = [(q, ref) for q, ref in lessons if qkey(q) not in played]
+            if not pool:
+                played.clear()
+                pool = lessons
+            for q, ref in rnd.sample(pool, min(5, len(pool))):
+                played.add(qkey(q))
+                if len(q.strip()) < 10 or stuttered(ref):
+                    continue                     # never hold machine stutter
                 ans, _ = reply(q, rng)
                 overlap = set(content_words(ans)) & set(content_words(ref))
                 need = max(1, len(content_words(ref)) // 2)
@@ -822,6 +869,8 @@ def _watch_lessons():
                 pairs = re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", new, re.S)
                 for q, a in pairs:
                     q, a = " ".join(q.split()), " ".join(a.split())
+                    if stuttered(a):
+                        continue                 # machine stutter never held
                     write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * 3)
                     hold_sentence(a, "lesson:" + q[:80])
                 if pairs:
