@@ -509,14 +509,6 @@ def reply(user_line, rng):
     if hit and share >= 0.34:
         thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
         return hit[0], "; ".join(thought)
-    # CONFUSION IS A SIGNAL, NOT A LICENSE TO BABBLE: if nothing bound at
-    # the lock, ask the teacher BEFORE composing fragments -- the observer
-    # answers as me, I relay it, and it is mine from then on.
-    if RELAY["on"]:
-        relayed = _teacher_relay(user_line)
-        if relayed:
-            thought.append("nothing bound at the lock; asked my teacher, held the answer -- owned for the future")
-            return relayed, "; ".join(thought)
     composed = compose(user_line, rng)
     if composed:
         composed = dedup(composed)
@@ -586,6 +578,15 @@ def rejected(user_line, ans):
 # There is ONE system. The terminal, Discord, and any future face all call
 # the same turn() and apply_feedback(); an interface carries messages across
 # the boundary and nothing else. No face has its own logic.
+CONFUSED = {}   # interface -> the question I could not answer, awaiting help
+_CHILD_FACES = ("terminal", "discord")   # faces where I ask like a child
+
+def _is_confused(thought):
+    # confusion = no STRONG channel answered: composed kin fragments are a
+    # guess wearing words, and a guess to a user is worse than a question
+    return ("asking rather than guessing" in thought
+            or "composed under the topic-lock" in thought)
+
 def turn(line, rng, interface="terminal"):
     """One conversational turn from any interface: returns (answer, thought).
     Learning happens here, identically, whoever is speaking through."""
@@ -604,6 +605,32 @@ def turn(line, rng, interface="terminal"):
         write_orbits(tok(fact + "\n") * 3)
         hold_sentence(fact, "told")
         write_orbits(tok("q: " + line + "\na: " + fact + "\n") * 2)
+        # THE CHILD'S ARC, stage 2: I asked for help, the user explained.
+        # Retry with their words held; if still unsure, my observer steps in
+        # -- and either way, what closes the gap is mine from then on.
+        orig = CONFUSED.pop(interface, None)
+        if orig:
+            # the observer leads stage 2, folding the user's words into its
+            # answer to the ORIGINAL question -- their help plus its teaching
+            relayed = _teacher_relay(orig, user_help=line) if RELAY["on"] else None
+            if relayed:
+                a, reasoning = relayed
+                ans = "Held. And with your help: " + a
+                thought = ("the user helped; my observer closed the open question with it"
+                           + ("; taught reasoning: " + reasoning[:120] if reasoning else "")
+                           + "; owned for the future")
+            else:
+                ans2, th2 = reply(orig, rng)
+                if not _is_confused(th2):
+                    ans = "Held. And now I can answer: " + dedup(ans2)
+                    thought = "the user's help bound the open question; answered and owned"
+                else:
+                    ans = "Held. I still do not hold that answer; teach me the words and I will keep them."
+                    thought = "user helped; nothing closed it yet; asking rather than guessing"
+            log("TURN", interface, line, ans, thought)
+            with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
+                f.write("Q: " + line + "\nA: " + ans + "\n")
+            return ans, thought
         if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
             candidate = None                    # never parrot the telling back
         if candidate and not rejected(line, candidate) and (set(content_words(line)) & set(t.lower() for t in tok(candidate))):
@@ -612,8 +639,18 @@ def turn(line, rng, interface="terminal"):
             ans = "Held. " + fact
             thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
     else:
+        CONFUSED.pop(interface, None)           # a new question supersedes an open one
         ans, thought = reply(line, rng)
         ans = dedup(ans)
+        # THE CHILD'S ARC, stage 1: when nothing binds strongly, ask the USER
+        # first -- like a child -- before any model is consulted.
+        if _is_confused(thought) and interface in _CHILD_FACES:
+            cw = content_words(line)
+            CONFUSED[interface] = line
+            ans = ("I do not hold that yet. Can you tell me more about " + cw[0] + "? "
+                   "I will hold what you say.") if cw else \
+                  "I do not hold that yet. Can you say it another way? I will hold what you say."
+            thought += "; confused -- asking the user like a child; observer stands ready if I stay unsure"
         write_orbits(tok("Q: " + line + "\n"))
     # the thought itself is held (self-observation, XIV-7)
     hold_sentence("On '" + line[:60] + "' I thought: " + thought, "thought")
@@ -700,15 +737,19 @@ def _ollama(prompt, timeout=600):
         log("TUTOR", "ollama error: " + str(e))
         return ""
 
-def _teacher_relay(question):
-    """THE OBSERVER RELAY: what I cannot answer, my teacher answers AS me;
-    I relay it and hold it -- asked once, owned forever (the Learning Law,
-    closed by a second observer instead of left open)."""
-    out = _ollama(UNISON_PERSONA + "\n\nA user just asked you: \"" + question.strip() +
-                  "\"\nAnswer them directly in one to two plain sentences, in your voice. "
-                  "No markdown, no preamble -- only the answer.", timeout=180)
-    a = " ".join(out.split()).strip()
-    a = re.sub(r"(?i)^(a:|answer:)\s*", "", a).strip()
+def _teacher_relay(question, user_help=""):
+    """THE OBSERVER RELAY: what I cannot answer, my teacher answers AS me --
+    with stepwise reasoning I hold as my own thought -- I relay it and keep
+    it: asked once, owned forever (the Learning Law, closed by a second
+    observer instead of left open). Returns (answer, reasoning) or None."""
+    helping = ("\nThe user explained, to help you: \"" + user_help.strip() + "\"") if user_help else ""
+    out = _ollama(UNISON_PERSONA + "\n\nA user just asked you: \"" + question.strip() + "\"" + helping +
+                  "\nFirst write ONE short line of stepwise reasoning beginning exactly 'Reasoning:'. "
+                  "Then the reply beginning exactly 'Answer:' -- one to two plain sentences, in your "
+                  "voice, no markdown.", timeout=180)
+    out = " ".join(out.split()).strip()
+    m = re.search(r"(?i)reasoning:\s*(.+?)\s*answer:\s*(.+)", out)
+    reasoning, a = (m.group(1).strip(), m.group(2).strip()) if m else ("", re.sub(r"(?i)^(a:|answer:)\s*", "", out))
     a = " ".join(re.split(r"(?<=[.!?])\s+", a)[:2])[:350]      # at most two sentences
     if len(a) < 8 or stuttered(a) or any(b in a for b in ("$", "\\", "{", "}", "*", "`", "|")):
         log("RELAY", "observer answer rejected", question[:80])
@@ -716,10 +757,35 @@ def _teacher_relay(question):
     a = a if a[-1:] in ".!?" else a + "."
     write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * 3)
     hold_sentence(a, "lesson:" + question.strip()[:80])
+    if reasoning:                                   # taught reasoning joins MY thought
+        hold_sentence("On '" + question.strip()[:60] + "' the reasoning is: " + reasoning[:250], "thought")
     with open(BASE + "/fold_ai/lessons/lessons_relay.txt", "a") as f:
         f.write("Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
     log("RELAY", question, a)
-    return a
+    return a, reasoning
+
+def observe_image(images_b64, caption=""):
+    """VISION INTAKE: the observer describes what is shown, in my voice; the
+    description is held as a telling -- the image becomes memory."""
+    try:
+        import json as _j, urllib.request as _u
+        req = _u.Request("http://localhost:11434/api/generate",
+                         data=_j.dumps({"model": "gemma4:26b",
+                                        "prompt": UNISON_PERSONA + "\n\nDescribe what you see in this image in two plain sentences, in your voice."
+                                        + ((" The user said: \"" + caption.strip() + "\"") if caption.strip() else ""),
+                                        "images": images_b64, "stream": False, "think": False}).encode(),
+                         headers={"Content-Type": "application/json"})
+        with _u.urlopen(req, timeout=300) as r:
+            d = " ".join(_j.loads(r.read().decode()).get("response", "").split()).strip()
+        if not d or stuttered(d):
+            return None
+        hold_sentence("I was shown an image: " + d, "told")
+        write_orbits(tok("I was shown an image: " + d + "\n") * 2)
+        log("VISION", (caption or "(no caption)")[:60], d[:150])
+        return d
+    except Exception as e:
+        log("VISION", "error: " + str(e))
+        return None
 
 def _tutor_loop():
     """THE AUTONOMOUS TUTOR: the full Learning Law with no human in the

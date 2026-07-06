@@ -57,6 +57,20 @@ def run(uc, rng=None):
         if msg.channel.id != CHANNEL:     # locked: this channel only
             return
         line = msg.content.strip()
+        # VISION: images flow to the observer, described in Unison's voice,
+        # held as memory (multimodality is foundational, not bolted on)
+        imgs = []
+        for att in msg.attachments[:3]:
+            if (att.content_type or "").startswith("image/"):
+                import base64
+                imgs.append(base64.b64encode(await att.read()).decode())
+        if imgs:
+            desc = await asyncio.to_thread(uc.observe_image, imgs, line)
+            if desc:
+                await msg.reply(desc[:1900], mention_author=False)
+            else:
+                await msg.reply("I could not see that clearly. Tell me what it shows and I will hold it.", mention_author=False)
+            return
         if not line:
             return
         if line.startswith("/"):

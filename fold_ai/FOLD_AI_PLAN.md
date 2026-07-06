@@ -104,6 +104,32 @@ directly against full-strength Stockfish; forensic probe per release
 (every game logged in full from the first 0–12), longitudinal dashboard,
 gates internal, ladder retired to on-demand calibration.
 
+## THE OBSERVER LADDER (registered 2026-07-06, Maria's design)
+
+Teaching is a LADDER, not a crutch: (1) today, gemma4:26b is Unison's
+teacher/observer -- it writes lessons from the corpus AND from the real
+conversations (in Unison's own voice), quizzes and closes y/n autonomously,
+and answers what Unison cannot (the confusion relay), every answer held
+forever. (2) When Unison reaches its teacher's capability, a SEPARATE
+Unison-observer instance takes the observer seat (the corpus's own 2-to-1
+self-observation closure, XIV-7, realized at system scale), and (3) the
+freed teacher seat is taken by a BIGGER model, so the ladder keeps a rung
+above the climber, always. Reasoning is taught the same way: the observer's
+stepwise reasoning arrives with every relayed answer and is held in the
+thought channel -- internal CoT grown from teaching, not bolted on.
+
+THE CHILD'S ARC (built + measured): confused -> ask the USER first, like a
+child -> hold their words -> observer closes the original question folding
+their help in -> owned permanently (measured: ask, help, 3s close, 0.0s on
+repeat). Confusion never babbles at a user again.
+
+MULTIMODALITY (foundational): vision is LIVE -- images to the Discord face
+flow to the observer (gemma4 is natively multimodal), described in Unison's
+voice, held as memory (measured: generated red square described correctly
+in 1s). Audio: ollama has no native audio input yet (open feature request);
+the registered path is a local transcriber feeding the same telling channel.
+Every modality lands as the same object: a telling, held as orbits.
+
 ## LIVE STATUS (update each session)
 
 - 2026-07-06 (latest): **THE UNIFIED SYSTEM IS UP -- one engine, many faces.**
