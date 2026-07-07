@@ -1,0 +1,128 @@
+# ============================================================================
+#  THE FOLD GO ENGINE -- rules substrate. Counted connectivity, zero knobs.
+# ============================================================================
+#
+#  -- WHY ----------------------------------------------------------------------
+#  Go is the counted game: it ENDS in a literal count (area scoring), its
+#  dynamics are counted connectivity (groups, liberties), and a point holds
+#  exactly THREE states -- empty, black, white -- the colour count itself.
+#  The incumbents climbed this game with thousands of TPUs and millions of
+#  self-play games; this campaign climbs it the way the chess campaign
+#  climbed: every quantity a count, every rule exact, zero parameters.
+#
+#  -- DERIVATION ---------------------------------------------------------------
+#  Rules are Tromp-Taylor: the logical, fully counted formulation of Go.
+#  A POSITION is legal iff every maximal same-colour group of stones has at
+#  least one liberty (an orthogonally adjacent empty point). Groups are
+#  counted connected components (breadth-first flood over the flat board
+#  list, a visited ledger, an exact stack with a moving head -- no
+#  recursion, no heuristics). This module is the substrate the census
+#  test certifies against the published oracle before ANY play is built
+#  on it -- the same discipline as the chess bot's perft certification.
+#
+#  -- CHECK --------------------------------------------------------------------
+#  tests/fold_go_census.ep enumerates every candidate colouring of small
+#  boards and counts the legal ones; the counts are checked digit for
+#  digit against the published Tromp oracle (tromp.github.io/go/legal):
+#  1x1 = 1, 2x2 = 57, 3x3 = 12675, 4x4 = 24318165 -- and the engine HALTS
+#  on any mismatch (forced_to_be). Rectangular boards are cross-checked
+#  against an independent Python implementation (tools/go_census_referee).
+# ============================================================================
+
+# point states: 0 empty, 1 black, 2 white -- three states, the colour count
+
+# Every maximal same-colour group on the board has at least one liberty?
+# Returns 1 if the POSITION is legal under Tromp-Taylor, else 0.
+define go_position_legal with board and w as Int and h as Int returning Int:
+    set n to w * h
+    set visited to create_list()
+    set i to 0
+    repeat while i < n:
+        set ok to append_list(visited and 0)
+        set i to i + 1
+    set legal to 1
+    set p to 0
+    repeat while p < n:
+        set colour to get_list(board and p)
+        if colour > 0:
+            if get_list(visited and p) == 0:
+                # flood this group: exact stack, moving head, counted
+                set stack to create_list()
+                set ok to append_list(stack and p)
+                set ok to set_list(visited and p and 1)
+                set liberty to 0
+                set head to 0
+                repeat while head < length_list(stack):
+                    set q to get_list(stack and head)
+                    set head to head + 1
+                    set row to q / w
+                    set col to q - row * w
+                    # four orthogonal neighbours, each examined once
+                    set d to 0
+                    repeat while d < 4:
+                        set r2 to row
+                        set c2 to col
+                        if d == 0:
+                            set r2 to row - 1
+                        if d == 1:
+                            set r2 to row + 1
+                        if d == 2:
+                            set c2 to col - 1
+                        if d == 3:
+                            set c2 to col + 1
+                        set inside to 1
+                        if r2 < 0:
+                            set inside to 0
+                        if r2 > h - 1:
+                            set inside to 0
+                        if c2 < 0:
+                            set inside to 0
+                        if c2 > w - 1:
+                            set inside to 0
+                        if inside == 1:
+                            set q2 to r2 * w + c2
+                            set v2 to get_list(board and q2)
+                            if v2 == 0:
+                                set liberty to 1
+                            if v2 == colour:
+                                if get_list(visited and q2) == 0:
+                                    set ok to set_list(visited and q2 and 1)
+                                    set ok to append_list(stack and q2)
+                        set d to d + 1
+                if liberty == 0:
+                    set legal to 0
+                    set p to n
+        set p to p + 1
+    return legal
+
+# Count every legal position on a w x h board by exact enumeration:
+# a base-three odometer over the n points (three states per point, the
+# colour count), each candidate checked by the group-liberty law.
+define go_census with w as Int and h as Int returning Int:
+    set n to w * h
+    set board to create_list()
+    set i to 0
+    repeat while i < n:
+        set ok to append_list(board and 0)
+        set i to i + 1
+    set total to 0
+    set running to 1
+    repeat while running == 1:
+        if go_position_legal(board and w and h) == 1:
+            set total to total + 1
+        # base-three odometer: increment with carry
+        set pos to 0
+        set carrying to 1
+        repeat while carrying == 1:
+            if pos == n:
+                set carrying to 0
+                set running to 0
+            else:
+                set v to get_list(board and pos) + 1
+                if v == 3:
+                    set ok to set_list(board and pos and 0)
+                    set pos to pos + 1
+                else:
+                    set ok to set_list(board and pos and v)
+                    set carrying to 0
+    return total
