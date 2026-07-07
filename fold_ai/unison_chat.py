@@ -2023,14 +2023,32 @@ def run_benchmark(rng=None):
         if not _is_confused(th):
             native += 1
     orbits = sum(len(s) for s in stores)
+    # counted behaviour metrics from the live event log: tool acts and
+    # whose voice answered (own vs teacher) -- fluency's raw material
+    try:
+        _lg = open(LOGFILE, errors="ignore").read()
+        n_tools = _lg.count("\tTOOL\t")
+        v_own = _lg.count("VOICE: UNISON")
+        v_teach = _lg.count("VOICE: GEMMA")
+    except Exception:
+        n_tools = v_own = v_teach = 0
+    _hdr = "time\torbits\tlessons\ttaught\ttold\tsights\tsounds\tvoiced\th2h_wins\th2h_losses\tprobe\tnative\ttools\tvoice_own\tvoice_teacher\n"
     if not os.path.exists(BENCH_LOG):
         with open(BENCH_LOG, "w") as f:
-            f.write("time\torbits\tlessons\ttaught\ttold\tsights\tsounds\tvoiced\th2h_wins\th2h_losses\tprobe\tnative\n")
+            f.write(_hdr)
+    elif "\ttools\t" not in open(BENCH_LOG).readline():
+        _rows = open(BENCH_LOG).read().splitlines()[1:]
+        with open(BENCH_LOG, "w") as f:      # transparent schema evolution:
+            f.write(_hdr)                    # old rows padded, nothing dropped
+            for _r in _rows:
+                f.write(_r + "\t-\t-\t-\n")
     with open(BENCH_LOG, "a") as f:
         f.write("\t".join(str(x) for x in (time.strftime("%Y-%m-%d %H:%M"), orbits, n_lessons,
                                             n_corr, n_told, n_sight, n_sound,
-                                            n_voice, tw, tl, probe, native)) + "\n")
+                                            n_voice, tw, tl, probe, native,
+                                            n_tools, v_own, v_teach)) + "\n")
     summary = (f"BENCHMARK: native coverage {native}/{probe} on probed curriculum (own channels, no teacher); "
+               f"tools used {n_tools}; voice own/teacher {v_own}/{v_teach}; "
                f"head-to-head {tw}W-{tl}L vs the teacher; owned: {n_lessons} lessons, {n_corr} taught answers, "
                f"{n_told} tellings, {n_sight} sights, {n_sound} sounds, {n_voice} voiced, {orbits} orbits. "
                f"Appended to benchmarks.tsv -- the difference between lines is the growth rate.")
@@ -2204,12 +2222,24 @@ def _bench_loop():
         run_benchmark()                    # the boot line: the curve's origin
     except Exception as e:
         log("BENCH", "error: " + str(e))
+    _hr = 0
     while True:
         time.sleep(3600)
+        _hr += 1
         try:
             run_benchmark()
         except Exception as e:
             log("BENCH", "error: " + str(e))
+        # every 2^3 autonomous hours: the SESSION EXAM joins the auto record
+        # -- conversational fluency, coherence, memory-across-boundary, and
+        # TOOL USE, scored whole and posted (the examiner's arithmetic and
+        # live-lookup turns exercise the toolkit by construction)
+        if _hr % (GEN_B ** 3) == 0 and (AUTO["teach"] or AUTO["selfplay"]):
+            try:
+                threading.Thread(target=run_session_assessment, daemon=True).start()
+                log("BENCH", "auto session assessment launched")
+            except Exception as e:
+                log("BENCH", "assess error: " + str(e))
 
 # ---------- THE GROWING BODY: prose arrives, is eaten live, and is baked in
 DIET_DIR = BASE + "/fold_ai/diet"
