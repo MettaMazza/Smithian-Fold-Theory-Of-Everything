@@ -55,6 +55,17 @@ def live_examples():
 def ask_teacher(passage):
     if passage == "__CONVERSATION__":
         prompt = CONVO_PROMPT
+    elif passage == "__DIALOGUE__":
+        import random as _r
+        topic = _r.choice(WORLD)
+        prompt = UNISON_SYSTEM + EXCLUDE_LAW + f"""
+
+Write ONE continuous, natural conversation of exactly 16 alternating turns between a person and you, starting from small talk and evolving through: {topic}. The person must use pronoun follow-ups ("why is that?", "tell me more about it"), change their mind once, reference something said earlier WITHOUT restating it, and end warmly. YOU must answer connectedly -- each reply acknowledging what came before, holding the thread across all 16 turns like one living exchange, never answering as if the turn stood alone. No markdown.
+Format STRICTLY as alternating lines:
+Q: ...
+A: ...
+Q: ...
+A: ..."""
     elif passage == "__WORLD__":
         import random as _r
         domain = _r.choice(WORLD)
@@ -118,12 +129,14 @@ if __name__ == "__main__":
     # watcher ingests every new pair within a minute of it being written.
     n = 0
     while True:
-        if n % 4 == 0:
+        if n % 5 == 0:
             passage, label = "__CONVERSATION__", "conversation"
-        elif n % 4 == 2 and live_examples():
+        elif n % 5 == 2 and live_examples():
             passage, label = "__LIVE_REPLAY__", "live replay"
-        elif n % 4 == 3:
+        elif n % 5 == 3:
             passage, label = "__WORLD__", "world curriculum"
+        elif n % 5 == 4:
+            passage, label = "__DIALOGUE__", "long dialogue (flow)"
         else:
             f = rng.choice(CORPUS)
             text = open(f, errors="ignore").read()

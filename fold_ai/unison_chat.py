@@ -622,10 +622,13 @@ def reply(user_line, rng, face=None):
         # observer answers, joining my experience for next time.
         if hit[1].startswith("lesson:"):
             lq = set(content_words(hit[1][7:]))
-            strong = bool(cw) and len(lq & set(cw)) * GEN_B >= len(set(cw))   # the ground: half
+            _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}   # informative only
+            strong = bool(_icw) and len(lq & _icw) * GEN_B >= len(_icw)   # half, of what MEANS something
         else:
             strong = hit[1] in ("told", "confirmed")
-        strong = (strong or graduated(user_line)) and not _anaphoric   # context questions go to the context-holder
+        strong = strong and not _anaphoric   # context questions go to the context-holder;
+        # graduated territories answer through their BANKED winning answer
+        # (the corrections seat), never through an arbitrary bind
         if strong or face not in _RELAY_FACES or not RELAY["on"]:
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
             return hit[0], "; ".join(thought)
@@ -1854,7 +1857,10 @@ def _tutor_loop():
             if v and v.group(1) == "A":
                 record_grad(k, True, q)
                 apply_feedback(q, ans, "y", "tutor")
-                log("TUTOR", "engine WON head-to-head", q)
+                record_correction(q, ans)   # the WINNING answer takes the seat:
+                                            # a graduated territory serves what
+                                            # actually won, never a loose bind
+                log("TUTOR", "engine WON head-to-head; winning answer banked", q)
             else:
                 record_grad(k, False, q)
                 apply_feedback(q, ans, "n " + ref, "tutor")
@@ -2286,7 +2292,9 @@ def _watch_lessons():
                     write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * GEN_C)
                     hold_sentence(a, "lesson:" + q[:80])
                 if pairs:
-                    log("LESSONS", os.path.basename(f), "+" + str(len(pairs)) + " pairs ingested live")
+                    write_orbits(tok(new), max_ctx=GEN_C)   # the FLOW: cross-turn
+                    # transitions of the whole block, not just isolated pairs
+                    log("LESSONS", os.path.basename(f), "+" + str(len(pairs)) + " pairs ingested live (with flow)")
         except Exception as e:
             log("LESSONS", "watcher error: " + str(e))
 
