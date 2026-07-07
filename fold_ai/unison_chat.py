@@ -351,9 +351,10 @@ def dedup(s):
     # so quote marks around words stay untouched)
     return re.sub(r"(\w)\s*'\s*(s|t|re|ve|ll|d|m)\b", r"\1'\2", s)
 
-def continue_orbit(ctx_tokens, rng, max_tokens=60):
+def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
     ctx = list(ctx_tokens)
     out = []
+    _ends = 0
     for _ in range(max_tokens):
         s = None
         for L in range(min(CTX_MAX, len(ctx)), 0, -1):
@@ -376,7 +377,9 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60):
         out.append(nxt)
         ctx.append(nxt)
         if nxt in (".", "!", "?") and len(out) > 3:
-            break
+            _ends += 1
+            if _ends >= sentences:
+                break
     s = " ".join(out)
     return re.sub(r"\s+([.,!?;:])", r"\1", s)
 
@@ -568,8 +571,21 @@ def reply(user_line, rng, face=None):
     if fa:
         thought.append("relation-fact channel: exact held fact")
         return fa, "; ".join(thought)
-    q_tokens = tok("Q: " + user_line) + tok("A:")
-    candidate = continue_orbit(q_tokens, rng)
+    # THE UNIFIED SAMPLER (the optimal design): ONE token-by-token walk
+    # over held transitions, seeded with the LIVE conversation -- practiced
+    # answers emerge as high-probability paths through the same walk that
+    # composes novelty; each emission is one fold act (the spike's
+    # atomicity), never a retrieved packet.
+    _seed = []
+    for _u, _a in RECENT[-GEN_B:]:
+        _seed += tok("Q: " + _u + "\nA: " + _a + "\n")
+    q_tokens = _seed + tok("Q: " + user_line) + tok("A:")
+    # THEORY BELONGS TO THE CORPUS, not to conversational vibes: a question
+    # that binds corpus-tier text skips the sampler and goes to the channels
+    # that read the source (matched corpus text, or the relay's grep law)
+    _pre_hit, _pre_sh = bind(user_line)
+    _is_theory = bool(_pre_hit) and _pre_hit[1] == "corpus"
+    candidate = None if _is_theory else continue_orbit(q_tokens, rng, max_tokens=120, sentences=GEN_B)
     if candidate and rejected(user_line, candidate):
         thought.append("dialogue candidate previously rejected; withheld")
         candidate = None
@@ -580,12 +596,13 @@ def reply(user_line, rng, face=None):
         shared = {w for w in set(cw) & set(t.lower() for t in tok(candidate))
                   if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
         if shared or len(cw) == 0:
-            # young-gate: a stitched candidate answers a USER only for
-            # greeting-class lines (no content words) where taught
-            # conversation orbits are exact -- content questions must come
-            # from matched experience or my teacher
+            # the sampler speaks to users when its walk is INFORMATIVELY
+            # bound to the question (the counted self-check is the gate,
+            # not channel identity) and clean of stutter -- free speech,
+            # earned by relevance; the closure loop grades what it says
             if (face not in _RELAY_FACES or not RELAY["on"]
-                    or (len(cw) == 0 and _skey(dedup(candidate)) in STRONG)):
+                    or (len(cw) == 0 and _skey(dedup(candidate)) in STRONG)
+                    or (shared and not stuttered(candidate))):
                 thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
                 return candidate, "; ".join(thought)
             thought.append("stitched candidate on a content question; deferring to matched experience or my teacher")
