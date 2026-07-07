@@ -31,7 +31,11 @@ def play_one(g):
     return (g, "new" if (o.winner == chess.WHITE) == new_white else "old")
 if __name__ == "__main__":
     tally = {}
-    with ProcessPoolExecutor(max_workers=12) as pool:
+    # TWO GAMES AT A TIME: the v19 bot spawns 8 root workers per move --
+    # twelve concurrent games oversubscribe the cores and starve every
+    # search (the summit-probe lesson, measured 2026-07-07). Two games
+    # keep the active process count inside the machine.
+    with ProcessPoolExecutor(max_workers=2) as pool:
         for g, r in pool.map(play_one, range(12)):
             tally[r] = tally.get(r, 0) + 1
             print(f"game {g+1}: {r}", flush=True)
