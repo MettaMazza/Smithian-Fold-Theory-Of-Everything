@@ -825,18 +825,24 @@ def reply(user_line, rng, face=None):
         # words (counted); otherwise the pool is thin there and the
         # observer answers, joining my experience for next time.
         _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}   # informative only
+        # THE FOCUS FLOOR (Maria, 2026-07-07, from the 20:41 log): a question
+        # with fewer than GEN_B informative words has NO matched-experience
+        # focus -- one shared common word ("you") must never serve a whole
+        # stored answer at a greeting ("How are you?" reprinted an off-topic
+        # automation correction). Too thin to bind an answer to -> the young
+        # engine relays it. Same GEN_B focus floor fusion already uses.
+        _has_focus = len(_icw) >= GEN_B
         if hit[1].startswith("lesson:"):
             lq = set(content_words(hit[1][7:]))
-            strong = bool(_icw) and len(lq & _icw) * GEN_B >= len(_icw)   # half, of what MEANS something
+            strong = _has_focus and len(lq & _icw) * GEN_B >= len(_icw)   # half, of what MEANS something
         elif hit[1] in ("told", "confirmed"):
             # ONE LAW FOR EVERY TIER (2026-07-07): a telling serves only when
-            # it holds at least half the question's informative words. The
-            # old free pass let a held conversational instruction outrank the
-            # relay that carried the true answer (the flipped-echo failure);
-            # tellings keep their top RANK in the experience order, but the
-            # same counted gate now decides whether they SERVE.
+            # the question carries a real focus AND the record holds at least
+            # half its informative words. Tellings keep their top RANK in the
+            # experience order, but the same counted gate decides whether they
+            # SERVE -- and a thin greeting can no longer trip it.
             hw = {t.lower() for t in tok(hit[0])}
-            strong = bool(_icw) and len(hw & _icw) * GEN_B >= len(_icw)
+            strong = _has_focus and len(hw & _icw) * GEN_B >= len(_icw)
         else:
             strong = False
         strong = strong and not _anaphoric   # context questions go to the context-holder;
