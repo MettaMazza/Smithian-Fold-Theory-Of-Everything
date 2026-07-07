@@ -154,7 +154,7 @@ for k in (16, 32, 64):
     ce_rq = run_variant(QUIET_NAMES, k, "random")
     loud_margin = ce_r - ce_l
     quiet_margin = ce_rq - ce_lq
-    ok = ce_l < ce_r
+    ok = (ce_l < ce_r) and (quiet_margin < loud_margin)   # BOTH registered conjuncts
     support = support and ok
     beats = "BEATS counted engine" if ce_l < FOLD_CE else "below counted engine"
     ln = (f"k={k:3d}/128  LOUD-class: loud {ce_l:.4f} vs random {ce_r:.4f} (margin {loud_margin:+.4f}) "

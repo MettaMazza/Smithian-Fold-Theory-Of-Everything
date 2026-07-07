@@ -296,3 +296,52 @@ recorded raw: the kin-shaped floor misallocates at this scale; the
 Gutenberg flood costs ~0.3 nats at theory-corpus CE in every arm
 (fluency organ, not a corpus-CE organ). Scope: the registered arena,
 as always. Suite: 36/36 after everything above.
+
+## THE AUDIT AND THE FINAL CHAIN — 2026-07-07, third act
+
+A 14-agent adversarial audit (three lenses: every paper number vs its
+committed record; every engine constant vs the forced chain; the
+pre-registration integrity of all four rung scripts) ran against paper
+v4.0 and the engine. Its verdict on the headline: **no construction
+violation — rung 5e's word-scale victory survives adversarial reading**
+(proper mixture normalization, identity-chained eval positions, the
+twin verifiably unweakened, first-look numbers, git-verified void
+history). Eleven confirmed findings, all repaired the same hour:
+
+- ENGINE: bare literals that were always generator quantities are now
+  SPELLED as the generators and inherit the halt discipline —
+  content-words focus [:CTX_MAX], qkey [:GEN_B**2], bind scan
+  [:GEN_B**GEN_C], kin scan [:GEN_B*CTX_MAX], kin half-weight
+  /GEN_B, recognition share *GEN_B>=1, session trail [:CTX_MAX] and
+  [:-GEN_B**CTX_MAX]. A second enumerated phrase-list (the anaphora
+  gate's `think|feel|reckon` verb regex, an earlier session's hack) was
+  REMOVED — the one-law tier gate now does that job lawfully (probed:
+  opinion questions serve on-topic matched lessons).
+- SCRIPTS: rung 5c's verdict now enforces BOTH registered conjuncts
+  (the recorded data always satisfied both); rung 5e's case-fold bridge
+  is train-split-only (the prior full-corpus unigram shares touched
+  only the LOSING arms — audit-verified outcome-neutral — and are now
+  impossible); 5e parses the 5d reference live instead of a literal.
+- PAPER: seven precision repairs (per-seed twin time; the He-control
+  0.97–0.98x; the 230x/79.3x attribution; the DOI version label; the
+  flood-cost spread 0.15–0.33; the +0.005 tie band stated; the
+  identity digit updated to the canonical chain).
+- STILL OPEN, for Maria's ruling (flagged, not hidden): the
+  one-in-a-thousand informativeness rule is used consistently at nine
+  sites but is not itself derived from the generators; the
+  relation-fact organ (learn_fact/answer_fact) routes on a closed
+  5-relation schema whose lexical anchors (name/favourite/live) are
+  the FLIP-class boundary; well_formed's 5–40 word window and 0.85
+  letter share are admission hygiene thresholds. Each is her call:
+  leave as marked interface facts, force a derivation she endorses, or
+  replace with counted quantiles.
+
+**THE FINAL CANONICAL CHAIN (arena 2,561,832 tokens, third anchoring
+of the day, fully serialized, suite 36/36 after):** rematch fold
+4.6024 / no-flood 4.4587 vs twin 3.4292; rung 5d SUPPORTED a THIRD
+time (61.5/93.5/102.3% vs null 7.8/21.2/53.6%; k=64 loud 3.7985 beats
+full 3.8164); rung 5e with the clean bridge: **A1 fold-mix 3.1907
+BEATS the twin 3.4292** (second independent replication of the
+victory), A4 stacked 3.1344, kin floor hurts consistently
+(4.6612/4.8398), flood costs consistently. Every self-test exact,
+including kin mass 1.0000000000.

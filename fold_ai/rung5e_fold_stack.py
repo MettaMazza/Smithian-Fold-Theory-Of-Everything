@@ -1,8 +1,10 @@
 """RUNG 5e: THE FOLD'S OWN STACK (pre-registered here, before data).
 
-THE STANDING RESIDUAL. After the rematch (fold 4.7244 / 4.5813 vs
-same-day twin 3.4853) and rung 5d (loud-shaped floor at hard backoff:
-3.9288, verdict SUPPORTED), the word-scale gap stands open. The
+THE STANDING RESIDUAL. After the rematch and rung 5d (verdict
+SUPPORTED at every chain anchoring), the word-scale gap stands open;
+this script parses the SAME-RUN chain's numbers live from the results
+files (the corpus is a living document -- every chain re-anchors to
+one text state, and the identity self-test voids a moved arena). The
 instruction: force the LARGEST amount of the PROVEN structures at it --
 all of them if possible -- everything zero-parameter, counted, forced;
 verdicts recorded raw.
@@ -42,15 +44,15 @@ rng 999, frozen snapshot store):
 
 SELF-TESTS (any failure voids the run):
   (a) A0 must reproduce the committed rematch numbers exactly
-      (flood 4.7244, no-flood 4.5813 -- cross-script identity);
+      (cross-script identity, parsed live from the results file);
   (b) fold-mix collapses to hard backoff when one level holds
       (constructed case, exact);
   (c) the kin floor shape sums to 1 over the vocabulary (one full
       position, numerical).
 
 VERDICT RULE (fixed in advance): report every arm's CE beside the
-same-day twin mean (parsed from rung5b_rematch_results.txt) and 5d's
-3.9288 reference. State plainly which arms close gap and whether any
+same-day twin mean and 5d's k=64 reference (both parsed live from
+their results files). State plainly which arms close gap and whether any
 reaches the twin. No spin in either direction; the numbers are
 committed as they land. Result file: rung5e_results.txt.
 """
@@ -117,10 +119,12 @@ for w, nb in _st["neigh"].items():
 # their OBSERVED unigram counts -- measured shares -- and the remainder
 # (variants below the vocab threshold) flows to the RARE bucket. With the
 # No-Zero form on top, the shape sums to 1 exactly (self-test c).
-_LOW_TOTAL = defaultdict(int)          # lower form -> total raw count (all case variants)
-for t, c in cnt.items():
+_LOW_TOTAL = defaultdict(int)          # lower form -> total TRAIN-split count (all case variants)
+_cnt_train = Counter(train_words)      # the bridge is TRAIN-ONLY (the contamination rule, enforced)
+for t, c in _cnt_train.items():
     _LOW_TOTAL[t.lower()] += c
-_VSHARE = {t: cnt[t] / _LOW_TOTAL[t.lower()] for t in stoi}   # vocab variant's measured share
+_VSHARE = {t: _cnt_train.get(t, 0) / _LOW_TOTAL[t.lower()] if _LOW_TOTAL.get(t.lower()) else 0.0
+           for t in stoi}              # vocab variant's measured TRAIN share
 _VCOVER = defaultdict(float)           # lower form -> total vocab-covered share
 for t in stoi:
     _VCOVER[t.lower()] += _VSHARE[t]
@@ -304,7 +308,9 @@ assert abs(mass - 1.0) < 1e-6, f"self-test (c) FAILED: mass {mass} -- run void"
 print(f"self-test (c) kin floor mass {mass:.10f} == 1: PASS", flush=True)
 
 # ---- RUN ALL ARMS ----
-lines = [f"RUNG 5e RESULTS -- same-day twin {TWIN}, 5d loud-hard reference 3.9288",
+_5d = open(BASE + "/fold_ai/rung5d_results.txt").read()
+_5dref = re.search(r"k= 64/128  loud-shaped ([0-9.]+)", _5d).group(1)
+lines = [f"RUNG 5e RESULTS -- same-day twin {TWIN}, 5d loud-hard reference {_5dref} (parsed live)",
          f"A0 baseline        flood {a0f:.4f}   no-flood {a0n:.4f}   (== rematch, identity held)"]
 results = {}
 for name, mix, floor in (("A1 fold-mix       ", True, "uniform"),

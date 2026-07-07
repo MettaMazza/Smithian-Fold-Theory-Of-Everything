@@ -181,7 +181,7 @@ def kin_expand(words, k=KIN_K):
         if not nb:
             continue
         cand = set()
-        for c in sorted(nb, key=lambda c: TOK_FREQ.get(c, 1))[:12]:
+        for c in sorted(nb, key=lambda c: TOK_FREQ.get(c, 1))[:GEN_B * CTX_MAX]:
             cand |= NEIGH_INDEX.get(c, set())
         cand.discard(w)
         cands = [(kinship(w, o), o) for o in cand if len(o) > 3]
@@ -307,7 +307,7 @@ def content_words(s):
     scored = [(informativeness(w), w) for w in ws]
     scored = [x for x in scored if x[0] > 0]
     scored.sort(reverse=True)
-    return [w for _, w in scored[:6]]
+    return [w for _, w in scored[:CTX_MAX]]   # focus breadth = the context depth
 
 
 
@@ -322,7 +322,7 @@ def bind(query, exclude_self=None, top=None):
             votes[sid] += informativeness(w)
     for w in kin_expand(cw, k=2) - set(cw):        # counted kin: half weight
         for sid in INDEX.get(w, ()):
-            votes[sid] += 0.5 * informativeness(w)
+            votes[sid] += informativeness(w) / GEN_B   # kin at half weight: the fold factor
     if not votes:
         return ([] if top else (None, 0.0))
     denom = sum(informativeness(w) for w in cw)
@@ -337,7 +337,7 @@ def bind(query, exclude_self=None, top=None):
         # XI-4: the RANKED hits, same vote sort, no new scoring -- callers
         # that fuse several orbits read the same order the single hit obeys
         out = []
-        for sid, v in best[:8]:
+        for sid, v in best[:GEN_B ** GEN_C]:
             s, srcname = SENTS[sid]
             if exclude_self and s.strip() == exclude_self.strip():
                 continue
@@ -345,7 +345,7 @@ def bind(query, exclude_self=None, top=None):
             if len(out) >= top:
                 break
         return out
-    for sid, v in best[:8]:
+    for sid, v in best[:GEN_B ** GEN_C]:
         s, srcname = SENTS[sid]
         if exclude_self and s.strip() == exclude_self.strip():
             continue
@@ -735,8 +735,9 @@ def reply(user_line, rng, face=None):
     # ANAPHORA IS CONTEXT: a thin question pointing outside itself ("what do
     # you think about THAT?") cannot be answered from context-free memory --
     # only the channel that holds the conversation may answer it
-    _anaphoric = (any(t.lower() in ("that", "this", "it") for t in tok(user_line))
-                  or bool(re.match(r"(?i)\s*what do you (think|feel|reckon)\b", user_line)))
+    _anaphoric = any(t.lower() in ("that", "this", "it") for t in tok(user_line))
+    # (an earlier enumerated verb-phrase disjunct here was a violation of the
+    #  zero-chosen-structure law; the one-law tier gate now does its job)
     # opinion-shape questions are PERSONA questions: they belong to the mind
     # holding the conversation, never to a loose matched lesson
     if ck in CORRECTIONS and not _anaphoric:
@@ -933,7 +934,7 @@ if os.path.exists(FEEDBACK_LOG):
             REJECTED.add((qk, bad))
 
 def qkey(user_line):
-    return ",".join(sorted(content_words(user_line)[:4]))
+    return ",".join(sorted(content_words(user_line)[:GEN_B ** 2]))
 
 if os.path.exists(CORR_LOG):
     for _ln in open(CORR_LOG):
@@ -1146,9 +1147,9 @@ def turn(line, rng, interface="terminal"):
                else "VOICE: UNISON (own held memory) | ") + thought
     hold_sentence("On '" + line[:60] + "' I thought: " + thought, "thought")
     if content_words(line):
-        LAST_TOPIC[0] = " ".join(content_words(line)[:4])
-        SESSION_TRAIL.append(content_words(line)[:6])
-        del SESSION_TRAIL[:-64]
+        LAST_TOPIC[0] = " ".join(content_words(line)[:GEN_B ** 2])
+        SESSION_TRAIL.append(content_words(line)[:CTX_MAX])
+        del SESSION_TRAIL[:-GEN_B ** CTX_MAX]
     RECENT.append((line, ans))
     del RECENT[:-256]   # IO bound; the relay trims to the model window itself
     # LEARNING, ongoing: your words always held (the prediction state)
@@ -1843,7 +1844,7 @@ def hear_audio(audio_bytes, suffix=".ogg"):
         sound0 = fold_hear(audio_bytes, suffix)
         if sound0:
             hit, share = bind(" ".join(sound0))
-            if hit and hit[1].startswith("lesson:SOUND") and share >= 0.5:
+            if hit and hit[1].startswith("lesson:SOUND") and share * GEN_B >= 1:
                 meaning = hit[0].split(" means: ", 1)[-1]
                 log("SOUND", "RECOGNIZED with my own ear", f"share {share:.2f}", meaning[:80])
                 return meaning
@@ -2017,7 +2018,7 @@ def observe_image(images_b64, caption=""):
         sight = fold_see(_b64.b64decode(images_b64[0]))
         if sight:
             hit, share = bind(" ".join(sight))
-            if hit and hit[1].startswith("lesson:SIGHT") and share >= 0.5:
+            if hit and hit[1].startswith("lesson:SIGHT") and share * GEN_B >= 1:
                 meaning = hit[0].split(" means: ", 1)[-1]
                 log("SIGHT", "RECOGNIZED with my own eye", f"share {share:.2f}", meaning[:100])
                 return "I recognize this: " + meaning

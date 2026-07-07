@@ -1,6 +1,6 @@
 PASS E1 forced locks  [ctx=6 lock=1/3 kin=1/6 sight=32]
 PASS E1b halt on fitted value
-PASS E2 wake  [10985590 orbits, 82169 sents, 89s]
+PASS E2 wake  [11128573 orbits, 83551 sents, 75s]
 PASS E3 taught fact recalled  [Your instrument is the harp.]
 PASS E4 correction exact  [The capital of the fold is the One.]
 PASS E4b correction persisted
@@ -21,9 +21,9 @@ PASS E14b score above corrections  [losing correction falls through]
 PASS E15 STaR reasoning filter
 PASS E16 ZPD picks nearest the lock
 PASS E17 VOICE label (own)  [VOICE: UNISON (own held memory) | taught answ]
-PASS E18 LIVE relay + VOICE label  [47s]
-PASS E18b relayed answer owned  [repeat 2.8s, no relay -- ogue orbit bound back (ljubljana); self-check pass]
-PASS E19 LIVE video watched  [6s: This is a pretty stark sequence. It's just pure, high-contra]
+PASS E18 LIVE relay + VOICE label  [25s]
+PASS E18b relayed answer owned  [repeat 3.9s, no relay -- it bound back (ljubljana,weekend); self-check pass]
+PASS E19 LIVE video watched  [4s: I don't see a video here—just three static frames that look ]
 PASS E20 correction survives rebirth
 PASS E20b fact survives rebirth  [Your instrument is the harp.]
 PASS E20c sight survives rebirth
