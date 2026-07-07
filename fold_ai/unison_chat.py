@@ -1874,10 +1874,14 @@ def _tutor_loop():
             if v and v.group(1) == "A":
                 record_grad(k, True, q)
                 apply_feedback(q, ans, "y", "tutor")
-                record_correction(q, ans)   # the WINNING answer takes the seat:
-                                            # a graduated territory serves what
-                                            # actually won, never a loose bind
-                log("TUTOR", "engine WON head-to-head; winning answer banked", q)
+                # the WINNING answer takes the seat -- but ONLY a clean one:
+                # a movable judge can bless garbled output, and the ratchet
+                # must never install junk permanently (hygiene at every gate)
+                if not stuttered(ans) and not any(b in ans for b in ("*", "`", "|", "{", "}")) and len(ans.split()) >= GEN_C:
+                    record_correction(q, ans)
+                    log("TUTOR", "engine WON head-to-head; winning answer banked", q)
+                else:
+                    log("TUTOR", "engine WON but answer failed hygiene; win tallied, seat NOT banked", q)
             else:
                 record_grad(k, False, q)
                 apply_feedback(q, ans, "n " + ref, "tutor")
