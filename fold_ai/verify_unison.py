@@ -9,17 +9,49 @@ import numpy as np
 
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory/fold_ai"
 os.chdir(BASE)
+
+# THE LIVE-FLIGHT GUARD (standing law: no cleanup without pgrep). This
+# suite writes fixtures into real ledgers and removes its own artifacts
+# at the end; against a LIVE engine those ledgers are shared and a
+# wholesale rewrite can clobber the flight's rows (measured 2026-07-07:
+# a live run lost its sounds store and lesson history to the old
+# unguarded cleanup). The suite therefore REFUSES to run while a flight
+# is up, unless explicitly overridden -- and the cleanup below is now
+# surgical (only artifacts this run created).
+import subprocess
+_live = subprocess.run(["pgrep", "-f", "unison_chat.py"], capture_output=True, text=True).stdout.strip()
+if _live and os.environ.get("UNISON_VERIFY_LIVE") != "1":
+    print("REFUSING: a live unison_chat flight is running (pid " + _live.split()[0] + ").\n"
+          "Run the suite on a quiescent system, or set UNISON_VERIFY_LIVE=1 to accept\n"
+          "the small append/filter race windows against the live ledgers.", flush=True)
+    raise SystemExit(2)
+
 RESULTS = []
 def check(name, ok, stat=""):
     RESULTS.append((name, bool(ok), stat))
     print(("PASS " if ok else "FAIL ") + name + ("  [" + stat + "]" if stat else ""), flush=True)
 
 def wake():
-    spec = importlib.util.spec_from_file_location("uc", "unison_chat.py")
+    # LIVE-FLIGHT SAFETY: the engine rotates logs/unison.log to archive at
+    # import -- that file belongs to the LIVE flight, so the suite loads
+    # the source with LOGFILE redirected to its own log first (one
+    # asserted replacement; everything else byte-identical).
+    src = open("unison_chat.py").read()
+    _OLD = 'LOGFILE = LOGDIR + "/unison.log"'
+    assert src.count(_OLD) == 1, "LOGFILE anchor drifted -- refusing to load"
+    src = src.replace(_OLD, 'LOGFILE = LOGDIR + "/verify_unison.log"')
+    # the graduation ledger is wholesale-rewritten by record_grad; the suite
+    # exercises the identical law against its OWN ledger so a live flight's
+    # tally is never shared with a test
+    _OLDG = 'GRAD_LOG = BASE + "/fold_ai/lessons/graduation.tsv"'
+    assert src.count(_OLDG) == 1, "GRAD_LOG anchor drifted -- refusing to load"
+    src = src.replace(_OLDG, 'GRAD_LOG = BASE + "/fold_ai/lessons/graduation_verify.tsv"')
+    spec = importlib.util.spec_from_loader("uc", loader=None, origin="unison_chat.py")
     m = importlib.util.module_from_spec(spec)
+    m.__file__ = "unison_chat.py"
     t0 = time.time()
     with contextlib.redirect_stdout(io.StringIO()):
-        spec.loader.exec_module(m)
+        exec(compile(src, "unison_chat.py", "exec"), m.__dict__)
     return m, time.time() - t0
 
 def png(fn, w=128, h=128):
@@ -31,6 +63,9 @@ def png(fn, w=128, h=128):
             + ch(b"IDAT", zlib.compress(rows)) + ch(b"IEND", b""))
 
 t_all = time.time()
+# snapshot the sounds store BEFORE any fixture speaks: cleanup may remove
+# ONLY what this run created, never a prior life's learned sounds
+_SOUNDS_BEFORE = set(os.listdir("sounds")) if os.path.isdir("sounds") else set()
 uc, wake_s = wake()
 rng = np.random.default_rng(0)
 
@@ -122,7 +157,7 @@ TK = "t,e,s,t," + str(os.getpid())
 uc.record_grad(TK, True, "Test question?")
 uc.record_grad(TK, False, "Test question?")
 uc.record_grad(TK, False, "Test question?")
-check("E14 graduation ledger", uc.GRAD[TK] == [1, 2] and "Test question?" in open("lessons/graduation.tsv").read())
+check("E14 graduation ledger", uc.GRAD[TK] == [1, 2] and "Test question?" in open(uc.GRAD_LOG).read())
 uc.CORRECTIONS[TK] = "A dethroned answer."
 w, l = uc.GRAD[TK]
 check("E14b score above corrections", l > w, "losing correction falls through")
@@ -146,13 +181,31 @@ check("E16 ZPD picks nearest the lock", bool(edge))
 ans, th = uc.turn("Do you know your own name?", rng, "test")
 check("E17 VOICE label (own)", th.startswith("VOICE: UNISON"), th[:45])
 
-# E18 LIVE observer relay + transparency + CoT (gemma)
+# E18 LIVE observer relay + transparency + CoT (gemma). DETERMINISTIC:
+# no fixture question can stay outside a GROWING engine's held territory
+# (measured twice: garden bound at 3,398 lessons; Ljubljana's unseen
+# words carry zero informativeness and the common remainder half-overlapped
+# a travel lesson at 9K). So the relay LAW is tested directly: the test
+# instance's in-memory stores are cleared -- nothing can bind, the relay
+# must fire, and E18b then proves the relayed answer is owned. In-memory
+# only; no file is touched.
+del uc.SENTS[:]
+uc.INDEX.clear()
+uc.STRONG.clear()
+uc.CORRECTIONS.clear()
+del uc.RECENT[:]
+for _s in uc.stores:
+    _s.clear()   # the dialogue sampler too: a 13M-orbit walk can emit the
+                 # question's common words and answer before the relay is
+                 # consulted -- the engine ABLE to answer is not the law
+                 # under test here
+_E18Q = "What is a sensible weekend itinerary for the old town of Ljubljana?"
 uc.RELAY["on"] = True
 t0 = time.time()
-ans, th = uc.turn("What is a sensible way to plan a small vegetable garden?", rng, "terminal")
+ans, th = uc.turn(_E18Q, rng, "terminal")
 check("E18 LIVE relay + VOICE label", th.startswith("VOICE: GEMMA") and len(ans) > 30, f"{time.time()-t0:.0f}s")
 t0 = time.time()
-r2 = uc.reply("What is a sensible way to plan a small vegetable garden?", rng)[0]
+r2 = uc.reply(_E18Q, rng)[0]
 check("E18b relayed answer owned", time.time() - t0 < 3, f"repeat {time.time()-t0:.1f}s")
 
 # E19 LIVE video: synthesize a tiny mp4 (moving square) and watch it
@@ -193,14 +246,14 @@ _vt = "Verification says the fold holds."
 _w1 = uc2.speak(_vt)
 t0 = time.time()
 _w2 = uc2.speak(_vt)
-_lg = open("logs/unison.log").read()
+_lg = open(uc2.LOGFILE).read()   # the suite engine's OWN log, never the flight's
 check("E23 native voice after one teaching", "NATIVE -- re-spoken" in _lg and time.time() - t0 < 1,
       f"replay {time.time()-t0:.2f}s, no synthesis model")
 # E24 THE REMOVAL-PROOF EAR: heard once, recognized natively after
 if _w1:
     uc2.hear_audio(open(_w1, "rb").read(), ".wav")
     _h2 = uc2.hear_audio(open(_w1, "rb").read(), ".wav")
-    check("E24 native ear after one hearing", "RECOGNIZED with my own ear" in open("logs/unison.log").read(),
+    check("E24 native ear after one hearing", "RECOGNIZED with my own ear" in open(uc2.LOGFILE).read(),
           str(_h2)[:50])
     for _w in (_w1, _w2):
         if _w and os.path.exists(_w):
@@ -238,23 +291,54 @@ long_s = "The fold " + "holds and counts " * 60 + "the One."
 uc2.hold_sentence(long_s, "told")
 check("E22 long sentence held", any(len(s) > 500 for s, src in uc2.SENTS[-3:]), f"{len(long_s)} chars")
 
-# SELF-CLEANING: the suite removes every artifact it taught, so a fresh
-# slate stays fresh after verification
+# SELF-CLEANING, SURGICAL (standing law after the 2026-07-07 live-flight
+# incident): the suite removes ONLY artifacts this run created -- its own
+# fixture rows by marker, its own new sound files by before/after
+# snapshot, its own redirected ledgers whole. It never unlinks a shared
+# ledger and never sweeps a directory wholesale.
 try:
-    for fn, marker in (("lessons/corrections.tsv", "capital of the fold"),
-                       ("lessons/graduation.tsv", "t,e,s,t"),
-                       ("lessons/lessons_sight.txt", "checkerboard test pattern"),
-                       ("lessons/lessons_sound.txt", "SOUND:"),
-                       ("lessons/facts.tsv", "Harp")):
+    _MARKERS = ("capital of the fold", "favourite instrument", "Harp",
+                "checkerboard test pattern", "Verification says the fold holds",
+                "Ljubljana", "Do you know your own name", "t,e,s,t,")
+    # tsv/one-line files: filter by line
+    for fn in ("lessons/corrections.tsv", "lessons/facts.tsv",
+               "lessons/lessons_feedback.txt"):
         if os.path.exists(fn):
-            kept = [ln for ln in open(fn).read().splitlines() if marker not in ln]
+            kept = [ln for ln in open(fn).read().splitlines()
+                    if not any(m in ln for m in _MARKERS)]
             open(fn, "w").write("\n".join(kept) + ("\n" if kept else ""))
-    for fn in list(__import__("glob").glob("sounds/*.npz")) + ["sounds/index.tsv"]:
-        if os.path.exists(fn):
-            os.unlink(fn)
-    for fn in ("lessons/lessons_live.txt", "lessons/lessons_feedback.txt"):
-        if os.path.exists(fn):
-            os.unlink(fn)
+    # Q/A files: filter by PAIR -- dropping only one line of a pair leaves
+    # an orphaned Q: that the wake parser glues onto the next real lesson
+    # (measured 2026-07-07: a franken-lesson born exactly this way)
+    for fn in ("lessons/lessons_sight.txt", "lessons/lessons_sound.txt",
+               "lessons/lessons_live.txt"):
+        if not os.path.exists(fn):
+            continue
+        lines = open(fn, errors="ignore").read().splitlines()
+        out, i = [], 0
+        while i < len(lines):
+            if lines[i].startswith("Q: ") and i + 1 < len(lines) and lines[i + 1].startswith("A: "):
+                if not any(m in lines[i] or m in lines[i + 1] for m in _MARKERS):
+                    out += [lines[i], lines[i + 1]]
+                i += 2
+                continue
+            if lines[i].startswith("Q: "):   # orphan: never keep, never create
+                i += 1
+                continue
+            if lines[i].strip() and not any(m in lines[i] for m in _MARKERS):
+                out.append(lines[i])
+            i += 1
+        open(fn, "w").write("\n".join(out) + ("\n" if out else ""))
+    if os.path.exists("lessons/graduation_verify.tsv"):
+        os.unlink("lessons/graduation_verify.tsv")   # the suite's own ledger, whole
+    _new_sounds = (set(os.listdir("sounds")) if os.path.isdir("sounds") else set()) - _SOUNDS_BEFORE
+    for _s in _new_sounds:
+        if _s != "index.tsv" and os.path.exists("sounds/" + _s):
+            os.unlink("sounds/" + _s)
+    if _new_sounds and os.path.exists("sounds/index.tsv"):
+        kept = [ln for ln in open("sounds/index.tsv").read().splitlines()
+                if not any(_s in ln for _s in _new_sounds)]
+        open("sounds/index.tsv", "w").write("\n".join(kept) + ("\n" if kept else ""))
 except Exception as _e:
     print("cleanup note:", _e)
 

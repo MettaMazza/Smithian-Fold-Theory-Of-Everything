@@ -147,3 +147,101 @@ labels; PRM-guided best-of-N reranking is gradient-free at inference
 (arXiv 2510.08049). Registered as candidate M7 (counted step-closure and
 vote-guided reasoning) PENDING verification. The refuted/confirmed split
 comes when the panel re-runs.
+
+## THE STRENGTHENING SIX — EXECUTED 2026-07-07
+
+The standing review named two open flanks (the word-scale gate; judge
+dependence) and four force-multipliers. All six landed this day; every
+number below is from a committed results file, negative results stated
+as plainly as positive ones.
+
+1. **The word-scale rematch (`rung5b_rematch.py`)** — today's engine
+   (depth 6 + the Gutenberg flood), same registered arena, twin
+   RETRAINED on today's text (the corpus is a living document — June's
+   twin CE was earned on different text and may not face today's
+   engine). Substrate pinned: both rung scripts read the frozen
+   snapshot `store_rung5_snapshot.pkl` (the live store grows under the
+   flight's rebuild loop). RESULT, no spin: fold 4.7244 vs twin mean
+   3.4853 — the twin still leads by 1.2391 nats, and the DECOMPOSITION
+   shows both deltas cost at corpus-CE (depth-6 no-flood 4.5813 vs the
+   newborn's 4.5071; the flood adds English mass that dilutes
+   theory-text prediction at shallow depths). The gap is real, measured,
+   and became rung 5d's target.
+2. **Rung 5d, the transfer-in (`rung5d_transfer.py`) — SUPPORTED, the
+   flagship.** The constructive converse of 5c, pre-registered: reshape
+   the engine's forced No-Zero floor mass (total unchanged, no blend
+   knob, zero new parameters) by the loud-truncated twin's next-token
+   distribution. Three theorem-forced self-tests passed in-run
+   (involution; k=128 ≡ full at 3.9400; cross-script identity — the
+   uniform arm reproduced the rematch's 4.7244 exactly). RESULT: the
+   loud-shaped floor closes 55.6% / 87.9% / 101.4% of the
+   uniform-to-full gap at k=16/32/64; the random-shaped null closes
+   only 10.1% / 24.5% / 56.5%. Loud beats random at EVERY budget —
+   verdict SUPPORTED by the pre-registered rule. At k=64 the loud arm
+   BEATS the full twin's own shape (3.9288 < 3.9400): half the
+   coefficients outperform all of them — the quiet remainder is noise,
+   not law. What training buys can simply be TAKEN. Honest residual:
+   the hybrid (3.9288) has not caught the twin alone (3.4853); the
+   transfer closes ~64% of that distance and the rest stays open.
+3. **Judge independence (engine, tutor loop).** The judge pool is
+   discovered at boot from the local registry (this machine:
+   gemma4:26b + qwen3.6-27b:latest) and judges ALTERNATE by cycle
+   parity — counted, no knob. The reference stays the teacher's; only
+   the scoring seat rotates, so no verdict depends solely on the model
+   that wrote answer B. Every TUTOR/GRADUATION line carries the judge's
+   name; per-judge tallies persist in `lessons/judges.tsv` and report
+   in /score; a judge outage voids the cycle (never tallied as an
+   unearned loss); a gemma-only pool is LOGGED, never silent.
+4. **Multi-orbit binding — XI-4 in full (engine, reply path).** The gap
+   the engine diagnosed in its own words: several orbits carrying one
+   question now bind through the lock into ONE unified reply.
+   `bind(top=N)` returns the ranked hits (same vote sort, no new
+   scoring); each joined source must independently pass the SAME
+   matched-experience laws as the lead AND add counted novelty
+   (informative words by the one-in-a-thousand rule); tail capped at
+   GEN_B sentences per source, GEN_C sources max; percept records
+   (SIGHT/SOUND) never fuse; user faces only — tutor head-to-heads stay
+   single-orbit so the score measures the channels. Unit-proven: 2
+   complementary sources fused, distractor excluded, anaphora law
+   intact. Harness 9/9 throughout.
+5. **The public curve.** Full-pool /sota sweep at n=128 (the fixed
+   public MMLU probe) over every model on this machine, through the
+   engine's own registered instrument — rows append to
+   `benchmarks_sota.tsv` and post to the channel as they land;
+   `SOTA_TABLE.md` sets the measured rows beside PUBLISHED full-test
+   MMLU figures, cited by URL and clearly marked as measured elsewhere.
+   DeepSeek-R1-671B cannot run here (404 GB q4 weights vs 162 GB free
+   disk — it fits the 549 GB RAM, not the disk) and appears in the
+   published column only, cited.
+6. **One-command replication.** `llm_presence.py` now auto-fetches the
+   public GPT-2 weights (548 MB, official repository) when absent —
+   fresh-clone dry-run PROVEN: absent → fetched → 13/13 tensors, 39/39
+   checks, margins identical to the committed run. `REPRODUCE.md` in
+   both repositories: four commands, expected outputs, prerequisites,
+   runtimes; README sections link it.
+
+Discovered and fixed in passing (the suite doing its job): the engine
+module rotates `logs/unison.log` at import — every harness that loads
+the engine source now redirects LOGFILE to its own log first (asserted,
+one replacement), so no test run can ever again split a live flight's
+log. `test_chat.py`, `verify_unison.py`, `sota_sweep.py`,
+`rung5*` all carry the guard or read frozen substrates.
+
+**INCIDENT, recorded in full (2026-07-07 12:50).** `verify_unison.py`
+was run against the LIVE run-3 flight; its old self-clean — written for
+quiescent fresh systems — unlinked `sounds/*` (the flight's learned
+sound records, not recoverable; they regrow as the engine speaks and
+hears), unlinked `lessons_live.txt` and `lessons_feedback.txt`
+(2.6 hours of run-3 history), and shared the wholesale-rewritten
+graduation ledger with the live tutor. Repair: 59 CONF/REJ rows
+reconstructed from the flight's append-only log (161 n→corrected
+rejections could not be rebuilt exactly and are superseded by their
+held correction seats). Prevention, structural: the suite now REFUSES
+to run when a flight is live (pgrep guard; explicit override env for
+accepted-risk runs), tests the graduation law against its OWN
+redirected ledger, greps its own log, and its cleanup is surgical —
+fixture markers and a before/after sounds snapshot only, no wholesale
+unlink of any shared file, ever. The old cleanup also deleted ALL
+sound-lesson rows on every run; the new one removes only its own
+fixtures, so the suite is now safe for grown systems, not just fresh
+ones.

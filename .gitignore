@@ -24,6 +24,7 @@ fold_ai/lessons/lessons_live.txt
 fold_ai/lessons/facts.tsv
 fold_ai/lessons/lessons_feedback.txt
 fold_ai/store.pkl
+fold_ai/store_rung5_snapshot.pkl
 fold_ai/store_log.txt
 fold_ai/logs/
 Videos/

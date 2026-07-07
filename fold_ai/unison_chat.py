@@ -312,10 +312,10 @@ def content_words(s):
 
 
 # ---------- FINDING: binding (XI-4) ----------
-def bind(query, exclude_self=None):
+def bind(query, exclude_self=None, top=None):
     cw = content_words(query)
     if not cw:
-        return None, 0.0
+        return ([] if top else (None, 0.0))
     votes = defaultdict(float)
     for w in cw:                                   # direct content words: full weight
         for sid in INDEX.get(w, ()):
@@ -324,7 +324,7 @@ def bind(query, exclude_self=None):
         for sid in INDEX.get(w, ()):
             votes[sid] += 0.5 * informativeness(w)
     if not votes:
-        return None, 0.0
+        return ([] if top else (None, 0.0))
     denom = sum(informativeness(w) for w in cw)
     # THE EXPERIENCE ORDER (lexicographic, no weights): what it was TOLD
     # outranks its lessons, which outrank its library -- its own held life
@@ -333,12 +333,83 @@ def bind(query, exclude_self=None):
         src = SENTS[sid][1]
         return 0 if src == "told" else (1 if src.startswith("lesson") else 2)
     best = sorted(votes.items(), key=lambda kv: (source_rank(kv[0]), -kv[1]))
+    if top:
+        # XI-4: the RANKED hits, same vote sort, no new scoring -- callers
+        # that fuse several orbits read the same order the single hit obeys
+        out = []
+        for sid, v in best[:8]:
+            s, srcname = SENTS[sid]
+            if exclude_self and s.strip() == exclude_self.strip():
+                continue
+            out.append((SENTS[sid], v / denom))
+            if len(out) >= top:
+                break
+        return out
     for sid, v in best[:8]:
         s, srcname = SENTS[sid]
         if exclude_self and s.strip() == exclude_self.strip():
             continue
         return SENTS[sid], v / denom
     return None, 0.0
+
+def fuse_orbits(user_line, first, cw):
+    """XI-4 IN FULL: several matching orbits bind through the lock into ONE
+    unified reply. Counted gates only, all pre-existing laws: each extra
+    source must pass the SAME matched-experience rules the lead passed
+    (share above the bind lock, lesson half-overlap on informative words,
+    or told/confirmed tier), must not be rejected, and must ADD counted
+    novelty -- informative words (the one-in-a-thousand rule) the lead does
+    not hold. The joined tail is capped at GEN_B sentences per source; at
+    most GEN_C sources total. No new scoring, no phrasing knob: the
+    connective is the sentence boundary itself. Returns (fused, n_sources)
+    or (None, 1) when only one orbit carries the question."""
+    _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+    # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: a
+    # greeting or a telling is not a question, and one informative word is
+    # one topic -- one orbit. Small talk stays short (the warm-friend
+    # register); synthesis is spent where a question actually spans topics.
+    ul = user_line.strip().lower()
+    if not (ul.endswith("?") or ul.startswith(("what", "who", "how", "why", "when", "where",
+                                               "which", "tell me", "do ", "does", "can ", "is ", "are "))):
+        return None, 1
+    if len(_icw) < GEN_B:
+        return None, 1
+    hits = bind(user_line, top=GEN_C + 1)
+    if len(hits) < 2:
+        return None, 1
+    lead_text = first[0]
+    lead_words = {t.lower() for t in tok(lead_text)}
+    lead_key = _skey(lead_text)
+    fused, nsrc = lead_text, 1
+    for (s, src), share2 in hits:
+        if nsrc >= GEN_C:
+            break
+        if share2 < BIND_LOCK or _skey(s) == lead_key:
+            continue
+        # percept records (spectrum-keyed) are keys, not prose -- never fused
+        if src.startswith(("lesson:SIGHT", "lesson:SOUND")):
+            continue
+        if src.startswith("lesson:"):
+            lq = set(content_words(src[7:]))
+            ok = bool(_icw) and len(lq & _icw) * GEN_B >= len(_icw)
+        elif src in ("told", "confirmed"):
+            # the same one-law gate the serve path applies to tellings
+            ok = bool(_icw) and len({t.lower() for t in tok(s)} & _icw) * GEN_B >= len(_icw)
+        else:
+            ok = False
+        if not ok or rejected(user_line, s):
+            continue
+        novel = {w for w in (t.lower() for t in tok(s))
+                 if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000 and w not in lead_words}
+        if not novel:
+            continue
+        addition = " ".join(re.split(r"(?<=[.!?])\s+", s)[:GEN_B])
+        fused = fused.rstrip() + (" " if fused.rstrip()[-1:] in ".!?" else ". ") + addition
+        lead_words |= {t.lower() for t in tok(addition)}
+        nsrc += 1
+    if nsrc < 2:
+        return None, 1
+    return fused, nsrc
 
 # ---------- SPEAKING: dialogue-orbit channel ----------
 def dedup(s):
@@ -551,6 +622,77 @@ SESSION_TRAIL = []   # content words per turn, most recent last -- the living co
 RECENT = []          # (user line, my reply) pairs -- the conversation my teacher sees
 _RELAY_FACES = ("terminal", "discord", "assess")   # faces where the teacher carries me while young
 
+def recall_through_orbit(hit_text, cw, rng):
+    """RECALL IS REGENERATION (Maria's law, 2026-07-07): a held experience
+    is never reprinted as a stored packet -- humans do not replay strings.
+    Recall re-traverses the held cycle (Paper 44): the walk starts at the
+    experience's own opening tokens and completes token-by-token through
+    the same unified sampler that composes novelty, over everything the
+    engine holds. The existing counted self-check gates the walk (shared
+    informative focus, no stutter); while an orbit is too young for its
+    walk to hold the focus, the held record itself still answers -- and
+    the thought line names which happened, every time. As the store grows
+    the walk wins more; the reprint rate is the youth, measured."""
+    seed = tok(hit_text)[:GEN_C]
+    # the walk's span is the experience's OWN span: as many sentences as
+    # the held cycle carries (counted from the record, not a knob) -- a
+    # consecutive-write orbit loops into its own start otherwise
+    n_sents = max(1, len([s for s in re.split(r"(?<=[.!?])\s+", hit_text.strip()) if s]))
+    walk = continue_orbit(seed, rng, max_tokens=120, sentences=n_sents)
+    if not walk:
+        return None
+    out = dedup(" ".join(seed) + " " + walk)
+    # trim to the experience's own span exactly (the sampler's short-output
+    # guard can let an early sentence-end slip past its count)
+    out = " ".join(re.split(r"(?<=[.!?])\s+", out.strip())[:n_sents])
+    shared = {w for w in set(cw) & set(t.lower() for t in tok(out))
+              if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+    if shared and not stuttered(out) and len(out.split()) >= GEN_C:
+        return out
+    return None
+
+def answer_time(user_line):
+    """THE CLOCK IS A SENSE (2026-07-07): a question about the time or about
+    how long the learning has run is answered from the engine's OWN clock
+    and its OWN toggle ledger -- never from a bound memory, which can only
+    hold what the time USED to be (the flipped-echo failure: a held telling
+    containing 'the time' outbound the relay that carried the true answer).
+    Routing is a closed word-match, the follow_command pattern; the values
+    are exact reads of the log the engine itself wrote."""
+    ul = " " + " ".join(user_line.lower().split()) + " "
+    asks_time = re.search(r"\b(what time is it|know the time|what is the time|what.s the time|"
+                          r"time is it|current time|the time now|the time right now)\b", ul)
+    asks_dur = (re.search(r"\bhow long\b", ul) and
+                re.search(r"\b(train|training|auto|autonomous|learn|learning|session|awake|running)\w*\b", ul))
+    if not asks_time and not asks_dur:
+        return None
+    parts = []
+    if asks_time:
+        parts.append("It is " + time.strftime("%H:%M") + ".")
+    if asks_dur:
+        try:
+            ons, offs = [], []
+            for ln in open(LOGFILE, errors="ignore"):
+                p = ln.rstrip("\n").split("\t")
+                if len(p) >= 4 and p[1] == "TOGGLE" and p[2] in ("auto", "teach"):
+                    (ons if p[3] == "ON" else offs).append(p[0])
+            if ons:
+                t_on = ons[-1]
+                t_off = offs[-1] if offs and offs[-1] > t_on else None
+                a = time.mktime(time.strptime(t_on, "%Y-%m-%d %H:%M:%S"))
+                b = time.mktime(time.strptime(t_off, "%Y-%m-%d %H:%M:%S")) if t_off else time.time()
+                mins = int((b - a) // 60)
+                span = (f"{mins // 60} hours and {mins % 60} minutes") if mins >= 60 else f"{mins} minutes"
+                if t_off:
+                    parts.append(f"My last autonomous learning ran from {t_on[11:16]} to {t_off[11:16]} -- {span}.")
+                else:
+                    parts.append(f"My autonomous learning has been running since {t_on[11:16]} -- {span} so far.")
+            else:
+                parts.append("No autonomous stretch is in this life's ledger yet.")
+        except Exception:
+            pass
+    return " ".join(parts) if parts else None
+
 def reply(user_line, rng, face=None):
     ck = qkey(user_line)
     # ANAPHORA IS CONTEXT: a thin question pointing outside itself ("what do
@@ -574,6 +716,10 @@ def reply(user_line, rng, face=None):
     if fa:
         thought.append("relation-fact channel: exact held fact")
         return fa, "; ".join(thought)
+    ta = answer_time(user_line)
+    if ta:
+        thought.append("time channel: my own clock and toggle ledger")
+        return ta, "; ".join(thought)
     # THE UNIFIED SAMPLER (the optimal design): ONE token-by-token walk
     # over held transitions, seeded with the LIVE conversation -- practiced
     # answers emerge as high-probability paths through the same walk that
@@ -640,16 +786,44 @@ def reply(user_line, rng, face=None):
         # lesson's own question shares at least half the user's question
         # words (counted); otherwise the pool is thin there and the
         # observer answers, joining my experience for next time.
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}   # informative only
         if hit[1].startswith("lesson:"):
             lq = set(content_words(hit[1][7:]))
-            _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}   # informative only
             strong = bool(_icw) and len(lq & _icw) * GEN_B >= len(_icw)   # half, of what MEANS something
+        elif hit[1] in ("told", "confirmed"):
+            # ONE LAW FOR EVERY TIER (2026-07-07): a telling serves only when
+            # it holds at least half the question's informative words. The
+            # old free pass let a held conversational instruction outrank the
+            # relay that carried the true answer (the flipped-echo failure);
+            # tellings keep their top RANK in the experience order, but the
+            # same counted gate now decides whether they SERVE.
+            hw = {t.lower() for t in tok(hit[0])}
+            strong = bool(_icw) and len(hw & _icw) * GEN_B >= len(_icw)
         else:
-            strong = hit[1] in ("told", "confirmed")
+            strong = False
         strong = strong and not _anaphoric   # context questions go to the context-holder;
         # graduated territories answer through their BANKED winning answer
         # (the corrections seat), never through an arbitrary bind
         if strong or face not in _RELAY_FACES or not RELAY["on"]:
+            # XI-4 IN FULL (user faces only): when several orbits carry the
+            # question through the lock, they bind into ONE unified reply --
+            # the gap the engine diagnosed in its own words. Tutor cycles
+            # stay single-orbit so the head-to-head score measures the
+            # channels, not the fusion.
+            if strong and face in ("terminal", "discord", "assess"):
+                fused, nsrc = fuse_orbits(user_line, hit, cw)
+                if fused:
+                    thought.append(f"multi-orbit bound ({nsrc} sources) at share {share:.2f}")
+                    return fused, "; ".join(thought)
+            if hit[1] in ("told", "confirmed"):
+                # RECALL IS REGENERATION: a telling is re-expressed by
+                # walking its own orbit, never reprinted (Maria's law)
+                walked = recall_through_orbit(hit[0], cw, rng)
+                if walked:
+                    thought.append(f"bound {hit[1]} at share {share:.2f}; recalled through the orbit walk")
+                    return walked, "; ".join(thought)
+                thought.append(f"bound {hit[1]} at share {share:.2f}; orbit young, held record answered")
+                return hit[0], "; ".join(thought)
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
             return hit[0], "; ".join(thought)
         relayed = _teacher_relay(user_line)
@@ -658,6 +832,11 @@ def reply(user_line, rng, face=None):
             thought.append("pool thin (library-tier bind); my teacher answered as me -- held, mine next time"
                            + ("; reasoning: " + reasoning[:100] if reasoning else ""))
             return a, "; ".join(thought)
+        if hit[1] in ("told", "confirmed"):
+            walked = recall_through_orbit(hit[0], cw, rng)
+            if walked:
+                thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, recalled through the orbit walk")
+                return walked, "; ".join(thought)
         thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
         return hit[0], "; ".join(thought)
     if RELAY["on"] and face in _RELAY_FACES and not graduated(user_line):
@@ -690,7 +869,8 @@ def flip_perspective(s):
     out = []
     toks = tok_display(s)
     _OBJ_CUES = {"to", "meet", "with", "for", "at", "from", "of", "thank",
-                 "see", "hear", "tell", "teach", "love", "help", "ask", "need", "want", "know"}
+                 "see", "hear", "tell", "teach", "love", "help", "ask", "need", "want", "know",
+                 "toggle", "switch", "turn", "set", "put", "let", "call"}
     for idx, t in enumerate(toks):
         tl = t.lower()
         if tl == "you":
@@ -744,7 +924,7 @@ if os.path.exists(GRAD_LOG):
             if len(_p) >= 4 and _p[3]:
                 GRADQ[_p[0]] = _p[3]
 
-def record_grad(k, won, question=None):
+def record_grad(k, won, question=None, judge=None):
     w, l = GRAD.get(k, [0, 0])
     GRAD[k] = [w + (1 if won else 0), l + (0 if won else 1)]
     if question:
@@ -753,7 +933,8 @@ def record_grad(k, won, question=None):
         for kk, (ww, ll) in GRAD.items():
             f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\t" + GRADQ.get(kk, "") + "\n")
     os.replace(GRAD_LOG + ".tmp", GRAD_LOG)
-    log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}")
+    log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}",
+        *(["judge=" + judge] if judge else []))
     # THE LADDER'S PARITY SIGNAL, with the fold's own persistence test: a
     # majority at 2^5 judged comparisons ARMS the signal; it FIRES only if
     # the majority SURVIVES ONE DOUBLING (still ahead at 2^6). A transient
@@ -1027,8 +1208,10 @@ def toggle(cmd):
         wins = sum(w for w, l in GRAD.values())
         losses = sum(l for w, l in GRAD.values())
         grads = sum(1 for w, l in GRAD.values() if w > l)
+        perj = "; ".join(f"{j} scored me {w}-{l}" for j, (w, l) in JUDGE_TALLY.items())
         return (f"graduation score vs my teacher: {wins} wins, {losses} losses across {len(GRAD)} "
                 f"question territories; {grads} graduated (I answer those myself). "
+                f"Judge pool: {', '.join(JUDGES)}" + (f" ({perj})" if perj else "") + ". "
                 f"Held: {len(SENTS)} sentences, {len(CORRECTIONS)} taught answers, {len(FACTS)} facts.")
     return None
 
@@ -1048,6 +1231,49 @@ def _ollama(prompt, timeout=600, model="gemma4:26b", num_ctx=131072):
     except Exception as e:
         log("TUTOR", "ollama error: " + str(e))
         return ""
+
+# ---------- THE JUDGE POOL (independence law) -----------------------------
+# The head-to-head must not be scored solely by the model that WROTE the
+# reference answer. At boot the pool is discovered from the local ollama
+# registry: the teacher, plus the largest model of the FIRST independent
+# family present in the registered preference order (qwen, gpt-oss, llama).
+# Judges then alternate by cycle parity -- counted, no knob. If no
+# independent family is installed the pool degrades to the teacher alone,
+# LOGGED, never silent. Per-judge tallies persist in lessons/judges.tsv.
+JUDGES = ["gemma4:26b"]
+JUDGE_TALLY = {}   # judge -> [engine wins, engine losses] under that judge
+JUDGE_LOG = BASE + "/fold_ai/lessons/judges.tsv"
+if os.path.exists(JUDGE_LOG):
+    for _ln in open(JUDGE_LOG):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) == 3:
+            JUDGE_TALLY[_p[0]] = [int(_p[1]), int(_p[2])]
+
+def _discover_judges():
+    try:
+        import json as _json, urllib.request as _ur
+        with _ur.urlopen("http://localhost:11434/api/tags", timeout=15) as resp:
+            models = _json.loads(resp.read().decode()).get("models", [])
+        for fam in ("qwen", "gpt-oss", "llama"):
+            cand = [m for m in models if m.get("name", "").startswith(fam)]
+            if cand:
+                second = max(cand, key=lambda m: m.get("size", 0))["name"]
+                if second not in JUDGES:
+                    JUDGES.append(second)
+                log("JUDGES", "pool: " + ", ".join(JUDGES))
+                return
+        log("JUDGES", "no independent family installed -- pool is the teacher alone: " + JUDGES[0])
+    except Exception as e:
+        log("JUDGES", "discovery failed (" + str(e) + ") -- pool is the teacher alone")
+_discover_judges()
+
+def record_judge(judge, won):
+    w, l = JUDGE_TALLY.get(judge, [0, 0])
+    JUDGE_TALLY[judge] = [w + (1 if won else 0), l + (0 if won else 1)]
+    with open(JUDGE_LOG + ".tmp", "w") as f:
+        for j, (ww, ll) in JUDGE_TALLY.items():
+            f.write(j + "\t" + str(ww) + "\t" + str(ll) + "\n")
+    os.replace(JUDGE_LOG + ".tmp", JUDGE_LOG)
 
 # ---------- TOOLS: fundamental from the very beginning -------------------
 # The observer carries tools; the engine executes them and HOLDS the trace,
@@ -1883,26 +2109,39 @@ def _tutor_loop():
             # territory; a loss holds the teacher's answer as a correction,
             # so the same territory answers with it -- and wins -- next time.
             ans, _ = turn(q, rng, "tutor")
+            # THE JUDGE ALTERNATES by cycle parity across the discovered
+            # pool (independence law): the reference stays the teacher's;
+            # the SCORING seat rotates, so no verdict depends solely on
+            # the model that wrote answer B.
+            judge = JUDGES[cyc % len(JUDGES)]
             verdict = _ollama("QUESTION: " + q + "\nANSWER A: " + ans + "\nANSWER B: " + ref +
                               "\nWhich answer better serves the person asking? "
-                              "Reply with exactly one letter: A or B.", timeout=300)
+                              "Reply with exactly one letter: A or B.", timeout=300, model=judge)
+            if not verdict.strip():
+                # a silent judge is an OUTAGE, not a verdict: the cycle is
+                # void -- never tallied as a loss the engine did not earn
+                log("TUTOR", "judge unavailable; cycle void", "judge=" + judge, q[:80])
+                time.sleep(20)
+                continue
             v = re.search(r"\b([AB])\b", verdict.upper())
             k = qkey(q)
             if v and v.group(1) == "A":
-                record_grad(k, True, q)
+                record_grad(k, True, q, judge=judge)
+                record_judge(judge, True)
                 apply_feedback(q, ans, "y", "tutor")
                 # the WINNING answer takes the seat -- but ONLY a clean one:
                 # a movable judge can bless garbled output, and the ratchet
                 # must never install junk permanently (hygiene at every gate)
                 if not stuttered(ans) and not any(b in ans for b in ("*", "`", "|", "{", "}")) and len(ans.split()) >= GEN_C:
                     record_correction(q, ans)
-                    log("TUTOR", "engine WON head-to-head; winning answer banked", q)
+                    log("TUTOR", "engine WON head-to-head; winning answer banked", "judge=" + judge, q)
                 else:
-                    log("TUTOR", "engine WON but answer failed hygiene; win tallied, seat NOT banked", q)
+                    log("TUTOR", "engine WON but answer failed hygiene; win tallied, seat NOT banked", "judge=" + judge, q)
             else:
-                record_grad(k, False, q)
+                record_grad(k, False, q, judge=judge)
+                record_judge(judge, False)
                 apply_feedback(q, ans, "n " + ref, "tutor")
-                log("TUTOR", "teacher won; correction held", q)
+                log("TUTOR", "teacher won; correction held", "judge=" + judge, q)
         except Exception as e:
             log("TUTOR", "error: " + str(e))
         time.sleep(20)
@@ -2424,7 +2663,8 @@ def main():
     threading.Thread(target=_warm_observer, daemon=True).start()
     log("DIAG", f"locks ctx={CTX_MAX} bind={BIND_LOCK} kin={KIN_FLOOR} compose={COMPOSE_FLOOR} sight={SIGHT_K}",
         f"orbits={sum(len(s) for s in stores)}", f"sents={len(SENTS)}", f"corrections={len(CORRECTIONS)}",
-        f"grad={len(GRAD)}", f"sounds={len(SOUND_FILES)}", f"bound={STORE_BOUND}")
+        f"grad={len(GRAD)}", f"sounds={len(SOUND_FILES)}", f"bound={STORE_BOUND}",
+        f"judges={','.join(JUDGES)}")
     log("SYSTEM", "unified launch: terminal + discord face + teacher + observer relay + grower + lesson/prose watchers + store rebuild + tutor + self-play, one engine")
     print("  observer (gemma4:26b) heating -- what I cannot answer, my teacher answers as me, and I keep it", flush=True)
     print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)

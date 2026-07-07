@@ -2,12 +2,21 @@
 directly (no subprocess, no stale ledgers) and checks each turn."""
 import importlib.util, sys, io, contextlib
 
-# load the engine module but suppress its wake print and skip main()
-spec = importlib.util.spec_from_file_location("uc", "unison_chat.py")
+# load the engine module but suppress its wake print and skip main().
+# LIVE-FLIGHT SAFETY: the engine rotates logs/unison.log to archive at
+# import -- that file belongs to the LIVE flight, so the harness loads the
+# source with LOGFILE redirected to its own log first (one asserted
+# replacement; everything else byte-identical).
+_src = open("unison_chat.py").read()
+_OLD = 'LOGFILE = LOGDIR + "/unison.log"'
+assert _src.count(_OLD) == 1, "LOGFILE anchor drifted -- refusing to load"
+_src = _src.replace(_OLD, 'LOGFILE = LOGDIR + "/test_chat.log"')
+spec = importlib.util.spec_from_loader("uc", loader=None, origin="unison_chat.py")
 uc = importlib.util.module_from_spec(spec)
+uc.__file__ = "unison_chat.py"
 with contextlib.redirect_stdout(io.StringIO()):
     # prevent main() from running on import: it's guarded by __main__, fine
-    spec.loader.exec_module(uc)
+    exec(compile(_src, "unison_chat.py", "exec"), uc.__dict__)
 
 import numpy as np
 rng = np.random.default_rng(0)

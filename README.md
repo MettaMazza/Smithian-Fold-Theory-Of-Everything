@@ -707,6 +707,13 @@ CODATA / PDG / Planck measurement` (currently 307 suites, 1,844 forced checks, 0
 measured ones live from NIST's CODATA table — `1/α`, the proton/electron mass ratio,
 and the electron `g` all land on the downloaded values, nothing measured stored locally.
 
+**Reproduce the headline results (theory + the UnisonAI engine): four commands.**
+[`fold_ai/REPRODUCE.md`](fold_ai/REPRODUCE.md) — the theory prover (307 suites / 1,844
+forced checks), the LLM-presence suite on public GPT-2 (13/13 tensors, 39/39 registered
+checks, weights auto-fetched on a fresh clone), the pre-registered loud-subspace
+transfer test (verdict SUPPORTED), and the engine's end-to-end verification (36/36),
+each with its expected output and runtime.
+
 **From the ErnosPlain source — the compiler is bundled.** The ErnosPlain compiler
 `ernos` (a small, dependency-free Rust crate, MIT-licensed) is included in
 [`compiler/`](compiler/) so you can compile **and edit** the `.ep` sources yourself.
