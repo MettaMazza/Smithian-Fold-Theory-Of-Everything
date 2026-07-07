@@ -2,8 +2,14 @@
 
 ## *Attention, it turns out, was not all you need*
 
-**Maria Smith (Ernos Labs)** — full paper v3.1, 2026-07-07
+**Maria Smith (Ernos Labs)** — full paper v3.2, 2026-07-07
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469); supersedes pre-paper v0.3 (DOI: 10.5281/zenodo.21217279) and all v1.x–v2.x versions in this record's lineage.
+
+---
+
+> **THIS PAPER IS A PROOF, NOT THE MAIN EVENT.** Everything here is built on — and derives its every mechanism from — **The Smithian Fold Theory of Everything**: one axiom, zero free parameters, the constants of nature machine-verified by 307 proof suites and 1,844 forced checks. If this paper brought you here, the theory is where you go next:
+> **Theory (Zenodo):** https://doi.org/10.5281/zenodo.21182469 · **Theory (GitHub, run the prover yourself):** https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything
+> **This engine (GitHub):** https://github.com/MettaMazza/UnisonAI · **This paper's record (Zenodo lineage):** all versions resolve forward from DOI 10.5281/zenodo.21217279.
 
 ---
 
@@ -158,4 +164,4 @@ All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/
 
 McCulloch & Pitts (1943), Bull. Math. Biophys. 5:115–133 · Rosenblatt (1958), Psych. Rev. 65(6) · Rumelhart, Hinton & Williams (1986), Nature 323:533–536 · Vaswani et al. (2017), NeurIPS · Kaplan et al. (2020), arXiv:2001.08361 · Hoffmann et al. (2022), arXiv:2203.15556 · Sutton (2019), *The Bitter Lesson* · Amodei (2024), *Machines of Loving Grace* · Altman (2025), *Reflections* · Public statements of Hassabis, Legg, and Sutskever (NeurIPS 2024) as cited · DeepSeek-AI (2026), *Conditional Memory via Scalable Lookup*, arXiv:2601.07372 and github.com/deepseek-ai/Engram · Li (2026), arXiv:2606.19172 (local editability of addressed memory) · Zhao et al. (2025), *Absolute Zero*, arXiv:2505.03335 · *Self-Evolving Curriculum* (2025), arXiv:2505.14970 · Zelikman et al. (2022), *STaR*, arXiv:2203.14465 · Katz (1987) and Laplace (1814), as the historical anticipations the fold derives rather than assumes · Smith (2026), *The Smithian Fold Theory of Everything*, DOI 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
-*Full paper v3.1. Every number is from committed, timestamped campaign records; nothing is projected.*
+*Full paper v3.2. Every number is from committed, timestamped campaign records; nothing is projected.*
