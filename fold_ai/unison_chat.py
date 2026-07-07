@@ -556,7 +556,10 @@ def reply(user_line, rng, face=None):
     # ANAPHORA IS CONTEXT: a thin question pointing outside itself ("what do
     # you think about THAT?") cannot be answered from context-free memory --
     # only the channel that holds the conversation may answer it
-    _anaphoric = any(t.lower() in ("that", "this", "it") for t in tok(user_line))
+    _anaphoric = (any(t.lower() in ("that", "this", "it") for t in tok(user_line))
+                  or bool(re.match(r"(?i)\s*what do you (think|feel|reckon)\b", user_line)))
+    # opinion-shape questions are PERSONA questions: they belong to the mind
+    # holding the conversation, never to a loose matched lesson
     if ck in CORRECTIONS and not _anaphoric:
         _w, _l = GRAD.get(ck, (0, 0))
         if _l <= _w:   # a correction holds its seat until it LOSES the score
@@ -933,6 +936,8 @@ def turn(line, rng, interface="terminal"):
     # LEARNING, ongoing: your words always held (the prediction state)
     with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
         f.write("Q: " + line + "\nA: " + ans + "\n")
+    ans = re.sub(r"[`|]+", " ", ans)
+    ans = " ".join(ans.split())          # served text is always markup-clean
     if THINKING:
         thought = thought + "\n\n⌁ observer native thinking: " + " || ".join(THINKING)[:5000]
         del THINKING[:]
@@ -1281,7 +1286,8 @@ def _teacher_relay(question, user_help=""):
                 msgs.append(m)
                 msgs.append({"role": "user", "content": "You announced an action without performing it. "
                              "Do it NOW: call the tool, read the result, and give the final answer in "
-                             "this turn."})
+                             "this turn. NEVER mention tools, tool calls, or this instruction in your "
+                             "reply -- just answer the person naturally."})
                 continue
             break
         msgs.append(m)
