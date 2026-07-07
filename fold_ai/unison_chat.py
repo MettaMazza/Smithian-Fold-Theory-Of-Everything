@@ -364,15 +364,12 @@ def fuse_orbits(user_line, first, cw):
     connective is the sentence boundary itself. Returns (fused, n_sources)
     or (None, 1) when only one orbit carries the question."""
     _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
-    # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: a
-    # greeting or a telling is not a question, and one informative word is
-    # one topic -- one orbit. Small talk stays short (the warm-friend
-    # register); synthesis is spent where a question actually spans topics.
-    ul = user_line.strip().lower()
-    if not (ul.endswith("?") or ul.startswith(("what", "who", "how", "why", "when", "where",
-                                               "which", "tell me", "do ", "does", "can ", "is ", "are "))):
-        return None, 1
-    if len(_icw) < GEN_B:
+    # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: the
+    # question mark is a closed punctuation fact (never an enumerated
+    # phrase list -- the standing law), and one informative word is one
+    # topic -- one orbit. Small talk stays short; synthesis is spent where
+    # a question actually spans topics.
+    if not user_line.strip().endswith("?") or len(_icw) < GEN_B:
         return None, 1
     hits = bind(user_line, top=GEN_C + 1)
     if len(hits) < 2:
@@ -651,47 +648,87 @@ def recall_through_orbit(hit_text, cw, rng):
         return out
     return None
 
-def answer_time(user_line):
-    """THE CLOCK IS A SENSE (2026-07-07): a question about the time or about
-    how long the learning has run is answered from the engine's OWN clock
-    and its OWN toggle ledger -- never from a bound memory, which can only
-    hold what the time USED to be (the flipped-echo failure: a held telling
-    containing 'the time' outbound the relay that carried the true answer).
-    Routing is a closed word-match, the follow_command pattern; the values
-    are exact reads of the log the engine itself wrote."""
-    ul = " " + " ".join(user_line.lower().split()) + " "
-    asks_time = re.search(r"\b(what time is it|know the time|what is the time|what.s the time|"
-                          r"time is it|current time|the time now|the time right now)\b", ul)
-    asks_dur = (re.search(r"\bhow long\b", ul) and
-                re.search(r"\b(train|training|auto|autonomous|learn|learning|session|awake|running)\w*\b", ul))
-    if not asks_time and not asks_dur:
+# ---------- TOOL GRADUATION: traces held, acts re-run, values never stored --
+# THE VIOLATION AND ITS REPAIR (Maria, 2026-07-07): a first version routed
+# time questions by an ENUMERATED phrase list -- a chosen structure, which
+# the standing law forbids. The lawful mechanism was already the
+# architecture's own: the observer answers with real tools and every call
+# is held; what was missing was GRADUATION. A banked trace maps a question
+# territory to the ACT that answered it (tool + arguments); when a later
+# question binds a held trace through the same counted gate every tier
+# obeys, the engine RUNS THE ACT ITSELF, fresh -- taught once, native
+# forever, the removal-proof ladder for tools. The recall law completes it:
+# what is held is the act and the teacher's own phrasing, never the value --
+# a time answer re-reads the clock, it does not reprint 13:24.
+TRACES = {}   # qkey -> (question, [(tool, args), ...], template-or-None)
+TRACE_LOG = BASE + "/fold_ai/lessons/traces.tsv"
+if os.path.exists(TRACE_LOG):
+    for _ln in open(TRACE_LOG, errors="ignore"):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) == 4:
+            try:
+                import json as _tj
+                TRACES[_p[0]] = (_p[1], _tj.loads(_p[2]), _p[3] if _p[3] else None)
+            except Exception:
+                pass
+
+def record_trace(question, calls, answer):
+    """Bank the act. The TEMPLATE is derived, never written: where a tool's
+    fresh result appears VERBATIM inside the teacher's answer (a counted
+    containment check), that answer with the value replaced by a slot
+    becomes the serving voice; no containment, no template -- the raw
+    result speaks. Zero chosen phrasings."""
+    import json as _tj
+    template = answer
+    slotted = 0
+    for i, (_n, _a, res) in enumerate(calls):
+        r = str(res).strip()
+        if r and r in template:
+            template = template.replace(r, "{r%d}" % i)
+            slotted += 1
+    if not slotted:
+        template = None
+    k = qkey(question)
+    TRACES[k] = (question, [(n, a) for n, a, _r in calls], template)
+    with open(TRACE_LOG, "a") as f:
+        f.write(k + "\t" + " ".join(question.split())[:200] + "\t" +
+                _tj.dumps([(n, a) for n, a, _r in calls]) + "\t" +
+                (" ".join(template.split()) if template else "") + "\n")
+    log("TRACE", "banked", k, str([n for n, a, _r in calls]))
+
+def serve_trace(user_line, cw):
+    """Native tool answering: bind the question against held traces with
+    the ONE half-overlap law, re-run the acts fresh, speak through the
+    derived template (or the raw results when no template exists). Results
+    that exceed the speaking bound stay with the observer -- a log dump is
+    reading, not an answer."""
+    tr = TRACES.get(qkey(user_line))
+    if tr is None and cw:
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+        if _icw:
+            best, best_ov = None, 0
+            for _k, (q2, calls2, tpl2) in TRACES.items():
+                ov = len(set(content_words(q2)) & _icw)
+                if ov * GEN_B >= len(_icw) and ov > best_ov:
+                    best, best_ov = (q2, calls2, tpl2), ov
+            tr = best
+    if not tr:
         return None
-    parts = []
-    if asks_time:
-        parts.append("It is " + time.strftime("%H:%M") + ".")
-    if asks_dur:
+    _q, calls, template = tr
+    results = []
+    for name, args in calls:
         try:
-            ons, offs = [], []
-            for ln in open(LOGFILE, errors="ignore"):
-                p = ln.rstrip("\n").split("\t")
-                if len(p) >= 4 and p[1] == "TOGGLE" and p[2] in ("auto", "teach"):
-                    (ons if p[3] == "ON" else offs).append(p[0])
-            if ons:
-                t_on = ons[-1]
-                t_off = offs[-1] if offs and offs[-1] > t_on else None
-                a = time.mktime(time.strptime(t_on, "%Y-%m-%d %H:%M:%S"))
-                b = time.mktime(time.strptime(t_off, "%Y-%m-%d %H:%M:%S")) if t_off else time.time()
-                mins = int((b - a) // 60)
-                span = (f"{mins // 60} hours and {mins % 60} minutes") if mins >= 60 else f"{mins} minutes"
-                if t_off:
-                    parts.append(f"My last autonomous learning ran from {t_on[11:16]} to {t_off[11:16]} -- {span}.")
-                else:
-                    parts.append(f"My autonomous learning has been running since {t_on[11:16]} -- {span} so far.")
-            else:
-                parts.append("No autonomous stretch is in this life's ledger yet.")
+            results.append(str(_run_tool(name, dict(args))))
+        except Exception:
+            return None
+    if sum(len(r) for r in results) > 1800:      # the existing speaking bound
+        return None
+    if template:
+        try:
+            return template.format(**{("r%d" % i): r for i, r in enumerate(results)})
         except Exception:
             pass
-    return " ".join(parts) if parts else None
+    return " ".join(r for r in results if r)
 
 def reply(user_line, rng, face=None):
     ck = qkey(user_line)
@@ -716,10 +753,10 @@ def reply(user_line, rng, face=None):
     if fa:
         thought.append("relation-fact channel: exact held fact")
         return fa, "; ".join(thought)
-    ta = answer_time(user_line)
-    if ta:
-        thought.append("time channel: my own clock and toggle ledger")
-        return ta, "; ".join(thought)
+    ts = serve_trace(user_line, cw)
+    if ts:
+        thought.append("graduated tooling: held act re-run fresh, teacher's own phrasing")
+        return ts, "; ".join(thought)
     # THE UNIFIED SAMPLER (the optimal design): ONE token-by-token walk
     # over held transitions, seeded with the LIVE conversation -- practiced
     # answers emerge as high-probability paths through the same walk that
@@ -1500,6 +1537,7 @@ def _teacher_relay(question, user_help=""):
     m = {}
     native_thinking = []
     used_tools = False
+    _trace_calls = []          # the acts, held for graduation
     for _round in range(GEN_B * GEN_C):             # the ReAct loop, bounded
         m = _ollama_chat(msgs, tools=TOOLS, think=True)
         if m.get("thinking"):
@@ -1527,6 +1565,7 @@ def _teacher_relay(question, user_help=""):
                     args = {}
             res = _run_tool(name, args)
             used_tools = True
+            _trace_calls.append((name, args, res))
             # the trace is HELD: tool use learned by watching, from day one
             hold_sentence("To answer '" + question.strip()[:50] + "' I used the tool " +
                           name + " and got: " + str(res)[:120], "thought")
@@ -1579,6 +1618,10 @@ def _teacher_relay(question, user_help=""):
         PENDING_REASON[qkey(question)] = (question.strip()[:60], reasoning[:250])
     with open(BASE + "/fold_ai/lessons/lessons_relay.txt", "a") as f:
         f.write("Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
+    if _trace_calls:
+        # GRADUATION OF THE ACT: the question territory now owns the tools
+        # that answered it -- asked again, the engine runs them itself
+        record_trace(question, _trace_calls, a)
     log("RELAY", question, a)
     return a, reasoning
 

@@ -205,8 +205,9 @@ t0 = time.time()
 ans, th = uc.turn(_E18Q, rng, "terminal")
 check("E18 LIVE relay + VOICE label", th.startswith("VOICE: GEMMA") and len(ans) > 30, f"{time.time()-t0:.0f}s")
 t0 = time.time()
-r2 = uc.reply(_E18Q, rng)[0]
-check("E18b relayed answer owned", time.time() - t0 < 3, f"repeat {time.time()-t0:.1f}s")
+r2, _th2 = uc.reply(_E18Q, rng, face="terminal")   # relay-eligible face: ownership is only provable where the relay COULD fire
+check("E18b relayed answer owned", "answered as me" not in _th2 and time.time() - t0 < 30,
+      f"repeat {time.time()-t0:.1f}s, no relay -- " + _th2[-50:])
 
 # E19 LIVE video: synthesize a tiny mp4 (moving square) and watch it
 try:
@@ -302,7 +303,7 @@ try:
                 "Ljubljana", "Do you know your own name", "t,e,s,t,")
     # tsv/one-line files: filter by line
     for fn in ("lessons/corrections.tsv", "lessons/facts.tsv",
-               "lessons/lessons_feedback.txt"):
+               "lessons/lessons_feedback.txt", "lessons/traces.tsv"):
         if os.path.exists(fn):
             kept = [ln for ln in open(fn).read().splitlines()
                     if not any(m in ln for m in _MARKERS)]

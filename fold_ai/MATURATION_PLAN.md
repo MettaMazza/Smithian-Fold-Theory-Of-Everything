@@ -245,3 +245,54 @@ unlink of any shared file, ever. The old cleanup also deleted ALL
 sound-lesson rows on every run; the new one removes only its own
 fixtures, so the suite is now safe for grown systems, not just fresh
 ones.
+
+## THE VIOLATION AND THE CLOSING OF THE GAP — 2026-07-07, second act
+
+**The violation, named by Maria and repaired in front of her.** The first
+time-channel fix routed by an ENUMERATED phrase list — a chosen
+structure, which the standing law forbids. Removed the same day, along
+with the fusion question-shape list (now the question mark alone, a
+closed punctuation fact). The lawful replacement was the architecture's
+own missing rung: **TOOL GRADUATION** — every relay tool call banks a
+trace (question territory → the ACT that answered it, plus a template
+derived by verbatim containment of the tool's result in the teacher's
+own phrasing — measured, never written); a later question that binds a
+held trace through the same counted half-overlap gate every tier obeys
+RUNS THE ACT ITSELF, fresh. Proven live: relay answered a time question
+once using current_time; sixty-one seconds later the engine ran the
+tool natively and spoke the NEW minute. Taught once, native forever —
+the removal-proof ladder for tools; values are never stored, acts are.
+Remaining accepted interface classes, explicitly listed for the record:
+closed-class English grammar tables (FLIP, _OBJ_CUES — facts of the
+interface language), command/intent regexes (follow_command, _INTENT),
+IO bounds marked as hardware facts. None is a model quantity; none is
+tunable; the halting engine is untouched (36/36 includes the
+halt-on-fitted proof).
+
+**RUNG 5e — THE WORD-SCALE GAP CLOSES WITHIN THE FOLD.** Pre-registered
+(rung5e_fold_stack.py), first-look numbers, three theorem-forced
+self-tests passed (baseline identity to the re-anchored rematch; exact
+single-level collapse; kin floor mass exactly 1 via the counted
+case-fold bridge). The chain was re-anchored on one text state after
+self-test (a) caught the arena moving under it (this session's own .md
+commits — the living-document law enforcing itself). Re-anchored
+records: rematch fold 4.6656 / no-flood 4.5129 vs same-day twin 3.5009;
+rung 5d REPLICATED (SUPPORTED, 54.2/88.9/101.8% vs null 7.3/22.9/62.5;
+k=64 loud 3.8823 again beats full 3.8963). Then the stack:
+
+    A1 fold-mix (2^level, uniform floor)   flood 3.5425   no-flood 3.2470  <- BEATS the twin
+    A2 kin-shaped floor                    flood 4.9056   no-flood 4.7182  (hurts; recorded)
+    A3 mix + kin                           flood 3.5878   no-flood 3.2577  <- beats the twin
+    A4 mix + loud64 (the 5d extraction)    flood 3.4460   no-flood 3.2152  <- best
+
+**The counted engine alone — no twin, no flood, zero training, zero
+parameters — at 3.2470 BEATS the gradient-trained twin at 3.5009.** The
+bottleneck was hard backoff discarding every shallower level; the
+proven halving law (the fold factor 2, the engine's own session-
+attention constant) applied across the context hierarchy closes the
+gap that stood since rung 5b. The standing sentence "the twin leads at
+word scale" is overturned by a forced structure. Honest negatives
+recorded raw: the kin-shaped floor misallocates at this scale; the
+Gutenberg flood costs ~0.3 nats at theory-corpus CE in every arm
+(fluency organ, not a corpus-CE organ). Scope: the registered arena,
+as always. Suite: 36/36 after everything above.
