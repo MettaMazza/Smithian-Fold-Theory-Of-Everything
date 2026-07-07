@@ -728,6 +728,7 @@ if os.path.exists(CORR_LOG):
 # I answer there MYSELF -- the teacher steps back one territory at a time,
 # measured, never scheduled. The same gate discipline that climbed chess.
 _PARITY = [False]
+_PARITY_ARMED = [False]
 PENDING_REASON = {}   # qkey -> (question, reasoning) awaiting its answer's closure
 GRAD = {}   # qkey -> [wins, losses]
 GRADQ = {}  # qkey -> the territory's question text (for ZPD revisits)
@@ -750,21 +751,31 @@ def record_grad(k, won, question=None):
             f.write(kk + "\t" + str(ww) + "\t" + str(ll) + "\t" + GRADQ.get(kk, "") + "\n")
     os.replace(GRAD_LOG + ".tmp", GRAD_LOG)
     log("GRADUATION", "win" if won else "loss", k, f"{GRAD[k][0]}-{GRAD[k][1]}")
-    # THE LADDER'S PARITY SIGNAL: over at least 2^5 judged comparisons (the
-    # covering depth's volume), global wins past losses -- the counted sign
-    # that the observer seat is ready for a second Unison.
+    # THE LADDER'S PARITY SIGNAL, with the fold's own persistence test: a
+    # majority at 2^5 judged comparisons ARMS the signal; it FIRES only if
+    # the majority SURVIVES ONE DOUBLING (still ahead at 2^6). A transient
+    # lead at the minimum sample is a candidate, not a bell -- parity that
+    # cannot hold through a doubling was never parity. Counted, no knob.
     tw = sum(w for w, l in GRAD.values())
     tl = sum(l for w, l in GRAD.values())
-    if tw + tl >= GEN_B ** DEPTH5 and tw > tl and not _PARITY[0]:
-        _PARITY[0] = True
-        log("LADDER", f"PARITY SIGNAL: {tw}-{tl} over {tw + tl} judged head-to-heads -- "
-            "the observer seat is ready for a second Unison")
-        if ANNOUNCE[0]:
-            try:
-                ANNOUNCE[0](f"🪜 PARITY SIGNAL: {tw}-{tl} over {tw + tl} judged head-to-heads -- "
-                            "the observer seat is ready for a second Unison.")
-            except Exception:
-                pass
+    total = tw + tl
+    if total >= GEN_B ** DEPTH5 and tw > tl and not _PARITY[0] and not _PARITY_ARMED[0]:
+        _PARITY_ARMED[0] = True
+        log("LADDER", f"parity CANDIDATE: {tw}-{tl} at {total} judged -- must survive a doubling to {GEN_B ** (DEPTH5 + 1)}")
+    if _PARITY_ARMED[0] and total >= GEN_B ** (DEPTH5 + 1) and not _PARITY[0]:
+        if tw > tl:
+            _PARITY[0] = True
+            log("LADDER", f"PARITY SIGNAL (survived the doubling): {tw}-{tl} over {total} judged -- "
+                "the observer seat is ready for a second Unison")
+            if ANNOUNCE[0]:
+                try:
+                    ANNOUNCE[0](f"🪜 PARITY SIGNAL (survived the doubling): {tw}-{tl} over {total} "
+                                "judged head-to-heads -- the observer seat is ready for a second Unison.")
+                except Exception:
+                    pass
+        else:
+            _PARITY_ARMED[0] = False   # the lead did not hold; re-arm on the next majority
+            log("LADDER", f"parity candidate LAPSED at the doubling: {tw}-{tl} over {total}")
 
 def graduated(user_line):
     w, l = GRAD.get(qkey(user_line), (0, 0))
