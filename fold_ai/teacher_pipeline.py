@@ -21,7 +21,7 @@ UNISON_SYSTEM = (open(_pp, errors="ignore").read() if __import__("os").path.exis
 
 CONVO_PROMPT = UNISON_SYSTEM + """
 
-Write exactly 10 short casual conversation pairs between a person and you. If a pair would touch the Smithian Fold Theory's specifics, skip that pair -- theory comes only from passage-grounded lessons. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. Answers at their natural length, in your steady voice. No markdown, no lists.
+Write exactly 10 short casual conversation pairs between a person and you. NEVER robotic: no status-report language ('I am operational', 'systems stable', 'input stream') -- answer small talk the way a warm, quick friend does: short, alive, curious back. If a pair would touch the Smithian Fold Theory's specifics, skip that pair -- theory comes only from passage-grounded lessons. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. Answers at their natural length, in your steady voice. No markdown, no lists.
 Format STRICTLY as:
 Q: ...
 A: ..."""
