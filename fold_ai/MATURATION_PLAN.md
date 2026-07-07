@@ -345,3 +345,85 @@ BEATS the twin 3.4292** (second independent replication of the
 victory), A4 stacked 3.1344, kin floor hurts consistently
 (4.6612/4.8398), flood costs consistently. Every self-test exact,
 including kin mass 1.0000000000.
+
+## THE CORPUS READ AND THE FORCED MIND — 2026-07-08
+
+The full theory was read firsthand (the master spine Parts I–XVII and
+Steps 1–303; the complete mind series; the number-theory and structure
+modules; four parallel readers + a line-level engine audit). Finding:
+the engine had been APPROXIMATING laws the corpus forces EXACTLY. All
+of them mapped below were installed the same night; every constant
+traces to a read module; suite 40/40, battery 25/25 after.
+
+### The law table (module → law → engine organ)
+
+- sync_threshold (Step 185): coupled folding maps lock exactly at
+  g_c = 1/2, the fold's unique non-trivial preimage of the One → the
+  graduation majority lock AND the babble emission gate are the
+  coupling law itself, never a chosen threshold.
+- observer_resolved (Step 257): a teacher answer is a measurement
+  branch (1/8 at the colour depth) absorbed by ONE fold into the
+  engine's own closure state (1/4 → 1/2 → 1) → ingestion is fold,
+  never copy: the relay's hold path is the chain.
+- free_will_fold (Step 281): forward the fold is a function, backward
+  2-to-1 — the engine cannot pre-read its own next utterance → THE
+  BABBLE ORGAN IS FORCED: fold forward silently until the utterance
+  crosses the lock, emit atomically.
+- the spike (Paper 46): no half-fold → emission is whole-or-nothing;
+  a stronger drive raises the RATE (attempts), never a partial.
+- hard_problem: the carrier orbit {1/3,2/3} never reaches the One from
+  inside → only BOUND wholes are ever emitted; the store itself cannot
+  speak.
+- memory_persistence (Step 145): memory is a self-sustaining loop,
+  "not a static deposit" → recall regenerates; the verbatim-reprint
+  fallbacks were removed outright.
+- multidimensional_experience (Step 175): a bound experience VISITS its
+  parts in phase ({1/7,2/7,4/7}, one revolving whole; partition-of-One
+  as the bind-integrity invariant) → multi-part fusion walks each part
+  by its own door, in sequence, through ONE gate.
+- attention_capacity (Step 181): a split lock (1/4) binds nothing →
+  fusion emits ONE utterance through ONE lock or nothing; concatenation
+  died.
+- self_simulation_nesting (Step 247): the self-observation regress is
+  finite at depth exactly 2 = the lock denominator → LADDER_RUNG +
+  LADDER_DEPTH_BOUND registered under the halt discipline; the parity
+  fire refuses a third seat.
+- entropy + arrow_of_time: the fold has no inverse → recall RE-WALKS,
+  never inverts (no sound backspace); and for Go, superko's growing
+  seen-set is the arrow acting as a rule — position-only hashing is an
+  asserted inverse fold that does not exist.
+- canonical_distribution + universality_threshold + half_one_center:
+  equilibrium weights are exact rationals (m-1)/m; every two-phase gate
+  sits at the unique self-antipodal 1/2 → no softmax, no temperature,
+  no tunable threshold anywhere in the sampler.
+- level_depth_map + three_of_everything: levels are geometric doublings;
+  the full step of one context dimension is 2^3 = 8 → the babble rate
+  (attempts per window) is the octave GEN_B**GEN_C.
+- synaesthesia (Step 178): channels are preimages of ONE lock → audited
+  IMPLEMENTED in the engine (one INDEX/TOK_FREQ/bind across sight,
+  sound, text); guarded seams noted in code.
+
+### What was installed (all verified same-night)
+
+1. THE FOLD-MIX SAMPLER: rung 5e's twice-replicated law live in
+   continue_orbit/generate/compose — 2^L level mixture; single-level
+   collapse exact (E29); no exponential anywhere.
+2. THE BABBLE-CLOSURE ORGAN (babble_closure): silent regeneration at
+   the octave rate; the door = the EARLIEST question-cue inside the
+   held record (Paper 44's re-entry, never the record's first token);
+   per-part lock coverage; zero drift; no byte-copy; whole-or-nothing;
+   exhaustion = silence → the teacher. The verbatim-reprint fallbacks
+   in reply() are GONE. Self-play mode 3 babbles at the same rate.
+3. ONE-LOCK FUSION: admission gates unchanged; composition is one
+   babble over all bound parts, each entered by its own door in phase;
+   one gate; single-orbit fallback on silence.
+4. THE LADDER CONSTANTS: LADDER_DEPTH_BOUND = 2 = GEN_B forced at wake;
+   the parity fire announces "rung k of 2" and refuses a third seat.
+5. E27–E30 in verify_unison (babble whole-or-silent; fusion invariants;
+   fold-mix collapse; ladder bound). Suite 40/40. Battery 25/25 across
+   babble/fusion/mixer/register/ladder lenses; the 20:41 greeting
+   regression does not reproduce.
+
+Open for Maria's ruling (flagged, not hidden): lessons still serve
+verbatim at strong (told/confirmed now regenerate; corrections are
+verbatim by her Learning-Law word; lessons sit between — her call).

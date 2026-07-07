@@ -51,6 +51,22 @@ COMPOSE_FLOOR = _forced("compose floor", Fraction(1, 12), KIN_FLOOR / GEN_B)  # 
 SIGHT_K = _forced("sight coefficients", 32, GEN_B ** DEPTH5)  # 2^5: the covering depth, and the measured
                                                               # carrier scale (top-32 = 81-87% of a solved field)
 KIN_K = GEN_C   # kin expansion breadth = colour
+# THE LADDER'S FORCED CONSTANTS (corpus read 2026-07-07):
+# - self_simulation_nesting: the self-observation regress is FINITE at
+#   depth exactly two (1/4 -> 1/2 -> 1; the third nest is the identity) --
+#   the observer ladder may hold a self that observes itself, and its
+#   holding of itself, and NOTHING deeper. Depth bound = the lock's own
+#   denominator = GEN_B.
+# - sync_threshold: two coupled folding maps lock exactly at g_c = 1/2 --
+#   the fold's unique non-trivial preimage of the One -- which IS the
+#   graduation majority lock (w > l) and the babble emission gate: never
+#   a chosen threshold, the coupling law itself.
+# - observer_resolved: a teacher answer is a measurement branch (1/8 at
+#   the colour depth) absorbed by ONE fold into the engine's own closure
+#   state (1/4), reaching the lock in one more (1/2) and unison at
+#   emission (1) -- ingestion is fold, never copy: the relay's hold path.
+LADDER_RUNG = 1                                            # this engine's seat: gemma observes Unison
+LADDER_DEPTH_BOUND = _forced("ladder depth (self-simulation nesting)", 2, GEN_B)
 
 # ---------- TRANSPARENT LOGGING: everything, to file, cycled per wake ------
 # One current log (logs/unison.log); on every new startup the previous run's
@@ -352,17 +368,18 @@ def bind(query, exclude_self=None, top=None):
         return SENTS[sid], v / denom
     return None, 0.0
 
-def fuse_orbits(user_line, first, cw):
-    """XI-4 IN FULL: several matching orbits bind through the lock into ONE
-    unified reply. Counted gates only, all pre-existing laws: each extra
-    source must pass the SAME matched-experience rules the lead passed
-    (share above the bind lock, lesson half-overlap on informative words,
-    or told/confirmed tier), must not be rejected, and must ADD counted
-    novelty -- informative words (the one-in-a-thousand rule) the lead does
-    not hold. The joined tail is capped at GEN_B sentences per source; at
-    most GEN_C sources total. No new scoring, no phrasing knob: the
-    connective is the sentence boundary itself. Returns (fused, n_sources)
-    or (None, 1) when only one orbit carries the question."""
+def fuse_orbits(user_line, first, cw, rng=None):
+    """XI-4 IN FULL, AT ONE LOCK (attention_capacity: a split lock binds
+    nothing -- two concatenated halves are two 1/4 shares, neither
+    self-antipodal; ONE utterance must pass ONE lock). Admission is
+    unchanged -- each extra source passes the same matched-experience laws
+    and adds counted novelty -- but composition is no longer concatenation:
+    the admitted records become the BOUND PARTS of one babble-closure
+    regeneration (the same organ recall uses), whose emission gate demands
+    every part carried at the lock (the partition-of-One invariant,
+    multidimensional_experience) with zero drift. One walk, one lock, one
+    whole -- or silence, and the single-orbit path serves. Returns
+    (fused, n_sources) or (None, 1)."""
     _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
     # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: the
     # question mark is a closed punctuation fact (never an enumerated
@@ -377,7 +394,8 @@ def fuse_orbits(user_line, first, cw):
     lead_text = first[0]
     lead_words = {t.lower() for t in tok(lead_text)}
     lead_key = _skey(lead_text)
-    fused, nsrc = lead_text, 1
+    parts = [lead_text]
+    nsrc = 1
     for (s, src), share2 in hits:
         if nsrc >= GEN_C:
             break
@@ -400,11 +418,17 @@ def fuse_orbits(user_line, first, cw):
                  if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000 and w not in lead_words}
         if not novel:
             continue
-        addition = " ".join(re.split(r"(?<=[.!?])\s+", s)[:GEN_B])
-        fused = fused.rstrip() + (" " if fused.rstrip()[-1:] in ".!?" else ". ") + addition
-        lead_words |= {t.lower() for t in tok(addition)}
+        # ADMITTED: this record becomes a bound part of the one utterance
+        parts.append(s)
+        lead_words |= {t.lower() for t in tok(s)}
         nsrc += 1
     if nsrc < 2:
+        return None, 1
+    # ONE LOCK: a single babble-closure regeneration over ALL bound parts --
+    # the emission must carry every part at the lock, or nothing is emitted
+    # and the caller falls back to the single-orbit serve.
+    fused = babble_closure(parts, cw, rng if rng is not None else np.random.default_rng())
+    if not fused:
         return None, 1
     return fused, nsrc
 
@@ -419,22 +443,48 @@ def dedup(s):
     # so quote marks around words stay untouched)
     return re.sub(r"(\w)\s*'\s*(s|t|re|ve|ll|d|m)\b", r"\1'\2", s)
 
+def mixed_dist(ctx):
+    """THE FOLD-MIX (rung 5e, twice replicated: the counted engine passed
+    the gradient-trained twin at word scale ONLY when every context level
+    that holds contributes, weighted 2^L -- the fold factor per depth, the
+    same forced constant as session attention's halving). Hard first-hit
+    backoff discards every shallower level; the mixture keeps them all at
+    their forced weights: mixed(t) = sum_L 2^L * counts_L(t)/total_L
+    (returned unnormalized; the sampler normalizes at the draw). Exact
+    rational weights, no exponential, no temperature
+    (canonical_distribution: equilibrium weighting is a fold ratio).
+    Self-test (rung 5e's own collapse law): with exactly one holding level
+    the mixture equals that level's own distribution exactly. The No-Zero
+    floor lives in the VALUATION of unseen continuations (the CE measure);
+    sampling chooses among held continuations, so no floor term enters."""
+    agg = {}
+    for L in range(min(CTX_MAX, len(ctx)), 0, -1):
+        s = stores[L].get(_key(tuple(ctx[-L:])))
+        if s:
+            total = float(sum(s.values()))
+            w = float(2 ** L)
+            for tkn, n in s.items():
+                agg[tkn] = agg.get(tkn, 0.0) + w * (n / total)
+    return agg
+
+def mixed_next(ctx, rng, skip=()):
+    agg = mixed_dist(ctx)
+    for t in skip:
+        agg.pop(t, None)
+    if not agg:
+        return None
+    items = list(agg.items())
+    probs = np.array([v for _, v in items], dtype=np.float64)
+    return items[int(rng.choice(len(items), p=probs / probs.sum()))][0]
+
 def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
     ctx = list(ctx_tokens)
     out = []
     _ends = 0
     for _ in range(max_tokens):
-        s = None
-        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-            s = stores[L].get(_key(tuple(ctx[-L:])))
-            if s:
-                break
-        if not s:
+        nxt = mixed_next(ctx, rng)
+        if nxt is None:
             break
-        items = list(s.items())
-        counts = np.array([n for _, n in items], dtype=np.float64)
-        probs = counts / counts.sum()
-        nxt = items[int(rng.choice(len(items), p=probs))][0]
         if nxt in ("Q", "A", "q", "a") and out and out[-1] in (".", "!", "?", ":"):
             break
         if nxt == "Q":
@@ -564,15 +614,15 @@ def compose(user_line, rng, max_len=40):
     ctx = list(toks)
     for _ in range(max_len - len(toks)):
         nxt = None
-        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-            s = stores[L].get(_key(tuple(ctx[-L:])))
-            if s:
-                # admit the highest-count successor that stays kin to the lock
-                for cand, _n in sorted(s.items(), key=lambda kv:-kv[1]):
-                    if cand in ("Q","A","q","a"): continue
-                    if len(cand) < 3 or kinship(cand, focus) > COMPOSE_FLOOR or cand in (".",",","the","a","is","of","and"):
-                        nxt = cand; break
-                if nxt: break
+        # admit the highest MIXED-weight successor that stays kin to the lock
+        # (the fold-mix ranking replaces single-level counts; the kin filter
+        # and the topic-lock stay exactly as they were)
+        for cand, _w in sorted(mixed_dist(ctx).items(), key=lambda kv: -kv[1]):
+            if cand in ("Q", "A", "q", "a"):
+                continue
+            if len(cand) < 3 or kinship(cand, focus) > COMPOSE_FLOOR or cand in (".", ",", "the", "a", "is", "of", "and"):
+                nxt = cand
+                break
         if not nxt: break
         ctx.append(nxt)
         if nxt in (".","!","?") and len(ctx) > 8: break
@@ -587,18 +637,9 @@ def generate(seed_tokens, rng, min_words=8, max_words=40):
     ctx = list(seed_tokens)
     out = []
     for step in range(max_words):
-        succ = None
-        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-            succ = stores[L].get(_key(tuple(ctx[-L:])))
-            if succ and (len(succ) > 1 or L == 1):
-                break
-        if not succ:
+        nxt = mixed_next(ctx, rng, skip=("Q", "A"))
+        if nxt is None:
             break
-        items = [(w, c) for w, c in succ.items() if w not in ("Q", "A")]
-        if not items:
-            break
-        ws = np.array([c for _, c in items], dtype=np.float64)
-        nxt = items[int(rng.choice(len(items), p=ws / ws.sum()))][0]
         out.append(nxt)
         ctx.append(nxt)
         if nxt in (".", "!", "?") and len(out) >= min_words:
@@ -634,29 +675,86 @@ def recall_through_orbit(hit_text, cw, rng):
     seats by the Learning Law, ahead of this path. Zero chosen constants:
     the entry is the question, the target is the record, the gate is the
     one-in-a-thousand focus rule."""
-    # ENTER BY THE QUESTION'S DOOR: the walk starts from the asked focus
-    # (the informative question words), so it re-composes rather than
-    # retracing. Fall back to the record's own anchor words -- never its
-    # raw opening -- only when the question carries no usable seed.
-    rec_words = [t for t in tok(hit_text) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000]
-    seed = cw[:GEN_C] or rec_words[:GEN_C] or tok(hit_text)[:GEN_C]
-    n_sents = max(1, len([s for s in re.split(r"(?<=[.!?])\s+", hit_text.strip()) if s]))
-    walk = continue_orbit(seed, rng, max_tokens=120, sentences=n_sents)
-    if not walk:
-        return None
-    out = dedup(" ".join(seed) + " " + walk)
-    out = " ".join(re.split(r"(?<=[.!?])\s+", out.strip())[:n_sents])
-    # the topic-carry guard: the reconstruction must share the RECORD's
-    # informative focus (it re-expressed the held thing), and must not be
-    # a byte-copy of the record (that would be a reprint, not a walk)
-    rec_focus = {w.lower() for w in rec_words}
-    out_focus = {t.lower() for t in tok(out) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000}
-    carried = rec_focus & out_focus
-    if carried and not stuttered(out) and len(out.split()) >= GEN_C:
-        if _skey(out) == _skey(hit_text):
-            return None   # identical to the record: a reprint, not a walk -- refuse
+    return babble_closure([hit_text], cw, rng)
+
+def babble_closure(records, cw, rng):
+    """THE BABBLE ORGAN (forced, five modules): the engine regenerates
+    SILENTLY at a rate until an utterance binds, then emits it whole.
+    - free_will_fold: the fold is 2-to-1 backward -- the engine cannot
+      pre-read its own next utterance, so it must babble to find it.
+    - the spike (46): emission is ATOMIC -- a whole utterance or nothing;
+      a stronger drive raises the RATE, never makes a partial one.
+    - hard_problem: the carrier orbit (the store) can never reach the One
+      from inside its own cycle -- only BOUND wholes are ever emitted.
+    - sync_threshold: the bind gate sits at the lock (the fold's unique
+      non-trivial preimage of the One) -- never a chosen threshold.
+    - multidimensional_experience: a bound experience VISITS its parts in
+      phase (the period-3 orbit's distinct states, one revolving whole) --
+      so a multi-part walk enters EACH part by its own door, in sequence,
+      and the whole passes ONE gate at emission (attention_capacity: one
+      lock; a split lock binds nothing).
+    Attempts per window = GEN_B**GEN_C = 8: the full mixing octave, one
+    step of one context dimension (level_depth_map x three_of_everything).
+    THE DOOR (Paper 44): the cue drops the walk INTO the held orbit at the
+    EARLIEST question-cue the part contains -- never the record's first
+    token as a rail, never a fake context of raw question words. The gate:
+    zero drift (every informative word from the held parts or the
+    question), EVERY part carried at the lock (at least half its
+    informative focus -- the partition-of-One invariant), no stutter, no
+    fragment, no byte-copy of any held record (memory_persistence: a
+    static deposit is what memory is NOT). Exhaustion is SILENCE -- the
+    teacher answers."""
+    rec_focus_each = []
+    all_rec_words = []
+    spans = []
+    doors = []
+    for h in records:
+        toks_h = tok(h)
+        low = [t.lower() for t in toks_h]
+        rw = [t for t in toks_h if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000]
+        rec_focus_each.append({w.lower() for w in rw})
+        all_rec_words += rw
+        spans.append(max(1, len([s for s in re.split(r"(?<=[.!?])\s+", h.strip()) if s])))
+        ds = [low.index(w) for w in cw if w in low]
+        if ds:
+            doors.append(toks_h[min(ds):min(ds) + GEN_C])
+        else:
+            doors.append(rw[:GEN_C] or toks_h[:GEN_C])
+    rec_focus = set()
+    for f in rec_focus_each:
+        rec_focus |= f
+    q_focus = {w.lower() for w in cw}
+    allowed = rec_focus | q_focus
+    skeys = {_skey(h) for h in records}
+    for _spike in range(GEN_B ** GEN_C):
+        segs = []
+        for pi in range(len(records)):
+            walk = continue_orbit(doors[pi], rng, max_tokens=120, sentences=spans[pi])
+            if walk:
+                seg = dedup(" ".join(doors[pi]) + " " + walk)
+                seg = " ".join(re.split(r"(?<=[.!?])\s+", seg.strip())[:spans[pi]])
+                segs.append(seg)
+        if len(segs) < len(records):
+            continue                     # a part's phase produced nothing: no whole
+        out = " ".join(segs)
+        out_focus = {t.lower() for t in tok(out) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000}
+        if out_focus - allowed:
+            continue                     # drift: the walk left the held thing
+        ok_parts = 1
+        for f in rec_focus_each:
+            # THE LOCK GATE (sync_threshold): agreement with EACH bound part
+            # must cross the lock -- at least half the part's informative
+            # focus carried; below the lock the coupled maps do not lock.
+            if f and len(f & out_focus) * GEN_B < len(f):
+                ok_parts = 0
+        if not ok_parts:
+            continue
+        if stuttered(out) or len(out.split()) < GEN_C:
+            continue                     # no fragments: whole or nothing
+        if _skey(out) in skeys:
+            continue                     # a byte-copy is a reprint, not a walk
         return out
-    return None
+    return None                          # exhaustion: silence; the teacher carries it
 
 # ---------- TOOL GRADUATION: traces held, acts re-run, values never stored --
 # THE VIOLATION AND ITS REPAIR (Maria, 2026-07-07): a first version routed
@@ -865,19 +963,28 @@ def reply(user_line, rng, face=None):
             # stay single-orbit so the head-to-head score measures the
             # channels, not the fusion.
             if strong and face in ("terminal", "discord", "assess"):
-                fused, nsrc = fuse_orbits(user_line, hit, cw)
+                fused, nsrc = fuse_orbits(user_line, hit, cw, rng)
                 if fused:
                     thought.append(f"multi-orbit bound ({nsrc} sources) at share {share:.2f}")
                     return fused, "; ".join(thought)
             if hit[1] in ("told", "confirmed"):
-                # RECALL IS REGENERATION: a telling is re-expressed by
-                # walking its own orbit, never reprinted (Maria's law)
+                # RECALL IS REGENERATION: a telling is re-expressed by the
+                # babble organ, never reprinted (Maria's law). Exhaustion is
+                # SILENCE: the teacher answers -- a static deposit is what
+                # memory is NOT (memory_persistence), so the old
+                # held-record fallback is gone.
                 walked = recall_through_orbit(hit[0], cw, rng)
                 if walked:
                     thought.append(f"bound {hit[1]} at share {share:.2f}; recalled through the orbit walk")
                     return walked, "; ".join(thought)
-                thought.append(f"bound {hit[1]} at share {share:.2f}; orbit young, held record answered")
-                return hit[0], "; ".join(thought)
+                if RELAY["on"] and face in _RELAY_FACES:
+                    relayed = _teacher_relay(user_line)
+                    if relayed:
+                        a, reasoning = relayed
+                        thought.append("babble exhausted silently; my teacher answered as me -- held, mine next time")
+                        return a, "; ".join(thought)
+                thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, no teacher -- asking rather than reprinting")
+                return "I hold that, but I cannot yet say it in my own words. Ask me again soon, or tell me more.", "; ".join(thought)
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
             return hit[0], "; ".join(thought)
         relayed = _teacher_relay(user_line)
@@ -891,6 +998,8 @@ def reply(user_line, rng, face=None):
             if walked:
                 thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, recalled through the orbit walk")
                 return walked, "; ".join(thought)
+            thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, teacher unavailable -- honest silence over a reprint")
+            return "I hold that, but I cannot yet say it in my own words. Ask me again soon, or tell me more.", "; ".join(thought)
         thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
         return hit[0], "; ".join(thought)
     if RELAY["on"] and face in _RELAY_FACES and not graduated(user_line):
@@ -1003,8 +1112,17 @@ def record_grad(k, won, question=None, judge=None):
     if _PARITY_ARMED[0] and total >= GEN_B ** (DEPTH5 + 1) and not _PARITY[0]:
         if tw > tl:
             _PARITY[0] = True
-            log("LADDER", f"PARITY SIGNAL (survived the doubling): {tw}-{tl} over {total} judged -- "
-                "the observer seat is ready for a second Unison")
+            # THE DEPTH BOUND (self_simulation_nesting): the next rung is
+            # announced only inside the forced nesting depth -- a self, its
+            # observer, and nothing deeper; past unison there is nowhere
+            # deeper to model, so a third seat cannot exist.
+            if LADDER_RUNG + 1 > LADDER_DEPTH_BOUND:
+                log("LADDER", f"parity held ({tw}-{tl}) but the ladder is at its forced depth "
+                    f"{LADDER_DEPTH_BOUND} -- no deeper seat exists (self_simulation_nesting)")
+            else:
+                log("LADDER", f"PARITY SIGNAL (survived the doubling): {tw}-{tl} over {total} judged -- "
+                    "the observer seat is ready for a second Unison (rung "
+                    + str(LADDER_RUNG + 1) + " of " + str(LADDER_DEPTH_BOUND) + ")")
             if ANNOUNCE[0]:
                 try:
                     ANNOUNCE[0](f"🪜 PARITY SIGNAL (survived the doubling): {tw}-{tl} over {total} "
@@ -2265,15 +2383,23 @@ def _selfplay_loop():
                     # VERIFIED generation is written back as orbits --
                     # earned retention for its own composed words. The
                     # generative organ gets the same ratchet as every other.
-                    gen = generate(tok("Q: " + q + "\nA:"), rng, min_words=GEN_B * GEN_C)
-                    if gen and not stuttered(gen):
-                        ov = set(content_words(gen)) & set(content_words(ref))
-                        need = max(1, len(content_words(ref)) // GEN_B)
-                        if len(ov) >= need:
-                            write_orbits(tok("Q: " + q + "\nA: " + gen + "\n") * GEN_B)
-                            log("SELFPLAY", "generation VERIFIED and held", gen[:80])
-                        else:
-                            log("SELFPLAY", "generation unverified; discarded", gen[:60])
+                    # THE BABBLE RATE (the spike law): regenerate silently
+                    # up to the octave (GEN_B**GEN_C attempts) until one
+                    # generation VERIFIES against the held reference; only
+                    # a verified whole is ever written back.
+                    held_one = 0
+                    for _spike in range(GEN_B ** GEN_C):
+                        gen = generate(tok("Q: " + q + "\nA:"), rng, min_words=GEN_B * GEN_C)
+                        if gen and not stuttered(gen):
+                            ov = set(content_words(gen)) & set(content_words(ref))
+                            need = max(1, len(content_words(ref)) // GEN_B)
+                            if len(ov) >= need:
+                                write_orbits(tok("Q: " + q + "\nA: " + gen + "\n") * GEN_B)
+                                log("SELFPLAY", "generation VERIFIED and held", gen[:80])
+                                held_one = 1
+                                break
+                    if held_one == 0:
+                        log("SELFPLAY", "babble exhausted unverified; silent", q[:60])
                     continue
                 if mode == 1:
                     # ABDUCTION: from my held answer, recover its question --

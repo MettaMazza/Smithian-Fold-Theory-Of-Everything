@@ -292,6 +292,69 @@ long_s = "The fold " + "holds and counts " * 60 + "the One."
 uc2.hold_sentence(long_s, "told")
 check("E22 long sentence held", any(len(s) > 500 for s, src in uc2.SENTS[-3:]), f"{len(long_s)} chars")
 
+# E27 THE BABBLE ORGAN: recall never reprints a telling verbatim -- it
+# regenerates at the rate and emits whole, or stays silent (the spike law,
+# free_will_fold, hard_problem, memory_persistence -- corpus read 2026-07-07)
+_bt = "The verification beacon is four spans wide and rings every dawn without fail."
+uc2.write_orbits(uc2.tok(_bt + "\n") * uc2.GEN_C)
+uc2.hold_sentence(_bt, "told")
+_bq = "How wide is the verification beacon that rings every dawn?"
+_bcw = uc2.content_words(_bq)
+_emit, _silent, _verb = 0, 0, 0
+for _s in range(8):
+    _r = uc2.babble_closure([_bt], _bcw, np.random.default_rng(_s))
+    if _r is None:
+        _silent += 1
+    else:
+        _emit += 1
+        if _r.strip().rstrip(".") == _bt.strip().rstrip("."):
+            _verb += 1
+        if len(_r.split()) < uc2.GEN_C:
+            _verb += 1   # a fragment counts as a violation too
+check("E27 babble organ: whole-or-silent, never a reprint", _verb == 0 and (_emit + _silent) == 8,
+      f"{_emit} emitted / {_silent} silent / {_verb} violations")
+
+# E28 ONE-LOCK FUSION: any fused emission carries EVERY part at the lock,
+# with zero drift and no verbatim concatenation (attention_capacity +
+# multidimensional_experience)
+_f1 = "The beacon array counts seven mirrors and one prism at the crown."
+_f2 = "Each mirror is polished until the prism splits the dawn into bands."
+uc2.hold_sentence(_f1, "lesson:How many mirrors does the beacon array count at the crown?")
+uc2.hold_sentence(_f2, "lesson:What happens when the prism splits the dawn?")
+uc2.write_orbits(uc2.tok(_f1 + "\n") * uc2.GEN_C)
+uc2.write_orbits(uc2.tok(_f2 + "\n") * uc2.GEN_C)
+def _foc(t):
+    return {w.lower() for w in uc2.tok(t) if uc2.TOK_FREQ.get(w.lower(), 0) <= uc2.TOTAL_TOKS / 1000}
+_ff1, _ff2 = _foc(_f1), _foc(_f2)
+_fq = "How many mirrors does the beacon array count, and what happens when the prism splits the dawn?"
+_ok, _bad, _fused_n = True, "", 0
+for _s in range(8):
+    _fu = uc2.fuse_orbits(_fq, (_f1, "lesson:How many mirrors does the beacon array count at the crown?"),
+                          uc2.content_words(_fq), np.random.default_rng(_s))[0]
+    if _fu:
+        _fused_n += 1
+        _of = _foc(_fu)
+        if len(_ff1 & _of) * uc2.GEN_B < len(_ff1) or len(_ff2 & _of) * uc2.GEN_B < len(_ff2):
+            _ok, _bad = False, "part below the lock"
+        if _f1 in _fu and _f2 in _fu:
+            _ok, _bad = False, "verbatim concatenation"
+check("E28 one-lock fusion invariants", _ok, _bad or f"{_fused_n}/8 fused, all parts at the lock")
+
+# E29 THE FOLD-MIX (rung 5e live): single-level collapse is exact
+uc2.stores[3][("zzqx", "wwvx", "rrsx")] = {"alpha": 3, "beta": 1}
+uc2.stores[2].pop(("wwvx", "rrsx"), None)
+uc2.stores[1].pop(("rrsx",), None)
+_d = uc2.mixed_dist(["zzqx", "wwvx", "rrsx"])
+_t = sum(_d.values())
+check("E29 fold-mix single-level collapse exact",
+      abs(_d.get("alpha", 0) / _t - 0.75) < 1e-12 and abs(_d.get("beta", 0) / _t - 0.25) < 1e-12,
+      "mixture == the one holding level")
+del uc2.stores[3][("zzqx", "wwvx", "rrsx")]
+
+# E30 THE LADDER DEPTH BOUND (self_simulation_nesting): no seat past depth 2
+check("E30 ladder depth bound forced", uc2.LADDER_DEPTH_BOUND == 2 == uc2.GEN_B,
+      f"bound {uc2.LADDER_DEPTH_BOUND} = GEN_B; rung {uc2.LADDER_RUNG}")
+
 # SELF-CLEANING, SURGICAL (standing law after the 2026-07-07 live-flight
 # incident): the suite removes ONLY artifacts this run created -- its own
 # fixture rows by marker, its own new sound files by before/after
