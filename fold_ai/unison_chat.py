@@ -620,31 +620,41 @@ RECENT = []          # (user line, my reply) pairs -- the conversation my teache
 _RELAY_FACES = ("terminal", "discord", "assess")   # faces where the teacher carries me while young
 
 def recall_through_orbit(hit_text, cw, rng):
-    """RECALL IS REGENERATION (Maria's law, 2026-07-07): a held experience
-    is never reprinted as a stored packet -- humans do not replay strings.
-    Recall re-traverses the held cycle (Paper 44): the walk starts at the
-    experience's own opening tokens and completes token-by-token through
-    the same unified sampler that composes novelty, over everything the
-    engine holds. The existing counted self-check gates the walk (shared
-    informative focus, no stutter); while an orbit is too young for its
-    walk to hold the focus, the held record itself still answers -- and
-    the thought line names which happened, every time. As the store grows
-    the walk wins more; the reprint rate is the youth, measured."""
-    seed = tok(hit_text)[:GEN_C]
-    # the walk's span is the experience's OWN span: as many sentences as
-    # the held cycle carries (counted from the record, not a knob) -- a
-    # consecutive-write orbit loops into its own start otherwise
+    """RECALL IS REGENERATION (Maria's law): a held experience is never
+    reprinted as a stored packet -- memory is a held orbit and recall is
+    the orbit WALKED AGAIN, entered by the door the present opened, not a
+    replay of the stored string from its own first word (Paper 44). The
+    walk SEEDS FROM THE QUESTION'S OWN FOCUS and composes token-by-token
+    through everything the engine holds; the held record is the attractor
+    it reconstructs toward, never a rail it copies. The counted self-check
+    is the guard: the walk must SHARE the record's informative focus (the
+    same thing, in the walk's own words) or it is rejected and the teacher
+    answers -- 'same thing, different words', never 'different thing'.
+    Facts and corrections do not reach here; they hold their verbatim
+    seats by the Learning Law, ahead of this path. Zero chosen constants:
+    the entry is the question, the target is the record, the gate is the
+    one-in-a-thousand focus rule."""
+    # ENTER BY THE QUESTION'S DOOR: the walk starts from the asked focus
+    # (the informative question words), so it re-composes rather than
+    # retracing. Fall back to the record's own anchor words -- never its
+    # raw opening -- only when the question carries no usable seed.
+    rec_words = [t for t in tok(hit_text) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000]
+    seed = cw[:GEN_C] or rec_words[:GEN_C] or tok(hit_text)[:GEN_C]
     n_sents = max(1, len([s for s in re.split(r"(?<=[.!?])\s+", hit_text.strip()) if s]))
     walk = continue_orbit(seed, rng, max_tokens=120, sentences=n_sents)
     if not walk:
         return None
     out = dedup(" ".join(seed) + " " + walk)
-    # trim to the experience's own span exactly (the sampler's short-output
-    # guard can let an early sentence-end slip past its count)
     out = " ".join(re.split(r"(?<=[.!?])\s+", out.strip())[:n_sents])
-    shared = {w for w in set(cw) & set(t.lower() for t in tok(out))
-              if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
-    if shared and not stuttered(out) and len(out.split()) >= GEN_C:
+    # the topic-carry guard: the reconstruction must share the RECORD's
+    # informative focus (it re-expressed the held thing), and must not be
+    # a byte-copy of the record (that would be a reprint, not a walk)
+    rec_focus = {w.lower() for w in rec_words}
+    out_focus = {t.lower() for t in tok(out) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000}
+    carried = rec_focus & out_focus
+    if carried and not stuttered(out) and len(out.split()) >= GEN_C:
+        if _skey(out) == _skey(hit_text):
+            return None   # identical to the record: a reprint, not a walk -- refuse
         return out
     return None
 
