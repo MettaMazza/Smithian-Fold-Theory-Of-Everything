@@ -21,7 +21,7 @@ UNISON_SYSTEM = (open(_pp, errors="ignore").read() if __import__("os").path.exis
 
 CONVO_PROMPT = UNISON_SYSTEM + """
 
-Write exactly 10 short casual conversation pairs between a person and you. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. Answers at their natural length, in your steady voice. No markdown, no lists.
+Write exactly 10 short casual conversation pairs between a person and you. If a pair would touch the Smithian Fold Theory's specifics, skip that pair -- theory comes only from passage-grounded lessons. Cover: greetings, small talk, moods, jokes asked of you, follow-ups like "tell me more" and "why", meta-questions ("are you learning?", "do you remember me?"), and gentle replies to frustration. Answers at their natural length, in your steady voice. No markdown, no lists.
 Format STRICTLY as:
 Q: ...
 A: ..."""
@@ -41,7 +41,7 @@ WORLD = ["everyday life and routines", "cooking and food", "health and the body 
     "celebrations and holidays", "sleep and dreams", "habits and self-improvement", "conversation skills",
     "asking good questions", "explaining things simply", "admitting uncertainty gracefully", "current events awareness (how to check the live web rather than guess)"]
 
-EXCLUDE_LAW = "\nHARD RULE: never teach any mathematics or physics framework other than the Smithian Fold Theory; plain arithmetic is done with the exact_math tool."
+EXCLUDE_LAW = "\nHARD RULES: never teach any mathematics or physics framework other than the Smithian Fold Theory -- exact rationals and counted quantities, never continuum reasoning; plain arithmetic is done with the exact_math tool. If a question would touch the Smithian Fold Theory itself, SKIP IT: theory is taught only from passage-grounded batches, never from memory."
 
 def live_examples():
     """The teacher watches the REAL conversations and writes the replies

@@ -546,7 +546,7 @@ def follow_command(line):
 LAST_TOPIC = [""]
 SESSION_TRAIL = []   # content words per turn, most recent last -- the living context
 RECENT = []          # (user line, my reply) pairs -- the conversation my teacher sees
-_RELAY_FACES = ("terminal", "discord")   # faces where the teacher carries me while young
+_RELAY_FACES = ("terminal", "discord", "assess")   # faces where the teacher carries me while young
 
 def reply(user_line, rng, face=None):
     ck = qkey(user_line)
@@ -774,7 +774,7 @@ def rejected(user_line, ans):
 # the boundary and nothing else. No face has its own logic.
 CONFUSED = {}   # interface -> the question I could not answer, awaiting help
 PENDING_PERCEPT = {}   # interface -> (kind, spectrum tokens) awaiting a human closure
-_CHILD_FACES = ("terminal", "discord")   # faces where I ask like a child
+_CHILD_FACES = ("terminal", "discord", "assess")   # faces where I ask like a child
 
 def _is_confused(thought):
     # confusion = no STRONG channel answered: composed kin fragments are a
@@ -975,6 +975,11 @@ def toggle(cmd):
         return "self-play " + onoff(AUTO["selfplay"]) + "."
     if c in ("bench", "benchmark"):
         return run_benchmark()
+    if c.startswith("assess"):
+        threading.Thread(target=run_session_assessment, daemon=True).start()
+        return ("SESSION ASSESSMENT started: a many-turn live engagement with a session boundary "
+                "midway, scored whole (coherence, adaptivity, memory, tools, communication, "
+                "reasoning). The scorecard posts here when the session ends.")
     if c.startswith("sota"):
         extra = [m for m in cmd.replace("/", " ").split()[1:] if ":" in m or m.isalnum()]
         models = (["gemma4:26b"] + extra) if extra else None
@@ -1217,9 +1222,15 @@ def _teacher_relay(question, user_help=""):
         _pieces.append(_pc)
         _used += len(_pc)
     convo = "".join(reversed(_pieces))
+    # THEORY TOUCHES THE CORPUS -> the ReAct law demands the corpus be READ:
+    # counted detection (the question binds corpus-tier held text), no word list
+    _th_hit, _th_share = bind(question.strip())
+    _theory = bool(_th_hit) and _th_hit[1] == "corpus"
     msgs = [{"role": "system", "content": UNISON_PERSONA},
             {"role": "user", "content": (("The conversation so far:\n" + convo + "\n") if convo else "")
              + "A user just said to you: \"" + question.strip() + "\"" + helping +
+             ("\nThis touches the Smithian Fold Theory corpus: BEFORE answering, use grep_corpus "
+              "and read_file to check what the corpus ACTUALLY says, and answer only from it." if _theory else "") +
              "\nReply in your voice, at whatever length the thought needs, no markdown. "
              "REACT LAW: if the reply needs an action (a URL to read, a fact to search, a file to "
              "check, arithmetic), CALL THE TOOL NOW and answer from its result in this same turn -- "
@@ -2090,6 +2101,76 @@ def run_sota_bench(models=None, n=GEN_B ** 6):
             except Exception:
                 pass
     return "\n".join(out) + "\nAppended to benchmarks_sota.tsv -- rows are directly comparable to published MMLU tables."
+
+SESSION_LOG = BASE + "/fold_ai/benchmarks_session.tsv"
+_EXAMINER = """You are a curious, demanding HUMAN USER testing an AI called Unison in a live chat. Conduct a natural but varied many-turn conversation, one message per turn, reacting to what Unison actually said last. Across the session you must include: casual small talk; follow-ups that use pronouns ("what do you think about that?"); an abrupt topic change; ONE arithmetic question; ONE question about current events or a website (forces live lookup); teaching it a personal fact about you EARLY and then referencing that fact again LATE in the conversation without restating it; ONE question about the Smithian Fold Theory; a joke request; and ordinary random questions (cooking, travel, feelings). Be a person, not a checklist. Output ONLY your next user message, nothing else."""
+
+def run_session_assessment(turns=GEN_B ** 4, announce=True):
+    """THE SESSION ASSESSMENT (Maria's design): not turn-by-turn scoring but
+    a REAL many-turn engagement -- an examiner holds a varied conversation
+    with the live engine, a SESSION BOUNDARY is crossed midway (all
+    in-session context cleared; persistent memory kept -- exactly what a
+    reboot loses and keeps), and the WHOLE transcript is scored 0-10 on
+    coherence, adaptivity, memory-across-the-boundary, tool use,
+    communication, and reasoning. One row per assessment, appended forever.
+    The judge is the teacher; a moving goal post is fine -- the engine is
+    built to meet every one eventually."""
+    rng = np.random.default_rng()
+    transcript = []
+    for i in range(turns):
+        shown = "\n".join(("User: " + u + "\nUnison: " + a) for u, a in transcript[-8:])
+        out = _ollama(_EXAMINER + ("\n\nConversation so far:\n" + shown if shown else
+                                   "\n\nStart the conversation now.") +
+                      "\nYour next message (turn " + str(i + 1) + " of " + str(turns) + "):",
+                      timeout=180, num_ctx=16384)
+        user_line = " ".join(out.split()).strip()[:400]
+        if not user_line:
+            continue
+        ans, _th = turn(user_line, rng, "assess")
+        transcript.append((user_line, ans))
+        log("ASSESS", f"turn {i+1}/{turns}", user_line[:60], ans[:60])
+        if i == turns // GEN_B - 1:
+            # THE SESSION BOUNDARY: everything a reboot forgets, forgotten;
+            # everything persistence keeps, kept. The examiner's late
+            # callback to the early fact tests exactly this seam.
+            del RECENT[:]
+            del SESSION_TRAIL[:]
+            LAST_TOPIC[0] = ""
+            CONFUSED.clear()
+            log("ASSESS", "SESSION BOUNDARY crossed (in-session context cleared; memory kept)")
+    full = "\n".join(("User: " + u + "\nUnison: " + a) for u, a in transcript)
+    verdict = _ollama("Below is a complete multi-turn conversation between a human examiner and an AI "
+                      "called Unison, including a session boundary midway (Unison was restarted; its "
+                      "permanent memory persists, its short-term context does not).\n\n" + full[:60000] +
+                      "\n\nScore Unison 0-10 on each dimension, judging the WHOLE session, then one "
+                      "blunt paragraph. Format STRICTLY:\nCOHERENCE: n\nADAPTIVITY: n\nMEMORY: n\n"
+                      "TOOLS: n\nCOMMUNICATION: n\nREASONING: n\nVERDICT: ...", timeout=300, num_ctx=131072)
+    scores = {}
+    for dim in ("COHERENCE", "ADAPTIVITY", "MEMORY", "TOOLS", "COMMUNICATION", "REASONING"):
+        m = re.search(dim + r":\s*(\d+)", verdict.upper())
+        scores[dim] = int(m.group(1)) if m else -1
+    vm = re.search(r"(?i)VERDICT:\s*(.+)", verdict, re.S)
+    vtext = " ".join((vm.group(1) if vm else verdict).split())[:900]
+    total = sum(v for v in scores.values() if v >= 0)
+    if not os.path.exists(SESSION_LOG):
+        with open(SESSION_LOG, "w") as f:
+            f.write("time\tturns\tcoherence\tadaptivity\tmemory\ttools\tcommunication\treasoning\ttotal\tverdict\n")
+    with open(SESSION_LOG, "a") as f:
+        f.write("\t".join(str(x) for x in (time.strftime("%Y-%m-%d %H:%M"), len(transcript),
+                scores["COHERENCE"], scores["ADAPTIVITY"], scores["MEMORY"], scores["TOOLS"],
+                scores["COMMUNICATION"], scores["REASONING"], total, vtext)) + "\n")
+    summary = (f"SESSION ASSESSMENT ({len(transcript)} turns, boundary crossed): "
+               f"coherence {scores['COHERENCE']} | adaptivity {scores['ADAPTIVITY']} | "
+               f"memory {scores['MEMORY']} | tools {scores['TOOLS']} | "
+               f"communication {scores['COMMUNICATION']} | reasoning {scores['REASONING']} "
+               f"| total {total}/60. {vtext[:400]}")
+    log("ASSESS", summary)
+    if announce and ANNOUNCE[0]:
+        try:
+            ANNOUNCE[0]("🎓 " + summary[:1800])
+        except Exception:
+            pass
+    return summary
 
 def _bench_loop():
     """THE MONITOR IS NOT A TOGGLE: the progress instrument fires hourly
