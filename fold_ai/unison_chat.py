@@ -87,6 +87,90 @@ def log(event, *parts):
     with _LOGLOCK:
         with open(LOGFILE, "a") as f:
             f.write(line + "\n")
+
+# ---------- THE SYNAPTIC GRAPH: roots, nodes, counted edges ----------------
+# Every layer of held knowledge gets a ROOT; every held entry is a NODE tied
+# to its root; recall that binds across nodes strengthens their EDGE by exact
+# count. The laws: the layer census is read off reply()'s own discrete recall
+# organs -- six of them, the generators' product (= CTX_MAX) -- plus the
+# USERS subject axis: seven roots, the eternal odd denominator of the
+# period-3 orbit {1/7, 2/7, 4/7} (multidimensional_experience;
+# memory_persistence: odd denominators never decay -- the root ring is an
+# eternal orbit, never pruned). All roots are pairwise connected (the
+# primordial mesh, C(7,2) = 21 -- a completeness INVARIANT checked at wake,
+# not a tunable). Edge strength is the exact count of co-traversal rows
+# (canonical_distribution: counted rationals, never trained floats; arrow of
+# time: monotone, append-only -- NO decay constant exists to force, so none
+# exists here). An edge is an entanglement: two cycles that fired in ONE
+# atomic emission interlock, and the count of joint firings is the exact
+# strength; percept<->text edges are licensed by perception_synaesthesia
+# (distinct channels, one shared lock).
+GRAPH_ROOTS = ("FACTS", "TAUGHT", "ACTS", "EXPERIENCE", "LESSONS", "LIBRARY", "USERS")
+_kl = _forced("knowledge layers", 6, GEN_B * GEN_C)
+_gr = _forced("graph roots", 7, GEN_B ** GEN_C - 1)
+assert len(GRAPH_ROOTS) == _gr and _kl == _gr - 1
+GRAPH_LOG = BASE + "/fold_ai/lessons/graph.tsv"
+GNODE = {}                      # node_id -> root
+GEDGE = {}                      # frozenset({a, b}) -> count
+_GRAPHLOCK = threading.Lock()
+if os.path.exists(GRAPH_LOG):
+    for _ln in open(GRAPH_LOG, errors="ignore"):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) >= 3 and _p[0] == "N":
+            GNODE[_p[1]] = _p[2]
+        elif len(_p) >= 3 and _p[0] == "E":
+            _k2 = frozenset((_p[1], _p[2]))
+            GEDGE[_k2] = GEDGE.get(_k2, 0) + 1
+
+def graph_node(node_id, root, ref=""):
+    """A node's birth: one held entry tied to its root. Idempotent -- a
+    memory is born once; re-holding strengthens edges, never re-births."""
+    if node_id in GNODE:
+        return
+    GNODE[node_id] = root
+    with _GRAPHLOCK:
+        with open(GRAPH_LOG, "a") as f:
+            f.write("N\t" + node_id + "\t" + root + "\t" + ref[:200].replace("\n", " ").replace("\t", " ") + "\n")
+    if not node_id.startswith("R:"):
+        graph_edge(node_id, "R:" + root)
+
+def graph_edge(a, b):
+    """One co-traversal: the pair fired in one atomic emission. Strength is
+    the exact count of these rows -- monotone, append-only, no decay."""
+    if a == b:
+        return
+    k = frozenset((a, b))
+    GEDGE[k] = GEDGE.get(k, 0) + 1
+    with _GRAPHLOCK:
+        with open(GRAPH_LOG, "a") as f:
+            f.write("E\t" + a + "\t" + b + "\n")
+
+def graph_genesis(ingested):
+    """First wake with the schema: the seven roots and the primordial mesh
+    (all roots connected to all roots), then one LIBRARY node per already-
+    eaten book. On every wake the invariants are CHECKED and violation
+    HALTS (the _forced discipline): the root census, one root per node,
+    the complete mesh."""
+    for r in GRAPH_ROOTS:
+        graph_node("R:" + r, r, "root")
+    for i in range(len(GRAPH_ROOTS)):
+        for j in range(i + 1, len(GRAPH_ROOTS)):
+            k = frozenset(("R:" + GRAPH_ROOTS[i], "R:" + GRAPH_ROOTS[j]))
+            if k not in GEDGE:
+                graph_edge("R:" + GRAPH_ROOTS[i], "R:" + GRAPH_ROOTS[j])
+    for b in ingested:
+        graph_node("B:" + b, "LIBRARY", b)
+    bad = [n for n, r in GNODE.items() if r not in GRAPH_ROOTS]
+    if bad:
+        raise SystemExit("graph invariant violated: nodes with unknown roots " + str(bad[:3]))
+    mesh = sum(1 for k in GEDGE if len(k) == 2 and all(x.startswith("R:") for x in k))
+    need = _gr * (_gr - 1) // 2
+    if mesh < need:
+        raise SystemExit(f"graph invariant violated: root mesh {mesh} < {need}")
+
+NODE_SID = {}   # sentence/lesson node id -> sid, for serve-time widening
+_WAKE_DONE = [False]
+
 LESSONS = [f for f in sorted(glob.glob(BASE + "/fold_ai/lessons/*.txt"))
            if "lessons_live" not in f and "facts.tsv" not in f]
 # THE DIET LAW: the engine reads the THEORY (the corpus and its lessons) --
@@ -228,15 +312,27 @@ def hold_sentence(s, source):
         return
     sid = len(SENTS)
     SENTS.append((s, source))
-    if source in ("told", "confirmed") or source.startswith("lesson"):
+    if source.startswith(("told", "lesson")) or source == "confirmed":
         STRONG.add(_skey(s))
     for w in set(t.lower() for t in tok(s) if len(t) > 2):
         INDEX[w].add(sid)
+    # THE GRAPH BIRTH (live entries only, never the wake replay): a telling
+    # or closed whole is an EXPERIENCE node; a live lesson a LESSONS node.
+    if _WAKE_DONE[0]:
+        nid = None
+        if source.startswith("told") or source == "confirmed":
+            nid = "S:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
+            graph_node(nid, "EXPERIENCE", s)
+        elif source.startswith("lesson"):
+            nid = "L:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
+            graph_node(nid, "LESSONS", s)
+        if nid:
+            NODE_SID[nid] = sid
 
 # lessons: hold Q/A pairs as bound units; corpus: hold sentences.
 # SIGHT pairs rebuild their spectrum-keyed form so the eye remembers
 # across wakes -- recognition needs the tokens IN the held sentence.
-for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", lesson_text, re.S):
+for q, a in re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nU:|\nQ:|\Z)", lesson_text, re.S):
     if stuttered(a):
         continue
     q, a = q.strip(), a.strip()
@@ -310,6 +406,8 @@ if os.path.exists(_sp) and 0 < os.path.getsize(_sp) < _MAX_STORE:
         log("STORE", "SKIPPED: " + str(_e))
 
 build_neigh_index()   # after ALL neighbours are in (corpus + prose store)
+graph_genesis(STORE_INGESTED)   # roots + primordial mesh + library nodes; invariants HALT
+_WAKE_DONE[0] = True            # from here, held entries are LIVE and birth nodes
 print(f"awake: {sum(len(s) for s in stores)} orbits, {len(SENTS)} held sentences, in {time.time()-t0:.0f}s", flush=True)
 log("WAKE", f"{sum(len(s) for s in stores)} orbits", f"{len(SENTS)} held sentences", f"{time.time()-t0:.0f}s")
 
@@ -328,7 +426,24 @@ def content_words(s):
 
 
 # ---------- FINDING: binding (XI-4) ----------
-def bind(query, exclude_self=None, top=None):
+def _experience_src(src):
+    # the experience tier: tellings (public or private) and closed wholes
+    return src.startswith("told") or src == "confirmed"
+
+def _text_node(text, src):
+    # the graph node id a held sentence was born under (hold_sentence's law)
+    if _experience_src(src):
+        return "S:%08x" % (_zlib.crc32(_skey(text).encode()) & 0xffffffff)
+    if src.startswith("lesson"):
+        return "L:%08x" % (_zlib.crc32(_skey(text).encode()) & 0xffffffff)
+    return None
+
+def _private_to_other(src, speaker):
+    # a deictic telling is PRIVATE to its teller: "told:uXXXX" serves only
+    # that subject; bare "told" and every other source is public knowledge
+    return src.startswith("told:") and src[5:] != (speaker or "")
+
+def bind(query, exclude_self=None, top=None, speaker=None):
     cw = content_words(query)
     if not cw:
         return ([] if top else (None, 0.0))
@@ -341,13 +456,33 @@ def bind(query, exclude_self=None, top=None):
             votes[sid] += informativeness(w) / GEN_B   # kin at half weight: the fold factor
     if not votes:
         return ([] if top else (None, 0.0))
+    # THE SYNAPTIC WIDENING (one hop, counted): a strongly voted node pulls
+    # its graph-adjacent held sentences into the CANDIDATE pool at an exact
+    # rational share of its own vote -- edge_count/node_degree, one fold
+    # step down (/GEN_B, the identical halving kin uses above). Widening
+    # feeds candidates; BIND_LOCK still serves. Severable by construction.
+    if GEDGE:
+        sid_node = {v: k for k, v in NODE_SID.items()}
+        for sid, v in sorted(votes.items(), key=lambda kv: -kv[1])[:GEN_C]:
+            n = sid_node.get(sid)
+            if not n:
+                continue
+            deg = sum(c for k, c in GEDGE.items() if n in k)
+            if not deg:
+                continue
+            for k, c in GEDGE.items():
+                if n in k:
+                    other = next(x for x in k if x != n) if len(k) == 2 else n
+                    adj = NODE_SID.get(other)
+                    if adj is not None and adj != sid:
+                        votes[adj] += v * (c / deg) / GEN_B
     denom = sum(informativeness(w) for w in cw)
     # THE EXPERIENCE ORDER (lexicographic, no weights): what it was TOLD
     # outranks its lessons, which outrank its library -- its own held life
     # first, then its teaching, then its reading.
     def source_rank(sid):
         src = SENTS[sid][1]
-        return 0 if src == "told" else (1 if src.startswith("lesson") else 2)
+        return 0 if src.startswith("told") or src == "confirmed" else (1 if src.startswith("lesson") else 2)
     best = sorted(votes.items(), key=lambda kv: (source_rank(kv[0]), -kv[1]))
     if top:
         # XI-4: the RANKED hits, same vote sort, no new scoring -- callers
@@ -357,6 +492,8 @@ def bind(query, exclude_self=None, top=None):
             s, srcname = SENTS[sid]
             if exclude_self and s.strip() == exclude_self.strip():
                 continue
+            if _private_to_other(srcname, speaker):
+                continue
             out.append((SENTS[sid], v / denom))
             if len(out) >= top:
                 break
@@ -365,10 +502,12 @@ def bind(query, exclude_self=None, top=None):
         s, srcname = SENTS[sid]
         if exclude_self and s.strip() == exclude_self.strip():
             continue
+        if _private_to_other(srcname, speaker):
+            continue
         return SENTS[sid], v / denom
     return None, 0.0
 
-def fuse_orbits(user_line, first, cw, rng=None):
+def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
     """XI-4 IN FULL, AT ONE LOCK (attention_capacity: a split lock binds
     nothing -- two concatenated halves are two 1/4 shares, neither
     self-antipodal; ONE utterance must pass ONE lock). Admission is
@@ -388,13 +527,14 @@ def fuse_orbits(user_line, first, cw, rng=None):
     # a question actually spans topics.
     if not user_line.strip().endswith("?") or len(_icw) < GEN_B:
         return None, 1
-    hits = bind(user_line, top=GEN_C + 1)
+    hits = bind(user_line, top=GEN_C + 1, speaker=speaker)
     if len(hits) < 2:
         return None, 1
     lead_text = first[0]
     lead_words = {t.lower() for t in tok(lead_text)}
     lead_key = _skey(lead_text)
     parts = [lead_text]
+    part_nodes = [n for n in (_text_node(first[0], first[1]),) if n]
     nsrc = 1
     for (s, src), share2 in hits:
         if nsrc >= GEN_C:
@@ -407,12 +547,12 @@ def fuse_orbits(user_line, first, cw, rng=None):
         if src.startswith("lesson:"):
             lq = set(content_words(src[7:]))
             ok = bool(_icw) and len(lq & _icw) * GEN_B >= len(_icw)
-        elif src in ("told", "confirmed"):
+        elif _experience_src(src):
             # the same one-law gate the serve path applies to tellings
             ok = bool(_icw) and len({t.lower() for t in tok(s)} & _icw) * GEN_B >= len(_icw)
         else:
             ok = False
-        if not ok or rejected(user_line, s):
+        if not ok or rejected(user_line, s, speaker):
             continue
         novel = {w for w in (t.lower() for t in tok(s))
                  if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000 and w not in lead_words}
@@ -420,6 +560,9 @@ def fuse_orbits(user_line, first, cw, rng=None):
             continue
         # ADMITTED: this record becomes a bound part of the one utterance
         parts.append(s)
+        _pn = _text_node(s, src)
+        if _pn:
+            part_nodes.append(_pn)
         lead_words |= {t.lower() for t in tok(s)}
         nsrc += 1
     if nsrc < 2:
@@ -430,6 +573,13 @@ def fuse_orbits(user_line, first, cw, rng=None):
     fused = babble_closure(parts, cw, rng if rng is not None else np.random.default_rng())
     if not fused:
         return None, 1
+    # the fused emission's sources co-bound in ONE atomic emission (touched)
+    # and stand registered for the SHORTCUT, which is born only at CLOSURE
+    # (y / head-to-head win) -- the retention law: never self-reinforced
+    if touched is not None:
+        touched.extend(n for n in part_nodes if n in GNODE)
+    if part_nodes:
+        PENDING_FUSE[qkey(user_line, speaker)] = list(dict.fromkeys(part_nodes))
     return fused, nsrc
 
 # ---------- SPEAKING: dialogue-orbit channel ----------
@@ -502,12 +652,47 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
     return re.sub(r"\s+([.,!?;:])", r"\1", s)
 
 
-# ---------- FACTS: relation orbits (subject, relation) -> value ----------
-# The user's "my/I" is the engine's "you"; the user's "your/you" is the
-# engine's "self". Facts are held FLIPPED at storage so role is exact.
-FACTS = {}   # (subject, relation) -> value ; subject in {"you","self"}
-FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"
+# ---------- THE SUBJECT AXIS: every speaker is a distinct held structure ---
+# A self is a closure structure, never a name (papers 42/43; names carry no
+# physics). Each speaker the engine meets gets a counted ADDRESS at first
+# contact -- crc32, the store's own counted address organ (_key) -- and every
+# private datum binds to it. Face seats with no platform id (terminal, tutor,
+# selfplay, assess) hash the face name alone: one seat per face, the operator
+# owns the terminal seat. users.tsv keeps full provenance, so a key collision
+# is detectable at registration and HALTS it (an invariant, not a knob).
+USERS = {}    # ukey -> (face, platform_id)
+USERS_LOG = BASE + "/fold_ai/lessons/users.tsv"
 import os as _os
+if _os.path.exists(USERS_LOG):
+    for _ln in open(USERS_LOG):
+        _p = _ln.rstrip("\n").split("\t")
+        if len(_p) >= 3:
+            USERS[_p[0]] = (_p[1], _p[2])
+
+def ukey(face, platform_id=None):
+    return "u%08x" % _zlib.crc32((face + ":" + str(platform_id or "")).encode())
+
+def register_user(face, platform_id=None):
+    k = ukey(face, platform_id)
+    held = USERS.get(k)
+    if held is not None:
+        if held != (face, str(platform_id or "")):
+            log("USER", "ADDRESS COLLISION -- registration halted", k, face, str(platform_id))
+            raise SystemExit("user address collision: " + k)
+        return k
+    USERS[k] = (face, str(platform_id or ""))
+    with open(USERS_LOG, "a") as _f:
+        _f.write(k + "\t" + face + "\t" + str(platform_id or "") + "\t" + time.strftime("%Y-%m-%dT%H:%M:%S") + "\n")
+    log("USER", "first contact; subject born", k, face)
+    graph_node("U:" + k, "USERS", face + ":" + str(platform_id or ""))
+    return k
+
+# ---------- FACTS: relation orbits (subject, relation) -> value ----------
+# The speaker's "my/I" is that speaker's OWN subject key; "your/you" is the
+# engine's "self". Facts are held FLIPPED at storage so role is exact -- and
+# per subject, so two speakers' names never collide (the flat "you" is gone).
+FACTS = {}   # (subject, relation) -> value ; subject = a ukey or "self"
+FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"
 if _os.path.exists(FACTS_LOG):
     for _ln in open(FACTS_LOG):
         _p = _ln.rstrip("\n").split("\t")
@@ -525,16 +710,19 @@ def persist_fact(subject, relation, value):
     with open(FACTS_LOG, "a") as _f:
         _f.write(subject + "\t" + relation + "\t" + value + "\n")
     log("FACT", subject, relation, value)
+    graph_node("F:" + subject + "|" + relation, "FACTS", relation + " of " + subject)
+    if subject != "self":
+        graph_edge("F:" + subject + "|" + relation, "U:" + subject)
 
-def _norm_subject(word):
+def _norm_subject(word, speaker=None):
     w = word.lower()
     if w in ("my", "i", "me", "mine", "myself"):
-        return "you"          # the user, from the engine's side
+        return speaker or "you"   # the present speaker's own subject
     if w in ("your", "you", "yours", "yourself"):
-        return "self"         # the engine
+        return "self"             # the engine
     return None
 
-def learn_fact(text):
+def learn_fact(text, speaker=None):
     # SENTENCE-SCOPED: a telling is extracted per sentence, so a declaration
     # buried mid-message still binds ("That is fine. My name is Maria Smith
     # i am your systems developer" -- the live miss of 2026-07-08 04:11:
@@ -542,11 +730,11 @@ def learn_fact(text):
     # name that followed).
     got = False
     for _s in re.split(r"(?<=[.!?])\s+", text.strip()):
-        if _s.strip() and _learn_fact_sentence(_s.strip()):
+        if _s.strip() and _learn_fact_sentence(_s.strip(), speaker):
             got = True
     return got
 
-def _learn_fact_sentence(text):
+def _learn_fact_sentence(text, speaker=None):
     t = text.strip().rstrip(".!")
     # "my/your name is X"
     m = re.match(r"(?i)(my|your)\s+name\s+is\s+(.+)", t)
@@ -563,18 +751,18 @@ def _learn_fact_sentence(text):
                 run.append(w)
             else:
                 break
-        persist_fact(_norm_subject(m.group(1)), "name",
+        persist_fact(_norm_subject(m.group(1), speaker), "name",
                      " ".join(run) if run else rest.title())
         return True
     # "my/your favourite X is Y"
     m = re.match(r"(?i)(my|your)\s+favou?rite\s+(\w+)\s+is\s+(.+)", t)
     if m:
-        persist_fact(_norm_subject(m.group(1)), "favourite " + m.group(2).lower(), m.group(3).strip())
+        persist_fact(_norm_subject(m.group(1), speaker), "favourite " + m.group(2).lower(), m.group(3).strip())
         return True
     # "I live in X" / "I am from X" / "my home is X"
     m = re.match(r"(?i)(?:i\s+live\s+in|i\s+am\s+from|i'?m\s+from|my\s+home\s+is)\s+(.+)", t)
     if m:
-        persist_fact("you", "location", m.group(1).strip().title())
+        persist_fact(speaker or "you", "location", m.group(1).strip().title())
         return True
     m = re.match(r"(?i)(?:you\s+live\s+in|your\s+home\s+is)\s+(.+)", t)
     if m:
@@ -584,37 +772,44 @@ def _learn_fact_sentence(text):
     # either ("I am not sure" holds no identity)
     m = re.match(r"(?i)(i\s+am|i'?m|you\s+are|you'?re)\s+(.+)", t)
     if m and not re.match(r"(?i)not\b", m.group(2).strip()):
-        subj = "you" if m.group(1).lower().startswith("i") else "self"
+        subj = (speaker or "you") if m.group(1).lower().startswith("i") else "self"
         persist_fact(subj, "identity", m.group(2).strip())
         return True
     return False
 
-def answer_fact(text):
+def answer_fact(text, speaker=None, touched=None):
+    me = speaker or "you"   # the present speaker's subject seat
     t = text.strip().rstrip("?.!")
     m = re.search(r"(?i)(?:what\s*is|what'?s|do\s+you\s+know)\s+(my|your)\s+(?:own\s+)?name", t)
     if m:
-        s = _norm_subject(m.group(1))
+        s = _norm_subject(m.group(1), me)
         v = FACTS.get((s, "name"))
-        return ("Your name is " + v + "." if s == "you" else "My name is " + v + ".") if v else None
+        if v and touched is not None:
+            touched.append("F:" + s + "|name")
+        return ("My name is " + v + "." if s == "self" else "Your name is " + v + ".") if v else None
     m = re.search(r"(?i)(?:who|what)\s+(?:are\s+you|you\s+are)", t)
     if m and ("self", "identity") in FACTS:
         v = FACTS[("self", "identity")]
         return "I am " + (v if v[-1:] in ".!?" else v + ".")
     m = re.search(r"(?i)what\s+is\s+(my|your)\s+favou?rite\s+(\w+)", t)
     if m:
-        s = _norm_subject(m.group(1)); rel = "favourite " + m.group(2).lower()
+        s = _norm_subject(m.group(1), me); rel = "favourite " + m.group(2).lower()
         v = FACTS.get((s, rel))
         if v:
-            return ("Your " if s == "you" else "My ") + m.group(2).lower() + " is " + v + "."
+            if touched is not None:
+                touched.append("F:" + s + "|" + rel)
+            return ("My " if s == "self" else "Your ") + m.group(2).lower() + " is " + v + "."
     m = re.search(r"(?i)where\s+do\s+i\s+live", t)
-    if m and ("you", "location") in FACTS:
-        return "You live in " + FACTS[("you", "location")] + "."
+    if m and (me, "location") in FACTS:
+        if touched is not None:
+            touched.append("F:" + me + "|location")
+        return "You live in " + FACTS[(me, "location")] + "."
     m = re.search(r"(?i)where\s+do\s+you\s+live", t)
     if m and ("self", "location") in FACTS:
         return "I hold my location as " + FACTS[("self", "location")] + "."
     m = re.search(r"(?i)(?:who|what)\s+am\s+i", t)
-    if m and ("you", "identity") in FACTS:
-        return "You are " + FACTS[("you", "identity")] + "."
+    if m and (me, "identity") in FACTS:
+        return "You are " + FACTS[(me, "identity")] + "."
     # THE KEY IS THE DOOR (Paper 44's door law, applied to the fact store):
     # a held fact is filed under (subject, relation); that key, spoken as
     # the question's own adjacent possessive-relation pair ("my name",
@@ -628,15 +823,23 @@ def answer_fact(text):
         low = " " + " ".join(w.lower() for w in tok(t)) + " "
         best = None
         for (s, rel), v in FACTS.items():
-            pair = " " + ("my" if s == "you" else "your") + " " + rel.lower() + " "
+            if s == "self":
+                poss = "your"
+            elif s == me:
+                poss = "my"
+            else:
+                continue               # another subject's fact: never served here
+            pair = " " + poss + " " + rel.lower() + " "
             pos = low.find(pair)
             if pos >= 0 and (best is None or pos < best[0]):
                 best = (pos, s, rel, v)
         if best:
             _, s, rel, v = best
+            if touched is not None:
+                touched.append("F:" + s + "|" + rel)
             if rel == "identity":
                 return ("You are " if s == "you" else "I am ") + (v if v[-1:] in ".!?" else v + ".")
-            return ("Your " if s == "you" else "My ") + rel + " is " + v + "."
+            return ("My " if s == "self" else "Your ") + rel + " is " + v + "."
     return None
 
 
@@ -704,8 +907,8 @@ def follow_command(line):
     return None
 
 LAST_TOPIC = [""]
-SESSION_TRAIL = []   # content words per turn, most recent last -- the living context
-RECENT = []          # (user line, my reply) pairs -- the conversation my teacher sees
+SESSION_TRAIL = defaultdict(list)   # SPEAKER -> content words per turn (scope law)
+RECENT = defaultdict(list)          # SPEAKER -> (user line, my reply) pairs
 _RELAY_FACES = ("terminal", "discord", "assess")   # faces where the teacher carries me while young
 
 def recall_through_orbit(hit_text, cw, rng):
@@ -828,7 +1031,7 @@ if os.path.exists(TRACE_LOG):
             except Exception:
                 pass
 
-def record_trace(question, calls, answer):
+def record_trace(question, calls, answer, speaker=None):
     """Bank the act. The TEMPLATE is derived, never written: where a tool's
     fresh result appears VERBATIM inside the teacher's answer (a counted
     containment check), that answer with the value replaced by a slot
@@ -844,21 +1047,24 @@ def record_trace(question, calls, answer):
             slotted += 1
     if not slotted:
         template = None
-    k = qkey(question)
+    k = qkey(question, speaker)
     TRACES[k] = (question, [(n, a) for n, a, _r in calls], template)
+    graph_node("T:" + k, "ACTS", question)
+    if speaker:
+        graph_edge("T:" + k, "U:" + speaker)
     with open(TRACE_LOG, "a") as f:
         f.write(k + "\t" + " ".join(question.split())[:200] + "\t" +
                 _tj.dumps([(n, a) for n, a, _r in calls]) + "\t" +
                 (" ".join(template.split()) if template else "") + "\n")
     log("TRACE", "banked", k, str([n for n, a, _r in calls]))
 
-def serve_trace(user_line, cw):
+def serve_trace(user_line, cw, speaker=None):
     """Native tool answering: bind the question against held traces with
     the ONE half-overlap law, re-run the acts fresh, speak through the
     derived template (or the raw results when no template exists). Results
     that exceed the speaking bound stay with the observer -- a log dump is
     reading, not an answer."""
-    tr = TRACES.get(qkey(user_line))
+    tr = TRACES.get(qkey(user_line, speaker))
     if tr is None and cw:
         _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
         if _icw:
@@ -886,8 +1092,8 @@ def serve_trace(user_line, cw):
             pass
     return " ".join(r for r in results if r)
 
-def reply(user_line, rng, face=None):
-    ck = qkey(user_line)
+def reply(user_line, rng, face=None, speaker=None, touched=None):
+    ck = qkey(user_line, speaker)
     # ANAPHORA IS CONTEXT: a thin question pointing outside itself ("what do
     # you think about THAT?") cannot be answered from context-free memory --
     # only the channel that holds the conversation may answer it
@@ -899,6 +1105,8 @@ def reply(user_line, rng, face=None):
     if ck in CORRECTIONS and not _anaphoric:
         _w, _l = GRAD.get(ck, (0, 0))
         if _l <= _w:   # a correction holds its seat until it LOSES the score
+            if touched is not None:
+                touched.append("C:" + ck)
             return CORRECTIONS[ck], "taught answer (held correction)"
         # dethroned by the head-to-head: fall through to the live chain
     cmd = follow_command(user_line)
@@ -906,12 +1114,14 @@ def reply(user_line, rng, face=None):
         return cmd, "command followed"
     cw = content_words(user_line)
     thought = ["focus=" + ",".join(cw[:4]) if cw else "focus=(none)"]
-    fa = answer_fact(user_line)
+    fa = answer_fact(user_line, speaker, touched)
     if fa:
         thought.append("relation-fact channel: exact held fact")
         return fa, "; ".join(thought)
-    ts = serve_trace(user_line, cw)
+    ts = serve_trace(user_line, cw, speaker)
     if ts:
+        if touched is not None:
+            touched.append("T:" + qkey(user_line, speaker))
         thought.append("graduated tooling: held act re-run fresh, teacher's own phrasing")
         return ts, "; ".join(thought)
     # THE UNIFIED SAMPLER (the optimal design): ONE token-by-token walk
@@ -920,13 +1130,13 @@ def reply(user_line, rng, face=None):
     # composes novelty; each emission is one fold act (the spike's
     # atomicity), never a retrieved packet.
     _seed = []
-    for _u, _a in RECENT[-GEN_B:]:
+    for _u, _a in RECENT[speaker or ""][-GEN_B:]:
         _seed += tok("Q: " + _u + "\nA: " + _a + "\n")
     q_tokens = _seed + tok("Q: " + user_line) + tok("A:")
     # THEORY BELONGS TO THE CORPUS, not to conversational vibes: a question
     # that binds corpus-tier text skips the sampler and goes to the channels
     # that read the source (matched corpus text, or the relay's grep law)
-    _pre_hit, _pre_sh = bind(user_line)
+    _pre_hit, _pre_sh = bind(user_line, speaker=speaker)
     _is_theory = bool(_pre_hit) and _pre_hit[1] == "corpus"
     # THE BABBLE LAW ON THE DIALOGUE SURFACE (the spike + hard_problem: only
     # BOUND wholes are ever emitted -- on EVERY emission surface, this one
@@ -945,7 +1155,7 @@ def reply(user_line, rng, face=None):
         qf = {w for w in set(cw) if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
         for _spike in range(GEN_B ** GEN_C):
             cand = continue_orbit(q_tokens, rng, max_tokens=120, sentences=GEN_B)
-            if not cand or rejected(user_line, cand):
+            if not cand or rejected(user_line, cand, speaker):
                 continue
             if stuttered(cand):
                 continue
@@ -963,8 +1173,9 @@ def reply(user_line, rng, face=None):
                            + "); spike " + str(_spike + 1))
             return cand, "; ".join(thought)
         thought.append("dialogue babble exhausted below the lock; deferring to matched experience or my teacher")
-    hit, share = bind(user_line)
-    if (hit is None or share < BIND_LOCK) and len(cw) < GEN_C and SESSION_TRAIL:
+    hit, share = bind(user_line, speaker=speaker)
+    _trail = SESSION_TRAIL[speaker or ""]
+    if (hit is None or share < BIND_LOCK) and len(cw) < GEN_C and _trail:
         # UNLIMITED CONTEXT, human-style: memory never truncates (binding is
         # content-addressed over EVERYTHING held); attention over the
         # conversation is what adjusts -- and ONLY when the question alone
@@ -972,17 +1183,17 @@ def reply(user_line, rng, face=None):
         # turns halve with each step of age: the decay is the fold factor 2
         # itself, not a tuned constant. The question always outvotes its past.
         extra = []
-        for age, words in enumerate(reversed(SESSION_TRAIL[-8:])):
+        for age, words in enumerate(reversed(_trail[-8:])):
             take = len(words) >> age             # halving attention by age
             if take <= 0:
                 break
             extra += words[:take]
         if extra:
-            hit2, share2 = bind(user_line + " " + " ".join(extra))
+            hit2, share2 = bind(user_line + " " + " ".join(extra), speaker=speaker)
             if hit2 and share2 > share:
                 hit, share = hit2, share2
                 thought.append("thin focus; attention folded over the conversation (halving with age)")
-    if hit and rejected(user_line, hit[0]):
+    if hit and rejected(user_line, hit[0], speaker):
         thought.append("bound fact previously rejected; withheld")
         hit = None
     if hit and share >= BIND_LOCK:
@@ -1002,7 +1213,7 @@ def reply(user_line, rng, face=None):
         if hit[1].startswith("lesson:"):
             lq = set(content_words(hit[1][7:]))
             strong = _has_focus and len(lq & _icw) * GEN_B >= len(_icw)   # half, of what MEANS something
-        elif hit[1] in ("told", "confirmed"):
+        elif _experience_src(hit[1]):
             # ONE LAW FOR EVERY TIER (2026-07-07): a telling serves only when
             # the question carries a real focus AND the record holds at least
             # half its informative words. Tellings keep their top RANK in the
@@ -1022,11 +1233,11 @@ def reply(user_line, rng, face=None):
             # stay single-orbit so the head-to-head score measures the
             # channels, not the fusion.
             if strong and face in ("terminal", "discord", "assess"):
-                fused, nsrc = fuse_orbits(user_line, hit, cw, rng)
+                fused, nsrc = fuse_orbits(user_line, hit, cw, rng, speaker=speaker, touched=touched)
                 if fused:
                     thought.append(f"multi-orbit bound ({nsrc} sources) at share {share:.2f}")
                     return fused, "; ".join(thought)
-            if hit[1] in ("told", "confirmed"):
+            if _experience_src(hit[1]):
                 # RECALL IS REGENERATION: a telling is re-expressed by the
                 # babble organ, never reprinted (Maria's law). Exhaustion is
                 # SILENCE: the teacher answers -- a static deposit is what
@@ -1035,9 +1246,13 @@ def reply(user_line, rng, face=None):
                 walked = recall_through_orbit(hit[0], cw, rng)
                 if walked:
                     thought.append(f"bound {hit[1]} at share {share:.2f}; recalled through the orbit walk")
+                    if touched is not None:
+                        _tn = _text_node(hit[0], hit[1])
+                        if _tn:
+                            touched.append(_tn)
                     return walked, "; ".join(thought)
                 if RELAY["on"] and face in _RELAY_FACES:
-                    relayed = _teacher_relay(user_line)
+                    relayed = _teacher_relay(user_line, speaker=speaker)
                     if relayed:
                         a, reasoning = relayed
                         thought.append("babble exhausted silently; my teacher answered as me -- held, mine next time")
@@ -1045,14 +1260,18 @@ def reply(user_line, rng, face=None):
                 thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, no teacher -- asking rather than reprinting")
                 return "I hold that, but I cannot yet say it in my own words. Ask me again soon, or tell me more.", "; ".join(thought)
             thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
+            if touched is not None:
+                _tn = _text_node(hit[0], hit[1])
+                if _tn:
+                    touched.append(_tn)
             return hit[0], "; ".join(thought)
-        relayed = _teacher_relay(user_line)
+        relayed = _teacher_relay(user_line, speaker=speaker)
         if relayed:
             a, reasoning = relayed
             thought.append("pool thin (library-tier bind); my teacher answered as me -- held, mine next time"
                            + ("; reasoning: " + reasoning[:100] if reasoning else ""))
             return a, "; ".join(thought)
-        if hit[1] in ("told", "confirmed"):
+        if _experience_src(hit[1]):
             walked = recall_through_orbit(hit[0], cw, rng)
             if walked:
                 thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, recalled through the orbit walk")
@@ -1062,7 +1281,7 @@ def reply(user_line, rng, face=None):
         thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
         return hit[0], "; ".join(thought)
     if RELAY["on"] and face in _RELAY_FACES and not graduated(user_line):
-        relayed = _teacher_relay(user_line)
+        relayed = _teacher_relay(user_line, speaker=speaker)
         if relayed:
             a, reasoning = relayed
             thought.append("nothing of my own bound; my teacher answered as me -- held, mine next time"
@@ -1117,8 +1336,23 @@ if os.path.exists(FEEDBACK_LOG):
             _, qk, bad = ln.rstrip("\n").split("\t")[:3]
             REJECTED.add((qk, bad))
 
-def qkey(user_line):
-    return ",".join(sorted(content_words(user_line)[:GEN_B ** 2]))
+def _deictic(line):
+    # PRIVATE iff the line carries person deixis -- a token of the closed
+    # grammatical paradigm the engine already holds as FLIP (the pronoun
+    # table). A closed class of the language, the same lawful category as
+    # the question mark; never an enumerated phrase list.
+    return any(t.lower() in FLIP for t in tok(line))
+
+def qkey(user_line, speaker=None):
+    # THE SCOPE LAW (HIVE's Public/Private, fold form): deixis partitions
+    # private from public. A question about "my ..." is the SPEAKER's own
+    # territory -- the key itself carries the subject, so corrections,
+    # graduation, traces and rejections all inherit per-user scope with no
+    # new mechanism. Impersonal territories stay shared: one scoreboard.
+    k = ",".join(sorted(content_words(user_line)[:GEN_B ** 2]))
+    if speaker and _deictic(user_line):
+        return speaker + "|" + k
+    return k
 
 if os.path.exists(CORR_LOG):
     for _ln in open(CORR_LOG):
@@ -1135,6 +1369,7 @@ if os.path.exists(CORR_LOG):
 _PARITY = [False]
 _PARITY_ARMED = [False]
 PENDING_REASON = {}   # qkey -> (question, reasoning) awaiting its answer's closure
+PENDING_FUSE = {}     # qkey -> source node ids of a fused emission awaiting closure
 GRAD = {}   # qkey -> [wins, losses]
 GRADQ = {}  # qkey -> the territory's question text (for ZPD revisits)
 GRAD_LOG = BASE + "/fold_ai/lessons/graduation.tsv"
@@ -1196,23 +1431,26 @@ def graduated(user_line):
     w, l = GRAD.get(qkey(user_line), (0, 0))
     return w > l   # majority: my answer beats my teacher's in this territory
 
-def record_correction(question, answer):
+def record_correction(question, answer, speaker=None):
     answer = answer.strip()
     answer = answer if answer[-1:] in ".!?" else answer + "."
-    k = qkey(question)
+    k = qkey(question, speaker)
     CORRECTIONS[k] = answer
     with open(CORR_LOG, "a") as f:
         f.write(k + "\t" + answer + "\n")
     # the correction is spoken in MY voice -- flip before extracting the
     # relation so first-person facts land on self, never on the teller
-    learn_fact(flip_perspective(answer))
+    learn_fact(flip_perspective(answer), speaker)
     write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
     hold_sentence(answer, "told")
     log("CORRECTION", question, answer)
+    graph_node("C:" + k, "TAUGHT", question)
+    if speaker:
+        graph_edge("C:" + k, "U:" + speaker)
     return answer
 
-def rejected(user_line, ans):
-    return (qkey(user_line), ans.strip()) in REJECTED
+def rejected(user_line, ans, speaker=None):
+    return (qkey(user_line, speaker), ans.strip()) in REJECTED
 
 # ---------- THE UNIFIED TURN: one engine, every face ----------------------
 # There is ONE system. The terminal, Discord, and any future face all call
@@ -1228,9 +1466,13 @@ def _is_confused(thought):
     return ("asking rather than guessing" in thought
             or "composed under the topic-lock" in thought)
 
-def turn(line, rng, interface="terminal"):
+def turn(line, rng, interface="terminal", speaker=None):
     """One conversational turn from any interface: returns (answer, thought).
-    Learning happens here, identically, whoever is speaking through."""
+    Learning happens here, identically, whoever is speaking through --
+    but never anonymously: every turn has a SUBJECT (the speaker seat),
+    and every private datum binds to it."""
+    speaker = speaker or register_user(interface)
+    touched = []           # graph nodes that serve this turn (one atomic emission)
     line = line.strip()
     is_question = line.endswith("?") or line.lower().startswith(
         ("what", "who", "how", "why", "when", "where", "do ", "does", "did", "can ", "is ", "are "))
@@ -1241,19 +1483,19 @@ def turn(line, rng, interface="terminal"):
     if not is_question and not is_command:
         if not content_words(line):
             return "okay.", "contentless; acknowledged, not held"
-        got = learn_fact(line)
+        got = learn_fact(line, speaker)
         fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
         # reply candidate BEFORE the telling is written -- otherwise the
         # freshest orbit is the echo of her own words (the parrot disease)
         candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
         write_orbits(tok(fact + "\n") * GEN_C)
-        hold_sentence(fact, "told")
+        hold_sentence(fact, "told:" + speaker if _deictic(line) else "told")
         write_orbits(tok("q: " + line + "\na: " + fact + "\n") * GEN_B)
         # A PENDING PERCEPT closes on the human's words: sight or sound,
         # paired exactly as an observer's description would be. Learning
         # new perceptual data requires NO model -- only an experience and
         # a telling (the Learning Law's original form).
-        pk = PENDING_PERCEPT.pop(interface, None)
+        pk = PENDING_PERCEPT.pop(speaker, None) or PENDING_PERCEPT.pop(interface, None)
         if pk:
             kind, toks = pk
             st = " ".join(toks)
@@ -1274,11 +1516,11 @@ def turn(line, rng, interface="terminal"):
         # THE CHILD'S ARC, stage 2: I asked for help, the user explained.
         # Retry with their words held; if still unsure, my observer steps in
         # -- and either way, what closes the gap is mine from then on.
-        orig = CONFUSED.pop(interface, None)
+        orig = CONFUSED.pop(speaker, None)
         if orig:
             # the observer leads stage 2, folding the user's words into its
             # answer to the ORIGINAL question -- their help plus its teaching
-            relayed = _teacher_relay(orig, user_help=line) if RELAY["on"] else None
+            relayed = _teacher_relay(orig, user_help=line, speaker=speaker) if RELAY["on"] else None
             if relayed:
                 a, reasoning = relayed
                 ans = "Held. And with your help: " + a
@@ -1286,7 +1528,7 @@ def turn(line, rng, interface="terminal"):
                            + ("; taught reasoning: " + reasoning[:120] if reasoning else "")
                            + "; owned for the future")
             else:
-                ans2, th2 = reply(orig, rng)
+                ans2, th2 = reply(orig, rng, speaker=speaker, touched=touched)
                 if not _is_confused(th2):
                     ans = "Held. And now I can answer: " + dedup(ans2)
                     thought = "the user's help bound the open question; answered and owned"
@@ -1300,7 +1542,7 @@ def turn(line, rng, interface="terminal"):
         # WHILE I AM YOUNG, THE TEACHER SPEAKS TO TELLINGS TOO: the facts are
         # already held above -- but the RESPONSE comes from my observer, in
         # my voice, never from a thin echo of the user's own words.
-        relayed = _teacher_relay(line) if (interface in _RELAY_FACES and RELAY["on"]) else None
+        relayed = _teacher_relay(line, speaker=speaker) if (interface in _RELAY_FACES and RELAY["on"]) else None
         if relayed:
             a, reasoning = relayed
             ans = a
@@ -1318,14 +1560,14 @@ def turn(line, rng, interface="terminal"):
                 ans = "Held. " + fact
                 thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
     else:
-        CONFUSED.pop(interface, None)           # a new question supersedes an open one
-        ans, thought = reply(line, rng, face=interface)
+        CONFUSED.pop(speaker, None)             # a new question supersedes an open one
+        ans, thought = reply(line, rng, face=interface, speaker=speaker, touched=touched)
         ans = dedup(ans)
         # THE CHILD'S ARC, stage 1: when nothing binds strongly, ask the USER
         # first -- like a child -- before any model is consulted.
         if _is_confused(thought) and interface in _CHILD_FACES:
             cw = content_words(line)
-            CONFUSED[interface] = line
+            CONFUSED[speaker] = line
             ans = ("I do not hold that yet. Can you tell me more about " + cw[0] + "? "
                    "I will hold what you say.") if cw else \
                   "I do not hold that yet. Can you say it another way? I will hold what you say."
@@ -1341,22 +1583,30 @@ def turn(line, rng, interface="terminal"):
     hold_sentence("On '" + line[:60] + "' I thought: " + thought, "thought")
     if content_words(line):
         LAST_TOPIC[0] = " ".join(content_words(line)[:GEN_B ** 2])
-        SESSION_TRAIL.append(content_words(line)[:CTX_MAX])
-        del SESSION_TRAIL[:-GEN_B ** CTX_MAX]
-    RECENT.append((line, ans))
-    del RECENT[:-256]   # IO bound; the relay trims to the model window itself
+        SESSION_TRAIL[speaker].append(content_words(line)[:CTX_MAX])
+        del SESSION_TRAIL[speaker][:-GEN_B ** CTX_MAX]
+    RECENT[speaker].append((line, ans))
+    del RECENT[speaker][:-256]   # IO bound; the relay trims to the model window itself
     # LEARNING, ongoing: your words always held (the prediction state)
     with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
-        f.write("Q: " + line + "\nA: " + ans + "\n")
+        f.write("U: " + speaker + "\nQ: " + line + "\nA: " + ans + "\n")
     ans = re.sub(r"[`|]+", " ", ans)
     ans = " ".join(ans.split())          # served text is always markup-clean
     if THINKING:
         thought = thought + "\n\n⌁ observer native thinking: " + " || ".join(THINKING)[:5000]
         del THINKING[:]
     log("TURN", interface, line, ans, thought)
+    # THE CO-BINDING (entanglement): the nodes that fired in THIS one
+    # atomic emission interlock -- one E row per pair, plus each to the
+    # speaker's subject node. Counted, monotone, no window, no knob.
+    tset = sorted(set(t for t in touched if t in GNODE))
+    for _i in range(len(tset)):
+        for _j in range(_i + 1, len(tset)):
+            graph_edge(tset[_i], tset[_j])
+        graph_edge(tset[_i], "U:" + speaker)
     return ans, thought
 
-def apply_feedback(question, answer, fb_text, interface="terminal"):
+def apply_feedback(question, answer, fb_text, interface="terminal", speaker=None):
     """THE CLOSURE (XIV-7), from any face. y consolidates (the exchange joins
     the held cycle -- earned retention). n withholds the antipode AND any
     text after the n IS the corrected answer -- plain words, no syntax."""
@@ -1364,25 +1614,38 @@ def apply_feedback(question, answer, fb_text, interface="terminal"):
     if fb[:1].lower() == "y":
         write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
         hold_sentence(answer, "confirmed")
+        # THE SHORTCUT (consolidation at CLOSURE, never at emission -- the
+        # retention law): a fused whole that closed becomes a NEW memory
+        # node edged to every source it bound -- the joint orbit made held.
+        _pf = PENDING_FUSE.pop(qkey(question, speaker), None)
+        if _pf:
+            _sn = "S:%08x" % (_zlib.crc32(_skey(answer).encode()) & 0xffffffff)
+            graph_node(_sn, "EXPERIENCE", answer)
+            NODE_SID[_sn] = len(SENTS) - 1
+            for _src_node in _pf:
+                if _src_node in GNODE:
+                    graph_edge(_sn, _src_node)
+            log("GRAPH", "shortcut consolidated at closure", _sn, str(len(_pf)) + " sources")
         reason = fb[1:].strip(" :,-")
         if reason:
             hold_sentence(reason, "told")
             write_orbits(tok(reason + "\n") * GEN_B)
         with open(FEEDBACK_LOG, "a") as f:
-            f.write("CONF\t" + qkey(question) + "\t" + answer + "\n")
-        pr = PENDING_REASON.pop(qkey(question), None)
+            f.write("CONF\t" + qkey(question, speaker) + "\t" + answer + "\n")
+        pr = PENDING_REASON.pop(qkey(question, speaker), None)
         if pr:   # M3: the answer closed -- its reasoning is retained
             hold_sentence("On '" + pr[0] + "' the reasoning is: " + pr[1], "thought")
         log("FEEDBACK", interface, "y", question, answer)
         return "consolidated -- this exchange joins the held cycle."
     if fb[:1].lower() == "n":
-        REJECTED.add((qkey(question), answer.strip()))
+        REJECTED.add((qkey(question, speaker), answer.strip()))
+        PENDING_FUSE.pop(qkey(question, speaker), None)   # a refused fusion dies unheld
         PENDING_REASON.pop(qkey(question), None)   # M3: reasoning dies with its answer
         with open(FEEDBACK_LOG, "a") as f:
-            f.write("REJ\t" + qkey(question) + "\t" + answer + "\n")
+            f.write("REJ\t" + qkey(question, speaker) + "\t" + answer + "\n")
         corrected = fb[1:].strip(" :,-")
         if corrected:
-            held = record_correction(question, corrected)
+            held = record_correction(question, corrected, speaker)
             log("FEEDBACK", interface, "n->corrected", question, held)
             return "held, permanently. Ask me again and I will say: " + held
         log("FEEDBACK", interface, "n (awaiting correction)", question, answer)
@@ -1692,7 +1955,7 @@ def _ollama_chat(messages, tools=None, timeout=600, think=False):
         log("TUTOR", "ollama chat error: " + str(e))
         return {}
 
-def _teacher_relay(question, user_help=""):
+def _teacher_relay(question, user_help="", speaker=None):
     """THE OBSERVER RELAY: what I cannot answer, my teacher answers AS me --
     with tools when they give the exact answer, and stepwise reasoning I
     hold as my own thought -- I relay it and keep it: asked once, owned
@@ -1708,7 +1971,7 @@ def _teacher_relay(question, user_help=""):
     # the model (an IO fact, not a model quantity)
     _budget = 131072 * 3
     _pieces, _used = [], 0
-    for u, a in reversed(RECENT):
+    for u, a in reversed(RECENT.get(speaker or "", [])):
         _pc = "User: " + u + "\nYou: " + a + "\n"
         if _used + len(_pc) > _budget:
             break
@@ -1809,13 +2072,13 @@ def _teacher_relay(question, user_help=""):
     # state and joins my thought only when its answer closes (y or a
     # head-to-head win); it is discarded with a rejected answer.
     if reasoning:
-        PENDING_REASON[qkey(question)] = (question.strip()[:60], reasoning[:250])
+        PENDING_REASON[qkey(question, speaker)] = (question.strip()[:60], reasoning[:250])
     with open(BASE + "/fold_ai/lessons/lessons_relay.txt", "a") as f:
-        f.write("Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
+        f.write(("U: " + speaker + "\n" if speaker else "") + "Q: " + question.strip() + "\nA: " + a + "\n")   # persists to next wake
     if _trace_calls:
         # GRADUATION OF THE ACT: the question territory now owns the tools
         # that answered it -- asked again, the engine runs them itself
-        record_trace(question, _trace_calls, a)
+        record_trace(question, _trace_calls, a, speaker)
     log("RELAY", question, a)
     return a, reasoning
 
@@ -2025,7 +2288,7 @@ def fold_speak(text):
         return None
 
 _WHISPER = [None]
-def hear_audio(audio_bytes, suffix=".ogg"):
+def hear_audio(audio_bytes, suffix=".ogg", percept_owner=None):
     """THE EAR (intake v1): a local transcriber turns sound into words that
     land in the SAME channel as every other experience -- a telling, held
     as orbits. (The fold-native ear -- audio as counted spectra, the eye's
@@ -2082,7 +2345,7 @@ def hear_audio(audio_bytes, suffix=".ogg"):
             sound0 = None
         s0 = fold_hear(audio_bytes, suffix)
         if s0:
-            PENDING_PERCEPT["discord"] = ("SOUND", s0)
+            PENDING_PERCEPT[percept_owner or "discord"] = ("SOUND", s0)
             return ("I hear it -- its spectrum is held. Tell me what it says, "
                     "and I will know it from now on.")
         return None
@@ -2198,7 +2461,7 @@ def ingest_document(name, data, caption="", interface="discord"):
         log("DOC", "ingest error: " + str(e))
         return None, "I could not read that file cleanly. Tell me what it says and I will hold it."
 
-def observe_image(images_b64, caption=""):
+def observe_image(images_b64, caption="", percept_owner=None):
     """VISION INTAKE, my own eye first: the image enters as counted fold
     mathematics (fold_see); if its spectrum binds a held sight-meaning, I
     recognize it MYSELF -- no image model in the loop. Only what I do not
@@ -2236,7 +2499,7 @@ def observe_image(images_b64, caption=""):
             # the human's next telling closes the percept -- the Learning
             # Law with a person as the observer, its original form
             if sight:
-                PENDING_PERCEPT["discord"] = ("SIGHT", sight)
+                PENDING_PERCEPT[percept_owner or "discord"] = ("SIGHT", sight)
                 return ("I see it -- its spectrum is held (" + " ".join(sight[:4]) +
                         " ...). Tell me what it shows, and I will know it from now on.")
             return None
@@ -2324,7 +2587,7 @@ def _tutor_loop():
                               "question a curious person might ask about it, and its answer grounded ONLY in "
                               "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
                               "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
-                m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", out, re.S)
+                m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nU:|\nQ:|\Z)", out, re.S)
                 if not m:
                     log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
                     continue
@@ -2345,7 +2608,8 @@ def _tutor_loop():
             # teacher's, judged blind. A win tallies toward graduating this
             # territory; a loss holds the teacher's answer as a correction,
             # so the same territory answers with it -- and wins -- next time.
-            ans, _ = turn(q, rng, "tutor")
+            _tspk = register_user("tutor")
+            ans, _ = turn(q, rng, "tutor", speaker=_tspk)
             # THE JUDGE ALTERNATES by cycle parity across the discovered
             # pool (independence law): the reference stays the teacher's;
             # the SCORING seat rotates, so no verdict depends solely on
@@ -2361,23 +2625,23 @@ def _tutor_loop():
                 time.sleep(20)
                 continue
             v = re.search(r"\b([AB])\b", verdict.upper())
-            k = qkey(q)
+            k = qkey(q, _tspk)
             if v and v.group(1) == "A":
                 record_grad(k, True, q, judge=judge)
                 record_judge(judge, True)
-                apply_feedback(q, ans, "y", "tutor")
+                apply_feedback(q, ans, "y", "tutor", speaker=_tspk)
                 # the WINNING answer takes the seat -- but ONLY a clean one:
                 # a movable judge can bless garbled output, and the ratchet
                 # must never install junk permanently (hygiene at every gate)
                 if not stuttered(ans) and not any(b in ans for b in ("*", "`", "|", "{", "}")) and len(ans.split()) >= GEN_C:
-                    record_correction(q, ans)
+                    record_correction(q, ans, _tspk)
                     log("TUTOR", "engine WON head-to-head; winning answer banked", "judge=" + judge, q)
                 else:
                     log("TUTOR", "engine WON but answer failed hygiene; win tallied, seat NOT banked", "judge=" + judge, q)
             else:
                 record_grad(k, False, q, judge=judge)
                 record_judge(judge, False)
-                apply_feedback(q, ans, "n " + ref, "tutor")
+                apply_feedback(q, ans, "n " + ref, "tutor", speaker=_tspk)
                 log("TUTOR", "teacher won; correction held", "judge=" + judge, q)
         except Exception as e:
             log("TUTOR", "error: " + str(e))
@@ -2488,7 +2752,7 @@ def _selfplay_loop():
                     write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * GEN_B)
                     log("SELFPLAY", "consolidated", q)
                 else:
-                    record_correction(q, ref)
+                    record_correction(q, ref, register_user("selfplay"))
                     log("SELFPLAY", "self-corrected", q)
         except Exception as e:
             log("SELFPLAY", "error: " + str(e))
@@ -2513,7 +2777,7 @@ def run_benchmark(rng=None):
     n_sight = sum(1 for s, src in SENTS if src.startswith("lesson:SIGHT"))
     n_sound = sum(1 for s, src in SENTS if src.startswith("lesson:SOUND"))
     n_voice = len(SOUND_FILES)
-    n_told = sum(1 for s, src in SENTS if src in ("told", "confirmed"))
+    n_told = sum(1 for s, src in SENTS if _experience_src(src))
     # live probe: can the engine answer its own curriculum WITHOUT a teacher?
     pool = [(src[7:], s) for s, src in SENTS
             if src.startswith("lesson:") and not src.startswith(("lesson:SIGHT", "lesson:SOUND"))
@@ -2679,8 +2943,8 @@ def run_session_assessment(turns=GEN_B ** 4, announce=True):
             # THE SESSION BOUNDARY: everything a reboot forgets, forgotten;
             # everything persistence keeps, kept. The examiner's late
             # callback to the early fact tests exactly this seam.
-            del RECENT[:]
-            del SESSION_TRAIL[:]
+            RECENT.clear()
+            SESSION_TRAIL.clear()
             LAST_TOPIC[0] = ""
             CONFUSED.clear()
             log("ASSESS", "SESSION BOUNDARY crossed (in-session context cleared; memory kept)")
@@ -2786,6 +3050,7 @@ def _prose_watcher():
                     if "|" not in s and "`" not in s and well_formed(s):
                         hold_sentence(s, "prose")
                 _EATEN.add(os.path.basename(f))
+                graph_node("B:" + os.path.basename(f), "LIBRARY", os.path.basename(f))
                 ate += 1
                 log("PROSE", os.path.basename(f), f"+{len(tl)} tokens eaten live")
             if ate:
@@ -2836,7 +3101,7 @@ def _watch_lessons():
                     fh.seek(start)
                     new = fh.read()
                 seen[f] = size
-                pairs = re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nQ:|\Z)", new, re.S)
+                pairs = re.findall(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nU:|\nQ:|\Z)", new, re.S)
                 for q, a in pairs:
                     q, a = " ".join(q.split()), " ".join(a.split())
                     if stuttered(a):
@@ -2887,6 +3152,7 @@ def _start_discord(rng):
 
 def main():
     rng = np.random.default_rng()
+    _term = register_user("terminal")   # the operator's seat
     # the unified system comes up as ONE: engine (awake above), the Discord
     # face on this same memory, the teachers, and the live lesson stream.
     _start_discord(np.random.default_rng())
@@ -2930,13 +3196,13 @@ def main():
             continue
         # bare negation = rejection of the previous answer, never a fact
         if line.lower().strip(" .!") in ("no", "wrong", "incorrect", "that is wrong", "thats wrong") and last_exchange[0]:
-            REJECTED.add((qkey(last_exchange[0]), last_exchange[1].strip()))
+            REJECTED.add((qkey(last_exchange[0], _term), last_exchange[1].strip()))
             with open(FEEDBACK_LOG, "a") as f:
-                f.write("REJ\t" + qkey(last_exchange[0]) + "\t" + last_exchange[1] + "\t(bare no)\n")
+                f.write("REJ\t" + qkey(last_exchange[0], _term) + "\t" + last_exchange[1] + "\t(bare no)\n")
             log("FEEDBACK", "terminal", "bare no", last_exchange[0], last_exchange[1])
             print("UnisonAI: withdrawn. Tell me the right of it, and I will hold it.\n", flush=True)
             continue
-        ans, thought = turn(line, rng)
+        ans, thought = turn(line, rng, speaker=_term)
         print("  \u2301 " + thought, flush=True)
         print("UnisonAI: " + ans + "\n", flush=True)
         last_exchange[0], last_exchange[1] = line, ans
@@ -2946,14 +3212,14 @@ def main():
             fb = ""
         if not fb:
             continue
-        res = apply_feedback(line, ans, fb)
+        res = apply_feedback(line, ans, fb, speaker=_term)
         if res is None:            # bare n: ask for the correction, once
             try:
                 corrected = input("UnisonAI: what should I have said? ").strip()
             except (EOFError, KeyboardInterrupt):
                 corrected = ""
             if corrected:
-                held = record_correction(line, corrected)
+                held = record_correction(line, corrected, _term)
                 print("UnisonAI: held, permanently: " + held + " Ask me again.\n", flush=True)
             else:
                 print("UnisonAI: withdrawn. I will not repeat it.\n", flush=True)

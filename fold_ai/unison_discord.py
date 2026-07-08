@@ -45,14 +45,17 @@ def run(uc, rng=None):
         if isinstance(msg.channel, discord.Thread) and msg.channel.id in PENDING:
             entry = PENDING[msg.channel.id]
             uid, q, a, awaiting = entry
+            if msg.author.id != uid:
+                return          # the closure author law: only the ASKER closes their thread
             text = msg.content.strip()
+            spk = uc.register_user("discord", msg.author.id)
             if awaiting and text[:1].lower() != "y":
                 # whatever she types now IS the corrected answer
-                held = uc.record_correction(q, text.lstrip("nN ").strip(" :,-") if text[:1].lower() == "n" else text)
+                held = uc.record_correction(q, text.lstrip("nN ").strip(" :,-") if text[:1].lower() == "n" else text, spk)
                 entry[3] = False
                 await msg.channel.send("⌁ held, permanently. Ask me again and I will say: " + held)
                 return
-            res = uc.apply_feedback(q, a, text, interface="discord")
+            res = uc.apply_feedback(q, a, text, interface="discord", speaker=spk)
             if res is None:          # bare n: ask for the correction in-thread
                 entry[3] = True
                 await msg.channel.send("⌁ withheld. What should I have said? Your next message here is held exactly.")
@@ -69,7 +72,8 @@ def run(uc, rng=None):
         for att in msg.attachments[:2]:
             if (att.content_type or "").startswith("audio/"):
                 heard = await asyncio.to_thread(uc.hear_audio, await att.read(),
-                                                os.path.splitext(att.filename)[1] or ".ogg")
+                                                os.path.splitext(att.filename)[1] or ".ogg",
+                                                uc.register_user("discord", msg.author.id))
                 if heard:
                     line = (line + " " + heard).strip()
                 else:
@@ -101,7 +105,8 @@ def run(uc, rng=None):
                 import base64
                 imgs.append(base64.b64encode(await att.read()).decode())
         if imgs:
-            desc = await asyncio.to_thread(uc.observe_image, imgs, line)
+            desc = await asyncio.to_thread(uc.observe_image, imgs, line,
+                                           uc.register_user("discord", msg.author.id))
             if desc:
                 await msg.reply(desc[:1900], mention_author=False)
             else:
@@ -114,12 +119,13 @@ def run(uc, rng=None):
             await msg.reply(t or "commands: /auto /teach /selfplay", mention_author=False)
             return
         heard_voice = any((att.content_type or "").startswith("audio/") for att in msg.attachments)
-        ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord")
+        spk = uc.register_user("discord", msg.author.id)
+        ans, thought = await asyncio.to_thread(uc.turn, line, rng, "discord", spk)
 
         class FeedbackView(discord.ui.View):
-            def __init__(self, q, a):
+            def __init__(self, q, a, asker_id, spk):
                 super().__init__(timeout=900)
-                self.q, self.a = q, a
+                self.q, self.a, self.asker_id, self.spk = q, a, asker_id, spk
             @discord.ui.button(label="🔊", style=discord.ButtonStyle.secondary)
             async def speak_btn(self, interaction, button):
                 await interaction.response.defer(thinking=False)
@@ -132,17 +138,21 @@ def run(uc, rng=None):
             @discord.ui.button(label="👍", style=discord.ButtonStyle.success)
             async def up_btn(self, interaction, button):
                 await interaction.response.defer(thinking=False)
-                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "y", "discord")
+                if interaction.user.id != self.asker_id:
+                    return      # the closure author law
+                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "y", "discord", self.spk)
                 await interaction.channel.send("⌁ consolidated 👍", delete_after=8)
             @discord.ui.button(label="👎", style=discord.ButtonStyle.danger)
             async def dn_btn(self, interaction, button):
                 await interaction.response.defer(thinking=False)
-                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "n", "discord")
+                if interaction.user.id != self.asker_id:
+                    return      # the closure author law
+                await asyncio.to_thread(uc.apply_feedback, self.q, self.a, "n", "discord", self.spk)
                 await interaction.channel.send("⌁ withheld 👎 (add `n <the right answer>` in the thread to teach me)", delete_after=12)
 
         # answer clean in the channel -- CHUNKED, never truncated; every
         # message carries speak + thumbs (one-tap closure, no comment needed)
-        await msg.reply(ans[:1900], mention_author=False, view=FeedbackView(line, ans))
+        await msg.reply(ans[:1900], mention_author=False, view=FeedbackView(line, ans, msg.author.id, spk))
         for i in range(1900, len(ans), 1900):
             await msg.channel.send(ans[i:i + 1900])
         # spoken in, spoken back: THE VOICE replies in kind (Kokoro)

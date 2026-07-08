@@ -507,3 +507,47 @@ Still open for her ruling (unchanged): identity extraction breadth ("I'm
 glad..." binds identity junk from flipped corrections -- negation guard
 added, the breadth itself awaits the relation-anchors ruling flagged above).
 The reboot to make the fixes live is hers, as ever.
+
+## 2026-07-08 — RUN 5 BUILT: THE SUBJECT AND THE GRAPH (Maria's plan, approved)
+
+Her three requirements, installed: (1) per-user identity — every speaker gets a
+counted address at first contact (ukey = crc32 of face:platform_id, the store's own
+address organ; a self is a closure structure, never a name), and ALL private data
+binds to it; (2) the synaptic knowledge graph — 7 eternal roots (6 knowledge layers
+counted off reply()'s own recall organs = CTX_MAX, + USERS; 7 = 2^3−1, the eternal
+odd denominator), primordial complete mesh (21, an invariant), every held entry a
+node under its root, counted co-traversal edges strengthened at each atomic emission,
+shortcuts consolidated ONLY at closure (the retention law); (3) her transformer-era
+architectures (HIVE scope isolation, NeuroForm layer-roots/strength recall, Ern-OS
+consolidation) instilled fold-natively — every 0.95/0.05/threshold knob dead: no
+decay exists because no decay constant can be forced (arrow of time).
+
+The mechanism inventory: users.tsv + register_user (collision = halt); speaker
+threaded explicitly through turn/reply/facts/corrections/traces/rejections (never a
+global); the deixis law (the FLIP pronoun closed class) partitions private from
+public — deictic qkeys carry the subject, deictic tellings are told:ukey and never
+serve another subject; per-speaker RECENT/SESSION_TRAIL/CONFUSED/PENDING_PERCEPT
+(one user's telling can no longer close another's confusion); the Discord closure
+author law (only the asker closes their thread/buttons — the audit hole shut);
+graph.tsv (N/E rows, append-only text), genesis + _forced invariants at wake,
+births hooked into every write organ, one-hop bind widening at exact rational
+shares (severable); PENDING_FUSE → shortcut node at y/win only. reborn.py: the
+run-5 fresh slate (pgrep guard, tar backup, clears EVERYTHING learned including
+graduation/judges/traces — the survivors that mixed runs 3 and 4; keeps the
+library store unless --library).
+
+Gates: harness 18/18 (incl. Alice/Bob isolation, order-independent); suite 47/47
+(E31–E37: genesis, births, monotone edges, turn co-binding, shortcut-at-closure,
+per-user isolation, speaker-keyed organs). Shadow gate over the 384 territories:
+378/384 answers byte-identical between old
+(c218693) and new (this build); 6 decided, NEW 4 - OLD 2, 0 void, 0 errors on
+either side. Honest reading: the tutor gate runs ONE speaker on impersonal
+territories, so the identity machinery does not engage by construction — the
+gate's job here was to catch serve-path regression from the graph widening
+(the round-1 lesson), and it measured near-total answer-neutrality with the
+small delta favorable. The 2^5/2^6 parity bars cannot apply to a 6-sample
+delta; they remain the bar for run 5's own live tally. Multi-user behavior
+is certified by the harness (18/18) and E31–E37 instead, where it can
+actually be exercised.
+
+The reborn itself fires only on Maria's word, with the flight down.

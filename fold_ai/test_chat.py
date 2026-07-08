@@ -18,9 +18,17 @@ _src = _src.replace(_OLD, 'LOGFILE = LOGDIR + "/test_chat.log"')
 _OLDF = 'FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"'
 assert _src.count(_OLDF) == 1, "FACTS_LOG anchor drifted -- refusing to load"
 _src = _src.replace(_OLDF, 'FACTS_LOG = LOGDIR + "/test_facts.tsv"')
+# the graph and users ledgers get the same live-flight protection
+_OLDG = 'GRAPH_LOG = BASE + "/fold_ai/lessons/graph.tsv"'
+assert _src.count(_OLDG) == 1, "GRAPH_LOG anchor drifted -- refusing to load"
+_src = _src.replace(_OLDG, 'GRAPH_LOG = LOGDIR + "/test_graph.tsv"')
+_OLDU = 'USERS_LOG = BASE + "/fold_ai/lessons/users.tsv"'
+assert _src.count(_OLDU) == 1, "USERS_LOG anchor drifted -- refusing to load"
+_src = _src.replace(_OLDU, 'USERS_LOG = LOGDIR + "/test_users.tsv"')
 import os as _os
-if _os.path.exists("logs/test_facts.tsv"):
-    _os.unlink("logs/test_facts.tsv")   # each run starts from its own clean slate
+for _tf in ("logs/test_facts.tsv", "logs/test_graph.tsv", "logs/test_users.tsv"):
+    if _os.path.exists(_tf):
+        _os.unlink(_tf)   # each run starts from its own clean slate
 spec = importlib.util.spec_from_loader("uc", loader=None, origin="unison_chat.py")
 uc = importlib.util.module_from_spec(spec)
 uc.__file__ = "unison_chat.py"
@@ -31,8 +39,9 @@ with contextlib.redirect_stdout(io.StringIO()):
 import numpy as np
 rng = np.random.default_rng(0)
 
-def say(line):
+def say(line, who="terminal", pid=None):
     """Replicate the loop's turn logic and return (answer)."""
+    spk = uc.register_user(who, pid)
     is_question = line.endswith("?") or line.lower().startswith(
         ("what","who","how","why","when","where","do ","does","did","can ","is ","are "))
     import re as _re
@@ -40,14 +49,14 @@ def say(line):
     if not is_question and not is_command:
         if not uc.content_words(line):
             return "okay."
-        got = uc.learn_fact(line)
+        got = uc.learn_fact(line, spk)
         fact = uc.flip_perspective(line if line[-1:] in ".!" else line + ".")
         uc.write_orbits(uc.tok(fact + "\n") * 3)
         uc.hold_sentence(fact, "told")
         if got:
             return "Held. fact"
         return "Held: " + fact
-    ans, _ = uc.reply(line, rng)
+    ans, _ = uc.reply(line, rng, speaker=spk)
     return ans
 
 TESTS = [
@@ -75,4 +84,22 @@ for line, check in TESTS:
     ok = check(a)
     passed += ok
     print(f"[{'PASS' if ok else 'FAIL'}] {line!r:40s} -> {a!r}")
-print(f"\n{passed}/{len(TESTS)} turns pass")
+
+# THE SUBJECT AXIS (run 5): two users, two closures -- distinct held
+# structures, order-independent, never overwriting each other
+USER_TESTS = [
+    ("My name is Alice",     "discord", 1001, lambda a: "held" in a.lower()),
+    ("My name is Bob",       "discord", 2002, lambda a: "held" in a.lower()),
+    ("What is my name?",     "discord", 1001, lambda a: a == "Your name is Alice."),
+    ("What is my name?",     "discord", 2002, lambda a: a == "Your name is Bob."),
+    ("Do you remember my name?", "discord", 1001, lambda a: a == "Your name is Alice."),
+    # the terminal seat's fact is untouched by the discord subjects
+    ("What is my name?",     "terminal", None, lambda a: a == "Your name is Maria Smith."),
+]
+for line, who, pid, check in USER_TESTS:
+    a = say(line, who, pid)
+    ok = check(a)
+    passed += ok
+    print(f"[{'PASS' if ok else 'FAIL'}] u{pid or 'term'}: {line!r:32s} -> {a!r}")
+TESTS_TOTAL = len(TESTS) + len(USER_TESTS)
+print(f"\n{passed}/{TESTS_TOTAL} turns pass")

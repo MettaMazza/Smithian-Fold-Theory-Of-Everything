@@ -46,6 +46,11 @@ def wake():
     _OLDG = 'GRAD_LOG = BASE + "/fold_ai/lessons/graduation.tsv"'
     assert src.count(_OLDG) == 1, "GRAD_LOG anchor drifted -- refusing to load"
     src = src.replace(_OLDG, 'GRAD_LOG = BASE + "/fold_ai/lessons/graduation_verify.tsv"')
+    for _anchor, _own in (('GRAPH_LOG = BASE + "/fold_ai/lessons/graph.tsv"', 'GRAPH_LOG = LOGDIR + "/graph_verify.tsv"'),
+                          ('USERS_LOG = BASE + "/fold_ai/lessons/users.tsv"', 'USERS_LOG = LOGDIR + "/users_verify.tsv"'),
+                          ('FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"', 'FACTS_LOG = LOGDIR + "/facts_verify.tsv"')):
+        assert src.count(_anchor) == 1, "ledger anchor drifted -- refusing to load"
+        src = src.replace(_anchor, _own)
     spec = importlib.util.spec_from_loader("uc", loader=None, origin="unison_chat.py")
     m = importlib.util.module_from_spec(spec)
     m.__file__ = "unison_chat.py"
@@ -85,9 +90,11 @@ check("E1b halt on fitted value", halted)
 orbits = sum(len(s) for s in uc.stores)
 check("E2 wake", orbits > 4_000_000 and len(uc.SENTS) > 50_000, f"{orbits} orbits, {len(uc.SENTS)} sents, {wake_s:.0f}s")
 
-# E3 memory: teach -> recall (same session)
+# E3 memory: teach -> recall (same session; the SAME speaker seat --
+# facts are per-subject now, and a subjectless recall must NOT see them)
+_e3spk = uc.register_user("test")
 uc.turn("My favourite instrument is the harp.", rng, "test")
-r = uc.reply("What is my favourite instrument?", rng)[0]
+r = uc.reply("What is my favourite instrument?", rng, speaker=_e3spk)[0]
 check("E3 taught fact recalled", "harp" in r.lower(), r[:40])
 
 # E4 correction: exact, persistent file
@@ -193,7 +200,7 @@ del uc.SENTS[:]
 uc.INDEX.clear()
 uc.STRONG.clear()
 uc.CORRECTIONS.clear()
-del uc.RECENT[:]
+uc.RECENT.clear()
 for _s in uc.stores:
     _s.clear()   # the dialogue sampler too: a 13M-orbit walk can emit the
                  # question's common words and answer before the relay is
@@ -236,7 +243,7 @@ uc2, wake2_s = wake()
 rng2 = np.random.default_rng(1)
 r = uc2.reply("What is the capital of the fold?", rng2)[0]
 check("E20 correction survives rebirth", r == "The capital of the fold is the One.")
-r = uc2.reply("What is my favourite instrument?", rng2)[0]
+r = uc2.reply("What is my favourite instrument?", rng2, speaker=uc2.register_user("test"))[0]
 check("E20b fact survives rebirth", "harp" in r.lower(), r[:40])
 hit, share = uc2.bind(" ".join(uc2.fold_see(checker)))
 check("E20c sight survives rebirth", bool(hit) and "checkerboard" in hit[0])
@@ -355,6 +362,76 @@ del uc2.stores[3][("zzqx", "wwvx", "rrsx")]
 check("E30 ladder depth bound forced", uc2.LADDER_DEPTH_BOUND == 2 == uc2.GEN_B,
       f"bound {uc2.LADDER_DEPTH_BOUND} = GEN_B; rung {uc2.LADDER_RUNG}")
 
+# E31 GRAPH GENESIS: seven eternal roots, the complete primordial mesh
+_roots = [n for n in uc2.GNODE if n.startswith("R:")]
+_mesh = sum(1 for k in uc2.GEDGE if all(x.startswith("R:") for x in k))
+check("E31 graph genesis: 7 roots + complete mesh",
+      len(_roots) == 7 == uc2.GEN_B ** uc2.GEN_C - 1 and _mesh >= 21,
+      f"{len(_roots)} roots, {_mesh} mesh edges")
+
+# E32 EVERY NODE HAS EXACTLY ONE ROOT; a write organ births exactly one node
+_orphans = [n for n, r in uc2.GNODE.items() if r not in uc2.GRAPH_ROOTS]
+_n0 = len(uc2.GNODE)
+uc2.persist_fact("uverify01", "beacon-colour", "vermilion")
+_n1 = len(uc2.GNODE)
+uc2.persist_fact("uverify01", "beacon-colour", "vermilion")   # idempotent
+check("E32 node births: one per write, one root each, idempotent",
+      not _orphans and _n1 == _n0 + 1 and len(uc2.GNODE) == _n1,
+      f"{_n1} nodes, 0 orphans")
+
+# E33 EDGE MONOTONICITY + REBIRTH: counts only grow; a re-wake reloads them
+_ek = frozenset(("F:uverify01|beacon-colour", "R:FACTS"))
+_c0 = uc2.GEDGE.get(_ek, 0)
+uc2.graph_edge("F:uverify01|beacon-colour", "R:FACTS")
+check("E33 edge counts monotone + persisted",
+      uc2.GEDGE.get(_ek, 0) == _c0 + 1 and
+      sum(1 for _l in open(uc2.GRAPH_LOG) if _l.startswith("E\tF:uverify01|beacon-colour\tR:FACTS") or _l.startswith("E\tR:FACTS\tF:uverify01|beacon-colour")) >= 1,
+      f"count {_c0}->{uc2.GEDGE.get(_ek, 0)}")
+
+# E34 CO-BINDING AT THE TURN: a served fact interlocks with its speaker
+_spk = uc2.register_user("verify", "e34")
+uc2.persist_fact(_spk, "favourite mineral", "feldspar")
+_a34, _ = uc2.turn("What is my favourite mineral?", np.random.default_rng(0), "verify", speaker=_spk)
+_fk = frozenset(("F:" + _spk + "|favourite mineral", "U:" + _spk))
+check("E34 turn co-binding: served fact edges to its speaker",
+      "feldspar" in _a34.lower() and uc2.GEDGE.get(_fk, 0) >= 1,
+      f"edge count {uc2.GEDGE.get(_fk, 0)}")
+
+# E35 SHORTCUT ONLY AT CLOSURE (the retention law): a registered fusion
+# births NO node until y-feedback; then exactly one, edged to its sources
+_qf = "Which mirrors ring the beacon and what splits the dawn?"
+uc2.PENDING_FUSE[uc2.qkey(_qf, _spk)] = ["R:LESSONS"]   # stand-in source id (held node)
+_ans35 = "The seven mirrors ring the beacon and the prism splits the dawn."
+_pre = len(uc2.GNODE)
+uc2.apply_feedback(_qf, _ans35, "n", "verify", speaker=_spk)
+_mid = len(uc2.GNODE)
+uc2.PENDING_FUSE[uc2.qkey(_qf, _spk)] = ["R:LESSONS"]
+uc2.apply_feedback(_qf, _ans35, "y", "verify", speaker=_spk)
+_post = len(uc2.GNODE)
+check("E35 shortcut only at closure", _mid == _pre and _post == _pre + 1,
+      f"n: +{_mid-_pre} nodes; y: +{_post-_mid} node")
+
+# E36 PER-USER ISOLATION: two subjects, two names, no overwrite; the
+# key-pair door never serves another subject's fact
+_ua = uc2.register_user("verify", "e36a"); _ub = uc2.register_user("verify", "e36b")
+uc2.learn_fact("My name is Ljubljana", _ua)
+uc2.learn_fact("My name is Trieste", _ub)
+_ra = uc2.answer_fact("Do you remember my name?", _ua)
+_rb = uc2.answer_fact("Do you remember my name?", _ub)
+check("E36 per-user fact isolation",
+      _ra == "Your name is Ljubljana." and _rb == "Your name is Trieste.",
+      f"{_ra!r} / {_rb!r}")
+
+# E37 SPEAKER-KEYED SESSION ORGANS: one subject's telling cannot close
+# another's confusion; deictic questions are per-subject territories
+uc2.CONFUSED[_ua] = "What is the beacon made of?"
+uc2.turn("It is made of feldspar and dawn.", np.random.default_rng(1), "verify", speaker=_ub)
+_iso = _ua in uc2.CONFUSED
+check("E37 speaker-keyed session organs",
+      _iso and uc2.qkey("What is my name?", _ua) != uc2.qkey("What is my name?", _ub)
+      and uc2.qkey("What is the fold?", _ua) == uc2.qkey("What is the fold?", _ub),
+      "confusion isolated; deictic keys scoped; impersonal keys shared")
+
 # SELF-CLEANING, SURGICAL (standing law after the 2026-07-07 live-flight
 # incident): the suite removes ONLY artifacts this run created -- its own
 # fixture rows by marker, its own new sound files by before/after
@@ -395,6 +472,9 @@ try:
         open(fn, "w").write("\n".join(out) + ("\n" if out else ""))
     if os.path.exists("lessons/graduation_verify.tsv"):
         os.unlink("lessons/graduation_verify.tsv")   # the suite's own ledger, whole
+    for _own in ("logs/graph_verify.tsv", "logs/users_verify.tsv", "logs/facts_verify.tsv"):
+        if os.path.exists(_own):
+            os.unlink(_own)                          # the suite's own ledgers, whole
     _new_sounds = (set(os.listdir("sounds")) if os.path.isdir("sounds") else set()) - _SOUNDS_BEFORE
     for _s in _new_sounds:
         if _s != "index.tsv" and os.path.exists("sounds/" + _s):
