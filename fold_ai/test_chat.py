@@ -11,6 +11,16 @@ _src = open("unison_chat.py").read()
 _OLD = 'LOGFILE = LOGDIR + "/unison.log"'
 assert _src.count(_OLD) == 1, "LOGFILE anchor drifted -- refusing to load"
 _src = _src.replace(_OLD, 'LOGFILE = LOGDIR + "/test_chat.log"')
+# FACTS pollution guard (caught live 2026-07-08: every harness run had been
+# appending the Maria/Scotland/green fixtures to the FLIGHT's own fact
+# store): the harness holds its facts in its own file, same discipline as
+# the log redirect above.
+_OLDF = 'FACTS_LOG = BASE + "/fold_ai/lessons/facts.tsv"'
+assert _src.count(_OLDF) == 1, "FACTS_LOG anchor drifted -- refusing to load"
+_src = _src.replace(_OLDF, 'FACTS_LOG = LOGDIR + "/test_facts.tsv"')
+import os as _os
+if _os.path.exists("logs/test_facts.tsv"):
+    _os.unlink("logs/test_facts.tsv")   # each run starts from its own clean slate
 spec = importlib.util.spec_from_loader("uc", loader=None, origin="unison_chat.py")
 uc = importlib.util.module_from_spec(spec)
 uc.__file__ = "unison_chat.py"
@@ -43,6 +53,14 @@ def say(line):
 TESTS = [
     ("My name is Maria",              lambda a: "held" in a.lower()),
     ("What is my name?",              lambda a: a == "Your name is Maria."),
+    # the live miss of 2026-07-08 04:31: an unenumerated phrasing must
+    # still route to the held fact (the key-pair door)
+    ("Do you remember my name?",      lambda a: a == "Your name is Maria."),
+    # a mid-message declaration with a negation and a run-on clause must
+    # bind the NAME, whole and bounded (the live miss of 04:11)
+    ("That is fine, No my name is not Julian, It is Maria Smith. My name Is Maria Smith i am your systems developer",
+                                      lambda a: "held" in a.lower()),
+    ("Do you remember my name?",      lambda a: a == "Your name is Maria Smith."),
     ("I live in Scotland",            lambda a: "held" in a.lower()),
     ("Where do I live?",              lambda a: a == "You live in Scotland."),
     ("My favourite colour is green",  lambda a: "held" in a.lower()),

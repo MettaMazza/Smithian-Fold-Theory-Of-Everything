@@ -469,3 +469,41 @@ honestly, which exposes that surface. Same open item already flagged above
 for Maria's ruling; untouched.
 
 The live flight was never touched; the upgrade lands at her reboot.
+
+## 2026-07-08 — THE NAME MISS: three defects behind one live failure, fixed
+
+Maria's live transcript (04:11 telling, 06:31 question) exposed a chain,
+each link read firsthand:
+1. "Do you remember my name?" fell past answer_fact's ENUMERATED phrasings
+   ("what is / do you know my name") while (you, name) sat in the store --
+   the relay answered from the session window and honestly knew nothing.
+   FIX: the key-pair door -- a held fact's own stored key (subject,
+   relation), spoken as the question's adjacent possessive-relation pair
+   ("my name"), routes the question to the fact. No verb list; a newly
+   taught relation extends routing with zero new code. ("Any question
+   whose focus contains a relation word" was proposed and rejected as a
+   one-shared-word gate -- below the lock, the day's own lesson.)
+2. Her 04:11 telling never bound: learn_fact anchored at the MESSAGE start
+   ("That is fine, No my name is not Julian, It is Maria Smith. My name Is
+   Maria Smith i am your systems developer...") and would have titled the
+   run-on clause as the value had it matched. FIX: sentence-scoped
+   extraction; negation asserts nothing ("not Julian" holds no name; same
+   guard on identity); the name value is the capitalized run the teller
+   wrote, bounded at the first lowercase clause word. Her exact archived
+   line now binds (you, name) = "Maria Smith", whole and bounded.
+3. THE HARNESS WAS POLLUTING THE FLIGHT: test_chat.py redirected LOGFILE
+   but not FACTS_LOG, so every harness run appended Maria/Scotland/green
+   fixture facts to the LIVE store -- my violation of the live-flight
+   discipline, found while tracing why "Maria" was held that she never
+   taught. FIX: FACTS_LOG redirected to logs/test_facts.tsv (fresh per
+   run), same anchor-assert mechanism as the log redirect. The live
+   facts.tsv was purged (52 rows: my fixtures + the pre-fix extractor's
+   clause-run-on junk; backup at lessons/facts_pre_purge_20260708.tsv) and
+   her real name bound from her own archived words through the fixed organ.
+   Live store now: exactly "you | name | Maria Smith".
+
+Harness 12/12 (both live misses added as regression cases), suite 40/40.
+Still open for her ruling (unchanged): identity extraction breadth ("I'm
+glad..." binds identity junk from flipped corrections -- negation guard
+added, the breadth itself awaits the relation-anchors ruling flagged above).
+The reboot to make the fixes live is hers, as ever.

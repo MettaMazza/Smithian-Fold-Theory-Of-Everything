@@ -535,11 +535,36 @@ def _norm_subject(word):
     return None
 
 def learn_fact(text):
+    # SENTENCE-SCOPED: a telling is extracted per sentence, so a declaration
+    # buried mid-message still binds ("That is fine. My name is Maria Smith
+    # i am your systems developer" -- the live miss of 2026-07-08 04:11:
+    # anchoring at the message start read "That is fine" and dropped the
+    # name that followed).
+    got = False
+    for _s in re.split(r"(?<=[.!?])\s+", text.strip()):
+        if _s.strip() and _learn_fact_sentence(_s.strip()):
+            got = True
+    return got
+
+def _learn_fact_sentence(text):
     t = text.strip().rstrip(".!")
     # "my/your name is X"
     m = re.match(r"(?i)(my|your)\s+name\s+is\s+(.+)", t)
     if m:
-        persist_fact(_norm_subject(m.group(1)), "name", m.group(2).strip().title())
+        rest = m.group(2).strip()
+        # negation asserts nothing ("my name is not Julian" holds no name)
+        if re.match(r"(?i)not\b", rest):
+            return False
+        # the name is the capitalized run the teller wrote; the first
+        # lowercase word starts the next clause, not the name
+        run = []
+        for w in rest.split():
+            if w[:1].isupper():
+                run.append(w)
+            else:
+                break
+        persist_fact(_norm_subject(m.group(1)), "name",
+                     " ".join(run) if run else rest.title())
         return True
     # "my/your favourite X is Y"
     m = re.match(r"(?i)(my|your)\s+favou?rite\s+(\w+)\s+is\s+(.+)", t)
@@ -555,9 +580,10 @@ def learn_fact(text):
     if m:
         persist_fact("self", "location", m.group(1).strip().title())
         return True
-    # "I am X" / "you are X"  (identity)
+    # "I am X" / "you are X"  (identity) -- negation asserts nothing here
+    # either ("I am not sure" holds no identity)
     m = re.match(r"(?i)(i\s+am|i'?m|you\s+are|you'?re)\s+(.+)", t)
-    if m:
+    if m and not re.match(r"(?i)not\b", m.group(2).strip()):
         subj = "you" if m.group(1).lower().startswith("i") else "self"
         persist_fact(subj, "identity", m.group(2).strip())
         return True
@@ -589,6 +615,28 @@ def answer_fact(text):
     m = re.search(r"(?i)(?:who|what)\s+am\s+i", t)
     if m and ("you", "identity") in FACTS:
         return "You are " + FACTS[("you", "identity")] + "."
+    # THE KEY IS THE DOOR (Paper 44's door law, applied to the fact store):
+    # a held fact is filed under (subject, relation); that key, spoken as
+    # the question's own adjacent possessive-relation pair ("my name",
+    # "your location"), routes the question to the fact. No verb list --
+    # "do you remember my name", "have you forgotten my name", "can you
+    # recall my favourite colour" all carry the key itself, and a newly
+    # taught relation extends the routing with zero new code. (The live
+    # miss of 2026-07-08 04:31: "Do you remember my name?" fell past the
+    # enumerated phrasings above while (you, name) sat in the store.)
+    if text.strip().endswith("?"):
+        low = " " + " ".join(w.lower() for w in tok(t)) + " "
+        best = None
+        for (s, rel), v in FACTS.items():
+            pair = " " + ("my" if s == "you" else "your") + " " + rel.lower() + " "
+            pos = low.find(pair)
+            if pos >= 0 and (best is None or pos < best[0]):
+                best = (pos, s, rel, v)
+        if best:
+            _, s, rel, v = best
+            if rel == "identity":
+                return ("You are " if s == "you" else "I am ") + (v if v[-1:] in ".!?" else v + ".")
+            return ("Your " if s == "you" else "My ") + rel + " is " + v + "."
     return None
 
 
