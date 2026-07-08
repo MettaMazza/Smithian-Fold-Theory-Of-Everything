@@ -880,30 +880,41 @@ def reply(user_line, rng, face=None):
     # that read the source (matched corpus text, or the relay's grep law)
     _pre_hit, _pre_sh = bind(user_line)
     _is_theory = bool(_pre_hit) and _pre_hit[1] == "corpus"
-    candidate = None if _is_theory else continue_orbit(q_tokens, rng, max_tokens=120, sentences=GEN_B)
-    if candidate and rejected(user_line, candidate):
-        thought.append("dialogue candidate previously rejected; withheld")
-        candidate = None
-    if candidate:
-        # shared focus must CARRY information: the same counted rule as the
-        # kin index -- a word above one part in a thousand of the mass
-        # ("the", "and") discriminates nothing and cannot pass a self-check
-        shared = {w for w in set(cw) & set(t.lower() for t in tok(candidate))
-                  if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
-        if shared or len(cw) == 0:
-            # the sampler speaks to users when its walk is INFORMATIVELY
-            # bound to the question (the counted self-check is the gate,
-            # not channel identity) and clean of stutter -- free speech,
-            # earned by relevance; the closure loop grades what it says
-            if (face not in _RELAY_FACES or not RELAY["on"]
-                    or (len(cw) == 0 and _skey(dedup(candidate)) in STRONG)
-                    or (shared and not stuttered(candidate))):
-                thought.append("dialogue orbit bound back (" + (",".join(list(shared)[:3]) or "greeting") + "); self-check pass")
-                return candidate, "; ".join(thought)
-            thought.append("stitched candidate on a content question; deferring to matched experience or my teacher")
-            candidate = None
-        else:
-            thought.append("dialogue candidate failed self-check (no shared focus)")
+    # THE BABBLE LAW ON THE DIALOGUE SURFACE (the spike + hard_problem: only
+    # BOUND wholes are ever emitted -- on EVERY emission surface, this one
+    # included). The walk regenerates SILENTLY through the octave
+    # (GEN_B**GEN_C, the same forced attempt window as babble_closure); an
+    # utterance is served only when its informative focus CARRIES the
+    # question's informative focus at the lock (sync_threshold's 1/2 -- the
+    # identical per-part gate babble_closure enforces), whole and
+    # stutter-clean. A one-shared-word pass is below the lock and does not
+    # bind: that weak check was the legacy remnant this surface kept while
+    # recall and fusion got the law, and the shadow gate measured it leaking
+    # store drift (2026-07-08, MATURATION). Exhaustion falls through to
+    # matched experience / lessons / the teacher, exactly as an empty
+    # candidate always has.
+    if not _is_theory:
+        qf = {w for w in set(cw) if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+        for _spike in range(GEN_B ** GEN_C):
+            cand = continue_orbit(q_tokens, rng, max_tokens=120, sentences=GEN_B)
+            if not cand or rejected(user_line, cand):
+                continue
+            if stuttered(cand):
+                continue
+            shared = qf & {t.lower() for t in tok(cand)}
+            if qf:
+                if len(shared) * GEN_B < len(qf):
+                    continue             # below the lock: the question is not carried
+            else:
+                # no informative focus (a greeting): while the teacher
+                # carries a young face, only a graduated utterance speaks
+                if face in _RELAY_FACES and RELAY["on"] and _skey(dedup(cand)) not in STRONG:
+                    continue
+            thought.append("dialogue orbit bound back at the lock ("
+                           + (",".join(list(shared)[:3]) or "greeting")
+                           + "); spike " + str(_spike + 1))
+            return cand, "; ".join(thought)
+        thought.append("dialogue babble exhausted below the lock; deferring to matched experience or my teacher")
     hit, share = bind(user_line)
     if (hit is None or share < BIND_LOCK) and len(cw) < GEN_C and SESSION_TRAIL:
         # UNLIMITED CONTEXT, human-style: memory never truncates (binding is

@@ -427,3 +427,45 @@ traces to a read module; suite 40/40, battery 25/25 after.
 Open for Maria's ruling (flagged, not hidden): lessons still serve
 verbatim at strong (told/confirmed now regenerate; corrections are
 verbatim by her Learning-Law word; lessons sit between — her call).
+
+## 2026-07-08 — THE SHADOW GATE: the reboot delta measured before the reboot
+
+The question "will the forced-mind reboot reach the parity standard?" was
+answered offline, blind, without touching the live flight. Method (the
+chess gate's discipline moved to the AI): two sandbox clones of the full
+engine + state (APFS, throwaway), OLD = the flight's boot-time code
+(2a91c15), NEW = HEAD; both answer the same questions through the tutor's
+own call (turn(q, rng, "tutor"), rng seeded by question index); differing
+answers judged blind A/B by the flight's own two judges, seats alternating
+by index, silent judge = void.
+
+Round 1 (64 most recent live questions) CAUGHT A REGRESSION: 48 identical,
+NEW lost 4-12. Anatomy, read firsthand: the babble law (only bound wholes
+are emitted) had been installed on recall and fusion but NOT on the free
+dialogue-composition surface, which still carried the legacy one-shared-word
+self-check; the fold-mix widened the walk over the 733MB book store and the
+un-gated surface leaked store drift (a French-novel sentence served as a
+dark-matter answer). A diagnostic L>=2 mixture floor was probed and
+DISCARDED as unlawful (a chosen exclusion, and it only halved the drift —
+the leak is the gate, not the mixture).
+
+The lawful repair, zero new constants: the babble law on the third surface —
+the dialogue candidate regenerates through the octave (GEN_B**GEN_C) and is
+served only when its informative focus carries the QUESTION's focus at the
+lock (len(shared)*GEN_B >= len(qf), sync_threshold's 1/2, the identical
+per-part gate babble_closure enforces), whole and stutter-clean; exhaustion
+falls through to matched experience / lessons / the teacher.
+
+Round 2 (the same 64): NEW 8-6 on decided. Round 3 (ALL 384 graduation
+territories): 285 identical, 99 decided, NEW 52 - OLD 47 (52.5%), 0 void;
+both judges positive (qwen 27-25, gemma 25-22). The engine's own parity law
+over the decided sequence: 18-14 at 2^5 ARMS, 36-28 at 2^6 — the doubling
+SURVIVED. Gates after the edit: harness 9/9, suite 40/40.
+
+Residual loss anatomy (read firsthand, all 6 of round 2's losses): 2 judge
+taste between on-topic answers; 4 the PRE-EXISTING lesson channel serving an
+ADJACENT lesson (share 0.67-0.84) — the lock-gated sampler now defers
+honestly, which exposes that surface. Same open item already flagged above
+for Maria's ruling; untouched.
+
+The live flight was never touched; the upgrade lands at her reboot.
