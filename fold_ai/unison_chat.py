@@ -80,6 +80,7 @@ if os.path.exists(LOGFILE):
     _stamp = time.strftime("%Y%m%d-%H%M%S", time.localtime(os.path.getmtime(LOGFILE)))
     os.rename(LOGFILE, LOGDIR + "/archive/unison-" + _stamp + ".log")
 _LOGLOCK = threading.Lock()
+_STORELOCK = threading.RLock()
 def log(event, *parts):
     line = time.strftime("%Y-%m-%d %H:%M:%S") + "\t" + event
     if parts:
@@ -233,63 +234,68 @@ def _key(tup):
         return (_zlib.crc32(" ".join(t).encode()) % STORE_BOUND,)
     return t
 def write_orbits(tl, max_ctx=None):
-    top = CTX_MAX if max_ctx is None else max_ctx
-    for i in range(len(tl) - 1):
-        nxt = tl[i + 1]                          # original-case successor (voice)
-        for L in range(0, top + 1):
-            if i - L + 1 < 0:
-                break
-            stores[L][_key(tl[i - L + 1:i + 1])][nxt] += 1
+    with _STORELOCK:
+        top = CTX_MAX if max_ctx is None else max_ctx
+        for i in range(len(tl) - 1):
+            nxt = tl[i + 1]                          # original-case successor (voice)
+            for L in range(0, top + 1):
+                if i - L + 1 < 0:
+                    break
+                stores[L][_key(tl[i - L + 1:i + 1])][nxt] += 1
 
 
 # ---------- COUNTED SIMILARITY (the keystone: kinship = shared contexts) ----
 # Trained embeddings approximate this by descent; we hold the counts exactly.
 NEIGH = defaultdict(lambda: defaultdict(int))   # word -> neighbour -> count
 def build_neighbours(tl):
-    for i in range(1, len(tl) - 1):
-        w = tl[i].lower()
-        if len(w) < 3:
-            continue
-        NEIGH[w][tl[i-1].lower()] += 1
-        NEIGH[w][tl[i+1].lower()] += 1
+    with _STORELOCK:
+        for i in range(1, len(tl) - 1):
+            w = tl[i].lower()
+            if len(w) < 3:
+                continue
+            NEIGH[w][tl[i-1].lower()] += 1
+            NEIGH[w][tl[i+1].lower()] += 1
 def kinship(a, b):
-    a, b = a.lower(), b.lower()
-    na, nb = NEIGH.get(a), NEIGH.get(b)
-    if not na or not nb:
-        return 0.0
-    keys = set(na) | set(nb)
-    inter = sum(min(na.get(k,0), nb.get(k,0)) for k in keys)
-    union = sum(max(na.get(k,0), nb.get(k,0)) for k in keys)
-    return inter / union if union else 0.0
+    with _STORELOCK:
+        a, b = a.lower(), b.lower()
+        na, nb = NEIGH.get(a), NEIGH.get(b)
+        if not na or not nb:
+            return 0.0
+        keys = set(na) | set(nb)
+        inter = sum(min(na.get(k,0), nb.get(k,0)) for k in keys)
+        union = sum(max(na.get(k,0), nb.get(k,0)) for k in keys)
+        return inter / union if union else 0.0
 NEIGH_INDEX = defaultdict(set)   # context word -> words holding it as neighbour
 def build_neigh_index():
-    # inverted kinship index: kin candidates are found through SHARED
-    # contexts (the only way kinship can be nonzero) instead of scanning
-    # every held word. Contexts carrying less than one part in a thousand
-    # of the count mass ("the", "and") discriminate nothing and are skipped.
-    NEIGH_INDEX.clear()
-    common = TOTAL_TOKS / 1000
-    for _w, _nb in NEIGH.items():
-        for _c in _nb:
-            if TOK_FREQ.get(_c, 0) <= common:
-                NEIGH_INDEX[_c].add(_w)
+    with _STORELOCK:
+        # inverted kinship index: kin candidates are found through SHARED
+        # contexts (the only way kinship can be nonzero) instead of scanning
+        # every held word. Contexts carrying less than one part in a thousand
+        # of the count mass ("the", "and") discriminate nothing and are skipped.
+        NEIGH_INDEX.clear()
+        common = TOTAL_TOKS / 1000
+        for _w, _nb in NEIGH.items():
+            for _c in _nb:
+                if TOK_FREQ.get(_c, 0) <= common:
+                    NEIGH_INDEX[_c].add(_w)
 
 def kin_expand(words, k=KIN_K):
-    out = set(w.lower() for w in words)
-    for w in list(out):
-        nb = NEIGH.get(w)
-        if not nb:
-            continue
-        cand = set()
-        for c in sorted(nb, key=lambda c: TOK_FREQ.get(c, 1))[:GEN_B * CTX_MAX]:
-            cand |= NEIGH_INDEX.get(c, set())
-        cand.discard(w)
-        cands = [(kinship(w, o), o) for o in cand if len(o) > 3]
-        cands.sort(reverse=True)
-        for sc, o in cands[:k]:
-            if sc > KIN_FLOOR:
-                out.add(o)
-    return out
+    with _STORELOCK:
+        out = set(w.lower() for w in words)
+        for w in list(out):
+            nb = NEIGH.get(w)
+            if not nb:
+                continue
+            cand = set()
+            for c in sorted(nb, key=lambda c: TOK_FREQ.get(c, 1))[:GEN_B * CTX_MAX]:
+                cand |= NEIGH_INDEX.get(c, set())
+            cand.discard(w)
+            cands = [(kinship(w, o), o) for o in cand if len(o) > 3]
+            cands.sort(reverse=True)
+            for sc, o in cands[:k]:
+                if sc > KIN_FLOOR:
+                    out.add(o)
+        return out
 
 full = corpus_text + ("\n" + lesson_text) * GEN_C
 words = tok(full)
@@ -307,27 +313,28 @@ def _skey(s):
     return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
 
 def hold_sentence(s, source):
-    s = " ".join(s.split())
-    if not (8 <= len(s) <= 2000):   # IO bound only -- no brevity law
-        return
-    sid = len(SENTS)
-    SENTS.append((s, source))
-    if source.startswith(("told", "lesson")) or source == "confirmed":
-        STRONG.add(_skey(s))
-    for w in set(t.lower() for t in tok(s) if len(t) > 2):
-        INDEX[w].add(sid)
-    # THE GRAPH BIRTH (live entries only, never the wake replay): a telling
-    # or closed whole is an EXPERIENCE node; a live lesson a LESSONS node.
-    if _WAKE_DONE[0]:
-        nid = None
-        if source.startswith("told") or source == "confirmed":
-            nid = "S:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
-            graph_node(nid, "EXPERIENCE", s)
-        elif source.startswith("lesson"):
-            nid = "L:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
-            graph_node(nid, "LESSONS", s)
-        if nid:
-            NODE_SID[nid] = sid
+    with _STORELOCK:
+        s = " ".join(s.split())
+        if not (8 <= len(s) <= 2000):   # IO bound only -- no brevity law
+            return
+        sid = len(SENTS)
+        SENTS.append((s, source))
+        if source.startswith(("told", "lesson")) or source == "confirmed":
+            STRONG.add(_skey(s))
+        for w in set(t.lower() for t in tok(s) if len(t) > 2):
+            INDEX[w].add(sid)
+        # THE GRAPH BIRTH (live entries only, never the wake replay): a telling
+        # or closed whole is an EXPERIENCE node; a live lesson a LESSONS node.
+        if _WAKE_DONE[0]:
+            nid = None
+            if source.startswith("told") or source == "confirmed":
+                nid = "S:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
+                graph_node(nid, "EXPERIENCE", s)
+            elif source.startswith("lesson"):
+                nid = "L:%08x" % (_zlib.crc32(_skey(s).encode()) & 0xffffffff)
+                graph_node(nid, "LESSONS", s)
+            if nid:
+                NODE_SID[nid] = sid
 
 # lessons: hold Q/A pairs as bound units; corpus: hold sentences.
 # SIGHT pairs rebuild their spectrum-keyed form so the eye remembers
@@ -444,68 +451,69 @@ def _private_to_other(src, speaker):
     return src.startswith("told:") and src[5:] != (speaker or "")
 
 def bind(query, exclude_self=None, top=None, speaker=None):
-    cw = content_words(query)
-    if not cw:
-        return ([] if top else (None, 0.0))
-    votes = defaultdict(float)
-    for w in cw:                                   # direct content words: full weight
-        for sid in INDEX.get(w, ()):
-            votes[sid] += informativeness(w)
-    for w in kin_expand(cw, k=2) - set(cw):        # counted kin: half weight
-        for sid in INDEX.get(w, ()):
-            votes[sid] += informativeness(w) / GEN_B   # kin at half weight: the fold factor
-    if not votes:
-        return ([] if top else (None, 0.0))
-    # THE SYNAPTIC WIDENING (one hop, counted): a strongly voted node pulls
-    # its graph-adjacent held sentences into the CANDIDATE pool at an exact
-    # rational share of its own vote -- edge_count/node_degree, one fold
-    # step down (/GEN_B, the identical halving kin uses above). Widening
-    # feeds candidates; BIND_LOCK still serves. Severable by construction.
-    if GEDGE:
-        sid_node = {v: k for k, v in NODE_SID.items()}
-        for sid, v in sorted(votes.items(), key=lambda kv: -kv[1])[:GEN_C]:
-            n = sid_node.get(sid)
-            if not n:
-                continue
-            deg = sum(c for k, c in GEDGE.items() if n in k)
-            if not deg:
-                continue
-            for k, c in GEDGE.items():
-                if n in k:
-                    other = next(x for x in k if x != n) if len(k) == 2 else n
-                    adj = NODE_SID.get(other)
-                    if adj is not None and adj != sid:
-                        votes[adj] += v * (c / deg) / GEN_B
-    denom = sum(informativeness(w) for w in cw)
-    # THE EXPERIENCE ORDER (lexicographic, no weights): what it was TOLD
-    # outranks its lessons, which outrank its library -- its own held life
-    # first, then its teaching, then its reading.
-    def source_rank(sid):
-        src = SENTS[sid][1]
-        return 0 if src.startswith("told") or src == "confirmed" else (1 if src.startswith("lesson") else 2)
-    best = sorted(votes.items(), key=lambda kv: (source_rank(kv[0]), -kv[1]))
-    if top:
-        # XI-4: the RANKED hits, same vote sort, no new scoring -- callers
-        # that fuse several orbits read the same order the single hit obeys
-        out = []
+    with _STORELOCK:
+        cw = content_words(query)
+        if not cw:
+            return ([] if top else (None, 0.0))
+        votes = defaultdict(float)
+        for w in cw:                                   # direct content words: full weight
+            for sid in INDEX.get(w, ()):
+                votes[sid] += informativeness(w)
+        for w in kin_expand(cw, k=2) - set(cw):        # counted kin: half weight
+            for sid in INDEX.get(w, ()):
+                votes[sid] += informativeness(w) / GEN_B   # kin at half weight: the fold factor
+        if not votes:
+            return ([] if top else (None, 0.0))
+        # THE SYNAPTIC WIDENING (one hop, counted): a strongly voted node pulls
+        # its graph-adjacent held sentences into the CANDIDATE pool at an exact
+        # rational share of its own vote -- edge_count/node_degree, one fold
+        # step down (/GEN_B, the identical halving kin uses above). Widening
+        # feeds candidates; BIND_LOCK still serves. Severable by construction.
+        if GEDGE:
+            sid_node = {v: k for k, v in NODE_SID.items()}
+            for sid, v in sorted(votes.items(), key=lambda kv: -kv[1])[:GEN_C]:
+                n = sid_node.get(sid)
+                if not n:
+                    continue
+                deg = sum(c for k, c in GEDGE.items() if n in k)
+                if not deg:
+                    continue
+                for k, c in GEDGE.items():
+                    if n in k:
+                        other = next(x for x in k if x != n) if len(k) == 2 else n
+                        adj = NODE_SID.get(other)
+                        if adj is not None and adj != sid:
+                            votes[adj] += v * (c / deg) / GEN_B
+        denom = sum(informativeness(w) for w in cw)
+        # THE EXPERIENCE ORDER (lexicographic, no weights): what it was TOLD
+        # outranks its lessons, which outrank its library -- its own held life
+        # first, then its teaching, then its reading.
+        def source_rank(sid):
+            src = SENTS[sid][1]
+            return 0 if src.startswith("told") or src == "confirmed" else (1 if src.startswith("lesson") else 2)
+        best = sorted(votes.items(), key=lambda kv: (source_rank(kv[0]), -kv[1]))
+        if top:
+            # XI-4: the RANKED hits, same vote sort, no new scoring -- callers
+            # that fuse several orbits read the same order the single hit obeys
+            out = []
+            for sid, v in best[:GEN_B ** GEN_C]:
+                s, srcname = SENTS[sid]
+                if exclude_self and s.strip() == exclude_self.strip():
+                    continue
+                if _private_to_other(srcname, speaker):
+                    continue
+                out.append((SENTS[sid], v / denom))
+                if len(out) >= top:
+                    break
+            return out
         for sid, v in best[:GEN_B ** GEN_C]:
             s, srcname = SENTS[sid]
             if exclude_self and s.strip() == exclude_self.strip():
                 continue
             if _private_to_other(srcname, speaker):
                 continue
-            out.append((SENTS[sid], v / denom))
-            if len(out) >= top:
-                break
-        return out
-    for sid, v in best[:GEN_B ** GEN_C]:
-        s, srcname = SENTS[sid]
-        if exclude_self and s.strip() == exclude_self.strip():
-            continue
-        if _private_to_other(srcname, speaker):
-            continue
-        return SENTS[sid], v / denom
-    return None, 0.0
+            return SENTS[sid], v / denom
+        return None, 0.0
 
 def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
     """XI-4 IN FULL, AT ONE LOCK (attention_capacity: a split lock binds
@@ -607,15 +615,16 @@ def mixed_dist(ctx):
     the mixture equals that level's own distribution exactly. The No-Zero
     floor lives in the VALUATION of unseen continuations (the CE measure);
     sampling chooses among held continuations, so no floor term enters."""
-    agg = {}
-    for L in range(min(CTX_MAX, len(ctx)), 0, -1):
-        s = stores[L].get(_key(tuple(ctx[-L:])))
-        if s:
-            total = float(sum(s.values()))
-            w = float(2 ** L)
-            for tkn, n in s.items():
-                agg[tkn] = agg.get(tkn, 0.0) + w * (n / total)
-    return agg
+    with _STORELOCK:
+        agg = {}
+        for L in range(min(CTX_MAX, len(ctx)), 0, -1):
+            s = stores[L].get(_key(tuple(ctx[-L:])))
+            if s:
+                total = float(sum(s.values()))
+                w = float(2 ** L)
+                for tkn, n in s.items():
+                    agg[tkn] = agg.get(tkn, 0.0) + w * (n / total)
+        return agg
 
 def mixed_next(ctx, rng, skip=()):
     agg = mixed_dist(ctx)
@@ -1610,47 +1619,48 @@ def apply_feedback(question, answer, fb_text, interface="terminal", speaker=None
     """THE CLOSURE (XIV-7), from any face. y consolidates (the exchange joins
     the held cycle -- earned retention). n withholds the antipode AND any
     text after the n IS the corrected answer -- plain words, no syntax."""
-    fb = fb_text.strip()
-    if fb[:1].lower() == "y":
-        write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
-        hold_sentence(answer, "confirmed")
-        # THE SHORTCUT (consolidation at CLOSURE, never at emission -- the
-        # retention law): a fused whole that closed becomes a NEW memory
-        # node edged to every source it bound -- the joint orbit made held.
-        _pf = PENDING_FUSE.pop(qkey(question, speaker), None)
-        if _pf:
-            _sn = "S:%08x" % (_zlib.crc32(_skey(answer).encode()) & 0xffffffff)
-            graph_node(_sn, "EXPERIENCE", answer)
-            NODE_SID[_sn] = len(SENTS) - 1
-            for _src_node in _pf:
-                if _src_node in GNODE:
-                    graph_edge(_sn, _src_node)
-            log("GRAPH", "shortcut consolidated at closure", _sn, str(len(_pf)) + " sources")
-        reason = fb[1:].strip(" :,-")
-        if reason:
-            hold_sentence(reason, "told")
-            write_orbits(tok(reason + "\n") * GEN_B)
-        with open(FEEDBACK_LOG, "a") as f:
-            f.write("CONF\t" + qkey(question, speaker) + "\t" + answer + "\n")
-        pr = PENDING_REASON.pop(qkey(question, speaker), None)
-        if pr:   # M3: the answer closed -- its reasoning is retained
-            hold_sentence("On '" + pr[0] + "' the reasoning is: " + pr[1], "thought")
-        log("FEEDBACK", interface, "y", question, answer)
-        return "consolidated -- this exchange joins the held cycle."
-    if fb[:1].lower() == "n":
-        REJECTED.add((qkey(question, speaker), answer.strip()))
-        PENDING_FUSE.pop(qkey(question, speaker), None)   # a refused fusion dies unheld
-        PENDING_REASON.pop(qkey(question), None)   # M3: reasoning dies with its answer
-        with open(FEEDBACK_LOG, "a") as f:
-            f.write("REJ\t" + qkey(question, speaker) + "\t" + answer + "\n")
-        corrected = fb[1:].strip(" :,-")
-        if corrected:
-            held = record_correction(question, corrected, speaker)
-            log("FEEDBACK", interface, "n->corrected", question, held)
-            return "held, permanently. Ask me again and I will say: " + held
-        log("FEEDBACK", interface, "n (awaiting correction)", question, answer)
-        return None   # face should ask: "what should I have said?"
-    return False      # not feedback
+    with _STORELOCK:
+        fb = fb_text.strip()
+        if fb[:1].lower() == "y":
+            write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
+            hold_sentence(answer, "confirmed")
+            # THE SHORTCUT (consolidation at CLOSURE, never at emission -- the
+            # retention law): a fused whole that closed becomes a NEW memory
+            # node edged to every source it bound -- the joint orbit made held.
+            _pf = PENDING_FUSE.pop(qkey(question, speaker), None)
+            if _pf:
+                _sn = "S:%08x" % (_zlib.crc32(_skey(answer).encode()) & 0xffffffff)
+                graph_node(_sn, "EXPERIENCE", answer)
+                NODE_SID[_sn] = len(SENTS) - 1
+                for _src_node in _pf:
+                    if _src_node in GNODE:
+                        graph_edge(_sn, _src_node)
+                log("GRAPH", "shortcut consolidated at closure", _sn, str(len(_pf)) + " sources")
+            reason = fb[1:].strip(" :,-")
+            if reason:
+                hold_sentence(reason, "told")
+                write_orbits(tok(reason + "\n") * GEN_B)
+            with open(FEEDBACK_LOG, "a") as f:
+                f.write("CONF\t" + qkey(question, speaker) + "\t" + answer + "\n")
+            pr = PENDING_REASON.pop(qkey(question, speaker), None)
+            if pr:   # M3: the answer closed -- its reasoning is retained
+                hold_sentence("On '" + pr[0] + "' the reasoning is: " + pr[1], "thought")
+            log("FEEDBACK", interface, "y", question, answer)
+            return "consolidated -- this exchange joins the held cycle."
+        if fb[:1].lower() == "n":
+            REJECTED.add((qkey(question, speaker), answer.strip()))
+            PENDING_FUSE.pop(qkey(question, speaker), None)   # a refused fusion dies unheld
+            PENDING_REASON.pop(qkey(question), None)   # M3: reasoning dies with its answer
+            with open(FEEDBACK_LOG, "a") as f:
+                f.write("REJ\t" + qkey(question, speaker) + "\t" + answer + "\n")
+            corrected = fb[1:].strip(" :,-")
+            if corrected:
+                held = record_correction(question, corrected, speaker)
+                log("FEEDBACK", interface, "n->corrected", question, held)
+                return "held, permanently. Ask me again and I will say: " + held
+            log("FEEDBACK", interface, "n (awaiting correction)", question, answer)
+            return None   # face should ask: "what should I have said?"
+        return False      # not feedback
 
 # ---------- AUTONOMY: the tutor closes the loop itself; the engine plays itself
 AUTO = {"teach": False, "selfplay": False}
