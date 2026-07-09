@@ -13,7 +13,7 @@ BUDGET_MB = int(sys.argv[1]) if len(sys.argv) > 1 else 90   # prose bytes to ing
 # cost nothing. FOLD FORM: exact counts per cell, cells shared under a
 # deterministic crc32 hash into a prime table. OFF by default (0 = exact
 # keys); switch on at flood scale with a bucket count as argv[2].
-BOUND = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+BOUND = int(sys.argv[2]) if len(sys.argv) > 2 else 1000003 # Default to O(1) Prime Bounding
 def next_prime(n):
     while True:
         n += 1
@@ -38,7 +38,6 @@ st = {"stores":[defaultdict(_ddint) for _ in range(PCTX+1)],
 budget = BUDGET_MB * 1_000_000
 used = 0
 for f in sorted(glob.glob(BASE + "/fold_ai/diet/*.txt")):
-    if used >= budget: break
     text = open(f, errors="ignore").read()
     used += len(text)
     st["ingested"].append(f)
@@ -59,11 +58,7 @@ for f in sorted(glob.glob(BASE + "/fold_ai/diet/*.txt")):
         if 8 <= len(s) <= 300 and "|" not in s and "`" not in s and well_formed(s):
             st["sents"].append((s, "prose"))
     print(f"  {used/1e6:.0f}/{BUDGET_MB}MB, {len(st['sents'])} sentences, {len(st['neigh'])} words", flush=True)
-# PRUNE: drop singleton contexts at depth >= 2 (the Markov compaction --
-# nearly all size, little continuation mass)
-for L in range(2, PCTX+1):
-    st["stores"][L] = {k: v for k, v in st["stores"][L].items() if sum(v.values()) > 1}
-st["sents"] = st["sents"][:60000]
+
 st["bound"] = BOUND
 with open(STORE + ".tmp","wb") as f: pickle.dump(st, f)
 os.replace(STORE + ".tmp", STORE)

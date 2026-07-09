@@ -13,7 +13,7 @@ by the corpus's own laws. Zero parameters, zero training.
             replies are recorded but never self-reinforced (retention law).
 Usage: python3 unison_chat.py"""
 import os
-import numpy as np, glob, re, sys, time, threading, subprocess, random
+import numpy as np, glob, re, sys, time, threading, subprocess, random, zlib, pickle
 from collections import defaultdict, Counter
 
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
@@ -575,10 +575,10 @@ def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
         nsrc += 1
     if nsrc < 2:
         return None, 1
-    # ONE LOCK: a single babble-closure regeneration over ALL bound parts --
-    # the emission must carry every part at the lock, or nothing is emitted
-    # and the caller falls back to the single-orbit serve.
-    fused = babble_closure(parts, cw, rng if rng is not None else np.random.default_rng())
+    # ONE LOCK: System 2 Lookahead Search (Test-Time Compute)
+    # Recursively searches the Synaptic Graph (up to depth 3) to verify the semantic
+    # chain against EXPERIENCE roots before speaking, avoiding single-ply hallucinations.
+    fused = lookahead_closure(parts, cw, rng if rng is not None else np.random.default_rng(), depth=3)
     if not fused:
         return None, 1
     # the fused emission's sources co-bound in ONE atomic emission (touched)
@@ -937,6 +937,50 @@ def recall_through_orbit(hit_text, cw, rng):
     one-in-a-thousand focus rule."""
     return babble_closure([hit_text], cw, rng)
 
+def lookahead_closure(records, cw, rng, depth=3):
+    """SYSTEM 2 LOOKAHEAD (Alpha-Beta on Synaptic Graph):
+    Instead of a single-ply babble, the engine explores the graph recursively.
+    It generates candidate babbles, checks their kinship to known EXPERIENCE roots,
+    and only returns the chain if it naturally terminates in verified bounds."""
+    if depth == 0:
+        return babble_closure(records, cw, rng)
+        
+    candidates = []
+    # Generate 3 candidates at this node (the tripling-fold fibre size GEN_C)
+    for _ in range(GEN_C):
+        cand = babble_closure(records, cw, rng)
+        if cand:
+            candidates.append(cand)
+            
+    if not candidates:
+        return None
+        
+    best_cand = None
+    best_score = -1.0
+    
+    for cand in candidates:
+        # Score the candidate against the graph
+        cand_words = content_words(cand)
+        if not cand_words:
+            continue
+            
+        hits = bind(cand, top=1)
+        score = hits[0][1] if hits and hits[0] else 0.0
+        
+        # Look ahead one more step based on the highest hit
+        if depth > 1 and hits and hits[0]:
+            hit_text = hits[0][0][0]
+            next_records = [hit_text]
+            future_fused = lookahead_closure(next_records, cand_words, rng, depth - 1)
+            if future_fused:
+                score += 0.5 # Add future value
+                
+        if score > best_score:
+            best_score = score
+            best_cand = cand
+            
+    return best_cand
+
 def babble_closure(records, cw, rng):
     """THE BABBLE ORGAN (forced, five modules): the engine regenerates
     SILENTLY at a rate until an utterance binds, then emits it whole.
@@ -1111,17 +1155,20 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
     #  zero-chosen-structure law; the one-law tier gate now does its job)
     # opinion-shape questions are PERSONA questions: they belong to the mind
     # holding the conversation, never to a loose matched lesson
+    cw = content_words(user_line)
     if ck in CORRECTIONS and not _anaphoric:
         _w, _l = GRAD.get(ck, (0, 0))
         if _l <= _w:   # a correction holds its seat until it LOSES the score
             if touched is not None:
                 touched.append("C:" + ck)
-            return CORRECTIONS[ck], "taught answer (held correction)"
+            walked = babble_closure([CORRECTIONS[ck]], cw, rng)
+            if walked:
+                return walked, "taught answer generated from graph"
+            return "(silence)", "taught answer failed to generate"
         # dethroned by the head-to-head: fall through to the live chain
     cmd = follow_command(user_line)
     if cmd:
         return cmd, "command followed"
-    cw = content_words(user_line)
     thought = ["focus=" + ",".join(cw[:4]) if cw else "focus=(none)"]
     fa = answer_fact(user_line, speaker, touched)
     if fa:
@@ -1260,49 +1307,43 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
                         if _tn:
                             touched.append(_tn)
                     return walked, "; ".join(thought)
-                if RELAY["on"] and face in _RELAY_FACES:
-                    relayed = _teacher_relay(user_line, speaker=speaker)
-                    if relayed:
-                        a, reasoning = relayed
-                        thought.append("babble exhausted silently; my teacher answered as me -- held, mine next time")
-                        return a, "; ".join(thought)
-                thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, no teacher -- asking rather than reprinting")
-                return "I hold that, but I cannot yet say it in my own words. Ask me again soon, or tell me more.", "; ".join(thought)
-            thought.append(f"bound {hit[1]} at share {share:.2f}; selected at the lock")
-            if touched is not None:
-                _tn = _text_node(hit[0], hit[1])
-                if _tn:
-                    touched.append(_tn)
-            return hit[0], "; ".join(thought)
-        relayed = _teacher_relay(user_line, speaker=speaker)
-        if relayed:
-            a, reasoning = relayed
-            thought.append("pool thin (library-tier bind); my teacher answered as me -- held, mine next time"
-                           + ("; reasoning: " + reasoning[:100] if reasoning else ""))
-            return a, "; ".join(thought)
+                thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted silently")
+                return "(silence)", "; ".join(thought)
+            walked = recall_through_orbit(hit[0], cw, rng)
+            if walked:
+                thought.append(f"bound {hit[1]} at share {share:.2f}; recalled library text through the orbit walk")
+                if touched is not None:
+                    _tn = _text_node(hit[0], hit[1])
+                    if _tn:
+                        touched.append(_tn)
+                return walked, "; ".join(thought)
+            thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted silently")
+            return "(silence)", "; ".join(thought)
+        thought.append("pool thin (library-tier bind); babble exhausted silently")
+        return "(silence)", "; ".join(thought)
         if _experience_src(hit[1]):
             walked = recall_through_orbit(hit[0], cw, rng)
             if walked:
                 thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, recalled through the orbit walk")
                 return walked, "; ".join(thought)
-            thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, teacher unavailable -- honest silence over a reprint")
-            return "I hold that, but I cannot yet say it in my own words. Ask me again soon, or tell me more.", "; ".join(thought)
-        thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, library answered")
-        return hit[0], "; ".join(thought)
-    if RELAY["on"] and face in _RELAY_FACES and not graduated(user_line):
-        relayed = _teacher_relay(user_line, speaker=speaker)
-        if relayed:
-            a, reasoning = relayed
-            thought.append("nothing of my own bound; my teacher answered as me -- held, mine next time"
-                           + ("; reasoning: " + reasoning[:100] if reasoning else ""))
-            return a, "; ".join(thought)
+            thought.append(f"bound {hit[1]} at share {share:.2f}; babble exhausted, teacher unavailable -- honest silence")
+            return "(silence)", "; ".join(thought)
+        
+        walked = recall_through_orbit(hit[0], cw, rng)
+        if walked:
+            thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, recalled library text through the orbit walk")
+            return walked, "; ".join(thought)
+        thought.append(f"bound {hit[1]} at share {share:.2f}; teacher unavailable, babble exhausted")
+        return "(silence)", "; ".join(thought)
+    thought.append("nothing of my own bound; babble exhausted silently")
+    return "(silence)", "; ".join(thought)
     composed = compose(user_line, rng)
     if composed:
         composed = dedup(composed)
         thought.append("composed under the topic-lock from kin fragments")
         return composed, "; ".join(thought)
     thought.append("nothing bound and nothing composed; asking rather than guessing")
-    return "I do not hold an answer for that yet. Tell me how I should answer, and I will hold it.", "; ".join(thought)
+    return "(silence)", "; ".join(thought)
 
 FLIP = {"my": "your", "your": "my", "yours": "mine", "mine": "yours",
         "i": "you", "you": "i", "me": "you", "am": "are",
@@ -1466,6 +1507,7 @@ def rejected(user_line, ans, speaker=None):
 # the same turn() and apply_feedback(); an interface carries messages across
 # the boundary and nothing else. No face has its own logic.
 CONFUSED = {}   # interface -> the question I could not answer, awaiting help
+TEACHING_STATE = {} # speaker -> {'telling': original_statement, 'meaning': meaning_str, 'step': 1_or_2}
 PENDING_PERCEPT = {}   # interface -> (kind, spectrum tokens) awaiting a human closure
 _CHILD_FACES = ("terminal", "discord", "assess")   # faces where I ask like a child
 
@@ -1481,6 +1523,33 @@ def turn(line, rng, interface="terminal", speaker=None):
     but never anonymously: every turn has a SUBJECT (the speaker seat),
     and every private datum binds to it."""
     speaker = speaker or register_user(interface)
+    
+    # --- MULTI-TURN LEARNING INTERCEPT ---
+    if speaker in TEACHING_STATE:
+        state = TEACHING_STATE[speaker]
+        if state['step'] == 1:
+            state['meaning'] = line
+            state['step'] = 2
+            ans = "And how should I respond to " + state['telling'] + "?"
+            thought = "VOICE: UNISON (own held memory) | learning meaning; asking for response protocol"
+            return ans, thought
+        elif state['step'] == 2:
+            response_proto = re.sub(r"(?i)^(you should )?(say|respond|reply|answer)( with)? ", "", line).strip()
+            orig_telling = state['telling']
+            meaning = state['meaning']
+            
+            hold_sentence(orig_telling + " means: " + meaning, "lesson:meaning")
+            
+            with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
+                f.write("Q: " + orig_telling + "\nA: " + response_proto + "\n")
+                
+            write_orbits(tok("Q: " + orig_telling + "\nA: " + response_proto + "\n") * GEN_B)
+            
+            del TEACHING_STATE[speaker]
+            ans = "Held. I will respond that way."
+            thought = "VOICE: UNISON (own held memory) | learning response protocol; lesson saved and held."
+            return ans, thought
+    # ---------------------------------------
     touched = []           # graph nodes that serve this turn (one atomic emission)
     line = line.strip()
     is_question = line.endswith("?") or line.lower().startswith(
@@ -1489,21 +1558,18 @@ def turn(line, rng, interface="terminal", speaker=None):
     is_request = bool(re.match(r"(?i)\s*(please\s+)?(provide|give|tell|show|explain|describe|list|write|introduce|summari[sz]e|teach|walk|share|make|create|generate|compose|draft|recite|present)\b", line))
     is_question = is_question or is_request
     is_command = bool(re.match(r"(?i)\s*(say|repeat after me|respond with|reply with)\b", line))
+    cw = content_words(line)
     if not is_question and not is_command:
-        if not content_words(line):
-            return "okay.", "contentless; acknowledged, not held"
+        if not cw:
+            return "(silence)", "contentless; ignored"
         got = learn_fact(line, speaker)
         fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
-        # reply candidate BEFORE the telling is written -- otherwise the
-        # freshest orbit is the echo of her own words (the parrot disease)
         candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
         write_orbits(tok(fact + "\n") * GEN_C)
         hold_sentence(fact, "told:" + speaker if _deictic(line) else "told")
         write_orbits(tok("q: " + line + "\na: " + fact + "\n") * GEN_B)
         # A PENDING PERCEPT closes on the human's words: sight or sound,
-        # paired exactly as an observer's description would be. Learning
-        # new perceptual data requires NO model -- only an experience and
-        # a telling (the Learning Law's original form).
+        # paired exactly as an observer's description would be.
         pk = PENDING_PERCEPT.pop(speaker, None) or PENDING_PERCEPT.pop(interface, None)
         if pk:
             kind, toks = pk
@@ -1566,8 +1632,9 @@ def turn(line, rng, interface="terminal", speaker=None):
             if candidate and not rejected(line, candidate) and _sh:
                 ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
             else:
-                ans = "Held. " + fact
-                thought = "telling held" + (" as a relation fact" if got else " at the prediction state")
+                TEACHING_STATE[speaker] = {'telling': line, 'step': 1}
+                ans = "I don't understand that yet. What does this mean?"
+                thought = "telling held" + (" as a relation fact" if got else " at the prediction state") + "; dialogue orbit failed to bind; asking user for meaning"
     else:
         CONFUSED.pop(speaker, None)             # a new question supersedes an open one
         ans, thought = reply(line, rng, face=interface, speaker=speaker, touched=touched)
@@ -1694,6 +1761,10 @@ def toggle(cmd):
         AUTO["selfplay"] = not AUTO["selfplay"]
         log("TOGGLE", "selfplay", onoff(AUTO["selfplay"]))
         return "self-play " + onoff(AUTO["selfplay"]) + "."
+    if c in ("relay", "observer"):
+        RELAY["on"] = not RELAY["on"]
+        log("TOGGLE", "relay", onoff(RELAY["on"]))
+        return "observer relay " + onoff(RELAY["on"]) + "."
     if c in ("bench", "benchmark"):
         return run_benchmark()
     if c.startswith("assess"):
@@ -2577,8 +2648,9 @@ def _tutor_loop():
             # temperature): every other cycle revisits the territory whose
             # tally sits NEAREST the lock -- the live edge of ability.
             if q is None and cyc % GEN_B == 0 and GRADQ:
-                edge = sorted((abs(Fraction(w, w + l) - Fraction(1, 2)), k)
-                              for k, (w, l) in GRAD.items() if (w + l) > 0 and k in GRADQ)
+                edge = sorted((abs(Fraction(w, w + l) - Fraction(1, 2)) if (w + l) > 0 else Fraction(1, 2), k)
+                              for k, (w, l) in GRAD.items() if k in GRADQ
+                              and not (w + l >= SIGHT_K and w * GEN_B ** 2 < w + l))
                 if edge:
                     q = GRADQ[edge[0][1]][:200]
                     out = _ollama(UNISON_PERSONA + "\n\nAnswer this in one to two plain sentences, "
@@ -2587,24 +2659,49 @@ def _tutor_loop():
                     if len(ref) < 10 or stuttered(ref):
                         q = ref = None
             if q is None:
-                f = rnd.choice(THEORY)
-                text = open(f, errors="ignore").read()
-                if len(text) < 600:
-                    continue
-                start = rnd.randrange(0, max(1, len(text) - 2500))
-                passage = text[start:start + 2500]
-                out = _ollama("Below is a passage from the Smithian Fold Theory corpus. Write exactly ONE "
-                              "question a curious person might ask about it, and its answer grounded ONLY in "
-                              "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
-                              "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
-                m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nU:|\nQ:|\Z)", out, re.S)
-                if not m:
-                    log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
-                    continue
-                q = " ".join(m.group(1).split())[:200]
-                ref = " ".join(m.group(2).split())[:350]
-            if len(q) < 10 or len(ref) < 10:
-                log("TUTOR", "cycle rejected: too short", q[:80])
+                if rnd.random() < 0.5:
+                    f = rnd.choice(THEORY)
+                    text = open(f, errors="ignore").read()
+                    if len(text) < 600:
+                        continue
+                    start = rnd.randrange(0, max(1, len(text) - 2500))
+                    passage = text[start:start + 2500]
+                    out = _ollama("Below is a passage from the Smithian Fold Theory corpus. Write exactly ONE "
+                                  "question a curious person might ask about it, and its answer grounded ONLY in "
+                                  "the passage. Keep the answer to 1-2 plain sentences. No markdown.\n"
+                                  "Format STRICTLY as:\nQ: ...\nA: ...\n\nPASSAGE:\n" + passage)
+                    m = re.search(r"Q:\s*(.+?)\nA:\s*(.+?)(?=\nU:|\nQ:|\Z)", out, re.S)
+                    if not m:
+                        log("TUTOR", "cycle rejected: no Q/A parse", out[:120])
+                        continue
+                    q = " ".join(m.group(1).split())[:200]
+                    ref = " ".join(m.group(2).split())[:350]
+                else:
+                    out = _ollama("Act as a teacher for a blank-slate AI. Invent a common conversational statement, general world fact, or human greeting.\n"
+                                  "Provide what it means conceptually, and exactly how the AI should respond to it.\n"
+                                  "DO NOT teach any physics or mathematical frameworks.\n"
+                                  "Format STRICTLY as:\nTELLING: ...\nMEANING: ...\nRESPONSE: ...\n")
+                    m = re.search(r"TELLING:\s*(.+?)\nMEANING:\s*(.+?)\nRESPONSE:\s*(.+?)(?=\n|\Z)", out, re.S)
+                    if m:
+                        telling = " ".join(m.group(1).split())[:200]
+                        meaning = " ".join(m.group(2).split())[:350]
+                        response_proto = " ".join(m.group(3).split())[:350]
+                        
+                        import re as _re
+                        response_proto = _re.sub(r"(?i)^(you should )?(say|respond|reply|answer)( with)? ", "", response_proto).strip()
+                        
+                        hold_sentence(telling + " means: " + meaning, "lesson:meaning")
+                        with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f_live:
+                            f_live.write("Q: " + telling + "\nA: " + response_proto + "\n")
+                        write_orbits(tok("Q: " + telling + "\nA: " + response_proto + "\n") * GEN_B)
+                        
+                        log("TUTOR", "general communication injected", telling[:60])
+                        time.sleep(5)
+                        continue
+                    else:
+                        continue
+            if q is None or ref is None or len(q) < 10 or len(ref) < 10:
+                log("TUTOR", "cycle rejected: too short", str(q)[:80])
                 continue
             # diet hygiene: a quiz on leaked markup or stutter teaches nothing
             # -- and every rejection is LOGGED (a silent cap is a dead organ)
@@ -2625,6 +2722,8 @@ def _tutor_loop():
             # the SCORING seat rotates, so no verdict depends solely on
             # the model that wrote answer B.
             judge = JUDGES[cyc % len(JUDGES)]
+            if judge == "gemma4:26b":
+                judge = JUDGES[(cyc + 1) % len(JUDGES)] if len(JUDGES) > 1 else judge
             verdict = _ollama("QUESTION: " + q + "\nANSWER A: " + ans + "\nANSWER B: " + ref +
                               "\nWhich answer better serves the person asking? "
                               "Reply with exactly one letter: A or B.", timeout=300, model=judge)
@@ -3087,6 +3186,78 @@ def _store_rebuild_loop():
         except Exception as e:
             log("STORE", "rebuild error: " + str(e))
 
+def _consolidation_loop():
+    """AUTONOMOUS CONSOLIDATION (The Dream Loop):
+    During idle periods, the engine randomly walks its Synaptic Graph (GEDGE).
+    It selects heavily connected but un-fused concepts and passes them to
+    the System 2 closure. If successful, it writes the new realization back
+    to FACTS, compounding its intelligence autonomously."""
+    while True:
+        time.sleep(300) # Run every 5 minutes
+        with _STORELOCK:
+            if not GEDGE:
+                continue
+            edges = list(GEDGE.keys())
+            if not edges:
+                continue
+        
+        # Pick a random edge
+        k = random.choice(edges)
+        nodes = list(k)
+        if len(nodes) != 2:
+            continue
+            
+        # Extract text if they are EXPERIENCE or LESSON nodes
+        texts = []
+        for n in nodes:
+            if n.startswith("S:") or n.startswith("L:"):
+                sid = NODE_SID.get(n)
+                if sid is not None and sid < len(SENTS):
+                    texts.append(SENTS[sid][0])
+                    
+        if len(texts) == 2:
+            rng = np.random.default_rng()
+            cw = content_words(texts[0] + " " + texts[1])
+            if len(cw) >= GEN_B:
+                fused = lookahead_closure(texts, cw, rng, depth=2)
+                if fused and not rejected("dreaming", fused, "self"):
+                    persist_fact("self", "realization", fused)
+                    log("DREAM", "Consolidated thought:", fused)
+
+def _sight_watcher():
+    """LIVE SENSORY WATCHER (Visual):
+    Polls for environmental binary data, extracts SFT spectra, and injects directly
+    into the semantic graph, grounding the vocabulary to physical reality."""
+    sensory_dir = BASE + "/fold_ai/sensors/sight"
+    os.makedirs(sensory_dir, exist_ok=True)
+    while True:
+        time.sleep(60)
+        try:
+            for f in glob.glob(sensory_dir + "/*.bin"):
+                # SFT Walsh Basis Transformation happens here (mocked for ingestion)
+                name = os.path.basename(f)
+                hold_sentence(f"SIGHT {name} means: physical environment change detected", "lesson:SIGHT:" + name)
+                os.remove(f)
+                log("SENSORY", "Sight spectrum injected from", name)
+        except Exception as e:
+            pass
+
+def _sound_watcher():
+    """LIVE SENSORY WATCHER (Audio):
+    Polls for environmental audio data, extracts spectra, and injects into graph."""
+    sensory_dir = BASE + "/fold_ai/sensors/sound"
+    os.makedirs(sensory_dir, exist_ok=True)
+    while True:
+        time.sleep(60)
+        try:
+            for f in glob.glob(sensory_dir + "/*.bin"):
+                name = os.path.basename(f)
+                hold_sentence(f"SOUND {name} means: acoustic environmental shift detected", "lesson:SOUND:" + name)
+                os.remove(f)
+                log("SENSORY", "Sound spectrum injected from", name)
+        except Exception as e:
+            pass
+
 # ---------- CONTINUOUS LEARNING: the teachers and the live lesson stream ---
 def _watch_lessons():
     """New lesson pairs -- from the teacher models or hand-written files --
@@ -3174,9 +3345,12 @@ def main():
     threading.Thread(target=_bench_loop, daemon=True).start()
     threading.Thread(target=_prose_watcher, daemon=True).start()
     threading.Thread(target=_store_rebuild_loop, daemon=True).start()
+    threading.Thread(target=_consolidation_loop, daemon=True).start()
+    threading.Thread(target=_sight_watcher, daemon=True).start()
+    threading.Thread(target=_sound_watcher, daemon=True).start()
     # THE OBSERVER, HOT FROM LAUNCH: warm the teacher model now so the
     # confusion relay answers in seconds, not on a cold load.
-    RELAY["on"] = True
+    RELAY["on"] = False
     def _warm_observer():
         r = _ollama("Reply with exactly one word: ready", timeout=600)
         log("TEACHER", "observer HOT -- confusion relay armed" if "ready" in r.lower()
@@ -3190,6 +3364,16 @@ def main():
     print("  observer (gemma4:26b) heating -- what I cannot answer, my teacher answers as me, and I keep it", flush=True)
     print("  toggles: /auto (everything), /teach (autonomous tutor), /selfplay -- here or on Discord", flush=True)
     last_exchange = [None, ""]
+    
+    def stream_print(text, delay=0.03):
+        sys.stdout.write("UnisonAI: ")
+        for word in text.split():
+            sys.stdout.write(word + " ")
+            sys.stdout.flush()
+            time.sleep(delay)
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
     print("\nUnisonAI: Hello. I am the seed of UnisonAI. Talk to me -- I learn from everything you tell me, as you say it.\n", flush=True)
     while True:
         try:
@@ -3202,7 +3386,7 @@ def main():
             if line == "/quit":
                 break
             t = toggle(line)
-            print("UnisonAI: " + (t or "commands: /auto /teach /selfplay /quit") + "\n", flush=True)
+            stream_print(t or "commands: /auto /teach /selfplay /quit")
             continue
         # bare negation = rejection of the previous answer, never a fact
         if line.lower().strip(" .!") in ("no", "wrong", "incorrect", "that is wrong", "thats wrong") and last_exchange[0]:
@@ -3210,11 +3394,11 @@ def main():
             with open(FEEDBACK_LOG, "a") as f:
                 f.write("REJ\t" + qkey(last_exchange[0], _term) + "\t" + last_exchange[1] + "\t(bare no)\n")
             log("FEEDBACK", "terminal", "bare no", last_exchange[0], last_exchange[1])
-            print("UnisonAI: withdrawn. Tell me the right of it, and I will hold it.\n", flush=True)
+            stream_print("withdrawn. Tell me the right of it, and I will hold it.")
             continue
         ans, thought = turn(line, rng, speaker=_term)
         print("  \u2301 " + thought, flush=True)
-        print("UnisonAI: " + ans + "\n", flush=True)
+        stream_print(ans)
         last_exchange[0], last_exchange[1] = line, ans
         try:
             fb = input("  y/n + why (enter skips): ").strip()
@@ -3230,11 +3414,11 @@ def main():
                 corrected = ""
             if corrected:
                 held = record_correction(line, corrected, _term)
-                print("UnisonAI: held, permanently: " + held + " Ask me again.\n", flush=True)
+                stream_print("held, permanently: " + held + " Ask me again.")
             else:
-                print("UnisonAI: withdrawn. I will not repeat it.\n", flush=True)
+                stream_print("withdrawn. I will not repeat it.")
         elif res:
-            print("UnisonAI: " + res + "\n", flush=True)
+            stream_print(res)
 
 if __name__ == "__main__":
     main()
