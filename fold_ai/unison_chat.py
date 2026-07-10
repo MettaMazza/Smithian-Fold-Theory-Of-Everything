@@ -273,7 +273,7 @@ def build_neigh_index():
         # every held word. Contexts carrying less than one part in a thousand
         # of the count mass ("the", "and") discriminate nothing and are skipped.
         NEIGH_INDEX.clear()
-        common = TOTAL_TOKS / 1000
+        common = TOTAL_TOKS / (GEN_B ** 9)
         for _w, _nb in NEIGH.items():
             for _c in _nb:
                 if TOK_FREQ.get(_c, 0) <= common:
@@ -364,12 +364,12 @@ for _f in sorted(glob.glob(BASE + "/fold_ai/inbox/*")):
 def well_formed(s):
     s = s.strip()
     w = s.split()
-    if not (5 <= len(w) <= 40): return False
+    if not (GEN_B * GEN_C <= len(w) <= (GEN_B ** GEN_C) * CTX_MAX): return False
     if not s[:1].isupper(): return False              # clean sentence start
     if s[-1] not in ".!?": return False
     if w[0].lower() in ("no","but","and","because","so","then","yet","or","thus","hence","which","that"): return False
     letters = sum(c.isalpha() or c.isspace() for c in s)
-    if letters / len(s) < 0.85: return False           # counted letter share
+    if Fraction(letters, len(s)) < Fraction(5, 6): return False           # counted letter share
     return True
 for s in re.split(r"(?<=[.!?])\s+", corpus_text):
     if "|" not in s and "#" not in s and "`" not in s and s.count("=") < 2 and well_formed(s):
@@ -421,7 +421,7 @@ log("WAKE", f"{sum(len(s) for s in stores)} orbits", f"{len(SENTS)} held sentenc
 def informativeness(w):
     # counted: rarer words carry more share (total/frequency, exact ratio)
     f = TOK_FREQ.get(w.lower(), 0)
-    return 0.0 if f == 0 else TOTAL_TOKS / f
+    return 0.0 if f == 0 else float(TOTAL_TOKS) / f
 
 def content_words(s):
     ws = [t.lower() for t in tok(s) if len(t) > 2]
@@ -527,7 +527,7 @@ def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
     multidimensional_experience) with zero drift. One walk, one lock, one
     whole -- or silence, and the single-orbit path serves. Returns
     (fused, n_sources) or (None, 1)."""
-    _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+    _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
     # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: the
     # question mark is a closed punctuation fact (never an enumerated
     # phrase list -- the standing law), and one informative word is one
@@ -563,7 +563,7 @@ def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
         if not ok or rejected(user_line, s, speaker):
             continue
         novel = {w for w in (t.lower() for t in tok(s))
-                 if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000 and w not in lead_words}
+                 if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9) and w not in lead_words}
         if not novel:
             continue
         # ADMITTED: this record becomes a bound part of the one utterance
@@ -608,23 +608,27 @@ def mixed_dist(ctx):
     same forced constant as session attention's halving). Hard first-hit
     backoff discards every shallower level; the mixture keeps them all at
     their forced weights: mixed(t) = sum_L 2^L * counts_L(t)/total_L
-    (returned unnormalized; the sampler normalizes at the draw). Exact
-    rational weights, no exponential, no temperature
-    (canonical_distribution: equilibrium weighting is a fold ratio).
-    Self-test (rung 5e's own collapse law): with exactly one holding level
     the mixture equals that level's own distribution exactly. The No-Zero
     floor lives in the VALUATION of unseen continuations (the CE measure);
     sampling chooses among held continuations, so no floor term enters."""
     with _STORELOCK:
-        agg = {}
+        valid_L = []
         for L in range(min(CTX_MAX, len(ctx)), 0, -1):
             s = stores[L].get(_key(tuple(ctx[-L:])))
             if s:
-                total = float(sum(s.values()))
-                w = float(2 ** L)
-                for tkn, n in s.items():
-                    agg[tkn] = agg.get(tkn, 0.0) + w * (n / total)
-        return agg
+                valid_L.append((L, s, sum(s.values())))
+        if not valid_L:
+            return {}
+        import math
+        cd = 1
+        for _, _, total in valid_L:
+            cd = (cd * total) // math.gcd(cd, total)
+        agg_num = {}
+        for L, s, total in valid_L:
+            mult = (2 ** L) * (cd // total)
+            for tkn, n in s.items():
+                agg_num[tkn] = agg_num.get(tkn, 0) + mult * n
+        return {tkn: Fraction(num, cd) for tkn, num in agg_num.items()}
 
 def mixed_next(ctx, rng, skip=()):
     agg = mixed_dist(ctx)
@@ -633,8 +637,11 @@ def mixed_next(ctx, rng, skip=()):
     if not agg:
         return None
     items = list(agg.items())
-    probs = np.array([v for _, v in items], dtype=np.float64)
-    return items[int(rng.choice(len(items), p=probs / probs.sum()))][0]
+    probs = [float(frac) for _, frac in items]
+    total_prob = sum(probs)
+    if total_prob <= 0:
+        return None
+    return rng.choice([t for t, _ in items], p=[p / total_prob for p in probs])
 
 def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
     ctx = list(ctx_tokens)
@@ -646,7 +653,7 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
             break
         if nxt in ("Q", "A", "q", "a") and out and out[-1] in (".", "!", "?", ":"):
             break
-        if nxt == "Q":
+        if nxt == "Q" or nxt == "\n" or nxt == "\\n":
             break
         if nxt == ":" and out and out[-1].lower() in ("q", "a"):
             out.pop()                            # never leak a bare "a:" stub
@@ -745,40 +752,27 @@ def learn_fact(text, speaker=None):
 
 def _learn_fact_sentence(text, speaker=None):
     t = text.strip().rstrip(".!")
-    # "my/your name is X"
-    m = re.match(r"(?i)(my|your)\s+name\s+is\s+(.+)", t)
+    # Mechanical derivation: subject (FLIP class) + relation (any word(s)) + copula (is/are) + value.
+    m = re.match(r"(?i)(my|your)\s+([^i][a-z0-9_\s]*?)\s+is\s+(.+)", t)
     if m:
-        rest = m.group(2).strip()
-        # negation asserts nothing ("my name is not Julian" holds no name)
+        rel = m.group(2).strip().lower()
+        rest = m.group(3).strip()
         if re.match(r"(?i)not\b", rest):
             return False
-        # the name is the capitalized run the teller wrote; the first
-        # lowercase word starts the next clause, not the name
         run = []
         for w in rest.split():
-            if w[:1].isupper():
-                run.append(w)
-            else:
-                break
-        persist_fact(_norm_subject(m.group(1), speaker), "name",
-                     " ".join(run) if run else rest.title())
+            if w[:1].isupper(): run.append(w)
+            else: break
+        
+        if run:
+            val = " ".join(run)
+        else:
+            # take until punctuation or conjunction
+            val = re.split(r"\b(?:because|so|but|and)\b|[,;]", rest)[0].strip()
+        persist_fact(_norm_subject(m.group(1), speaker), rel, val)
         return True
-    # "my/your favourite X is Y"
-    m = re.match(r"(?i)(my|your)\s+favou?rite\s+(\w+)\s+is\s+(.+)", t)
-    if m:
-        persist_fact(_norm_subject(m.group(1), speaker), "favourite " + m.group(2).lower(), m.group(3).strip())
-        return True
-    # "I live in X" / "I am from X" / "my home is X"
-    m = re.match(r"(?i)(?:i\s+live\s+in|i\s+am\s+from|i'?m\s+from|my\s+home\s+is)\s+(.+)", t)
-    if m:
-        persist_fact(speaker or "you", "location", m.group(1).strip().title())
-        return True
-    m = re.match(r"(?i)(?:you\s+live\s+in|your\s+home\s+is)\s+(.+)", t)
-    if m:
-        persist_fact("self", "location", m.group(1).strip().title())
-        return True
-    # "I am X" / "you are X"  (identity) -- negation asserts nothing here
-    # either ("I am not sure" holds no identity)
+
+    # "I am X" / "you are X"  (identity)
     m = re.match(r"(?i)(i\s+am|i'?m|you\s+are|you'?re)\s+(.+)", t)
     if m and not re.match(r"(?i)not\b", m.group(2).strip()):
         subj = (speaker or "you") if m.group(1).lower().startswith("i") else "self"
@@ -789,33 +783,10 @@ def _learn_fact_sentence(text, speaker=None):
 def answer_fact(text, speaker=None, touched=None):
     me = speaker or "you"   # the present speaker's subject seat
     t = text.strip().rstrip("?.!")
-    m = re.search(r"(?i)(?:what\s*is|what'?s|do\s+you\s+know)\s+(my|your)\s+(?:own\s+)?name", t)
-    if m:
-        s = _norm_subject(m.group(1), me)
-        v = FACTS.get((s, "name"))
-        if v and touched is not None:
-            touched.append("F:" + s + "|name")
-        return ("My name is " + v + "." if s == "self" else "Your name is " + v + ".") if v else None
     m = re.search(r"(?i)(?:who|what)\s+(?:are\s+you|you\s+are)", t)
     if m and ("self", "identity") in FACTS:
         v = FACTS[("self", "identity")]
         return "I am " + (v if v[-1:] in ".!?" else v + ".")
-    m = re.search(r"(?i)what\s+is\s+(my|your)\s+favou?rite\s+(\w+)", t)
-    if m:
-        s = _norm_subject(m.group(1), me); rel = "favourite " + m.group(2).lower()
-        v = FACTS.get((s, rel))
-        if v:
-            if touched is not None:
-                touched.append("F:" + s + "|" + rel)
-            return ("My " if s == "self" else "Your ") + m.group(2).lower() + " is " + v + "."
-    m = re.search(r"(?i)where\s+do\s+i\s+live", t)
-    if m and (me, "location") in FACTS:
-        if touched is not None:
-            touched.append("F:" + me + "|location")
-        return "You live in " + FACTS[(me, "location")] + "."
-    m = re.search(r"(?i)where\s+do\s+you\s+live", t)
-    if m and ("self", "location") in FACTS:
-        return "I hold my location as " + FACTS[("self", "location")] + "."
     m = re.search(r"(?i)(?:who|what)\s+am\s+i", t)
     if m and (me, "identity") in FACTS:
         return "You are " + FACTS[(me, "identity")] + "."
@@ -973,7 +944,7 @@ def lookahead_closure(records, cw, rng, depth=3):
             next_records = [hit_text]
             future_fused = lookahead_closure(next_records, cand_words, rng, depth - 1)
             if future_fused:
-                score += 0.5 # Add future value
+                score += Fraction(1, 2) # Add future value
                 
         if score > best_score:
             best_score = score
@@ -1015,13 +986,16 @@ def babble_closure(records, cw, rng):
     for h in records:
         toks_h = tok(h)
         low = [t.lower() for t in toks_h]
-        rw = [t for t in toks_h if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000]
+        rw = [t for t in toks_h if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / (GEN_B ** 10)]
         rec_focus_each.append({w.lower() for w in rw})
         all_rec_words += rw
         spans.append(max(1, len([s for s in re.split(r"(?<=[.!?])\s+", h.strip()) if s])))
         ds = [low.index(w) for w in cw if w in low]
         if ds:
-            doors.append(toks_h[min(ds):min(ds) + GEN_C])
+            if h in CORRECTIONS.values():
+                doors.append(toks_h[:GEN_C])
+            else:
+                doors.append(toks_h[min(ds):min(ds) + GEN_C])
         else:
             doors.append(rw[:GEN_C] or toks_h[:GEN_C])
     rec_focus = set()
@@ -1041,7 +1015,7 @@ def babble_closure(records, cw, rng):
         if len(segs) < len(records):
             continue                     # a part's phase produced nothing: no whole
         out = " ".join(segs)
-        out_focus = {t.lower() for t in tok(out) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / 1000}
+        out_focus = {t.lower() for t in tok(out) if TOK_FREQ.get(t.lower(), 0) <= TOTAL_TOKS / (GEN_B ** 10)}
         if out_focus - allowed:
             continue                     # drift: the walk left the held thing
         ok_parts = 1
@@ -1056,7 +1030,10 @@ def babble_closure(records, cw, rng):
         if stuttered(out) or len(out.split()) < GEN_C:
             continue                     # no fragments: whole or nothing
         if _skey(out) in skeys:
-            continue                     # a byte-copy is a reprint, not a walk
+            if len(records) == 1 and records[0] in CORRECTIONS.values():
+                pass
+            else:
+                continue                     # a byte-copy is a reprint, not a walk
         return out
     return None                          # exhaustion: silence; the teacher carries it
 
@@ -1119,7 +1096,7 @@ def serve_trace(user_line, cw, speaker=None):
     reading, not an answer."""
     tr = TRACES.get(qkey(user_line, speaker))
     if tr is None and cw:
-        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
         if _icw:
             best, best_ov = None, 0
             for _k, (q2, calls2, tpl2) in TRACES.items():
@@ -1208,7 +1185,7 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
     # matched experience / lessons / the teacher, exactly as an empty
     # candidate always has.
     if not _is_theory:
-        qf = {w for w in set(cw) if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+        qf = {w for w in set(cw) if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
         for _spike in range(GEN_B ** GEN_C):
             cand = continue_orbit(q_tokens, rng, max_tokens=120, sentences=GEN_B)
             if not cand or rejected(user_line, cand, speaker):
@@ -1258,7 +1235,7 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
         # lesson's own question shares at least half the user's question
         # words (counted); otherwise the pool is thin there and the
         # observer answers, joining my experience for next time.
-        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}   # informative only
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}   # informative only
         # THE FOCUS FLOOR (Maria, 2026-07-07, from the 20:41 log): a question
         # with fewer than GEN_B informative words has NO matched-experience
         # focus -- one shared common word ("you") must never serve a whole
@@ -1491,7 +1468,7 @@ def record_correction(question, answer, speaker=None):
     # the correction is spoken in MY voice -- flip before extracting the
     # relation so first-person facts land on self, never on the teller
     learn_fact(flip_perspective(answer), speaker)
-    write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
+    write_orbits(tok("A: " + answer + " .\n") * GEN_C)
     hold_sentence(answer, "told")
     log("CORRECTION", question, answer)
     graph_node("C:" + k, "TAUGHT", question)
@@ -1534,7 +1511,7 @@ def turn(line, rng, interface="terminal", speaker=None):
             thought = "VOICE: UNISON (own held memory) | learning meaning; asking for response protocol"
             return ans, thought
         elif state['step'] == 2:
-            response_proto = re.sub(r"(?i)^(you should )?(say|respond|reply|answer)( with)? ", "", line).strip()
+            response_proto = re.sub(r"(?i)^((you|i|we)\s+(should\s+)?)?(say|respond|reply|answer)( with)?\s*", "", line).strip()
             orig_telling = state['telling']
             meaning = state['meaning']
             
@@ -1628,7 +1605,7 @@ def turn(line, rng, interface="terminal", speaker=None):
             if candidate and dedup(candidate).lower().rstrip(".!? ") == fact.lower().rstrip(".!? "):
                 candidate = None                    # never parrot the telling back
             _sh = {w for w in set(content_words(line)) & set(t.lower() for t in tok(candidate or ""))
-                   if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000}
+                   if len(tok(line)) < 6 or TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
             if candidate and not rejected(line, candidate) and _sh:
                 ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
             else:
@@ -2659,7 +2636,7 @@ def _tutor_loop():
                     if len(ref) < 10 or stuttered(ref):
                         q = ref = None
             if q is None:
-                if rnd.random() < 0.5:
+                if int(rnd.integers(0, 2)) == 0:
                     f = rnd.choice(THEORY)
                     text = open(f, errors="ignore").read()
                     if len(text) < 600:
@@ -2848,7 +2825,7 @@ def _selfplay_loop():
                     # the shared structure must surface through counted kin
                     q2 = batch[0][0] if batch[0][0] != q else batch[-1][0]
                     shared = [w for w in set(content_words(q)) & set(content_words(q2))
-                              if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / 1000]
+                              if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)]
                     if shared:
                         hit, _sh2 = bind(shared[0])
                         log("SELFPLAY", "induction " + ("linked" if hit else "open"), shared[0])

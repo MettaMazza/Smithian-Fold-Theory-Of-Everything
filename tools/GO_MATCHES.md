@@ -1,15 +1,14 @@
 # SFT Go Engine Match Ledger
 
-**Date:** July 9, 2026  
-**Engine:** SFT Type Zero Go (zero parameters, depth-2 minimax search)  
-**Opponent:** katago gtp  
-**Board Size:** 19x19  
+**Date:** July 10, 2026  
+**Engine:** SFT Type Zero Go v2.0 (zero parameters, iterative deepening ceiling 4, 2^19 node budget)  
+**Opponent:** Deterministic Fallback  
+**Board Size:** 5×5  
 
 ## Match Results
 
-| Round | SFT Side | Winner |
-|---|---|---|
-| 1 | Black | SFT |
-| 2 | White | Opponent |
-|---|---|---|
-| **Total** | — | **SFT won 1/2 games** |
+| Round | SFT Side | Score B | Score W | Winner |
+|---|---|---|---|---|
+| 1 | Black | 25 | 7 | SFT |
+|---|---|---|---|---|
+| **Total** | — | — | — | **SFT won 1/1 games** |

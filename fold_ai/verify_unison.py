@@ -242,9 +242,9 @@ except Exception as e:
 uc2, wake2_s = wake()
 rng2 = np.random.default_rng(1)
 r = uc2.reply("What is the capital of the fold?", rng2)[0]
-check("E20 correction survives rebirth", r == "The capital of the fold is the One.")
-r = uc2.reply("What is my favourite instrument?", rng2, speaker=uc2.register_user("test"))[0]
-check("E20b fact survives rebirth", "harp" in r.lower(), r[:40])
+check("E20 correction survives rebirth", r == "The capital of the fold is the One.", f"Got: {r}")
+r2b = uc2.reply("What is my favourite instrument?", rng2, speaker=uc2.register_user("test"))[0]
+check("E20b fact survives rebirth", "harp" in r2b.lower(), r2b[:40])
 hit, share = uc2.bind(" ".join(uc2.fold_see(checker)))
 check("E20c sight survives rebirth", bool(hit) and "checkerboard" in hit[0])
 check("E20d graduation survives rebirth", uc2.GRAD.get(TK) == [1, 2])
@@ -354,7 +354,7 @@ uc2.stores[1].pop(("rrsx",), None)
 _d = uc2.mixed_dist(["zzqx", "wwvx", "rrsx"])
 _t = sum(_d.values())
 check("E29 fold-mix single-level collapse exact",
-      abs(_d.get("alpha", 0) / _t - 0.75) < 1e-12 and abs(_d.get("beta", 0) / _t - 0.25) < 1e-12,
+      _d.get("alpha", Fraction(0)) / _t == Fraction(3, 4) and _d.get("beta", Fraction(0)) / _t == Fraction(1, 4),
       "mixture == the one holding level")
 del uc2.stores[3][("zzqx", "wwvx", "rrsx")]
 

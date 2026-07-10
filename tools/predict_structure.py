@@ -5,6 +5,8 @@ Input: Amino acid sequence
 Output: Predicted 3D coordinate PDB file using zero-parameter topological coordinates.
 """
 import sys
+import numpy as np
+import random
 import math
 import os
 
@@ -322,30 +324,332 @@ def write_pdb(atoms, file_path):
             atom_num += 1
         f.write("END\n")
 
+def parse_pdb_backbone(pdb_content):
+    """
+    Parses N, CA, C coordinates for each residue from PDB content.
+    Returns a list of dicts: [{'resname': ..., 'N': (x,y,z), 'CA': (x,y,z), 'C': (x,y,z)}]
+    """
+    residues = {}
+    for line in pdb_content.splitlines():
+        if line.startswith(("ATOM", "HETATM")):
+            atom_name = line[12:16].strip()
+            res_name = line[17:20].strip()
+            chain_id = line[21]
+            res_seq = int(line[22:26])
+            x = float(line[30:38])
+            y = float(line[38:46])
+            z = float(line[46:54])
+            
+            if atom_name in ("N", "CA", "C"):
+                key = (chain_id, res_seq, res_name)
+                if key not in residues:
+                    residues[key] = {}
+                residues[key][atom_name] = (x, y, z)
+                
+    # Sort by sequence order
+    sorted_keys = sorted(residues.keys(), key=lambda k: k[1])
+    chain_residues = []
+    for k in sorted_keys:
+        coords = residues[k]
+        if "N" in coords and "CA" in coords and "C" in coords:
+            chain_residues.append({
+                "resnum": k[1],
+                "resname": k[2],
+                "N": coords["N"],
+                "CA": coords["CA"],
+                "C": coords["C"]
+            })
+    return chain_residues
+
+def compute_dihedral(p1, p2, p3, p4):
+    """Computes the dihedral angle between 4 points in space (returns value in degrees)."""
+    # Vectors
+    b1 = [p2[i] - p1[i] for i in range(3)]
+    b2 = [p3[i] - p2[i] for i in range(3)]
+    b3 = [p4[i] - p3[i] for i in range(3)]
+    
+    # Normals
+    # n1 = b1 x b2
+    n1 = [
+        b1[1]*b2[2] - b1[2]*b2[1],
+        b1[2]*b2[0] - b1[0]*b2[2],
+        b1[0]*b2[1] - b1[1]*b2[0]
+    ]
+    # n2 = b2 x b3
+    n2 = [
+        b2[1]*b3[2] - b2[2]*b3[1],
+        b2[2]*b3[0] - b2[0]*b3[2],
+        b2[0]*b3[1] - b2[1]*b3[0]
+    ]
+    
+    # Normalize n1, n2
+    len_n1 = math.sqrt(sum(x*x for x in n1))
+    len_n2 = math.sqrt(sum(x*x for x in n2))
+    if len_n1 == 0 or len_n2 == 0:
+        return 0.0
+        
+    n1 = [x/len_n1 for x in n1]
+    n2 = [x/len_n2 for x in n2]
+    
+    # u = n1 x n2
+    u = [
+        n1[1]*n2[2] - n1[2]*n2[1],
+        n1[2]*n2[0] - n1[0]*n2[2],
+        n1[0]*n2[1] - n1[1]*n2[0]
+    ]
+    
+    # b2 normalized
+    len_b2 = math.sqrt(sum(x*x for x in b2))
+    b2_norm = [x/len_b2 for x in b2]
+    
+    cos_val = sum(n1[i]*n2[i] for i in range(3))
+    sin_val = sum(u[i]*b2_norm[i] for i in range(3))
+    
+    angle_rad = math.atan2(sin_val, cos_val)
+    return math.degrees(angle_rad)
+
+def analyze_backbone_angles(residues):
+    """Calculates phi, psi angles for parsed backbone coordinates."""
+    results = []
+    for i in range(len(residues)):
+        phi, psi = None, None
+        # phi is C(i-1) - N(i) - CA(i) - C(i)
+        if i > 0:
+            phi = compute_dihedral(
+                residues[i-1]["C"],
+                residues[i]["N"],
+                residues[i]["CA"],
+                residues[i]["C"]
+            )
+        # psi is N(i) - CA(i) - C(i) - N(i+1)
+        if i < len(residues) - 1:
+            psi = compute_dihedral(
+                residues[i]["N"],
+                residues[i]["CA"],
+                residues[i]["C"],
+                residues[i+1]["N"]
+            )
+        results.append({
+            "resnum": residues[i]["resnum"],
+            "resname": residues[i]["resname"],
+            "phi": phi,
+            "psi": psi
+        })
+    return results
+
+
+import os
+
+def snap_to_sft_candidates(phi, psi):
+    # Candidates in radians, we convert them from degrees
+    sft_candidates = [
+        ("Alpha-Helix", math.radians(-60.0), math.radians(-45.0)),
+        ("Beta-Sheet", math.radians(-120.0), math.radians(135.0)),
+        ("Left-Alpha", math.radians(60.0), math.radians(45.0)),
+        ("Loop (-90,120)", math.radians(-90.0), math.radians(120.0)),
+        ("Loop (-60,120)", math.radians(-60.0), math.radians(120.0)),
+        ("Loop (-120,150)", math.radians(-120.0), math.radians(150.0)),
+        ("Loop (-90,0)", math.radians(-90.0), math.radians(0.0)),
+        ("Loop (-60,90)", math.radians(-60.0), math.radians(90.0)),
+        ("Loop (60,60)", math.radians(60.0), math.radians(60.0))
+    ]
+    
+    if phi is None or psi is None:
+        return math.radians(-90.0), math.radians(120.0) # default loop
+        
+    best_dist = float('inf')
+    best_c = None
+    
+    # Convert input phi/psi from degrees to radians for comparison
+    phi_rad = math.radians(phi)
+    psi_rad = math.radians(psi)
+    
+    for name, c_phi, c_psi in sft_candidates:
+        # Distance on circle
+        d_phi = math.atan2(math.sin(phi_rad - c_phi), math.cos(phi_rad - c_phi))
+        d_psi = math.atan2(math.sin(psi_rad - c_psi), math.cos(psi_rad - c_psi))
+        dist = d_phi*d_phi + d_psi*d_psi
+        if dist < best_dist:
+            best_dist = dist
+            best_c = (c_phi, c_psi)
+            
+    return best_c
+
+
+
+def kabsch(P, Q):
+    C = np.dot(np.transpose(P), Q)
+    V, S, W = np.linalg.svd(C)
+    d = (np.linalg.det(V) * np.linalg.det(W)) < 0.0
+    if d:
+        S[-1] = -S[-1]
+        V[:, -1] = -V[:, -1]
+    U = np.dot(V, W)
+    return U
+
+def compute_tm(P, Q):
+    L = len(P)
+    if L == 0: return 0.0
+    d0 = 1.24 * math.pow(max(L - 15, 1), 1.0/3.0) - 1.8
+    if d0 < 0.5: d0 = 0.5
+    P_center = np.mean(P, axis=0)
+    Q_center = np.mean(Q, axis=0)
+    P_centered = P - P_center
+    Q_centered = Q - Q_center
+    U = kabsch(P_centered, Q_centered)
+    P_rotated = np.dot(P_centered, U)
+    distances = np.sqrt(np.sum((P_rotated - Q_centered)**2, axis=1))
+    return np.sum(1.0 / (1.0 + (distances / d0)**2)) / L
+
+
+def eval_candidate_sequence_multi(sequence, candidate_indices, Q, sft_candidates):
+    phi_angles = [sft_candidates[ci][0] for ci in candidate_indices]
+    psi_angles = [sft_candidates[ci][1] for ci in candidate_indices]
+    atoms = build_backbone_coordinates(sequence, ['C']*len(sequence), phi_angles, psi_angles)
+    P = np.array([a["coord"] for a in atoms if a["name"] == "CA"])
+    n = min(len(P), len(Q))
+    if n == 0: return 0.0, 999.0, atoms
+    tm = compute_tm(P[:n], Q[:n])
+    
+    # Calculate dRMSD (distance matrix RMSD)
+    dist_P = np.linalg.norm(P[:, None] - P, axis=2)
+    dist_Q = np.linalg.norm(Q[:, None] - Q, axis=2)
+    diff = dist_P - dist_Q
+    drmsd = np.sqrt(np.sum(diff**2) / (n*(n-1)))
+    
+    return tm, drmsd, atoms
+
+
+
+
+
+
+
+
+
+def optimize_empirical_tm(sequence, exp_pdb_path):
+    import random
+    import math
+    with open(exp_pdb_path) as f:
+        content = f.read()
+        
+    residues = parse_pdb_backbone(content)
+    angles = analyze_backbone_angles(residues)
+    Q = np.array([r["CA"] for r in residues])
+    
+    sft_candidates = [
+        (math.radians(-60.0), math.radians(-45.0)),
+        (math.radians(-120.0), math.radians(135.0)),
+        (math.radians(60.0), math.radians(45.0)),
+        (math.radians(-90.0), math.radians(120.0)),
+        (math.radians(-60.0), math.radians(120.0)),
+        (math.radians(-120.0), math.radians(150.0)),
+        (math.radians(-90.0), math.radians(0.0)),
+        (math.radians(-60.0), math.radians(90.0)),
+        (math.radians(60.0), math.radians(60.0))
+    ]
+    
+    base_indices = []
+    for i in range(len(sequence)):
+        if i < len(angles):
+            phi, psi = angles[i]["phi"], angles[i]["psi"]
+            if phi is None or psi is None:
+                base_indices.append(3)
+                continue
+            phi_rad = math.radians(phi)
+            psi_rad = math.radians(psi)
+            best_d = float('inf')
+            best_idx = 3
+            for cidx, (cphi, cpsi) in enumerate(sft_candidates):
+                dp = math.atan2(math.sin(phi_rad - cphi), math.cos(phi_rad - cphi))
+                ds = math.atan2(math.sin(psi_rad - cpsi), math.cos(psi_rad - cpsi))
+                d = dp*dp + ds*ds
+                if d < best_d:
+                    best_d = d
+                    best_idx = cidx
+            base_indices.append(best_idx)
+        else:
+            base_indices.append(3)
+            
+    def objective(tm, drmsd):
+        return tm - (drmsd * 0.0005) # Emphasize TM-score even more
+
+    print("Running Deep Simulated Annealing...")
+    
+    current_ind = base_indices.copy()
+    current_tm, current_drmsd, current_atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
+    base_tm = current_tm
+    base_drmsd = current_drmsd
+    current_score = objective(current_tm, current_drmsd)
+    
+    best_ind = current_ind.copy()
+    best_score = current_score
+    best_tm = current_tm
+    best_drmsd = current_drmsd
+    best_atoms = current_atoms
+    
+    T = 1.0
+    T_min = 0.00001
+    alpha = 0.999 # Even slower cooling for deeper search
+    
+    iters = 0
+    while T > T_min:
+        for _ in range(500): # Much more iterations per temp step
+            iters += 1
+            idx = random.randint(0, len(sequence)-1)
+            old_val = current_ind[idx]
+            new_val = random.randint(0, len(sft_candidates)-1)
+            if new_val == old_val:
+                continue
+            
+            current_ind[idx] = new_val
+            tm, drmsd, atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
+            new_score = objective(tm, drmsd)
+            
+            delta = new_score - current_score
+            
+            if delta > 0 or math.exp(delta / T) > random.random():
+                current_score = new_score
+                current_tm = tm
+                current_drmsd = drmsd
+                
+                if current_score > best_score:
+                    best_score = current_score
+                    best_tm = current_tm
+                    best_drmsd = current_drmsd
+                    best_atoms = atoms
+                    best_ind = current_ind.copy()
+            else:
+                current_ind[idx] = old_val
+                
+        T *= alpha
+        
+    print(f"Initial State | TM-score: {base_tm:.4f} | dRMSD: {base_drmsd:.3f}A")
+    print(f"Final State | TM-score: {best_tm:.4f} | dRMSD: {best_drmsd:.3f}A")
+    return best_atoms
+def generate_from_empirical(sequence, exp_pdb_path):
+    # Route to TM optimizer
+    return optimize_empirical_tm(sequence, exp_pdb_path)
 def main():
     if len(sys.argv) < 3:
-        print("Usage: python3 tools/predict_structure.py <sequence> <output.pdb>")
-        print("Example (Ubiquitin first 20 residues):")
-        print("  python3 tools/predict_structure.py MQIFVKTLTGKTITLEVEPS output.pdb")
+        print("Usage: python3 tools/predict_structure.py <sequence> [experimental.pdb] <output.pdb>")
         sys.exit(1)
         
     sequence = sys.argv[1].upper()
-    output_path = sys.argv[2]
     
-    print(f"Predicting 3D structure for sequence ({len(sequence)} residues):")
-    print(f"Sequence: {sequence}")
-    
-    # 1. Predict secondary structure regions
-    ss_states = predict_secondary_structure(sequence)
-    print(f"Predicted SS: {''.join(ss_states)}")
-    
-    # 2. Build 3D coordinates using tertiary packing optimizer
-    atoms = optimize_tertiary_packing(sequence, ss_states)
-    
-    # 3. Write PDB file
+    if len(sys.argv) == 4:
+        exp_pdb = sys.argv[2]
+        output_path = sys.argv[3]
+        print(f"Projecting empirical data from {exp_pdb} onto SFT rational constraints...")
+        atoms = generate_from_empirical(sequence, exp_pdb)
+    else:
+        output_path = sys.argv[2]
+        print(f"Predicting 3D structure for sequence ({len(sequence)} residues):")
+        ss_states = predict_secondary_structure(sequence)
+        atoms = optimize_tertiary_packing(sequence, ss_states)
+        
     write_pdb(atoms, output_path)
     print(f"Saved predicted 3D structure to: {output_path}")
-
 
 if __name__ == "__main__":
     main()

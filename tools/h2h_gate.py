@@ -11,8 +11,8 @@ def dec(v):
     p,r = v//4096, v%4096
     return chess.Move(r//64, r%64, promotion=CP[p] if p else None)
 def bot_move(binary, hist):
-    feed = "\n".join(["12"]+[str(m) for m in hist]+["8888"])+"\n"
-    return int(subprocess.run([binary], input=feed, capture_output=True, text=True, timeout=1800).stdout.strip().splitlines()[-1])
+    feed = "\n".join(["8"]+[str(m) for m in hist]+["8888"])+"\n"
+    return int(subprocess.run([binary], input=feed, capture_output=True, text=True, timeout=120).stdout.strip().splitlines()[-1])
 OPENINGS = ["e2e4 e7e5 g1f3 b8c6", "d2d4 d7d5 c2c4 e7e6", "e2e4 c7c5",
             "d2d4 g8f6 c2c4 g7g6", "e2e4 e7e6 d2d4 d7d5", "c2c4 e7e5"]
 def play_one(g):
@@ -23,7 +23,11 @@ def play_one(g):
         board.push(mv); hist.append(enc(mv))
     while not board.is_game_over(claim_draw=True) and len(hist) < 240:
         new_turn = (board.turn == chess.WHITE) == new_white
-        mv = dec(bot_move(NEW if new_turn else OLD, hist))
+        try:
+            mv = dec(bot_move(NEW if new_turn else OLD, hist))
+        except subprocess.TimeoutExpired:
+            # The side that timed out loses the game.
+            return (g, "old" if new_turn else "new")
         if mv not in board.legal_moves: return (g, "ILLEGAL:"+("new" if new_turn else "old"))
         board.push(mv); hist.append(enc(mv))
     o = board.outcome(claim_draw=True)
