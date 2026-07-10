@@ -527,7 +527,7 @@ def fuse_orbits(user_line, first, cw, rng=None, speaker=None, touched=None):
     multidimensional_experience) with zero drift. One walk, one lock, one
     whole -- or silence, and the single-orbit path serves. Returns
     (fused, n_sources) or (None, 1)."""
-    _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
+    _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 10)}
     # a multi-orbit answer is for QUESTIONS with a MULTI-WORD focus: the
     # question mark is a closed punctuation fact (never an enumerated
     # phrase list -- the standing law), and one informative word is one
@@ -1096,7 +1096,7 @@ def serve_trace(user_line, cw, speaker=None):
     reading, not an answer."""
     tr = TRACES.get(qkey(user_line, speaker))
     if tr is None and cw:
-        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 10)}
         if _icw:
             best, best_ov = None, 0
             for _k, (q2, calls2, tpl2) in TRACES.items():
@@ -1235,7 +1235,7 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
         # lesson's own question shares at least half the user's question
         # words (counted); otherwise the pool is thin there and the
         # observer answers, joining my experience for next time.
-        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}   # informative only
+        _icw = {w for w in cw if TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 10)}   # informative only
         # THE FOCUS FLOOR (Maria, 2026-07-07, from the 20:41 log): a question
         # with fewer than GEN_B informative words has NO matched-experience
         # focus -- one shared common word ("you") must never serve a whole

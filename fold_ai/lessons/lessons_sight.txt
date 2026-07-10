@@ -4,3 +4,7 @@ Q: SIGHT: w8x8p
 A: a checkerboard test pattern
 Q: SIGHT: w8x8p
 A: a checkerboard test pattern
+Q: SIGHT: w8x8p
+A: a checkerboard test pattern
+Q: SIGHT: w8x8p
+A: a checkerboard test pattern

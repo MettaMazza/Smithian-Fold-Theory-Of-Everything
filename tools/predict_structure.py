@@ -527,9 +527,12 @@ def eval_candidate_sequence_multi(sequence, candidate_indices, Q, sft_candidates
 
 
 
+
 def optimize_empirical_tm(sequence, exp_pdb_path):
     import random
     import math
+    import numpy as np
+    
     with open(exp_pdb_path) as f:
         content = f.read()
         
@@ -537,6 +540,7 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
     angles = analyze_backbone_angles(residues)
     Q = np.array([r["CA"] for r in residues])
     
+    # Strictly the 9 SFT Mathematical Rational Constraints
     sft_candidates = [
         (math.radians(-60.0), math.radians(-45.0)),
         (math.radians(-120.0), math.radians(135.0)),
@@ -572,9 +576,9 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
             base_indices.append(3)
             
     def objective(tm, drmsd):
-        return tm - (drmsd * 0.0005) # Emphasize TM-score even more
+        return tm - (drmsd * 0.0005)
 
-    print("Running Deep Simulated Annealing...")
+    print("Running Block-Mutation Simulated Annealing (Crankshaft SA)...")
     
     current_ind = base_indices.copy()
     current_tm, current_drmsd, current_atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
@@ -590,19 +594,28 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
     
     T = 1.0
     T_min = 0.00001
-    alpha = 0.999 # Even slower cooling for deeper search
+    alpha = 0.995
     
     iters = 0
     while T > T_min:
-        for _ in range(500): # Much more iterations per temp step
+        for _ in range(200):
             iters += 1
-            idx = random.randint(0, len(sequence)-1)
-            old_val = current_ind[idx]
-            new_val = random.randint(0, len(sft_candidates)-1)
-            if new_val == old_val:
-                continue
+            # Choose mutation type
+            mut_type = random.random()
+            num_mutations = 1
+            if mut_type > 0.75:
+                num_mutations = 3
+            elif mut_type > 0.5:
+                num_mutations = 2
+                
+            idx = random.randint(0, len(sequence) - num_mutations)
             
-            current_ind[idx] = new_val
+            old_vals = [current_ind[idx + i] for i in range(num_mutations)]
+            
+            for i in range(num_mutations):
+                new_val = random.randint(0, len(sft_candidates) - 1)
+                current_ind[idx + i] = new_val
+                
             tm, drmsd, atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
             new_score = objective(tm, drmsd)
             
@@ -620,7 +633,8 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
                     best_atoms = atoms
                     best_ind = current_ind.copy()
             else:
-                current_ind[idx] = old_val
+                for i in range(num_mutations):
+                    current_ind[idx + i] = old_vals[i]
                 
         T *= alpha
         
