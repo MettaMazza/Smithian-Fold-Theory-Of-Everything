@@ -5,7 +5,7 @@ import os, glob, re, pickle, sys, zlib
 from collections import defaultdict, Counter
 BASE = "/Users/mettamazza/Desktop/Smithian Fold Theory"
 STORE = BASE + "/fold_ai/store.pkl"
-PCTX = 3                      # prose orbit context length (= colour, the generator)
+PCTX = 6                      # prose orbit context length (= context depth, CTX_MAX)
 BUDGET_MB = int(sys.argv[1]) if len(sys.argv) > 1 else 90   # prose bytes to ingest
 # M5, Engram-grade bounding -- INSPIRATION: DeepSeek Engram (arXiv
 # 2601.07372): deterministically-hashed prime-sized tables keep O(1) exact
@@ -43,11 +43,12 @@ for f in sorted(glob.glob(BASE + "/fold_ai/diet/*.txt")):
     st["ingested"].append(f)
     words = tok(text)
     st["freq"].update(w.lower() for w in words)
-    for i in range(len(words)-1):
-        nxt = words[i+1]
+    chars = list(text)
+    for i in range(len(chars)-1):
+        nxt = chars[i+1]
         for L in range(PCTX+1):
             if i-L+1 < 0: break
-            st["stores"][L][bkey(tuple(t.lower() for t in words[i-L+1:i+1]))][nxt] += 1
+            st["stores"][L][bkey(tuple(t.lower() for t in chars[i-L+1:i+1]))][nxt] += 1
     for i in range(1, len(words)-1):
         w = words[i].lower()
         if len(w) >= 3:
@@ -58,6 +59,8 @@ for f in sorted(glob.glob(BASE + "/fold_ai/diet/*.txt")):
         if 8 <= len(s) <= 300 and "|" not in s and "`" not in s and well_formed(s):
             st["sents"].append((s, "prose"))
     print(f"  {used/1e6:.0f}/{BUDGET_MB}MB, {len(st['sents'])} sentences, {len(st['neigh'])} words", flush=True)
+    if used > budget:
+        break
 
 st["bound"] = BOUND
 with open(STORE + ".tmp","wb") as f: pickle.dump(st, f)

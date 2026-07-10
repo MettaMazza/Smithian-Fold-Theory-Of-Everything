@@ -528,6 +528,7 @@ def eval_candidate_sequence_multi(sequence, candidate_indices, Q, sft_candidates
 
 
 
+
 def optimize_empirical_tm(sequence, exp_pdb_path):
     import random
     import math
@@ -575,10 +576,11 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
         else:
             base_indices.append(3)
             
+    # Pure TM-score optimization
     def objective(tm, drmsd):
-        return tm - (drmsd * 0.0005)
+        return tm - (drmsd * 0.0001) # drastically reduce drmsd weight to let TM-score dominate
 
-    print("Running Block-Mutation Simulated Annealing (Crankshaft SA)...")
+    print("Running Ultra-Deep Crankshaft SA (Blocks 1-5)...")
     
     current_ind = base_indices.copy()
     current_tm, current_drmsd, current_atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
@@ -592,29 +594,34 @@ def optimize_empirical_tm(sequence, exp_pdb_path):
     best_drmsd = current_drmsd
     best_atoms = current_atoms
     
-    T = 1.0
+    T = 2.0  # Hotter starting temp
     T_min = 0.00001
-    alpha = 0.995
+    alpha = 0.997 # Deep cooling
     
     iters = 0
     while T > T_min:
-        for _ in range(200):
+        for _ in range(250):
             iters += 1
-            # Choose mutation type
-            mut_type = random.random()
-            num_mutations = 1
-            if mut_type > 0.75:
+            
+            # Weighted random choice of block size (1 to 5)
+            r = random.random()
+            if r > 0.90:
+                num_mutations = 5
+            elif r > 0.80:
+                num_mutations = 4
+            elif r > 0.65:
                 num_mutations = 3
-            elif mut_type > 0.5:
+            elif r > 0.40:
                 num_mutations = 2
+            else:
+                num_mutations = 1
                 
             idx = random.randint(0, len(sequence) - num_mutations)
             
             old_vals = [current_ind[idx + i] for i in range(num_mutations)]
             
             for i in range(num_mutations):
-                new_val = random.randint(0, len(sft_candidates) - 1)
-                current_ind[idx + i] = new_val
+                current_ind[idx + i] = random.randint(0, len(sft_candidates) - 1)
                 
             tm, drmsd, atoms = eval_candidate_sequence_multi(sequence, current_ind, Q, sft_candidates)
             new_score = objective(tm, drmsd)

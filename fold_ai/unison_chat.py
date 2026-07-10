@@ -233,9 +233,10 @@ def _key(tup):
     if STORE_BOUND:
         return (_zlib.crc32(" ".join(t).encode()) % STORE_BOUND,)
     return t
-def write_orbits(tl, max_ctx=None):
+def write_orbits(text, max_ctx=None, repeat=1):
     with _STORELOCK:
         top = CTX_MAX if max_ctx is None else max_ctx
+        tl = list(text) * repeat
         for i in range(len(tl) - 1):
             nxt = tl[i + 1]                          # original-case successor (voice)
             for L in range(0, top + 1):
@@ -299,7 +300,7 @@ def kin_expand(words, k=KIN_K):
 
 full = corpus_text + ("\n" + lesson_text) * GEN_C
 words = tok(full)
-write_orbits(words)
+write_orbits(full)
 build_neighbours(words)
 
 # sentence store + inverted index (binding substrate)
@@ -664,8 +665,8 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
             _ends += 1
             if _ends >= sentences:
                 break
-    s = " ".join(out)
-    return re.sub(r"\s+([.,!?;:])", r"\1", s)
+    s = "".join(out)
+    return s
 
 
 # ---------- THE SUBJECT AXIS: every speaker is a distinct held structure ---
@@ -1007,9 +1008,10 @@ def babble_closure(records, cw, rng):
     for _spike in range(GEN_B ** GEN_C):
         segs = []
         for pi in range(len(records)):
-            walk = continue_orbit(doors[pi], rng, max_tokens=120, sentences=spans[pi])
+            door_str = " ".join(doors[pi])
+            walk = continue_orbit(list(door_str + " "), rng, max_tokens=120, sentences=spans[pi])
             if walk:
-                seg = dedup(" ".join(doors[pi]) + " " + walk)
+                seg = dedup(door_str + " " + walk)
                 seg = " ".join(re.split(r"(?<=[.!?])\s+", seg.strip())[:spans[pi]])
                 segs.append(seg)
         if len(segs) < len(records):
@@ -1164,8 +1166,8 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
     # atomicity), never a retrieved packet.
     _seed = []
     for _u, _a in RECENT[speaker or ""][-GEN_B:]:
-        _seed += tok("Q: " + _u + "\nA: " + _a + "\n")
-    q_tokens = _seed + tok("Q: " + user_line) + tok("A:")
+        _seed += list("Q: " + _u + "\nA: " + _a + "\n")
+    q_tokens = _seed + list("Q: " + user_line + "\nA: ")
     # THEORY BELONGS TO THE CORPUS, not to conversational vibes: a question
     # that binds corpus-tier text skips the sampler and goes to the channels
     # that read the source (matched corpus text, or the relay's grep law)
@@ -1468,7 +1470,7 @@ def record_correction(question, answer, speaker=None):
     # the correction is spoken in MY voice -- flip before extracting the
     # relation so first-person facts land on self, never on the teller
     learn_fact(flip_perspective(answer), speaker)
-    write_orbits(tok("A: " + answer + " .\n") * GEN_C)
+    write_orbits("A: " + answer + " .\n", repeat=GEN_C)
     hold_sentence(answer, "told")
     log("CORRECTION", question, answer)
     graph_node("C:" + k, "TAUGHT", question)
@@ -1520,7 +1522,7 @@ def turn(line, rng, interface="terminal", speaker=None):
             with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f:
                 f.write("Q: " + orig_telling + "\nA: " + response_proto + "\n")
                 
-            write_orbits(tok("Q: " + orig_telling + "\nA: " + response_proto + "\n") * GEN_B)
+            write_orbits("Q: " + orig_telling + "\nA: " + response_proto + "\n", repeat=GEN_B)
             
             del TEACHING_STATE[speaker]
             ans = "Held. I will respond that way."
@@ -1541,10 +1543,10 @@ def turn(line, rng, interface="terminal", speaker=None):
             return "(silence)", "contentless; ignored"
         got = learn_fact(line, speaker)
         fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
-        candidate = continue_orbit(tok("Q: " + line) + tok("A:"), rng)
-        write_orbits(tok(fact + "\n") * GEN_C)
+        candidate = continue_orbit(list("Q: " + line + "\nA: "), rng)
+        write_orbits(fact + "\n", repeat=GEN_C)
         hold_sentence(fact, "told:" + speaker if _deictic(line) else "told")
-        write_orbits(tok("q: " + line + "\na: " + fact + "\n") * GEN_B)
+        write_orbits("q: " + line + "\na: " + fact + "\n", repeat=GEN_B)
         # A PENDING PERCEPT closes on the human's words: sight or sound,
         # paired exactly as an observer's description would be.
         pk = PENDING_PERCEPT.pop(speaker, None) or PENDING_PERCEPT.pop(interface, None)
@@ -1553,7 +1555,7 @@ def turn(line, rng, interface="terminal", speaker=None):
             st = " ".join(toks)
             meaning = line if line[-1:] in ".!?" else line + "."
             TOK_FREQ.update(toks)
-            write_orbits(tok(kind + ": " + st + "\nMEANS: " + meaning + "\n") * GEN_B)
+            write_orbits(kind + ": " + st + "\nMEANS: " + meaning + "\n", repeat=GEN_B)
             hold_sentence(kind + " " + st + " means: " + meaning, "lesson:" + kind + ": " + st[:60])
             fn = "lessons_sight.txt" if kind == "SIGHT" else "lessons_sound.txt"
             with open(BASE + "/fold_ai/lessons/" + fn, "a") as _pf:
@@ -1625,7 +1627,7 @@ def turn(line, rng, interface="terminal", speaker=None):
                    "I will hold what you say.") if cw else \
                   "I do not hold that yet. Can you say it another way? I will hold what you say."
             thought += "; confused -- asking the user like a child; observer stands ready if I stay unsure"
-        write_orbits(tok("Q: " + line + "\n"))
+        write_orbits("Q: " + line + "\n")
     # the thought itself is held (self-observation, XIV-7)
     # WHOSE VOICE: until Unison is its own observer, every reasoning
     # thread names the speaker plainly -- its own held memory, or the
@@ -1666,7 +1668,7 @@ def apply_feedback(question, answer, fb_text, interface="terminal", speaker=None
     with _STORELOCK:
         fb = fb_text.strip()
         if fb[:1].lower() == "y":
-            write_orbits(tok("Q: " + question + "\nA: " + answer + "\n") * GEN_C)
+            write_orbits("Q: " + question + "\nA: " + answer + "\n", repeat=GEN_C)
             hold_sentence(answer, "confirmed")
             # THE SHORTCUT (consolidation at CLOSURE, never at emission -- the
             # retention law): a fused whole that closed becomes a NEW memory
@@ -1683,7 +1685,7 @@ def apply_feedback(question, answer, fb_text, interface="terminal", speaker=None
             reason = fb[1:].strip(" :,-")
             if reason:
                 hold_sentence(reason, "told")
-                write_orbits(tok(reason + "\n") * GEN_B)
+                write_orbits(reason + "\n", repeat=GEN_B)
             with open(FEEDBACK_LOG, "a") as f:
                 f.write("CONF\t" + qkey(question, speaker) + "\t" + answer + "\n")
             pr = PENDING_REASON.pop(qkey(question, speaker), None)
@@ -2122,7 +2124,7 @@ def _teacher_relay(question, user_help="", speaker=None):
         log("RELAY", "observer answer rejected after retries", question[:80])
         return None
     a = a if a[-1:] in ".!?" else a + "."
-    write_orbits(tok("Q: " + question + "\nA: " + a + "\n") * GEN_C)
+    write_orbits(a, repeat=GEN_C)
     hold_sentence(a, "lesson:" + question.strip()[:80])
     # M3, STaR-filtered retention -- INSPIRATION: STaR (Zelikman et al.,
     # arXiv 2203.14465): keep only reasoning whose ANSWER verifies; the
@@ -2386,7 +2388,7 @@ def hear_audio(audio_bytes, suffix=".ogg", percept_owner=None):
             if sound:
                 st = " ".join(sound)
                 TOK_FREQ.update(sound)
-                write_orbits(tok("SOUND: " + st + "\nMEANS: " + text + "\n") * GEN_B)
+                write_orbits("SOUND: " + st + "\nMEANS: " + text + "\n", repeat=GEN_B)
                 hold_sentence("SOUND " + st + " means: " + text, "lesson:SOUND: " + st[:60])
                 with open(BASE + "/fold_ai/lessons/lessons_sound.txt", "a") as _sf:
                     _sf.write("Q: SOUND: " + st + "\nA: " + text + "\n")
@@ -2456,7 +2458,7 @@ def observe_video(video_bytes, caption="", suffix=".mp4"):
         if not d or stuttered(d):
             return None
         hold_sentence("I watched a video: " + d, "told")
-        write_orbits(tok("I watched a video: " + d + "\n") * GEN_B)
+        write_orbits("I watched a video: " + d + "\n", repeat=GEN_B)
         log("VIDEO", (caption or "(no caption)")[:60], d[:150])
         for b in b64s:                                   # every frame enters the eye
             sight = fold_see(_b64.b64decode(b))
@@ -2496,7 +2498,7 @@ def ingest_document(name, data, caption="", interface="discord"):
         with open(INBOX + "/" + safe, "w", errors="ignore") as f:
             f.write(text[:2_000_000])                  # IO bound
         tl = tok(text)
-        write_orbits(tl, max_ctx=GEN_C)                # prose depth, like the store
+        write_orbits(text, max_ctx=GEN_C)                # prose depth, like the store
         TOK_FREQ.update(w.lower() for w in tl)
         held = 0
         for s in re.split(r"(?<=[.!?])\s+", text):
@@ -2562,7 +2564,7 @@ def observe_image(images_b64, caption="", percept_owner=None):
                         " ...). Tell me what it shows, and I will know it from now on.")
             return None
         hold_sentence("I was shown an image: " + d, "told")
-        write_orbits(tok("I was shown an image: " + d + "\n") * GEN_B)
+        write_orbits("I was shown an image: " + d + "\n", repeat=GEN_B)
         log("VISION", (caption or "(no caption)")[:60], d[:150])
         # THE PAIRING: the new spectrum, closed by the observer's
         # description -- sight held at the prediction state, meaning as the
@@ -2571,7 +2573,7 @@ def observe_image(images_b64, caption="", percept_owner=None):
             st = " ".join(sight)
             TOK_FREQ.update(sight)   # new sight tokens join the census NOW,
                                      # so recognition works this session too
-            write_orbits(tok("SIGHT: " + st + "\nMEANS: " + d + "\n") * GEN_B)
+            write_orbits("SIGHT: " + st + "\nMEANS: " + d + "\n", repeat=GEN_B)
             hold_sentence("SIGHT " + st + " means: " + d, "lesson:SIGHT: " + st[:60])
             with open(BASE + "/fold_ai/lessons/lessons_sight.txt", "a") as f:
                 f.write("Q: SIGHT: " + st + "\nA: " + d + "\n")   # sight survives wakes
@@ -2670,7 +2672,7 @@ def _tutor_loop():
                         hold_sentence(telling + " means: " + meaning, "lesson:meaning")
                         with open(BASE + "/fold_ai/lessons/lessons_live.txt", "a") as f_live:
                             f_live.write("Q: " + telling + "\nA: " + response_proto + "\n")
-                        write_orbits(tok("Q: " + telling + "\nA: " + response_proto + "\n") * GEN_B)
+                        write_orbits("Q: " + telling + "\nA: " + response_proto + "\n", repeat=GEN_B)
                         
                         log("TUTOR", "general communication injected", telling[:60])
                         time.sleep(5)
@@ -2803,7 +2805,7 @@ def _selfplay_loop():
                             ov = set(content_words(gen)) & set(content_words(ref))
                             need = max(1, len(content_words(ref)) // GEN_B)
                             if len(ov) >= need:
-                                write_orbits(tok("Q: " + q + "\nA: " + gen + "\n") * GEN_B)
+                                write_orbits(gen, repeat=GEN_B)
                                 log("SELFPLAY", "generation VERIFIED and held", gen[:80])
                                 held_one = 1
                                 break
@@ -2818,7 +2820,7 @@ def _selfplay_loop():
                         set(content_words(hit[1][7:])) & set(content_words(q)))
                     log("SELFPLAY", "abduction " + ("solved" if ok else "missed"), q)
                     if not ok:
-                        write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * GEN_B)
+                        write_orbits(ref, repeat=GEN_B)
                     continue
                 if mode == 2 and len(batch) > 1:
                     # INDUCTION: two lessons sharing an informative word --
@@ -2835,7 +2837,7 @@ def _selfplay_loop():
                 overlap = set(content_words(ans)) & set(content_words(ref))
                 need = max(1, len(content_words(ref)) // GEN_B)
                 if len(overlap) >= need or ans.strip() == ref.strip():
-                    write_orbits(tok("Q: " + q + "\nA: " + ref + "\n") * GEN_B)
+                    write_orbits(ref, repeat=GEN_B)
                     log("SELFPLAY", "consolidated", q)
                 else:
                     record_correction(q, ref, register_user("selfplay"))
@@ -3127,7 +3129,7 @@ def _prose_watcher():
             for f in new[:2]:                    # two books per meal, bounded
                 text = open(f, errors="ignore").read()
                 tl = tok(text)
-                write_orbits(tl, max_ctx=3)      # prose depth, like the store
+                write_orbits(text, max_ctx=3)      # prose depth, like the store
                 build_neighbours(tl)
                 TOK_FREQ.update(w.lower() for w in tl)
                 TOTAL_TOKS += len(tl)
@@ -3264,10 +3266,10 @@ def _watch_lessons():
                     q, a = " ".join(q.split()), " ".join(a.split())
                     if stuttered(a):
                         continue                 # machine stutter never held
-                    write_orbits(tok("Q: " + q + "\nA: " + a + "\n") * GEN_C)
+                    write_orbits("Q: " + q + "\nA: " + a + "\n", repeat=GEN_C)
                     hold_sentence(a, "lesson:" + q[:80])
                 if pairs:
-                    write_orbits(tok(new), max_ctx=GEN_C)   # the FLOW: cross-turn
+                    write_orbits(new, repeat=GEN_C)   # the FLOW: cross-turn
                     # transitions of the whole block, not just isolated pairs
                     log("LESSONS", os.path.basename(f), "+" + str(len(pairs)) + " pairs ingested live (with flow)")
         except Exception as e:
