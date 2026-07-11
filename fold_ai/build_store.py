@@ -43,12 +43,11 @@ for f in sorted(glob.glob(BASE + "/fold_ai/diet/*.txt")):
     st["ingested"].append(f)
     words = tok(text)
     st["freq"].update(w.lower() for w in words)
-    chars = list(text)
-    for i in range(len(chars)-1):
-        nxt = chars[i+1]
+    for i in range(len(words)-1):
+        nxt = words[i+1]
         for L in range(PCTX+1):
             if i-L+1 < 0: break
-            st["stores"][L][bkey(tuple(t.lower() for t in chars[i-L+1:i+1]))][nxt] += 1
+            st["stores"][L][bkey(tuple(t.lower() for t in words[i-L+1:i+1]))][nxt] += 1
     for i in range(1, len(words)-1):
         w = words[i].lower()
         if len(w) >= 3:

@@ -204,7 +204,7 @@ def evaluate_conformation(sequence, secondary_structures, phi_angles, psi_angles
     # Hydrophobic score (minimize sum of pairwise distances of non-polar residues)
     hydrophobic_indices = [i for i, aa in enumerate(sequence) if aa in ('L', 'I', 'V', 'F', 'M', 'A', 'Y', 'W')]
     
-    score = 0.0
+    hydro_score = 0.0
     for idx_i in range(len(hydrophobic_indices)):
         for idx_j in range(idx_i + 1, len(hydrophobic_indices)):
             i = hydrophobic_indices[idx_i]
@@ -215,7 +215,69 @@ def evaluate_conformation(sequence, secondary_structures, phi_angles, psi_angles
                 dx = coord_i[0] - coord_j[0]
                 dy = coord_i[1] - coord_j[1]
                 dz = coord_i[2] - coord_j[2]
-                score += math.sqrt(dx*dx + dy*dy + dz*dz)
+                hydro_score += math.sqrt(dx*dx + dy*dy + dz*dz)
+                
+    # Electrostatic Score (Coulomb Potential)
+    charges = {}
+    for i, aa in enumerate(sequence):
+        if aa in ('R', 'K', 'H'):
+            charges[i] = 1.0
+        elif aa in ('D', 'E'):
+            charges[i] = -1.0
+            
+    electro_score = 0.0
+    charged_indices = list(charges.keys())
+    for idx_i in range(len(charged_indices)):
+        for idx_j in range(idx_i + 1, len(charged_indices)):
+            i = charged_indices[idx_i]
+            j = charged_indices[idx_j]
+            if abs(i - j) >= 4:
+                coord_i = ca_coords[i]
+                coord_j = ca_coords[j]
+                dx = coord_i[0] - coord_j[0]
+                dy = coord_i[1] - coord_j[1]
+                dz = coord_i[2] - coord_j[2]
+                dist = math.sqrt(dx*dx + dy*dy + dz*dz)
+                if dist > 0.1:
+                    electro_score += (charges[i] * charges[j]) / dist
+
+    # Beta-Sheet Pairing Propensity
+    beta_indices = [i for i, ss in enumerate(secondary_structures) if ss == 'E']
+    beta_score = 0.0
+    for idx_i in range(len(beta_indices)):
+        for idx_j in range(idx_i + 1, len(beta_indices)):
+            i = beta_indices[idx_i]
+            j = beta_indices[idx_j]
+            if abs(i - j) >= 4:
+                coord_i = ca_coords[i]
+                coord_j = ca_coords[j]
+                dx = coord_i[0] - coord_j[0]
+                dy = coord_i[1] - coord_j[1]
+                dz = coord_i[2] - coord_j[2]
+                beta_score += math.sqrt(dx*dx + dy*dy + dz*dz)
+                
+    # Explicit Main-Chain Hydrogen Bonding (V5)
+    # Extract N and C coordinates to evaluate directional H-bonds (N to C=O proxy)
+    n_coords = [a["coord"] for a in atoms if a["name"] == "N"]
+    c_coords = [a["coord"] for a in atoms if a["name"] == "C"]
+    
+    hbond_reward = 0.0
+    for i in range(len(n_coords)):
+        for j in range(len(c_coords)):
+            if abs(i - j) >= 4:
+                coord_n = n_coords[i]
+                coord_c = c_coords[j]
+                dx = coord_n[0] - coord_c[0]
+                dy = coord_n[1] - coord_c[1]
+                dz = coord_n[2] - coord_c[2]
+                dist = math.sqrt(dx*dx + dy*dy + dz*dz)
+                if dist <= 4.0:
+                    hbond_reward += 15.0 # Massive reward for exact atomic pairing
+                    
+    # The hydrophobic and beta scores are sums of distances (~ hundreds to thousands). 
+    # Electro score is typically small fractions. We multiply it by 150.0 to make it impactful.
+    # We subtract hbond_reward because score is minimized.
+    score = hydro_score + (150.0 * electro_score) + (1.5 * beta_score) - hbond_reward
                 
     # Steric clash detection (CA-CA distance < 3.2 Å)
     has_clash = False

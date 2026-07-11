@@ -236,7 +236,7 @@ def _key(tup):
 def write_orbits(text, max_ctx=None, repeat=1):
     with _STORELOCK:
         top = CTX_MAX if max_ctx is None else max_ctx
-        tl = list(text) * repeat
+        tl = tok(text) * repeat
         for i in range(len(tl) - 1):
             nxt = tl[i + 1]                          # original-case successor (voice)
             for L in range(0, top + 1):
@@ -665,7 +665,7 @@ def continue_orbit(ctx_tokens, rng, max_tokens=60, sentences=1):
             _ends += 1
             if _ends >= sentences:
                 break
-    s = "".join(out)
+    s = " ".join(out)
     return s
 
 
@@ -1009,7 +1009,7 @@ def babble_closure(records, cw, rng):
         segs = []
         for pi in range(len(records)):
             door_str = " ".join(doors[pi])
-            walk = continue_orbit(list(door_str + " "), rng, max_tokens=120, sentences=spans[pi])
+            walk = continue_orbit(tok(door_str + " "), rng, max_tokens=120, sentences=spans[pi])
             if walk:
                 seg = dedup(door_str + " " + walk)
                 seg = " ".join(re.split(r"(?<=[.!?])\s+", seg.strip())[:spans[pi]])
@@ -1166,8 +1166,8 @@ def reply(user_line, rng, face=None, speaker=None, touched=None):
     # atomicity), never a retrieved packet.
     _seed = []
     for _u, _a in RECENT[speaker or ""][-GEN_B:]:
-        _seed += list("Q: " + _u + "\nA: " + _a + "\n")
-    q_tokens = _seed + list("Q: " + user_line + "\nA: ")
+        _seed += tok("Q: " + _u + "\nA: " + _a + "\n")
+    q_tokens = _seed + tok("Q: " + user_line + "\nA: ")
     # THEORY BELONGS TO THE CORPUS, not to conversational vibes: a question
     # that binds corpus-tier text skips the sampler and goes to the channels
     # that read the source (matched corpus text, or the relay's grep law)
@@ -1543,7 +1543,7 @@ def turn(line, rng, interface="terminal", speaker=None):
             return "(silence)", "contentless; ignored"
         got = learn_fact(line, speaker)
         fact = flip_perspective(line if line[-1:] in ".!" else line + ".")
-        candidate = continue_orbit(list("Q: " + line + "\nA: "), rng)
+        candidate = continue_orbit(tok("Q: " + line + "\nA: "), rng)
         write_orbits(fact + "\n", repeat=GEN_C)
         hold_sentence(fact, "told:" + speaker if _deictic(line) else "told")
         write_orbits("q: " + line + "\na: " + fact + "\n", repeat=GEN_B)
@@ -1608,7 +1608,9 @@ def turn(line, rng, interface="terminal", speaker=None):
                 candidate = None                    # never parrot the telling back
             _sh = {w for w in set(content_words(line)) & set(t.lower() for t in tok(candidate or ""))
                    if len(tok(line)) < 6 or TOK_FREQ.get(w, 0) <= TOTAL_TOKS / (GEN_B ** 9)}
-            if candidate and not rejected(line, candidate) and _sh:
+            ctx_toks = tok("Q: " + line + "\nA: ")
+            is_reflex = bool(stores[min(CTX_MAX, len(ctx_toks))][_key(ctx_toks[-CTX_MAX:])])
+            if candidate and not rejected(line, candidate) and (_sh or is_reflex):
                 ans, thought = dedup(candidate), "telling held (perspective flipped); dialogue orbit bound back"
             else:
                 TEACHING_STATE[speaker] = {'telling': line, 'step': 1}

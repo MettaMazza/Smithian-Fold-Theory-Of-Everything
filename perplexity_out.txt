@@ -1,0 +1,9 @@
+Loading UnisonAI store...
+UnisonAI waking: reading everything once...
+  diet: 126 theory files at wake; prose arrives via the prebuilt store
+  merged prose store: +428429 sentences, +261767 words from 202 books
+awake: 2222816 orbits, 437652 held sentences, in 51s
+Testing perplexity on 301 characters...
+Results:
+Bits Per Byte (Cross-Entropy Loss): 2.0764
+Character Perplexity: 4.2175

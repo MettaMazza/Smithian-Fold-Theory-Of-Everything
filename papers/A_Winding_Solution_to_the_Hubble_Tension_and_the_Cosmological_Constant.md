@@ -14,7 +14,7 @@ We resolve the Hubble tension and derive the cosmological constant $\Omega_\Lamb
 ## 1. Introduction
 The Hubble constant $H_0$ measures the expansion rate of the universe. In modern cosmology, measurements from the nearby universe (using Cepheid variables and Type Ia supernovae, such as the SH0ES collaboration) and the early universe (using the Cosmic Microwave Background, such as the Planck satellite) disagree. SH0ES reports $H_{0, 	ext{late}} pprox 73.04 	ext{ km/s/Mpc}$, while Planck reports $H_{0, 	ext{early}} pprox 67.36 	ext{ km/s/Mpc}$. This $5\sigma$ discrepancy is known as the "Hubble tension."
 
-In the Smithian Fold Theory (SFT), the expansion rate is not a free parameters of a spatial continuum. It is a discrete flow partitioned over the SFT spatial lattice. The late and early expansion rates represent the two ends of the 2-adic covering ladder: the shallow color tower (late) and the deep Planck floor (early).
+In the Smithian Fold Theory (SFT), the expansion rate is not a free parameter of a spatial continuum. It is a discrete flow partitioned over the SFT spatial lattice. The late and early expansion rates represent the two ends of the 2-adic covering ladder: the shallow color tower (late) and the deep Planck floor (early).
 
 ---
 

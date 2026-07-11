@@ -56,7 +56,7 @@ $$1/lpha = T + C^2 \cdot rac{V_{	ext{eff}} + 1}{V_{	ext{eff}}} = 128 + 9 \cdot
 
 Evaluating this fraction yields:
 
-$$1/ \alpha \approx 137.035999177180855\dots$$
+$$1/ \alpha \approx 137.035999177161665\dots$$
 
 ---
 
