@@ -1,9 +1,0 @@
-2026-07-09 18:38:02+0100: Running with following config:
-logAllGTPCommunication = false
-logDir = gtp_logs
-logSearchInfo = false
-maxVisits = 100
-numSearchThreads = 1
-
-2026-07-09 18:38:02+0100: GTP Engine starting...
-2026-07-09 18:38:02+0100: KataGo v1.16.5

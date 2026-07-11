@@ -29,3 +29,16 @@ fold_ai/store_log.txt
 fold_ai/logs/
 Videos/
 articles/
+
+# scratch, logs, one-off patches, session transcripts — kept local, not published
+transcript*.jsonl
+patch*.py
+scratch*.py
+scratch/
+gtp_logs/
+probe_reports/
+beam.log
+.temp_validate.py
+perplexity_out.txt
+spectral_probe_out.txt
+fix_cutoff.py
