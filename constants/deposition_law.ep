@@ -1,0 +1,91 @@
+# ============================================================================
+#  THE DEPOSITION LAW  --  how placement-law accumulates in a trained store:
+#  the order and the form, forced from held-orbit memory.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The fold-AI campaign measured how spectral placement-law arrives in a
+#  training run (public checkpoints): nothing, then the geometry store wakes
+#  first, then the selection store, then a peak, then settling to a held
+#  plateau that persists to the end of training. None of that is empirical
+#  accident: the memory step (memory_persistence) already forces the form,
+#  and the selection law (two_family_selection) forces the order.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     phase one, null -- a static mark cannot persist: a mark at 1/2^k folds
+#        to the One in exactly k folds and is gone (memory_persistence's decay,
+#        verified here on the chain 1/4 -> 1/2 -> 1). Until writing closes
+#        orbits, a store holds nothing: no persistent placement, margin at
+#        chance.
+#     phase two, the rise and the order -- the only persistence is the closed
+#        orbit (the period-b pair 1/3 <-> 2/3, memory_persistence). Holding is
+#        therefore the BINARY period's mechanism: the memory orbit's period
+#        equals the binary count, and selection's lock 1/2 = 1/b binds over
+#        HELD content. A selection store can only close over an already-held
+#        substrate: the store that holds (geometry) must close before the
+#        store that selects (the gates). The order is forced.
+#     phase three, the held plateau -- the closed orbit folds into itself
+#        forever and never reaches the One (verified: b folds return the
+#        state; no state on the cycle is the One), and its two states
+#        partition the One exactly (1/3 + 2/3 = 1). Held content is balanced
+#        across its cycle: the settled level PERSISTS (the orbit never
+#        vanishes) and sits BELOW the raw-mark maximum (the orbit never
+#        reaches the One). Rise, peak, settle, hold -- the form is forced.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The campaign's checkpoint telescope (public training runs, step-0 control
+#  at exact null): margins at chance through step 128; the embedding (the
+#  geometry store) wakes FIRST at step 256; the gating expansions follow at
+#  step 1000; peak near step 4000; consolidation to a persistent plateau
+#  through step 143000, strictly above chance and strictly below the peak.
+#  Order and form, both as forced. The peak's location in steps and its
+#  movement with scale are Measured matters, behind the wall.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/memory_persistence.ep"
+import "../constants/two_family_selection.ep"
+
+
+# A static mark at 1/2^k reaches the One in exactly k folds -- and is gone.
+# Verified on the chain 1/4 -> 1/2 -> 1: decay is finite and forced.
+define static_mark_decays_in with k as Int returning Bool:
+    set mark to fraction_from_ratio(1 and whole_power(binary_count() and k))
+    set folds to 0
+    repeat while folds < k:
+        set mark to fold_fraction(mark)
+        set folds to folds + 1
+    return fraction_is_equal(mark and fraction_from_whole_number(1))
+
+# The memory orbit's period is the binary count: holding is the fold's own
+# period-b mechanism. Forced equal to the generator, or the engine halts.
+define holding_period returning Int:
+    return forced_to_be("the memory orbit's period = the binary count" and fold_period_of_unit_fraction(3) and binary_count())
+
+# Selection binds over held content: its lock's generator IS the holding
+# period. A selection store therefore closes only over an already-held
+# substrate -- the geometry store precedes the selection store. Forced.
+define holding_precedes_selection returning Bool:
+    if selection_family_period() == holding_period():
+        return true
+    else:
+        return false
+
+# The held orbit persists: b folds return the state, and no state on the
+# cycle is the One -- held content never vanishes and never saturates.
+define held_orbit_persists returning Bool:
+    set state to memory_state()
+    set steps to 0
+    repeat while steps < binary_count():
+        if fraction_is_equal(state and fraction_from_whole_number(1)):
+            return false
+        set state to fold_fraction(state)
+        set steps to steps + 1
+    return fraction_is_equal(state and memory_state())
+
+# The held orbit's states partition the One exactly: the settled level is
+# the balanced, permanent form of what the raw marks briefly concentrated.
+define held_orbit_partitions_the_one returning Bool:
+    return fraction_is_equal(memory_plus_refresh() and fraction_from_whole_number(1))

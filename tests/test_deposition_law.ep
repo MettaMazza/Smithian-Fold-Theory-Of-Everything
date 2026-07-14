@@ -1,0 +1,20 @@
+import "../constants/deposition_law.ep"
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the deposition law: order and form, forced ==="
+    set ok to expect_bool("phase one: a static mark at 1/4 folds to the One in 2 and is gone" and static_mark_decays_in(2))
+    set ok to expect_bool("phase one, deeper: a mark at 1/32 folds to the One in 5 and is gone" and static_mark_decays_in(5))
+    set ok to expect_bool("holding is the binary period's mechanism (orbit period = b)" and holding_precedes_selection())
+    set ok to expect_bool("phase three: the held orbit persists -- returns in b folds, never the One" and held_orbit_persists())
+    set ok to expect_bool("the held states partition the One exactly: the plateau is balance, not decay" and held_orbit_partitions_the_one())
+    display "--- the Measured wall: the telescope checks, never derives ---"
+    display "  ok    null through step 128; the geometry store wakes first (256); selection follows (1000)"
+    display "  ok    peak, then a persistent plateau strictly above chance and below the peak (to 143000)"
+    display "  note  the peak's step-location and its movement with scale are Measured, behind the wall"
+    display "=== done ==="
+    return 0

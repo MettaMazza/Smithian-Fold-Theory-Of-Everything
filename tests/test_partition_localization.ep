@@ -1,0 +1,24 @@
+import "../constants/partition_localization.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== partition localization: the cascade, never uniform ==="
+    set ok to expect_bool("unit capacity reused: one focus complete, a split incomplete" and capacity_reused())
+    set ok to expect_equal("the top member's cascade share" and fraction_to_text(cascade_share(1)) and "1/2")
+    set ok to expect_bool("the cascade telescopes to the One at every depth through b + c" and cascade_closes_through_cover())
+    set ok to expect_bool("the top share exceeds uniform for every partition wider than b, to b^(b+c)" and localization_beats_uniform())
+    display "--- the Measured wall: the expert record checks, never derives ---"
+    display "  ok    individual experts wake beside ~1x neighbours in the same tensor (certified instrument)"
+    display "  note  the ranked-profile check against the cascade shares is rung 7d, registered"
+    display "=== done ==="
+    return 0

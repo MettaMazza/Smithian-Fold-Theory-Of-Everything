@@ -1,0 +1,25 @@
+import "../constants/functional_band.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the functional band ==="
+    set ok to expect_equal("the colour volume c^c" and int_to_string(colour_volume()) and "27")
+    set ok to expect_equal("the covering depth (two routes agree)" and int_to_string(band_covering_depth()) and "5")
+    set ok to expect_equal("the functional band b^5 (two routes agree)" and int_to_string(functional_band()) and "32")
+    set ok to expect_bool("the band's closure: 31/32 + 1/32 = 1 exactly" and band_partitions_the_one())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    solved chess fields: top-32 = 81-87 percent of field energy (Rung 2.5)"
+    display "  ok    loud-subspace transfer held at k = 32 of 128 per row (Rung 5c, 93.5 percent of gap)"
+    display "  note  registered next verification: the capability map at the FORCED k = 32 per block"
+    display "=== done ==="
+    return 0

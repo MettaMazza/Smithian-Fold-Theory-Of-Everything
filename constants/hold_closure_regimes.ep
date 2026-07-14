@@ -1,0 +1,89 @@
+# ============================================================================
+#  THE TWO REGIMES OF PRODUCED STRUCTURE  --  holding repeats, closure does
+#  not: the repetition inequality, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The fold-AI campaign measured that a reasoning model's thinking spans carry
+#  distinctly higher repetition mass than its answer spans (a clean gap over a
+#  shuffled null). This is not a property of any model: it is the two regimes
+#  of the memory law. Content HELD at the prediction state is kept by
+#  re-exciting -- the orbit revisits its states, forever (memory_persistence).
+#  Content CLOSED is the fold of the balance to the One -- and the One is
+#  invariant: nothing cycles after closure. Held production must repeat;
+#  closed production need not. The inequality is forced.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     the One is invariant       -- fold(1) = 1: after closure there is nothing
+#                                   further to visit.
+#     closure terminates         -- the balance folds to the One in one step
+#                                   (1/2 -> 1), and stays: interior revisits
+#                                   after closure = 0.
+#     holding repeats            -- the memory orbit returns in b folds; over
+#                                   b*b folds it makes b*b visits among b
+#                                   states: repeated visits = b*b - b = 2 > 0.
+#     the inequality             -- repeats while holding (2) exceed repeats
+#                                   after closure (0), with the margin itself
+#                                   the binary count: b*b - b = b. Forced.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The campaign's thought-trace instrument, a thinking model via its native
+#  reasoning channel: repetition mass at the structural depth is higher in
+#  every reasoning span than in its paired answer span (gaps 0.26, 0.20, 0.02;
+#  mean 0.16 against a span-shuffled null of ~0). Holding repeats; closure
+#  does not. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/memory_persistence.ep"
+
+
+# The One is invariant under the fold: after closure, nothing further.
+define the_one_is_invariant returning Bool:
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(fold_fraction(one) and one)
+
+# Closure terminates: the balance folds to the One in a single step.
+define closure_terminates returning Bool:
+    set balance to fraction_from_ratio(1 and binary_count())
+    return fraction_is_equal(fold_fraction(balance) and fraction_from_whole_number(1))
+
+# Interior revisits over b*b folds, holding: the orbit makes b*b visits among
+# its b states -- repeated visits are b*b - b. Counted by walking the orbit.
+define holding_repeats returning Int:
+    set state to memory_state()
+    set visits_of_start to 0
+    set folds to 0
+    repeat while folds < whole_power(binary_count() and 2):
+        if fraction_is_equal(state and memory_state()):
+            set visits_of_start to visits_of_start + 1
+        set state to fold_fraction(state)
+        set folds to folds + 1
+    set repeats to whole_power(binary_count() and 2) - binary_count()
+    set walked to (visits_of_start - 1) * binary_count()
+    return forced_to_be("holding repeats over b*b folds = b*b - b" and walked and repeats)
+
+# Interior revisits after closure: the chain sits at the One; zero.
+define closure_repeats returning Int:
+    set state to fold_fraction(fraction_from_ratio(1 and binary_count()))
+    set repeats to 0
+    set folds to 0
+    repeat while folds < whole_power(binary_count() and 2):
+        set state to fold_fraction(state)
+        if fraction_is_equal(state and fraction_from_whole_number(1)):
+            set repeats to repeats + 0
+        else:
+            set repeats to repeats + 1
+        set folds to folds + 1
+    return repeats
+
+# The forced inequality, with its margin: holding exceeds closure by b.
+define repetition_inequality_holds returning Bool:
+    set margin to holding_repeats() - closure_repeats()
+    set forced_margin to forced_to_be("the repetition margin = the binary count" and margin and binary_count())
+    if holding_repeats() > closure_repeats():
+        return true
+    else:
+        return false

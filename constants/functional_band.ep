@@ -1,0 +1,69 @@
+# ============================================================================
+#  THE FUNCTIONAL BAND  --  how many spectral coefficients carry a held
+#  field's function: b^5 = 32 per block, forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The fold-AI campaign measured that deleting a model's loudest spectral
+#  coefficients destroys it while deleting the same number at random does
+#  almost nothing: the loud band IS the function. The size of that band is
+#  not free: the perceptual capacity of a held field is the covering count,
+#  b to the covering depth of the colour volume -- thirty-two -- the same
+#  forced count the engine's eye uses (top-2^5 sight tokens) and the solved
+#  chess fields concentrate into (top-32 = 81-87 percent of field energy,
+#  the campaign's standing exhibit).
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b, c, and counted covers) ──────
+#     the colour volume  = c^c = 27  -- the colour count's own cube (the
+#                          three-of-everything volume: three dimensions of
+#                          three).
+#     the covering depth = cover(27) = 5 -- the smallest number of doublings
+#                          that covers the colour volume; cross-checked
+#                          (forced_to_be) against the corpus's own identity
+#                          cover(c^c) = b + c.
+#     the band          = b^5 = 32 -- the covering count: the number of
+#                          doublings' worth of coefficients that hold a
+#                          field's functional content. Two independent
+#                          routes forced equal.
+#     the closure       = 31/32 + 1/32 = 1 -- the band's interior rungs and
+#                          the final rung partition the One exactly: nothing
+#                          leaks past the band.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The solved chess value fields concentrate 81-87 percent of their energy in
+#  the top 32 coefficients (the campaign's Rung 2.5 record). The loud-subspace
+#  transfer (Rung 5c) preserved the trained twin's advantage at k = 32 of 128
+#  coefficients per row (93.5 percent of the available gap). The registered
+#  next verification: the capability map re-run at the FORCED k = 32 per
+#  block -- prediction: function destroyed at the forced band, matched random
+#  deletion negligible. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# The colour volume: the colour count's own cube, c^c = 27.
+define colour_volume returning Int:
+    return whole_power(colour_count() and colour_count())
+
+# The covering depth of the colour volume: the smallest number of doublings
+# that covers it -- forced equal to b + c by the corpus's own identity.
+define band_covering_depth returning Int:
+    set by_cover to minimal_binary_cover(colour_volume())
+    set by_sum to binary_count() + colour_count()
+    return forced_to_be("covering depth of the colour volume = b + c" and by_cover and by_sum)
+
+# The functional band: b to the covering depth -- thirty-two. Two routes.
+define functional_band returning Int:
+    set by_depth to whole_power(binary_count() and band_covering_depth())
+    set by_sum to whole_power(binary_count() and binary_count() + colour_count())
+    return forced_to_be("functional band = b^cover(c^c) = b^(b+c)" and by_depth and by_sum)
+
+# The band's closure: the interior and the final rung partition the One
+# exactly -- (band-1)/band + 1/band = 1. Nothing leaks past the band.
+define band_partitions_the_one returning Bool:
+    set interior to fraction_from_ratio(functional_band() - 1 and functional_band())
+    set final_rung to fraction_from_ratio(1 and functional_band())
+    return fraction_is_equal(fraction_add(interior and final_rung) and fraction_from_whole_number(1))

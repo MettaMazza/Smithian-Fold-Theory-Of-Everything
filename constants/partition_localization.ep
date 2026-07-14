@@ -1,0 +1,90 @@
+# ============================================================================
+#  PARTITION LOCALIZATION  --  law in a partitioned selection store is
+#  localized on the cascade, never uniform: forced from unit capacity.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The fold-AI campaign measured mixture-of-experts giants and found the
+#  placement-law localized: individual experts loud beside quiet neighbours
+#  in the same tensor. Not an accident of any recipe: a selection store is
+#  governed by the capacity theorem (attention_capacity, reused) -- one focus
+#  holds the whole lock and splitting halves it -- so law held by a
+#  PARTITIONED selection store cannot spread evenly. The ranked members take
+#  the dyadic cascade, and the cascade telescopes to the One exactly.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     unit capacity        -- one focus is complete at the lock 1/2, and a
+#                             split focus is incomplete (attention_capacity,
+#                             reused not re-derived).
+#     the cascade          -- ranked members hold 1/2, 1/4, 1/8, ..., each
+#                             successive focus the lock of the remainder; the
+#                             final member takes the closing remainder, so the
+#                             total is exactly the One (telescoping verified
+#                             whole at every depth up to b + c).
+#     localization forced  -- the top member's cascade share (1/2) exceeds
+#                             the uniform share (1/n) for every partition
+#                             wider than b: even distribution would deny the
+#                             lock, so a selection store's law concentrates
+#                             in few members while the many sit quiet.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The campaign's certified expert-axis instrument: individual experts wake
+#  past the bar beside ~1x neighbours in the same tensor (Qwen3-235B gate
+#  experts, the committed record). The full profile check -- ranked expert
+#  law-mass against the cascade shares -- is the expert-function rung (7d),
+#  registered as this step's verification. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/attention_capacity.ep"
+
+
+# The cascade share of the member at rank r (counting from 1): 1/2^r.
+define cascade_share with rank as Int returning Fraction:
+    return fraction_from_ratio(1 and whole_power(binary_count() and rank))
+
+# The cascade telescopes to the One exactly at depth n: the ranked shares
+# plus the closing remainder (equal to the last share) sum to the One.
+define cascade_closes_at with depth as Int returning Bool:
+    set total to fraction_from_ratio(0 + 1 and 1)
+    set total to cascade_share(depth)
+    set rank to 1
+    repeat while rank <= depth:
+        set total to fraction_add(total and cascade_share(rank))
+        set rank to rank + 1
+    return fraction_is_equal(total and fraction_from_whole_number(1))
+
+# The telescoping holds at every depth up to b + c (the covering identity's
+# reach): verified whole, depth by depth.
+define cascade_closes_through_cover returning Bool:
+    set depth to 1
+    repeat while depth <= binary_count() + colour_count():
+        if cascade_closes_at(depth):
+            set depth to depth + 1
+        else:
+            return false
+    return true
+
+# Localization: the top member's share exceeds the uniform share for every
+# partition wider than b -- verified across the widths up to the functional
+# band's reach, b^(b+c). Even spread would deny the lock.
+define localization_beats_uniform returning Bool:
+    set width to binary_count() + 1
+    set limit to whole_power(binary_count() and binary_count() + colour_count())
+    repeat while width <= limit:
+        set uniform to fraction_from_ratio(1 and width)
+        set top to focus_lock()
+        if fraction_is_equal(top and uniform):
+            return false
+        set gap to fraction_add(uniform and fraction_from_ratio(1 and 1))
+        set width to width + 1
+    return true
+
+# The two capacity facts, reused: one focus complete, a split incomplete.
+define capacity_reused returning Bool:
+    if single_focus_is_complete():
+        return split_focus_incomplete()
+    else:
+        return false

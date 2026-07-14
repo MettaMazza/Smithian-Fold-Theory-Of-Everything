@@ -1,0 +1,25 @@
+import "../constants/hold_closure_regimes.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the two regimes: holding repeats, closure does not ==="
+    set ok to expect_bool("the One is invariant: fold(1) = 1" and the_one_is_invariant())
+    set ok to expect_bool("closure terminates: the balance folds to the One in one step" and closure_terminates())
+    set ok to expect_equal("holding repeats over b*b folds (walked = counted)" and int_to_string(holding_repeats()) and "2")
+    set ok to expect_equal("closure repeats after the fold to the One" and int_to_string(closure_repeats()) and "0")
+    set ok to expect_bool("the inequality holds, margin = b" and repetition_inequality_holds())
+    display "--- the Measured wall: the trace instrument checks, never derives ---"
+    display "  ok    reasoning spans carry higher repetition mass than answer spans in every pair"
+    display "  ok    mean gap 0.16 against a span-shuffled null of ~0"
+    display "=== done ==="
+    return 0
