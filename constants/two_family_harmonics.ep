@@ -1,0 +1,94 @@
+# ============================================================================
+#  THE TWO HARMONIC FAMILIES  --  why held structure has exactly two spectral
+#  homes, and what the second family's exact quantities are.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Trained neural weights measured in the fold-AI campaign concentrate their
+#  placement-law in exactly two spectral families -- the dyadic (Walsh) family
+#  and the smooth (cosine) family -- with no third found (the atlas and slant
+#  arms, committed in the campaign record). Two families is not an empirical
+#  accident: it is the generator count, forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3, and the fold) ────
+#     family count = 2 -- a harmonic family belongs to a counted period (an
+#                        orbit's cycle length forces its harmonics); the theory
+#                        has exactly the two generator periods (structural
+#                        counts), so exactly two families. Cross-checked: the
+#                        fold's own family (one) plus the further generators in
+#                        the stability window (b, b^2) (exactly one) = two.
+#     the binary family -- the fold's own doubling: the integer Walsh eye
+#                        (whole values, exact integer Parseval; the engine's
+#                        perception law, held in the record).
+#     the colour family -- the third-turn rotation of the period-3 orbit. Its
+#                        lawful quantities are the SQUARED harmonics, in the
+#                        domain: cos^2 = 1/b^2 = 1/4, verified by the whole
+#                        identity 4*cos^2 = 1, and its complement is the
+#                        ALREADY-FORCED electroweak mixing cos^2(theta_W)
+#                        = 1 - 1/b^2 (electroweak_mixing, reused not
+#                        re-derived): cos^2 + cos^2(theta_W) = 1 exactly.
+#     distinctness      -- the two periods are distinct whole numbers (2 != 3);
+#                        the whole-valued family and the {1/4, 3/4} family
+#                        share nothing.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The campaign's basis atlas measured exactly two law-bearing families across
+#  twelve public models (dyadic and smooth; the slant arm excludes a third).
+#  The identification -- measured dyadic-loud class = the binary family,
+#  measured smooth-loud class = the colour family -- is this step's claim at
+#  the wall. NOT forced here: which tensor class of a trained model writes in
+#  which family (the selection law) -- the corpus's next target.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/electroweak_mixing.ep"
+
+
+# The number of further generators in the stability window (b, b^2): the
+# integers strictly between the binary count and its square. Exactly one.
+define further_generators_in_window returning Int:
+    set upper to whole_power(binary_count() and 2)
+    set count to 0
+    set candidate to binary_count() + 1
+    repeat while candidate < upper:
+        set count to count + 1
+        set candidate to candidate + 1
+    return count
+
+# The harmonic family count: one family per generator period. Route A counts
+# the distinct generator periods; route B counts the fold's own family plus
+# the further generators the stability window admits. Forced equal. Two.
+define harmonic_family_count returning Int:
+    set by_generators to 0
+    if binary_count() == colour_count():
+        set by_generators to 1
+    else:
+        set by_generators to 2
+    set by_window to 1 + further_generators_in_window()
+    return forced_to_be("harmonic family count = generator count" and by_generators and by_window)
+
+# The colour family's exact cosine-squared: the third-turn's squared harmonic,
+# 1/b^2 = 1/4 -- in the domain, exact.
+define colour_cos_squared returning Fraction:
+    return fraction_from_ratio(1 and whole_power(binary_count() and 2))
+
+# The whole-number identity of the third turn: 4 * cos^2 = 1, exactly.
+define third_turn_identity_holds returning Bool:
+    set four to fraction_from_whole_number(whole_power(binary_count() and 2))
+    set product to fraction_multiply(four and colour_cos_squared())
+    return fraction_is_equal(product and fraction_from_whole_number(1))
+
+# The colour family's complement is the already-forced electroweak mixing:
+# cos^2 + cos^2(theta_W) = 1 exactly (reuse, not re-derivation).
+define colour_family_meets_electroweak returning Bool:
+    set total to fraction_add(colour_cos_squared() and cos_squared_mixing())
+    return fraction_is_equal(total and fraction_from_whole_number(1))
+
+# The two families are distinct: their periods are different whole numbers.
+define families_distinct returning Bool:
+    if binary_count() == colour_count():
+        return false
+    else:
+        return true

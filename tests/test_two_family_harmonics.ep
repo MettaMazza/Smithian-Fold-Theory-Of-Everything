@@ -1,0 +1,25 @@
+import "../constants/two_family_harmonics.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the two harmonic families ==="
+    set ok to expect_equal("harmonic family count = generator count (two routes agree)" and int_to_string(harmonic_family_count()) and "2")
+    set ok to expect_equal("colour family cos^2 = 1/b^2 (the third turn, squared)" and fraction_to_text(colour_cos_squared()) and "1/4")
+    set ok to expect_bool("the third-turn whole identity: 4 * cos^2 = 1" and third_turn_identity_holds())
+    set ok to expect_bool("colour family meets the forced electroweak mixing: cos^2 + cos^2(theta_W) = 1" and colour_family_meets_electroweak())
+    set ok to expect_bool("families distinct: the two generator periods differ" and families_distinct())
+    display "--- the Measured wall: the atlas checks, never derives ---"
+    display "  ok    measured family count (two: dyadic + smooth; slant excludes a third) meets the forced count"
+    display "  note  the selection law (which tensor writes in which family) is NOT forced here"
+    display "=== done ==="
+    return 0

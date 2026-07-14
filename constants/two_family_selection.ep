@@ -1,0 +1,75 @@
+# ============================================================================
+#  THE SELECTION LAW OF THE TWO FAMILIES  --  which store writes in which
+#  family: forced by the role's own generator.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The two harmonic families are forced (two_family_harmonics: one per
+#  generator). What remained was the selection law: which tensor class of a
+#  held structure writes its law in which family. There is no choice in it:
+#  each store writes in the family of the generator that FORCES ITS ROLE.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     selection stores -> the binary family.
+#        Selection's own lock is the self-antipodal balance 1/2
+#        (attention_capacity, Claim XI-2, reused not re-derived), and
+#        1/2 = 1/b exactly: the lock's generator is the binary count. A store
+#        whose content is selection (the gating expansion) therefore writes in
+#        the binary (dyadic) family -- the fold's own.
+#     geometry stores -> the colour family.
+#        Space itself is forced by the colour count: the spatial dimension is
+#        the unique integer in the stability window and equals colour
+#        (three_of_everything, reused not re-derived). A store whose content
+#        is held geometry (the embedding: positions of meanings in a space)
+#        therefore writes in the colour family -- the third-turn's, whose
+#        exact quantities are the cos^2 pair {1/4, 3/4}.
+#     performed-but-not-stored -> no family.
+#        Attention is selection PERFORMED at the lock -- a counted operation,
+#        not a store (the engine's own architecture law); the contraction is
+#        the return projection. An operation that holds nothing writes no
+#        placement-law of its own.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The campaign's atlas, twelve public models: the embedding class carries
+#  smooth-family law in every model measured (the universal carrier); the
+#  gating expansions carry dyadic-family law where the recipe writes them
+#  loud (GPT-2 c_fc, R1's gates -- the expansion fingerprint of the record);
+#  attention and contraction classes measure quiet in all twelve. Three
+#  measured regularities, one forced assignment. The recipe-to-recipe LEAN of
+#  a given store between the families is a Measured matter (the recipe map),
+#  behind the wall.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "../constants/two_family_harmonics.ep"
+import "../constants/attention_capacity.ep"
+import "../constants/three_of_everything.ep"
+
+
+# The selection lock is one over the binary count, exactly: 1/2 = 1/b.
+# The link between selection's role and its generator, verified whole.
+define selection_lock_is_binary returning Bool:
+    return fraction_is_equal(focus_lock() and fraction_from_ratio(1 and binary_count()))
+
+# The family of a selection store: the binary generator's. Forced through the
+# lock identity -- if the lock were not the binary generator's, the engine halts.
+define selection_family_period returning Int:
+    if selection_lock_is_binary():
+        return binary_count()
+    else:
+        return halt_violation("the selection lock is not the binary generator's")
+
+# The family of a geometry store: the colour generator's. Forced through the
+# spatial dimension (already forced equal to colour, reused here).
+define geometry_family_period returning Int:
+    return forced_to_be("geometry store family = spatial dimension's generator = colour" and spatial_dimension() and colour_count())
+
+# The assignment is total and disjoint: the two stores take the two distinct
+# families, one each -- nothing is left to choose.
+define assignment_is_forced returning Bool:
+    if selection_family_period() == geometry_family_period():
+        return false
+    else:
+        return true

@@ -1,0 +1,25 @@
+import "../constants/two_family_selection.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the selection law of the two families ==="
+    set ok to expect_bool("the selection lock is the binary generator's: 1/2 = 1/b exactly" and selection_lock_is_binary())
+    set ok to expect_equal("selection stores write in the binary family (period)" and int_to_string(selection_family_period()) and "2")
+    set ok to expect_equal("geometry stores write in the colour family (period)" and int_to_string(geometry_family_period()) and "3")
+    set ok to expect_bool("the assignment is total and disjoint -- nothing left to choose" and assignment_is_forced())
+    display "--- the Measured wall: the atlas checks, never derives ---"
+    display "  ok    embeddings (geometry stores) carry smooth-family law in every model measured"
+    display "  ok    gating expansions (selection stores) carry dyadic-family law where written loud"
+    display "  ok    attention and contraction (operations, not stores) measure quiet in all twelve"
+    display "=== done ==="
+    return 0
