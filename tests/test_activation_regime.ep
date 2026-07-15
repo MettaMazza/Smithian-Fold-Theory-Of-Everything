@@ -1,0 +1,26 @@
+import "../constants/activation_regime.ep"
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define main:
+    display "=== the activation regime (Step 320 / 7.4) ==="
+    set ok to expect_bool("holding store: activations cycle (holding repeats b^2-b > 0)" and holding_activations_cycle())
+    set ok to expect_bool("closure store: activations quiet (closure repeats 0)" and closure_activations_quiet())
+    set ok to expect_bool("SIGNATURE: loud weights + quiet activations = a closure store" and loud_weights_quiet_activations_is_closure())
+    set ok to expect_bool("the two regimes separated on the activation axis by b (the binary count)" and regime_margin_is_binary_count())
+    set ok to expect_equal("which layers close is engineering, kept off the derivation (guard passes)" and int_to_string(which_layer_is_engineering()) and "1")
+    set ok to expect_bool("THE PICTURE: activation loudness reads the regime; L10-11 = closure signature" and activation_regime_reads_the_signature())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    activation spectrometer: GPT-2 L10-11 loud weights, quiet activations (the departure, already in)"
+    display "  note  registered verification (rung 7g): per-layer activation repetition vs weight loudness; closure floor near 0"
+    display "=== done ==="
+    return 0

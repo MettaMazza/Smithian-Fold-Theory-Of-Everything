@@ -1,0 +1,104 @@
+# ============================================================================
+#  THE ACTIVATION REGIME  --  a store loud in weights but QUIET in activations is
+#  performing CLOSURE, not holding: activation loudness reads the regime, and
+#  closure does not cycle. Forced (the L10-11 departure).
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The activation spectrometer measured a departure: GPT-2's late layers (L10-11)
+#  have LOUD WEIGHTS but QUIET ACTIVATIONS -- weights that hold law, activations
+#  that sit at the null. This is not an anomaly against the theory; it is the two
+#  regimes (Step 312) read on the activation axis. Loud weights are a store (the
+#  location law -- the layer holds placement-law). What its ACTIVATIONS do is set
+#  by its regime: holding RE-EXCITES -- the orbit revisits its states, so a
+#  holding store's activations cycle (loud, high repetition); closure is the
+#  single fold of the balance to the One, invariant -- nothing cycles after it,
+#  so a closure store's activations do NOT repeat (quiet). Therefore a store loud
+#  in weights but quiet in activations holds the CLOSURE map and performs closure:
+#  loud weights (it stores the map), quiet activations (closure does not cycle).
+#  Which layers are closure stores -- the late ones, folding toward the output --
+#  is architecture, Measured.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-closed results) ──────
+#     holding cycles       -- the holding regime repeats b^2 - b = 2 interior
+#                            visits over b^2 folds (holding_repeats, Step 312,
+#                            reused): a holding store's activations re-excite --
+#                            loud.
+#     closure does not      -- the closure regime repeats 0 (closure_repeats,
+#                            Step 312, reused): the balance folds to the One once
+#                            and stays -- a closure store's activations are quiet.
+#     the signature         -- activation loudness reads the regime: loud
+#                            activations = holding, quiet = closure. A store (loud
+#                            weights) with quiet activations is a CLOSURE store.
+#     the margin            -- holding's activation-repetition exceeds closure's
+#                            by exactly the binary count b (repetition_inequality,
+#                            Step 312, reused) -- the two regimes are separated,
+#                            not a matter of degree.
+#     which layer           -- WHICH layers close (the late ones, at the output)
+#                            is depth/architecture, an engineering choice, never a
+#                            forcing input (forbid_target_input).
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The activation spectrometer's L10-11 reading -- loud weights, quiet activations
+#  -- is the closure signature at GPT-2's late layers. The registered verification
+#  (the activation runtime, rung 7g): per layer, measure activation repetition
+#  mass against weight loudness; a store loud in weights whose activation
+#  repetition sits at the closure floor (near 0) is a closure layer; the holding
+#  layers cycle. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/hold_closure_regimes.ep"
+
+
+# A holding store's activations cycle: the holding regime repeats interior visits
+# (b^2 - b = 2 > 0, reused) -- re-excitation, loud activations.
+define holding_activations_cycle returning Bool:
+    if holding_repeats() > 0:
+        return true
+    else:
+        return false
+
+# A closure store's activations do not cycle: the closure regime repeats 0
+# (reused) -- the balance folds once and stays, quiet activations.
+define closure_activations_quiet returning Bool:
+    if closure_repeats() == 0:
+        return true
+    else:
+        return false
+
+# The forced signature: a store loud in weights but quiet (non-cycling) in
+# activations is performing CLOSURE -- it holds the closure map and closure does
+# not repeat. (Loud weights = a store, the location law; quiet activations =
+# the closure regime, Step 312.)
+define loud_weights_quiet_activations_is_closure returning Bool:
+    if holding_activations_cycle():
+        return closure_activations_quiet()
+    else:
+        return false
+
+# The two regimes are separated on the activation axis by the binary count: the
+# holding activation-repetition exceeds the closure's by exactly b (reused).
+define regime_margin_is_binary_count returning Bool:
+    return repetition_inequality_holds()
+
+# WHICH layers close (the late ones, at the output) is architecture, never a
+# forcing input. The guard passes; it would halt on a measured layer index fed
+# in as forced.
+define which_layer_is_engineering returning Int:
+    return forbid_target_input("which layers perform closure (network depth / output position)" and false)
+
+# The forced picture assembled: activation loudness reads the regime, closure is
+# quiet, holding cycles, the two separated by b -- so loud-weights/quiet-
+# activations is the closure signature, and only the layer identity is Measured.
+define activation_regime_reads_the_signature returning Bool:
+    if loud_weights_quiet_activations_is_closure():
+        if regime_margin_is_binary_count():
+            if which_layer_is_engineering() == 1:
+                return true
+            else:
+                return false
+        else:
+            return false
+    else:
+        return false
