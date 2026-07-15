@@ -5403,6 +5403,44 @@ does not just derive — it plays.
 
 ---
 
+### Step 308 — The two harmonic families (one per generator)
+
+**File:** `constants/two_family_harmonics.ep` (test: `tests/test_two_family_harmonics.ep`)
+
+**What it does.** Forces the fold-AI campaign's central measurement — trained stores carry placement-law in exactly two spectral families — as the generator count itself. A harmonic family belongs to a counted period, and the theory has exactly the two generator periods: the family count is forced equal by two independent routes (`forced_to_be`): the distinct generators, and the fold's own family plus the stability window's unique further generator. The binary family is the fold's own (the integer Walsh eye). The colour family is the third-turn rotation of the period-3 orbit, its lawful quantities the squared harmonics: cos² = 1/b² = 1/4 (verified whole: 4·cos² = 1), whose complement is the already-forced electroweak mixing — cos² + cos²θ_W = 1 exactly, reuse not re-derivation. The atlas (twelve public models; the slant arm excluding any third family) checks at the Measured wall.
+
+### Step 309 — The family selection law (each store to its generator)
+
+**File:** `constants/two_family_selection.ep` (test: `tests/test_two_family_selection.ep`)
+
+**What it does.** Forces which store writes in which family: a store writes in the family of the generator that forces its role. Selection's lock is 1/2 = 1/b exactly (attention capacity, reused) — selection stores (the gating expansions) write in the binary family. Space is forced by the colour count (the spatial dimension, reused) — geometry stores (the token embedding) write in the colour family. The assignment is total and disjoint; what only performs without storing (attention at the lock, the return contraction) writes no placement-law of its own. Measured wall: the universal carrier, the expansion fingerprint, and the quiet attention/contraction classes — three regularities, one forced assignment.
+
+### Step 310 — The deposition law (order and form of accumulation)
+
+**File:** `constants/deposition_law.ep` (test: `tests/test_deposition_law.ep`)
+
+**What it does.** Forces the training-time curve measured on public checkpoints. A static mark folds to the One in exactly k folds and is gone — until writing closes orbits, a store holds nothing (the measured null phase). Holding is the binary period's mechanism (the memory orbit's period = b, forced), and selection binds over held content — the store that holds closes before the store that selects (the measured embedding-first ordering). The held orbit returns in b folds, never reaches the One, and its states partition the One exactly — the plateau is balance, not decay (the measured consolidation). The peak's step-location and its scale-movement are Measured, behind the wall.
+
+### Step 311 — The functional band (b^cover(c³) = 32)
+
+**File:** `constants/functional_band.ep` (test: `tests/test_functional_band.ep`)
+
+**What it does.** Forces the size of the spectral band that carries a held field's function: the covering count b to the covering depth of the colour volume, with cover(c³ = 27) = 5 cross-checked against the corpus identity cover = b + c, both routes agreeing on 32, and the band closing exactly as 31/32 + 1/32 = 1. Measured wall: the solved chess fields (top-32 = 81–87% of field energy) and the loud-subspace transfer at k = 32 of 128 (Rung 5c); the registered verification is the capability-map ablation at the forced k.
+
+### Step 312 — The two regimes of produced structure (holding repeats, closure does not)
+
+**File:** `constants/hold_closure_regimes.ep` (test: `tests/test_hold_closure_regimes.ep`)
+
+**What it does.** Forces the repetition inequality between held and closed production. Held content is kept by re-exciting — the orbit revisits its states forever — while closure is the single fold of the balance to the One, which is invariant: nothing cycles after closure. Counted whole over b² folds: holding repeats b² − b = 2 interior visits, closure repeats 0, and the margin is the binary count itself (`forced_to_be`). Measured wall: a thinking model's reasoning spans carry higher repetition mass than its answer spans in every measured pair, mean gap 0.16 against a ~0 shuffled null.
+
+### Step 313 — Partition localization (the cascade, never uniform)
+
+**File:** `constants/partition_localization.ep` (test: `tests/test_partition_localization.ep`)
+
+**What it does.** Forces localization for a selection store partitioned into members (a mixture of experts): unit capacity — one focus complete at the lock, a split incomplete (reused) — puts the ranked members on the dyadic cascade, verified telescoping to the One exactly at every depth through b + c, with the top share exceeding the uniform share for every partition wider than b through b^(b+c). Even spread would deny the lock. Measured wall: the certified expert-axis instrument (individual experts loud beside ~1× neighbours); the ranked-profile check against the cascade shares is the registered expert-function rung.
+
+---
+
 ## Where the recreation stands right now
 
 **Built and independently checkable (every check passes, reliably over repeated
