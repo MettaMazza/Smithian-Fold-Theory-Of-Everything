@@ -1,0 +1,93 @@
+# ============================================================================
+#  THE DEPOSITION APPROACH FORM  --  the training-time curve approaches its
+#  plateau by the fold's own halving (dyadic 2^-k), not a logistic; the timescale
+#  is Measured, like a half-life. Forced (A2).
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Step 310 forced the deposition curve's ORDER and qualitative form (null →
+#  rise → peak → plateau) and placed the peak's step-location and scale-movement
+#  behind the Measured wall. What remained (A2): the FUNCTIONAL form of the
+#  approach — a logistic crossing at the 1/2 lock, or a 2^-k halving? The fold
+#  settles it. The fold is two-to-one, losing exactly one bit per step (the arrow
+#  of time), so any excess over a fold fixed point is multiplied by 1/b each
+#  step — the identical halving that radioactive decay is (Step 66, reused):
+#  remaining(k) = 1/b^k = 1/2^k. So the deposition curve's decay segments — the
+#  null-phase residual of static marks, and the peak → plateau consolidation of
+#  the excess — approach by DYADIC HALVING, not a logistic. What is Measured is
+#  only the TIMESCALE: how many training steps map to one fold-step (the
+#  deposition "half-life"), set by the recipe's optimizer — exactly as a
+#  radioactive half-life in seconds is a measured, per-species value.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     the halving          -- each fold-step multiplies the survivors/excess by
+#                            1/b (half_life_halves, Step 66, reused): the fold is
+#                            two-to-one, one bit lost per step.
+#     the form             -- the deviation remaining after k fold-steps is
+#                            1/b^k = 1/2^k (remaining_after, Step 66, reused): a
+#                            geometric DYADIC approach, the fold's own contraction
+#                            -- the crossing form is 2^-k, not a logistic.
+#     the per-step ratio   -- one fold-step leaves 1/b exactly (deviation after 1
+#                            = 1/b), forced two ways: the reused halving, and one
+#                            over the binary count.
+#     the timescale        -- how many training steps make one fold-step (the
+#                            "half-life") is the recipe's, never a forcing input
+#                            (forbid_target_input) -- the peak-location and
+#                            scale-movement of Step 310 are this one Measured
+#                            timescale, the fold fixing the form and the recipe
+#                            fixing only the clock.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The checkpoint telescope's curve (public runs): rise, peak, decay to a
+#  persistent plateau. The registered verification (the deposition-law fitter,
+#  rung 7f): fit the measured margin(step) segments against the forced dyadic
+#  2^-k form with a single Measured timescale per (model, scale), and against the
+#  logistic alternative — prediction: the dyadic form holds, the timescale is the
+#  only free (Measured) quantity, and it is what moves with scale. Measured,
+#  behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/radioactive_decay.ep"
+
+
+# The approach halves each fold-step: the deviation from the plateau (and the
+# null-phase residual) is multiplied by 1/b each step -- the fold's own halving,
+# reused from radioactive decay. Dyadic, not logistic.
+define approach_is_dyadic_halving returning Bool:
+    return half_life_halves()
+
+# The deviation remaining after k fold-steps: 1/b^k = 1/2^k (reused). The forced
+# FUNCTIONAL form of the crossing -- the fold's geometric contraction.
+define deviation_after with folds as Int returning Fraction:
+    return remaining_after(folds)
+
+# The per-step ratio is 1/b = 1/2, forced two ways: one fold-step of the reused
+# halving leaves the deviation at exactly one over the binary count.
+define approach_ratio returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+define approach_ratio_is_one_over_b returning Bool:
+    return fraction_is_equal(deviation_after(1) and approach_ratio())
+
+# The dyadic form persists over every depth: the deviation strictly halves,
+# 1/2 > 1/4 > 1/8 ... never reaching zero (checked through the covering depth).
+define halving_persists_through_cover returning Bool:
+    set depth to 1
+    set prev to fraction_from_whole_number(1)
+    repeat while depth <= binary_count() + colour_count():
+        set here to deviation_after(depth)
+        set ratioed to fraction_multiply(prev and approach_ratio())
+        if fraction_is_equal(here and ratioed):
+            set prev to here
+            set depth to depth + 1
+        else:
+            return false
+    return true
+
+# The TIMESCALE -- training-steps per fold-step (the deposition "half-life") --
+# is Measured per recipe (the optimizer), never a forcing input; it is exactly
+# the peak-location and scale-movement Step 310 placed behind the wall. The fold
+# fixes the FORM; the recipe fixes only the clock.
+define timescale_is_measured returning Int:
+    return forbid_target_input("training-steps-per-fold-step (the deposition half-life / rate)" and false)

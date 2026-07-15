@@ -1,0 +1,100 @@
+# ============================================================================
+#  EXPERT QUANTIZATION  --  a partitioned selection store's LOUD head is its top
+#  b+c members on the cascade, carrying exactly the band interior (31/32); the
+#  rest are the quiet tail (1/32). The loud count is forced; the member count is
+#  engineering. Forced (A4).
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Step 313 forced that a partitioned selection store (a mixture of experts)
+#  puts its ranked members on the dyadic cascade. What remained (A4): how MANY
+#  members are loud, and how the loud fraction relates to the locks. The answer
+#  is the cascade meeting the band. The cumulative cascade mass through depth k
+#  is 1 - 1/b^k; it reaches the FUNCTIONAL BAND's interior (band-1)/band = 31/32
+#  exactly at depth b+c (the covering depth, Step 311), leaving the band's final
+#  rung 1/band = 1/32 as the tail. So a store's LOUD head is its top b+c members
+#  (they carry the band interior), and everything below is the quiet tail. The
+#  loud COUNT is forced (b+c); the TOTAL member count is a recipe's choice
+#  (architecture), so the loud FRACTION (b+c)/N is Measured given the width --
+#  exactly as the block's native window is engineering while its band is forced.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-closed results) ──────
+#     the cascade          -- ranked members hold 1/b, 1/b^2, ... (cascade_share,
+#                            Step 313, reused): powers of the closed lock.
+#     cumulative mass       -- the top-k members carry the sum of their shares.
+#     the loud head         -- that cumulative reaches the band interior
+#                            (band-1)/band = 31/32 (functional_band, Step 311,
+#                            reused) EXACTLY at depth b+c -- forced_to_be equal
+#                            to the covering depth by the depth that lands it.
+#     the quiet tail        -- the remaining mass is 1 minus the head = 1/band =
+#                            1/32, the band's own final rung (band_partitions,
+#                            Step 311, reused): head and tail partition the One.
+#     the member count      -- how many members a store has is architecture, an
+#                            engineering choice, never a forcing input
+#                            (forbid_target_input) -- so the loud FRACTION
+#                            (b+c)/N is Measured given N, the loud COUNT forced.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The certified expert-axis instrument already reads individual experts loud
+#  beside ~1x neighbours in the same tensor (Qwen3-235B gates, the committed
+#  record). The registered verification (rung 7d, `expert_probe.py`): rank each
+#  layer's experts by law-mass and check the loud head against the top-(b+c)
+#  cascade prefix and the tail against 1/32; correlate loud experts with routing
+#  domain. The loud fraction per layer is Measured (needs N); that the loud head
+#  is the top b+c is forced. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/functional_band.ep"
+import "../constants/partition_localization.ep"
+
+
+# The cumulative cascade mass carried by the top `depth` members: the sum of
+# their shares 1/b + 1/b^2 + ... through the given depth.
+define cascade_mass_through with depth as Int returning Fraction:
+    set total to fraction_from_whole_number(0)
+    set rank to 1
+    repeat while rank <= depth:
+        set total to fraction_add(total and cascade_share(rank))
+        set rank to rank + 1
+    return total
+
+# The functional band's interior: (band-1)/band = 31/32 (reused from Step 311).
+define band_interior returning Fraction:
+    return fraction_from_ratio(functional_band() - 1 and functional_band())
+
+# The loud head reaches the band interior exactly at depth b+c: the top-(b+c)
+# members carry 31/32 of the store's law.
+define loud_head_reaches_band_interior returning Bool:
+    return fraction_is_equal(cascade_mass_through(binary_count() + colour_count()) and band_interior())
+
+# The loud-head depth, forced = the covering depth b+c: the unique cascade depth
+# whose cumulative mass equals the band interior. forced_to_be, or the engine halts.
+define loud_head_depth returning Int:
+    set depth to 1
+    repeat while depth <= functional_band():
+        if fraction_is_equal(cascade_mass_through(depth) and band_interior()):
+            return forced_to_be("loud-head depth = covering depth b+c" and depth and binary_count() + colour_count())
+        set depth to depth + 1
+    return halt_violation("the cascade never reaches the band interior")
+
+# The quiet tail: the mass below the loud head, 1 - 31/32 = 1/band = 1/32.
+define quiet_tail returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and cascade_mass_through(binary_count() + colour_count()))
+
+# The tail is exactly the band's final rung 1/band (reused Step 311 closure).
+define tail_is_final_rung returning Bool:
+    return fraction_is_equal(quiet_tail() and fraction_from_ratio(1 and functional_band()))
+
+# The loud head and the quiet tail partition the One: 31/32 + 1/32 = 1.
+define head_and_tail_partition_one returning Bool:
+    set head to cascade_mass_through(binary_count() + colour_count())
+    return fraction_is_equal(fraction_add(head and quiet_tail()) and fraction_from_whole_number(1))
+
+# The total member (expert) count is engineering -- a recipe's choice, never a
+# forcing input. So the loud FRACTION (b+c)/N is Measured given N; the loud
+# COUNT (b+c) is forced. The guard passes; it would halt on a measured count fed
+# in as forced.
+define member_count_is_engineering returning Int:
+    return forbid_target_input("MoE member (expert) count (architecture width)" and false)

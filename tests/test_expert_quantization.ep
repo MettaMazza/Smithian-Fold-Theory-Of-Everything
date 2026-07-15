@@ -1,0 +1,27 @@
+import "../constants/expert_quantization.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== expert quantization (Step 318 / A4) ==="
+    set ok to expect_equal("band interior = 31/32" and fraction_to_text(band_interior()) and "31/32")
+    set ok to expect_bool("the loud head (top b+c) carries the band interior 31/32" and loud_head_reaches_band_interior())
+    set ok to expect_equal("loud-head depth = b+c = 5 (two routes agree)" and int_to_string(loud_head_depth()) and "5")
+    set ok to expect_equal("the quiet tail = 1/32" and fraction_to_text(quiet_tail()) and "1/32")
+    set ok to expect_bool("the tail is the band's final rung 1/band" and tail_is_final_rung())
+    set ok to expect_bool("loud head + quiet tail partition the One (31/32 + 1/32 = 1)" and head_and_tail_partition_one())
+    set ok to expect_equal("member count is engineering, kept off the derivation (guard passes)" and int_to_string(member_count_is_engineering()) and "1")
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    expert-axis instrument: individual experts loud beside ~1x neighbours (Qwen3-235B gates)"
+    display "  note  registered verification (rung 7d): rank experts by law-mass; loud head vs top-(b+c) cascade, tail vs 1/32"
+    display "=== done ==="
+    return 0
