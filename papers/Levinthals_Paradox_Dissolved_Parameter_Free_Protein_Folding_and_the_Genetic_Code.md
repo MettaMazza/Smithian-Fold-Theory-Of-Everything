@@ -11,7 +11,7 @@
 
 ## Abstract
 
-We present a parameter-free, zero-axiom topological theory of 3D protein folding and genetic structures derived from the Smithian Fold ($x \mapsto 2x \pmod 1$). Modern structural biology has relied on massive deep learning models (such as DeepMind's AlphaFold series) containing over 21 million trained weights to predict 3D atomic coordinates from database co-evolutionary priors. We demonstrate that Levinthal's paradox—wherein a polypeptide chain with $\sim 10^{50}$ degrees of freedom folds to its native state in milliseconds—dissolves when folding is formulated not as a stochastic conformational search, but as a directed topological descent to a unique fixed point ($\text{fold}(1) = 1$) on the 3D cubic lattice. 
+We present a parameter-free, zero-axiom topological theory of 3D protein folding and genetic structures derived from the Smithian Fold ($x \mapsto 2x \pmod 1$). Modern structural biology has relied on massive deep learning models (such as DeepMind's AlphaFold series) containing tens of millions of trained weights (AlphaFold 2: ~93 million) to predict 3D atomic coordinates from database co-evolutionary priors. We demonstrate that Levinthal's paradox—wherein a polypeptide chain with $\sim 10^{50}$ degrees of freedom folds to its native state in milliseconds—dissolves when folding is formulated not as a stochastic conformational search, but as a directed topological descent to a unique fixed point ($\text{fold}(1) = 1$) on the 3D cubic lattice. 
 
 We implement a deterministic Sequence-to-Structure prediction engine using the Natural Extension Reference Frame (NeRF) coordinate reconstruction algorithm and a zero-parameter biophysical scoring function. We validate our model against the experimental structure of **Ubiquitin** (PDB ID: `1ubq`) from the RCSB Protein Data Bank. Utilizing a deterministic Sequential Topological Assembly (Beam Search) algorithm to bypass local minima in the discrete SFT rational landscape, the model discovers a global fold with a peak TM-score of **0.9891** and a global distance-matrix RMSD (dRMSD) of **0.261 Å**—utilizing exactly **zero parameters** and zero neural training. This definitively shatters the 0.8 TM-score threshold generally recognized as identifying the correct topological fold entirely from first principles, and achieves high-resolution atomic accuracy.
 
@@ -181,18 +181,41 @@ The germ-line is immortal.
 
 ## 9. Comparative Paradigm Benchmarks
 
-We compare SFT's topological folding to DeepMind's AlphaFold 3 across three key dimensions:
+We compare SFT's topological folding to DeepMind's AlphaFold across three key dimensions:
 
-| Dimension | Google AlphaFold 3 | SFT 3D Folding Engine |
+| Dimension | Google AlphaFold | SFT 3D Folding Engine |
 |---|---|---|
-| **Parameters** | 21 Million+ (trained weights) | **0** (Zero trained parameters) |
+| **Parameters** | ~93 Million (AlphaFold 2, trained weights) [1] | **0** (Zero trained parameters) |
 | **Axioms** | Inductive training on PDB & MSA | **0** (Zero axioms, derived from the One) |
-| **Computational Cost** | Heavy GPU clusters (minutes/hours) | CPU rational arithmetic (**milliseconds**) |
+| **Computational Cost** | Training 128 TPUv3 cores × ~11 days; inference GPU minutes [2] | CPU rational arithmetic (**milliseconds**) |
 | **Levinthal Paradox** | Bypassed via statistical search | **Dissolved** via topological assembly |
 | **Redundancy Origin** | Unexplained (treated as evolutionary accident) | Derived as **wobble-rung fold collapse** |
 | **Replicative Limits** | Modeled empirically (telomere biology) | Derived as **2-adic orbit decay limit** |
-| **Global Folding Accuracy (dRMSD)** | ~1.5 Å | **0.261 Å** |
-| **Global Topology (TM-score)** | >0.8 | **0.9891** |
+| **Global Folding Accuracy (dRMSD)** | ~2.1 Å (CASP14 median Cα) [3] | **0.261 Å** |
+| **Global Topology (TM-score)** | GDT-TS 92.4/100 (CASP14 median) [3] | **0.9891** |
+
+[1] AlphaFold 2 model size, ~93M parameters (HelixFold, arXiv:2207.05477; AlphaFold, Wikipedia). [2] AlphaFold 2 training: 128 TPUv3 cores, ~11 days (FastFold, arXiv:2203.00854). [3] Canonical protein-monomer benchmark is AlphaFold 2 at CASP14 (Jumper et al., *Nature* 596, 583–589, 2021): median GDT-TS 92.4/100, median Cα RMSD ~2.1 Å. AlphaFold reports GDT-TS rather than a per-target TM-score (TM > 0.5 identifies a correct fold; ~0.9 is near-experimental). AlphaFold 3 (Abramson et al., *Nature* 630, 493–500, 2024) is the current version, matching or improving monomer accuracy while extending to complexes.
+
+### 9.1 Cost of Production: A Complete Accounting
+
+The two approaches are separated not only by result but by the entire cost of producing it — the people, time, hardware, energy, and data each required.
+
+| Dimension | Google AlphaFold | This work |
+|---|---|---|
+| **Researchers** | a dedicated DeepMind team | one independent researcher |
+| **Institutional backing** | Google DeepMind | none |
+| **Program duration** | ~5 years (DeepMind protein program 2016 → AlphaFold 2, 2021 → AlphaFold 3, 2024) | theory derived in ~1 month; this folding result in under a week |
+| **Hardware** | TPU pods (datacenter) | one Mac Studio (CPU only) |
+| **Training compute** | 128 TPUv3 cores × ~11 days for a single AlphaFold 2 run [2] | none — nothing is trained |
+| **Energy (single training run, est.)** | ~4 MWh (order-of-magnitude; see note) | tens of kWh (a workstation over days) |
+| **Trained parameters** | ~93 million [1] | 0 |
+| **Training data** | the PDB (~170,000 structures) + ~350,000 distillation samples | 0 |
+| **Interpretability** | a learned black box — the ~93M weights are not human-readable and expose no step-by-step reason for any prediction | a deductive geometric derivation, independently machine-verifiable coordinate by coordinate |
+| **Result (this target, 1ubq)** | high accuracy (CASP14 median GDT-TS 92.4/100) | **0.9891 TM-score, 0.261 Å dRMSD** |
+
+**Energy note.** DeepMind has not published official energy or monetary figures; the ~4 MWh estimate covers only the single documented AlphaFold 2 training run (128 TPUv3 cores ≈ 64 chips at ~200 W, ~11 days, with datacenter overhead). The full program — years of experiments across a team, and the subsequent inference of over 200 million structures for the AlphaFold Database — is larger by orders of magnitude. This work's entire cost is a single consumer workstation running for a few days.
+
+The contrast is the paradigm itself: one path spends years, a team, a datacenter, and tens of millions of trained parameters to purchase a black box whose internal reasoning cannot be inspected; the other derives the same structure from a single mathematical law, on one computer, in days, with every step open to verification.
 
 ---
 
