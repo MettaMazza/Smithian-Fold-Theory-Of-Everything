@@ -5463,6 +5463,22 @@ does not just derive — it plays.
 
 **What it does.** Forces the answer to the recipe-selection question (A1): a recipe does not select a store's family directly — it selects the store's **role**, and the family is forced downstream. Step 309 maps each storing role to exactly one family (total and disjoint); Step 316 makes the family a total function of the value signature. The two storing roles carry two **distinct** generators (selection → binary, geometry → colour), and that count equals the family count — a **bijection role ↔ family**, forced_to_be equal. A bijection is invertible, so fixing the role fixes the family: **family is invariant per role**, the same in every recipe. The only handle a recipe has is *which role a store plays* — architecture, an engineering choice kept off the derivation side (`forbid_target_input`, exactly as the block's native window in Step 314). So a store measured leaning to a different family across recipes is playing a **different or mixed role**, not selecting a family; the "recipe map" is a map of roles. Measured wall: the atlas's store-to-family readings are that role map; the registered verification (queued, not run) is the role census — does each store hold geometry, gate a selection, or both — read alongside its value-signature family (Step 316). A1's remaining open object is thus the Measured role census; the family is forced from it.
 
+### Form-closure sweep of the decode subseries (Steps 308–317) — complete
+
+The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted **assembled algebraic form** be minimal over a generated candidate space and unique among same-size shapes (`assembly_enumeration` + `forbid_form_selection`), not merely that its ingredient counts are forced. Auditing the whole fold-AI subseries against that bar (2026-07-15): **the functional band (Step 311) was the sole step that asserted new assembled constants, and both now carry both guards** — the colour volume c³ (a two-operation cube, minimal and unique over {c}) and the covering depth b+c (minimal and unique over {b, c}). Every other step asserts **no new assembled constant**, so owes no assembly guard, and is closed by the machinery it already runs:
+
+- **308** — the colour value 1/4 is closed as the *complement* of the already-guarded cos² = 3/4 (the partition check); the family count is `forced_to_be` two-route. (At b = 2, `1/(b·b) = 1/(b+b)`, so 1/4 is form-ambiguous and *must* close by complement, never by assembly guards — the same reason the corpus guards cos² and derives sin².)
+- **309** — reuses the closed lock 1/2 (half_one_center, `forced_unique`) and the forced spatial dimension; total-disjoint assignment.
+- **310** — reuses the structurally-closed period-2 memory orbit {1/3, 2/3} (introspection_limit) and the fold decay chain 1/2ᵏ (powers of the closed lock); the holding-before-selection order rests on `forced_to_be` counts.
+- **312** — the repeat counts (b²−b, and the margin = b) are `forced_to_be` against an independent orbit walk; reuses the closed lock.
+- **313** — the cascade shares 1/2ʳ are powers of the closed lock, telescoping to the One verified whole through b + c; the width-sweep bound b^(b+c) reuses the closed band.
+- **314** — reuses the closed band and colour volume; the tiling is a covering count (`forced_to_be` two routes), the native window guarded off (`forbid_target_input`).
+- **315** — a pure composition of already-closed results (family count, the disjoint two-store assignment, the closed lock, the cascade).
+- **316** — rests on the closed electroweak sin²/cos²; disjointness by non-wholeness (proper fractions in (0,1)); the earlier "scale = b²" framing was dropped precisely because it was form-ambiguous.
+- **317** — the role ↔ family bijection is a `forced_to_be` count; reuses the closed assignment.
+
+The whole subseries compiles and passes under `ernos` with zero violations. **Every fold-AI decode step is now closed to the corpus's finished form-closure standard** — the same standard the physics constants meet — with the band the only one that owed, and received, the generated-minimality and named-shape guards; all others reduce to reused-closed primitives, counts forced two ways, complements of closed values, and structural telescopings.
+
 ---
 
 ## Where the recreation stands right now
