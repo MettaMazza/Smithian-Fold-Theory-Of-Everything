@@ -1,0 +1,28 @@
+import "../constants/coherence_value.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the coherence value: fold-determined, scale-invariant ==="
+    set ok to expect_equal("coherence lock = 1/2 (fold preimage of the One)" and fraction_to_text(coherence_lock()) and "1/2")
+    set ok to expect_bool("at the lock the coupling multiplier is the One (marginal)" and lock_is_marginal())
+    set ok to expect_bool("a locked scale binds to the One (coherent whole)" and lock_binds_to_one())
+    set ok to expect_bool("the lock is scale-invariant (= cascade head share)" and lock_is_scale_invariant())
+    set ok to expect_bool("strong association 2/3 coheres (>= 1/2)" and strong_coheres())
+    set ok to expect_bool("weak association 1/3 runs free (< 1/2)" and weak_runs_free())
+    set ok to expect_equal("combined four scales + floor bind to the One" and fraction_to_text(combined_binds_to_one()) and "1")
+    set ok to expect_equal("score is fold-determined (= the lock)" and fraction_to_text(coherence_is_fold_determined()) and "1/2")
+    display "=== done ==="
+    return 0

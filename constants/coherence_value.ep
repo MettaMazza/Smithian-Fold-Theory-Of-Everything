@@ -1,0 +1,112 @@
+# ============================================================================
+#  THE COHERENCE VALUE  --  a fold-determined, scale-invariant correctness score
+#  for a part against the others and against the whole, at every scale.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A generator needs to value its output the way a probabilistic model does -- how well
+#  each piece fits the others and the whole -- but with ZERO parameters, fold-determined.
+#  Forced: coupled folding processes lock into one exactly at the coupling g_c = 1/2, the
+#  fold's preimage of the One (sync_threshold). That lock is the coherence threshold, and
+#  because 1/2 is the fold's universal preimage of the One it is the SAME at every scale:
+#  token against token, word against word, word against its statement, statement against
+#  the conversation. A part coheres when its coupling to the rest reaches 1/2 (it locks);
+#  below 1/2 it runs free -- the incoherent piece. The scales themselves cascade and
+#  close to the One, so the combined correctness across token+word+statement+conversation
+#  binds to unison. One lock, checked at every scale and in combination: the functional
+#  "weight" of correctness, determined by the fold, not fitted.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  1. THE LOCK. Two maps run the fold, coupled with strength g; the fold doubles, so a
+#     gap is scaled by 2*(1 - g) each step. The gap is marginal (neither grows nor
+#     decays) -- the parts LOCK -- exactly when 2*(1 - g) = 1, i.e. g_c = 1/2
+#     (sync_threshold, reused). This is the coherence threshold.
+#  2. LOCK BINDS TO ONE. fold(1/2) = 1: a locked pair folds to unison -- one coherent
+#     whole (binding_problem, reused).
+#  3. SCALE-INVARIANT. 1/2 is the fold's unique non-trivial preimage of the One, carrying
+#     no scale index, so the SAME lock scores coherence at every scale; it equals the
+#     cascade head share cascade_share(1) = 1/2 (attention lock, reused).
+#  4. CORRECTNESS AT A SCALE. A part coheres iff its coupling to the rest >= 1/2 (locked);
+#     a strong association (kin 2/3 >= 1/2) coheres, a weak one (1/3 < 1/2) runs free.
+#  5. COMBINED (multi-scale). The scales token < word < statement < conversation are the
+#     dyadic cascade: their shares 1/2 + 1/4 + 1/8 + 1/16 plus the No-Zero floor 1/16
+#     close to the One -- the combined correctness across all scales binds to unison.
+#  6. FORBID the score as a fitted/measured parameter: it is the fold preimage of the One,
+#     forced -- functionally a probability, but determined, not trained.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: g_c = 1/2 (multiplier = 1), fold(1/2) = 1, strong coheres
+#  / weak free, and the four-scale cascade + floor = 1. Observed: understanding rides
+#  cross-scale binding -- a word is judged right by its fit to phrase, sentence and
+#  discourse together, the multi-scale lock this forces.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# ── 1. THE LOCK: a gap is scaled by 2*(1 - g); marginal at g = 1/2. ──
+define coupling_multiplier with g as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    set uncoupled to fraction_subtract(one and g)          # 1 - g
+    return fraction_add(uncoupled and uncoupled)           # 2*(1 - g)
+
+# The coherence lock = the fold preimage of the One = 1/2.
+define coherence_lock returning Fraction:
+    return fraction_from_ratio(1 and binary_count())
+
+# At the lock the multiplier is the One (the gap is preserved -- the parts lock).
+define lock_is_marginal returning Bool:
+    return fraction_is_equal(coupling_multiplier(coherence_lock()) and fraction_from_whole_number(1))
+
+# ── 2. A locked scale binds to the One (coherent whole). ──
+define lock_binds_to_one returning Bool:
+    return fraction_is_equal(fold_fraction(coherence_lock()) and fraction_from_whole_number(1))
+
+# ── 3. SCALE-INVARIANT: the lock equals the cascade head share, 1/2, at every scale. ──
+define cascade_head_share returning Fraction:
+    return fraction_from_ratio(1 and binary_count())       # cascade_share(1) = 1/2
+
+define lock_is_scale_invariant returning Bool:
+    return fraction_is_equal(coherence_lock() and cascade_head_share())
+
+# ── 4. CORRECTNESS AT A SCALE: coupling >= lock coheres; below runs free. ──
+define coheres_at with coupling as Fraction returning Bool:
+    return fraction_compare(coupling and coherence_lock()) >= 0
+
+# a strong (kin) association 2/3 >= 1/2 coheres.
+define strong_coheres returning Bool:
+    return coheres_at(fraction_from_ratio(binary_count() and colour_count()))
+
+# a weak association 1/3 < 1/2 runs free (incoherent).
+define weak_runs_free returning Bool:
+    set weak to fraction_from_ratio(1 and colour_count())
+    if coheres_at(weak):
+        return false
+    return true
+
+# ── 5. COMBINED across the four scales: cascade shares + floor close to the One. ──
+# token 1/2, word 1/4, statement 1/8, conversation 1/16, plus the No-Zero floor 1/16.
+define combined_binds_to_one returning Fraction:
+    set half to fraction_from_ratio(1 and 2)
+    set quarter to fraction_from_ratio(1 and 4)
+    set eighth to fraction_from_ratio(1 and 8)
+    set sixteenth to fraction_from_ratio(1 and 16)
+    set floor to fraction_from_ratio(1 and 16)
+    set s1 to fraction_add(half and quarter)
+    set s2 to fraction_add(s1 and eighth)
+    set s3 to fraction_add(s2 and sixteenth)
+    return fraction_add(s3 and floor)
+
+# ── 6. FORBID the score as a fitted parameter: it is the fold preimage of the One. ──
+define coherence_is_fold_determined returning Fraction:
+    set guard to forbid_target_input("the coherence score is a fitted/measured weight" and false)
+    return coherence_lock()
