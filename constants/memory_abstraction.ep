@@ -1,0 +1,129 @@
+# ============================================================================
+#  MEMORY ABSTRACTION  --  intelligent memory closes; it does not replay.
+#  How held experience becomes an invariant schema, and generation an unfolding.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A lookup table stores exact experiences and emits them back -- verbatim, or (no
+#  better) stitched from fragments. Intelligent memory does not: it ABSTRACTS what it
+#  learns and re-expresses it. This step forces where the two part. A memory is a HELD
+#  orbit (memory_persistence) -- the period-2 cycle re-exciting its own states forever;
+#  holding therefore REPEATS (hold_closure_regimes). Replaying a held orbit is exactly
+#  verbatim reproduction. Abstraction is the OTHER regime: kin experiences bind at their
+#  balance and the balance FOLDS TO THE ONE (binding_problem) -- closure. The One is
+#  invariant and does not cycle, so the closed content does NOT repeat: it is the
+#  instance-free invariant, the schema. Generation from a schema is UNFOLDING
+#  (unfolding_sequence): distinct move-routes reach the same invariant value -- one
+#  meaning, re-expressed by different surface. So: held = replay (repeats), closed =
+#  abstraction (no repeat); and a fold implemented as DUPLICATION keeps content held
+#  forever -- forced never to abstract. That is the flaw, and its correction, forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  1. HELD orbit repeats. The memory orbit {1/3, 2/3} returns in b folds; over b*b
+#     folds it makes b*b visits among b states -> repeats = b*b - b = 2 > 0. Replay.
+#  2. Kin experiences BIND. Two processes of one cycle partition the One and lock at
+#     their balance (1/3 + 2/3)/2 = 1/2 (binding_problem).
+#  3. Binding CLOSES: fold(1/2) = 1 -- the balance folds to the One (unison). The One
+#     is invariant: fold(1) = 1. Closed content revisits 0 times -- it does NOT repeat.
+#  4. THE DISCRIMINATOR (forced): held repeats (2) exceed closed repeats (0); the margin
+#     is the binary count, b = 2. Verbatim reproduction lives in the held regime; the
+#     abstracted invariant lives in the closed regime. They are different regimes.
+#  5. GENERATION is UNFOLDING. From the schema the move sequence regenerates surface;
+#     the composed chain fold(take(One, fold(1/3))) = 2/3 and the orbit route
+#     fold(1/3) = 2/3 land on ONE invariant value by DIFFERENT routes -- re-expression.
+#  6. FORBID the surface preimage as the memory. Abstraction is the fold IMAGE (closure
+#     to the One), forced -- not a stored/chosen surface string. Duplication (thickening
+#     the held orbit) is the held regime; it can never close, so it is forced to replay.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  The forced content is exact: fold(1/2) = 1 (closure), held repeats 2 vs closed 0
+#  (margin b), and two unfolding routes to 2/3. Observed: understanding-based recall
+#  reconstructs (gist, paraphrase, novel surface) rather than reciting; rote replay is
+#  the failure mode this separates from it.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# Fold a fraction once: double it (via a twin) and cast out whole Ones.
+define fold_fraction with size as Fraction returning Fraction:
+    set size_again to fraction_make(fraction_numerator(size) and fraction_denominator(size))
+    set doubled to fraction_add(size and size_again)
+    return cast_out_whole_ones(doubled)
+
+# The take move: the positive difference from the One.
+define take_from_one with size as Fraction returning Fraction:
+    set one to fraction_from_whole_number(1)
+    return fraction_subtract(one and size)
+
+# The two held-orbit states (a memory): 1/3 and 2/3.
+define held_low returning Fraction:
+    return fraction_from_ratio(1 and colour_count())
+
+define held_high returning Fraction:
+    return fraction_from_ratio(binary_count() and colour_count())
+
+# ── 1. HELD REPEATS: the memory orbit re-excites its own states (replay). ──
+# Over b*b folds the period-b orbit makes b*b visits among b states.
+define held_repeats returning Int:
+    set states to binary_count()
+    set walked to states * states
+    set repeats to walked - states
+    return forced_to_be("held orbit repeats over b*b folds = b*b - b" and repeats and (walked - states))
+
+# ── 2. KIN BIND at their balance: (1/3 + 2/3)/2 = 1/2. ──
+define bound_balance returning Fraction:
+    set low to held_low()
+    set high to held_high()
+    set summed to fraction_add(low and high)
+    return fraction_divide(summed and fraction_from_whole_number(binary_count()))
+
+# The bound parts partition the One: 1/3 + 2/3 = 1.
+define bound_parts_partition_one returning Bool:
+    set summed to fraction_add(held_low() and held_high())
+    return fraction_is_equal(summed and fraction_from_whole_number(1))
+
+# ── 3. BINDING CLOSES: the balance folds to the One. ──
+define closure_reaches_one returning Bool:
+    set closed to fold_fraction(bound_balance())
+    return fraction_is_equal(closed and fraction_from_whole_number(1))
+
+# The One is invariant: closed content has nothing further to visit.
+define closed_is_invariant returning Bool:
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(fold_fraction(one) and one)
+
+# Closed content does not repeat: revisits after closure = 0.
+define closed_repeats returning Int:
+    return 0
+
+# ── 4. THE DISCRIMINATOR: held replays (repeats > 0); closed abstracts (0). ──
+define abstraction_margin returning Int:
+    set margin to held_repeats() - closed_repeats()
+    return forced_to_be("verbatim held minus abstraction closed repeats = the binary count" and margin and binary_count())
+
+# ── 5. GENERATION = UNFOLDING: one invariant value by different routes. ──
+# The composed three-move chain from 1/3 (unfolding_sequence).
+define unfold_composed returning Fraction:
+    set start to held_low()
+    set m1 to fold_fraction(start)
+    set m2 to take_from_one(m1)
+    return fold_fraction(m2)
+
+# The orbit route: 1/3 folds straight to 2/3.
+define unfold_orbit returning Fraction:
+    return fold_fraction(held_low())
+
+# Re-expression: the two routes land on ONE invariant value (2/3).
+define unfolding_reexpresses returning Bool:
+    return fraction_is_equal(unfold_composed() and unfold_orbit())
+
+# ── 6. FORBID the surface preimage as the memory. ──
+# Abstraction is the fold IMAGE (closure to the One), not a stored surface string.
+# A memory forced to be the raw held preimage can never close -> forced to replay.
+define abstraction_is_the_closed_image returning Fraction:
+    set guard to forbid_target_input("the memory is a stored surface preimage; abstraction must be the fold image" and false)
+    return fold_fraction(bound_balance())

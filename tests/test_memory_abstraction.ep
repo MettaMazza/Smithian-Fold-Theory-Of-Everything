@@ -1,0 +1,44 @@
+import "../constants/memory_abstraction.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== memory abstraction: closes, does not replay ==="
+
+    # 1. HELD regime = replay: the memory orbit repeats (b*b - b = 2 > 0).
+    set r to held_repeats()
+    set ok to expect_bool("held orbit repeats (verbatim regime): repeats = 2" and (r equals 2))
+
+    # 2. Kin bind and partition the One; balance = 1/2.
+    set ok to expect_bool("bound parts partition the One" and bound_parts_partition_one())
+    set ok to expect_equal("bound balance = 1/2" and fraction_to_text(bound_balance()) and "1/2")
+
+    # 3. Binding CLOSES: the balance folds to the One; the One is invariant.
+    set ok to expect_bool("binding closes: balance folds to the One" and closure_reaches_one())
+    set ok to expect_bool("closed is invariant (nothing further to visit)" and closed_is_invariant())
+
+    # 4. The discriminator: held repeats minus closed repeats = the binary count.
+    set m to abstraction_margin()
+    set ok to expect_bool("verbatim(held) - abstraction(closed) repeats = b = 2" and (m equals 2))
+
+    # 5. Generation = unfolding: two routes, one invariant value (re-expression).
+    set ok to expect_bool("unfolding re-expresses: two routes agree" and unfolding_reexpresses())
+    set ok to expect_equal("unfolded invariant value = 2/3" and fraction_to_text(unfold_composed()) and "2/3")
+
+    # 6. Abstraction IS the closed fold-image (not the stored surface preimage).
+    set ok to expect_equal("abstraction = the closed image = 1" and fraction_to_text(abstraction_is_the_closed_image()) and "1")
+
+    display "=== done ==="
+    return 0
