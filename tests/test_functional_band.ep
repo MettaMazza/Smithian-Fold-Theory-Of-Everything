@@ -17,6 +17,11 @@ define main:
     set ok to expect_equal("the covering depth (two routes agree)" and int_to_string(band_covering_depth()) and "5")
     set ok to expect_equal("the functional band b^5 (two routes agree)" and int_to_string(functional_band()) and "32")
     set ok to expect_bool("the band's closure: 31/32 + 1/32 = 1 exactly" and band_partitions_the_one())
+    display "--- FORM CLOSURE (STANDARDS Rule 1): both assembled forms forced, not selected ---"
+    set ok to expect_equal("volume minimality: no simpler assembly of {c} reaches c^c = 27" and int_to_string(colour_volume_is_minimal()) and "1")
+    set ok to expect_equal("volume uniqueness: exactly one two-op shape over {c} gives 27 (the cube)" and int_to_string(colour_volume_form_is_unique()) and "1")
+    set ok to expect_equal("depth minimality: no simpler assembly of {b,c} reaches the exponent b+c" and int_to_string(band_exponent_is_minimal()) and "1")
+    set ok to expect_equal("depth uniqueness: exactly one form over {b,c} gives b+c" and int_to_string(band_exponent_form_is_unique()) and "1")
     display "--- the Measured wall: the record checks, never derives ---"
     display "  ok    solved chess fields: top-32 = 81-87 percent of field energy (Rung 2.5)"
     display "  ok    loud-subspace transfer held at k = 32 of 128 per row (Rung 5c, 93.5 percent of gap)"

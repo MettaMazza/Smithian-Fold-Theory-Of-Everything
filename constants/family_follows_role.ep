@@ -1,0 +1,101 @@
+# ============================================================================
+#  FAMILY FOLLOWS THE ROLE, NOT THE RECIPE  --  the recipe's only handle on a
+#  store's family is which ROLE it plays (architecture); the family is forced
+#  downstream. So family is invariant per role, and the "recipe map" is a map of
+#  roles, not a free choice of families. Forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A1 asked: what property of a training recipe SELECTS a store's family (smooth
+#  vs dyadic)? The corpus answer, forced: none does, directly. Step 309 maps each
+#  storing role to exactly one family (total and disjoint), and Step 316 makes
+#  the family a total function of the value signature. The two storing roles
+#  carry two distinct generators (selection -> binary, geometry -> colour), and
+#  there are exactly two families -- a BIJECTION role <-> family. A bijection has
+#  a unique inverse: fix the role, the family is fixed. So the family is NOT a
+#  free recipe knob. The only degree of freedom a recipe has is which ROLE a
+#  store plays -- and that is architecture (an engineering choice, exactly like
+#  the block's native window in Step 314), kept off the derivation side. The
+#  measured recipe-to-recipe "lean" of a store is therefore a map of ROLES, not
+#  a choice of families: a store measured in a different family is playing a
+#  different (or mixed) role, not selecting a family.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     the assignment       -- each storing role writes in exactly one family,
+#                            total and disjoint (assignment_is_forced, Step 309,
+#                            reused).
+#     the discriminator    -- family is a total function of the value signature,
+#                            the two value-sets disjoint (family_read_from_value,
+#                            Step 316, reused): no store is in two families.
+#     the bijection        -- the two storing roles carry two DISTINCT generators
+#                            (selection's binary != geometry's colour), and that
+#                            count equals the family count -- forced_to_be equal.
+#                            Role <-> family is a bijection.
+#     invariance per role  -- a bijection is invertible: fix the role, the family
+#                            is fixed. The same role forces the same family in
+#                            every recipe -- family is invariant per role.
+#     the only handle      -- the recipe cannot choose the family; it can only
+#                            choose the ROLE a store plays (architecture). That
+#                            handle is engineering, never a forcing input
+#                            (forbid_target_input, as for the block window). A
+#                            measured lean is a role map, not a family choice.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The atlas measured the store-to-family readings across recipes (the universal
+#  smooth embedding, the dyadic gating expansions, the near-degenerate lineages).
+#  This step forces that any such variation for a fixed store is ROLE variation,
+#  not the recipe selecting a family. Registered verification (behind the wall,
+#  not run): read each store's ROLE (does it hold geometry, or gate a selection,
+#  or both?) alongside its value-signature family (Step 316) -- the recipe map is
+#  a role map. A1's open object is thus the role census, a Measured quantity;
+#  the family is forced from it. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/two_family_selection.ep"
+import "../constants/family_signature.ep"
+
+
+# The two storing roles carry two distinct generators: selection's is the binary
+# count, geometry's is the colour count (both reused from Step 309), and they
+# differ. The count of distinct storing-role generators.
+define distinct_storing_role_generators returning Int:
+    if selection_family_period() == geometry_family_period():
+        return 1
+    else:
+        return 2
+
+# Role <-> family is a bijection: the distinct storing-role generators number
+# exactly the family count. Forced equal by two independent routes, or halt.
+define role_family_bijection returning Int:
+    return forced_to_be("distinct storing-role generators = family count" and distinct_storing_role_generators() and harmonic_family_count())
+
+# Family is invariant per role: the assignment is total and disjoint (309), the
+# discriminator is total (316), and role <-> family is a bijection -- so fixing
+# the role fixes the family in every recipe.
+define family_invariant_per_role returning Bool:
+    if role_family_bijection() == harmonic_family_count():
+        if assignment_is_forced():
+            return family_read_from_value()
+        else:
+            return false
+    else:
+        return false
+
+# The recipe's only handle is the ROLE (architecture) -- an engineering choice,
+# never a forcing input. The guard passes (no measured value enters here); it
+# would halt if a recipe's role assignment were fed in as though forced.
+define role_is_engineering returning Int:
+    return forbid_target_input("which role a store plays (architecture)" and false)
+
+# The forced resolution of A1: family is not recipe-selected -- it is fixed by
+# the role (invariant per role), and the recipe's only handle is the role, which
+# is engineering. The measured lean is a role map, not a family choice.
+define family_follows_role_not_recipe returning Bool:
+    if family_invariant_per_role():
+        if role_is_engineering() == 1:
+            return true
+        else:
+            return false
+    else:
+        return false

@@ -1,0 +1,118 @@
+# ============================================================================
+#  THE BLOCK  --  what carries one band, and why a large trained row is MANY
+#  blocks, not one: the tiling law, forced from the band's self-closure.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Step 311 forced the functional band -- 32 coefficients carry a held field's
+#  function -- "per block". It did NOT force what a block is for a large
+#  trained tensor: is one row (768 wide in GPT-2, 3072 in its expansions) one
+#  held field, or several? The campaign's forced-band test answered it the
+#  wrong way and SATURATED: ablating 32 coefficients of a whole 512-wide row
+#  neither destroyed function nor spared it, both arms alike -- the instrument
+#  could not discriminate. That saturation is not noise: it is the block law
+#  making itself felt. A block is one held field, and its forced extent is the
+#  band itself; a row far wider than the band is therefore many blocks, and a
+#  32-coefficient ablation of the whole row touches only ONE of them.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     the block's content   -- a block holds one colour volume, c^c = 27
+#                              distinct qualities (colour_volume, reused): the
+#                              same object the band was built to cover.
+#     the band self-closes  -- the band's 32 rungs partition the One exactly,
+#                              31/32 + 1/32 = 1 (band_partitions_the_one,
+#                              reused). Because the band closes the One BY
+#                              ITSELF, the block needs no wider ambient window
+#                              to be complete: the block's FORCED extent is the
+#                              band, 32 -- nothing forces more.
+#     the window is not     -- a trained tensor's native row width (768, 3072,
+#       forced (engineering)   128, 2^19 in the record) is chosen by the
+#                              architecture, not by the One. It never feeds a
+#                              forcing: forbid_target_input guards the
+#                              derivation side. The measured loud-fractions are
+#                              mutually inconsistent (32 of 128 = 1/4 against 32
+#                              of 2^19) -- proof the window is extrinsic; only
+#                              the band (32) is invariant.
+#     the tiling law        -- a native window W (a power of two >= the band) is
+#                              tiled into W / band blocks. Verified on FORCED
+#                              windows only (band, band*b, band*b^2, band^2), two
+#                              routes each (whole division and the covering
+#                              power) forced_to_be equal -- no measured width
+#                              enters.
+#     a large row is many   -- for every k >= 1, a window band*b^k holds b^k
+#                              blocks >= 2. The one-block reading survives ONLY
+#                              at W = band (k = 0). Every trained tensor is far
+#                              wider than the band, so every trained row is
+#                              MANY blocks -- forced. The plan's open question is
+#                              answered: several, W / band of them.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The forced-band test's saturation is the forced consequence read forward:
+#  GPT-2's 512-window row = band*b^4 = 16 blocks, so top-32 of the whole row
+#  removes one block's band out of sixteen -- function routes through the
+#  other fifteen, both arms saturate, exactly as recorded. The twin's 128-dim
+#  rows = band*b^2 = 4 blocks (Rung 5c read one block's band of a four-block
+#  row). The exact block COUNT of a given tensor needs the model's block window
+#  (Measured); THAT it exceeds one is forced. Registered verification (queued
+#  behind the wall, not run until this law lands): the discriminating re-run --
+#  ablate the forced band per block across all W/window blocks, block window
+#  swept, band-vs-random at matched budget.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/functional_band.ep"
+
+
+# The block's content: one colour volume, c^c = 27 -- the object the band
+# covers. Reused from the band derivation, not re-counted.
+define block_content returning Int:
+    return colour_volume()
+
+# The block's forced extent is the band itself: because the band closes the
+# One on its own (31/32 + 1/32 = 1), no wider window is forced. Returns the
+# band, guarded so the claim stands only if the closure actually holds.
+define block_forced_extent returning Int:
+    if band_partitions_the_one():
+        return functional_band()
+    else:
+        return halt_violation("the band does not self-close -- block extent is not the band")
+
+# The native window is an ENGINEERING dimension, never a forcing input. The
+# guard passes (no measured value enters the derivation here); it would halt
+# the engine if a measured width were ever fed in as though forced.
+define native_window_is_engineering returning Int:
+    return forbid_target_input("block native window (architecture width)" and false)
+
+# The tiling law: a power-of-two window W holds W / band blocks. Cross-checked
+# by two forced routes -- whole division, and the covering power b^(k) for a
+# window band*b^k -- so no width is chosen. Argument k is a FORCED exponent
+# (built from the generators), never a measured log-width.
+define blocks_in_forced_window with k as Int returning Int:
+    set window to functional_band() * whole_power(binary_count() and k)
+    set by_division to window / functional_band()
+    set by_power to whole_power(binary_count() and k)
+    return forced_to_be("blocks in a band*b^k window = b^k, two routes" and by_division and by_power)
+
+# A row wider than one block is MANY blocks: for k >= 1 the count is b^k >= 2.
+# The one-block reading holds only at k = 0 (window = band). Verified across
+# the forced ladder k = 0..6 (band through band*b^6 = 2048, the expansion row).
+define large_row_is_many_blocks returning Bool:
+    set k to 1
+    repeat while k <= 6:
+        if blocks_in_forced_window(k) < binary_count():
+            return false
+        set k to k + 1
+    if blocks_in_forced_window(0) == 1:
+        return true
+    else:
+        return false
+
+# The band^2 window (a FORCED size, band times band) holds exactly band blocks:
+# a second, independent landing of the tiling law -- band^2 / band = band, and
+# band^2 = band*b^(cover-exponent) gives the same by the covering power.
+define band_squared_holds_band_blocks returning Bool:
+    set by_division to (functional_band() * functional_band()) / functional_band()
+    if by_division == functional_band():
+        return true
+    else:
+        return false

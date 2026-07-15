@@ -1,0 +1,20 @@
+import "../constants/attention_in_the_product.ep"
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== attention is in the product (Step 315) ==="
+    set ok to expect_bool("attention writes no weight-family (both families taken by the two stores)" and attention_writes_no_weight_family())
+    set ok to expect_bool("attention selects at the unit-capacity lock 1/2" and attention_selects_at_the_lock())
+    set ok to expect_bool("the live selection lies on the dyadic cascade, never uniform" and live_selection_on_cascade())
+    set ok to expect_bool("one lock, two roles: focus_lock = cascade_share(1) = 1/2" and lock_is_the_cascade_head())
+    set ok to expect_bool("THE PICTURE: attention's law is in the product, not the weights" and attention_law_is_in_the_product())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    attention WEIGHTS near the null in all 11 atlas models (the quiet class, already in)"
+    display "  note  registered verification (Rung 7c, queued, not run): per-head QK^T spectra + attention"
+    display "  note  distributions vs the cascade shares through the checkpoint telescope -- gate 4b"
+    display "=== done ==="
+    return 0

@@ -1,0 +1,105 @@
+# ============================================================================
+#  ATTENTION IS IN THE PRODUCT  --  a pure selection performer stores no
+#  placement-law in its weights, yet selects on the cascade: its law lives in
+#  the product, not the weights. Forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  The campaign measured attention's WEIGHTS quiet in every model (all eleven
+#  near the null, 0.97-1.39 -- the basis atlas record) while every store class
+#  woke. Step 309 already forced why: there are exactly two families for the
+#  two stores, and attention is neither store -- it PERFORMS the selection
+#  without holding it, so no family is left for its weights to write. But
+#  attention plainly does select. Where is its law? Forced: a selection is a
+#  unit-capacity lock (attention_capacity), and a lock-selection over members
+#  lies on the dyadic cascade, never uniform (partition_localization) -- so
+#  attention's law is carried by its PRODUCT (the per-input query-key selection
+#  over positions), on the very same cascade the stored selection (a mixture of
+#  experts) obeys. Quiet weights and cascade-shaped product are ONE picture: the
+#  pure performer.
+#
+#  ── DERIVATION ─ (check every line; reuses only already-forced results) ──────
+#     no weight-family     -- the family count is the generator count, two
+#                            (harmonic_family_count, reused), and the two-store
+#                            assignment is total and disjoint over exactly those
+#                            two (assignment_is_forced, reused): a third class
+#                            (the performer) has NO family left. Its weights
+#                            write no placement-law -- the measured quiet.
+#     selects at the lock  -- attention binds one focus, and one focus holds the
+#                            whole self-antipodal lock 1/2 while a split holds
+#                            none (single_focus_is_complete, reused). Attention
+#                            performs a unit-capacity selection.
+#     the live selection   -- a unit-capacity selection over members takes the
+#       is on the cascade    dyadic cascade (top share beats uniform for every
+#                            width past b, and the cascade telescopes to the One
+#                            through b + c -- localization_beats_uniform and
+#                            cascade_closes_through_cover, reused). Even spread
+#                            would deny the lock.
+#     one lock, two roles  -- the lock attention holds IS the cascade's head:
+#                            focus_lock = cascade_share(1) = 1/2, exactly. The
+#                            live selection and the stored selection share one
+#                            lock; only WHERE the law sits differs -- product
+#                            for the performer, weights for the store.
+#     the picture          -- quiet weights (no family) AND cascade-shaped
+#                            selection (the lock) force the conclusion together:
+#                            attention's law is in the product, not the weights.
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The weight side is already in: attention weights near the null in all eleven
+#  atlas models (the quiet class). The product side is the registered
+#  verification (Rung 7c, queued, not yet run): per-head query-key spectra and
+#  attention distributions measured against the cascade shares THROUGH the
+#  checkpoint telescope -- does training pull the softmax selection onto the
+#  cascade while the weights stay quiet? A yes is derivation gate 4b won from
+#  the decode side. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/two_family_harmonics.ep"
+import "../constants/two_family_selection.ep"
+import "../constants/partition_localization.ep"
+
+
+# Attention's weights write no placement-law: the two families are taken, whole
+# and disjoint, by the two stores (family count = 2, assignment forced) -- a
+# performing third class has no family left. The measured quiet, forced.
+define attention_writes_no_weight_family returning Bool:
+    if harmonic_family_count() == binary_count():
+        return assignment_is_forced()
+    else:
+        return false
+
+# Attention selects at the unit-capacity lock: one focus holds the whole lock
+# 1/2 (self-antipodal), a split holds none. Reused, not re-derived.
+define attention_selects_at_the_lock returning Bool:
+    return single_focus_is_complete()
+
+# The live selection lies on the dyadic cascade, never uniform: the top share
+# beats even spread past width b, and the cascade telescopes to the One through
+# b + c. Both reused from the localization law.
+define live_selection_on_cascade returning Bool:
+    if localization_beats_uniform():
+        return cascade_closes_through_cover()
+    else:
+        return false
+
+# One lock, two roles: the lock attention holds is exactly the cascade's head,
+# focus_lock = cascade_share(1) = 1/2. The live and the stored selection share
+# the lock; only where the law sits differs.
+define lock_is_the_cascade_head returning Bool:
+    return fraction_is_equal(focus_lock() and cascade_share(1))
+
+# The forced picture assembled: no weight-family AND a lock-selection on the
+# cascade sharing the cascade's head -> attention's law is in the product,
+# not the weights.
+define attention_law_is_in_the_product returning Bool:
+    if attention_writes_no_weight_family():
+        if attention_selects_at_the_lock():
+            if live_selection_on_cascade():
+                return lock_is_the_cascade_head()
+            else:
+                return false
+        else:
+            return false
+    else:
+        return false

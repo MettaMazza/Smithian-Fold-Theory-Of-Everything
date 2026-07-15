@@ -1,0 +1,32 @@
+import "../constants/the_block.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the block (Step 314) ==="
+    set ok to expect_equal("block content = one colour volume c^c" and int_to_string(block_content()) and "27")
+    set ok to expect_equal("block forced extent = the band (self-closing)" and int_to_string(block_forced_extent()) and "32")
+    set ok to expect_equal("native window kept off the derivation side (guard passes)" and int_to_string(native_window_is_engineering()) and "1")
+    display "--- the tiling law: W / band blocks, two forced routes agree ---"
+    set ok to expect_equal("band window (k=0): one block -- the degenerate reading" and int_to_string(blocks_in_forced_window(0)) and "1")
+    set ok to expect_equal("band*b (k=1): the smallest MANY-block row" and int_to_string(blocks_in_forced_window(1)) and "2")
+    set ok to expect_equal("band*b^2 = 128 (the twin's rows): four blocks" and int_to_string(blocks_in_forced_window(2)) and "4")
+    set ok to expect_equal("band*b^4 = 512 (GPT-2 window): sixteen blocks" and int_to_string(blocks_in_forced_window(4)) and "16")
+    set ok to expect_equal("band*b^6 = 2048 (the expansion row): sixty-four blocks" and int_to_string(blocks_in_forced_window(6)) and "64")
+    set ok to expect_bool("band^2 window holds exactly band blocks (independent landing)" and band_squared_holds_band_blocks())
+    set ok to expect_bool("a large trained row is MANY blocks (k>=1 gives b^k>=2); one only at W=band" and large_row_is_many_blocks())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    forced-band test SATURATED: 32 of a 512-window row = one block of sixteen (the law read forward)"
+    display "  ok    twin 128-dim rows = band*b^2 = 4 blocks (Rung 5c read one block's band of a four-block row)"
+    display "  note  registered verification (queued, not run): band-per-block ablation across all W/window blocks, window swept"
+    display "=== done ==="
+    return 0

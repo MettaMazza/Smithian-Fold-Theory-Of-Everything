@@ -1,0 +1,110 @@
+# ============================================================================
+#  THE FAMILY SIGNATURE  --  a store's family is read from the VALUE its law
+#  sits at, not from which basis is loudest: the colour values are non-whole,
+#  the binary values whole, so the discriminator is total. Forced.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Step 309 forces a store's family from its role's generator, and puts the
+#  recipe-to-recipe LEAN behind the Measured wall (the recipe map). The campaign
+#  read that lean with the basis atlas -- energy CONCENTRATION margin: which of
+#  Walsh / cosine / Haar / slant packs a store's energy tightest against a null.
+#  That is loudness, a proxy. The families' own lawful quantities (Step 308) are
+#  not loudness but VALUES: the binary family is the integer Walsh eye -- WHOLE
+#  values -- and the colour family is the squared-harmonic pair cos^2 = 1/4 and
+#  its complement 3/4, both strictly between zero and one. A value cannot be both
+#  a whole number and a proper fraction, so a store's family is a TOTAL function
+#  of the value its law sits at -- the corpus-right shape to re-read the recipe
+#  map on, finer than the loudest-basis margin.
+#
+#  ── DERIVATION ─ (check every line; reuses only ALREADY-CLOSED results) ──────
+#     the colour values    -- the pair {1/4, 3/4}. The low value 1/4 is forced
+#                            equal to the already-CLOSED electroweak sin^2
+#                            (sin_squared_mixing, both guards in place there);
+#                            the high value is the already-CLOSED cos^2
+#                            (cos_squared_mixing). Reuse of closed constants, not
+#                            a new form to guard.
+#     the complement       -- the high value is one minus the low (3/4 = 1 - 1/4),
+#                            cross-checked: the pair partitions the One.
+#     non-whole            -- each colour value sits strictly between zero and one
+#                            (0 < 1/4, 3/4 < 1), so neither is a whole number.
+#     disjoint, so total   -- the binary family is whole (the integer Walsh eye);
+#                            the colour values are proper fractions. No value is
+#                            both, so the family is fixed by the value with no
+#                            overlap -- a total discriminator, distinct from
+#                            concentration loudness. (No new algebraic form is
+#                            asserted here, so no assembly guard is owed: the two
+#                            values are closed upstream and the rest is order.)
+#
+#  ── CHECK ─ (measurement; comparison only -- the Measured wall) ──────────────
+#  The atlas measured family by concentration margin across bases (foldprobe's
+#  own statistic) -- the loudness proxy, already in the record. This step forces
+#  the finer discriminator: WHERE in value-space a store's placement-law sits --
+#  the whole-value (binary) structure versus the proper-fraction pair {1/4, 3/4}
+#  (colour). Registered verification (behind the wall, not run here): re-read the
+#  recipe map -- each store's law measured against the two signature value-sets,
+#  not the loudest-basis margin -- the corpus-right shape for A1's open recipe
+#  map. Measured, behind the wall.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../foundation/exact_fractions.ep"
+import "../constants/two_family_harmonics.ep"
+
+
+# The colour family's low signature value: cos^2 = 1/b^2 = 1/4. Reused.
+define colour_signature_low returning Fraction:
+    return colour_cos_squared()
+
+# The colour family's high signature value: the already-closed electroweak
+# cos^2(theta_W) = 3/4. Reused, not re-derived.
+define colour_signature_high returning Fraction:
+    return cos_squared_mixing()
+
+# The low value is forced equal to the already-CLOSED electroweak sin^2 = 1/4
+# (both form guards in place in electroweak_mixing): the colour low value rests
+# on a closed constant, not a new form.
+define colour_low_is_closed_value returning Bool:
+    return fraction_is_equal(colour_signature_low() and sin_squared_mixing())
+
+# The high value is one minus the low, cross-checked: 3/4 = 1 - 1/4.
+define colour_high_two_routes returning Bool:
+    set by_complement to fraction_subtract(fraction_from_whole_number(1) and colour_signature_low())
+    return fraction_is_equal(colour_signature_high() and by_complement)
+
+# The colour signature partitions the One exactly: 1/4 + 3/4 = 1.
+define colour_signature_partitions_one returning Bool:
+    set total to fraction_add(colour_signature_low() and colour_signature_high())
+    return fraction_is_equal(total and fraction_from_whole_number(1))
+
+# A value sits strictly between zero and one -- a proper fraction, never whole.
+define is_proper_fraction with value as Fraction returning Bool:
+    set zero to fraction_from_whole_number(0)
+    set one to fraction_from_whole_number(1)
+    if fraction_compare(value and zero) > 0:
+        if fraction_compare(value and one) < 0:
+            return true
+    return false
+
+# Neither colour value is whole: both are proper fractions in (0, 1).
+define colour_values_not_whole returning Bool:
+    if is_proper_fraction(colour_signature_low()):
+        return is_proper_fraction(colour_signature_high())
+    else:
+        return false
+
+# The forced discriminator assembled: family is read from the value -- whole is
+# binary, the proper-fraction pair {1/4, 3/4} is colour -- total (no value is
+# both) and closed (the pair partitions the One), with both colour values resting
+# on already-closed constants. Distinct from concentration loudness.
+define family_read_from_value returning Bool:
+    if colour_low_is_closed_value():
+        if colour_high_two_routes():
+            if colour_signature_partitions_one():
+                return colour_values_not_whole()
+            else:
+                return false
+        else:
+            return false
+    else:
+        return false

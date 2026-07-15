@@ -42,6 +42,7 @@
 import "../foundation/structural_counts.ep"
 import "../foundation/the_one_and_the_fold.ep"
 import "../foundation/enforcement.ep"
+import "../foundation/assembly_enumeration.ep"
 
 
 # The colour volume: the colour count's own cube, c^c = 27.
@@ -67,3 +68,85 @@ define band_partitions_the_one returning Bool:
     set interior to fraction_from_ratio(functional_band() - 1 and functional_band())
     set final_rung to fraction_from_ratio(1 and functional_band())
     return fraction_is_equal(fraction_add(interior and final_rung) and fraction_from_whole_number(1))
+
+
+# ── FORM CLOSURE (STANDARDS Rule 1) ─ the band is b raised to the covering
+#  depth of the colour volume. Forcing the counts is not enough: every assembled
+#  FORM in the chain must be forced too -- minimal over the generated grammar and
+#  unique among same-size shapes -- or the band is not finished. Two forms are
+#  assembled here: the colour VOLUME c^c (the cube), and the covering DEPTH b+c.
+
+# --- the colour volume c^c = 27: colour's own cube, a two-operation assembly ---
+define colour_volume_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and colour_count())
+    return nums
+
+define colour_volume_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 1)
+    return dens
+
+# MINIMALITY: no assembly of fewer than two operations over {c} reaches 27 --
+# a bare c is 3, and every one-operation form (c+c, c-c, c*c, c/c) misses; the
+# cube genuinely needs its two multiplications. The simpler space is fully searched.
+define colour_volume_is_minimal returning Int:
+    set leaf_nums to colour_volume_leaf_numerators()
+    set leaf_dens to colour_volume_leaf_denominators()
+    return canonical_assembly_is_minimal("no simpler assembly reaches the colour volume c^c" and leaf_nums and leaf_dens and colour_volume() and 1 and 2)
+
+# NAMED-SHAPE UNIQUENESS: among the two-operation shapes over {c}, EXACTLY ONE --
+# the cube c*c*c -- reproduces 27. The volume form is not selected among equals.
+define colour_volume_form_is_unique returning Int:
+    set total to 0
+    set target to fraction_from_whole_number(colour_volume())
+    set c to fraction_from_whole_number(colour_count())
+    set c_times_c to fraction_multiply(c and c)
+    set total to count_form_match(total and fraction_multiply(c_times_c and c) and target)
+    set total to count_form_match(total and fraction_add(c_times_c and c) and target)
+    set total to count_form_match(total and fraction_subtract(c_times_c and c) and target)
+    set total to count_form_match(total and fraction_add(fraction_add(c and c) and c) and target)
+    set total to count_form_match(total and fraction_multiply(fraction_add(c and c) and c) and target)
+    set total to count_form_match(total and fraction_divide(c_times_c and c) and target)
+    return forbid_form_selection("the colour volume cube form" and total)
+
+# --- the covering depth b+c = 5 ---
+#  The band is b raised to the covering depth, and that depth is the exponent b+c.
+
+# The leaves of the exponent assembly: the two generators, b and c.
+define band_exponent_leaf_numerators returning List:
+    set nums to create_list()
+    set ok to append_list(nums and binary_count())
+    set ok to append_list(nums and colour_count())
+    return nums
+
+define band_exponent_leaf_denominators returning List:
+    set dens to create_list()
+    set ok to append_list(dens and 1)
+    set ok to append_list(dens and 1)
+    return dens
+
+# MINIMALITY: the engine generates every simpler assembly of {b, c} and confirms
+# NONE reaches the exponent b+c = 5 -- no bare generator is 5, it genuinely needs
+# the one operation. The whole simpler space is searched, not a hand-picked list.
+define band_exponent_is_minimal returning Int:
+    set leaf_nums to band_exponent_leaf_numerators()
+    set leaf_dens to band_exponent_leaf_denominators()
+    set target to binary_count() + colour_count()
+    return canonical_assembly_is_minimal("no simpler assembly reaches the band exponent b+c" and leaf_nums and leaf_dens and target and 1 and 1)
+
+# NAMED-SHAPE UNIQUENESS: among the same-size (one-operation) forms over {b, c}
+# -- sum, both differences, product, both quotients -- EXACTLY ONE reproduces
+# b+c = 5 (the covering depth cover(c^c), cross-checked). The form is not selected.
+define band_exponent_form_is_unique returning Int:
+    set total to 0
+    set target to fraction_from_whole_number(binary_count() + colour_count())
+    set b to fraction_from_whole_number(binary_count())
+    set c to fraction_from_whole_number(colour_count())
+    set total to count_form_match(total and fraction_add(b and c) and target)
+    set total to count_form_match(total and fraction_subtract(b and c) and target)
+    set total to count_form_match(total and fraction_subtract(c and b) and target)
+    set total to count_form_match(total and fraction_multiply(b and c) and target)
+    set total to count_form_match(total and fraction_divide(b and c) and target)
+    set total to count_form_match(total and fraction_divide(c and b) and target)
+    return forbid_form_selection("the band exponent form b+c" and total)

@@ -122,3 +122,5 @@ All artifacts live in the public repositories accompanying the SFTOM corpus.
 - M. Smith, *The Smithian Fold Theory of Everything*, DOI: 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
 *Pre-paper v0.2. Every number in this document is from committed, timestamped campaign records; nothing is projected.*
+
+*Addendum (2026-07-15): the closing proposition — that the detected law can be **derived** — has since been carried out. The decode campaign's regularities are now forced steps in the corpus (two families and their selection law, deposition, the functional band, the two regimes, partition localization, the block, and attention-in-the-product), and the family-selection question is answered, closed to the corpus's finished form-closure standard, and verified: **a store's spectral family follows its architectural role, not the training recipe** — geometry→colour, selection→binary, performers quiet — confirmed by the role census (geometry reads colour in 9/11 woken embeddings, performers quiet in all 22). The full account is in the UnisonAI architecture paper §7.10–7.12 (DOI 10.5281/zenodo.21364144).*

@@ -1,0 +1,26 @@
+import "../constants/family_follows_role.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== family follows the role, not the recipe (Step 317) ==="
+    set ok to expect_equal("two distinct storing-role generators (selection!=geometry)" and int_to_string(distinct_storing_role_generators()) and "2")
+    set ok to expect_equal("role<->family bijection: distinct role-generators = family count" and int_to_string(role_family_bijection()) and "2")
+    set ok to expect_bool("family invariant per role (bijection is invertible)" and family_invariant_per_role())
+    set ok to expect_equal("the role is engineering, kept off the derivation side (guard passes)" and int_to_string(role_is_engineering()) and "1")
+    set ok to expect_bool("ingredient-forced (NOT closed -- form guards pending): family follows the role, not the recipe" and family_follows_role_not_recipe())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    atlas store-to-family readings across recipes = a ROLE map, not a family choice"
+    display "  note  registered verification (queued, not run): the role census -- does each store hold"
+    display "  note  geometry, gate a selection, or both -- read alongside its value-signature family (S316)"
+    display "=== done ==="
+    return 0

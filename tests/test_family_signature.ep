@@ -1,0 +1,28 @@
+import "../constants/family_signature.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== the family signature (Step 316) ==="
+    set ok to expect_equal("colour signature low = 1/4 (cos^2)" and fraction_to_text(colour_signature_low()) and "1/4")
+    set ok to expect_equal("colour signature high = 3/4 (electroweak complement)" and fraction_to_text(colour_signature_high()) and "3/4")
+    set ok to expect_bool("colour low rests on the CLOSED electroweak sin^2 = 1/4" and colour_low_is_closed_value())
+    set ok to expect_bool("colour high two routes: cos^2 = 1 - sin^2" and colour_high_two_routes())
+    set ok to expect_bool("colour signature partitions the One: 1/4 + 3/4 = 1" and colour_signature_partitions_one())
+    set ok to expect_bool("both colour values are proper fractions in (0,1) -- non-whole" and colour_values_not_whole())
+    set ok to expect_bool("THE DISCRIMINATOR: family read from the value (whole=binary, {1/4,3/4}=colour), disjoint" and family_read_from_value())
+    display "--- the Measured wall: the record checks, never derives ---"
+    display "  ok    the atlas read family by CONCENTRATION margin (loudest basis) -- the loudness proxy, already in"
+    display "  note  registered verification (queued, not run): re-read the recipe map on the value signature --"
+    display "  note  each store's law vs the value-sets {whole} and {1/4, 3/4}, not loudest-basis margin"
+    display "=== done ==="
+    return 0
