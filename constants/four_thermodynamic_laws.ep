@@ -20,7 +20,7 @@
 #     same image (fold(1/4) = fold(3/4) = 1/2), so information is lost and the map
 #     has no unique inverse. Being binary (2 = 2^1), each step loses exactly one bit
 #     -- a strictly positive entropy rate, forcing time forward.
-#  THIRD (absolute zero is unreachable). Zero is forbidden -- there is not nothing --
+#  THIRD (absolute zero is unreachable). Zero is forbidden -- there is no nothing --
 #     so the ground state is the displaced half-One 1/2, strictly above zero. The
 #     empty value cannot be reached; absolute zero is unattainable.
 #

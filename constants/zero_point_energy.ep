@@ -8,7 +8,7 @@
 #  the floor nonzero, and why exactly a half? Forced.
 #
 #  ── DERIVATION ─ (check every line; uses ONLY b = 2 and the fold) ────────────
-#  Zero is forbidden -- there is not nothing -- so the ground cannot sit at the empty
+#  Zero is forbidden -- there is no nothing -- so the ground cannot sit at the empty
 #  value. The lowest it can sit is the value whose double is the One: x + x = One gives
 #  x = One/binary = 1/2, the half-One. So the zero-point floor is the half-One, exactly
 #  the 1/2 in E = (1/2) h f. It is:

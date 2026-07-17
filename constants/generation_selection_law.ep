@@ -1,0 +1,125 @@
+# ============================================================================
+#  THE GENERATION SELECTION LAW  --  the association step, context binding, and
+#  re-expression forced; the last engineering choices of contextual generation
+#  replaced by the lock, the capacity, and the binary count.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  Contextual integration (contextual_integration.ep) forced the DEPTH and the
+#  WEIGHTS of deep context. Three constituents of the generator remained
+#  engineering constructs: (1) how far one association step spreads (a chosen
+#  neighbour cap), (2) which held contexts contribute their continuations (a
+#  chosen match threshold), and (3) what re-expression of a taught meaning
+#  requires (a chosen mechanism). All three are forced. (1) A step's spread is
+#  UNIT CAPACITY at the lock: one focus is complete at 1/2 (the attention
+#  capacity, reused), so a step spreads exactly to the neighbour set completing
+#  the lock share -- the strongest neighbours whose exact shares sum to >= 1/2 --
+#  and no chosen cap exists. (2) A held context BINDS to the live context when
+#  their coupling reaches the lock 1/2 (the sync threshold, reused): strong kin
+#  2/3 binds, weak 1/3 runs free -- the match threshold is the lock, not a knob.
+#  (3) A held expression re-emitted whole is the HELD regime -- it repeats
+#  (memory_abstraction, reused) -- forbidden in generation; a FRESH surface is a
+#  combination of held expressions, and a combination requires at least the
+#  binary count b = 2 of them. With one expression held, the lawful act is to
+#  defer and learn another -- the teacher loop's defer rule, forced.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  1. STEP SPREAD IS UNIT CAPACITY. One complete focus at the lock 1/2 (reused):
+#     an association step commits its focus to the minimal strongest neighbour
+#     set whose exact shares reach 1/2; the remainder is the suppressed tail.
+#     No neighbour-count parameter exists -- the lock is the capacity.
+#  2. CONTEXT BINDING IS THE LOCK. Coupled processes lock at g_c = 1/2 (reused):
+#     a held context contributes its continuations iff its coupling to the live
+#     context >= 1/2. Strong kin (2/3) binds; weak association (1/3) runs free.
+#  3. CONTRIBUTIONS ARE EXACT SHARES ON THE CASCADE. A bound context's
+#     continuations enter as exact rational shares, and depth levels mix at the
+#     forced cascade weights (contextual_integration.ep, reused): nothing fitted.
+#  4. RE-EXPRESSION REQUIRES b EXPRESSIONS. A single held expression re-emitted
+#     is the held orbit's own regime: it REPEATS (the hold/closure margin b,
+#     memory_abstraction, reused) -- verbatim, forbidden as generation. A fresh
+#     combination draws from at least two distinct held expressions: the minimal
+#     count of parts a combination needs is the binary count b = 2. Below b, the
+#     lawful act is deferral (ask/learn), never emission.
+#  5. FORBID the engineering dimensions: index/posting caps, corpus size, and
+#     any neighbour-count or match-threshold knob (both are the lock now).
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Forced content is exact: capacity 1/2; binding at 1/2 (2/3 binds, 1/3 free);
+#  re-expression minimum b = 2. Observed in the running engine: the cumulative-
+#  lock spread replaces the degree cap; the taught-match threshold equals the
+#  lock; single-expression corrections defer to the teacher until a second
+#  expression is held -- each previously a chosen number, now a reuse.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "attention_capacity.ep"
+
+
+# ── 1. STEP SPREAD: unit capacity at the lock. ──
+define step_capacity returning Fraction:
+    return fraction_from_ratio(1 and binary_count())              # 1/2, reused lock
+
+# a spread completing the lock: strongest shares 1/3 + 1/6 = 1/2 reach capacity...
+define spread_completes_at_lock returning Bool:
+    set third to fraction_from_ratio(1 and colour_count())
+    set sixth to fraction_from_ratio(1 and 6)
+    set spread to fraction_add(third and sixth)
+    return fraction_is_equal(spread and step_capacity())
+
+# ...and the suppressed tail is the complement 1/2: spread + tail = the One.
+define spread_and_tail_partition_one returning Fraction:
+    return fraction_add(step_capacity() and step_capacity())      # = 1 exactly
+
+# ── 2. CONTEXT BINDING: the lock decides; strong kin binds, weak runs free. ──
+define binding_threshold returning Fraction:
+    return fraction_from_ratio(1 and binary_count())              # the same lock, reused
+
+define strong_kin_binds returning Bool:
+    set kin to fraction_from_ratio(binary_count() and colour_count())   # 2/3
+    return fraction_compare(kin and binding_threshold()) >= 0
+
+define weak_runs_free returning Bool:
+    set weak to fraction_from_ratio(1 and colour_count())               # 1/3
+    if fraction_compare(weak and binding_threshold()) >= 0:
+        return false
+    return true
+
+# ── 4. RE-EXPRESSION: at least b held expressions; below b, defer. ──
+define reexpression_minimum returning Fraction:
+    return fraction_from_whole_number(binary_count())             # b = 2
+
+define one_expression_repeats returning Bool:
+    # one held expression emitted whole = the held regime = repeats (forbidden):
+    # a combination of ONE part is that part itself -- fresh surface requires >= b.
+    set one to fraction_from_whole_number(1)
+    if fraction_compare(one and reexpression_minimum()) >= 0:
+        return false
+    return true
+
+define two_expressions_compose returning Bool:
+    set two to fraction_from_whole_number(2)
+    return fraction_compare(two and reexpression_minimum()) >= 0
+
+# ── 5. FORBID the engineering dimensions and the retired knobs. ──
+define selection_is_not_tuned returning Bool:
+    set guard to forbid_target_input("index/posting caps and corpus size (engineering)" and false)
+    set guard to forbid_target_input("a neighbour-count spread cap (retired: the lock is the capacity)" and false)
+    set guard to forbid_target_input("a match-threshold knob (retired: the lock is the threshold)" and false)
+    return true
+
+
+# ── FORM CLOSURE (STANDARDS Rule 1, by reuse of closed forms) ──
+# Every value this law uses is a reused-closed form: the capacity/threshold is the
+# CLOSED focus lock 1/2 (attention_capacity.ep); the re-expression minimum is the
+# generator count b itself. The reuses are cross-routed against their closed sources.
+define capacity_equals_closed_focus_lock returning Bool:
+    return fraction_is_equal(step_capacity() and focus_lock())
+
+define binding_equals_closed_focus_lock returning Bool:
+    return fraction_is_equal(binding_threshold() and focus_lock())
+
+define minimum_is_the_generator_itself returning Bool:
+    return fraction_is_equal(reexpression_minimum() and fraction_from_whole_number(binary_count()))

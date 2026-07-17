@@ -1,12 +1,12 @@
 # ============================================================================
-#  TRACE TO THE ONE  --  the whole chain in one place: axiom -> generators ->
-#  depths -> a headline constant, every step reducing to the One.
+#  TRACE TO THE ONE  --  the whole chain in one place: self-proven theorem ->
+#  the One -> generators -> depths -> a headline constant.
 # ============================================================================
 #  This is the "everything bottoms out at the One" demonstration. It walks the
-#  dependency floor: the One is forced from "there is not nothing"; the two
+#  dependency floor: the One is forced from "there is no nothing"; the two
 #  generators are COUNTED from the fold's own period spectrum; the depths are forced
 #  from the generators; and 1/alpha's every block is built from those -- so the only
-#  irreducible input anywhere is the One.
+#  irreducible foundation is the self-proven theorem that forces the One.
 # ============================================================================
 import "../constants/the_axiom_is_a_theorem.ep"
 import "../constants/fine_structure_constant.ep"
@@ -27,9 +27,9 @@ define expect_bool with label as Str and got as Bool:
     return 0
 
 define main:
-    display "=== trace to the One: every value reduces to the axiom ==="
+    display "=== trace to the One: every value reduces to the self-proven theorem ==="
 
-    display "--- the One (forced from 'there is not nothing', not assumed) ---"
+    display "--- the One (forced from 'there is no nothing', not assumed) ---"
     set ok to expect_bool("the ground is not nothing (zero forbidden)" and ground_is_not_nothing())
     set ok to expect_equal("the displaced ground (x with x+x = One) = 1/2" and fraction_to_text(displaced_ground()) and "1/2")
     set ok to expect_equal("the ground doubles to the One (1/2 + 1/2 = 1)" and fraction_to_text(ground_doubles_to_one()) and "1")

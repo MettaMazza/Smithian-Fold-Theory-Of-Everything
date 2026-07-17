@@ -110,7 +110,7 @@ Build a non-destructive current-source gate:
 
 The generated-C pass and complete current-source pass remain separately named receipts. Existing certificate drift is reconciled, and already established later derivations are now attached to the chronological corpus.
 
-**Progress on 17 July 2026:** the isolated gate proves the entire current source at **326 suites / 2,002 checks / zero failures**. The generated-C release now proves **324 suites / 1,975 checks / zero failures**, and all 324 registered pairs regenerate identically. The only absent certificates are `contextual_integration` and `generation_selection_law`; both source suites pass the engine gate but remain outside the registered publication release. Maria decides whether and how their engine-valid data becomes a publishable conclusion; no agent may publish that conclusion from a green test alone.
+**Completed on 17 July 2026:** the source and generated-C release surfaces both prove **326 suites / 2,002 checks / zero failures**. All 326 pairs regenerate identically, with zero drift and zero absence. The final two derivations—contextual integration and generation selection—were confirmed as already-published Unison v6.1 conclusions and reconciled as Steps 323–324 with exact certificates.
 
 Do not use a cleanup script that deletes non-source files from the test tree.
 

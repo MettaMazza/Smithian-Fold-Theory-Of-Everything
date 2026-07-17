@@ -70,7 +70,7 @@ which the continuum, with its ~26 fitted dials, never derived at all.
 
 **The foundation.** The theory has zero free parameters and, in the precise sense
 proven in its own engine, zero axioms: its single premise is itself a machine-checked
-theorem. Given only that there is *not nothing*, the One (the whole, 1), its domain
+theorem. Given only that there is *no nothing*, the One (the whole, 1), its domain
 (0, 1], and the fold — the doubling map x → x + x with whole Ones cast out — are
 forced: the engine enumerates every parameter-free self-map of bounded size, runs
 them, and proves the fold is the **unique** generator (non-injective, recurrent, and
@@ -329,12 +329,12 @@ an amputation of mathematics; it is the mathematics of Brahmagupta's predecessor
 of every ledger and every laboratory readout, shown below to be sufficient for the
 constants of nature.
 
-## I.2 There is not nothing: the premise that proves itself
+## I.2 There is no nothing: the premise that proves itself
 
-The theory's single premise is the denial of the void: **there is not nothing.**
+The theory's single self-proven theorem is the denial of the void: **there is no nothing.**
 From it, three things are forced, and the engine derives rather than assumes each:
 
-- **The One.** If there is not nothing, there is something; the whole of it,
+- **The One.** If there is no nothing, there is something; the whole of it,
   normalized to itself, is the unit. The One is not a chosen scale — it is the
   tautology that the whole is all of it. (The absolute scale in conventional units
   is a label, not physics; Part XV returns to this.)
@@ -965,7 +965,7 @@ by exact squares). The two agree end to end. Every claim in this paper cites
 machinery in this repository:
 
 - **`make -C verify prove`** — the complete audit: **306 suites, 1,832 forced
-  checks, 0 failures**, from the axiom to every measured comparison, requiring
+  checks, 0 failures**, from the self-proven theorem to every measured comparison, requiring
   nothing but a C compiler.
 - **`make online`** — the live mode: current CODATA/NIST values fetched at run
   time, closing the "you typed the measured numbers in yourself" objection.
@@ -1015,7 +1015,7 @@ falsification battery, and check lives in `OneFoldMaster.md` and its module.
 - Step 21 — the arrow of time: the fold is non-injective (`fold(1/4) = fold(3/4)
 - Step 22 — the uncertainty principle: position support × frequency support `≥
 - Step 23 — spin and statistics: the boson is the One, the fermion the half-One
-- Step 24 — the axiom is a theorem: given only "not nothing", the One, the domain
+- Step 24 — the historical axiom is derived as a theorem: given only "there is no nothing", the One, the domain
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
 - Step 26 — the prime-sector ladder: the force-sectors are exactly the primes
 - Step 27 — the fold's orbits are the order of two: `period(1/p) = ord_p(2)`

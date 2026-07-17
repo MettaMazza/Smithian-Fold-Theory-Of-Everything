@@ -189,3 +189,7 @@ This section records progress after the immutable capture above; it does not rew
 - The two absent suites are the untracked `contextual_integration` (14 checks) and `generation_selection_law` (13 checks). Both pass the isolated engine source gate, but remain outside the registered certificate/publication release pending Maria Smith's decision about publishable conclusions.
 - The complete current-source receipt remains **326 suites / 2,002 checks / zero failures**.
 - No commit or push was performed.
+
+## Final release reconciliation — 17 July 2026
+
+Direct comparison with the Unison Git repository and published v6.1 architecture paper established that `contextual_integration` and `generation_selection_law` were already published as 27/27 form-closed and consumed by the engine. They were therefore synchronization debt rather than unpublished candidates. They are now Steps 323–324 with exact generated-C certificates. Final surface: **326 suites / 2,002 checks / zero failures; 326 identical / zero drifted / zero absent**.

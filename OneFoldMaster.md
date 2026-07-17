@@ -5503,7 +5503,19 @@ checks).
 
 **What it does.** Forces the correctness lock used to value whether a part fits the others and the whole, without a trained or fitted score. Two coupled fold processes scale a gap by `2·(1−g)`; the marginal locking point is therefore `g = 1/2`, the fold preimage of the One. At that lock the multiplier is the One, `fold(1/2) = 1`, and the lock equals the already-closed cascade head share, so the same criterion applies at token, word, statement, and conversation scales. Strong kin `2/3` coheres because it reaches the lock; weak association `1/3` runs free. Across four scales, `1/2 + 1/4 + 1/8 + 1/16` plus the No-Zero floor `1/16` closes exactly to the One. The score is therefore the fold-determined lock, not a measured or fitted parameter (`forbid_target_input` guards that boundary). No new assembled constant is introduced: the lock, fold preimage, cascade shares, kin values, and closing floor are reused closed structures. Ernos-verified 2026-07-15 (8/8 checks).
 
-### Form-closure sweep of the decode subseries (Steps 308–322) — complete
+### Step 323 — Contextual integration (the forced deep-context cascade)
+
+**File:** `constants/contextual_integration.ep` (test: `tests/test_contextual_integration.ep`)
+
+**What it does.** Forces the depth and weights of deep contextual integration without a chosen layer count or trained mixing weights. One association step is one binding through the held kin graph; every further step is one fold deeper and therefore halves exactly. The integration depth closes at the already-closed covering depth of the colour volume: `cover(c^c) = b + c = 5`, because `2^5 = 32` covers `27` while `2^4 = 16` does not. The five shares `1/2 + 1/4 + 1/8 + 1/16 + 1/32`, together with the No-Zero floor `1/32`, partition the One exactly. The depth, floor, and colour volume are independently cross-routed to the closed functional-band derivation; vocabulary size, graph degree, and fitted step weights are forbidden derivation inputs. This is the exact deep-context law consumed by UnisonAI and published in its v6.1 architecture paper. Ernos-verified 2026-07-17 (14/14 checks).
+
+### Step 324 — The generation-selection law (capacity, binding, and re-expression)
+
+**File:** `constants/generation_selection_law.ep` (test: `tests/test_generation_selection_law.ep`)
+
+**What it does.** Forces the remaining selection operations used by contextual generation. Association spread has unit capacity at the closed lock `1/2`: the minimal strongest-neighbour shares fill that capacity, with `1/3 + 1/6 = 1/2`, and the suppressed tail supplies the complementary half. A held context binds to live context at the same lock: strong kin `2/3` binds and weak association `1/3` remains free. Fresh re-expression requires at least the binary count `b = 2` held expressions; a single expression can only repeat its held surface and therefore must defer rather than masquerade as generation. The capacity and binding threshold cross-route to the already-closed attention focus lock, while the minimum cross-routes to the generator itself; posting caps, corpus size, neighbour-count caps, and fitted thresholds are forbidden derivation inputs. This is the exact generation-selection law consumed by UnisonAI and published in its v6.1 architecture paper. Ernos-verified 2026-07-17 (13/13 checks).
+
+### Form-closure sweep of the decode subseries (Steps 308–324) — complete
 
 The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted **assembled algebraic form** be minimal over a generated candidate space and unique among same-size shapes (`assembly_enumeration` + `forbid_form_selection`), not merely that its ingredient counts are forced. Auditing the whole fold-AI subseries against that bar (2026-07-15): **the functional band (Step 311) was the sole step that asserted new assembled constants, and both now carry both guards** — the colour volume c³ (a two-operation cube, minimal and unique over {c}) and the covering depth b+c (minimal and unique over {b, c}). Every other step asserts **no new assembled constant**, so owes no assembly guard, and is closed by the machinery it already runs:
 
@@ -5521,6 +5533,8 @@ The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted 
 - **320** — the closure signature reuses the two regimes (Step 312: holding repeats b²−b, closure 0) and the location law; the layer identity guarded off. No new form.
 - **321** — memory abstraction reuses the closed held orbit, binding lock, hold/closure regimes, and unfolding equivalence; surface-as-memory is guarded off. No new form.
 - **322** — the coherence value reuses the closed lock 1/2, fold preimage, cascade shares, and kin partition; the four-scale sum telescopes to the One and the score-as-measurement route is guarded off. No new form.
+- **323** — contextual integration reuses the closed covering depth and functional band, cross-routing its depth, floor, and colour volume; the dyadic weights are successive folds of the closed lock and engineering dimensions are guarded off. No new form.
+- **324** — generation selection reuses and cross-routes the closed focus lock for both capacity and binding, and the generator count for the re-expression minimum; caps and fitted thresholds are guarded off. No new form.
 
 The whole subseries compiles and passes under `ernos` with zero violations. **Every fold-AI decode step is now closed to the corpus's finished form-closure standard** — the same standard the physics constants meet — with the band the only one that owed, and received, the generated-minimality and named-shape guards; all others reduce to reused-closed primitives, counts forced two ways, complements of closed values, and structural telescopings.
 
@@ -5593,7 +5607,7 @@ runs):**
 - Step 23 — spin and statistics: the boson is the One, the fermion the half-One
   `1/2` (`fold(1/2) = 1`, `1/2 + 1/2 = 1`) — the two-to-one fold gives exactly
   fermions and bosons.
-- Step 24 — the axiom is a theorem: given only "not nothing", the One, the domain
+- Step 24 — the historical axiom is derived as a theorem: given only "there is no nothing", the One, the domain
   `(0,1]`, and the fold are forced — zero parameters, and the single premise
   proves itself (zero axioms).
 - Step 25 — the fold is forced (machine-checked): the size-≤2 parameter-free
@@ -6233,7 +6247,7 @@ So the algebraic assembly itself is proven determinate, not selected among
 coincident alternatives (nine modules: fine-structure leading + second order,
 dark/baryon, Hubble, electroweak, gluons, Koide, neutrino reactor, absolute scale,
 the lepton invariants and channel). And the foundation itself
-is not a free choice (Step 24): given only that there is *not nothing*, the One,
+is not a free choice (Step 24): given only that there is *no nothing*, the One,
 the domain `(0,1]`, and the fold are forced — so the model has **zero free
 parameters and its single premise is a proven theorem** (zero axioms).
 The only literals left are implementation-only — the base ten of decimal notation

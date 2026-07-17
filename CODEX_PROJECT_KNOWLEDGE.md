@@ -2,7 +2,8 @@
 
 **Last grounded:** 17 July 2026  
 **Owner:** Maria Smith  
-**Maintaining agent:** OpenAI Codex, GPT-5-based; exact deployment identifier/reasoning-effort setting is not exposed inside the task  
+**Maintaining agent:** OpenAI Codex, GPT-5 family  
+**Audit level:** root/direct integration audit, with same-model full-context read-only project auditors; exact deployment identifier and reasoning-effort setting is not exposed inside the task  
 **Development context:** approximately one month of work by one person  
 **Primary machine:** Apple Mac with M3 Ultra and 512 GB unified CPU/GPU/NPU memory  
 **Purpose:** durable working memory for future technical collaboration across SFT, Fold Protein, Fold Go, FoldBot Chess, and Unison AI
@@ -55,7 +56,7 @@ Anything else is outside the forced claim until closed. Established computer sci
 
 Declared walls such as `DERIVATION`/`CHECK` and `Measured` are provenance controls, not claims that mathematics, physics, and computation are separate realities. The unified theory determines the ontology; the walls prevent target measurements or agent priors from being mistaken for derivations.
 
-The One's historical wording is not contradictory: it began as the operational axiom, then the later corpus derived that axiom as a self-contained theorem from “there is not nothing.” Preserve both stages in chronological documentation.
+The current foundation is **one machine-checked, self-proven theorem: “there is no nothing.”** It forces the One and its fold; the theory therefore has zero axioms. The One's historical wording is chronological rather than current: it began as the operational axiom, then the later corpus derived it from the theorem. Preserve that development history, but never summarize the present theory as “one axiom.”
 
 ## Project roots
 
@@ -73,13 +74,13 @@ These are live worktrees. Before editing or promoting a result, refresh reposito
 
 Each project owns its own repository. Commit completed work locally and narrowly inside that project; do not push without Maria's explicit request. “Sync and push” means first prove main-corpus adherence and synchronize all required main-theory and standalone artifacts, then commit and push the main theory repository and the individual project repository separately to their respective GitHub remotes. Never sweep unrelated dirty paths into either commit.
 
-Observed local discrepancy on 17 July 2026: `/Users/mettamazza/Desktop/Unison AI/` is not currently recognized by Git as a repository, even though Unison is governed as an individual project/repository. Preserve its synchronized files, but do not invent a remote or initialize/attach repository metadata without resolving the intended existing repository boundary.
+Resolved Unison repository boundary on 17 July 2026: `/Users/mettamazza/Desktop/UnisonAI/` is the canonical Git repository (`MettaMazza/UnisonAI.git`), while `/Users/mettamazza/Desktop/Unison AI/` is the 5.7 GB live runtime workspace. Synchronize only reviewed tracked source/document deltas from the runtime workspace into the repository; never bulk-copy runtime stores, corpora, sessions, ledgers, logs, media, secrets, or model data. `/Users/mettamazza/Desktop/UnisonAI_backup_20260713_205354/` is a divergent historical backup and must remain untouched.
 
 The lifecycle is deliberate: main theory/reference → standalone application development → missing derivation returned to and closed in main → derivation consumed by application → worked/verified application release imported back into main. During development, divergence is expected. The standalone project controls active application source; the main copy remains the last established published/reference snapshot.
 
 Forcing and derivation validity are defined by the engines and `STANDARDS.md`: trace to the One, satisfy the required forced/closure routes, and halt on violation. Neither Maria nor an agent supplies a discretionary validity threshold. Maria interprets the resulting data, decides which conclusions are publishable, and redirects the investigation. When she approves a conclusion for publication, synchronize the canonical developing project with the main corpus and all related papers, READMEs, master-spine status, claims, certificates, and evidence links as one release. Preserve earlier/voided material as labeled history; do not leave contradictory current claims.
 
-**Current synchronization record, 17 July 2026:** the already published coherence derivation is now registered as `SFT-COHERENCE-322`, attached to Step 322 and an 8/8 matching certificate, described consistently in both main-corpus Unison papers, both standalone Unison architecture papers, and the standalone Omni README. The standalone `corpus/OneFoldMaster.md` is byte-identical to the authoritative main master. `contextual_integration` and `generation_selection_law` pass the current engine source gate but remain publication-pending; they were not paper-synchronized or added to the registered certificate release.
+**Current synchronization record, 17 July 2026:** coherence is registered as `SFT-COHERENCE-322`. Direct review then established that Unison v6.1 already publishes `contextual_integration` and `generation_selection_law` as 27/27 form-closed and the engine consumes them. Their main-corpus lag was synchronization debt, not unpublished work. They are now registered as Steps 323–324 with matching certificates, completing the 326-suite release surface.
 
 ## Documentation inventory and reading rule
 
@@ -97,7 +98,7 @@ The long AI-misalignment documentary and presentation articles explain motivatio
 
 ## Foundational model
 
-The programme begins from “there is not nothing,” the One, exact rational parts in `(0,1]`, and a parameter-free expression language. The fold doubles a part and casts out whole Ones.
+The programme begins from the machine-checked, self-proven theorem “there is no nothing,” which forces the One, exact rational parts in `(0,1]`, and a parameter-free expression language. The fold doubles a part and casts out whole Ones.
 
 `foundation/forced_fold_theorem.ep` tests four named size-at-most-two self-map forms:
 
@@ -136,9 +137,9 @@ The fold spectrum supplies `b=2`, `c=3`; covering relations supply depths 5 and 
 - Steps 266–302: frontier campaign;
 - Step 303: whole-board chess;
 - Steps 304–307: early application engines;
-- Steps 308–322: Fold-AI/Unison decode, memory, context, generation, and coherence continuation.
+- Steps 308–324: Fold-AI/Unison decode, memory, context, generation, coherence, contextual integration, and generation selection.
 
-Step 321 replaces held-orbit replay with schema closure/unfolding. Step 322 forces the coherence value at the fold balance point. Later step-local corrections control stale earlier milestone prose.
+Step 321 replaces held-orbit replay with schema closure/unfolding. Step 322 forces the coherence value at the fold balance point. Steps 323–324 force the deep-context cascade and its generation-selection law. Later step-local corrections control stale earlier milestone prose.
 
 ## Status vocabulary
 
@@ -177,18 +178,14 @@ The NIST checker tolerances are not uniform: inverse alpha uses `1e-6` relative 
 Inventory after chronological and certificate reconciliation:
 
 - 326 `.ep` test sources;
-- 324 generated-C certificates;
-- all 326 current sources compile and execute in an isolated copy: **326 suites / 2,002 checks / zero failures**;
-- the generated-C surface executes **324 suites / 1,975 checks / zero failures**;
-- **324/324 registered source/C pairs regenerate byte-identically**;
-- zero registered pairs currently drift;
-- two untracked source suites remain outside the release pending Maria's validity decision.
+- 326 generated-C certificates;
+- the complete source and generated-C surfaces both execute **326 suites / 2,002 checks / zero failures**;
+- **326/326 source/C pairs regenerate byte-identically**;
+- zero pairs drift and zero certificates are absent.
 
-The two deliberately absent certificates are `test_contextual_integration` (14 checks) and `test_generation_selection_law` (13 checks). Their sources and tests pass the isolated engine gate, establishing the present execution receipt; they are not yet part of the registered publication release or its paper conclusions. Maria decides whether and how the engine-valid data supports a publishable conclusion. The other sixteen formerly absent suites were already tracked/published work, were reconciled with Steps 308–322 and the Step 303 endgame receipt, and now have matching certificates.
+The last two certificates are `test_contextual_integration` (14 checks) and `test_generation_selection_law` (13 checks). Their 27 checks were already published by Unison v6.1 and are now attached to Steps 323–324 and the registered release. The endgame-table suite separately completed both full 2^19 re-proofs, including value-law closure, exact censuses, win/loss/draw counts, mate counts, and maximum distances.
 
-The sixteen synchronized additions contribute **127 checks** to the generated-C surface; the two pending suites contribute the remaining **27 checks** to the complete 326/2,002 source surface. The endgame-table suite completed both full 2^19 re-proofs, including value-law closure, exact censuses, win/loss/draw counts, mate counts, and maximum distances.
-
-Use `verify/prove_current_source_isolated.sh` for the non-destructive live-source gate. It builds and runs in a temporary directory, leaves `tests/` and `verify/` untouched, and reports both the 326/2,002 execution receipt and certificate comparison. Current expected comparison is **324 identical, zero drifted, two absent**.
+Use `verify/prove_current_source_isolated.sh` for the non-destructive live-source gate. It builds and runs in a temporary directory, leaves `tests/` and `verify/` untouched, and reports both the 326/2,002 execution receipt and certificate comparison. Current expected comparison is **326 identical, zero drifted, zero absent**.
 
 The twelve formerly drifted pairs were synchronized mechanically and remain visible in the audit history: `test_applied_signatures`, `test_codata_comparison`, `test_constants_rationality`, `test_counterfactual_map`, `test_endgame_oracle`, `test_fine_hyperfine`, `test_finite_inventory`, `test_fold_chess_bot`, `test_measured_values`, `test_particle_census`, `test_trace_to_the_one`, `test_turbulence_spectrum`.
 
@@ -266,6 +263,10 @@ The construction critique is about certificate completeness, not incumbent blind
 - attach input, source, command, log, state path, PDB, score, and hashes in one manifest;
 - keep blind sequence-to-boundary forcing in a separate forward ledger.
 
+The committed task-62 witness replays 76 state indices over the row-major 24×24 lattice and reconstructs the tracked PDB byte-for-byte. The repository evaluator reproduces TM-like 0.9891233862 and C-alpha dRMSD 0.2608370339. This secures the witness as target-assisted construction evidence. The search that produced the witness remains unreproducible from committed source: the committed beam engine exposes nine states and width 500 without the paper's 576-state, width-2000, steric-filtered producing path.
+
+The present witness coordinate construction uses floating NeRF, while one current paper describes a 2^40 fixed-integer engine. The score reads 76 C-alpha atoms from a 228-atom prediction against a 602-atom target, and `calculate_tm.py` is not canonical TM-align. These are implementation and metric boundaries to repair in the certificate; they do not negate the openly target-assisted structural construction.
+
 ### Metric boundary
 
 `calculate_tm.py` is a whole-chain Kabsch-aligned TM-like score and silently truncates to the shorter chain. Until independently canonical-scored, call the result **repository Kabsch/TM-like score 0.9891**. Add an equal-length guard.
@@ -291,6 +292,10 @@ The exact `.ep` solver is exhaustive; the Python match harness is bounded and he
 
 The match transposition key omits positional-superko history. Add history identity before calling cached match search exact under those rules.
 
+Direct root inspection also confirms that the current competitive search omits `last_passed` from its transposition identity, stores alpha-beta cutoffs without exact/lower/upper bound type, and searches pass only when no stone candidate survives. A correct competitive-proof state must bind board, mover, complete positional-superko history, and previous-pass state; pass must remain an available action; any symmetry must transform the full augmented state rather than the current board alone.
+
+The current match referee does not establish a shared opponent rules/komi contract or bind immutable source, opponent, configuration, and transcript hashes. It also overwrites the human-readable ledger. Repair these provenance and halt conditions before treating a rerun as the secured rank.
+
 Current raw ledgers:
 
 - GnuGo 9x9 d2: 1/2;
@@ -300,6 +305,8 @@ Current raw ledgers:
 - KataGo 9x9 d4: 0/4.
 
 `ledger_katago_9x9_d3.md` is mislabeled GnuGo 13x13 material. No raw current ledger supports the 2–0 19x19 KataGo headline. Preserve this as an evidence-link repair, not a judgment on the counted law.
+
+Two separate GNU Go 9×9 depth-3 batches are genuine historical 2–0 evidence. Independent replay accepts every move under positional superko and reproduces both pass-pass terminals and all four recorded scores. Preserve both raw logs and their hashes; rerun the gate after the augmented-state/referee repair before calling the current rank secured.
 
 The R1 referee script expects output fields the current solver no longer emits. Repair both sides or generate a structured result manifest.
 
@@ -353,6 +360,10 @@ Do not apply an exact-fraction claim from the substrate to the whole live stack.
 ### Verification
 
 - current standalone `verify_omni.py`: 21/21 fresh;
+- current context/integration source laws: 27/27 form-closed and consumed by the engine;
+- final reconciled main-corpus target: 326 suites, 2,002 checks, zero failures, 326 source/C pairs identical;
+- live binding calibration: 9/10 intended bindings and 13/14 intended rejections;
+- existing two-judge pool calibration: both judges separate 10/10 known-good and 10/10 known-bad examples;
 - older `verify_unison.py`: hardcoded to umbrella `fold_ai`;
 - stored older artifact: 43/47;
 - documents also cite 36/36 and 47/47.

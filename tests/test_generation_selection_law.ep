@@ -1,0 +1,33 @@
+import "../constants/generation_selection_law.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== the generation selection law: step, binding, re-expression forced ==="
+    set ok to expect_equal("step capacity is the lock 1/2 (unit capacity, reused)" and fraction_to_text(step_capacity()) and "1/2")
+    set ok to expect_bool("a spread completes exactly at the lock (1/3 + 1/6 = 1/2)" and spread_completes_at_lock())
+    set ok to expect_equal("spread + suppressed tail partition the One" and fraction_to_text(spread_and_tail_partition_one()) and "1")
+    set ok to expect_equal("binding threshold is the same lock 1/2" and fraction_to_text(binding_threshold()) and "1/2")
+    set ok to expect_bool("strong kin 2/3 binds (contributes continuations)" and strong_kin_binds())
+    set ok to expect_bool("weak association 1/3 runs free (does not contribute)" and weak_runs_free())
+    set ok to expect_equal("re-expression minimum is the binary count b = 2" and fraction_to_text(reexpression_minimum()) and "2")
+    set ok to expect_bool("one held expression repeats (forbidden as generation)" and one_expression_repeats())
+    set ok to expect_bool("two held expressions compose fresh surface (lawful)" and two_expressions_compose())
+    set ok to expect_bool("no tuned knobs: caps/thresholds retired or guarded" and selection_is_not_tuned())
+    set ok to expect_bool("FORM CLOSURE: capacity equals the CLOSED focus lock (cross-routed)" and capacity_equals_closed_focus_lock())
+    set ok to expect_bool("FORM CLOSURE: binding equals the CLOSED focus lock (cross-routed)" and binding_equals_closed_focus_lock())
+    set ok to expect_bool("FORM CLOSURE: the minimum is the generator b itself" and minimum_is_the_generator_itself())
+    display "=== done ==="
+    return 0

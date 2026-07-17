@@ -1,0 +1,159 @@
+# ============================================================================
+#  CONTEXTUAL INTEGRATION  --  the deep-context law: what stacked attention
+#  layers buy with gradients, forced from the fold's own cascade and cover.
+# ============================================================================
+#
+#  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
+#  A transformer integrates context by STACKING attention layers: each layer mixes
+#  every position with every other (one step of association), and depth-k layers carry
+#  order-k relations -- relations between relations. The layer count is a TUNED
+#  hyperparameter and the mixing weights are TRAINED. The fold forces both. One
+#  integration step is one binding through kin (order-1 association, the held graph);
+#  a further step is one fold deeper, so its contribution HALVES -- the fold factor,
+#  never a trained weight. And the depth is not chosen: integration closes at the
+#  covering depth of the colour volume -- cover(c^c) = b + c = 5 steps -- the same
+#  forced count that closes the functional band (2^5 = 32). Five halving steps plus
+#  the No-Zero floor partition the One exactly: integration CLOSES, it does not
+#  truncate. Deep context is therefore a forced cascade over kin depth: the engine's
+#  "depth" is b + c, its "layer weights" are 2^-k, its "LayerNorm" is exact closure
+#  to the One -- zero tunable numbers where the transformer has millions.
+#
+#  ── DERIVATION ─ (check every line; uses ONLY b = 2, c = 3 and the fold) ─────
+#  1. ONE STEP IS ONE BINDING. Association through the held kin graph carries
+#     order-1 relations; composing k steps carries order-k relations (the counted
+#     analogue of k stacked mixing layers).
+#  2. A DEEPER STEP IS ONE FOLD DEEPER. Attention halves with each step of distance
+#     (the fold factor 1/b, reused -- the same law that ages the conversation), so
+#     integration step k contributes the cascade share 2^-k. No weight is trained.
+#  3. DEPTH CLOSES AT THE COVER. The colour volume is c^c = 27; the covering depth
+#     is the smallest number of doublings that covers it: 2^5 = 32 >= 27 > 16 = 2^4,
+#     so cover(c^c) = 5 = b + c (the covering-depth identity, reused from the
+#     functional band). Integration deeper than the cover adds no reachable order.
+#  4. THE CASCADE CLOSES TO THE ONE. The five shares 1/2 + 1/4 + 1/8 + 1/16 + 1/32
+#     plus the No-Zero floor 1/32 equal the One exactly: the integrated state is a
+#     PARTITION of the One (exact normalization -- the forced "LayerNorm").
+#  5. THE FOCI AT EACH STEP are the ranked dyadic cascade 1/2, 1/4, ... (the
+#     attention-capacity lock, reused). At the Measured wall: trained attention
+#     leans toward exactly this cascade in 12/12 probed layers (the decode record).
+#  6. FORBID the engineering dimensions: the kin graph's degree cap and the
+#     vocabulary size are measured/engineering facts, never derivation inputs; and
+#     the step weights are never fitted.
+#
+#  ── CHECK ─ (measurement; comparison only) ──────────────────────────────────
+#  Forced content is exact: depth = b + c = 5; weights 2^-1 .. 2^-5; closure to the
+#  One with the floor 1/32; the transformer's layer count and mixing weights are the
+#  trained approximations of exactly this shape (the decode campaign's dyadic lean).
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+import "functional_band.ep"
+
+
+# ── 2. The step weights: one fold deeper per step -- 2^-k. Each weight is
+#       VERIFIED to halve the one above it (w_{k+1} + w_{k+1} = w_k, exact),
+#       so the cascade is the fold factor applied k times, never a chosen list. ──
+define integration_weight_1 returning Fraction:
+    return fraction_from_ratio(1 and binary_count())               # 1/2
+
+define integration_weight_2 returning Fraction:
+    return fraction_from_ratio(1 and 4)
+
+define integration_weight_3 returning Fraction:
+    return fraction_from_ratio(1 and 8)
+
+define integration_weight_4 returning Fraction:
+    return fraction_from_ratio(1 and 16)
+
+define integration_weight_5 returning Fraction:
+    return fraction_from_ratio(1 and 32)
+
+define weights_are_successive_halvings returning Bool:
+    set h2 to fraction_is_equal(fraction_add(integration_weight_2() and integration_weight_2()) and integration_weight_1())
+    set h3 to fraction_is_equal(fraction_add(integration_weight_3() and integration_weight_3()) and integration_weight_2())
+    set h4 to fraction_is_equal(fraction_add(integration_weight_4() and integration_weight_4()) and integration_weight_3())
+    set h5 to fraction_is_equal(fraction_add(integration_weight_5() and integration_weight_5()) and integration_weight_4())
+    if h2:
+        if h3:
+            if h4:
+                if h5:
+                    return true
+    return false
+
+# ── 3. Depth closes at the cover: 2^5 = 32 covers c^c = 27; 2^4 = 16 does not. ──
+define volume_built_from_c returning Fraction:
+    set c to fraction_from_whole_number(colour_count())
+    set c2 to fraction_add(fraction_add(c and c) and c)              # 3c = 9? no: c+c+c
+    # c2 above is c+c+c = 9; the volume is 9+9+9 = 27
+    return fraction_add(fraction_add(c2 and c2) and c2)
+
+define doublings_5 returning Fraction:
+    set two to fraction_from_whole_number(binary_count())
+    set four to fraction_add(two and two)
+    set eight to fraction_add(four and four)
+    set sixteen to fraction_add(eight and eight)
+    return fraction_add(sixteen and sixteen)                         # 32
+
+define doublings_4 returning Fraction:
+    set two to fraction_from_whole_number(binary_count())
+    set four to fraction_add(two and two)
+    set eight to fraction_add(four and four)
+    return fraction_add(eight and eight)                             # 16
+
+define cover_holds_at_5 returning Bool:
+    return fraction_compare(doublings_5() and volume_built_from_c()) >= 0
+
+define cover_fails_at_4 returning Bool:
+    if fraction_compare(doublings_4() and volume_built_from_c()) >= 0:
+        return false
+    return true
+
+# The integration depth: b + c = 5, the covering depth (identity reused).
+define integration_depth returning Fraction:
+    set b to fraction_from_whole_number(binary_count())
+    set c to fraction_from_whole_number(colour_count())
+    return fraction_add(b and c)                                     # 5
+
+# ── 4. The cascade over the forced depth closes to the One with the floor. ──
+define integration_floor returning Fraction:
+    return integration_weight_5()                                    # 1/32, the No-Zero floor
+
+define integration_closes_to_one returning Fraction:
+    set s1 to fraction_add(integration_weight_1() and integration_weight_2())
+    set s2 to fraction_add(s1 and integration_weight_3())
+    set s3 to fraction_add(s2 and integration_weight_4())
+    set s4 to fraction_add(s3 and integration_weight_5())
+    return fraction_add(s4 and integration_floor())                  # = 1 exactly
+
+# ── 5. The head focus at every step is the lock 1/2 (attention capacity, reused). ──
+define step_head_is_the_lock returning Bool:
+    return fraction_is_equal(integration_weight_1() and fraction_from_ratio(1 and binary_count()))
+
+# ── 6. FORBID the engineering dimensions and any fitted weight. ──
+define depth_is_not_tuned returning Bool:
+    set guard to forbid_target_input("kin-graph degree cap (engineering dimension)" and false)
+    set guard to forbid_target_input("vocabulary size (measured fact)" and false)
+    set guard to forbid_target_input("integration step weights as fitted parameters" and false)
+    return true
+
+
+# ── FORM CLOSURE (STANDARDS Rule 1, by reuse of closed forms) ──
+# The step's assembled forms are: the depth b + c and the halving weights 2^-k.
+# b + c is the covering depth ALREADY CLOSED with both guards in functional_band.ep
+# (minimal assembly + same-size uniqueness); the weights are cascade shares of the
+# CLOSED lock 1/2. Per the corpus's closure principle, reused-closed forms owe no
+# new guards -- but the reuse itself is cross-routed: the depth must EQUAL the
+# closed covering depth computed independently by the band's own derivation.
+define depth_equals_closed_covering_depth returning Bool:
+    set band_depth to fraction_from_whole_number(band_covering_depth())
+    return fraction_is_equal(integration_depth() and band_depth)
+
+# and the floor is the band's own closing share: 1/32 = 1/functional_band.
+define floor_is_band_share returning Bool:
+    return fraction_is_equal(integration_floor() and fraction_from_ratio(1 and functional_band()))
+
+# the built volume cross-routed against the CLOSED colour volume (functional_band.ep):
+define volume_equals_closed_volume returning Bool:
+    return fraction_is_equal(volume_built_from_c() and fraction_from_whole_number(colour_volume()))

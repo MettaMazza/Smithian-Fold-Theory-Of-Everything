@@ -649,9 +649,10 @@ is in [`OneFoldMaster.md`](OneFoldMaster.md), and provable in one run with
 
 ---
 
-## The axiom is a theorem
+## The foundation is a self-proven theorem
 
-The model has zero free parameters — and zero axioms. The foundation proves itself,
+The model has zero free parameters and zero axioms. Its single foundation is the
+machine-checked, self-proven theorem **there is no nothing**. The foundation proves itself,
 and the proof is machine-checked in two parts.
 
 **The fold itself is forced** (`constants/forced_fold_theorem.ep`). Build maps from
@@ -666,7 +667,7 @@ is not asserted — it is executed and checked.
 
 **The One then follows** (`constants/the_axiom_is_a_theorem.ep`):
 
-1. **Not nothing.** Zero is forbidden; a value must lie in `(0, 1]`.
+1. **There is no nothing.** Zero is forbidden; a value must lie in `(0, 1]`.
 2. **The displaced ground.** The ground cannot be zero — it is the unique value
    whose double is the One (`x + x = One`), solved to the half-One `1/2`.
 3. **The One, forced.** The ground folds up to the One (`fold(1/2) = 1`), and the

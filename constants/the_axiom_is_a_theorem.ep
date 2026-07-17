@@ -1,15 +1,15 @@
 # ============================================================================
-#  THE AXIOM IS A THEOREM  --  the One and the fold are forced, not assumed.
+#  THE FOUNDATION IS A THEOREM  --  the One and the fold are forced, not assumed.
 # ============================================================================
 #
 #  ── WHY ─ (significance; skip if you only want to verify) ────────────────────
 #  Everything here is forced from "the One and its fold." This step shows the
-#  starting point is not a free choice but a THEOREM: given only that there is not
+#  starting point is not a free choice but a THEOREM: given only that there is no
 #  nothing, the One, the domain (0,1], and the fold are forced. Zero free parameters
 #  AND zero axioms -- the one premise proves itself, so it is derived, not assumed.
 #
-#  ── DERIVATION ─ (check every line; the only input is "there is not nothing") ─
-#   1. NOT NOTHING. Zero is forbidden -- a value must lie in (0,1]. (The fold layer
+#  ── DERIVATION ─ (check every line; the only input is "there is no nothing") ──
+#   1. THERE IS NO NOTHING. Zero is forbidden -- a value must lie in (0,1]. (The fold layer
 #      halts on zero; here the ground is checked strictly positive.)
 #   2. THE DISPLACED GROUND, SOLVED. The ground cannot be zero, and it must return
 #      to unison under the fold, so it is the unique value whose double is the One:
@@ -48,7 +48,7 @@ define fold_factor returning Int:
 #  STEP 2 -- the ground is DERIVED (the unique solution of x + x = One)
 # ----------------------------------------------------------------------------
 
-# The displaced ground is forced, not chosen. There is not nothing, so the ground
+# The displaced ground is forced, not chosen. There is no nothing, so the ground
 # cannot be the empty value; and it must return to unison under the fold, so it is
 # the unique value whose double is the One: x + x = One. Solving by the fold
 # factor, x = One / binary = 1/2. This SOLVES for the ground; it does not assume it.

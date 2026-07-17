@@ -1,0 +1,34 @@
+import "../constants/contextual_integration.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and concat(label and concat(" got " and got)))
+    return 0
+
+define expect_bool with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== contextual integration: the deep-context law, forced ==="
+    set ok to expect_equal("step-1 weight is the fold factor 1/2" and fraction_to_text(integration_weight_1()) and "1/2")
+    set ok to expect_equal("step-2 weight halves to 1/4" and fraction_to_text(integration_weight_2()) and "1/4")
+    set ok to expect_equal("step-5 weight is 1/32" and fraction_to_text(integration_weight_5()) and "1/32")
+    set ok to expect_bool("each weight halves the one above (fold factor, verified)" and weights_are_successive_halvings())
+    set ok to expect_equal("colour volume c^c = 27" and fraction_to_text(volume_built_from_c()) and "27")
+    set ok to expect_bool("2^5 = 32 covers the colour volume" and cover_holds_at_5())
+    set ok to expect_bool("2^4 = 16 does NOT cover it (5 is minimal)" and cover_fails_at_4())
+    set ok to expect_equal("integration depth = b + c = 5 (the covering depth)" and fraction_to_text(integration_depth()) and "5")
+    set ok to expect_equal("five halving steps + the floor close to the One" and fraction_to_text(integration_closes_to_one()) and "1")
+    set ok to expect_bool("each step's head focus is the lock 1/2" and step_head_is_the_lock())
+    set ok to expect_bool("depth and weights are forced, never tuned (guards hold)" and depth_is_not_tuned())
+    set ok to expect_bool("FORM CLOSURE: depth equals the CLOSED covering depth (cross-routed)" and depth_equals_closed_covering_depth())
+    set ok to expect_bool("FORM CLOSURE: the floor is the band share 1/32 (cross-routed)" and floor_is_band_share())
+    set ok to expect_bool("FORM CLOSURE: built volume equals the CLOSED colour volume (cross-routed)" and volume_equals_closed_volume())
+    display "=== done ==="
+    return 0

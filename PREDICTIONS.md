@@ -4,7 +4,7 @@
 prediction of the Smithian Fold Theory: a value or structure **forced from one
 object (the One) and one operation (the fold) with zero free parameters**, published
 here *before* the deciding data exists. Each row names the forced value, the module
-that proves it (run `make -C verify prove` — every claim recomputes from the axiom on
+that proves it (run `make -C verify prove` — every claim recomputes from the self-proven theorem on
 any machine with a C compiler), the experiment that will decide it, and exactly what
 outcome falsifies the theory. The git history timestamps every entry.
 
