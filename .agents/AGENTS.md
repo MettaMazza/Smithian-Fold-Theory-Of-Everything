@@ -35,7 +35,9 @@ The order of authority is: current derivation and standards; fresh strict execut
 
 ### Repository lifecycle
 
-The main Smithian Fold Theory folder is the authoritative core theory, completed published work, chronological reference corpus, and integration surface. `Unison AI`, `Fold Protein`, `FoldBot Chess`, and `Fold Go` are the canonical active development environments for their applications.
+The main Smithian Fold Theory folder is the authoritative core theory, completed published work, chronological reference corpus, and integration surface. `Unison AI`, `Fold Protein`, `FoldBot Chess`, and `Fold Go` are the canonical active development environments for four computational proofs of the main SFT corpus. They are not independent product demonstrations appended to the theory: each is an executable proof-by-construction that SFT can force, forward-force, or constitutionally re-derive the required computational science and instantiate it as a working system.
+
+Prediction scores, match ranks, and task performance are forward proof surfaces for those computational proofs. They test how far the forced construction has been carried; they do not become an external authority over the validity of the main mathematical corpus or erase already completed structural constructions.
 
 When application development exposes a missing mathematical requirement, create and close that derivation in the main corpus, append it to `OneFoldMaster.md`, and then consume it in the standalone project. When an application mechanism is worked, verified, and established, import a reviewed release into the main corpus. Do not overwrite active standalone work from an older main snapshot, and do not treat expected development divergence as a defect.
 

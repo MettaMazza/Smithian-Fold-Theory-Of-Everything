@@ -18,7 +18,11 @@ It owns:
 - complete executable proof/reference corpus;
 - published and established application releases imported from the development projects.
 
-### Standalone application projects
+### Standalone computational-proof projects
+
+Unison AI, FoldBot Chess, Fold Go, and Fold Protein are four computational proofs of the main Smithian Fold Theory corpus. Their role is stronger than ordinary application engineering: each supplies an executable proof-by-construction that the main SFT spine can force, forward-force, or constitutionally re-derive the necessary computational science and instantiate a functioning system. The standalone folders are where those proofs are actively developed; the main corpus remains their mathematical authority and eventual integration surface.
+
+Competitive rank, generative performance, and blind prediction are forward proof surfaces showing the attained reach of a computational proof. They are not imported standards that decide whether the foundational mathematics or an already verified structural construction is valid.
 
 The following are the canonical active development environments:
 

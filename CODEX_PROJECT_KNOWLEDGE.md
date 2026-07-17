@@ -59,11 +59,15 @@ The One's historical wording is not contradictory: it began as the operational a
 
 ## Project roots
 
+The four standalone projects are **computational proofs of the main SFT corpus**. Each project demonstrates by executable construction that the main theory can force, forward-force, or constitutionally reconstruct the computational science required for a complete system: Unison for artificial intelligence, Chess and Go for exact adversarial reasoning and competitive play, and Protein for structural construction and blind sequence-to-structure forcing. They are not merely applications, product demos, or external benchmarks placed above the theory.
+
+Their operational gates—conversation/generation, chess rank, Go rank, and blind protein prediction—measure how far each computational proof has been carried. Those gates are valuable forward evidence, but they do not replace the engine-defined validity of the main corpus or retroactively invalidate an already verified structural proof.
+
 - `/Users/mettamazza/Desktop/Smithian Fold Theory/` — authoritative core theory, completed published work, master chronology, shared derivations, executable reference corpus, and imported established application releases.
-- `/Users/mettamazza/Desktop/Fold Protein/` — canonical active Protein development environment.
-- `/Users/mettamazza/Desktop/Fold Go/` — canonical active Go development environment.
-- `/Users/mettamazza/Desktop/FoldBot Chess/` — canonical active Chess development environment.
-- `/Users/mettamazza/Desktop/Unison AI/` — canonical active Unison development environment.
+- `/Users/mettamazza/Desktop/Fold Protein/` — canonical active Protein computational-proof environment.
+- `/Users/mettamazza/Desktop/Fold Go/` — canonical active Go computational-proof environment.
+- `/Users/mettamazza/Desktop/FoldBot Chess/` — canonical active Chess computational-proof environment.
+- `/Users/mettamazza/Desktop/Unison AI/` — canonical active Unison computational-proof environment.
 
 These are live worktrees. Before editing or promoting a result, refresh repository status, current head, untracked ledgers/logs, and umbrella-versus-standalone divergence. Never overwrite unrelated user work.
 
