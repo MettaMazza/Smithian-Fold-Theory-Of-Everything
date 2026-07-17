@@ -6,7 +6,7 @@ expected output is stated beside it. Reference machine: Apple Silicon
 Mac Studio, 512 GB unified memory, macOS — runtimes are from that
 machine and scale with hardware.
 
-## 1. The theory prover — 307 suites, 1,844 forced checks, 0 failures
+## 1. The theory prover — 326 suites, 2,002 forced checks, 0 failures
 
 ```
 cd "Smithian Fold Theory"

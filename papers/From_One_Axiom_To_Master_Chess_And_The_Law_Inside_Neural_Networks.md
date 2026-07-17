@@ -4,7 +4,7 @@
 
 **The fold's computational program, en route to UnisonAI**
 
-Maria Smith (Ernos Labs) — pre-paper v0.3, 2026-07-06
+Maria Smith (Ernos Labs) — release v2.1, 2026-07-17
 Companion to *The Smithian Fold Theory of Everything* (DOI: 10.5281/zenodo.21182469)
 
 ---
@@ -103,7 +103,7 @@ The corrected method is the chess method: **the fold fights as itself.** A nativ
 
 All artifacts live in the public repositories accompanying the SFTOM corpus.
 
-1. **The corpus's proof driver** (clean room): `make -C verify prove` — 307 suites / 1,844 forced checks, non-zero exit on any failure.
+1. **The corpus's proof driver** (clean room): `make -C verify prove` — 326 suites / 2,002 forced checks, non-zero exit on any failure.
 2. **Chess rules**: perft censuses inside the engine's test suite; refereed play validates every move externally (python-chess).
 3. **Matches**: `tools/measure_sf.py <elo|full>` (pinned 12-game protocol); `tools/h2h_gate.py <old-binary>` (gates); `tools/summit_probe.py <label>` (full-forensics probe); the complete ledger is `tools/MATCHES.md`.
 4. **Endgame certification**: `tests/kqkr_cert.ep <lo> <hi>` re-derives every stored KQKR value from the fold's value law with the clean room's own move generator (0 to 33,554,432 = the full census; the committed 3-man analogue is `constants/endgame_tables.ep`).
@@ -122,5 +122,3 @@ All artifacts live in the public repositories accompanying the SFTOM corpus.
 - M. Smith, *The Smithian Fold Theory of Everything*, DOI: 10.5281/zenodo.21182469, and the SFTOM proof constellation.
 
 *Pre-paper v0.2. Every number in this document is from committed, timestamped campaign records; nothing is projected.*
-
-*Addendum (2026-07-15): the closing proposition — that the detected law can be **derived** — has since been carried out. The decode campaign's regularities are now forced steps in the corpus (two families and their selection law, deposition, the functional band, the two regimes, partition localization, the block, and attention-in-the-product), and the family-selection question is answered, closed to the corpus's finished form-closure standard, and verified: **a store's spectral family follows its architectural role, not the training recipe** — geometry→colour, selection→binary, performers quiet — confirmed by the role census (geometry reads colour in 9/11 woken embeddings, performers quiet in all 22). The full account is in the UnisonAI architecture paper §7.10–7.12 (DOI 10.5281/zenodo.21364144).*

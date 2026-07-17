@@ -6,7 +6,7 @@
 DOI: [10.5281/zenodo.21182468](https://doi.org/10.5281/zenodo.21182468) (concept — always latest version)
 Ernos Labs, Scotland
 
-Complete verified corpus (this repository): 306 machine-verified proof suites, 1,832
+Complete verified corpus (this repository): 326 machine-verified proof suites, 2,002
 forced checks, reproducible on any machine with a C compiler in one command
 (`make -C verify prove`). Companion records: the 61-DOI constellation of standalone
 proof papers (Appendix B), each a single result of this model published separately.
@@ -271,7 +271,7 @@ the data exists. The theory can absorb almost no result it did not call: **every
 is a place it can die**, which is precisely what distinguishes derivation from
 accommodation.
 
-**Method.** Everything above is machine-verified: 306 proof suites, 1,832 forced
+**Method.** Everything above is machine-verified: 326 proof suites, 2,002 forced
 checks, every value traced to the One through an enforcement layer that halts on
 any fitted, chosen, or selected quantity; exact rational arithmetic with floats
 forbidden on the derivation side; every combining rule guarded by generated-grammar
@@ -354,7 +354,7 @@ From it, three things are forced, and the engine derives rather than assumes eac
 
 The premise is thus a theorem about its own consequences: the corpus's own audit
 (the single-axiom audit, Step 24; the forced-fold theorem, Step 25) verifies that
-nothing in the 306 suites rests on anything beyond these forced three. Zero free
+nothing in the 326 suites rests on anything beyond these forced three. Zero free
 parameters is enforced; zero axioms is proven.
 
 ## I.3 The two generators, read off the spectrum
@@ -432,7 +432,7 @@ being, as Part XV proves, the point.
 ## II.3 Reproduction: one command, a C compiler, nothing else
 
 The complete verification — every derivation from the One to every measured
-comparison — is `make -C verify prove`: **306 suites, 1,832 forced checks, 0
+comparison — is `make -C verify prove`: **326 suites, 2,002 forced checks, 0
 failures** at the time of writing, finishing with the corpus's summary line. The
 verify directory carries committed, self-contained C (generated from the
 ErnosPlain sources; rebuildable from source with the bundled compiler) so that
@@ -874,7 +874,7 @@ complete chess player in existence whose every number is counted rather than
 chosen** — and the demonstration that the fold framework computes forward as
 well as it derives. The fold does not just derive; it plays.
 
-**The geometric Go solver: achieving master-level parity.** The fold's computational capacity was then tested against the game of Go, a domain whose $10^{170}$ state space previously forced the field to rely exclusively on deep neural networks and billions of learned parameters. Extending the zero-parameter architecture to the 19x19 board, the fold evaluates Go board geometry directly, employing a dynamic sparse move generation algorithm to trim the branching factor via local topological symmetries rather than statistical guessing. In a full 19x19 refereed match, the zero-parameter geometric fold engine achieved a 1-1 tie against the state-of-the-art deep neural network KataGo (b18c384nbt), decisively winning its game as White. This conclusively demonstrates that what modern AI architectures approximate with massive compute, data, and parameters can be derived exactly through geometric law.
+**The geometric Go solver: exact substrate and competitive development.** The fold's computational capacity is also tested in Go. The exact surface enumerates 1, 57, 12,675, and 24,318,165 states for 1×1 through 4×4 and solves the empty 1×1, 1×2, and 2×2 boards at values 0, 0, and +1. The standalone competitive engine evaluates board geometry through counted command and exact rational shares. Its current accepted record includes two separately replayed 2–0 batches against GNU Go 3.8 on 9×9 at ceiling 3. Earlier prose claiming a completed 19×19 KataGo result is withdrawn: the retained 19×19 artifact is partial only. Full-board and broader rank gates remain active open development, not a limit on the counted law.
 
 # Part XV — The lock, the map, and the finite inventory
 
@@ -964,7 +964,7 @@ bisection with sign-scan-found brackets; irrational comparison targets handled
 by exact squares). The two agree end to end. Every claim in this paper cites
 machinery in this repository:
 
-- **`make -C verify prove`** — the complete audit: **306 suites, 1,832 forced
+- **`make -C verify prove`** — the complete audit: **326 suites, 2,002 forced
   checks, 0 failures**, from the self-proven theorem to every measured comparison, requiring
   nothing but a C compiler.
 - **`make online`** — the live mode: current CODATA/NIST values fetched at run
@@ -1296,9 +1296,20 @@ falsification battery, and check lives in `OneFoldMaster.md` and its module.
 - Step 302 — the TERMINAL fine structure: the promotion ladder is counted (one successor
 - Step 303 — the fold chess bot: complete legal chess, ZERO fitted parameters — rules
 - Step 304 — quaternary homodimeric protein docking: independent chain folding + 6D translation/rotation coordinate minimization subject to a $3.2$ Å steric clash floor; verified on Cro repressor (1cop.pdb) with global dRMSD of 12.539 Å.
-- Step 305 — the zero-parameter Go engine: GTP-compliant spatial command solver on the 2D grid, naturally opening on Tengen (E5) and verified 10-0 against simulated random GTP.
+- Step 305 — the zero-parameter Go computational proof: exact state censuses 1, 57, 12,675, and 24,318,165 for 1×1–4×4; exact empty-board values 1×1=0, 1×2=0, 2×2=+1; the standalone development record includes two independently replayed 2–0 GNU Go 3.8 batches on 9×9 at ceiling 3, while broader rank and 19×19 gates remain active.
 - Step 306 — the 3D lattice CFD fluid simulator: mass and momentum advection on the $s_5 = 1/32$ spatial lattice with discrete vorticity capped at 32; mass conserved exactly (150.000 to 150.000).
 - Step 307 — federated Hebbian mesh consensus: decentralized UnisonAI database merging (facts.tsv, corrections.tsv) via information-content sorting; verified conflict resolution with zero duplicates.
+- Steps 308–320 — the Unison/Fold Decode spectral series: two transform families, family selection by storage role, deposition ordering and approach, the functional band, localization, block structure, attention in the product, family signature, expert quantization, and activation regime.
+- Step 321 — memory abstraction: held surface repetition is distinguished from folded schema closure and fresh unfolding.
+- Step 322 — coherence: the marginal synchronization lock is forced at $1/2$, with $2/3$ bound and $1/3$ free; 8/8 checks.
+- Step 323 — contextual integration: the five-stage dyadic cascade closes exactly to the One; 14/14 checks.
+- Step 324 — generation selection: spread binds at the half-One lock and fresh re-expression requires the binary count of held expressions; 13/13 checks.
+
+### Computational-proof evidence: Fold Protein
+
+Protein development does not replace the established Step 308–324 chronology above. Its current secured result is a separate target-assisted construction-parity witness: a 76-state path through a declared 24×24 dihedral lattice reproduces the committed ubiquitin backbone construction byte for byte. The repository scorer reports Kabsch TM-like 0.9891211351 and Cα dRMSD 0.2608575408 Å against the experimental `1ubq` reference.
+
+The target coordinates selected the path during development. This establishes construction/structural parity at the declared comparison boundary; “parity” is not being redefined as predictive parity. Blind sequence-to-structure selection is the next active forward-forcing extension and does not retroactively weaken the construction result. The canonical evidence, exact state path, hashes, replay verifier, and papers live in the Fold Protein repository and are synchronized into this corpus as a reviewed application release.
 
 ## Appendix B — The published constellation and this record
 

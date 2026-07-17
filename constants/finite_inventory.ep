@@ -47,7 +47,7 @@ define inventory_tower_rungs returning Int:
     return whole_power(2 and 7)
 
 # The floor walked down: the One halved seven times, each step exact, the
-# landing 1/128 -- and still positive (the No-Zero axiom holds at the floor).
+# landing 1/128 -- and still positive (the theorem-forced No-Zero domain holds at the floor).
 define floor_is_walked returning Bool:
     set rung to fraction_from_whole_number(1)
     set step to 0

@@ -31,6 +31,8 @@ Read the programme from the One outward. Do not impose an incumbent learned-pred
 
 Mathematical and structural proof is the primary value hierarchy. Prediction is valuable, is actively being developed, and already has an engine in the main corpus; it does not outrank transparent derivation merely because contemporary systems emphasize statistical prediction.
 
+**Parity vocabulary is comparison-specific.** Construction parity, structural parity, predictive parity, and competitive parity are different claims. Do not redefine an author-declared construction or structural parity victory to mean predictive parity, and do not make a later predictive gate a retrospective condition on an earlier proof-by-construction. State the compared objects and metric, then preserve the attained result at that boundary.
+
 The primary questions are:
 
 1. What is the declared SFT object and grammar?
@@ -54,7 +56,7 @@ Every mechanism inside the forced system must enter by one of three routes:
 
 Anything else is outside the forced claim until closed. Established computer science may be used; it may not be imported as an unexplained pretrained prior. The provenance record must say which route admitted it and which earlier SFT steps constrain it.
 
-Declared walls such as `DERIVATION`/`CHECK` and `Measured` are provenance controls, not claims that mathematics, physics, and computation are separate realities. The unified theory determines the ontology; the walls prevent target measurements or agent priors from being mistaken for derivations.
+Declared separations such as `DERIVATION`/`CHECK` and `Measured` are provenance controls, not theoretical walls and not claims that mathematics, physics, and computation are separate realities. The unified theory determines the ontology; these controls prevent target measurements or agent priors from being mistaken for derivations. Likewise, `ENGINEERING TRANSLATION` records present development status only. It must never be written as a declaration that SFT cannot force or re-derive the component.
 
 The current foundation is **one machine-checked, self-proven theorem: “there is no nothing.”** It forces the One and its fold; the theory therefore has zero axioms. The One's historical wording is chronological rather than current: it began as the operational axiom, then the later corpus derived it from the theorem. Preserve that development history, but never summarize the present theory as “one axiom.”
 
@@ -68,7 +70,8 @@ Their operational gates—conversation/generation, chess rank, Go rank, and blin
 - `/Users/mettamazza/Desktop/Fold Protein/` — canonical active Protein computational-proof environment.
 - `/Users/mettamazza/Desktop/Fold Go/` — canonical active Go computational-proof environment.
 - `/Users/mettamazza/Desktop/FoldBot Chess/` — canonical active Chess computational-proof environment.
-- `/Users/mettamazza/Desktop/Unison AI/` — canonical active Unison computational-proof environment.
+- `/Users/mettamazza/Desktop/UnisonAI/` — canonical version-controlled Unison computational-proof repository.
+- `/Users/mettamazza/Desktop/Unison AI/` — live Unison runtime workspace; synchronize reviewed source only and never bulk-import runtime state.
 
 These are live worktrees. Before editing or promoting a result, refresh repository status, current head, untracked ledgers/logs, and umbrella-versus-standalone divergence. Never overwrite unrelated user work.
 
@@ -161,15 +164,9 @@ Never collapse these into “works” or “doesn't work.”
 
 ## Current umbrella execution anchor
 
-Fresh on 17 July 2026:
+Fresh on 17 July 2026, the complete current-source and generated-certificate surfaces both execute **326 suites / 2,002 checks / zero failures**, and all 326 source/certificate pairs regenerate byte-identically. Earlier 307/1,844 and 308/1,848 totals are historical intermediate surfaces and must not appear as current release counts.
 
-- `RUN_EVERYTHING.sh`: 308 suites, 1,848 checks, zero failures;
-- deliberate mutated constant: halted, exit 1;
-- fine-structure neighborhood scan: one in-role candidate within 1 sigma, 0.008 sigma;
-- live NIST comparison: all four rows inside declared tolerances;
-- refereed chess versus random: 4–0–0, zero illegal moves.
-
-The driver banner's 307/1,844 total is stale. The executed total is 308/1,848.
+Additional registered checks include deliberate fitted-value halt behavior, the fine-structure neighborhood scan, declared-tolerance NIST comparisons, and the refereed chess legality anchor. Each retains its own evidence and scope.
 
 The NIST checker tolerances are not uniform: inverse alpha uses `1e-6` relative tolerance; proton/electron, muon/electron, and electron g use 1%. Report the actual deviations and tolerances rather than saying every value is exact.
 
@@ -241,7 +238,7 @@ The live comparison's inverse-alpha deviation is approximately `1.18e-10%`; the 
 
 ### Correct claim
 
-The 0.9891 ubiquitin artifact is a **target-assisted 24-lattice proof-by-construction/structural-expressiveness result**. The project openly uses the native coordinates to rank candidates. It does not claim that blind sequence-to-structure forcing is finished.
+The 0.9891 ubiquitin artifact is a **target-assisted 24-lattice proof-by-construction and construction-parity/structural-parity result at its declared comparison boundary**. The project openly uses the native coordinates to rank candidates. “Parity” here is not predictive parity. Blind sequence-to-structure forcing is a separate active extension, not a condition that weakens or redefines the secured construction result.
 
 Blind forward forcing remains the active problem of deriving sequence-to-invariant spatial boundaries and selecting the lattice path without native coordinates. Blindness measures forward-selection closure/efficiency; it is not the validity criterion for the already disclosed construction.
 

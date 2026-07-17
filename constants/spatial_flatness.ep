@@ -15,7 +15,7 @@
 #  neither grows nor decays as the universe folds forward must be the fold's fixed point
 #  -- the One (fold(1) = 1). So Omega_total = 1. The curvature share is whatever is left
 #  over: Omega_k = One - Omega_total. But One - One is the boundary value that the domain
-#  (0, 1] forbids (the No-Zero axiom): it is not a value space can carry. So there is no
+#  (0, 1] forbids (the theorem-forced No-Zero domain): it is not a value space can carry. So there is no
 #  curvature share to hold -- Omega_k sits at the excluded boundary, which is to say space
 #  is flat. Flatness is not tuned; a non-flat universe would require the density budget to
 #  hold a piece at the one value the fold's domain excludes.

@@ -24,9 +24,12 @@ Unison AI, FoldBot Chess, Fold Go, and Fold Protein are four computational proof
 
 Competitive rank, generative performance, and blind prediction are forward proof surfaces showing the attained reach of a computational proof. They are not imported standards that decide whether the foundational mathematics or an already verified structural construction is valid.
 
+Parity is always qualified by its comparison surface: construction/structural parity, predictive parity, and competitive parity are not interchangeable. A later forward gate extends the programme and must not be imposed retrospectively as a condition on an earlier secured result.
+
 The following are the canonical active development environments:
 
-- `/Users/mettamazza/Desktop/Unison AI/`
+- `/Users/mettamazza/Desktop/UnisonAI/` (version-controlled source)
+- `/Users/mettamazza/Desktop/Unison AI/` (live runtime workspace; reviewed synchronization only)
 - `/Users/mettamazza/Desktop/Fold Protein/`
 - `/Users/mettamazza/Desktop/FoldBot Chess/`
 - `/Users/mettamazza/Desktop/Fold Go/`

@@ -34,6 +34,10 @@ articles/
 transcript*.jsonl
 patch*.py
 scratch*.py
+
+# The chronological transparency spine must always remain publishable.
+!One.md
+!OneFoldMaster.md
 scratch/
 gtp_logs/
 probe_reports/
@@ -42,3 +46,29 @@ beam.log
 perplexity_out.txt
 spectral_probe_out.txt
 fix_cutoff.py
+# ── Secrets — never commit ──
+.env
+*.env
+
+# ── Unison omni: generated brain / curriculum / logs / sessions (runtime state) ──
+graph_memory.json
+graph_memory.json.tmp
+omni/graph_memory.json
+omni/curricula_generated.json
+omni/boundary_store.json
+omni/logs/
+omni/sessions/
+omni/__pycache__/
+omni/*.safetensors
+omni/*.gguf
+
+# ── Local snapshots taken during development ──
+omni_backup_*.tar.gz
+
+# ── Python bytecode ──
+__pycache__/
+*.pyc
+
+# ── Protein-folding scratch artifacts ──
+*.pdb
+*_init.npz

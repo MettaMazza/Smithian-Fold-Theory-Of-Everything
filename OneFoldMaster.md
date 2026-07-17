@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-306 suites, 1,831 forced checks, 0 failures). It needs nothing but a C compiler. Use
+326 suites, 2,002 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5393,11 +5393,11 @@ checks).
 
 **What it does.** Extends SFT's sequence-to-structure model to multi-chain quaternary docking. Rather than using deep learning weights to predict interaction boundaries, the engine folds monomer chains independently using SFT's rational angles, then searches the 6D translation and rotation space. It minimizes the Euclidean distance between hydrophobic residues of the two chains, subject to a hard inter-chain steric clash floor of $3.2$ Å. Validated on the experimental Lambda Cro Repressor dimer (`1cop.pdb`), it achieved a monomer folding dRMSD of **10.266 Å** and a global complex dRMSD of **12.539 Å** in milliseconds of CPU execution, demonstrating parameter-free biophysical assembly.
 
-### Step 305 — The zero-parameter Go engine (tengen emergence from space command)
+### Step 305 — The zero-parameter Go engine (exact substrate and competitive development)
 
 **File:** `tools/measure_go.py`
 
-**What it does.** A standard GTP-compliant Go engine playing master-adjacent Go on the $9 \times 9$ board with exactly zero parameters, zero neural weights, and zero training. The engine counts connected group liberties under Tromp-Taylor rules to evaluate moves. Guided by iterative deepening minimax search with transposition tables and move ordering, it naturally chooses the central star point (`E5` tengen) as its first move to maximize initial spatial command. Verified by achieving a **10-0 victory** against a simulated random GTP bot and establishing a rating calibration ladder.
+**What it does.** Establishes the Go computational-proof programme with zero trained parameters. The exact surface now counts 1, 57, 12,675, and 24,318,165 states for 1×1 through 4×4 and solves the empty 1×1, 1×2, and 2×2 boards at values 0, 0, and +1 (17,038,501 nodes for 2×2), independently refereed. The competitive engine counts liberties and spatial command under its declared rules and uses exact rational values. Its accepted development record contains two independently replayed 2–0 GNU Go 3.8 batches on 9×9 at ceiling 3. No completed 19×19 result or broader secured rank is currently claimed; those gates remain active.
 
 ### Step 306 — The 3D lattice CFD fluid simulator (regularity under the vorticity cap)
 
@@ -6229,7 +6229,7 @@ runs):**
   refereed whole games (python-chess validating every move): **10–0 vs random, 5 draws +
   1 loss vs floor-Stockfish, zero illegal moves** (tools/MATCHES.md). **The fold plays.**
 - Step 304 — quaternary homodimeric protein docking: independent chain folding + 6D translation/rotation coordinate minimization subject to a $3.2$ Å steric clash floor; verified on Cro repressor (1cop.pdb) with global dRMSD of 12.539 Å.
-- Step 305 — the zero-parameter Go engine: GTP-compliant spatial command solver on the 2D grid, naturally opening on Tengen (E5) and verified 10-0 against simulated random GTP.
+- Step 305 — the zero-parameter Go computational proof: exact censuses through 4×4, exact empty-board values through 2×2, and two replayed 2–0 GNU Go 9×9 d3 development batches; broader rank and 19×19 gates active.
 - Step 306 — the 3D lattice CFD fluid simulator: mass and momentum advection on the $s_5 = 1/32$ spatial lattice with discrete vorticity capped at 32; mass conserved exactly (150.000 to 150.000).
 - Step 307 — federated Hebbian mesh consensus: decentralized UnisonAI database merging (facts.tsv, corrections.tsv) via information-content sorting; verified conflict resolution with zero duplicates.
 
