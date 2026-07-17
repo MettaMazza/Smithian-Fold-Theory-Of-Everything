@@ -4923,19 +4923,31 @@ long long float_to_int(long long val) {
 
 
 /* External Function Prototypes (FFI) */
-long long ep_exit(long long);
+
+
+/* Top-Level Constant Globals (Bridge Libraries) */
+long long TT_KEYS = 0;
+long long TT_MOVES = 0;
+long long TT_STAMP = 0;
+long long TT_GEN = 0;
+long long KILLER_A = 0;
+long long KILLER_B = 0;
+long long HIST = 0;
+long long NODES_LEFT = 0;
+long long PASS_ABORTED = 0;
+long long WHITE_REACH_BUF = 0;
+long long BLACK_REACH_BUF = 0;
 
 
 /* User Function Prototypes */
 long long expect_equal(long long, long long, long long);
 long long expect_bool(long long, long long);
 long long _main();
-long long cascade_branching_ratio(long long);
-long long cascade_dimension();
-long long structure_function_exponent();
-long long energy_spectrum_exponent();
-long long ratio_is_strong_coupling();
-long long binary_cascade_excluded();
+long long table_kind(long long, long long);
+long long table_ply(long long, long long);
+long long index_part(long long, long long);
+long long child_index(long long, long long);
+long long certify_table(long long, long long);
 long long smallest_fold_period_above(long long);
 long long binary_count();
 long long colour_count();
@@ -4984,21 +4996,60 @@ long long exact_integer_power(long long, long long);
 long long exact_integer_divide(long long, long long);
 long long exact_integer_divide_exactly(long long, long long);
 long long exact_integer_greatest_common_divisor(long long, long long);
-long long deepest_covering_depth();
-long long whole_is_prime(long long);
-long long prime_sector_count();
-long long first_prime_beyond_ceiling();
-long long sector_shortfall(long long);
-long long sector_coupling(long long);
-long long sector_partition_holds(long long);
-long long sector_carry_closes(long long);
-long long sector_mediator_count(long long);
-long long sector_beta_slope(long long);
-long long halt_violation(long long);
-long long forbid_selection(long long);
-long long forbid_target_input(long long, long long);
-long long forced_unique(long long, long long, long long);
-long long forced_to_be(long long, long long, long long);
+long long piece_is_white(long long);
+long long piece_is_black(long long);
+long long piece_kind(long long);
+long long starting_state();
+long long copy_state(long long);
+long long empty_state();
+long long square_attacked(long long, long long, long long);
+long long lesser_attacker_exists(long long, long long, long long, long long);
+long long attack_min_reach_map(long long, long long);
+long long king_square(long long, long long);
+long long side_in_check(long long);
+long long make_move(long long, long long);
+long long push_move(long long, long long, long long);
+long long push_pawn_move(long long, long long, long long, long long);
+long long pseudo_moves(long long);
+long long legal_moves(long long);
+long long perft(long long, long long);
+long long counted_reach(long long, long long, long long);
+long long mobility_count(long long, long long, long long);
+long long pawn_promotion_potential(long long, long long, long long);
+long long side_units(long long, long long);
+long long share_numerator(long long);
+long long share_denominator(long long);
+long long flip_rank(long long);
+long long parse_packed_token(long long);
+long long load_packed_table(long long);
+long long endgame_probe(long long, long long, long long);
+long long move_is_capture(long long, long long);
+long long ordered_moves(long long);
+long long could_check_from(long long, long long, long long, long long);
+long long quiescence(long long, long long, long long, long long, long long, long long);
+long long tt_key(long long);
+long long tt_ensure();
+long long search_value(long long, long long, long long, long long, long long, long long);
+long long state_signature(long long);
+long long root_pass(long long, long long, long long, long long);
+long long thinking_budget();
+long long search_best_seen(long long, long long, long long);
+long long search_best(long long, long long);
+long long start_is_at_the_lock();
+long long finds_fools_mate();
+long long fools_mate_is_seen_as_mate();
+long long fools_mate_is_real();
+long long self_play_plies(long long);
+long long endgame_best_move(long long, long long, long long);
+long long krk_index(long long, long long, long long, long long);
+long long krk_state(long long, long long, long long, long long, long long, long long);
+long long squares_adjacent(long long, long long);
+long long krk_position_legal(long long, long long, long long, long long, long long, long long);
+long long krk_mate_in_one_position();
+long long krk_finds_the_mate();
+long long krk_mate_is_valued();
+long long krk_mate_is_real();
+long long krk_drives_the_net();
 
 
 
@@ -5045,136 +5096,365 @@ L_cleanup:
 }
 
 long long _main() {
+    long long kqk = 0;
+    long long krk = 0;
     long long ok = 0;
+    long long report = 0;
+    long long report2 = 0;
     long long ret_val = 0;
 
-    printf("%s\n", (char*)(long long)"=== the Kolmogorov exponents: turbulence's 2/3 and 5/3 as fold ratios ===");
-    ok = expect_equal((long long)"the cascade dimension is COUNTED: the colour three", int_to_string(cascade_dimension()), (long long)"3");
-    ok = expect_equal((long long)"the STRUCTURE-FUNCTION exponent (Kolmogorov's 2/3 law)", fraction_to_text(structure_function_exponent()), (long long)"2/3");
-    ok = expect_equal((long long)"the ENERGY-SPECTRUM exponent 1 + 2/3 (the 5/3 law)", fraction_to_text(energy_spectrum_exponent()), (long long)"5/3");
-    ok = expect_bool((long long)"the cascade ratio IS the strong coupling (one number, two roles)", ratio_is_strong_coupling());
-    ok = expect_bool((long long)"EXCLUSION: a binary cascade (1/2) is ruled out -- 3D is load-bearing", binary_cascade_excluded());
+    ep_gc_push_root(&kqk);
+    ep_gc_push_root(&krk);
+    ep_gc_push_root(&report);
+    ep_gc_push_root(&report2);
+
+    ep_gc_maybe_collect();
+
+    printf("%s\n", (char*)(long long)"=== the endgame tables: perfect play, re-proven in-room ===");
+    kqk = load_packed_table((long long)"../data/kqk_packed.txt");
+    report = certify_table(kqk, 5);
+    ok = expect_equal((long long)"KQK: EVERY index obeys the fold's value law (full 2^19 re-proof)", int_to_string(get_list(report, 0)), (long long)"1");
+    ok = expect_equal((long long)"KQK legal census = the campaign's certified 368,452", int_to_string(get_list(report, 1)), (long long)"368452");
+    ok = expect_equal((long long)"KQK wins 144,508", int_to_string(get_list(report, 2)), (long long)"144508");
+    ok = expect_equal((long long)"KQK losses 200,896", int_to_string(get_list(report, 3)), (long long)"200896");
+    ok = expect_equal((long long)"KQK draws 23,048", int_to_string(get_list(report, 4)), (long long)"23048");
+    ok = expect_equal((long long)"KQK checkmates 364", int_to_string(get_list(report, 5)), (long long)"364");
+    ok = expect_equal((long long)"KQK longest distance 20 plies (winner mates in 19; the defender one more)", int_to_string(get_list(report, 6)), (long long)"20");
+    krk = load_packed_table((long long)"../data/krk_packed.txt");
+    report2 = certify_table(krk, 4);
+    ok = expect_equal((long long)"KRK: EVERY index obeys the fold's value law", int_to_string(get_list(report2, 0)), (long long)"1");
+    ok = expect_equal((long long)"KRK legal census 399,112", int_to_string(get_list(report2, 1)), (long long)"399112");
+    ok = expect_equal((long long)"KRK wins 175,168", int_to_string(get_list(report2, 2)), (long long)"175168");
+    ok = expect_equal((long long)"KRK losses 201,700", int_to_string(get_list(report2, 3)), (long long)"201700");
+    ok = expect_equal((long long)"KRK draws 22,244", int_to_string(get_list(report2, 4)), (long long)"22244");
+    ok = expect_equal((long long)"KRK checkmates 216", int_to_string(get_list(report2, 5)), (long long)"216");
+    ok = expect_equal((long long)"KRK longest distance 32 plies (winner mates in 31 = the textbook 16 moves)", int_to_string(get_list(report2, 6)), (long long)"32");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
+    ep_gc_pop_roots(4);
+    free_list(report);
+    report = 0;
+    free_list(report2);
+    report2 = 0;
     return ret_val;
 }
 
-long long cascade_branching_ratio(long long m) {
-    long long branch_unit = 0;
-    long long one = 0;
+long long table_kind(long long table, long long idx) {
+    long long kindnum = 0;
+    long long packed = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&branch_unit);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&m);
+    ep_gc_push_root(&table);
+    ep_gc_push_root(&idx);
 
     ep_gc_maybe_collect();
 
-    one = fraction_from_whole_number(1);
-    branch_unit = fraction_from_ratio(1, m);
-    ret_val = fraction_subtract(one, branch_unit);
+    packed = get_list(table, idx);
+    kindnum = (packed / 64);
+    if (kindnum == 1) {
+    ret_val = 87;
     goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long cascade_dimension() {
-    long long ret_val = 0;
-
-    ret_val = smallest_fold_period_above(binary_count());
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long structure_function_exponent() {
-    long long m = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&m);
-
-    ep_gc_maybe_collect();
-
-    m = smallest_fold_period_above(binary_count());
-    ret_val = cascade_branching_ratio(m);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long energy_spectrum_exponent() {
-    long long one = 0;
-    long long structure = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&structure);
-
-    ep_gc_maybe_collect();
-
-    structure = structure_function_exponent();
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_add(one, structure);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    return ret_val;
-}
-
-long long ratio_is_strong_coupling() {
-    long long cascade = 0;
-    long long strong = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&cascade);
-    ep_gc_push_root(&strong);
-
-    ep_gc_maybe_collect();
-
-    cascade = structure_function_exponent();
-    strong = sector_coupling(3);
-    ret_val = fraction_compare(cascade, strong) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(2);
-    free_struct_Fraction(cascade);
-    cascade = 0;
-    free_struct_Fraction(strong);
-    strong = 0;
-    return ret_val;
-}
-
-long long binary_cascade_excluded() {
-    long long binary_ratio = 0;
-    long long differ = 0;
-    long long same = 0;
-    long long true_ratio = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&binary_ratio);
-    ep_gc_push_root(&true_ratio);
-
-    ep_gc_maybe_collect();
-
-    binary_ratio = cascade_branching_ratio(2);
-    true_ratio = structure_function_exponent();
-    differ = 1LL;
-    same = fraction_compare(binary_ratio, true_ratio) == 0;
-    if (same) {
-    differ = 0LL;
     }
-    ret_val = differ;
+    if (kindnum == 2) {
+    ret_val = 76;
+    goto L_cleanup;
+    }
+    if (kindnum == 3) {
+    ret_val = 68;
+    goto L_cleanup;
+    }
+    ret_val = 85;
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(2);
-    free_struct_Fraction(binary_ratio);
-    binary_ratio = 0;
-    free_struct_Fraction(true_ratio);
-    true_ratio = 0;
+    return ret_val;
+}
+
+long long table_ply(long long table, long long idx) {
+    long long packed = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&table);
+    ep_gc_push_root(&idx);
+
+    ep_gc_maybe_collect();
+
+    packed = get_list(table, idx);
+    ret_val = (packed - ((packed / 64) * 64));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long index_part(long long idx, long long part) {
+    long long bk = 0;
+    long long rest = 0;
+    long long stm = 0;
+    long long wk = 0;
+    long long wp = 0;
+    long long ret_val = 0;
+
+    stm = (idx - ((idx / 2) + (idx / 2)));
+    rest = (idx / 2);
+    bk = (rest - ((rest / 64) * 64));
+    rest = (rest / 64);
+    wp = (rest - ((rest / 64) * 64));
+    wk = (rest / 64);
+    if (part == 0) {
+    ret_val = wk;
+    goto L_cleanup;
+    }
+    if (part == 1) {
+    ret_val = wp;
+    goto L_cleanup;
+    }
+    if (part == 2) {
+    ret_val = bk;
+    goto L_cleanup;
+    }
+    ret_val = stm;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long child_index(long long child, long long piece_code) {
+    long long bk = 0;
+    long long code = 0;
+    long long sq = 0;
+    long long wk = 0;
+    long long wp = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&child);
+
+    ep_gc_maybe_collect();
+
+    wk = 64;
+    wp = 64;
+    bk = 64;
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(child, sq);
+    if (code == 6) {
+    wk = sq;
+    }
+    if (code == piece_code) {
+    wp = sq;
+    }
+    if (code == 12) {
+    bk = sq;
+    }
+    sq = (sq + 1);
+    }
+    if (wp == 64) {
+    ret_val = -1;
+    goto L_cleanup;
+    }
+    ret_val = ((((((wk * 64) + wp) * 64) + bk) + ((((wk * 64) + wp) * 64) + bk)) + get_list(child, 64));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long certify_table(long long table, long long piece_code) {
+    long long best_loss_ply = 0;
+    long long bk = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long cidx = 0;
+    long long draws = 0;
+    long long has_draw = 0;
+    long long i = 0;
+    long long idx = 0;
+    long long law_kind = 0;
+    long long law_ply = 0;
+    long long legal_count = 0;
+    long long losses = 0;
+    long long mates = 0;
+    long long max_ply = 0;
+    long long move = 0;
+    long long move_count = 0;
+    long long moves = 0;
+    long long ok = 0;
+    long long placement_legal = 0;
+    long long r = 0;
+    long long report = 0;
+    long long state = 0;
+    long long stm = 0;
+    long long stored_kind = 0;
+    long long stored_ply = 0;
+    long long succ_kind = 0;
+    long long succ_ply = 0;
+    long long to_sq = 0;
+    long long wins = 0;
+    long long wk = 0;
+    long long worst_win_ply = 0;
+    long long wp = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&bk);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&cidx);
+    ep_gc_push_root(&draws);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&idx);
+    ep_gc_push_root(&legal_count);
+    ep_gc_push_root(&losses);
+    ep_gc_push_root(&mates);
+    ep_gc_push_root(&max_ply);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&ok);
+    ep_gc_push_root(&report);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&stm);
+    ep_gc_push_root(&wins);
+    ep_gc_push_root(&wk);
+    ep_gc_push_root(&wp);
+    ep_gc_push_root(&table);
+    ep_gc_push_root(&piece_code);
+
+    ep_gc_maybe_collect();
+
+    report = create_list();
+    ok = 1;
+    legal_count = 0;
+    wins = 0;
+    losses = 0;
+    draws = 0;
+    mates = 0;
+    max_ply = 0;
+    idx = 0;
+    while (idx < 524288) {
+    wk = index_part(idx, 0);
+    wp = index_part(idx, 1);
+    bk = index_part(idx, 2);
+    stm = index_part(idx, 3);
+    placement_legal = krk_position_legal(wk, wp, bk, stm, piece_code, 1);
+    stored_kind = table_kind(table, idx);
+    stored_ply = table_ply(table, idx);
+    if (placement_legal) {
+    legal_count = (legal_count + 1);
+    if (stored_kind == 87) {
+    wins = (wins + 1);
+    }
+    if (stored_kind == 76) {
+    losses = (losses + 1);
+    if (stored_ply == 0) {
+    mates = (mates + 1);
+    }
+    }
+    if (stored_kind == 68) {
+    draws = (draws + 1);
+    }
+    if (stored_ply > max_ply) {
+    max_ply = stored_ply;
+    }
+    state = krk_state(wk, wp, bk, stm, piece_code, 1);
+    moves = legal_moves(state);
+    move_count = length_list(moves);
+    law_kind = 0;
+    law_ply = 0;
+    if (move_count == 0) {
+    checked = side_in_check(state);
+    if (checked) {
+    law_kind = 76;
+    } else {
+    law_kind = 68;
+    }
+    } else {
+    best_loss_ply = 100000;
+    worst_win_ply = -1;
+    has_draw = 0;
+    i = 0;
+    while (i < move_count) {
+    move = get_list(moves, i);
+    to_sq = (move - ((move / 64) * 64));
+    succ_kind = 68;
+    succ_ply = 0;
+    if (stm == 1) {
+    if (to_sq == wp) {
+    succ_kind = 68;
+    } else {
+    child = make_move(state, move);
+    cidx = child_index(child, piece_code);
+    succ_kind = table_kind(table, cidx);
+    succ_ply = table_ply(table, cidx);
+    }
+    } else {
+    child = make_move(state, move);
+    cidx = child_index(child, piece_code);
+    succ_kind = table_kind(table, cidx);
+    succ_ply = table_ply(table, cidx);
+    }
+    if (succ_kind == 76) {
+    if (succ_ply < best_loss_ply) {
+    best_loss_ply = succ_ply;
+    }
+    }
+    if (succ_kind == 68) {
+    has_draw = 1;
+    }
+    if (succ_kind == 87) {
+    if (succ_ply > worst_win_ply) {
+    worst_win_ply = succ_ply;
+    }
+    }
+    i = (i + 1);
+    }
+    if (best_loss_ply < 100000) {
+    law_kind = 87;
+    law_ply = (best_loss_ply + 1);
+    } else {
+    if (has_draw == 1) {
+    law_kind = 68;
+    } else {
+    law_kind = 76;
+    law_ply = (worst_win_ply + 1);
+    }
+    }
+    }
+    if (stored_kind == law_kind) {
+    ok = ok;
+    } else {
+    ok = 0;
+    }
+    if (law_kind == 68) {
+    ok = ok;
+    } else {
+    if (stored_ply == law_ply) {
+    ok = ok;
+    } else {
+    ok = 0;
+    }
+    }
+    } else {
+    if (stored_kind == 85) {
+    ok = ok;
+    } else {
+    ok = 0;
+    }
+    }
+    idx = (idx + 1);
+    }
+    r = append_list(report, ok);
+    r = append_list(report, legal_count);
+    r = append_list(report, wins);
+    r = append_list(report, losses);
+    r = append_list(report, draws);
+    r = append_list(report, mates);
+    r = append_list(report, max_ply);
+    ret_val = report;
+    report = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(21);
     return ret_val;
 }
 
@@ -6541,358 +6821,4226 @@ L_cleanup:
     return ret_val;
 }
 
-long long deepest_covering_depth() {
-    long long by_covering = 0;
-    long long by_relation = 0;
-    long long next_volume = 0;
+long long piece_is_white(long long code) {
     long long ret_val = 0;
 
-    ep_gc_push_root(&by_covering);
-    ep_gc_push_root(&by_relation);
-    ep_gc_push_root(&next_volume);
+    if (code > 0) {
+    if (code < 7) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long piece_is_black(long long code) {
+    long long ret_val = 0;
+
+    ret_val = code > 6;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long piece_kind(long long code) {
+    long long ret_val = 0;
+
+    if (code > 6) {
+    ret_val = (code - 6);
+    goto L_cleanup;
+    }
+    ret_val = code;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long starting_state() {
+    long long back = 0;
+    long long f = 0;
+    long long ok = 0;
+    long long right = 0;
+    long long sq = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&back);
+    ep_gc_push_root(&state);
 
     ep_gc_maybe_collect();
 
-    next_volume = whole_power(colour_count(), (colour_count() + 1));
-    by_covering = minimal_binary_cover(next_volume);
-    by_relation = (smallest_fold_period_above(binary_count()) + (smallest_fold_period_above(binary_count()) + 1));
-    ret_val = forced_to_be((long long)"deepest depth = cover(colour^(colour+1)) = colour+(colour+1)", by_covering, by_relation);
+    state = create_list();
+    back = create_list();
+    ok = append_list(back, 4);
+    ok = append_list(back, 2);
+    ok = append_list(back, 3);
+    ok = append_list(back, 5);
+    ok = append_list(back, 6);
+    ok = append_list(back, 3);
+    ok = append_list(back, 2);
+    ok = append_list(back, 4);
+    ok = append_list(state, get_list(back, 0));
+    ok = append_list(state, get_list(back, 1));
+    ok = append_list(state, get_list(back, 2));
+    ok = append_list(state, get_list(back, 3));
+    ok = append_list(state, get_list(back, 4));
+    ok = append_list(state, get_list(back, 5));
+    ok = append_list(state, get_list(back, 6));
+    ok = append_list(state, get_list(back, 7));
+    f = 8;
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    f = 8;
+    sq = 16;
+    while (sq < 48) {
+    ok = append_list(state, 0);
+    sq = (sq + 1);
+    }
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    ok = append_list(state, 7);
+    f = 8;
+    ok = append_list(state, (get_list(back, 0) + 6));
+    ok = append_list(state, (get_list(back, 1) + 6));
+    ok = append_list(state, (get_list(back, 2) + 6));
+    ok = append_list(state, (get_list(back, 3) + 6));
+    ok = append_list(state, (get_list(back, 4) + 6));
+    ok = append_list(state, (get_list(back, 5) + 6));
+    ok = append_list(state, (get_list(back, 6) + 6));
+    ok = append_list(state, (get_list(back, 7) + 6));
+    f = 8;
+    ok = append_list(state, 0);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    ok = append_list(state, 1);
+    right = 4;
+    ok = append_list(state, 64);
+    ok = append_list(state, 0);
+    ret_val = state;
+    state = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long copy_state(long long state) {
+    long long fresh = 0;
+    long long i = 0;
+    long long ok = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&fresh);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    fresh = create_list();
+    i = 0;
+    while (i < 71) {
+    ok = append_list(fresh, get_list(state, i));
+    i = (i + 1);
+    }
+    ret_val = fresh;
+    fresh = 0;
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
     return ret_val;
 }
 
-long long whole_is_prime(long long n) {
-    long long divisor = 0;
-    long long prime = 0;
-    long long quotient = 0;
-    long long remainder = 0;
+long long empty_state() {
+    long long ok = 0;
+    long long right = 0;
+    long long sq = 0;
+    long long state = 0;
     long long ret_val = 0;
 
-    divisor = 2;
-    prime = 1LL;
-    while (divisor < n) {
-    quotient = (n / divisor);
-    remainder = (n - (quotient * divisor));
-    if (remainder < 1) {
-    prime = 0LL;
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = create_list();
+    sq = 0;
+    while (sq < 64) {
+    ok = append_list(state, 0);
+    sq = (sq + 1);
     }
-    divisor = (divisor + 1);
-    }
-    ret_val = prime;
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    ok = append_list(state, 0);
+    right = 4;
+    ok = append_list(state, 64);
+    ok = append_list(state, 0);
+    ret_val = state;
+    state = 0;
     goto L_cleanup;
 L_cleanup:
+    ep_gc_pop_roots(1);
     return ret_val;
 }
 
-long long prime_sector_count() {
-    long long ceiling = 0;
+long long square_attacked(long long state, long long square, long long by_black) {
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long diagonal = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long kind = 0;
+    long long live = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long right_colour = 0;
+    long long steps = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&f);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    rank = (square / 8);
+    file = (square - (rank * 8));
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (piece_kind(code) == 2) {
+    if (by_black == 1) {
+    if (code > 6) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    live = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    live = 0;
+    }
+    }
+    if (live == 1) {
+    diagonal = 0;
+    if (dr == 0) {
+    diagonal = 0;
+    } else {
+    if (df == 0) {
+    diagonal = 0;
+    } else {
+    diagonal = 1;
+    }
+    }
+    r = (rank + dr);
+    f = (file + df);
+    steps = 1;
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (code == 0) {
+    r = (r + dr);
+    f = (f + df);
+    steps = (steps + 1);
+    walking = 1;
+    } else {
+    right_colour = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    right_colour = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    right_colour = 1;
+    }
+    }
+    if (right_colour == 1) {
+    kind = piece_kind(code);
+    if (kind == 5) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    if (diagonal == 1) {
+    if (kind == 3) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    } else {
+    if (kind == 4) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    if (steps == 1) {
+    if (kind == 6) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    if (diagonal == 1) {
+    if (kind == 1) {
+    if (by_black == 1) {
+    if (dr == 1) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    if (by_black == 0) {
+    if (dr == -1) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long lesser_attacker_exists(long long state, long long square, long long defender_reach, long long by_black) {
+    long long attacks = 0;
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long diagonal = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long kind = 0;
+    long long live = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long right_colour = 0;
+    long long steps = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&f);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&by_black);
+
+    ep_gc_maybe_collect();
+
+    rank = (square / 8);
+    file = (square - (rank * 8));
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (piece_kind(code) == 2) {
+    right_colour = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    right_colour = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    right_colour = 1;
+    }
+    }
+    if (right_colour == 1) {
+    if (counted_reach(2, ((r * 8) + f), by_black) < defender_reach) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    live = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    live = 0;
+    }
+    }
+    if (live == 1) {
+    diagonal = 0;
+    if (dr == 0) {
+    diagonal = 0;
+    } else {
+    if (df == 0) {
+    diagonal = 0;
+    } else {
+    diagonal = 1;
+    }
+    }
+    r = (rank + dr);
+    f = (file + df);
+    steps = 1;
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    code = get_list(state, ((r * 8) + f));
+    if (code == 0) {
+    r = (r + dr);
+    f = (f + df);
+    steps = (steps + 1);
+    walking = 1;
+    } else {
+    right_colour = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    right_colour = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (piece_is_white(code)) {
+    right_colour = 1;
+    }
+    }
+    if (right_colour == 1) {
+    kind = piece_kind(code);
+    attacks = 0;
+    if (kind == 5) {
+    attacks = 1;
+    }
+    if (diagonal == 1) {
+    if (kind == 3) {
+    attacks = 1;
+    }
+    } else {
+    if (kind == 4) {
+    attacks = 1;
+    }
+    }
+    if (steps == 1) {
+    if (kind == 6) {
+    attacks = 1;
+    }
+    if (diagonal == 1) {
+    if (kind == 1) {
+    if (by_black == 1) {
+    if (dr == 1) {
+    attacks = 1;
+    }
+    }
+    if (by_black == 0) {
+    if (dr == -1) {
+    attacks = 1;
+    }
+    }
+    }
+    }
+    }
+    if (attacks == 1) {
+    if (counted_reach(kind, ((r * 8) + f), by_black) < defender_reach) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long attack_min_reach_map(long long state, long long by_black) {
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long forward = 0;
+    long long i = 0;
+    long long kind = 0;
+    long long mine = 0;
+    long long moved = 0;
+    long long ok = 0;
+    long long old = 0;
+    long long on_ray = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long reach = 0;
+    long long reach_map = 0;
+    long long sq = 0;
+    long long target = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&reach);
+    ep_gc_push_root(&reach_map);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&target);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&by_black);
+
+    ep_gc_maybe_collect();
+
+    if (by_black == 1) {
+    reach_map = BLACK_REACH_BUF;
+    } else {
+    reach_map = WHITE_REACH_BUF;
+    }
+    while (length_list(reach_map) < 64) {
+    ok = append_list(reach_map, 0);
+    }
+    i = 0;
+    while (i < 64) {
+    ok = set_list(reach_map, i, 0);
+    i = (i + 1);
+    }
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    mine = 0;
+    if (by_black == 1) {
+    if (code > 6) {
+    mine = 1;
+    }
+    } else {
+    if (piece_is_white(code)) {
+    mine = 1;
+    }
+    }
+    if (mine == 1) {
+    kind = piece_kind(code);
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    reach = counted_reach(kind, sq, by_black);
+    if (kind == 1) {
+    forward = 1;
+    if (by_black == 1) {
+    forward = -1;
+    }
+    r = (rank + forward);
+    if (r > -1) {
+    if (r < 8) {
+    df = -1;
+    while (df < 2) {
+    if (df == 0) {
+    df = df;
+    } else {
+    f = (file + df);
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    }
+    }
+    }
+    if (kind == 2) {
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    if (kind > 2) {
+    if (kind < 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    on_ray = 0;
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    } else {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    }
+    } else {
+    if (df == 0) {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    } else {
+    if (kind == 3) {
+    on_ray = 1;
+    }
+    if (kind == 5) {
+    on_ray = 1;
+    }
+    }
+    }
+    if (kind == 4) {
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    }
+    } else {
+    if (df == 0) {
+    on_ray = 1;
+    } else {
+    on_ray = 0;
+    }
+    }
+    }
+    if (on_ray == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    if (get_list(state, target) == 0) {
+    r = (r + dr);
+    f = (f + df);
+    walking = 1;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    if (kind == 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    moved = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    moved = 0;
+    }
+    }
+    if (moved == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    target = ((r * 8) + f);
+    old = get_list(reach_map, target);
+    if (old == 0) {
+    ok = set_list(reach_map, target, reach);
+    } else {
+    if (reach < old) {
+    ok = set_list(reach_map, target, reach);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    ret_val = reach_map;
+    reach_map = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(9);
+    return ret_val;
+}
+
+long long king_square(long long state, long long black_king) {
+    long long sq = 0;
+    long long wanted = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    wanted = 6;
+    if (black_king == 1) {
+    wanted = 12;
+    }
+    sq = 0;
+    while (sq < 64) {
+    if (get_list(state, sq) == wanted) {
+    ret_val = sq;
+    goto L_cleanup;
+    }
+    sq = (sq + 1);
+    }
+    ret_val = 64;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long side_in_check(long long state) {
+    long long attacker = 0;
+    long long ksq = 0;
+    long long side = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&attacker);
+    ep_gc_push_root(&ksq);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    side = get_list(state, 64);
+    ksq = king_square(state, side);
+    attacker = (1 - side);
+    ret_val = square_attacked(state, ksq, attacker);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long make_move(long long state, long long move) {
+    long long clock = 0;
+    long long code = 0;
+    long long ep_square = 0;
+    long long fresh = 0;
+    long long from_file = 0;
+    long long from_sq = 0;
+    long long kind = 0;
+    long long landed = 0;
+    long long ok = 0;
+    long long promo = 0;
+    long long rest = 0;
+    long long side = 0;
+    long long to_file = 0;
+    long long to_rank = 0;
+    long long to_sq = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&clock);
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&fresh);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&landed);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    fresh = copy_state(state);
+    promo = (move / 4096);
+    rest = (move - (promo * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
+    code = get_list(fresh, from_sq);
+    side = get_list(fresh, 64);
+    kind = piece_kind(code);
+    ep_square = get_list(fresh, 69);
+    clock = (get_list(fresh, 70) + 1);
+    if (kind == 1) {
+    clock = 0;
+    }
+    if (get_list(fresh, to_sq) > 0) {
+    clock = 0;
+    }
+    ok = set_list(fresh, 70, clock);
+    if (kind == 1) {
+    if (to_sq == ep_square) {
+    if (side == 0) {
+    ok = set_list(fresh, (to_sq - 8), 0);
+    } else {
+    ok = set_list(fresh, (to_sq + 8), 0);
+    }
+    }
+    }
+    ok = set_list(fresh, from_sq, 0);
+    ok = set_list(fresh, to_sq, code);
+    if (kind == 1) {
+    to_rank = (to_sq / 8);
+    landed = promo;
+    if (landed == 0) {
+    landed = 5;
+    }
+    if (side == 0) {
+    if (to_rank == 7) {
+    ok = set_list(fresh, to_sq, landed);
+    }
+    } else {
+    if (to_rank == 0) {
+    ok = set_list(fresh, to_sq, (landed + 6));
+    }
+    }
+    }
+    if (kind == 6) {
+    from_file = (from_sq - ((from_sq / 8) * 8));
+    to_file = (to_sq - ((to_sq / 8) * 8));
+    if (to_file == (from_file + 2)) {
+    ok = set_list(fresh, (to_sq - 1), get_list(fresh, (to_sq + 1)));
+    ok = set_list(fresh, (to_sq + 1), 0);
+    }
+    if (from_file == (to_file + 2)) {
+    ok = set_list(fresh, (to_sq + 1), get_list(fresh, (to_sq - 2)));
+    ok = set_list(fresh, (to_sq - 2), 0);
+    }
+    }
+    if (code == 6) {
+    ok = set_list(fresh, 65, 0);
+    ok = set_list(fresh, 66, 0);
+    }
+    if (code == 12) {
+    ok = set_list(fresh, 67, 0);
+    ok = set_list(fresh, 68, 0);
+    }
+    if (from_sq == 7) {
+    ok = set_list(fresh, 65, 0);
+    }
+    if (from_sq == 0) {
+    ok = set_list(fresh, 66, 0);
+    }
+    if (from_sq == 63) {
+    ok = set_list(fresh, 67, 0);
+    }
+    if (from_sq == 56) {
+    ok = set_list(fresh, 68, 0);
+    }
+    if (to_sq == 7) {
+    ok = set_list(fresh, 65, 0);
+    }
+    if (to_sq == 0) {
+    ok = set_list(fresh, 66, 0);
+    }
+    if (to_sq == 63) {
+    ok = set_list(fresh, 67, 0);
+    }
+    if (to_sq == 56) {
+    ok = set_list(fresh, 68, 0);
+    }
+    ok = set_list(fresh, 69, 64);
+    if (kind == 1) {
+    if (side == 0) {
+    if (to_sq == (from_sq + 16)) {
+    ok = set_list(fresh, 69, (from_sq + 8));
+    }
+    } else {
+    if ((to_sq + 16) == from_sq) {
+    ok = set_list(fresh, 69, (from_sq - 8));
+    }
+    }
+    }
+    ok = set_list(fresh, 64, (1 - side));
+    ret_val = fresh;
+    fresh = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long push_move(long long moves, long long from_sq, long long to_sq) {
+    long long ok = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&to_sq);
+
+    ep_gc_maybe_collect();
+
+    ok = append_list(moves, ((from_sq * 64) + to_sq));
+    ret_val = moves;
+    moves = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long push_pawn_move(long long moves, long long from_sq, long long to_sq, long long side) {
+    long long ok = 0;
+    long long promo = 0;
+    long long promotes = 0;
+    long long to_rank = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&promo);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&to_sq);
+
+    ep_gc_maybe_collect();
+
+    to_rank = (to_sq / 8);
+    promotes = 0;
+    if (side == 0) {
+    if (to_rank == 7) {
+    promotes = 1;
+    }
+    } else {
+    if (to_rank == 0) {
+    promotes = 1;
+    }
+    }
+    if (promotes == 1) {
+    promo = 2;
+    while (promo < 6) {
+    ok = append_list(moves, (((promo * 4096) + (from_sq * 64)) + to_sq));
+    promo = (promo + 1);
+    }
+    } else {
+    ok = append_list(moves, ((from_sq * 64) + to_sq));
+    }
+    ret_val = moves;
+    moves = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long pseudo_moves(long long state) {
+    long long ahead = 0;
+    long long blocked = 0;
+    long long capture_file = 0;
+    long long code = 0;
+    long long deltas_f = 0;
+    long long deltas_r = 0;
+    long long df = 0;
+    long long dr = 0;
+    long long enemy = 0;
+    long long enemy_side = 0;
+    long long ep_square = 0;
+    long long f = 0;
+    long long file = 0;
+    long long forward = 0;
+    long long home = 0;
+    long long home_rank = 0;
+    long long j = 0;
+    long long kind = 0;
+    long long long_right = 0;
+    long long mine = 0;
+    long long moves = 0;
+    long long ok = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long ray = 0;
+    long long ray_df = 0;
+    long long ray_dr = 0;
+    long long ray_end = 0;
+    long long ray_start = 0;
+    long long safe_far = 0;
+    long long safe_mid = 0;
+    long long safe_now = 0;
+    long long short_right = 0;
+    long long side = 0;
+    long long skip = 0;
+    long long sq = 0;
+    long long takes = 0;
+    long long target = 0;
+    long long two_ahead = 0;
+    long long victim = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&ahead);
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&deltas_f);
+    ep_gc_push_root(&deltas_r);
+    ep_gc_push_root(&enemy_side);
+    ep_gc_push_root(&f);
+    ep_gc_push_root(&home);
+    ep_gc_push_root(&j);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&ray);
+    ep_gc_push_root(&ray_df);
+    ep_gc_push_root(&ray_dr);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&target);
+    ep_gc_push_root(&two_ahead);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    moves = create_list();
+    side = get_list(state, 64);
+    deltas_r = create_list();
+    deltas_f = create_list();
+    ok = append_list(deltas_r, 2);
+    ok = append_list(deltas_f, 1);
+    ok = append_list(deltas_r, 2);
+    ok = append_list(deltas_f, -1);
+    ok = append_list(deltas_r, -2);
+    ok = append_list(deltas_f, 1);
+    ok = append_list(deltas_r, -2);
+    ok = append_list(deltas_f, -1);
+    ok = append_list(deltas_r, 1);
+    ok = append_list(deltas_f, 2);
+    ok = append_list(deltas_r, 1);
+    ok = append_list(deltas_f, -2);
+    ok = append_list(deltas_r, -1);
+    ok = append_list(deltas_f, 2);
+    ok = append_list(deltas_r, -1);
+    ok = append_list(deltas_f, -2);
+    ray_dr = create_list();
+    ray_df = create_list();
+    ok = append_list(ray_dr, 1);
+    ok = append_list(ray_df, 1);
+    ok = append_list(ray_dr, 1);
+    ok = append_list(ray_df, -1);
+    ok = append_list(ray_dr, -1);
+    ok = append_list(ray_df, 1);
+    ok = append_list(ray_dr, -1);
+    ok = append_list(ray_df, -1);
+    ok = append_list(ray_dr, 1);
+    ok = append_list(ray_df, 0);
+    ok = append_list(ray_dr, -1);
+    ok = append_list(ray_df, 0);
+    ok = append_list(ray_dr, 0);
+    ok = append_list(ray_df, 1);
+    ok = append_list(ray_dr, 0);
+    ok = append_list(ray_df, -1);
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    mine = 0;
+    if (side == 0) {
+    if (piece_is_white(code)) {
+    mine = 1;
+    }
+    } else {
+    if (code > 6) {
+    mine = 1;
+    }
+    }
+    if (mine == 1) {
+    kind = piece_kind(code);
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    if (kind == 1) {
+    forward = 8;
+    home_rank = 1;
+    ep_square = get_list(state, 69);
+    if (side == 1) {
+    forward = -8;
+    home_rank = 6;
+    }
+    ahead = (sq + forward);
+    if (ahead > -1) {
+    if (ahead < 64) {
+    if (get_list(state, ahead) == 0) {
+    moves = push_pawn_move(moves, sq, ahead, side);
+    if (rank == home_rank) {
+    two_ahead = (ahead + forward);
+    if (get_list(state, two_ahead) == 0) {
+    moves = push_move(moves, sq, two_ahead);
+    }
+    }
+    }
+    }
+    }
+    capture_file = (file - 1);
+    while (capture_file < (file + 2)) {
+    if (capture_file > -1) {
+    if (capture_file < 8) {
+    if (capture_file == file) {
+    capture_file = capture_file;
+    } else {
+    target = (((rank * 8) + capture_file) + forward);
+    if (target > -1) {
+    if (target < 64) {
+    victim = get_list(state, target);
+    takes = 0;
+    if (side == 0) {
+    if (victim > 6) {
+    takes = 1;
+    }
+    } else {
+    if (piece_is_white(victim)) {
+    takes = 1;
+    }
+    }
+    if (target == ep_square) {
+    takes = 1;
+    }
+    if (takes == 1) {
+    moves = push_pawn_move(moves, sq, target, side);
+    }
+    }
+    }
+    }
+    }
+    }
+    capture_file = (capture_file + 1);
+    }
+    }
+    if (kind == 2) {
+    j = 0;
+    while (j < 8) {
+    r = (rank + get_list(deltas_r, j));
+    f = (file + get_list(deltas_f, j));
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    blocked = 0;
+    if (side == 0) {
+    if (piece_is_white(victim)) {
+    blocked = 1;
+    }
+    } else {
+    if (victim > 6) {
+    blocked = 1;
+    }
+    }
+    if (blocked == 0) {
+    moves = push_move(moves, sq, ((r * 8) + f));
+    }
+    }
+    }
+    }
+    }
+    j = (j + 1);
+    }
+    }
+    if (kind > 2) {
+    if (kind < 6) {
+    ray_start = 0;
+    ray_end = 8;
+    if (kind == 3) {
+    ray_end = 4;
+    }
+    if (kind == 4) {
+    ray_start = 4;
+    }
+    ray = ray_start;
+    while (ray < ray_end) {
+    dr = get_list(ray_dr, ray);
+    df = get_list(ray_df, ray);
+    r = (rank + dr);
+    f = (file + df);
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    if (victim == 0) {
+    moves = push_move(moves, sq, ((r * 8) + f));
+    r = (r + dr);
+    f = (f + df);
+    walking = 1;
+    } else {
+    enemy = 0;
+    if (side == 0) {
+    if (victim > 6) {
+    enemy = 1;
+    }
+    } else {
+    if (piece_is_white(victim)) {
+    enemy = 1;
+    }
+    }
+    if (enemy == 1) {
+    moves = push_move(moves, sq, ((r * 8) + f));
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    ray = (ray + 1);
+    }
+    }
+    }
+    if (kind == 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    if (dr == 0) {
+    if (df == 0) {
+    df = df;
+    }
+    }
+    r = (rank + dr);
+    f = (file + df);
+    skip = 0;
+    if (dr == 0) {
+    if (df == 0) {
+    skip = 1;
+    }
+    }
+    if (skip == 0) {
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    blocked = 0;
+    if (side == 0) {
+    if (piece_is_white(victim)) {
+    blocked = 1;
+    }
+    } else {
+    if (victim > 6) {
+    blocked = 1;
+    }
+    }
+    if (blocked == 0) {
+    moves = push_move(moves, sq, ((r * 8) + f));
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    enemy_side = (1 - side);
+    home = 4;
+    short_right = get_list(state, 65);
+    long_right = get_list(state, 66);
+    if (side == 1) {
+    home = 60;
+    short_right = get_list(state, 67);
+    long_right = get_list(state, 68);
+    }
+    if (sq == home) {
+    if (short_right == 1) {
+    if (get_list(state, (home + 1)) == 0) {
+    if (get_list(state, (home + 2)) == 0) {
+    safe_now = square_attacked(state, home, enemy_side);
+    safe_mid = square_attacked(state, (home + 1), enemy_side);
+    safe_far = square_attacked(state, (home + 2), enemy_side);
+    if (safe_now) {
+    safe_now = safe_now;
+    } else {
+    if (safe_mid) {
+    safe_mid = safe_mid;
+    } else {
+    if (safe_far) {
+    safe_far = safe_far;
+    } else {
+    moves = push_move(moves, sq, (home + 2));
+    }
+    }
+    }
+    }
+    }
+    }
+    if (long_right == 1) {
+    if (get_list(state, (home - 1)) == 0) {
+    if (get_list(state, (home - 2)) == 0) {
+    if (get_list(state, (home - 3)) == 0) {
+    safe_now = square_attacked(state, home, enemy_side);
+    safe_mid = square_attacked(state, (home - 1), enemy_side);
+    safe_far = square_attacked(state, (home - 2), enemy_side);
+    if (safe_now) {
+    safe_now = safe_now;
+    } else {
+    if (safe_mid) {
+    safe_mid = safe_mid;
+    } else {
+    if (safe_far) {
+    safe_far = safe_far;
+    } else {
+    moves = push_move(moves, sq, (home - 2));
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    ret_val = moves;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(19);
+    free_list(deltas_f);
+    deltas_f = 0;
+    free_list(deltas_r);
+    deltas_r = 0;
+    free_list(ray_df);
+    ray_df = 0;
+    free_list(ray_dr);
+    ray_dr = 0;
+    return ret_val;
+}
+
+long long legal_moves(long long state) {
+    long long candidates = 0;
+    long long child = 0;
     long long count = 0;
-    long long n = 0;
-    long long n_is_prime = 0;
+    long long exposed = 0;
+    long long i = 0;
+    long long ksq = 0;
+    long long legal = 0;
+    long long move = 0;
+    long long ok = 0;
+    long long side = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&n);
+    ep_gc_push_root(&candidates);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&ksq);
+    ep_gc_push_root(&legal);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&state);
 
     ep_gc_maybe_collect();
 
-    ceiling = deepest_covering_depth();
-    count = 0;
-    n = 2;
-    while (n < (ceiling + 1)) {
-    n_is_prime = whole_is_prime(n);
-    if (n_is_prime) {
-    count = (count + 1);
+    legal = create_list();
+    side = get_list(state, 64);
+    candidates = pseudo_moves(state);
+    count = length_list(candidates);
+    i = 0;
+    while (i < count) {
+    move = get_list(candidates, i);
+    child = make_move(state, move);
+    ksq = king_square(child, side);
+    exposed = square_attacked(child, ksq, (1 - side));
+    if (exposed) {
+    exposed = exposed;
+    } else {
+    ok = append_list(legal, move);
     }
-    n = (n + 1);
+    i = (i + 1);
     }
-    ret_val = count;
+    ret_val = legal;
+    legal = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(1);
+    ep_gc_pop_roots(8);
     return ret_val;
 }
 
-long long first_prime_beyond_ceiling() {
-    long long candidate = 0;
-    long long candidate_is_prime = 0;
-    long long ceiling = 0;
-    long long found = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&candidate);
-
-    ep_gc_maybe_collect();
-
-    ceiling = deepest_covering_depth();
-    candidate = (ceiling + 1);
-    found = 0;
-    while (found < 1) {
-    candidate_is_prime = whole_is_prime(candidate);
-    if (candidate_is_prime) {
-    found = candidate;
-    }
-    candidate = (candidate + 1);
-    }
-    ret_val = found;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long sector_shortfall(long long p) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    ret_val = fraction_from_ratio(1, p);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long sector_coupling(long long p) {
-    long long one = 0;
-    long long shortfall = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    shortfall = fraction_from_ratio(1, p);
-    ret_val = fraction_subtract(one, shortfall);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long sector_partition_holds(long long p) {
-    long long coupling = 0;
-    long long one = 0;
-    long long shortfall = 0;
+long long perft(long long state, long long depth) {
+    long long child = 0;
+    long long count = 0;
+    long long i = 0;
+    long long moves = 0;
     long long total = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&coupling);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&p);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
 
     ep_gc_maybe_collect();
 
-    coupling = sector_coupling(p);
-    shortfall = fraction_from_ratio(1, p);
-    total = fraction_add(coupling, shortfall);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_compare(total, one) == 0;
+    if (depth == 0) {
+    ret_val = 1;
     goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    free_struct_Fraction(one);
-    one = 0;
-    free_struct_Fraction(total);
+    }
+    moves = legal_moves(state);
+    count = length_list(moves);
+    if (depth == 1) {
+    ret_val = count;
+    goto L_cleanup;
+    }
     total = 0;
-    return ret_val;
-}
-
-long long sector_carry_closes(long long p) {
-    long long one = 0;
-    long long p_fraction = 0;
-    long long shortfall = 0;
-    long long tiled = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&p_fraction);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&tiled);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    shortfall = fraction_from_ratio(1, p);
-    p_fraction = fraction_from_whole_number(p);
-    tiled = fraction_multiply(shortfall, p_fraction);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_compare(tiled, one) == 0;
+    i = 0;
+    while (i < count) {
+    child = make_move(state, get_list(moves, i));
+    total = (total + perft(child, (depth - 1)));
+    i = (i + 1);
+    }
+    ret_val = total;
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(5);
-    free_struct_Fraction(one);
-    one = 0;
-    free_struct_Fraction(tiled);
-    tiled = 0;
+    free_list(child);
+    child = 0;
+    free_list(moves);
+    moves = 0;
     return ret_val;
 }
 
-long long sector_mediator_count(long long p) {
-    long long squared = 0;
+long long counted_reach(long long kind, long long sq, long long is_black) {
+    long long bishop_reach = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long down = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long f = 0;
+    long long file = 0;
+    long long left_side = 0;
+    long long moved = 0;
+    long long ne = 0;
+    long long nw = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long reach = 0;
+    long long right_side = 0;
+    long long rook_reach = 0;
+    long long se = 0;
+    long long sw = 0;
+    long long up = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&p);
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    if (kind == 1) {
+    reach = 0;
+    if (is_black == 1) {
+    if (rank > 0) {
+    reach = 1;
+    if (rank == 6) {
+    reach = 2;
+    }
+    }
+    } else {
+    if (rank < 7) {
+    reach = 1;
+    if (rank == 1) {
+    reach = 2;
+    }
+    }
+    }
+    ret_val = reach;
+    goto L_cleanup;
+    }
+    if (kind == 2) {
+    reach = 0;
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    reach = (reach + 1);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    ret_val = reach;
+    goto L_cleanup;
+    }
+    if (kind == 6) {
+    reach = 0;
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    moved = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    moved = 0;
+    }
+    }
+    if (moved == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    reach = (reach + 1);
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    ret_val = reach;
+    goto L_cleanup;
+    }
+    up = (7 - rank);
+    down = rank;
+    right_side = (7 - file);
+    left_side = file;
+    rook_reach = (((up + down) + right_side) + left_side);
+    ne = up;
+    if (right_side < ne) {
+    ne = right_side;
+    }
+    nw = up;
+    if (left_side < nw) {
+    nw = left_side;
+    }
+    se = down;
+    if (right_side < se) {
+    se = right_side;
+    }
+    sw = down;
+    if (left_side < sw) {
+    sw = left_side;
+    }
+    bishop_reach = (((ne + nw) + se) + sw);
+    if (kind == 3) {
+    ret_val = bishop_reach;
+    goto L_cleanup;
+    }
+    if (kind == 4) {
+    ret_val = rook_reach;
+    goto L_cleanup;
+    }
+    ret_val = (rook_reach + bishop_reach);
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long mobility_count(long long state, long long for_black, long long enemy_map) {
+    long long ahead = 0;
+    long long blocked = 0;
+    long long code = 0;
+    long long df = 0;
+    long long df_size = 0;
+    long long dr = 0;
+    long long dr_size = 0;
+    long long enemy = 0;
+    long long f = 0;
+    long long fan = 0;
+    long long file = 0;
+    long long forward = 0;
+    long long home_rank = 0;
+    long long kind = 0;
+    long long mine = 0;
+    long long moved = 0;
+    long long on_ray = 0;
+    long long own_reach = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long safe = 0;
+    long long sq = 0;
+    long long takes = 0;
+    long long target = 0;
+    long long target_rank = 0;
+    long long threat = 0;
+    long long total = 0;
+    long long victim = 0;
+    long long walking = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&ahead);
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&f);
+    ep_gc_push_root(&forward);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&target);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&for_black);
+    ep_gc_push_root(&enemy_map);
 
     ep_gc_maybe_collect();
 
-    squared = whole_power(p, 2);
-    ret_val = (squared - 1);
+    total = 0;
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    mine = 0;
+    if (for_black == 1) {
+    if (code > 6) {
+    mine = 1;
+    }
+    } else {
+    if (piece_is_white(code)) {
+    mine = 1;
+    }
+    }
+    if (mine == 1) {
+    kind = piece_kind(code);
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    own_reach = 0;
+    if (kind < 6) {
+    if (kind > 1) {
+    own_reach = counted_reach(kind, sq, for_black);
+    threat = get_list(enemy_map, sq);
+    if (threat > 0) {
+    if (threat < own_reach) {
+    kind = 0;
+    }
+    }
+    }
+    }
+    if (kind == 1) {
+    forward = 8;
+    home_rank = 1;
+    fan = 1;
+    if (for_black == 1) {
+    forward = -8;
+    home_rank = 6;
+    }
+    target_rank = (rank + (forward / 8));
+    if (target_rank == 7) {
+    fan = 4;
+    }
+    if (target_rank == 0) {
+    fan = 4;
+    }
+    ahead = (sq + forward);
+    if (ahead > -1) {
+    if (ahead < 64) {
+    if (get_list(state, ahead) == 0) {
+    total = (total + fan);
+    if (rank == home_rank) {
+    if (get_list(state, (ahead + forward)) == 0) {
+    total = (total + 1);
+    }
+    }
+    }
+    }
+    }
+    df = -1;
+    while (df < 2) {
+    if (df == 0) {
+    df = df;
+    } else {
+    f = (file + df);
+    if (f > -1) {
+    if (f < 8) {
+    target = (((rank * 8) + f) + forward);
+    if (target > -1) {
+    if (target < 64) {
+    victim = get_list(state, target);
+    takes = 0;
+    if (for_black == 1) {
+    if (piece_is_white(victim)) {
+    takes = 1;
+    }
+    } else {
+    if (victim > 6) {
+    takes = 1;
+    }
+    }
+    if (takes == 1) {
+    total = (total + fan);
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    }
+    if (kind == 2) {
+    dr = -2;
+    while (dr < 3) {
+    df = -2;
+    while (df < 3) {
+    dr_size = dr;
+    if (dr_size < 0) {
+    dr_size = (0 - dr_size);
+    }
+    df_size = df;
+    if (df_size < 0) {
+    df_size = (0 - df_size);
+    }
+    if ((dr_size + df_size) == 3) {
+    if (dr_size > 0) {
+    if (df_size > 0) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    blocked = 0;
+    if (for_black == 1) {
+    if (victim > 6) {
+    blocked = 1;
+    }
+    } else {
+    if (piece_is_white(victim)) {
+    blocked = 1;
+    }
+    }
+    if (blocked == 0) {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
+    total = (total + 1);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    if (kind > 2) {
+    if (kind < 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    on_ray = 0;
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    } else {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    }
+    } else {
+    if (df == 0) {
+    if (kind > 3) {
+    on_ray = 1;
+    }
+    } else {
+    if (kind == 3) {
+    on_ray = 1;
+    }
+    if (kind == 5) {
+    on_ray = 1;
+    }
+    }
+    }
+    if (kind == 4) {
+    if (dr == 0) {
+    if (df == 0) {
+    on_ray = 0;
+    }
+    } else {
+    if (df == 0) {
+    on_ray = 1;
+    } else {
+    on_ray = 0;
+    }
+    }
+    }
+    if (on_ray == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    walking = 1;
+    while (walking == 1) {
+    walking = 0;
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    if (victim == 0) {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
+    total = (total + 1);
+    }
+    r = (r + dr);
+    f = (f + df);
+    walking = 1;
+    } else {
+    enemy = 0;
+    if (for_black == 1) {
+    if (piece_is_white(victim)) {
+    enemy = 1;
+    }
+    } else {
+    if (victim > 6) {
+    enemy = 1;
+    }
+    }
+    if (enemy == 1) {
+    threat = get_list(enemy_map, ((r * 8) + f));
+    safe = 1;
+    if (threat > 0) {
+    if (threat < own_reach) {
+    safe = 0;
+    }
+    }
+    if (safe == 1) {
+    total = (total + 1);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    if (kind == 6) {
+    dr = -1;
+    while (dr < 2) {
+    df = -1;
+    while (df < 2) {
+    moved = 1;
+    if (dr == 0) {
+    if (df == 0) {
+    moved = 0;
+    }
+    }
+    if (moved == 1) {
+    r = (rank + dr);
+    f = (file + df);
+    if (r > -1) {
+    if (r < 8) {
+    if (f > -1) {
+    if (f < 8) {
+    victim = get_list(state, ((r * 8) + f));
+    blocked = 0;
+    if (for_black == 1) {
+    if (victim > 6) {
+    blocked = 1;
+    }
+    } else {
+    if (piece_is_white(victim)) {
+    blocked = 1;
+    }
+    }
+    if (blocked == 0) {
+    if (get_list(enemy_map, ((r * 8) + f)) > 0) {
+    total = total;
+    } else {
+    total = (total + 1);
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    df = (df + 1);
+    }
+    dr = (dr + 1);
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    ret_val = total;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(12);
+    return ret_val;
+}
+
+long long pawn_promotion_potential(long long state, long long sq, long long for_black) {
+    long long enemy_pawn = 0;
+    long long file = 0;
+    long long here = 0;
+    long long lane = 0;
+    long long passed = 0;
+    long long path_clear = 0;
+    long long probe = 0;
+    long long probe_rank = 0;
+    long long promo_rank = 0;
+    long long promo_sq = 0;
+    long long r = 0;
+    long long rank = 0;
+    long long scanning = 0;
+    long long step = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&lane);
+    ep_gc_push_root(&probe);
+    ep_gc_push_root(&promo_sq);
+    ep_gc_push_root(&r);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&for_black);
+
+    ep_gc_maybe_collect();
+
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    step = 8;
+    promo_rank = 7;
+    if (for_black == 1) {
+    step = -8;
+    promo_rank = 0;
+    }
+    path_clear = 1;
+    probe = (sq + step);
+    while (probe > -1) {
+    if (probe < 64) {
+    here = get_list(state, probe);
+    if (here > 0) {
+    path_clear = 0;
+    }
+    probe_rank = (probe / 8);
+    if (probe_rank == promo_rank) {
+    probe = -100;
+    } else {
+    probe = (probe + step);
+    }
+    } else {
+    probe = -100;
+    }
+    }
+    if (path_clear == 0) {
+    ret_val = 0;
+    goto L_cleanup;
+    }
+    enemy_pawn = 7;
+    if (for_black == 1) {
+    enemy_pawn = 1;
+    }
+    passed = 1;
+    lane = (file - 1);
+    while (lane < (file + 2)) {
+    if (lane > -1) {
+    if (lane < 8) {
+    r = (rank + (step / 8));
+    scanning = 1;
+    while (scanning == 1) {
+    scanning = 0;
+    if (r > 0) {
+    if (r < 7) {
+    if (get_list(state, ((r * 8) + lane)) == enemy_pawn) {
+    passed = 0;
+    }
+    r = (r + (step / 8));
+    scanning = 1;
+    }
+    }
+    }
+    }
+    }
+    lane = (lane + 1);
+    }
+    if (passed == 0) {
+    ret_val = 0;
+    goto L_cleanup;
+    }
+    promo_sq = ((promo_rank * 8) + file);
+    ret_val = counted_reach(5, promo_sq, for_black);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long side_units(long long state, long long for_black) {
+    long long code = 0;
+    long long enemy_map = 0;
+    long long kind = 0;
+    long long mine = 0;
+    long long sq = 0;
+    long long units = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&enemy_map);
+    ep_gc_push_root(&kind);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&for_black);
+
+    ep_gc_maybe_collect();
+
+    units = 0;
+    sq = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    mine = 0;
+    if (for_black == 1) {
+    if (code > 6) {
+    mine = 1;
+    }
+    } else {
+    if (piece_is_white(code)) {
+    mine = 1;
+    }
+    }
+    if (mine == 1) {
+    kind = piece_kind(code);
+    units = (units + counted_reach(kind, sq, for_black));
+    if (kind == 1) {
+    units = (units + pawn_promotion_potential(state, sq, for_black));
+    }
+    }
+    sq = (sq + 1);
+    }
+    enemy_map = attack_min_reach_map(state, (1 - for_black));
+    units = (units + mobility_count(state, for_black, enemy_map));
+    ret_val = units;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long share_numerator(long long state) {
+    long long side = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    side = get_list(state, 64);
+    ret_val = side_units(state, side);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long share_denominator(long long state) {
+    long long mine = 0;
+    long long theirs = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    mine = side_units(state, get_list(state, 64));
+    theirs = side_units(state, (1 - get_list(state, 64)));
+    ret_val = (mine + theirs);
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(1);
     return ret_val;
 }
 
-long long sector_beta_slope(long long p) {
-    long long coupling = 0;
-    long long matches = 0;
-    long long ratio = 0;
-    long long shortfall = 0;
-    long long slope = 0;
+long long flip_rank(long long sq) {
+    long long file = 0;
+    long long rank = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&coupling);
-    ep_gc_push_root(&ratio);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&slope);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    coupling = sector_coupling(p);
-    shortfall = fraction_from_ratio(1, p);
-    ratio = fraction_divide(coupling, shortfall);
-    slope = fraction_from_whole_number((p - 1));
-    matches = fraction_compare(ratio, slope) == 0;
-    if (matches) {
-    ret_val = (p - 1);
-    goto L_cleanup;
-    }
-    ret_val = -1;
+    rank = (sq / 8);
+    file = (sq - (rank * 8));
+    ret_val = (((7 - rank) * 8) + file);
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(5);
-    free_struct_Fraction(ratio);
-    ratio = 0;
-    free_struct_Fraction(slope);
-    slope = 0;
     return ret_val;
 }
 
-long long halt_violation(long long reason) {
-    long long discard = 0;
+long long parse_packed_token(long long tok) {
+    long long i = 0;
+    long long len = 0;
+    long long n = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&reason);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&tok);
 
     ep_gc_maybe_collect();
 
-    printf("%s\n", (char*)(long long)"============================================================");
-    printf("%s\n", (char*)(long long)"LAW VIOLATION -- the engine is invalid and is stopping.");
-    printf("%s\n", (char*)concat((long long)"  reason: ", reason));
-    printf("%s\n", (char*)(long long)"============================================================");
-    discard = ep_exit(1);
+    n = 0;
+    i = 0;
+    len = string_length((char*)tok);
+    while (i < len) {
+    n = ((n * 10) + (char_at(tok, i) - 48));
+    i = (i + 1);
+    }
+    ret_val = n;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long load_packed_table(long long path) {
+    long long i = 0;
+    long long n = 0;
+    long long ok = 0;
+    long long out = 0;
+    long long parts = 0;
+    long long text = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&out);
+    ep_gc_push_root(&parts);
+    ep_gc_push_root(&text);
+    ep_gc_push_root(&path);
+
+    ep_gc_maybe_collect();
+
+    text = file_read(path);
+    parts = string_split(text, (long long)" ");
+    out = create_list();
+    i = 0;
+    n = length_list(parts);
+    while (i < n) {
+    ok = append_list(out, parse_packed_token(get_list(parts, i)));
+    i = (i + 1);
+    }
+    ret_val = out;
+    out = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    return ret_val;
+}
+
+long long endgame_probe(long long state, long long kqk, long long krk) {
+    long long bk_n = 0;
+    long long black_king = 0;
+    long long code = 0;
+    long long count = 0;
+    long long covered = 0;
+    long long idx = 0;
+    long long kind = 0;
+    long long packed = 0;
+    long long r = 0;
+    long long result = 0;
+    long long sq = 0;
+    long long stm = 0;
+    long long stored_kind = 0;
+    long long stored_ply = 0;
+    long long strong_is_white = 0;
+    long long table = 0;
+    long long third_code = 0;
+    long long third_sq = 0;
+    long long too_many = 0;
+    long long white_king = 0;
+    long long wk_n = 0;
+    long long wp_n = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&black_king);
+    ep_gc_push_root(&idx);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&sq);
+    ep_gc_push_root(&stored_ply);
+    ep_gc_push_root(&table);
+    ep_gc_push_root(&third_code);
+    ep_gc_push_root(&third_sq);
+    ep_gc_push_root(&white_king);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&kqk);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    if (length_list(kqk) < 2) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    white_king = 64;
+    black_king = 64;
+    third_sq = 64;
+    third_code = 0;
+    count = 0;
+    sq = 0;
+    too_many = 0;
+    while (sq < 64) {
+    code = get_list(state, sq);
+    if (code > 0) {
+    count = (count + 1);
+    if (count > 3) {
+    sq = 64;
+    too_many = 1;
+    } else {
+    if (code == 6) {
+    white_king = sq;
+    } else {
+    if (code == 12) {
+    black_king = sq;
+    } else {
+    third_sq = sq;
+    third_code = code;
+    }
+    }
+    }
+    }
+    sq = (sq + 1);
+    }
+    if (too_many == 1) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if (count == 2) {
+    r = append_list(result, 1);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    kind = piece_kind(third_code);
+    covered = 0;
+    if (kind == 5) {
+    covered = 1;
+    }
+    if (kind == 4) {
+    covered = 1;
+    }
+    if (covered == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    stm = get_list(state, 64);
+    strong_is_white = piece_is_white(third_code);
+    idx = 0;
+    if (strong_is_white) {
+    idx = ((((((white_king * 64) + third_sq) * 64) + black_king) + ((((white_king * 64) + third_sq) * 64) + black_king)) + stm);
+    } else {
+    wk_n = flip_rank(black_king);
+    wp_n = flip_rank(third_sq);
+    bk_n = flip_rank(white_king);
+    idx = ((((((wk_n * 64) + wp_n) * 64) + bk_n) + ((((wk_n * 64) + wp_n) * 64) + bk_n)) + (1 - stm));
+    }
+    table = kqk;
+    if (kind == 4) {
+    table = krk;
+    }
+    packed = get_list(table, idx);
+    stored_kind = (packed / 64);
+    stored_ply = (packed - (stored_kind * 64));
+    r = append_list(result, 1);
+    if (stored_kind == 1) {
+    r = append_list(result, (2048 - stored_ply));
+    r = append_list(result, (2049 - stored_ply));
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    if (stored_kind == 2) {
+    r = append_list(result, 1);
+    r = append_list(result, (2049 - stored_ply));
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    r = append_list(result, 1);
+    r = append_list(result, 2);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(11);
+    return ret_val;
+}
+
+long long move_is_capture(long long state, long long move) {
+    long long code = 0;
+    long long from_sq = 0;
+    long long promo = 0;
+    long long rest = 0;
+    long long to_sq = 0;
+    long long victim = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&code);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    promo = (move / 4096);
+    if (promo > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    rest = (move - (promo * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
+    victim = get_list(state, to_sq);
+    if (victim > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    code = get_list(state, from_sq);
+    if (piece_kind(code) == 1) {
+    if (to_sq == get_list(state, 69)) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    return ret_val;
+}
+
+long long ordered_moves(long long state) {
+    long long bucket = 0;
+    long long count = 0;
+    long long heavy = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long ok = 0;
+    long long ordered = 0;
+    long long rest = 0;
+    long long taking = 0;
+    long long to_sq = 0;
+    long long victim = 0;
+    long long wanted = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&ordered);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    moves = legal_moves(state);
+    count = length_list(moves);
+    ordered = create_list();
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (1) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (1) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    rest = (move - ((move / 4096) * 4096));
+    to_sq = (rest - ((rest / 64) * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (0) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (1) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    ok = append_list(ordered, move);
+    }
+    i = (i + 1);
+    }
+    bucket = 3;
+    ret_val = ordered;
+    ordered = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(7);
+    return ret_val;
+}
+
+long long could_check_from(long long kind, long long to_sq, long long enemy_king, long long for_black) {
+    long long adf = 0;
+    long long adr = 0;
+    long long df = 0;
+    long long dr = 0;
+    long long ret_val = 0;
+
+    dr = ((enemy_king / 8) - (to_sq / 8));
+    df = ((enemy_king - ((enemy_king / 8) * 8)) - (to_sq - ((to_sq / 8) * 8)));
+    adr = dr;
+    if (adr < 0) {
+    adr = (0 - adr);
+    }
+    adf = df;
+    if (adf < 0) {
+    adf = (0 - adf);
+    }
+    if (kind == 2) {
+    if ((adr + adf) == 3) {
+    if (adr > 0) {
+    if (adf > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    if (kind == 3) {
+    ret_val = adr == adf;
+    goto L_cleanup;
+    }
+    if (kind == 4) {
+    if (adr == 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = adf == 0;
+    goto L_cleanup;
+    }
+    if (kind == 5) {
+    if (adr == adf) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    if (adr == 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = adf == 0;
+    goto L_cleanup;
+    }
+    if (kind == 1) {
+    if (adf == 1) {
+    if (for_black == 1) {
+    ret_val = dr == -1;
+    goto L_cleanup;
+    }
+    ret_val = dr == 1;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long quiescence(long long state, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den, long long fresh) {
+    long long a_den = 0;
+    long long a_num = 0;
+    long long best_den = 0;
+    long long best_num = 0;
+    long long bucket = 0;
+    long long bucket_end = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long could = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long enemy_king = 0;
+    long long examine = 0;
+    long long exposed = 0;
+    long long from_sq = 0;
+    long long gives_check = 0;
+    long long heavy = 0;
+    long long i = 0;
+    long long king_from = 0;
+    long long king_now = 0;
+    long long legal_seen = 0;
+    long long move = 0;
+    long long mover_kind = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long pseudo = 0;
+    long long read_this = 0;
+    long long rest = 0;
+    long long side = 0;
+    long long stand_den = 0;
+    long long stand_mine = 0;
+    long long stand_num = 0;
+    long long stand_theirs = 0;
+    long long taking = 0;
+    long long to_sq = 0;
+    long long victim = 0;
+    long long wanted = 0;
+    long long worth_building = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&a_den);
+    ep_gc_push_root(&a_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&enemy_king);
+    ep_gc_push_root(&from_sq);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&king_from);
+    ep_gc_push_root(&king_now);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&mover_kind);
+    ep_gc_push_root(&pseudo);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&beta_num);
+    ep_gc_push_root(&beta_den);
+
+    ep_gc_maybe_collect();
+
+    NODES_LEFT = (NODES_LEFT - 1);
+    if (NODES_LEFT < 0) {
+    PASS_ABORTED = 1;
+    ret_val = 65538;
+    goto L_cleanup;
+    }
+    if (get_list(state, 70) > 99) {
+    ret_val = 65538;
+    goto L_cleanup;
+    }
+    side = get_list(state, 64);
+    king_from = king_square(state, side);
+    checked = square_attacked(state, king_from, (1 - side));
+    enemy_king = king_square(state, (1 - side));
+    best_num = 0;
+    best_den = 1;
+    a_num = alpha_num;
+    a_den = alpha_den;
+    if (checked) {
+    best_num = best_num;
+    } else {
+    stand_mine = side_units(state, side);
+    stand_theirs = side_units(state, (1 - side));
+    stand_num = stand_mine;
+    stand_den = (stand_mine + stand_theirs);
+    if ((stand_num * beta_den) > (beta_num * stand_den)) {
+    ret_val = ((stand_num * 65536) + stand_den);
+    goto L_cleanup;
+    }
+    best_num = stand_num;
+    best_den = stand_den;
+    if ((stand_num * a_den) > (a_num * stand_den)) {
+    a_num = stand_num;
+    a_den = stand_den;
+    }
+    }
+    legal_seen = 0;
+    pseudo = pseudo_moves(state);
+    count = length_list(pseudo);
+    bucket_end = 2;
+    if (checked) {
+    bucket_end = 3;
+    }
+    if (fresh == 1) {
+    bucket_end = 3;
+    }
+    bucket = 0;
+    while (bucket < bucket_end) {
+    i = 0;
+    while (i < count) {
+    move = get_list(pseudo, i);
+    taking = move_is_capture(state, move);
+    examine = 0;
+    if (taking) {
+    examine = 1;
+    }
+    if (checked) {
+    examine = 1;
+    }
+    if (fresh == 1) {
+    examine = 1;
+    }
+    if (examine == 1) {
+    rest = (move - ((move / 4096) * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
+    victim = get_list(state, to_sq);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (bucket == 0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 1) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 2) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    wanted = 1;
+    }
+    }
+    if (wanted == 1) {
+    worth_building = 1;
+    if (taking) {
+    worth_building = 1;
+    } else {
+    if (checked) {
+    worth_building = 1;
+    } else {
+    mover_kind = piece_kind(get_list(state, from_sq));
+    could = could_check_from(mover_kind, to_sq, enemy_king, side);
+    if (could) {
+    worth_building = 1;
+    } else {
+    worth_building = 0;
+    }
+    }
+    }
+    if (worth_building == 0) {
+    worth_building = worth_building;
+    } else {
+    child = make_move(state, move);
+    king_now = king_from;
+    if (from_sq == king_from) {
+    king_now = to_sq;
+    }
+    exposed = square_attacked(child, king_now, (1 - side));
+    if (exposed) {
+    exposed = exposed;
+    } else {
+    legal_seen = (legal_seen + 1);
+    read_this = 1;
+    if (taking) {
+    read_this = 1;
+    } else {
+    if (checked) {
+    read_this = 1;
+    } else {
+    gives_check = square_attacked(child, enemy_king, side);
+    if (gives_check) {
+    read_this = 1;
+    } else {
+    read_this = 0;
+    }
+    }
+    }
+    if (read_this == 0) {
+    read_this = read_this;
+    } else {
+    deeper = quiescence(child, (beta_den - beta_num), beta_den, (a_den - a_num), a_den, 0);
+    child_num = (deeper / 65536);
+    child_den = (deeper - (child_num * 65536));
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    }
+    if ((my_num * beta_den) > (beta_num * my_den)) {
+    ret_val = ((best_num * 65536) + best_den);
+    goto L_cleanup;
+    }
+    if ((my_num * a_den) > (a_num * my_den)) {
+    a_num = my_num;
+    a_den = my_den;
+    }
+    }
+    }
+    }
+    }
+    }
+    i = (i + 1);
+    }
+    bucket = (bucket + 1);
+    }
+    if (checked) {
+    if (legal_seen == 0) {
+    ret_val = 66560;
+    goto L_cleanup;
+    }
+    }
+    ret_val = ((best_num * 65536) + best_den);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(17);
+    free_list(pseudo);
+    pseudo = 0;
+    return ret_val;
+}
+
+long long tt_key(long long state) {
+    long long i = 0;
+    long long k = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    k = 0;
+    i = 0;
+    while (i < 70) {
+    k = ((k * 131) + get_list(state, i));
+    k = (k - ((k / 36028797018963913) * 36028797018963913));
+    i = (i + 1);
+    }
+    ret_val = k;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    return ret_val;
+}
+
+long long tt_ensure() {
+    long long ok = 0;
+    long long ret_val = 0;
+
+    while (length_list(TT_KEYS) < 262144) {
+    ok = append_list(TT_KEYS, 0);
+    ok = append_list(TT_MOVES, 0);
+    ok = append_list(TT_STAMP, 0);
+    }
+    while (length_list(KILLER_A) < 64) {
+    ok = append_list(KILLER_A, -1);
+    ok = append_list(KILLER_B, -1);
+    }
+    while (length_list(HIST) < 4096) {
+    ok = append_list(HIST, 0);
+    }
     ret_val = 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(1);
     return ret_val;
 }
 
-long long forbid_selection(long long reason) {
+long long search_value(long long state, long long depth, long long alpha_num, long long alpha_den, long long beta_num, long long beta_den) {
+    long long a_den = 0;
+    long long a_num = 0;
+    long long best_den = 0;
+    long long best_h = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long bucket = 0;
+    long long cand = 0;
+    long long cand_taking = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long exposed = 0;
+    long long from_sq = 0;
+    long long h = 0;
+    long long heavy = 0;
+    long long hist_ready = 0;
+    long long hslot = 0;
+    long long i = 0;
+    long long j = 0;
+    long long k1 = 0;
+    long long k2 = 0;
+    long long key = 0;
+    long long king_from = 0;
+    long long king_now = 0;
+    long long legal_seen = 0;
+    long long move = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long probe_den = 0;
+    long long probe_num = 0;
+    long long pseudo = 0;
+    long long rest = 0;
+    long long sel_j = 0;
+    long long side = 0;
+    long long slot = 0;
+    long long taking = 0;
+    long long to_sq = 0;
+    long long tt_move = 0;
+    long long use_tt = 0;
+    long long victim = 0;
+    long long wanted = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&reason);
+    ep_gc_push_root(&a_den);
+    ep_gc_push_root(&a_num);
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&cand);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&hslot);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&j);
+    ep_gc_push_root(&k1);
+    ep_gc_push_root(&key);
+    ep_gc_push_root(&king_now);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&pseudo);
+    ep_gc_push_root(&sel_j);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&slot);
+    ep_gc_push_root(&to_sq);
+    ep_gc_push_root(&victim);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&alpha_num);
+    ep_gc_push_root(&alpha_den);
+    ep_gc_push_root(&beta_num);
+    ep_gc_push_root(&beta_den);
 
     ep_gc_maybe_collect();
 
-    ret_val = halt_violation(concat((long long)"SELECTION is forbidden -- a value was chosen, not forced: ", reason));
+    NODES_LEFT = (NODES_LEFT - 1);
+    if (NODES_LEFT < 0) {
+    PASS_ABORTED = 1;
+    ret_val = 65538;
+    goto L_cleanup;
+    }
+    if (get_list(state, 70) > 99) {
+    ret_val = 65538;
+    goto L_cleanup;
+    }
+    if (depth == 0) {
+    ret_val = quiescence(state, alpha_num, alpha_den, beta_num, beta_den, 1);
+    goto L_cleanup;
+    }
+    side = get_list(state, 64);
+    king_from = king_square(state, side);
+    pseudo = pseudo_moves(state);
+    count = length_list(pseudo);
+    legal_seen = 0;
+    best_num = 0;
+    best_den = 1;
+    best_move = -1;
+    a_num = alpha_num;
+    a_den = alpha_den;
+    use_tt = 0;
+    key = 0;
+    slot = 0;
+    tt_move = -1;
+    if (depth > 1) {
+    if (TT_GEN > 0) {
+    use_tt = 1;
+    key = tt_key(state);
+    slot = (key - ((key / 262144) * 262144));
+    if (get_list(TT_STAMP, slot) == TT_GEN) {
+    if (get_list(TT_KEYS, slot) == key) {
+    tt_move = get_list(TT_MOVES, slot);
+    }
+    }
+    }
+    }
+    k1 = -1;
+    k2 = -1;
+    if (length_list(KILLER_A) > 63) {
+    k1 = get_list(KILLER_A, depth);
+    k2 = get_list(KILLER_B, depth);
+    }
+    hist_ready = 0;
+    if (length_list(HIST) > 4095) {
+    hist_ready = 1;
+    }
+    bucket = -1;
+    while (bucket < 4) {
+    i = 0;
+    while (i < count) {
+    move = get_list(pseudo, i);
+    if (bucket == 3) {
+    move = -1;
+    best_h = -1;
+    sel_j = -1;
+    j = 0;
+    while (j < count) {
+    cand = get_list(pseudo, j);
+    if (cand > -1) {
+    if (cand == tt_move) {
+    j = j;
+    } else {
+    if (cand == k1) {
+    j = j;
+    } else {
+    if (cand == k2) {
+    j = j;
+    } else {
+    cand_taking = move_is_capture(state, cand);
+    if (cand_taking) {
+    j = j;
+    } else {
+    h = 0;
+    if (hist_ready == 1) {
+    h = get_list(HIST, (cand - ((cand / 4096) * 4096)));
+    }
+    if (h > best_h) {
+    best_h = h;
+    move = cand;
+    sel_j = j;
+    }
+    }
+    }
+    }
+    }
+    }
+    j = (j + 1);
+    }
+    if (sel_j > -1) {
+    ok = set_list(pseudo, sel_j, -1);
+    }
+    }
+    if (move < 0) {
+    i = (i + 1);
+    } else {
+    rest = (move - ((move / 4096) * 4096));
+    from_sq = (rest / 64);
+    to_sq = (rest - (from_sq * 64));
+    victim = get_list(state, to_sq);
+    taking = move_is_capture(state, move);
+    heavy = 0;
+    if (victim > 0) {
+    if (counted_reach(piece_kind(victim), to_sq, 0) > 8) {
+    heavy = 1;
+    }
+    }
+    wanted = 0;
+    if (bucket == -1) {
+    if (tt_move > -1) {
+    if (move == tt_move) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 0) {
+    if (taking) {
+    if (heavy == 1) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 1) {
+    if (taking) {
+    if (heavy == 0) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 2) {
+    if (taking) {
+    wanted = 0;
+    } else {
+    if (move == k1) {
+    wanted = 1;
+    }
+    if (move == k2) {
+    wanted = 1;
+    }
+    }
+    }
+    if (bucket == 3) {
+    wanted = 1;
+    }
+    if (bucket > -1) {
+    if (move == tt_move) {
+    wanted = 0;
+    }
+    }
+    if (wanted == 1) {
+    child = make_move(state, move);
+    king_now = king_from;
+    if (from_sq == king_from) {
+    king_now = to_sq;
+    }
+    exposed = square_attacked(child, king_now, (1 - side));
+    if (exposed) {
+    exposed = exposed;
+    } else {
+    legal_seen = (legal_seen + 1);
+    deeper = 0;
+    if (legal_seen == 1) {
+    deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
+    } else {
+    deeper = search_value(child, (depth - 1), (a_den - a_num), a_den, (a_den - a_num), a_den);
+    probe_num = ((deeper - ((deeper / 65536) * 65536)) - (deeper / 65536));
+    probe_den = (deeper - ((deeper / 65536) * 65536));
+    if ((probe_num * a_den) > (a_num * probe_den)) {
+    deeper = search_value(child, (depth - 1), (beta_den - beta_num), beta_den, (a_den - a_num), a_den);
+    }
+    }
+    child_num = (deeper / 65536);
+    child_den = (deeper - (child_num * 65536));
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    if ((my_num * beta_den) > (beta_num * my_den)) {
+    if (use_tt == 1) {
+    ok = set_list(TT_KEYS, slot, key);
+    ok = set_list(TT_MOVES, slot, move);
+    ok = set_list(TT_STAMP, slot, TT_GEN);
+    }
+    if (taking) {
+    taking = taking;
+    } else {
+    if (length_list(KILLER_A) > 63) {
+    if (move == k1) {
+    k1 = k1;
+    } else {
+    ok = set_list(KILLER_B, depth, k1);
+    ok = set_list(KILLER_A, depth, move);
+    }
+    }
+    if (hist_ready == 1) {
+    hslot = (move - ((move / 4096) * 4096));
+    ok = set_list(HIST, hslot, (get_list(HIST, hslot) + 1));
+    }
+    }
+    ret_val = ((best_num * 65536) + best_den);
+    goto L_cleanup;
+    }
+    if ((my_num * a_den) > (a_num * my_den)) {
+    a_num = my_num;
+    a_den = my_den;
+    }
+    }
+    }
+    i = (i + 1);
+    }
+    }
+    bucket = (bucket + 1);
+    }
+    if (use_tt == 1) {
+    if (best_move > -1) {
+    ok = set_list(TT_KEYS, slot, key);
+    ok = set_list(TT_MOVES, slot, best_move);
+    ok = set_list(TT_STAMP, slot, TT_GEN);
+    }
+    }
+    if (legal_seen == 0) {
+    checked = side_in_check(state);
+    if (checked) {
+    ret_val = (66560 + depth);
+    goto L_cleanup;
+    }
+    ret_val = 65538;
+    goto L_cleanup;
+    }
+    ret_val = ((best_num * 65536) + best_den);
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(1);
+    ep_gc_pop_roots(24);
+    free_list(pseudo);
+    pseudo = 0;
     return ret_val;
 }
 
-long long forbid_target_input(long long label, long long value_is_measured) {
+long long state_signature(long long state) {
+    long long i = 0;
+    long long signature = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&label);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&signature);
+    ep_gc_push_root(&state);
 
     ep_gc_maybe_collect();
 
-    if (value_is_measured) {
-    ret_val = halt_violation(concat((long long)"TARGET INPUT detected -- a measured value reached a derivation; measurements are comparison-only, never forcing inputs: ", label));
-    goto L_cleanup;
+    signature = (long long)"|";
+    i = 0;
+    while (i < 70) {
+    signature = concat(signature, concat(int_to_string(get_list(state, i)), (long long)"."));
+    i = (i + 1);
     }
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forced_unique(long long label, long long forced_satisfies, long long alternatives_that_satisfy) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-
-    ep_gc_maybe_collect();
-
-    if (forced_satisfies != 1) {
-    ret_val = halt_violation(concat((long long)"not forced -- the claimed value fails its own structural condition: ", label));
-    goto L_cleanup;
-    }
-    if (alternatives_that_satisfy != 0) {
-    ret_val = halt_violation(concat((long long)"SELECTION detected -- more than one candidate lands, so the value was chosen, not forced: ", label));
-    goto L_cleanup;
-    }
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forced_to_be(long long label, long long derived, long long independently_forced) {
-    long long discard = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&derived);
-    ep_gc_push_root(&independently_forced);
-
-    ep_gc_maybe_collect();
-
-    if (derived == independently_forced) {
-    ret_val = derived;
-    goto L_cleanup;
-    }
-    printf("%s\n", (char*)(long long)"============================================================");
-    printf("%s\n", (char*)(long long)"FORCING VIOLATION -- the engine is invalid and is stopping.");
-    printf("%s\n", (char*)concat((long long)"  what: ", label));
-    printf("%s\n", (char*)concat((long long)"  derived one way:        ", int_to_string(derived)));
-    printf("%s\n", (char*)concat((long long)"  forced independently:   ", int_to_string(independently_forced)));
-    printf("%s\n", (char*)(long long)"A value did not match its independent forced derivation. Nothing");
-    printf("%s\n", (char*)(long long)"in this theory may be fitted or chosen; a value that is not forced");
-    printf("%s\n", (char*)(long long)"from the One is not allowed to stand.");
-    printf("%s\n", (char*)(long long)"============================================================");
-    discard = ep_exit(1);
-    ret_val = derived;
+    ret_val = signature;
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
     return ret_val;
 }
 
+long long root_pass(long long state, long long depth, long long seen, long long pre_move) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long i = 0;
+    long long left_at_entry = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long result = 0;
+    long long signature = 0;
+    long long skip_this = 0;
+    long long visited = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&best_den);
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&best_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&left_at_entry);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&signature);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&seen);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    left_at_entry = NODES_LEFT;
+    moves = ordered_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    checked = side_in_check(state);
+    ok = append_list(result, -1);
+    if (checked) {
+    ok = append_list(result, 1);
+    ok = append_list(result, (1024 + depth));
+    } else {
+    ok = append_list(result, 1);
+    ok = append_list(result, 2);
+    }
+    ok = append_list(result, 1);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_move = get_list(moves, 0);
+    best_num = 0;
+    best_den = 1;
+    i = -1;
+    while (i < count) {
+    move = pre_move;
+    if (i > -1) {
+    move = get_list(moves, i);
+    }
+    skip_this = 0;
+    if (i < 0) {
+    if (pre_move < 0) {
+    skip_this = 1;
+    }
+    } else {
+    if (move == pre_move) {
+    skip_this = 1;
+    }
+    }
+    if (skip_this == 1) {
+    i = (i + 1);
+    } else {
+    child = make_move(state, move);
+    my_num = 1;
+    my_den = 2;
+    signature = state_signature(child);
+    visited = string_index_of(seen, signature);
+    if (visited < 0) {
+    deeper = search_value(child, (depth - 1), 0, 1, (best_den - best_num), best_den);
+    child_num = (deeper / 65536);
+    child_den = (deeper - (child_num * 65536));
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    }
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    i = (i + 1);
+    }
+    }
+    ok = append_list(result, best_move);
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ok = append_list(result, ((1 + left_at_entry) - NODES_LEFT));
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(13);
+    return ret_val;
+}
+
+long long thinking_budget() {
+    long long base = 0;
+    long long budget = 0;
+    long long k = 0;
+    long long ret_val = 0;
+
+    base = 2;
+    budget = 1;
+    k = 0;
+    while (k < 25) {
+    budget = (budget * base);
+    k = (k + 1);
+    }
+    ret_val = budget;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long search_best_seen(long long state, long long ceiling, long long seen) {
+    long long budget = 0;
+    long long climbing = 0;
+    long long depth = 0;
+    long long final_den = 0;
+    long long final_move = 0;
+    long long final_num = 0;
+    long long ok = 0;
+    long long pass_result = 0;
+    long long pre_move = 0;
+    long long remaining = 0;
+    long long result = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&final_den);
+    ep_gc_push_root(&final_move);
+    ep_gc_push_root(&final_num);
+    ep_gc_push_root(&pass_result);
+    ep_gc_push_root(&pre_move);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&seen);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    ok = tt_ensure();
+    TT_GEN = (TT_GEN + 1);
+    budget = thinking_budget();
+    remaining = budget;
+    pre_move = -1;
+    final_move = -1;
+    final_num = 1;
+    final_den = 2;
+    depth = 2;
+    climbing = 1;
+    while (climbing == 1) {
+    NODES_LEFT = remaining;
+    PASS_ABORTED = 0;
+    pass_result = root_pass(state, depth, seen, pre_move);
+    remaining = NODES_LEFT;
+    if (PASS_ABORTED == 1) {
+    if (final_move < 0) {
+    final_move = get_list(pass_result, 0);
+    final_num = get_list(pass_result, 1);
+    final_den = get_list(pass_result, 2);
+    }
+    climbing = 0;
+    } else {
+    final_move = get_list(pass_result, 0);
+    final_num = get_list(pass_result, 1);
+    final_den = get_list(pass_result, 2);
+    pre_move = final_move;
+    depth = (depth + 1);
+    if (depth > ceiling) {
+    climbing = 0;
+    }
+    if (remaining < 1) {
+    climbing = 0;
+    }
+    if (final_move < 0) {
+    climbing = 0;
+    }
+    }
+    }
+    ok = append_list(result, final_move);
+    ok = append_list(result, final_num);
+    ok = append_list(result, final_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(9);
+    return ret_val;
+}
+
+long long search_best(long long state, long long depth) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_den = 0;
+    long long child_num = 0;
+    long long count = 0;
+    long long deeper = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long ok = 0;
+    long long result = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&best_den);
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&best_num);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&depth);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    NODES_LEFT = 1152921504606846976;
+    PASS_ABORTED = 0;
+    moves = ordered_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    checked = side_in_check(state);
+    ok = append_list(result, -1);
+    if (checked) {
+    ok = append_list(result, 1);
+    ok = append_list(result, (1024 + depth));
+    } else {
+    ok = append_list(result, 1);
+    ok = append_list(result, 2);
+    }
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_move = get_list(moves, 0);
+    best_num = 0;
+    best_den = 1;
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    child = make_move(state, move);
+    deeper = search_value(child, (depth - 1), 0, 1, (best_den - best_num), best_den);
+    child_num = (deeper / 65536);
+    child_den = (deeper - (child_num * 65536));
+    my_num = (child_den - child_num);
+    my_den = child_den;
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    i = (i + 1);
+    }
+    ok = append_list(result, best_move);
+    ok = append_list(result, best_num);
+    ok = append_list(result, best_den);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(10);
+    return ret_val;
+}
+
+long long start_is_at_the_lock() {
+    long long mine = 0;
+    long long state = 0;
+    long long total = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = starting_state();
+    mine = share_numerator(state);
+    total = share_denominator(state);
+    ret_val = total == (2 * mine);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long finds_fools_mate() {
+    long long answer = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = starting_state();
+    state = make_move(state, 853);
+    state = make_move(state, 3364);
+    state = make_move(state, 926);
+    answer = search_best(state, 2);
+    ret_val = get_list(answer, 0);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    free_list(answer);
+    answer = 0;
+    return ret_val;
+}
+
+long long fools_mate_is_seen_as_mate() {
+    long long answer = 0;
+    long long den = 0;
+    long long num = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = starting_state();
+    state = make_move(state, 853);
+    state = make_move(state, 3364);
+    state = make_move(state, 926);
+    answer = search_best(state, 2);
+    num = get_list(answer, 1);
+    den = get_list(answer, 2);
+    ret_val = (num * 1024) > (den * 1000);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    free_list(answer);
+    answer = 0;
+    return ret_val;
+}
+
+long long fools_mate_is_real() {
+    long long checked = 0;
+    long long final = 0;
+    long long replies = 0;
+    long long state = 0;
+    long long strike = 0;
+    long long trapped = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&final);
+    ep_gc_push_root(&replies);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&strike);
+
+    ep_gc_maybe_collect();
+
+    state = starting_state();
+    state = make_move(state, 853);
+    state = make_move(state, 3364);
+    state = make_move(state, 926);
+    strike = finds_fools_mate();
+    final = make_move(state, strike);
+    replies = legal_moves(final);
+    trapped = length_list(replies) == 0;
+    checked = side_in_check(final);
+    if (trapped) {
+    ret_val = checked;
+    goto L_cleanup;
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_list(replies);
+    replies = 0;
+    return ret_val;
+}
+
+long long self_play_plies(long long plies) {
+    long long answer = 0;
+    long long black_king = 0;
+    long long moves = 0;
+    long long ok = 0;
+    long long opponent_safe = 0;
+    long long played = 0;
+    long long probe = 0;
+    long long state = 0;
+    long long white_king = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&probe);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = starting_state();
+    played = 0;
+    while (played < plies) {
+    moves = legal_moves(state);
+    if (length_list(moves) == 0) {
+    ret_val = played;
+    goto L_cleanup;
+    }
+    answer = search_best(state, 2);
+    state = make_move(state, get_list(answer, 0));
+    played = (played + 1);
+    }
+    white_king = king_square(state, 0);
+    black_king = king_square(state, 1);
+    if (white_king < 64) {
+    if (black_king < 64) {
+    probe = copy_state(state);
+    ok = set_list(probe, 64, (1 - get_list(state, 64)));
+    opponent_safe = side_in_check(probe);
+    if (opponent_safe) {
+    ret_val = -1;
+    goto L_cleanup;
+    }
+    ret_val = played;
+    goto L_cleanup;
+    }
+    }
+    ret_val = -2;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_list(answer);
+    answer = 0;
+    free_list(moves);
+    moves = 0;
+    return ret_val;
+}
+
+long long endgame_best_move(long long state, long long kqk, long long krk) {
+    long long best_den = 0;
+    long long best_move = 0;
+    long long best_num = 0;
+    long long cd = 0;
+    long long checked = 0;
+    long long child = 0;
+    long long child_val = 0;
+    long long cn = 0;
+    long long count = 0;
+    long long here = 0;
+    long long i = 0;
+    long long move = 0;
+    long long moves = 0;
+    long long my_den = 0;
+    long long my_num = 0;
+    long long r = 0;
+    long long replies = 0;
+    long long result = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&best_move);
+    ep_gc_push_root(&child);
+    ep_gc_push_root(&child_val);
+    ep_gc_push_root(&here);
+    ep_gc_push_root(&i);
+    ep_gc_push_root(&move);
+    ep_gc_push_root(&moves);
+    ep_gc_push_root(&replies);
+    ep_gc_push_root(&result);
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&kqk);
+    ep_gc_push_root(&krk);
+
+    ep_gc_maybe_collect();
+
+    result = create_list();
+    here = endgame_probe(state, kqk, krk);
+    if (get_list(here, 0) == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 0);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    moves = legal_moves(state);
+    count = length_list(moves);
+    if (count == 0) {
+    r = append_list(result, 0);
+    r = append_list(result, 0);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+    }
+    best_move = get_list(moves, 0);
+    best_num = 0;
+    best_den = 1;
+    i = 0;
+    while (i < count) {
+    move = get_list(moves, i);
+    child = make_move(state, move);
+    child_val = endgame_probe(child, kqk, krk);
+    my_num = 1;
+    my_den = 2;
+    if (get_list(child_val, 0) == 1) {
+    cn = get_list(child_val, 1);
+    cd = get_list(child_val, 2);
+    my_num = (cd - cn);
+    my_den = cd;
+    } else {
+    replies = legal_moves(child);
+    if (length_list(replies) == 0) {
+    checked = side_in_check(child);
+    if (checked) {
+    my_num = 1;
+    my_den = 1;
+    } else {
+    my_num = 1;
+    my_den = 2;
+    }
+    }
+    }
+    if ((my_num * best_den) > (best_num * my_den)) {
+    best_num = my_num;
+    best_den = my_den;
+    best_move = move;
+    }
+    i = (i + 1);
+    }
+    r = append_list(result, 1);
+    r = append_list(result, best_move);
+    ret_val = result;
+    result = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(12);
+    return ret_val;
+}
+
+long long krk_index(long long strong_king, long long strong_piece, long long weak_king, long long side) {
+    long long ret_val = 0;
+
+    ret_val = ((((strong_king * 8192) + (strong_piece * 128)) + (weak_king + weak_king)) + side);
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long krk_state(long long strong_king, long long strong_piece, long long weak_king, long long side, long long piece_kind, long long strong_is_white) {
+    long long ok = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&strong_king);
+    ep_gc_push_root(&strong_piece);
+    ep_gc_push_root(&weak_king);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&piece_kind);
+
+    ep_gc_maybe_collect();
+
+    state = empty_state();
+    if (strong_is_white == 1) {
+    ok = set_list(state, strong_king, 6);
+    ok = set_list(state, strong_piece, piece_kind);
+    ok = set_list(state, weak_king, 12);
+    } else {
+    ok = set_list(state, strong_king, 12);
+    ok = set_list(state, strong_piece, (piece_kind + 6));
+    ok = set_list(state, weak_king, 6);
+    }
+    ok = set_list(state, 64, side);
+    ret_val = state;
+    state = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(6);
+    return ret_val;
+}
+
+long long squares_adjacent(long long a, long long b) {
+    long long af = 0;
+    long long ar = 0;
+    long long bf = 0;
+    long long br = 0;
+    long long df = 0;
+    long long dr = 0;
+    long long ret_val = 0;
+
+    ar = (a / 8);
+    af = (a - (ar * 8));
+    br = (b / 8);
+    bf = (b - (br * 8));
+    dr = (ar - br);
+    if (dr < 0) {
+    dr = (0 - dr);
+    }
+    df = (af - bf);
+    if (df < 0) {
+    df = (0 - df);
+    }
+    if (dr < 2) {
+    if (df < 2) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long krk_position_legal(long long strong_king, long long strong_piece, long long weak_king, long long side, long long piece_kind, long long strong_is_white) {
+    long long adjacent = 0;
+    long long in_check = 0;
+    long long ok = 0;
+    long long state = 0;
+    long long waiter = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+    ep_gc_push_root(&waiter);
+    ep_gc_push_root(&strong_king);
+    ep_gc_push_root(&strong_piece);
+    ep_gc_push_root(&weak_king);
+    ep_gc_push_root(&side);
+    ep_gc_push_root(&piece_kind);
+    ep_gc_push_root(&strong_is_white);
+
+    ep_gc_maybe_collect();
+
+    if (strong_king == strong_piece) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    if (strong_king == weak_king) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    if (strong_piece == weak_king) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    adjacent = squares_adjacent(strong_king, weak_king);
+    if (adjacent) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    state = krk_state(strong_king, strong_piece, weak_king, side, piece_kind, strong_is_white);
+    waiter = (1 - side);
+    ok = set_list(state, 64, waiter);
+    in_check = side_in_check(state);
+    if (in_check) {
+    ret_val = 0LL;
+    goto L_cleanup;
+    }
+    ret_val = 1LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(8);
+    return ret_val;
+}
+
+long long krk_mate_in_one_position() {
+    long long ok = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = empty_state();
+    ok = set_list(state, 46, 6);
+    ok = set_list(state, 48, 4);
+    ok = set_list(state, 63, 12);
+    ok = set_list(state, 64, 0);
+    ret_val = state;
+    state = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long krk_finds_the_mate() {
+    long long answer = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = krk_mate_in_one_position();
+    answer = search_best(state, 2);
+    ret_val = get_list(answer, 0) == 3128;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    free_list(answer);
+    answer = 0;
+    return ret_val;
+}
+
+long long krk_mate_is_valued() {
+    long long answer = 0;
+    long long den = 0;
+    long long num = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = krk_mate_in_one_position();
+    answer = search_best(state, 2);
+    num = get_list(answer, 1);
+    den = get_list(answer, 2);
+    ret_val = (num * 1000) > (den * 999);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    free_list(answer);
+    answer = 0;
+    return ret_val;
+}
+
+long long krk_mate_is_real() {
+    long long answer = 0;
+    long long checked = 0;
+    long long final = 0;
+    long long replies = 0;
+    long long state = 0;
+    long long trapped = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&final);
+    ep_gc_push_root(&replies);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = krk_mate_in_one_position();
+    answer = search_best(state, 2);
+    final = make_move(state, get_list(answer, 0));
+    replies = legal_moves(final);
+    trapped = length_list(replies) == 0;
+    checked = side_in_check(final);
+    if (trapped) {
+    ret_val = checked;
+    goto L_cleanup;
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_list(answer);
+    answer = 0;
+    free_list(replies);
+    replies = 0;
+    return ret_val;
+}
+
+long long krk_drives_the_net() {
+    long long answer = 0;
+    long long den = 0;
+    long long num = 0;
+    long long ok = 0;
+    long long state = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&answer);
+    ep_gc_push_root(&state);
+
+    ep_gc_maybe_collect();
+
+    state = empty_state();
+    ok = set_list(state, 45, 6);
+    ok = set_list(state, 0, 4);
+    ok = set_list(state, 63, 12);
+    ok = set_list(state, 64, 0);
+    answer = search_best(state, 4);
+    num = get_list(answer, 1);
+    den = get_list(answer, 2);
+    ret_val = (num * 1000) > (den * 990);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
+    free_list(answer);
+    answer = 0;
+    return ret_val;
+}
+
+
+static void __ep_mark_globals_major(void) {
+    if (TT_KEYS != 0) ep_gc_mark_object((void*)TT_KEYS);
+    if (TT_MOVES != 0) ep_gc_mark_object((void*)TT_MOVES);
+    if (TT_STAMP != 0) ep_gc_mark_object((void*)TT_STAMP);
+    if (TT_GEN != 0) ep_gc_mark_object((void*)TT_GEN);
+    if (KILLER_A != 0) ep_gc_mark_object((void*)KILLER_A);
+    if (KILLER_B != 0) ep_gc_mark_object((void*)KILLER_B);
+    if (HIST != 0) ep_gc_mark_object((void*)HIST);
+    if (NODES_LEFT != 0) ep_gc_mark_object((void*)NODES_LEFT);
+    if (PASS_ABORTED != 0) ep_gc_mark_object((void*)PASS_ABORTED);
+    if (WHITE_REACH_BUF != 0) ep_gc_mark_object((void*)WHITE_REACH_BUF);
+    if (BLACK_REACH_BUF != 0) ep_gc_mark_object((void*)BLACK_REACH_BUF);
+}
+static void __ep_mark_globals_minor(void) {
+    if (TT_KEYS != 0) ep_gc_mark_object_minor((void*)TT_KEYS);
+    if (TT_MOVES != 0) ep_gc_mark_object_minor((void*)TT_MOVES);
+    if (TT_STAMP != 0) ep_gc_mark_object_minor((void*)TT_STAMP);
+    if (TT_GEN != 0) ep_gc_mark_object_minor((void*)TT_GEN);
+    if (KILLER_A != 0) ep_gc_mark_object_minor((void*)KILLER_A);
+    if (KILLER_B != 0) ep_gc_mark_object_minor((void*)KILLER_B);
+    if (HIST != 0) ep_gc_mark_object_minor((void*)HIST);
+    if (NODES_LEFT != 0) ep_gc_mark_object_minor((void*)NODES_LEFT);
+    if (PASS_ABORTED != 0) ep_gc_mark_object_minor((void*)PASS_ABORTED);
+    if (WHITE_REACH_BUF != 0) ep_gc_mark_object_minor((void*)WHITE_REACH_BUF);
+    if (BLACK_REACH_BUF != 0) ep_gc_mark_object_minor((void*)BLACK_REACH_BUF);
+}
+
+void __ep_init_constants(void) {
+    ep_gc_mark_globals_major = __ep_mark_globals_major;
+    ep_gc_mark_globals_minor = __ep_mark_globals_minor;
+    TT_KEYS = create_list();
+    TT_MOVES = create_list();
+    TT_STAMP = create_list();
+    TT_GEN = 0;
+    KILLER_A = create_list();
+    KILLER_B = create_list();
+    HIST = create_list();
+    NODES_LEFT = 0;
+    PASS_ABORTED = 0;
+    WHITE_REACH_BUF = create_list();
+    BLACK_REACH_BUF = create_list();
+}
 
 /* Bootstrapper C main */
 int main(int argc, char** argv) {
@@ -6908,6 +11056,7 @@ int main(int argc, char** argv) {
         srand(seed);
     }
     init_ep_args(argc, argv);
+    __ep_init_constants();
     int result = (int)_main();
     ep_async_loop_run();
     ep_gc_shutdown();

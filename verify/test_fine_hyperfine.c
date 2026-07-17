@@ -4994,6 +4994,7 @@ long long inverse_fine_structure_first_order();
 long long inverse_fine_structure_first_order_decimal(long long);
 long long inverse_fine_structure_second_order();
 long long inverse_fine_structure_second_order_decimal(long long);
+long long second_order_with_sub(long long);
 long long fs_tower_fraction();
 long long fs_colour_square_fraction();
 long long fs_dilation_up();
@@ -6729,6 +6730,27 @@ long long inverse_fine_structure_second_order_decimal(long long places) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long second_order_with_sub(long long sub) {
+    long long cov = 0;
+    long long effective_top = 0;
+    long long numerator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&effective_top);
+    ep_gc_push_root(&numerator);
+
+    ep_gc_maybe_collect();
+
+    cov = (smallest_fold_period_above(1) * whole_power(down_depth(), colour_count()));
+    effective_top = ((cov * sub) + 1);
+    numerator = ((whole_power(binary_count(), up_depth()) * effective_top) + (whole_power(colour_count(), binary_count()) * (effective_top + sub)));
+    ret_val = fraction_from_ratio(numerator, effective_top);
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(2);
     return ret_val;
 }
 

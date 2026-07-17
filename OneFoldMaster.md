@@ -5377,6 +5377,16 @@ our knowledge — the only complete chess player with zero fitted parameters. Th
 chess campaign derived laws from solved fields; **this plays the whole board.** The fold
 does not just derive — it plays.
 
+**Established three-man table receipt.** `constants/endgame_tables.ep` with
+`tests/test_endgame_tables.ep` loads the published KQK and KRK packed tables and refuses
+to trust the stored values: using the independent clean-room move generator, it re-proves
+the fold value law over every one of the `2^19 = 524,288` indices in each table. KQK closes
+at 368,452 legal states (144,508 W / 200,896 L / 23,048 D; 364 mates; maximum distance
+20 plies); KRK closes at 399,112 legal states (175,168 W / 201,700 L / 22,244 D; 216
+mates; maximum distance 32 plies). Every stored kind and non-draw distance must equal the
+successor law or the certificate fails. Ernos current-source verified 2026-07-17 (14/14
+checks).
+
 ### Step 304 — Quaternary homodimeric protein docking (zero-parameter multi-chain folding)
 
 **File:** `tools/predict_complex.py`
@@ -5487,7 +5497,13 @@ does not just derive — it plays.
 
 **What it does.** Forces where rote reproduction and understanding part, and thereby corrects the UnisonAI engine's generation law. A memory is a **held orbit** (memory_persistence, reused) — it re-excites its own surface states, so **holding repeats** (Step 312, reused: b²−b = 2 > 0); replaying a held orbit *is* verbatim reproduction. **Abstraction is the other regime:** kin experiences are the two processes of one shared cycle — they partition the One and lock at their balance 1/2 (binding_problem, reused) — and the balance **folds to the One** (closure): the One is invariant, so **closed content does not repeat** (0). The abstracted schema is the **fold image**, instance-free, not the surface preimage (`forbid_target_input` guards the surface-as-memory). The discriminator is forced: held(verbatim) − closed(abstracted) repeats = the binary count b (`forced_to_be`). Generation is then **unfolding** the closed schema (unfolding_sequence, reused): distinct move-routes reach one invariant value (the composed chain 2/3 = the orbit route 2/3), one meaning re-expressed by different surface. The corollary the corpus forces on the engine: a fold implemented as **duplication** (thickening the held surface) keeps content in the held/repeating regime forever — forced to replay — so `fold_orbit`-as-copy is exactly the "prints memory" bug; the forced fold **binds and closes**, and generation **unfolds** (`sample_next_unfold`), which is now the shipped law. No new assembled constant (reuses binding, memory-persistence, hold-closure, unfolding); closed by reuse. Ernos-verified 2026-07-15 (9/9 checks).
 
-### Form-closure sweep of the decode subseries (Steps 308–320) — complete
+### Step 322 — The coherence value (fold-determined correctness at every scale)
+
+**File:** `constants/coherence_value.ep` (test: `tests/test_coherence_value.ep`)
+
+**What it does.** Forces the correctness lock used to value whether a part fits the others and the whole, without a trained or fitted score. Two coupled fold processes scale a gap by `2·(1−g)`; the marginal locking point is therefore `g = 1/2`, the fold preimage of the One. At that lock the multiplier is the One, `fold(1/2) = 1`, and the lock equals the already-closed cascade head share, so the same criterion applies at token, word, statement, and conversation scales. Strong kin `2/3` coheres because it reaches the lock; weak association `1/3` runs free. Across four scales, `1/2 + 1/4 + 1/8 + 1/16` plus the No-Zero floor `1/16` closes exactly to the One. The score is therefore the fold-determined lock, not a measured or fitted parameter (`forbid_target_input` guards that boundary). No new assembled constant is introduced: the lock, fold preimage, cascade shares, kin values, and closing floor are reused closed structures. Ernos-verified 2026-07-15 (8/8 checks).
+
+### Form-closure sweep of the decode subseries (Steps 308–322) — complete
 
 The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted **assembled algebraic form** be minimal over a generated candidate space and unique among same-size shapes (`assembly_enumeration` + `forbid_form_selection`), not merely that its ingredient counts are forced. Auditing the whole fold-AI subseries against that bar (2026-07-15): **the functional band (Step 311) was the sole step that asserted new assembled constants, and both now carry both guards** — the colour volume c³ (a two-operation cube, minimal and unique over {c}) and the covering depth b+c (minimal and unique over {b, c}). Every other step asserts **no new assembled constant**, so owes no assembly guard, and is closed by the machinery it already runs:
 
@@ -5503,6 +5519,8 @@ The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted 
 - **318** — the loud head (top b+c) reaches the band interior 31/32; reuses the closed cascade (313) and band (311); the head depth is `forced_to_be` = b+c; member count guarded off.
 - **319** — the approach is the fold's halving 1/2ᵏ (reuses the closed radioactive-decay/fold contraction, Step 66) and the lock 1/b; the timescale guarded off.
 - **320** — the closure signature reuses the two regimes (Step 312: holding repeats b²−b, closure 0) and the location law; the layer identity guarded off. No new form.
+- **321** — memory abstraction reuses the closed held orbit, binding lock, hold/closure regimes, and unfolding equivalence; surface-as-memory is guarded off. No new form.
+- **322** — the coherence value reuses the closed lock 1/2, fold preimage, cascade shares, and kin partition; the four-scale sum telescopes to the One and the score-as-measurement route is guarded off. No new form.
 
 The whole subseries compiles and passes under `ernos` with zero violations. **Every fold-AI decode step is now closed to the corpus's finished form-closure standard** — the same standard the physics constants meet — with the band the only one that owed, and received, the generated-minimality and named-shape guards; all others reduce to reused-closed primitives, counts forced two ways, complements of closed values, and structural telescopings.
 

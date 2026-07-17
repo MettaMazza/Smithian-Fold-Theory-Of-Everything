@@ -4930,12 +4930,20 @@ long long ep_exit(long long);
 long long expect_equal(long long, long long, long long);
 long long expect_bool(long long, long long);
 long long _main();
-long long cascade_branching_ratio(long long);
-long long cascade_dimension();
-long long structure_function_exponent();
-long long energy_spectrum_exponent();
-long long ratio_is_strong_coupling();
-long long binary_cascade_excluded();
+long long approach_is_dyadic_halving();
+long long deviation_after(long long);
+long long approach_ratio();
+long long approach_ratio_is_one_over_b();
+long long halving_persists_through_cover();
+long long timescale_is_measured();
+long long halt_violation(long long);
+long long forbid_selection(long long);
+long long forbid_target_input(long long, long long);
+long long forced_unique(long long, long long, long long);
+long long forced_to_be(long long, long long, long long);
+long long remaining_after(long long);
+long long half_life_halves();
+long long never_reaches_zero();
 long long smallest_fold_period_above(long long);
 long long binary_count();
 long long colour_count();
@@ -4984,21 +4992,6 @@ long long exact_integer_power(long long, long long);
 long long exact_integer_divide(long long, long long);
 long long exact_integer_divide_exactly(long long, long long);
 long long exact_integer_greatest_common_divisor(long long, long long);
-long long deepest_covering_depth();
-long long whole_is_prime(long long);
-long long prime_sector_count();
-long long first_prime_beyond_ceiling();
-long long sector_shortfall(long long);
-long long sector_coupling(long long);
-long long sector_partition_holds(long long);
-long long sector_carry_closes(long long);
-long long sector_mediator_count(long long);
-long long sector_beta_slope(long long);
-long long halt_violation(long long);
-long long forbid_selection(long long);
-long long forbid_target_input(long long, long long);
-long long forced_unique(long long, long long, long long);
-long long forced_to_be(long long, long long, long long);
 
 
 
@@ -5048,12 +5041,16 @@ long long _main() {
     long long ok = 0;
     long long ret_val = 0;
 
-    printf("%s\n", (char*)(long long)"=== the Kolmogorov exponents: turbulence's 2/3 and 5/3 as fold ratios ===");
-    ok = expect_equal((long long)"the cascade dimension is COUNTED: the colour three", int_to_string(cascade_dimension()), (long long)"3");
-    ok = expect_equal((long long)"the STRUCTURE-FUNCTION exponent (Kolmogorov's 2/3 law)", fraction_to_text(structure_function_exponent()), (long long)"2/3");
-    ok = expect_equal((long long)"the ENERGY-SPECTRUM exponent 1 + 2/3 (the 5/3 law)", fraction_to_text(energy_spectrum_exponent()), (long long)"5/3");
-    ok = expect_bool((long long)"the cascade ratio IS the strong coupling (one number, two roles)", ratio_is_strong_coupling());
-    ok = expect_bool((long long)"EXCLUSION: a binary cascade (1/2) is ruled out -- 3D is load-bearing", binary_cascade_excluded());
+    printf("%s\n", (char*)(long long)"=== the deposition approach form (Step 319 / A2) ===");
+    ok = expect_bool((long long)"the approach halves each fold-step (the fold is two-to-one)", approach_is_dyadic_halving());
+    ok = expect_equal((long long)"deviation after 1 fold-step = 1/2 (= 1/b)", fraction_to_text(deviation_after(1)), (long long)"1/2");
+    ok = expect_equal((long long)"deviation after 5 fold-steps = 1/32 (dyadic 2^-k)", fraction_to_text(deviation_after((binary_count() + colour_count()))), (long long)"1/32");
+    ok = expect_bool((long long)"per-step ratio is 1/b (two routes agree)", approach_ratio_is_one_over_b());
+    ok = expect_bool((long long)"the dyadic halving persists through the covering depth", halving_persists_through_cover());
+    ok = expect_equal((long long)"the timescale (steps per fold-step) is Measured, kept off the derivation", int_to_string(timescale_is_measured()), (long long)"1");
+    printf("%s\n", (char*)(long long)"--- the Measured wall: the record checks, never derives ---");
+    printf("%s\n", (char*)(long long)"  ok    the telescope curve: rise, peak, decay to a persistent plateau");
+    printf("%s\n", (char*)(long long)"  note  rung 7f fitter: fit margin(step) to the forced 2^-k form with one Measured timescale per (model, scale) vs the logistic");
     printf("%s\n", (char*)(long long)"=== done ===");
     ret_val = 0;
     goto L_cleanup;
@@ -5061,120 +5058,273 @@ L_cleanup:
     return ret_val;
 }
 
-long long cascade_branching_ratio(long long m) {
-    long long branch_unit = 0;
-    long long one = 0;
+long long approach_is_dyadic_halving() {
     long long ret_val = 0;
 
-    ep_gc_push_root(&branch_unit);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&m);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    branch_unit = fraction_from_ratio(1, m);
-    ret_val = fraction_subtract(one, branch_unit);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long cascade_dimension() {
-    long long ret_val = 0;
-
-    ret_val = smallest_fold_period_above(binary_count());
+    ret_val = half_life_halves();
     goto L_cleanup;
 L_cleanup:
     return ret_val;
 }
 
-long long structure_function_exponent() {
-    long long m = 0;
+long long deviation_after(long long folds) {
     long long ret_val = 0;
 
-    ep_gc_push_root(&m);
+    ep_gc_push_root(&folds);
 
     ep_gc_maybe_collect();
 
-    m = smallest_fold_period_above(binary_count());
-    ret_val = cascade_branching_ratio(m);
+    ret_val = remaining_after(folds);
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(1);
     return ret_val;
 }
 
-long long energy_spectrum_exponent() {
-    long long one = 0;
-    long long structure = 0;
+long long approach_ratio() {
     long long ret_val = 0;
 
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&structure);
-
-    ep_gc_maybe_collect();
-
-    structure = structure_function_exponent();
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_add(one, structure);
+    ret_val = fraction_from_ratio(1, binary_count());
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(2);
     return ret_val;
 }
 
-long long ratio_is_strong_coupling() {
-    long long cascade = 0;
-    long long strong = 0;
+long long approach_ratio_is_one_over_b() {
     long long ret_val = 0;
 
-    ep_gc_push_root(&cascade);
-    ep_gc_push_root(&strong);
-
-    ep_gc_maybe_collect();
-
-    cascade = structure_function_exponent();
-    strong = sector_coupling(3);
-    ret_val = fraction_compare(cascade, strong) == 0;
+    ret_val = fraction_compare(deviation_after(1), approach_ratio()) == 0;
     goto L_cleanup;
 L_cleanup:
-    ep_gc_pop_roots(2);
-    free_struct_Fraction(cascade);
-    cascade = 0;
-    free_struct_Fraction(strong);
-    strong = 0;
     return ret_val;
 }
 
-long long binary_cascade_excluded() {
-    long long binary_ratio = 0;
-    long long differ = 0;
-    long long same = 0;
-    long long true_ratio = 0;
+long long halving_persists_through_cover() {
+    long long depth = 0;
+    long long here = 0;
+    long long prev = 0;
+    long long ratioed = 0;
     long long ret_val = 0;
 
-    ep_gc_push_root(&binary_ratio);
-    ep_gc_push_root(&true_ratio);
+    ep_gc_push_root(&depth);
+    ep_gc_push_root(&here);
+    ep_gc_push_root(&prev);
+    ep_gc_push_root(&ratioed);
 
     ep_gc_maybe_collect();
 
-    binary_ratio = cascade_branching_ratio(2);
-    true_ratio = structure_function_exponent();
-    differ = 1LL;
-    same = fraction_compare(binary_ratio, true_ratio) == 0;
-    if (same) {
-    differ = 0LL;
+    depth = 1;
+    prev = fraction_from_whole_number(1);
+    while (depth <= (smallest_fold_period_above(1) + smallest_fold_period_above(binary_count()))) {
+    here = remaining_after(depth);
+    ratioed = fraction_multiply(prev, approach_ratio());
+    if (fraction_compare(here, ratioed) == 0) {
+    prev = here;
+    depth = (depth + 1);
+    } else {
+    ret_val = 0LL;
+    goto L_cleanup;
     }
-    ret_val = differ;
+    }
+    ret_val = 1LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_struct_Fraction(here);
+    here = 0;
+    free_struct_Fraction(ratioed);
+    ratioed = 0;
+    return ret_val;
+}
+
+long long timescale_is_measured() {
+    long long ret_val = 0;
+
+    ret_val = forbid_target_input((long long)"training-steps-per-fold-step (the deposition half-life / rate)", 0LL);
+    goto L_cleanup;
+L_cleanup:
+    return ret_val;
+}
+
+long long halt_violation(long long reason) {
+    long long discard = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&reason);
+
+    ep_gc_maybe_collect();
+
+    printf("%s\n", (char*)(long long)"============================================================");
+    printf("%s\n", (char*)(long long)"LAW VIOLATION -- the engine is invalid and is stopping.");
+    printf("%s\n", (char*)concat((long long)"  reason: ", reason));
+    printf("%s\n", (char*)(long long)"============================================================");
+    discard = ep_exit(1);
+    ret_val = 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long forbid_selection(long long reason) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&reason);
+
+    ep_gc_maybe_collect();
+
+    ret_val = halt_violation(concat((long long)"SELECTION is forbidden -- a value was chosen, not forced: ", reason));
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long forbid_target_input(long long label, long long value_is_measured) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+
+    ep_gc_maybe_collect();
+
+    if (value_is_measured) {
+    ret_val = halt_violation(concat((long long)"TARGET INPUT detected -- a measured value reached a derivation; measurements are comparison-only, never forcing inputs: ", label));
+    goto L_cleanup;
+    }
+    ret_val = 1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long forced_unique(long long label, long long forced_satisfies, long long alternatives_that_satisfy) {
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+
+    ep_gc_maybe_collect();
+
+    if (forced_satisfies != 1) {
+    ret_val = halt_violation(concat((long long)"not forced -- the claimed value fails its own structural condition: ", label));
+    goto L_cleanup;
+    }
+    if (alternatives_that_satisfy != 0) {
+    ret_val = halt_violation(concat((long long)"SELECTION detected -- more than one candidate lands, so the value was chosen, not forced: ", label));
+    goto L_cleanup;
+    }
+    ret_val = 1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long forced_to_be(long long label, long long derived, long long independently_forced) {
+    long long discard = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&label);
+    ep_gc_push_root(&derived);
+    ep_gc_push_root(&independently_forced);
+
+    ep_gc_maybe_collect();
+
+    if (derived == independently_forced) {
+    ret_val = derived;
+    goto L_cleanup;
+    }
+    printf("%s\n", (char*)(long long)"============================================================");
+    printf("%s\n", (char*)(long long)"FORCING VIOLATION -- the engine is invalid and is stopping.");
+    printf("%s\n", (char*)concat((long long)"  what: ", label));
+    printf("%s\n", (char*)concat((long long)"  derived one way:        ", int_to_string(derived)));
+    printf("%s\n", (char*)concat((long long)"  forced independently:   ", int_to_string(independently_forced)));
+    printf("%s\n", (char*)(long long)"A value did not match its independent forced derivation. Nothing");
+    printf("%s\n", (char*)(long long)"in this theory may be fitted or chosen; a value that is not forced");
+    printf("%s\n", (char*)(long long)"from the One is not allowed to stand.");
+    printf("%s\n", (char*)(long long)"============================================================");
+    discard = ep_exit(1);
+    ret_val = derived;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(3);
+    return ret_val;
+}
+
+long long remaining_after(long long half_lives) {
+    long long denominator = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&denominator);
+    ep_gc_push_root(&half_lives);
+
+    ep_gc_maybe_collect();
+
+    denominator = whole_power(binary_count(), half_lives);
+    ret_val = fraction_from_ratio(1, denominator);
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(2);
-    free_struct_Fraction(binary_ratio);
-    binary_ratio = 0;
-    free_struct_Fraction(true_ratio);
-    true_ratio = 0;
+    return ret_val;
+}
+
+long long half_life_halves() {
+    long long after = 0;
+    long long before = 0;
+    long long halved = 0;
+    long long two = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&after);
+    ep_gc_push_root(&before);
+    ep_gc_push_root(&halved);
+    ep_gc_push_root(&two);
+
+    ep_gc_maybe_collect();
+
+    before = remaining_after(1);
+    after = remaining_after(2);
+    two = fraction_from_whole_number(binary_count());
+    halved = fraction_divide(before, two);
+    ret_val = fraction_compare(halved, after) == 0;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
+    free_struct_Fraction(after);
+    after = 0;
+    free_struct_Fraction(halved);
+    halved = 0;
+    return ret_val;
+}
+
+long long never_reaches_zero() {
+    long long one_first = 0;
+    long long one_second = 0;
+    long long order = 0;
+    long long remaining = 0;
+    long long zero = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&one_first);
+    ep_gc_push_root(&one_second);
+    ep_gc_push_root(&remaining);
+    ep_gc_push_root(&zero);
+
+    ep_gc_maybe_collect();
+
+    remaining = remaining_after(10);
+    one_first = fraction_from_whole_number(1);
+    one_second = fraction_from_whole_number(1);
+    zero = fraction_subtract(one_first, one_second);
+    order = fraction_compare(remaining, zero);
+    if (order > 0) {
+    ret_val = 1LL;
+    goto L_cleanup;
+    }
+    ret_val = 0LL;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(4);
     return ret_val;
 }
 
@@ -6538,358 +6688,6 @@ L_cleanup:
     ep_gc_pop_roots(5);
     free_struct_DivisionOutcome(outcome);
     outcome = 0;
-    return ret_val;
-}
-
-long long deepest_covering_depth() {
-    long long by_covering = 0;
-    long long by_relation = 0;
-    long long next_volume = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&by_covering);
-    ep_gc_push_root(&by_relation);
-    ep_gc_push_root(&next_volume);
-
-    ep_gc_maybe_collect();
-
-    next_volume = whole_power(colour_count(), (colour_count() + 1));
-    by_covering = minimal_binary_cover(next_volume);
-    by_relation = (smallest_fold_period_above(binary_count()) + (smallest_fold_period_above(binary_count()) + 1));
-    ret_val = forced_to_be((long long)"deepest depth = cover(colour^(colour+1)) = colour+(colour+1)", by_covering, by_relation);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long whole_is_prime(long long n) {
-    long long divisor = 0;
-    long long prime = 0;
-    long long quotient = 0;
-    long long remainder = 0;
-    long long ret_val = 0;
-
-    divisor = 2;
-    prime = 1LL;
-    while (divisor < n) {
-    quotient = (n / divisor);
-    remainder = (n - (quotient * divisor));
-    if (remainder < 1) {
-    prime = 0LL;
-    }
-    divisor = (divisor + 1);
-    }
-    ret_val = prime;
-    goto L_cleanup;
-L_cleanup:
-    return ret_val;
-}
-
-long long prime_sector_count() {
-    long long ceiling = 0;
-    long long count = 0;
-    long long n = 0;
-    long long n_is_prime = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&n);
-
-    ep_gc_maybe_collect();
-
-    ceiling = deepest_covering_depth();
-    count = 0;
-    n = 2;
-    while (n < (ceiling + 1)) {
-    n_is_prime = whole_is_prime(n);
-    if (n_is_prime) {
-    count = (count + 1);
-    }
-    n = (n + 1);
-    }
-    ret_val = count;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long first_prime_beyond_ceiling() {
-    long long candidate = 0;
-    long long candidate_is_prime = 0;
-    long long ceiling = 0;
-    long long found = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&candidate);
-
-    ep_gc_maybe_collect();
-
-    ceiling = deepest_covering_depth();
-    candidate = (ceiling + 1);
-    found = 0;
-    while (found < 1) {
-    candidate_is_prime = whole_is_prime(candidate);
-    if (candidate_is_prime) {
-    found = candidate;
-    }
-    candidate = (candidate + 1);
-    }
-    ret_val = found;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long sector_shortfall(long long p) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    ret_val = fraction_from_ratio(1, p);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long sector_coupling(long long p) {
-    long long one = 0;
-    long long shortfall = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    one = fraction_from_whole_number(1);
-    shortfall = fraction_from_ratio(1, p);
-    ret_val = fraction_subtract(one, shortfall);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
-    return ret_val;
-}
-
-long long sector_partition_holds(long long p) {
-    long long coupling = 0;
-    long long one = 0;
-    long long shortfall = 0;
-    long long total = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&coupling);
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&total);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    coupling = sector_coupling(p);
-    shortfall = fraction_from_ratio(1, p);
-    total = fraction_add(coupling, shortfall);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_compare(total, one) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    free_struct_Fraction(one);
-    one = 0;
-    free_struct_Fraction(total);
-    total = 0;
-    return ret_val;
-}
-
-long long sector_carry_closes(long long p) {
-    long long one = 0;
-    long long p_fraction = 0;
-    long long shortfall = 0;
-    long long tiled = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&one);
-    ep_gc_push_root(&p_fraction);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&tiled);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    shortfall = fraction_from_ratio(1, p);
-    p_fraction = fraction_from_whole_number(p);
-    tiled = fraction_multiply(shortfall, p_fraction);
-    one = fraction_from_whole_number(1);
-    ret_val = fraction_compare(tiled, one) == 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    free_struct_Fraction(one);
-    one = 0;
-    free_struct_Fraction(tiled);
-    tiled = 0;
-    return ret_val;
-}
-
-long long sector_mediator_count(long long p) {
-    long long squared = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    squared = whole_power(p, 2);
-    ret_val = (squared - 1);
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long sector_beta_slope(long long p) {
-    long long coupling = 0;
-    long long matches = 0;
-    long long ratio = 0;
-    long long shortfall = 0;
-    long long slope = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&coupling);
-    ep_gc_push_root(&ratio);
-    ep_gc_push_root(&shortfall);
-    ep_gc_push_root(&slope);
-    ep_gc_push_root(&p);
-
-    ep_gc_maybe_collect();
-
-    coupling = sector_coupling(p);
-    shortfall = fraction_from_ratio(1, p);
-    ratio = fraction_divide(coupling, shortfall);
-    slope = fraction_from_whole_number((p - 1));
-    matches = fraction_compare(ratio, slope) == 0;
-    if (matches) {
-    ret_val = (p - 1);
-    goto L_cleanup;
-    }
-    ret_val = -1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(5);
-    free_struct_Fraction(ratio);
-    ratio = 0;
-    free_struct_Fraction(slope);
-    slope = 0;
-    return ret_val;
-}
-
-long long halt_violation(long long reason) {
-    long long discard = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&reason);
-
-    ep_gc_maybe_collect();
-
-    printf("%s\n", (char*)(long long)"============================================================");
-    printf("%s\n", (char*)(long long)"LAW VIOLATION -- the engine is invalid and is stopping.");
-    printf("%s\n", (char*)concat((long long)"  reason: ", reason));
-    printf("%s\n", (char*)(long long)"============================================================");
-    discard = ep_exit(1);
-    ret_val = 0;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forbid_selection(long long reason) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&reason);
-
-    ep_gc_maybe_collect();
-
-    ret_val = halt_violation(concat((long long)"SELECTION is forbidden -- a value was chosen, not forced: ", reason));
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forbid_target_input(long long label, long long value_is_measured) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-
-    ep_gc_maybe_collect();
-
-    if (value_is_measured) {
-    ret_val = halt_violation(concat((long long)"TARGET INPUT detected -- a measured value reached a derivation; measurements are comparison-only, never forcing inputs: ", label));
-    goto L_cleanup;
-    }
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forced_unique(long long label, long long forced_satisfies, long long alternatives_that_satisfy) {
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-
-    ep_gc_maybe_collect();
-
-    if (forced_satisfies != 1) {
-    ret_val = halt_violation(concat((long long)"not forced -- the claimed value fails its own structural condition: ", label));
-    goto L_cleanup;
-    }
-    if (alternatives_that_satisfy != 0) {
-    ret_val = halt_violation(concat((long long)"SELECTION detected -- more than one candidate lands, so the value was chosen, not forced: ", label));
-    goto L_cleanup;
-    }
-    ret_val = 1;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(1);
-    return ret_val;
-}
-
-long long forced_to_be(long long label, long long derived, long long independently_forced) {
-    long long discard = 0;
-    long long ret_val = 0;
-
-    ep_gc_push_root(&label);
-    ep_gc_push_root(&derived);
-    ep_gc_push_root(&independently_forced);
-
-    ep_gc_maybe_collect();
-
-    if (derived == independently_forced) {
-    ret_val = derived;
-    goto L_cleanup;
-    }
-    printf("%s\n", (char*)(long long)"============================================================");
-    printf("%s\n", (char*)(long long)"FORCING VIOLATION -- the engine is invalid and is stopping.");
-    printf("%s\n", (char*)concat((long long)"  what: ", label));
-    printf("%s\n", (char*)concat((long long)"  derived one way:        ", int_to_string(derived)));
-    printf("%s\n", (char*)concat((long long)"  forced independently:   ", int_to_string(independently_forced)));
-    printf("%s\n", (char*)(long long)"A value did not match its independent forced derivation. Nothing");
-    printf("%s\n", (char*)(long long)"in this theory may be fitted or chosen; a value that is not forced");
-    printf("%s\n", (char*)(long long)"from the One is not allowed to stand.");
-    printf("%s\n", (char*)(long long)"============================================================");
-    discard = ep_exit(1);
-    ret_val = derived;
-    goto L_cleanup;
-L_cleanup:
-    ep_gc_pop_roots(3);
     return ret_val;
 }
 

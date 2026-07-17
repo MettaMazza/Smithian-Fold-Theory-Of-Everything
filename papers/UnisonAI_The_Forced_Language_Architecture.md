@@ -70,6 +70,10 @@ UnisonAI is a complete language architecture in which each mechanism of an LLM i
 
 Knowledge is *written, not trained*: teaching the engine one fact costs one record — no gradient run, no catastrophic forgetting, and the store can be opened and read. Learning is automatic and ongoing (every telling), feedback-weighted but never feedback-dependent. Facts persist across process death in a plain ledger. An engineering law completes the design: the engine's diet is the theory corpus, growing prose, and its lessons — never its own build documents.
 
+### 6.1 The fold-determined coherence value
+
+Step 322 closes the structural coherence value used by this architecture (`constants/coherence_value.ep`; claim `SFT-COHERENCE-322`). The gap multiplier is `2(1-g)`, so the marginal synchronization regime is forced at `g = 1/2`; folding that balance gives the completed One. The scale-invariant/cascade head binds `2/3` of the available share while `1/3` remains free, and the finite cascade closes exactly as `1/2 + 1/4 + 1/8 + 1/16 + 1/16 = 1`. The derivation contains no fitted score and passes 8/8 exact checks. This theorem fixes the structural lock and partition; whether a live coherence critic is empirically calibrated for conversational quality remains a separate measured question and is not inferred from the theorem.
+
 ## 7. Measured results
 
 **The task gate.** On identical held-out text with an identical arena, the fold-native engine versus a trained transformer twin (4 layers, 128 dims, 48,000 gradient-batched readings ≈ 11 passes, 21 minutes per seed, 3 seeds): **fold 1.2891, transformer 1.8878** — the engine read the corpus once, built its store in 26 seconds, and won by the campaign's widest margin. Registered efficiency axes: 1 pass vs ~11; 26s vs 21min; fact-edit = write one record vs retrain. At word scale over a 2.5M-token corpus the trained twin led (3.497 vs 4.507) — recorded: exact-context stores thin as the token space grows, and the scale-dependence of the two regimes is part of the finding, addressed by volume (below) and by counted kinship.
@@ -104,7 +108,7 @@ The economic statement is the plainest one. The expensive triad of modern AI —
 
 ## 11. Reproducibility
 
-All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/PROTOCOL.md` (every registration, amendment, and refusal), `fold_ai/spectral_probe.py` and rung scripts, seed 20260706, verbatim result files; the F2-linear self-test certifies each run internally; all probed models are public releases. **The engine**: `fold_ai/unison_chat.py` (the architecture of §6, mechanism-annotated), `fold_ai/test_chat.py` (the conversation harness; 9/9 on the reference cases), `fold_ai/rung5_native_seed.py` and `rung5b_words.py` (the task gates), `fold_ai/corpus_grower.py`, `build_store.py`, `teacher_pipeline.py` (the growth system), `unison_discord.py` (deployment). The engine repository: github.com/MettaMazza/UnisonAI. The corpus and its 1,844 machine-checked forced results: github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything (`make -C verify prove`).
+All artifacts are in the public repositories. **Spectral instrument**: `fold_ai/PROTOCOL.md` (every registration, amendment, and refusal), `fold_ai/spectral_probe.py` and rung scripts, seed 20260706, verbatim result files; the F2-linear self-test certifies each run internally; all probed models are public releases. **The engine**: `fold_ai/unison_chat.py` (the architecture of §6, mechanism-annotated), `fold_ai/test_chat.py` (the conversation harness; 9/9 on the reference cases), `fold_ai/rung5_native_seed.py` and `rung5b_words.py` (the task gates), `fold_ai/corpus_grower.py`, `build_store.py`, `teacher_pipeline.py` (the growth system), `unison_discord.py` (deployment). The engine repository: github.com/MettaMazza/UnisonAI. The corpus and its 1,975 machine-checked forced results: github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything (`make -C verify prove`).
 
 ## References
 

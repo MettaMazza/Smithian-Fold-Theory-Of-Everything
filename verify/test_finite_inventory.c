@@ -5051,6 +5051,7 @@ long long sector_coupling(long long);
 long long sector_partition_holds(long long);
 long long sector_carry_closes(long long);
 long long sector_mediator_count(long long);
+long long sector_beta_slope(long long);
 
 
 
@@ -8168,6 +8169,42 @@ long long sector_mediator_count(long long p) {
     goto L_cleanup;
 L_cleanup:
     ep_gc_pop_roots(1);
+    return ret_val;
+}
+
+long long sector_beta_slope(long long p) {
+    long long coupling = 0;
+    long long matches = 0;
+    long long ratio = 0;
+    long long shortfall = 0;
+    long long slope = 0;
+    long long ret_val = 0;
+
+    ep_gc_push_root(&coupling);
+    ep_gc_push_root(&ratio);
+    ep_gc_push_root(&shortfall);
+    ep_gc_push_root(&slope);
+    ep_gc_push_root(&p);
+
+    ep_gc_maybe_collect();
+
+    coupling = sector_coupling(p);
+    shortfall = fraction_from_ratio(1, p);
+    ratio = fraction_divide(coupling, shortfall);
+    slope = fraction_from_whole_number((p - 1));
+    matches = fraction_compare(ratio, slope) == 0;
+    if (matches) {
+    ret_val = (p - 1);
+    goto L_cleanup;
+    }
+    ret_val = -1;
+    goto L_cleanup;
+L_cleanup:
+    ep_gc_pop_roots(5);
+    free_struct_Fraction(ratio);
+    ratio = 0;
+    free_struct_Fraction(slope);
+    slope = 0;
     return ret_val;
 }
 
