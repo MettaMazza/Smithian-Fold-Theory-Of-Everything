@@ -75,7 +75,7 @@ piece is constructed afresh and shown to reproduce the known result exactly.
 The fastest path: `make -C verify prove`. The unified top-level driver
 (`verify/prove_all.sh`) builds and runs **every** proof in a single pass and prints,
 for each constant and scale: its forced value, the **trace back to the One**
-(`test_trace_to_the_one`: axiom → counted generators → depths → the constant), and the
+(`test_trace_to_the_one`: self-proven foundation theorem → One → counted generators → depths → the constant), and the
 **external measurement it matches** (`test_codata_comparison`: every forced value vs
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
@@ -725,7 +725,7 @@ the pre-periodic tower 128): `1 + (2/3 + 1/127)/8 = 3305/3048 = 1.0843175`,
 against measured 1.0843230 — **five parts in a million**, from 13/12's one in a
 thousand. Nothing is imported: `d_up = 7` and `127` are the deepest rung of the
 *same* ladder the leading term stands on — there is no "outside" to import from in
-a one-axiom model. And the deepening is not merely asserted forced — it is
+the zero-axiom model founded on the self-proven theorem. And the deepening is not merely asserted forced — it is
 machine-checked: the shape `vacuum + 1/127` is put through `forbid_form_selection`
 against `−1/127`, `+1/128` (the pre-periodic tower), and `+1/7` (the bare depth);
 only `+1/127` lands (`hubble_second_order_is_unique`). Zero new parameters.

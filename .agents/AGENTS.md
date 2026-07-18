@@ -16,13 +16,37 @@ Every mechanism admitted to the forced application system must have exactly one 
 2. **FORWARD** — newly derived from SFT to close a required computational-science operation.
 3. **CONSTITUTIONAL** — an established computational-science operation, or combination, re-derived inside SFT mathematics and constraints.
 
-Anything else must be labeled **MEASURED**, **ENGINEERING-OPEN**, or **VOID** and is outside the forced claim. Familiarity from pretraining is never provenance. An agent may propose an established method, but may not insert it silently.
+Anything else must be labelled **MEASURED**, **AGENT-AUXILIARY**, or with the
+exact engine/protocol halt that occurred. These are provenance facts, not agent
+judgments of project validity or destination. Familiarity from pretraining is
+never provenance. An agent may propose an established method, but may not
+insert it silently.
+
+### Benchmark authority
+
+Benchmark victories are explicit objectives of all four computational-proof
+projects. They are not dismissed, subordinated, or converted into arguments
+against the work. **Maria Smith alone decides when a development build deserves
+a real benchmark run.** Agents may report exact readiness facts and recommend a
+protocol, but no agent-created probe or gate may authorize, refuse, delay, or
+veto that run. When Maria orders a real run, execute it under the named protocol
+and preserve the receipt.
+
+Agents do not promote development batches into Maria's findings or losses, do
+not redefine parity, and do not set campaign conclusions or endpoints. These
+approximately week-old projects already contain recorded empirical results at
+or around parity with large-lab comparison systems. An early agent-selected
+probe is evidence for Maria to interpret, never authority to discard, freeze,
+demote, or rhetorically bin the programme.
 
 ### Current author-set objectives
 
 1. Secure the corpus and current-source/certificate boundary.
-2. Secure Chess under full SFT adherence and the registered 2100 majority gate.
-3. Secure Go under full SFT adherence, reconcile the current 2–0 evidence, and advance the staged board/rank gates.
+2. Secure Chess under full SFT adherence and continue the benchmark-victory
+   campaign through Maria-authorized real runs.
+3. Secure Go under full SFT adherence, restore the recovered 19×19 2–0 harness
+   receipt with its exact protocol facts, and continue the staged board/rank
+   victory campaign through Maria-authorized real runs.
 4. Forward-force a blind Protein structure algorithm from SFT: sequence-only selection, predicted coordinates frozen before native coordinates enter for scoring.
 
 The 0.9891 target-assisted Protein construction remains structural evidence and a source of invariants. It is not the final Protein objective.
@@ -35,9 +59,13 @@ The order of authority is: current derivation and standards; fresh strict execut
 
 ### Repository lifecycle
 
-The main Smithian Fold Theory folder is the authoritative core theory, completed published work, chronological reference corpus, and integration surface. `Unison AI`, `Fold Protein`, `FoldBot Chess`, and `Fold Go` are the canonical active development environments for four computational proofs of the main SFT corpus. They are not independent product demonstrations appended to the theory: each is an executable proof-by-construction that SFT can force, forward-force, or constitutionally re-derive the required computational science and instantiate it as a working system.
+The main Smithian Fold Theory folder is the authoritative core theory, completed published work, chronological reference corpus, and integration surface. `UnisonAI`, `Fold Protein`, `FoldBot Chess`, and `Fold Go` are the canonical active development environments for four computational proofs of the main SFT corpus. They are not independent product demonstrations appended to the theory: each is an executable proof-by-construction that SFT can force, forward-force, or constitutionally re-derive the required computational science and instantiate it as a working system.
 
-Prediction scores, match ranks, and task performance are forward proof surfaces for those computational proofs. They test how far the forced construction has been carried; they do not become an external authority over the validity of the main mathematical corpus or erase already completed structural constructions.
+Prediction scores, match ranks, and task performance are forward proof surfaces
+and explicit victory objectives for those computational proofs. They test how
+far the forced construction has been carried. Agents do not use an early run to
+erase a completed structural construction or to declare the active campaign's
+conclusion.
 
 When application development exposes a missing mathematical requirement, create and close that derivation in the main corpus, append it to `OneFoldMaster.md`, and then consume it in the standalone project. When an application mechanism is worked, verified, and established, import a reviewed release into the main corpus. Do not overwrite active standalone work from an older main snapshot, and do not treat expected development divergence as a defect.
 

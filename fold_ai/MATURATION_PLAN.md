@@ -107,11 +107,11 @@ cluster (PRMs, MCTS) is the priority follow-up: per-step closure of
 reasoning (a y/n on each step, not just the answer) is the natural fold
 form of a process reward model and would deepen M3.
 
-## REFUTED IN VERIFICATION (never import these framings)
+## TECHNICAL SOURCE CORRECTIONS (never import these framings)
 
 - "STaR corrects rationale-and-answer on failure" — mischaracterization
   (1-2); STaR FILTERS on correctness, it does not correct.
-- "STaR cannot bootstrap from at-or-below-chance models" — refuted 0-3.
+- "STaR cannot bootstrap from at-or-below-chance models" — contradicted by source 0-3.
 
 Build order: M1 → M3 (small deltas to live loops) → M4 → M2 (the big
 upgrade) → M5 at need. Every item lands as counted selection or counted
@@ -145,15 +145,16 @@ UCT VISIT STATISTICS (pure counts, directly fold-portable); implicit PRMs
 (arXiv 2412.01981) — step-level rewards obtained free from outcome-only
 labels; PRM-guided best-of-N reranking is gradient-free at inference
 (arXiv 2510.08049). Registered as candidate M7 (counted step-closure and
-vote-guided reasoning) PENDING verification. The refuted/confirmed split
-comes when the panel re-runs.
+vote-guided reasoning) PENDING verification. Any expectation attached by an
+agent remains an auxiliary hypothesis; the panel re-run supplies measurements,
+and Maria assigns the project conclusion.
 
 ## THE STRENGTHENING SIX — EXECUTED 2026-07-07
 
 The standing review named two open flanks (the word-scale gate; judge
 dependence) and four force-multipliers. All six landed this day; every
-number below is from a committed results file, negative results stated
-as plainly as positive ones.
+number below is from a committed results file and is retained with its exact
+scope and provenance.
 
 1. **The word-scale rematch (`rung5b_rematch.py`)** — today's engine
    (depth 6 + the Gutenberg flood), same registered arena, twin

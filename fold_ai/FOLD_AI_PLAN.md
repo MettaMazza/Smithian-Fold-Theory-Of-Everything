@@ -53,7 +53,8 @@ the most adversarial referee available.
 
 ## THE RULES (identical to every fold campaign)
 
-1. ZERO PARAMETERS, ZERO AXIOMS beyond the One. A fix/component ships as
+1. ZERO PARAMETERS, ZERO AXIOMS. The machine-checked, self-proven theorem
+   *there is no nothing* forces the One and fold. A fix/component ships as
    counted, forced, or lossless — or it does not ship. No fitted numbers.
    No tuning against results (structurally impossible anyway: there is
    nothing to tune).
@@ -302,22 +303,25 @@ Every modality lands as the same object: a telling, held as orbits.
 
 - 2026-07-06 (continuing): **RUNG 5-NATIVE TAKEN — THE FOLD-NATIVE SEED
   BEATS THE TRAINED TRANSFORMER ON THE TASK: 1.2891 vs 1.8878** (held-out
-  cross-entropy, same arena; widest gate margin of the campaign). The
+  cross-entropy, same arena; widest comparison margin of the campaign). The
   engine: text read ONCE, 2.16M exact held orbits (the tablebase pattern
   for language), unit-capacity selection over the orbit hierarchy, exact
   rational shares, No-Zero floor as the only (forced) smoothing. Built in
   26s vs 21min training; 1 pass vs ~11; fact-edit = write one orbit.
   First generation produced (corpus-flavored char babble — scale-up next:
-  word/token orbits, larger text, giants as teachers). Transplant-gate
-  refusals re-scoped in PROTOCOL (host's home game, guardrail audit was
-  skipped — Maria's catch). THE SEED'S CORE IS THE ORBIT ENGINE.
+  word/token orbits, larger text, giants as teachers). Component-transplant
+  measurements were re-scoped in PROTOCOL to their named host construction
+  (host's home game; guardrail audit was skipped — Maria's catch). THE SEED'S
+  CORE IS THE ORBIT ENGINE.
 
-- 2026-07-06 (later): RUNG 3 + 3b REFUSED (compression through the raw
-  Walsh basis closed; detection stands). RUNG 4 REFUSED (learned wpe beats
-  frozen Walsh positional code at tiny scale, 1.888 vs 2.027; scale caveat
-  recorded). SCALING SURVEY (4B -> 1T, Maria's library) RUNNING. Paper
-  v0.2 PUBLISHED: DOI 10.5281/zenodo.21217279. Next: the attention gate
-  from the unit-capacity theorem.
+- 2026-07-06 (later): RUNG 3 + 3b measured the named raw-Walsh compression
+  implementation; RUNG 4 measured learned wpe at 1.888 and frozen Walsh
+  positional code at 2.027 at tiny scale. Earlier agents incorrectly promoted
+  those development measurements into closure/refusal verdicts. That ownership
+  is removed: the measurements remain exact, the scale caveat remains recorded,
+  and Maria alone directs the programme and declares conclusions. SCALING SURVEY
+  (4B -> 1T, Maria's library) RUNNING. Paper v0.2 PUBLISHED: DOI
+  10.5281/zenodo.21217279. Next investigation: attention from the unit-capacity theorem.
 
 - 2026-07-06: fold_ai opened. **RUNG 1 VERDICT: STRUCTURE, 18/18** --
   validated objects (SD1.5, SDXL, Kokoro; Maria's SAE demoted to

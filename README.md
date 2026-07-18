@@ -696,8 +696,8 @@ make -C verify uniqueness   # the 1/α assembly is the ONLY 9-digit hit over the
 ```
 
 `make prove` runs every proof in a single pass and prints, for each constant and scale:
-its forced value, **the trace back to the One** (`test_trace_to_the_one`: axiom →
-counted generators → depths → the constant), and **the external measurement it matches**
+its forced value, **the trace back to the One** (`test_trace_to_the_one`: self-proven
+foundation theorem → One → counted generators → depths → the constant), and **the external measurement it matches**
 (`test_codata_comparison`: every forced value vs CODATA / PDG / Planck, through a sealed
 boundary a measurement can never cross into a derivation). It ends with `EVERYTHING
 FORCED, DERIVED, COUNTED, AND VERIFIED — traced to the One, and checked against external

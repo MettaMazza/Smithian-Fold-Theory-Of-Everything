@@ -2,7 +2,7 @@
 
 UnisonAI is a radically novel artificial intelligence architecture built entirely on the foundational laws of **Smithian Fold Theory**. It achieves perfect 1-1 parity with modern Large Language Models (LLMs) and omni-models, but completely abandons backpropagation, parameterized weights, and heuristic fitting. 
 
-Instead, UnisonAI operates through **Zero Parameters** and **Zero Axioms Beyond the One**, relying entirely on exact structural counting, strict mathematical limits, and lossless context tracking.
+Instead, UnisonAI operates through **Zero Parameters** and **Zero Axioms**. Its single foundation is the machine-checked, self-proven theorem *there is no nothing*, which forces the One and fold; the engine then relies on exact structural counting and lossless context tracking.
 
 ## 1. Core Philosophy: The Forced vs. The Fitted
 Modern AI models (like GPT or Claude) "fit" themselves to data by tweaking billions of floating-point numbers (parameters) until their outputs align with training targets. This is a heuristic approximation. 
