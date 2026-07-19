@@ -2,9 +2,9 @@
 
 **Author approval:** Maria Smith requested synchronization, push, and publication on 17 July 2026.
 
-This directory records the reviewed standalone revisions imported into the main SFT corpus. Canonical executable source and complete raw evidence remain in each producing repository; the main corpus holds the synchronized papers, claim registry, governance, and release manifests.
+This directory records the reviewed standalone revisions imported into the main SFT corpus on the stated release boundary. It is an immutable historical snapshot, not the current development index. Canonical executable source and complete raw evidence remain in each producing repository; current programme status is maintained in the root `README.md`, `THE_SMITHIAN_FOLD_THEORY_OF_EVERYTHING.md`, `CODEX_CLAIM_REGISTRY.md`, and `CODEX_PROJECT_KNOWLEDGE.md`.
 
-| Project | Canonical revision | Imported release evidence | Current evidence and direction |
+| Project | Canonical revision | Imported release evidence | Evidence and direction at this imported release |
 |---|---|---|---|
 | Fold Protein | `9b72c9dd19acfa475039cf4ebc77a6d829581d4d` | witness manifest and `task-62.log`; both principal papers mirrored; complete 76-residue blind release manifest `protein_blind_76_release_manifest_v3.7.json` | byte-exact 76-state construction replay at TM 0.9891211351 / Cα dRMSD 0.2608575408 Å; complete target-isolated sealed 76-residue blind execution; local HLV TM 0.9914591922; orientation-continuity and whole-chain assembly frontier active |
 | Fold Go | `222f480f9730d4d914f47df54b46f313c0d29180` | v2.2 manifest; recovered 19×19 raw receipt and receipt map; both current papers mirrored | exact census/solve; two replayed 2–0 GNU Go 9×9 batches; recovered harness-reported 2–0 KataGo 19×19 point-at-cutoff measurement with Round-1 synchronization defect disclosed; benchmark-victory campaign active |

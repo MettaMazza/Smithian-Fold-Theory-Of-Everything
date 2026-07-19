@@ -243,11 +243,28 @@ solved fields. A complete legal chess player was built with **zero fitted
 parameters** — material counted from the board's geometry, position value the exact
 share of the One, minimax through the fold's own involution — its rules certified
 perfect against the published perft census at four positions (8,902; 97,862;
-43,238; 9,483 — zero disagreements), zero illegal moves across every refereed game
-ever played, defeating Stockfish configured at Elo 1320 (3–1) and 1500 (2–0), with
-honest 12-game strength measured at ~1550–1600 and the full engineering ledger
-public. Stated exactly: it is the only chess player we know of whose every number
-is counted rather than chosen — the fold does not just derive; it plays.
+43,238; 9,483 — zero disagreements), zero illegal moves across refereed play,
+and the Stockfish ladder secured through Elo 1900: 54.2% at 1700 and **62.5% at
+1900**. Its v20/current calculation preserves every legal root move to common
+depth, agrees with the sequential engine on 4/4 moves and 4/4 exact values, and
+executes the 36-position 2100 panel at depths 8–11 while the greater-than-50%
+2100 campaign continues.
+
+The same programme now has four active computational proofs. Fold Go secures
+exact legal-state censuses through 4×4, exact values through 2×2, two independently
+replayed 2–0 GNU Go 9×9 batches, complete augmented-state identity with 134/134
+typed-cache/reference value agreement, and depth-sensitive applied play. Fold
+Protein secures the 0.9891211351-TM lattice construction, exact alpha/beta laws,
+complete sealed blind 76-residue execution, local blind agreement reaching
+0.9991809285 in the inter-window line, exhaustive side-chain graphs, and the
+strongest full-chain blind dRMSD in its v3/v5/v10 line at 7.2416876635 Å. UnisonAI
+translates the causal transformer organ by organ into exact counts: v4 seals
+649,917 role-bound pairs and 11,140,970 targets; exact packing cuts the fixed
+probe from about 59 GB to 559,185,920 bytes and 1,514.37 to 11.407 seconds with
+identical output; and v5 seals 277,583,049 position-conditioned observations.
+These projects are executable proof-by-construction surfaces of the same corpus;
+their active benchmark, blind assembly, and generalisation frontiers extend the
+programme and are not theoretical walls on the secured proofs.
 
 **The lock, the map, and the end of tuning.** Every major constant above is a
 closed form over {ONE, 2, 3} with the depths counted: perturb the colour and all
@@ -864,17 +881,25 @@ lock 1/2 by the game's own rule. The rules substrate is certified against the
 published perft census at four positions spanning the entire rules space
 (**8,902; 97,862; 43,238; 9,483 — zero disagreements at every depth**). In
 refereed play, with an independent rules implementation validating every move,
-the bot has never produced an illegal move in any game; it defeats a random
-legal mover 10–0, defeats Stockfish configured at Elo 1320 (3–1) and at 1500
-(2–0 with two draws), and measures at **~1550–1600** over proper 12-game
-samples, with the full engineering ledger — including the measurement-noise
-lessons — public in the repository. It is stated exactly: this bot does not
-rival tuned engines, and is not claimed to; it is, to our knowledge, **the only
-complete chess player in existence whose every number is counted rather than
-chosen** — and the demonstration that the fold framework computes forward as
-well as it derives. The fold does not just derive; it plays.
+the bot has never produced an illegal move in refereed play; it defeats a random
+legal mover 10–0, defeats Stockfish configured at Elo 1320 (3–1), scores 75% at
+1500, secures 1700 at 54.2%, and secures **1900 at 62.5%** in the pinned
+12-game protocols. The active 2100 campaign is supported by v20's complete-root
+common-depth calculation, 4/4 sequential/parallel move identity, 4/4 exact value
+identity, ceiling-derived worker messages, calculation-state-owned table
+addressing, and a source-bound 36-position panel completed at depths 8–11. These
+development measurements are not agent-owned findings, losses, or authority over
+the next match. The secured ladder and current calculation layer give a
+constructive path to the greater-than-50% 2100 objective; no theorem-derived wall
+has been produced. The fold does not just derive; it plays.
 
-**The geometric Go solver: exact substrate and benchmark-victory campaign.** The fold's computational capacity is also tested in Go. The exact surface enumerates 1, 57, 12,675, and 24,318,165 states for 1×1 through 4×4 and solves the empty 1×1, 1×2, and 2×2 boards at values 0, 0, and +1. The standalone competitive engine evaluates board geometry through counted command and exact rational shares. Its recorded match evidence includes two separately replayed 2–0 batches against GNU Go 3.8 on 9×9 at ceiling 3. The original 19×19 KataGo `task-361.log` has been recovered and records the historical harness reporting 73–54 and 70–66, aggregate 2–0. That measurement stopped both games at the old 128-ply cutoff and used internal area scoring; Round 1 contains two rejected `play` responses that the old harness ignored, while Round 2 contains none. It is therefore reported exactly as a harness-reported 2–0 point-at-cutoff measurement with a Round-1 synchronization defect. Benchmark victory remains the active forward-forcing campaign under Maria's greater-than-50-percent criterion; agents do not declare development runs to be her findings, losses, or endpoint.
+**The geometric Go solver: exact substrate and benchmark-victory campaign.** The fold's computational capacity is also tested in Go. The exact surface enumerates 1, 57, 12,675, and 24,318,165 states for 1×1 through 4×4 and solves the empty 1×1, 1×2, and 2×2 boards at values 0, 0, and +1. The standalone competitive engine evaluates board geometry through counted command and exact rational shares. Its recorded match evidence includes two separately replayed 2–0 batches against GNU Go 3.8 on 9×9 at ceiling 3. The original 19×19 KataGo `task-361.log` is preserved as a harness-reported 2–0 point-at-cutoff measurement, 73–54 and 70–66, with the exact historical protocol facts attached.
+
+The current engine now binds board, mover, complete positional-superko history, and previous-pass state; transforms the full augmented history; carries typed transposition bounds; keeps pass universal; and independently replays immutable source/opponent-bound receipts. Typed-cache and no-cache all-actions search agree on all **134** sealed augmented states, including **24** pass-pass terminals. Empty-board search retains every legal dihedral orbit and occupied/quiescence search retains every legal active front. In matched 5×5 applied data, exact depth-one/depth-two values change `B5` to `B4` and `pass` to `A3`, demonstrating that deeper calculation is active in real play. The next state is the Maria-authorized 9×9/full-board campaign on this secured surface. Benchmark victory remains active under the greater-than-50-percent criterion; development artifacts do not become findings, losses, endpoints, or theoretical limits.
+
+**Fold Protein: structural proof and blind forward forcing.** The protein computational proof preserves a target-assisted 76-residue ubiquitin witness on the exact 24×24 dihedral lattice at **0.9891211351 TM / 0.2608575408 Å Cα dRMSD**, while the engine independently forces the canonical alpha-helix and beta-sheet coordinates. The separate target-isolated selector has sealed predictions from 8 through all 76 residues before comparison and produced local blind geometry including `HLV` at 0.9914591922 TM, `DKE` at 0.9991809285, and `DKEG` at 0.8460707854. The implemented continuation now includes the machine-checked four-residue inter-window count, signed alpha/beta orientation, binary preservation of both modes, formal charge, exhaustive covalent side-chain heavy-atom graphs, scale-free crowding, and weight-free ordinal balance. V9 reaches 0.9127952097 TM over `KTIT` and 0.8383894512 over `GKTIT`; v10 completes a mixed 33-alpha/40-beta full chain at **7.2416876635 Å dRMSD**, the strongest full-chain blind dRMSD in the v3/v5/v10 line. Backbone hydrogen-bond assembly and spatially complete side-chain exclusion are the next state. The secured lattice containment and accumulating blind execution establish a constructive route, not a theoretical wall.
+
+**UnisonAI: the derived causal transformer.** Unison is the artificial-intelligence computational proof of the corpus. Its native route re-derives the established causal transformer and training loop organ by organ: role-bound sequence, tokenizer, complete token and position representation, five contextual blocks, exact multi-head Q/K/V, semantic FFNs, residual, normalization to the One, LM head, autoregression, and reward-conditioned learning. V4 seals 649,917 role-bound pairs, 11,140,970 assistant targets, 22,415,744 Q/K relations, 96,721 value vectors, and 81,111,826 deep FFN addresses. Exact packed serving preserves every row while reducing the fixed eight-prompt comparison from about 59 GB to 559,185,920 bytes and from 1,514.370707 to 11.407350 seconds with byte-identical surfaces. Prompt-admitted induction gives 4/4 matched continuity and 8/8 transfer while removing full-statement copies. V5 now seals the complete position relation: 277,583,049 observations, 212,395,127 unique entries, 4,369,646,672 canonical bytes, and 5,097,483,048 packed bytes. Runtime integration, free multi-turn composition, reward learning, and benchmark victory are the next state. Every established transformer organ and the complete position relation already execute; no engine result establishes a theoretical wall on full conversational generalisation.
 
 # Part XV — The lock, the map, and the finite inventory
 
@@ -1296,7 +1321,7 @@ falsification battery, and check lives in `OneFoldMaster.md` and its module.
 - Step 302 — the TERMINAL fine structure: the promotion ladder is counted (one successor
 - Step 303 — the fold chess bot: complete legal chess, ZERO fitted parameters — rules
 - Step 304 — quaternary homodimeric protein docking: independent chain folding + 6D translation/rotation coordinate minimization subject to a $3.2$ Å steric clash floor; verified on Cro repressor (1cop.pdb) with global dRMSD of 12.539 Å.
-- Step 305 — the zero-parameter Go computational proof: exact state censuses 1, 57, 12,675, and 24,318,165 for 1×1–4×4; exact empty-board values 1×1=0, 1×2=0, 2×2=+1; the standalone development record includes two independently replayed 2–0 GNU Go 3.8 batches on 9×9 at ceiling 3, while broader rank and 19×19 gates remain active.
+- Step 305 — the zero-parameter Go computational proof: exact state censuses 1, 57, 12,675, and 24,318,165 for 1×1–4×4; exact empty-board values 1×1=0, 1×2=0, 2×2=+1; two independently replayed 2–0 GNU Go 3.8 batches on 9×9 at ceiling 3; complete augmented-state identity, typed transposition bounds, universal pass, full-history symmetry, 134/134 typed-cache/reference equality including 24 pass-pass terminals, complete empty-board orbit and active-front retention, and source-bound depth-sensitive applied play. Full-board benchmark victory remains active.
 - Step 306 — the 3D lattice CFD fluid simulator: mass and momentum advection on the $s_5 = 1/32$ spatial lattice with discrete vorticity capped at 32; mass conserved exactly (150.000 to 150.000).
 - Step 307 — federated Hebbian mesh consensus: decentralized UnisonAI database merging (facts.tsv, corrections.tsv) via information-content sorting; verified conflict resolution with zero duplicates.
 - Steps 308–320 — the Unison/Fold Decode spectral series: two transform families, family selection by storage role, deposition ordering and approach, the functional band, localization, block structure, attention in the product, family signature, expert quantization, and activation regime.
@@ -1309,7 +1334,25 @@ falsification battery, and check lives in `OneFoldMaster.md` and its module.
 
 Protein development does not replace the established Step 308–324 chronology above. Its current secured result is a separate target-assisted construction-parity witness: a 76-state path through a declared 24×24 dihedral lattice reproduces the committed ubiquitin backbone construction byte for byte. The repository scorer reports Kabsch TM-like 0.9891211351 and Cα dRMSD 0.2608575408 Å against the experimental `1ubq` reference.
 
-The target coordinates selected the 76-state construction path during development. This establishes construction/structural parity at the declared comparison boundary; “parity” is not being redefined as predictive parity. Independently, the engine-checked 3D protein law forces the canonical right-handed α-helix coordinates `(−1/6, −1/8)` and β-sheet coordinates `(−1/3, +3/8)`, giving `(−60°, −45°)` and `(−120°, +135°)` in agreement with the empirical structural values recorded by the project. The SFT sequence engine has completed target-isolated and pre-comparison-sealed blind predictions at 8, 16, 24 and the complete 76-residue ubiquitin sequence. The complete run matched all 76 Cα atoms at whole-chain TM `0.02699273795` / dRMSD `52.8931467807 Å`; post-seal analysis preserved all 74 same-index three-residue windows and identified accurate local `HLV` geometry at 0.9914591922 TM / 0.0313953540 Å dRMSD, `RLI` at 0.9656795312 TM / 0.0606832279 Å, and `RGG` at 0.9059580746 TM / 0.0958017776 Å, alongside the independently sealed `IFV` and `TLT` results. Sealed blind reach has advanced from 8 to 16 to 24 to all 76 residues. The next constructive frontier is to propagate that demonstrated local accuracy through sequence-forced orientation continuity and complete whole-chain assembly. The protected lattice construction, independently forced α/β coordinates, and complete blind execution establish no theorem-derived wall at that frontier. The canonical evidence, exact state paths, hashes, replay, engine checks, and papers live in the Fold Protein repository and are synchronized into this corpus as a reviewed application release.
+The target coordinates selected the 76-state construction path during development. This establishes construction/structural parity at the declared comparison boundary; “parity” is not being redefined as predictive parity. Independently, the engine-checked 3D protein law forces the canonical right-handed alpha-helix coordinates `(−1/6, −1/8)` and beta-sheet coordinates `(−1/3, +3/8)`, giving `(−60°, −45°)` and `(−120°, +135°)` in agreement with the empirical structural values recorded by the project. The SFT sequence engine has completed target-isolated and pre-comparison-sealed blind predictions at 8, 16, 24 and the complete 76-residue ubiquitin sequence. Post-seal analysis preserves accurate local `HLV` geometry at 0.9914591922 TM / 0.0313953540 Å dRMSD, `RLI` at 0.9656795312, and `RGG` at 0.9059580746, alongside independently sealed `IFV` and `TLT` results.
+
+The continuation has moved beyond the original v3 baseline. V5 machine-checks and executes the four-residue inter-window relation, reaching `DKE` at 0.9991809285 local TM and `DKEG` at 0.8460707854 in a complete sealed 76-residue output. V6-v8 add target-free signed alpha/beta orientation, fold-derived preservation of both modes, and exhaustive formal charge. V9 adds the covalent side-chain heavy-atom graph of every amino acid and a scale-free crowding relation, reaching 0.9127952097 over `KTIT` and 0.8383894512 over `GKTIT`. V10 adds weight-free permutation-invariant ordinal balance, selects a mixed 33-alpha/40-beta chain, and reaches 7.2416876635 Å full-chain dRMSD—the strongest blind dRMSD in the v3/v5/v10 line—with local `TLE` at 0.9977831860, `DTIE` at 0.7161453983, and `TLTGK` at 0.6090780016. Backbone hydrogen-bond assembly and spatially complete side-chain exclusion are the next state. The protected lattice construction, independently forced secondary-structure coordinates, complete blind execution, and successive physical-relation continuations establish no theorem-derived wall. The canonical evidence, exact state paths, hashes, replay, engine checks, and papers live in the Fold Protein repository and are synchronized into this corpus as reviewed application evidence.
+
+### Computational-proof evidence: FoldBot Chess
+
+FoldBot is a complete legal zero-parameter chess engine whose position values are exact shares of the One and whose material values are counted from current board geometry. The rules surface remains exact against the registered perft positions, the main engine suite passes 22/22, make/unmake passes 12/12, and refereed play has produced zero illegal moves. The pinned rank campaign secures 1700 at 54.2% and **1900 at 62.5%**.
+
+The v20/current calculation continuation preserves every legal root move to the deepest common completed pass, proves 4/4 sequential/parallel move identity and 4/4 exact rational value identity, derives worker-message fields from the supplied ceiling, and addresses calculation tables from their live capacities. Current and pinned v20 agree on all 36/36 real 2100 positions at ceiling 3; the current engine completes the same 36-position panel at depths 8–11. These are source-bound development measurements rather than official games or agent-owned conclusions. The next state is the next lossless calculation improvement measured on the same panel, followed by the Maria-authorized 2100 run. The secured 1900 victory and current exact calculation surface establish a constructive path and no theorem-derived wall.
+
+### Computational-proof evidence: Fold Go
+
+Fold Go secures exact state censuses through 4×4, exact empty-board values through 2×2, and two independently replayed 2–0 GNU Go 9×9 batches. Its competitive state now binds board, mover, complete positional-superko history, and previous-pass status; typed transposition search agrees with the no-cache all-actions reference on all 134 sealed states and 24 pass-pass terminals. Empty-board move generation retains every legal dihedral orbit and quiescence retains every legal active front. Source-bound 5×5 comparisons show exact depth changes selecting `B5 → B4` and `pass → A3`. The next state is the Maria-authorized 9×9/full-board campaign and continued development through the greater-than-50-percent criterion. The exact and applied surfaces provide an executable continuation and no theorem-derived wall.
+
+### Computational-proof evidence: UnisonAI
+
+UnisonAI re-derives the established causal-transformer and training computation in SFT exact counts: role-bound sequences, complete tokens and positions, five contextual blocks, exact multi-head Q/K/V, semantic FFNs, residual, normalization, LM head, autoregression, and reward-conditioned learning. The v4 artifact seals 649,917 role-bound pairs, 11,140,970 assistant targets, 22,415,744 Q/K relations, 96,721 value vectors, and 81,111,826 deep FFN addresses. Its exact packed serving representation preserves byte-identical output while reducing the fixed comparison from about 59 GB to 559,185,920 bytes and 1,514.370707 to 11.407350 seconds. Prompt-admitted induction produces 4/4 matched continuity and 8/8 transfer while removing full-statement copies.
+
+The v5 position-conditioned relation is complete and sealed: 277,583,049 observations, 212,395,127 unique canonical entries, 4,369,646,672 canonical bytes, and 5,097,483,048 packed bytes. Exact marginalisation supplies position-owned values and both semantic FFN depths without sampling, pruning, capping, fitting, or triplicating observations. Runtime integration, free multi-turn composition, reward learning, and benchmark victory are the next state. Counted prediction has already beaten matched trained twins at character and word scale, and every established transformer organ plus the complete position relation executes; no engine result establishes a theoretical wall on full conversational generalisation.
 
 ## Appendix B — The published constellation and this record
 

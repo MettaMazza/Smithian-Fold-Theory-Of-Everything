@@ -111,7 +111,7 @@ Only unexplained divergence, reverse overwriting, or an import without provenanc
 
 ## Immediate application to current work
 
-- Chess active v19/v20 and 2100 work remains canonical in standalone FoldBot Chess until secured and imported.
-- Go active match work and the 2–0/full-board progression remain canonical in standalone Fold Go until secured and imported.
-- Blind Protein forward forcing must be developed canonically in standalone Fold Protein. Any missing SFT derivation is first closed in the main corpus, then consumed by Protein. The established blind engine is later imported back into main.
-- Unison's active architecture remains canonical in standalone Unison AI. Its lack of a version-control boundary is a housekeeping risk, but does not transfer development authority to the older main-corpus snapshot.
+- Chess v20/current common-depth calculation, exact parallel identity, live-capacity addressing, real-position depth-8-11 evidence, and the 2100 campaign remain canonical in standalone FoldBot Chess until Maria approves a coordinated release.
+- Go's complete augmented-state constitution, 134-state exact cache/reference surface, complete orbit/front retention, depth-sensitive applied evidence, and full-board campaign remain canonical in standalone Fold Go until Maria approves a coordinated release.
+- Protein's v5-v10 blind continuation—inter-window topology, signed alpha/beta orientation, formal charge, exact side-chain graphs, and weight-free balance—remains canonical in standalone Fold Protein. Missing shared SFT derivations are first closed in the main corpus; the next state is hydrogen-bond assembly and spatially complete side-chain exclusion.
+- Unison's canonical Git repository is `/Users/mettamazza/Desktop/UnisonAI/`; `/Users/mettamazza/Desktop/Unison AI/` is the reviewed live runtime workspace. V4's full-token transformer and exact packed serving plus v5's completed position relation remain canonical in the Git repository while runtime integration and free multi-turn generalisation continue.

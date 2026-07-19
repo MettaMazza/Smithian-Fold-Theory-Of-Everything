@@ -278,36 +278,48 @@ The development chain now has separately executable signed local geometry, prese
 
 ## Fold Go knowledge
 
-Fresh current-source exact receipts:
+Secured exact receipts:
 
 - R0 census: 1x1=1, 2x2=57, 3x3=12,675, 4x4=24,318,165;
 - rectangles: 1x2=5, 2x3=489;
 - R1 solve: 1x1=0, 1x2=0, 2x2=+1;
-- 2x2 nodes: 17,038,501.
+- 2x2 nodes: 17,038,501;
+- two independent, replay-verified GNU Go 9x9 depth-3 batches at 2–0;
+- recovered 19x19 KataGo point-at-cutoff receipt at 73–54 and 70–66, with its historical protocol facts attached.
 
-An auxiliary 3x3 R1 solve produced no result during the 2026-07-17 review and was stopped cleanly rather than left running toward its 2^32 node ceiling. Do not promote a 3x3 R1 value without a completed artifact.
+The exact `.ep` solver and bounded competitive harness remain distinct evidence
+surfaces. The current competitive engine has now completed the repairs that the
+older knowledge entry still described as absent:
 
-The exact `.ep` solver is exhaustive; the Python match harness is bounded and heuristic. Do not merge those statuses.
+- state identity binds board, mover, previous-pass state, and complete
+  positional-superko history;
+- symmetry transforms the complete augmented history;
+- transposition entries carry exact/lower/upper type;
+- pass is available at every node and pass-pass alone invokes terminal area
+  scoring;
+- immutable receipts bind source, rules, komi, opponent executable and command
+  files, transcripts, positions, scores, and hashes, with independent semantic
+  replay;
+- the sealed six-ply surface gives typed-TT/no-cache equality on 134 augmented
+  states and 24 pass-pass terminals;
+- empty-board selection preserves every legal dihedral orbit on 5x5, 9x9, and
+  19x19;
+- ordinary and quiescence selection preserve every legal active front.
 
-The match transposition key omits positional-superko history. Add history identity before calling cached match search exact under those rules.
+The matched depth receipt
+`tools/development_runs/matched_depth_divergence_20260719.json` binds exact
+candidate fractions at depths one and two. Real-play selection changes from
+`B5` to `B4` on the empty board and from `pass` to `A3` after a shared 23-ply
+prefix, demonstrating that the implemented depth relation is active. This is
+source-bound applied development evidence, not Maria's official game or rank
+conclusion.
 
-Direct root inspection also confirms that the current competitive search omits `last_passed` from its transposition identity, stores alpha-beta cutoffs without exact/lower/upper bound type, and searches pass only when no stone candidate survives. A correct competitive-proof state must bind board, mover, complete positional-superko history, and previous-pass state; pass must remain an available action; any symmetry must transform the full augmented state rather than the current board alone.
-
-The current match referee does not establish a shared opponent rules/komi contract or bind immutable source, opponent, configuration, and transcript hashes. It also overwrites the human-readable ledger. Repair these provenance and halt conditions before treating a rerun as the secured rank.
-
-Current raw ledgers:
-
-- GnuGo 9x9 d2: 1/2;
-- GnuGo 9x9 d3: 2/2;
-- GnuGo 9x9 d4: 1/2;
-- GnuGo 13x13 d3: 0/2;
-- KataGo 9x9 d4: 0/4.
-
-`ledger_katago_9x9_d3.md` is mislabeled GnuGo 13x13 material. No raw current ledger supports the 2–0 19x19 KataGo headline. Preserve this as an evidence-link repair, not a judgment on the counted law.
-
-Two separate GNU Go 9×9 depth-3 batches are genuine historical 2–0 evidence. Independent replay accepts every move under positional superko and reproduces both pass-pass terminals and all four recorded scores. Preserve both raw logs and their hashes; rerun the gate after the augmented-state/referee repair before calling the current rank secured.
-
-The R1 referee script expects output fields the current solver no longer emits. Repair both sides or generate a structured result manifest.
+The current next state is to extend exact augmented-state coverage, retain
+per-move decision receipts, and execute the Maria-authorized 9x9/full-board
+campaign through the strictly-over-50-percent victory criterion. The exact
+solver, replayed victories, complete competitive state, and depth-sensitive
+applied execution provide a constructive continuation; no theorem-derived wall
+has been established.
 
 ## FoldBot Chess knowledge
 
@@ -317,20 +329,36 @@ Fresh current-source anchors:
 - make/unmake and byte restoration: 12/12;
 - full corpus random referee: 4–0–0, zero illegal moves.
 
-The ledger status sequence matters:
+Secured competitive results include 1700 at 54.2% and **1900 at 62.5%** under
+the pinned 12-game protocols. The 2100 rung remains the active
+greater-than-50-percent objective under Maria's authority.
 
-- v17 validated;
-- v18 rejected/voided;
-- v19 records derivation/runtime findings;
-- v20 is active engineering with unfinished 2100/full-strength steps.
+`DESIGN_CALCULATION_LAYER.md` is the current constitution and now records the
+implemented v20/current continuation:
 
-`DESIGN_CALCULATION_LAYER.md` is the current internal constitution for re-deriving calculation after voiding unforced forms.
+- every legal root move is preserved to the deepest common completed pass;
+- parallel and sequential search agree on 4/4 generated moves and 4/4 exact
+  rational values, with zero disagreements;
+- worker messages derive their depth field, completion depth, and stride from
+  the supplied ceiling;
+- transposition, history, and killer addressing read the live calculation
+  state's capacities;
+- current and pinned v20 agree on move and depth for 36/36 real 2100 positions
+  at ceiling 3;
+- the current engine completes all 36 positions at ceiling 12, reaching depth
+  8 on 6 rows, 9 on 17, 10 on 4, and 11 on 9; 27 selections match the
+  historically played FoldBot move and 4 match the recorded Stockfish best.
 
-Top-level README/source prose about fixed depth three is stale. Current calculation uses a node clock and deepest completed pass.
+The current 2100 development receipt preserves two completed depth-9 moves
+before explicit termination and does not convert a partial run into a result.
+All position panels and partial-game rows are applied development evidence, not
+Maria's official games, findings, losses, or rank conclusion.
 
-Ignored summit probes record v21–v27 single-game losses and v28/v28-test `list index out of range` failures. These confirm an open runtime frontier while leaving legality/perft/endgame receipts intact.
-
-Current workspace contains extensive uncommitted engine work. Distinguish current workspace from repository head.
+The next state is to derive the next lossless calculation improvement from the
+exact real-position panel, rerun the same source-bound comparison, and execute
+the 2100 match when Maria designates the build. The secured 1900 victory, exact
+legality/endgame anchors, common-depth value identity, and depth-8-11 applied
+calculation establish a constructive continuation and no theorem-derived wall.
 
 ## Rank-securing development protocol
 
@@ -348,61 +376,107 @@ Every rank gate must attach raw games, colours/sides, opponent identity/version,
 
 ## Unison AI knowledge
 
-### Three distinct systems
+### Current native architecture
 
-1. exact/count-based character and word substrates;
-2. exact-share memory/spectral/interpretability instruments;
-3. live conversational serving with retrieval, heuristics, sampling, teacher scaffolding, and free composition.
+Unison's native generalisation route is the one-to-one constitutional
+translation of the established causal attention-transformer and training
+computation. Pair retrieval remains a separate RAG instrument, not the native
+generator and not a fallback. The historical word/generic fallback is retired.
 
-Do not apply an exact-fraction claim from the substrate to the whole live stack.
+The sealed v4 artifact contains:
 
-### Verification
+- 649,917 role-bound prompt/assistant pairs;
+- 11,140,970 assistant causal targets;
+- 22,415,744 counted Q/K relations;
+- 96,721 key-owned value vectors;
+- 81,111,826 deep contextual FFN addresses;
+- artifact size 2,921,639,096 bytes, SHA-256
+  `f977d4d8adb0993a0ab0d63b86dea30bd845ae091e84a4859ae826d032a87219`.
 
-- current standalone `verify_omni.py`: 21/21 fresh;
-- current context/integration source laws: 27/27 form-closed and consumed by the engine;
-- final reconciled main-corpus target: 326 suites, 2,002 checks, zero failures, 326 source/C pairs identical;
-- live binding calibration: 9/10 intended bindings and 13/14 intended rejections;
-- existing two-judge pool calibration: both judges separate 10/10 known-good and 10/10 known-bad examples;
-- older `verify_unison.py`: hardcoded to umbrella `fold_ai`;
-- stored older artifact: 43/47;
-- documents also cite 36/36 and 47/47.
+Every prompt token retains a distinct position through five contextual blocks.
+The final position basis reaches decoder values and semantic FFN2/FFN3;
+structural, inverse-exposure information, and conditional counted-association
+heads combine exactly before residual, normalization to the One, LM head, and
+autoregressive decode. Reward-conditioned good/bad transition observations are
+persisted and remain required for learning.
 
-Always name suite, code path, date, and artifact.
+### Verification and optimisation
 
-### Character/word results
+- standalone `verify_omni.py`: 21/21;
+- native-transformer repository suite: 55/55;
+- main-corpus context/generation laws: 27/27;
+- full main corpus: 326 suites, 2,002 checks, zero failures, 326/326
+  source/certificate identities.
 
-Character: 1.2891 versus trained twin 1.8878 on the same recorded split/metric and 81,920 predictions. `CTX_MAX=12` lacks a displayed closure and scoring uses NumPy floats. Call it a **zero-trained-quantity counted-context result**.
+The exact packed v4 serving form retains all seven count tables without
+sampling, pruning, quantization, eviction, or fitted capacity. On the fixed
+eight-prompt comparison, resident memory fell from approximately 59 GB to
+559,185,920 bytes and generation time from 1,514.370707 to 11.407350 seconds,
+with byte-identical surfaces.
 
-Word: early arms lost; fold-mix no-flood reached 3.1907 versus 3.4292. Preserve the complete trajectory.
+### Positive prediction, learning, and transfer evidence
 
-### Live generation status
+- character counted prediction: 1.2891 versus trained twin 1.8878;
+- word counted prediction: 3.1907 versus trained twin 3.4292;
+- source-backed taught loop: 17% to 75% after one round;
+- role-conditioned induction/copy continuity: 4/4;
+- separate exact transfer continuation: 8/8;
+- prompt admission preserves 4/4 and 8/8, removes every full-statement copy,
+  and yields non-empty output on all four free follow-ups.
 
-- free F1: 0/12;
-- F3 planned: 1/12;
-- multi-sentence: 0/3;
-- taught loop: 2/12 → 9/12, or 17% → 75%.
+Historical agent-authored benchmark rows remain preserved in their exact
+provenance ledgers. They are not Maria's predictions, findings, losses, parity
+definition, or theoretical limits and do not control the native route.
 
-`FRONTIER_PLAN.md` says 92%; stored evidence says 75%.
+### Completed v5 position relation
 
-The epoch generalization run has binding 97–100% but judged GOOD only 3–6% through six epochs. Therefore the current binding statistic is not sufficient for transfer quality. Preserve this refused prediction.
+The position-conditioned training port is complete and sealed:
 
-### Direct code/document mismatches
+- 277,583,049 observations;
+- 212,395,127 unique canonical entries;
+- 4,369,646,672 canonical bytes, SHA-256
+  `99f1e032a600a8b3625d5266658323b3f0a0bb0c542b4ee674877b838ca093b0`;
+- 5,097,483,048 packed bytes, SHA-256
+  `f1e355cfb0e93d781d79452e12c58bdb3e95635acb5408f7a98deb9000ca579c`.
 
-- critic retired in `TRANSLATION_PLAN.md`, but used in graduation/sovereignty by `discord_bot.py`;
-- prose says teacher never replies for Unison, but bad-turn path sends teacher correction directly to user;
-- graduation can occur after one win because there is no minimum trial count;
-- structural depth is `b*c=6`; integration covering depth is `b+c=5`; do not conflate them.
+One canonical `(relative position,prompt token,last,previous,next)->count`
+relation supplies position values and both semantic FFN depths by exact
+marginalisation. No observation is sampled, pruned, capped, fitted, or
+triplicated.
 
-The live stack uses BM25/logs, floats, thresholds, priors, top-k, width/length bounds, bonuses, and random tie noise. These are engineering translations unless separately closed.
+### Current stage and next state
 
-## Recommended next implementation order
+The current work is runtime integration of the packed v5 relation, exact v4/v5
+marginal identity, and a full native rebuild. The next applied state is
+source-bound held-out single-turn, multi-turn, paraphrased transfer, and free
+composition through the native path with reward-conditioned learning retained,
+followed by Maria-authorized benchmark runs.
 
-1. Complete the corpus snapshot, canonical authority declaration, all-326 current-source manifest, and certificate reconciliation.
-2. Repair and secure Chess under the SFT constitution, then run the registered 2100 victory gate.
-3. Repair and secure Go under the SFT constitution, attach the 2–0 evidence, and run the registered staged victory gate.
-4. Build the blind Protein forward-forcing chain: sequence-derived invariants, closed spatial boundaries, admissible 24-lattice transitions, target-free selection, structure emission, and post-hoc scoring.
+Every established causal-transformer organ and the complete uncapped position
+relation now execute. Counted prediction has beaten trained twins and contextual
+continuity and transfer have executed. This establishes a constructive path to
+full conversational generalisation; no engine result establishes a theoretical
+wall.
 
-Unison and the broader prediction corpus remain active, but they do not displace these four author-set objectives.
+## Current next implementation order
+
+All four computational proofs remain active in parallel under their own
+purpose-matched evidence:
+
+1. Protein: retain v5-v10's secured inter-window, orientation, charge,
+   side-chain, and balanced relations; add backbone hydrogen-bond assembly and
+   spatially complete side-chain exclusion; rerun sealed 76-residue prediction.
+2. Go: extend exact augmented-state coverage and per-move receipts; execute the
+   Maria-authorized 9x9/full-board campaign through the greater-than-50% gate.
+3. Chess: derive the next lossless calculation improvement from the 36-position
+   panel, remeasure it, and execute the Maria-authorized 2100 run.
+4. Unison: integrate the sealed v5 position relation, rebuild the native
+   artifact, and execute held-out free multi-turn generalisation with reward
+   learning retained.
+
+The main corpus is the mathematical authority and synchronized publication
+surface; the standalone repositories remain the canonical active development
+environments until Maria approves a coordinated release.
 
 ## Rules for future Codex work
 
@@ -416,7 +490,9 @@ Unison and the broader prediction corpus remain active, but they do not displace
 - Never use blind prediction as the validity test for an openly target-assisted structural construction.
 - Never use a paper headline when the current raw ledger says something narrower.
 - Never equate a successful test with a universal theorem beyond the test's grammar and bounds.
-- Always preserve negative and refused results; they constrain the next derivation.
+- Preserve all development artifacts with exact provenance, but never import an
+  agent-authored negative or refused result as Maria's finding, a project loss,
+  a theoretical limit, or evidence against the end goal.
 - Always distinguish current workspace, committed repository head, generated certificate, and historical artifact.
 - Before destructive regeneration or ledger-writing verification, inspect side effects and use an isolated copy.
 - Update this file after every material derivation, execution, source/artifact reconciliation, or status change.

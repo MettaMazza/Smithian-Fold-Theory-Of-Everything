@@ -13,12 +13,17 @@ Secure the documentary, mathematical, source, artifact, and authorship boundarie
 
 This plan does not pause the scientific programme indefinitely. It creates a short release boundary so Chess and Go development can continue without repeating the provenance drift that occurred in earlier agent sessions.
 
-## Author-corrected active sequence
+## Author-corrected active programme
 
-1. Secure the corpus.
-2. Secure Chess with full SFT adherence and the registered 2100 majority gate.
-3. Secure Go with full SFT adherence, reconciled 2–0 evidence, and staged majority gates.
-4. Forward-force a blind Protein structure algorithm from SFT: sequence-only selection, predicted structure output, native coordinates used only afterward for scoring.
+1. Keep the main corpus secured and synchronized.
+2. Develop Chess toward the registered 2100 majority gate.
+3. Develop Go through 9×9/full-board staged majority gates.
+4. Continue blind Protein structure assembly from sequence-only selection.
+5. Complete Unison's native causal-transformer generalisation and benchmark campaign.
+
+The four computational proofs proceed in parallel under their own purpose-matched
+implemented evidence. This plan's numbered phases are documentary organization,
+not an instruction to suspend one project while another develops.
 
 The Protein evidence bundle below remains necessary housekeeping, but construction certification is not the final research goal. The 0.9891 witness supplies structural evidence and invariants for the forward derivation.
 
@@ -42,7 +47,8 @@ Only the first three belong to the forced application system. An agent may recom
 Before structural edits:
 
 - record the current branch, commit, dirty/untracked paths, and timestamp for each Git repository;
-- record that Unison AI currently lacks its own local Git boundary if that remains true;
+- record `/Users/mettamazza/Desktop/UnisonAI/` as the canonical Git repository
+  and `/Users/mettamazza/Desktop/Unison AI/` as the reviewed live runtime workspace;
 - inventory every documentation, source, generated certificate, executable, ledger, raw game, log, benchmark result, and Protein artifact;
 - identify umbrella/standalone mirrors and mark one canonical owner for each component;
 - take no destructive regeneration step;
@@ -159,14 +165,18 @@ Native coordinates, TM-like/TM scores, and dRMSD may appear only after predicted
 
 Current author target: **secure 2100 by scoring more than 50% at the point of victory**.
 
-Before further tuning, freeze the current clean legality/calculation anchor:
+The current clean legality/calculation anchor now includes:
 
 - 22/22 engine checks;
 - 12/12 make/unmake restoration checks;
 - exact engine snapshot;
 - current calculation constitution;
-- known v28 `list index out of range` defect;
-- status of v17, voided v18, v19, and v20.
+- secured 1700 at 54.2% and 1900 at 62.5%;
+- v20 complete-root common-depth selection;
+- 4/4 sequential/parallel move and exact-value identity;
+- ceiling-derived worker messages and live-capacity table addressing;
+- 36/36 current/v20 real-position move/depth identity at ceiling 3;
+- current 36-position execution at depths 8–11.
 
 For every 2100 match batch attach:
 
@@ -195,29 +205,40 @@ First preserve the exact foundation:
 - 2x2 node count 17,038,501;
 - no promoted 3x3 R1 value from the interrupted auxiliary run.
 
-Before the next rank batch:
+The current competitive surface now:
 
-- repair positional-superko identity in the transposition key;
-- repair the stale R1 referee/output contract;
-- correct the mislabeled ledger;
-- identify and attach the author's 2–0 half-board games;
-- separate exact solver receipts from bounded match-engine receipts.
+- binds board, mover, previous-pass state, and complete positional-superko history;
+- transforms complete history under symmetry and carries typed TT bounds;
+- keeps pass universal and scores pass-pass terminals exactly;
+- gives 134/134 typed-TT/no-cache identity including 24 pass-pass terminals;
+- preserves every legal empty-board orbit and active front;
+- binds source, opponent/configuration, rules, transcripts, and hashes;
+- preserves two independently replayed 2–0 GNU Go 9×9 batches and the recovered
+  19×19 point-at-cutoff receipt;
+- records matched depth-sensitive applied moves `B5→B4` and `pass→A3`.
 
 Every match bundle must include board size, rules, ko/superko rule, komi, colour balance, opponent/version/strength, time and node controls, engine snapshot, SGFs, stderr/stdout logs, illegal moves, crashes, W/L/D, and score percentage.
 
 The gate is again strictly more than 50% at the declared current level. Once secured, freeze the bundle, move to full strength, restart the investigation, and later run the full league.
 
-## Phase 8 — Unison and predictive-engine housekeeping
+## Phase 8 — Unison native generalisation
 
-Prediction remains valuable but subordinate to proof in the programme hierarchy. Separate:
+Keep the native causal transformer separate from pair/RAG instrumentation and
+the retired fallback. The current secured surface is:
 
-- exact character/word prediction substrate;
-- exact-share memory and spectral machinery;
-- live conversational retrieval/generation;
-- teacher-assisted development;
-- open forward generalization.
+- v4: 649,917 role-bound pairs, 11,140,970 targets, 22,415,744 Q/K relations,
+  96,721 values, and 81,111,826 deep FFN addresses;
+- exact packed serving: 559,185,920-byte resident measurement and 11.407350
+  seconds on the fixed probe, with byte-identical output;
+- prompt-admitted induction: 4/4 continuity and 8/8 transfer with no full
+  statement copies;
+- v5: 277,583,049 position observations, 212,395,127 unique entries,
+  4,369,646,672 canonical bytes, and 5,097,483,048 packed bytes.
 
-Reconcile 21/21, 43/47, 36/36, and 47/47 by suite identity rather than choosing one universal number. Register float/heuristic live-serving mechanisms under their constitutional or engineering status. Preserve the refused generalization result as evidence constraining the next derivation.
+The next state is v5 runtime integration, exact v4/v5 marginal identity, a full
+native rebuild, free multi-turn conversation, reward-conditioned learning, and
+Maria-authorized benchmark runs. Historical agent-authored benchmark rows remain
+provenance artifacts only and do not become project conclusions or limits.
 
 ## Phase 9 — Public-claim generation
 
@@ -250,4 +271,7 @@ Housekeeping is sufficiently complete to resume engine work when all of the foll
 - Go match manifest template;
 - exact locations for raw PGN/SGF/log evidence.
 
-The first development action after that gate is the author-set sequence: secure Chess, secure Go, then build the blind Protein forward-forcing algorithm. Each implementation choice must be chosen from the attached derivation/evidence, not from an agent's pretrained preference.
+The current programme develops Protein, Go, Chess, and Unison in parallel. Each
+implementation choice must be chosen from the attached derivation and
+purpose-matched real evidence, not from an agent's pretrained preference. Maria
+alone designates official runs and publishable conclusions.
