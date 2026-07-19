@@ -256,9 +256,19 @@ The source-bound v5 route passed its six implementation/protocol tests and the 8
 
 These v5 numbers are exact agent-generated development measurements for Maria to interpret. They are not autonomously declared findings, victories or official benchmark results.
 
+### Signed-orientation continuation — 19 July 2026
+
+V6 generated target-free signed quartet modes from the exact forced α angles `(-60,-45)` and β angles `(-120,+135)`. Its sealed 24-residue run raised the best length-three window to TM `0.9997317192` / dRMSD `0.0080481353 Å` and the best length-four window to TM `0.8233174803` / dRMSD `0.1322225931 Å`, but the path chose α for all 21 quartets. Whole-prefix TM was `0.0132290421`; the all-α observation prevented an unnecessary 76-residue run.
+
+V7 used `24 / b = 12` to preserve 12 α and 12 β paths at every complete frontier. The final path contained 20 α quartets and one β quartet; whole-prefix TM was `0.0188388722` and best length-four TM was `0.7992362770`.
+
+V8 added an exhaustive formal-charge constitution (`KR` positive, `DE` negative, all others uncharged) and a dimensionless signed inverse-distance relation with no dielectric, cutoff, fractional charge, or fitted weight. It changed the selected states and produced two β quartets, proving that the charge relation entered sequence-side selection. Whole-prefix TM was `0.0174142357`; best length-four TM was `0.7994283891`. It was therefore preserved without a 76-residue extension.
+
+All three runs were source-bound, target-isolated, sealed before comparison, and remain agent-generated development evidence for Maria to interpret. The Protein gate now covers 102 classified sources, 63 tracked PDBs, and 45 passing v3-v8 tests. V5 remains the strongest full 76-residue blind continuation at TM `0.1232111976`.
+
 ### Next traced direction
 
-Post-seal orientation diagnostics show why the quartet relation improves local and whole-chain assembly but does not yet propagate the best agreement through longer windows: its distance-only key cannot distinguish the signed handedness of a four-point orientation. Across the 76-residue run, the target's mean absolute normalized quartet volume is `0.5520106`, while v5's is `0.0001531`; v5 selected nearly coplanar quartets. The next candidate relation should therefore use the signed orientation of the already-forced α and β orbit geometries as a target-free discriminant, then retain v5 topology and full-prefix relations as subsequent exact orders. This is a development direction, not a declared theoretical limit.
+The development sequence now distinguishes three solved subrelations: signed local geometry, preservation of both generated modes, and charge-sensitive mode switching. Their current combination does not yet propagate v5's full-chain improvement. The next implementation should add more of the sequence's spatial command through a named target-free side-chain steric-form and/or backbone hydrogen-bond assembly constitution. This is an identified engineering direction, not a theoretical wall or a Maria-declared result.
 
 ## Fold Go knowledge
 
