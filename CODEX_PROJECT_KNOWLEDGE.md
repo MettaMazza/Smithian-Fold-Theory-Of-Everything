@@ -1,9 +1,9 @@
 # Codex Living Knowledge — Smithian Fold Programme
 
-**Last grounded:** 17 July 2026  
+**Last grounded:** 19 July 2026
 **Owner:** Maria Smith  
-**Maintaining agent:** OpenAI Codex, GPT-5 family  
-**Audit level:** root/direct integration audit, with same-model full-context read-only project auditors; exact deployment identifier and reasoning-effort setting is not exposed inside the task  
+**Maintaining agent:** OpenAI Codex, gpt-5.6-sol
+**Audit level:** root/direct integration audit, high reasoning level; project subagents are read-only when Maria explicitly authorizes their use
 **Development context:** approximately one month of work by one person  
 **Primary machine:** Apple Mac with M3 Ultra and 512 GB unified CPU/GPU/NPU memory  
 **Purpose:** durable working memory for future technical collaboration across SFT, Fold Protein, Fold Go, FoldBot Chess, and Unison AI
@@ -236,43 +236,29 @@ The live comparison's inverse-alpha deviation is approximately `1.18e-10%`; the 
 
 ## Fold Protein knowledge
 
-### Correct claim
+### Secured construction and blind campaign
 
-The 0.9891 ubiquitin artifact is a **target-assisted 24-lattice proof-by-construction and construction-parity/structural-parity result at its declared comparison boundary**. The project openly uses the native coordinates to rank candidates. “Parity” here is not predictive parity. Blind sequence-to-structure forcing is a separate active extension, not a condition that weakens or redefines the secured construction result.
+The protected ubiquitin result is a **target-assisted 24×24-lattice proof by construction and construction/structural-parity result at its declared boundary**: TM `0.9891211351`, Cα dRMSD `0.2608575408 Å`. Its 76-state row-major lattice path, target, builder, generated PDB, score route, log and hashes are bound by `verify/ubiquitin_24_lattice_manifest.json`; `verify/replay_ubiquitin_24_lattice.py` and the isolated geometry replay reconstruct the witness byte-for-byte. Earlier prose describing this as an unresolved producing-source gap is superseded by that protected manifest and replay.
 
-Blind forward forcing remains the active problem of deriving sequence-to-invariant spatial boundaries and selecting the lattice path without native coordinates. Blindness measures forward-selection closure/efficiency; it is not the validity criterion for the already disclosed construction.
+The blind campaign is a separate positive development surface, not a retrospective condition on the secured construction. Selector v3 receives only sequence and run ID, cannot import a target, seals states and PDB before comparison, and has executed on 8, 16, 24 and all 76 residues. Maria declared the completed blind executions and their positive local results for publication. The complete v3 run preserved all 74 length-three windows; named measurements include `HLV` TM `0.9914591922` / dRMSD `0.0313953540 Å`, `RLI` TM `0.9656795312`, and `RGG` TM `0.9059580746`.
 
-### Evidence
+### Inter-window orientation development — 19 July 2026
 
-`verify/task-62.log` records 76 depths, final 0.9891, dRMSD 0.261 Å, and indices up to 561, demonstrating a 576-candidate producing run. The PDB artifact and log are meaningful receipts.
+An agent-authored v4 probe made the terminal three-residue compactness relation primary. Its sealed 24-residue applied data did not support replacing v3, so its source and exact receipt are preserved as auxiliary development evidence only. It is not Maria's finding, loss or failed prediction.
 
-### Reproducibility gap
+Selector v5 addresses the declared frontier directly. Three Cα points define one local plane; two consecutive colour-count windows share the binary count of two residues, so their union is forced as `c + c - b = 3 + 3 - 2 = 4`. Consecutive quartets overlap by `c = 3` and advance by the One residue. `constants/protein_interwindow_orientation.ep` machine-checks those counts. V5 orders candidates first by the generated, target-free four-residue topology, then by the complete-prefix v3 relation; it adds no fitted weight, reward scale, target input or configurable beam width.
 
-Current `beam_search_engine.py` contains nine angle pairs and beam width 500; papers document 576 pairs and width 2000 for the producing command. `blind_24_lattice_solver.py` has 576 states and width 2000 but is a different engine. Recover/freeze the exact producing revision.
+The source-bound v5 route passed its six implementation/protocol tests and the 85-source forcing registry, including prohibited legacy-import closure. Its real outputs were sealed before comparison:
 
-The construction critique is about certificate completeness, not incumbent blindness:
+- 24 residues: whole-prefix TM `0.0439286063`, dRMSD `6.6359273380 Å`; best length-three `FVK` TM `0.9812391838`, dRMSD `0.0464779788 Å`; best length-four `LEVE` TM `0.4695859044`, dRMSD `0.2849076209 Å`.
+- 76 residues: whole-chain TM `0.1232111976`, dRMSD `8.3625317712 Å`; best length-three `DKE` TM `0.9991809285`, dRMSD `0.0125248561 Å`; best length-four `DKEG` TM `0.8460707854`, dRMSD `0.0765993000 Å`; best length-five `QDKEG` TM `0.3332405586`, dRMSD `0.3430673090 Å`.
+- The full v5 run completed in `141.99 s` with maximum resident memory `73,138,176` bytes. Prediction PDB SHA-256 is `bb2828dec81435ec05d909efa62eede62761c100d223176f875494a8d6ec49c2`; selected-state SHA-256 is `c2ca099620ae7613d0f23c2d3759423e47d1203fcb3239368175dbc89413dcc2`; seal-file SHA-256 is `b3b9eacaaf71597374e981d5c18dae10ca8407150a2b0c90bb4a3fa8fab28a58`.
 
-- freeze the exact 576-state producing source and ordering;
-- independently verify every output transition belongs to the 24-lattice;
-- close the derivation and uniqueness of the angle alphabet rather than only checking supplied fractions;
-- enforce residue-count, chain, and atom correspondence;
-- treat beam width/objective weights as search-reproduction quantities, not witness validity;
-- attach input, source, command, log, state path, PDB, score, and hashes in one manifest;
-- keep blind sequence-to-boundary forcing in a separate forward ledger.
+These v5 numbers are exact agent-generated development measurements for Maria to interpret. They are not autonomously declared findings, victories or official benchmark results.
 
-The committed task-62 witness replays 76 state indices over the row-major 24×24 lattice and reconstructs the tracked PDB byte-for-byte. The repository evaluator reproduces TM-like 0.9891233862 and C-alpha dRMSD 0.2608370339. This secures the witness as target-assisted construction evidence. The search that produced the witness remains unreproducible from committed source: the committed beam engine exposes nine states and width 500 without the paper's 576-state, width-2000, steric-filtered producing path.
+### Next traced direction
 
-The present witness coordinate construction uses floating NeRF, while one current paper describes a 2^40 fixed-integer engine. The score reads 76 C-alpha atoms from a 228-atom prediction against a 602-atom target, and `calculate_tm.py` is not canonical TM-align. These are implementation and metric boundaries to repair in the certificate; they do not negate the openly target-assisted structural construction.
-
-### Metric boundary
-
-`calculate_tm.py` is a whole-chain Kabsch-aligned TM-like score and silently truncates to the shorter chain. Until independently canonical-scored, call the result **repository Kabsch/TM-like score 0.9891**. Add an equal-length guard.
-
-### Open engineering quantities
-
-The blind and experimental engines contain hydrophobic sets, contact/clash cutoffs, geometry constants, reward scales, and target-objective weights. Mark them engineering/open until each receives candidate-space and form closure.
-
-`protein_folding.ep` verifies the scalar route `3/4 → 1/2 → 1`; it does not alone map arbitrary conformations or prove all rational starts converge. `protein_folding_3d.ep` verifies supplied fractions; it does not derive the angle alphabet's uniqueness.
+Post-seal orientation diagnostics show why the quartet relation improves local and whole-chain assembly but does not yet propagate the best agreement through longer windows: its distance-only key cannot distinguish the signed handedness of a four-point orientation. Across the 76-residue run, the target's mean absolute normalized quartet volume is `0.5520106`, while v5's is `0.0001531`; v5 selected nearly coplanar quartets. The next candidate relation should therefore use the signed orientation of the already-forced α and β orbit geometries as a target-free discriminant, then retain v5 topology and full-prefix relations as subsequent exact orders. This is a development direction, not a declared theoretical limit.
 
 ## Fold Go knowledge
 
