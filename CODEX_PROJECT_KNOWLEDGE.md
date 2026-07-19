@@ -268,7 +268,13 @@ All three runs were source-bound, target-isolated, sealed before comparison, and
 
 ### Next traced direction
 
-The development sequence now distinguishes three solved subrelations: signed local geometry, preservation of both generated modes, and charge-sensitive mode switching. Their current combination does not yet propagate v5's full-chain improvement. The next implementation should add more of the sequence's spatial command through a named target-free side-chain steric-form and/or backbone hydrogen-bond assembly constitution. This is an identified engineering direction, not a theoretical wall or a Maria-declared result.
+V9 added an exhaustive covalent side-chain heavy-atom graph constitution for all 20 amino acids and a scale-free crowding relation with no residue radii, cutoffs, rotamers or fitted weights. Its sealed 24-residue run produced best local TM `0.9127952097` over `KTIT` and TM `0.8383894512` over `GKTIT`, the strongest five-residue local continuation in the 24-residue development line.
+
+V10 removed numerical-scale privilege between the active relations. Hard self-exclusion remains absolute; signed orientation, steric crowding, charge, hydrophobic dispersion and radius become exact within-frontier ordinal ranks compared by a permutation-invariant worst-rank-first order. The implementation is invariant under objective permutation and strictly increasing re-expression and uses no weights or score blend.
+
+The sealed v10 24-residue run selected 10 alpha and 11 beta quartets and measured whole-prefix TM `0.0332708282` / dRMSD `6.6076920576 Å`. The sealed 76-residue run completed in `806.75 s`, selected 33 alpha and 40 beta quartets, and measured whole-chain TM `0.0903326363` / dRMSD `7.2416876635 Å`. That dRMSD is the strongest full-chain blind result in the v3/v5/v10 line. The full run also produced local TM `0.9977831860` over `TLE`, `0.7161453983` over `DTIE`, and `0.6090780016` over `TLTGK`.
+
+The development chain now has separately executable signed local geometry, preservation of both generated modes, charge-sensitive switching, exact side-chain graph crowding, and weight-free multi-relation balance. The next evidence-producing direction is to retain these constitutions while forward-forcing backbone hydrogen-bond assembly and a more spatially complete hard-exclusion representation. This is a constructive engineering frontier, not a theoretical wall or an agent-declared conclusion.
 
 ## Fold Go knowledge
 
