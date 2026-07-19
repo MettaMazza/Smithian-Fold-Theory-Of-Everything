@@ -748,6 +748,14 @@ voids the engine.
 
 ---
 
+## Fold Protein computational-proof project
+
+Fold Protein has completed target-isolated, sequence-only protein-structure predictions for real ubiquitin prefixes of 8, 16, and 24 residues. Each selected-state record and prediction PDB was sealed before experimental target access and evaluated only afterward. The completed runs are blind SFT predictions at their stated lengths; the complete 76-residue run is the active scaling objective, not a retrospective validity threshold.
+
+The same project preserves the separate 76-residue 24-lattice Super Parity construction at **0.9891211351 TM / 0.2608575408 Å Cα dRMSD**. See [`papers/Levinthals_Paradox_Dissolved_Parameter_Free_Protein_Folding_and_the_Genetic_Code.md`](papers/Levinthals_Paradox_Dissolved_Parameter_Free_Protein_Folding_and_the_Genetic_Code.md), [`papers/Super_Parity_Zero_Parameter_Protein_Folding.md`](papers/Super_Parity_Zero_Parameter_Protein_Folding.md), and the canonical [Fold Protein repository](https://github.com/MettaMazza/Fold-Protein).
+
+---
+
 ## UnisonAI computational-proof project
 
 UnisonAI is the active artificial-intelligence computational proof of this corpus. Its canonical version-controlled development repository is [MettaMazza/UnisonAI](https://github.com/MettaMazza/UnisonAI); reviewed established releases are synchronized back here.

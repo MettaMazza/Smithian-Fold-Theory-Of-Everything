@@ -106,3 +106,29 @@ The master walkthrough, [`OneFoldMaster.md`](OneFoldMaster.md), is a single
 dependency-ordered spine — One → fold → (the fold is forced) → the two generators →
 each constant — so the whole thing can be read top to bottom with nothing assumed
 out of order.
+
+## 3. Computational changes require purpose-matched implemented evidence
+
+For every computational-proof project synchronized with this corpus, a source
+change is not complete merely because it compiles, traces to the One, closes,
+or passes proof and unit tests. Those establish forcing and implementation
+closure. The actual changed executable must also be run on real project data,
+with evidence matched to the change's declared purpose: real conversational
+sequences for Unison, target-isolated sealed real protein sequences for Fold
+Protein, and real games or matched positions for Fold Go and FoldBot Chess.
+
+Performance changes require a source-bound before/after comparison under the
+same declared protocol. Forcing, correctness, or provenance repairs require a
+real replay demonstrating the intended closure while preserving the protected
+result. Optimisation changes require identical operational output plus measured
+runtime or memory data. Receipts record the relevant source and artifact
+identity, inputs or opponent, command, outputs, project metrics, runtime,
+memory, and favourable and unfavourable rows. Mocks, fixtures, unit tests,
+static reasoning, projected benefit, agent judgement, and code volume do not
+replace the relevant implemented evidence.
+
+No single project's performance rule may be imported into another project:
+gameplay victory metrics do not govern protein provenance repairs, and a
+universal score-improvement gate does not define whether a sealed blind protein
+prediction occurred. The engine decides forcing and halt. Maria Smith decides
+retention, official runs, benchmark conclusions, and publishable findings.
