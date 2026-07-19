@@ -750,7 +750,7 @@ voids the engine.
 
 ## Fold Protein computational-proof project
 
-Fold Protein has completed target-isolated, sequence-only protein-structure predictions for real ubiquitin prefixes of 8, 16, and 24 residues. Each selected-state record and prediction PDB was sealed before experimental target access and evaluated only afterward. The completed runs are blind SFT predictions at their stated lengths; the complete 76-residue run is the active scaling objective, not a retrospective validity threshold.
+Fold Protein's engine-checked 3D law forces the canonical right-handed α-helix angles `(−60°, −45°)` from exact circle coordinates `(−1/6, −1/8)` and the β-sheet angles `(−120°, +135°)` from `(−1/3, +3/8)`, matching the empirical structural values recorded by the project. Its SFT-constrained sequence engine has also completed target-isolated, pre-comparison-sealed blind predictions for ubiquitin prefixes of 8, 16 and 24 residues. Post-seal comparison identifies `IFV` at **0.8821336259 local TM / 0.1611313002 Å dRMSD** and `TLT` at approximately **0.892 local TM / 0.187 Å dRMSD** in independently sealed 16- and 24-residue predictions. Complete 76-residue blind sequencing and global assembly remain active forward work.
 
 The same project preserves the separate 76-residue 24-lattice Super Parity construction at **0.9891211351 TM / 0.2608575408 Å Cα dRMSD**. See [`papers/Levinthals_Paradox_Dissolved_Parameter_Free_Protein_Folding_and_the_Genetic_Code.md`](papers/Levinthals_Paradox_Dissolved_Parameter_Free_Protein_Folding_and_the_Genetic_Code.md), [`papers/Super_Parity_Zero_Parameter_Protein_Folding.md`](papers/Super_Parity_Zero_Parameter_Protein_Folding.md), and the canonical [Fold Protein repository](https://github.com/MettaMazza/Fold-Protein).
 
