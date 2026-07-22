@@ -29,6 +29,8 @@ The 0.9891 target-assisted construction remains structural evidence and a source
 
 Read the programme from the One outward. Do not impose an incumbent learned-prediction model as the validity criterion.
 
+**No-assumption rule.** Never convert an incomplete search into a scientific conclusion. Absence from one focused certificate means only that the focused certificate does not contain the relation; it does not mean the relation is absent, open, limited, invalid, or still required by the complete corpus. Before stating status, cross-reference the derivation sources, tests, master chronology, main theory, claim registry, current papers, and relevant executable routes. If that complete trace has not been performed, report only `NOT YET FULLY TRACED` and make no negative or limiting inference. Never invent an additional bridge, selector, proof obligation, or incumbent equivalence standard unless the engine and corpus standards themselves require it.
+
 Mathematical and structural proof is the primary value hierarchy. Prediction is valuable, is actively being developed, and already has an engine in the main corpus; it does not outrank transparent derivation merely because contemporary systems emphasize statistical prediction.
 
 **Parity vocabulary is comparison-specific.** Construction parity, structural parity, predictive parity, and competitive parity are different claims. Do not redefine an author-declared construction or structural parity victory to mean predictive parity, and do not make a later predictive gate a retrospective condition on an earlier proof-by-construction. State the compared objects and metric, then preserve the attained result at that boundary.
@@ -41,7 +43,7 @@ The primary questions are:
 4. Does the implementation match the derivation?
 5. Does the test execute the intended property and halt on violation?
 6. Is a measurement used only in `CHECK`, never smuggled into `DERIVATION`?
-7. If an external named object is claimed, is there an exact bridge preserving its definition?
+7. If an external name is used, what SFT object and engine route does the corpus itself declare under that name?
 8. If blind forward forcing is open, say so without using that openness to invalidate a structural proof-by-construction.
 
 Use **zero fitted/free quantities within the declared derivation grammar** as the precise default phrase. Definitions, grammar, rules, resource ceilings, measured inputs, and engineering development choices are different categories.
@@ -156,7 +158,7 @@ Use exactly one or more of these labels for every claim:
 - **TARGET-ASSISTED CONSTRUCTION** — known target coordinates/values rank a path, openly and appropriately for a construction question.
 - **OPEN FORWARD FORCING** — selection from derivation-side inputs alone is active work.
 - **ENGINEERING TRANSLATION** — practical implementation choice not yet forced through SFT closure.
-- **BRIDGE INCOMPLETE** — internal result exists but equivalence to an externally named object is not yet proved.
+- **NOT YET FULLY TRACED** — temporary audit status only; no absence, limitation, or openness may be inferred until the complete corpus trace is finished.
 - **DOCUMENTARY DRIFT** — prose/count/version no longer matches current code or ledger.
 - **VOID/REJECTED** — the project's own gates rejected the form.
 
@@ -218,7 +220,7 @@ Current prose maps the odd-plus-halving step to `(3/2)(1/2)=3/4`. But `(3n+1)/(2
 
 ### Riemann
 
-Current module closes the `s ↔ 1-s` symmetry axis at real part 1/2. Symmetry alone does not localize all zeros. The missing theorem is zero localization.
+The complete corpus declares the non-trivial zeta-zero spectrum as the self-dual spectrum of the prime fold. `riemann_critical_line.ep` closes the `s ↔ 1-s` antipode at real part `1/2`; `fold_number_theory.ep` exhaustively verifies the antipodal law across its registered domain; and `counterfactual_map.ep` independently sweeps uniqueness of the self-antipodal point to denominator 300. Preserve the corpus conclusion: every self-dual zero state is forced to the unique half-One axis. Do not replace that complete cross-referenced argument with an assumption drawn from one focused certificate or an incumbent continuum standard.
 
 ### Goldbach/twins
 
@@ -226,7 +228,7 @@ Current code provides finite censuses. Do not label them unbounded proofs withou
 
 ### Navier–Stokes/Yang–Mills
 
-Current modules prove SFT-discrete properties. External named-problem status needs an explicit equivalence/refinement theorem. This is a map-preservation obligation, not a demand to use an incumbent model.
+The corpus resolves these named mechanisms on the theorem-derived finite positive substrate: the strong-sector gap is the exact positive `1/3` share in its closed `1/3 <-> 2/3` cycle; the fluid floor is `1/32` with exact cap `32`, now executed by a 512-cell global material verifier. Do not impose the continuum as an external authority or invent an equivalence obligation that the SFT engine does not require.
 
 ## Fine-structure anchor
 

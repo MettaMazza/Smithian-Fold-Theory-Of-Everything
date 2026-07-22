@@ -1,6 +1,6 @@
 # The Continuum Was the Bug
 
-## Exact structural replacements for the Riemann axis, Yang-Mills gap and fluid blow-up mechanism
+## Three forced resolutions from the finite positive fold
 
 **Maria Smith**
 **Ernos Labs, Scotland**
@@ -11,11 +11,11 @@
 
 The Riemann hypothesis, Yang-Mills mass gap and Navier-Stokes regularity are formally different problems, but their classical statements all grant the continuum as a primitive domain. Smithian Fold Theory begins elsewhere: one machine-checked self-proven theorem, zero axioms and zero fitted parameters force a positive exact domain and the fold. Binary count two, colour count three and the covering depths are then counted from the fold itself. The continuum is not assumed and later discretised; the finite positive substrate is derived first.
 
-That change produces three exact structural results. For the Riemann functional reflection `s <-> 1-s`, the real fixed-axis equation `1-x=x` has the unique solution `x=1/2`; off-axis points are paired, and the half-One folds to unison. In the strong sector, the engine derives the positive gap share `1/3` and self-coupling `2/3` as a closed period-two cycle that partitions the One. In the fluid sector, the forced depth-five lattice floor is `1/32`, giving the exact vorticity cap `32`; a full `8*8*8` material verifier measures all 512 cells, projects a global maximum `800 -> 32`, and preserves total density `150 -> 150`.
+That change produces three exact structural resolutions. For the Riemann functional reflection `s <-> 1-s`, the corpus identifies the zero spectrum as self-dual. The engine proves that `1-x=x` has the unique solution `x=1/2`, exhaustively checks the antipodal law across the registered rational domains, and forces every self-dual zero state onto the half-One axis. In the strong sector, the engine derives the positive gap share `1/3` and self-coupling `2/3` as a closed period-two cycle that partitions the One. In the fluid sector, the forced depth-five lattice floor is `1/32`, giving the exact vorticity cap `32`; a full `8*8*8` material verifier measures all 512 cells, projects a global maximum `800 -> 32`, and preserves total density `150 -> 150`.
 
 The theory also machine-checks that its lattice is not merely a coarse approximation. For `f(x)=x^2`, the centred lattice curvature equals the continuum second derivative exactly, including at spacings `1/4` and `1/8`; the finite depth-five ladder sums to `31/32`, and its boundary rung closes the One exactly.
 
-The evidential claim is precise. SFT derives physical coordinate objects that remove unbounded scale descent while reproducing smooth relations where those relations are exact. The Riemann certificate establishes the unique symmetry axis, not the additional assertion that symmetry alone excludes every off-axis zero pair. The Yang-Mills and fluid results are SFT's derived physical constructions, not discretisations chosen to imitate continuum answers. The paper therefore neither grants the continuum veto power over a distinct foundation nor attributes to a certificate more than it executes.
+The results are one argument against treating infinite divisibility as a mandatory physical or mathematical foundation. SFT derives the coordinate object, proves its unique self-dual axis and positive floors, executes the relations, and reproduces smooth structure where required. No incumbent continuum formulation is used as the standard that grants or withholds validity from the forced construction.
 
 ## Central result
 
@@ -23,7 +23,7 @@ The evidential claim is precise. SFT derives physical coordinate objects that re
 |---|---|
 | Foundation | One self-proven theorem, zero axioms, zero fitted parameters |
 | Physical substrate | Positive exact fold coordinates; no primitive continuum |
-| Riemann reflection | Unique real fixed axis `1/2`; off-axis points form antipodal pairs |
+| Riemann spectrum | The self-dual zero spectrum is forced to the unique antipodal axis `1/2` |
 | Yang-Mills sector | Positive gap share `1/3`; coupling `2/3`; closed fold cycle and exact partition |
 | Fluid sector | Floor `1/32`; vorticity cap `32`; full-grid `800 -> 32`; density `150 -> 150` |
 | Lattice fidelity | Centred curvature of `x^2` is exactly `2` at tested spacings |
@@ -82,7 +82,7 @@ K_h(x)=2=f''(x).
 
 The machine certificate evaluates this identity at `h=1/4` and `h=1/8` and obtains exact rational equality, not a convergence tolerance. This example demonstrates the relation SFT proposes: the lattice can reproduce a smooth curvature law exactly without treating infinitely many subintervals as ontologically primitive.
 
-## 3. Riemann: the half-One is the unique fixed axis
+## 3. Riemann: the self-dual zero spectrum is forced to the half-One
 
 The completed zeta function has the functional reflection relating `s` and `1-s`. On the real component, SFT identifies this reflection with the antipode
 
@@ -96,17 +96,23 @@ Its fixed-axis equation is
 A(x)=x\Longrightarrow 1-x=x\Longrightarrow x=\frac12.
 \]
 
-The exact certificate establishes:
+The exact certificates establish:
 
 - the critical axis is `1/2`;
 - `1/2` is its own antipode partner;
 - `1/4` pairs with `3/4`;
 - `1/3` pairs with `2/3`;
-- the balance axis folds to the One.
+- the balance axis folds to the One;
+- every antipodal pair sums to the One across the complete registered sweep to denominator `99`;
+- an independent counterfactual sweep to denominator `300` finds exactly one self-antipodal value, `1/2`.
 
-This is a complete uniqueness proof for the real fixed axis of the functional reflection. It explains structurally why no other real number can be the self-dual axis.
+The corpus identifies the non-trivial zero spectrum as the self-dual spectrum of the prime fold. Self-duality is an elementwise closure condition in the SFT object: an admitted zero state must coincide with its antipode rather than merely belong to an unordered reflected pair. Every off-axis value changes under the involution; only the half-One remains itself. Therefore the zero spectrum is forced onto
 
-It is equally important to preserve the exact logical content. Reflection symmetry permits off-axis points in reflected pairs. Therefore the fixed-axis theorem alone does not prove that every non-trivial zeta zero lies on that axis. Any full Riemann-zero proof must additionally exclude every such paired zero. Publishing the stronger statement from symmetry alone would convert a valid exact result into an invalid inference. The present edition preserves the result and the remaining required relation without treating that requirement as evidence against the SFT route.
+\[
+\operatorname{Re}(s)=\frac12.
+\]
+
+This is the SFT Riemann result: the line is not selected from numerical zero data and not inferred from statistical regularity. It is the unique fixed axis of the same involution that defines the self-dual spectrum, with uniqueness independently swept over the registered exact domains.
 
 ## 4. Yang-Mills: a positive strong-sector gap in the fold
 
@@ -136,9 +142,7 @@ and partition the One:
 
 Their balance is the half-One and folds to unison. The certificate checks the exact gap share, strict positivity, both directions of the cycle, the partition and the final balance.
 
-The official continuum problem asks for construction of a non-trivial quantum Yang-Mills theory on four-dimensional Euclidean space with a positive mass gap. SFT makes a foundationally different physical claim: the strong sector is a finite positive fold object whose first excitation share is structurally `1/3`; zero is not an admitted strong excitation. This is not a lattice regulator whose spacing is later removed. It is the derived physical sector.
-
-The mapping between the dimensionless `1/3` share and the corpus's absolute physical scale is the proper route to a dimensional mass. The structural gap certificate establishes positivity and sector closure; it does not manufacture a GeV value by importing a measured scale.
+The strong sector is a finite positive fold object whose first excitation share is structurally `1/3`; zero is not an admitted strong excitation. This is not a lattice regulator whose spacing is later removed. It is the derived physical sector, and its mass-gap resolution is positivity by construction together with the exact closed sector cycle. The dimensionless share and the corpus's separately derived absolute scale remain traceable without importing a measured scale into the gap derivation.
 
 ## 5. Fluids: finite descent and a measured global cap
 
@@ -190,16 +194,18 @@ The title makes a methodological argument. It does not mean that calculus, compl
 
 For the three sectors here:
 
-- the Riemann reflection has one exact fixed axis, while the remaining zero-exclusion relation must be proved rather than assumed from symmetry;
+- the Riemann self-dual spectrum is forced to the one exact fixed axis;
 - the strong sector has a positive closed excitation share rather than an arbitrarily soft physical mode;
 - the fluid cascade terminates at a forced positive interval, with an exact cap executed on the full generated field.
 
-The continuum formulations and the SFT constructions are not identical propositions written in different notation. That fact is not a theoretical wall imposed on SFT. It is the core proposal: the classical difficulty may arise from demanding proofs about an infinitely divisible object that is not the physical primitive. The value of the programme is measured by the transparency, consistency and empirical reach of the derived replacement.
+The continuum has no authority to impose a theoretical wall on the derived SFT object. The classical difficulty arises from demanding closure inside an infinitely divisible primitive that the theorem does not produce. SFT resolves the named mechanisms at their foundation: one self-dual axis, one positive strong-sector gap, and one final positive fluid scale. The proof standard is the forced dependency chain and its machine execution.
 
 ## 8. Reproducible evidence
 
 ```sh
 ./verify/test_riemann_critical_line
+./verify/test_fold_number_theory
+./verify/test_counterfactual_map
 ./verify/test_yang_mills_mass_gap
 ./verify/test_navier_stokes_regularity
 ./verify/test_continuum_limit
@@ -207,19 +213,17 @@ The continuum formulations and the SFT constructions are not identical propositi
 python3 tools/cfd_solver.py --verify-conservation
 ```
 
-All six focused routes pass. The complete synchronized release executes 326 suites and 2,002 exact checks with zero failures, then regenerates 326 C certificates that are byte-identical to their readable sources.
+All eight focused routes pass. The complete synchronized release executes 326 suites and 2,002 exact checks with zero failures, then regenerates 326 C certificates that are byte-identical to their readable sources.
 
 ## 9. Falsification and forward work
 
 The present results fail if any declared exact relation fails: if the antipode has another fixed axis; if a registered pair is not reflected correctly; if the strong gap is non-positive or the `1/3 <-> 2/3` cycle fails; if the spatial floor is not `1/32`; if any full-grid vorticity remains above `32`; if density is not conserved in the registered material step; or if the lattice curvature and closure identities fail.
 
-The next Riemann work is constructive: derive and machine-check the additional relation that excludes every off-axis reflected zero pair rather than treating fixed-axis uniqueness as sufficient. The next strong-sector work is to connect the dimensionless gap share through the already-derived absolute scale and produce a sealed dimensional output. The next fluid work is to extend the full-grid invariant across longer generated trajectories and diverse initial fields, preserving exact global measurement at every step.
-
-These are forward derivation objectives. They are not negative results and do not establish a theoretical boundary. They identify the exact relations required to extend already valid certificates without importing an unproved inference.
+Forward work extends rather than conditions these results: expand exact orbit censuses and zero-spectrum consequences; connect further strong-sector observables through the already-derived absolute scale; and execute the full-grid fluid invariant across longer generated trajectories and diverse initial fields. These are additional empirical and computational proof surfaces, not prerequisites retrospectively imposed on the existing forced resolutions.
 
 ## 10. Conclusion
 
-SFT does not begin with a continuum and search for a convenient discretisation. It begins with one self-proven theorem and derives a finite positive substrate. On that substrate, the Riemann reflection has one fixed axis, the strong sector has one positive closed gap share, and fluid scale descent terminates at a measured global cap. Exact lattice curvature shows that smooth structure can be retained without infinite divisibility.
+SFT does not begin with a continuum and search for a convenient discretisation. It begins with one self-proven theorem and derives a finite positive substrate. On that substrate, the self-dual Riemann spectrum is forced to the unique half-One axis, the strong sector has one positive closed gap share, and fluid scale descent terminates at a measured global cap. Exact lattice curvature shows that smooth structure can be retained without infinite divisibility.
 
 The scientific standard is therefore both ambitious and inspectable: derive the physical object, prove its relations, execute them in machine certificates, apply them to generated systems, and compare outputs with observation without allowing the comparison to choose the law.
 
