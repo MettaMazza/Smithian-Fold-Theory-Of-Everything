@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "Determined and Unforeseeable: Free Will as Exact Forward Determination and Forced Self-Opacity",
+    "upload_type": "publication", "publication_type": "article",
+    "description": "<p><strong>The fold is fully determined forward and exactly non-invertible backward.</strong> One state has one successor, while the distinct preimages 1/4 and 3/4 both fold to 1/2. The engine proves forward uniqueness, backward collapse and the unrecoverable preimage distinction.</p><p>A self is inside the same relation it tries to inspect. The observer chain 1/8 to 1/4 to 1/2 to 1 joins measurement, self-observation, binding and unison. The act is fixed by the forward law while its completion is unavailable to the self-model before execution.</p><p>From one machine-checked self-proven theorem, zero axioms and zero fitted parameters, the paper rules out libertarian indeterminism and identifies the lived openness of deliberation as the accurate internal view of a determined but self-opaque process.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}], "publication_date": "2026-07-22", "version": "v2.0", "language": "eng", "access_right": "open", "license": "cc-by-4.0",
+    "keywords": ["free will", "determinism", "self-opacity", "non-invertibility", "observer", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the primary preview; the Markdown source follows.",
+    "related_identifiers": [{"identifier":"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"},{"identifier":"10.5281/zenodo.21035854","relation":"references","scheme":"doi"}]
+  }
+}

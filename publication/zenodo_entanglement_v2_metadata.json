@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "title": "Entanglement Without Spookiness: Shared Origin, Product Structure, and Correlation Without a Travelling Signal",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Entanglement is derived as one composite state with two local readings, not communication between independent objects.</strong> From one machine-checked self-proven theorem, zero axioms and zero fitted parameters, the coprime periods 2 and 3 generate one joint period 6. The shared dimension 15 supplies one origin 1/15, and the fold advances the same connected orbit to 2/15.</p><p>The complete composite walk sends 8/15 to 1/15 while its local shadows move from (2,3) to (1,1) together, with both local laws agreeing. The no-signalling route derives channels 2/3 and 1/3, proves that they partition the One, cycle into each other and remain closed under their difference. No third signal carrier is generated.</p><p>The result is deterministic, nonlocal, no-signalling and fully inspectable. It connects the formal derivation, exact implementation, independent certificates and empirical Bell programme without treating opaque statistical prediction as the authority over structural proof.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["entanglement", "nonlocal correlation", "Bell", "no signalling", "shared origin", "product structure", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21028523", "relation": "references", "scheme": "doi"}
+    ]
+  }
+}

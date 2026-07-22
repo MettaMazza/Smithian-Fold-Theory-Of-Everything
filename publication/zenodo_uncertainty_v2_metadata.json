@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "title": "Why There Is Uncertainty: Heisenberg's Relation as an Exact Finite Count",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives uncertainty as conservation of a finite support count across two conjugate descriptions of one state.</strong> At depth k, the state contains N=2^k cells and the minimum position-frequency support product is exactly N. The machine certificates verify 2 x 4 = 8 at depth three, 2 x 16 = 32 at depth five, and full conjugate support for a localized state.</p><p>An independent variance route gives the same object: at depth two the minimal variance product is exactly 1/16, equal to the independently generated floor 1/2^(2k). Equality, a wider-state control above the floor and identity with spacing squared are all machine-checked.</p><p>The result replaces unexplained continuum fuzziness with an exact, transparent construction from one self-proven theorem, zero axioms and zero fitted parameters. Derivation, execution and measurement remain connected throughout.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["uncertainty principle", "Heisenberg", "finite support", "conjugate variables", "exact variance", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21028523", "relation": "isReferencedBy", "scheme": "doi"}
+    ]
+  }
+}

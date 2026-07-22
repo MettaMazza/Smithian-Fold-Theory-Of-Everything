@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "From the Self-Proven Theorem to Master-Level Chess - and the Law Inside Neural Networks",
+    "upload_type": "publication", "publication_type": "article",
+    "description": "<p><strong>A zero-parameter chess engine derived from the fold secured the 1900 benchmark victory at 6W-3D-3L (62.5%) and now advances toward the explicit 2100 victory objective.</strong> It contains no trained weights, opening book or fitted piece values: evaluation is a counted exact share of the One.</p><p>The engine also solved 1,092,871,108 five-piece positions at zero error against Syzygy, including 19,733,336 legal queen-versus-rook positions independently re-proven with zero disagreements. Current calculation preserves every legal root move to common depth, agrees with the sequential engine on exact values and executes the recorded 2100 position panel at depths 8-11.</p><p>The same registered dyadic instrument locates placement law inside trained neural weights, while a fold-native language engine measured 1.289 against its trained transformer twin's 1.888 after one reading rather than 48,000 gradient-batched readings. The paper preserves machine proofs, implementation measurements, Maria Smith's conclusions and agent-authored auxiliary hypotheses as distinct evidence classes.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/FoldBot-Chess\">FoldBot Chess</a>.</p>",
+    "creators": [{"name":"Smith, Maria","affiliation":"Ernos Labs"}], "publication_date":"2026-07-22", "version":"v2.4", "language":"eng", "access_right":"open", "license":"cc-by-4.0",
+    "keywords":["computer chess","zero parameters","exact search","tablebases","Walsh spectrum","neural network interpretability","benchmark victory","Smithian Fold Theory","machine-checked derivation"],
+    "notes":"PDF-first publication edition. Existing ledgers and machine-readable receipts are retained as supporting evidence.",
+    "related_identifiers":[{"identifier":"https://github.com/MettaMazza/FoldBot-Chess","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"}]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "Don't Be Evil: The Freedom of Knowledge - Transparent Derivation, Machine Proof, and Open Empirical Science",
+    "upload_type": "publication", "publication_type": "article",
+    "description": "<p><strong>Opaque predictive reliability is valuable evidence of performance; it is not by itself a derivation, causal explanation or proof.</strong> This paper establishes the Smithian Fold Theory standard: one machine-checked self-proven theorem, zero axioms, zero fitted parameters, exact trace to the One, independent certificates, public evidence and a halt when forcing breaks.</p><p>The synchronized corpus executes 326 suites and 2,002 exact checks with zero failures, with all 326 generated-C certificates identical to source. Its computational proofs carry the same method into sealed blind protein structure, exact and competitive Chess, exact and competitive Go, native zero-trained-parameter UnisonAI and measurement of fold law inside trained weights.</p><p>The paper protects authorship and empirical method: agents do not declare Maria Smith's findings, convert their auxiliary failures into her results or impose incumbent theoretical walls. Benchmark victories remain explicit objectives; development evidence directs construction; every positive result is investigated and retained.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}], "publication_date": "2026-07-22", "version": "v2.0", "language": "eng", "access_right": "open", "license": "cc-by-4.0",
+    "keywords": ["open science", "transparent derivation", "machine proof", "empirical methodology", "black-box machine learning", "authorship", "zero free parameters", "Smithian Fold Theory"],
+    "notes": "Complete authoritative rewrite. The finished PDF is the primary preview; the Markdown source follows.",
+    "related_identifiers": [{"identifier":"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"},{"identifier":"10.5281/zenodo.21482128","relation":"references","scheme":"doi"}]
+  }
+}

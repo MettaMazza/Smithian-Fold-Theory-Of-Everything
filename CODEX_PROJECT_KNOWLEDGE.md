@@ -448,11 +448,14 @@ triplicated.
 
 ### Current stage and next state
 
-The current work is runtime integration of the packed v5 relation, exact v4/v5
-marginal identity, and a full native rebuild. The next applied state is
-source-bound held-out single-turn, multi-turn, paraphrased transfer, and free
-composition through the native path with reward-conditioned learning retained,
-followed by Maria-authorized benchmark runs.
+The packed v5 relation is active in the live autoregressive runtime, sealed
+together with the unchanged v4 counted store and exact runtime sources. The
+fixed applied panel observed all 628/628 value queries, with 577 semantic2 and
+476 semantic3 addresses supplied by the canonical relation. The next applied
+state is source-bound held-out single-turn, multi-turn, paraphrased transfer,
+free composition, and full Discord user engagement through the native path
+with reward-conditioned learning retained, followed by Maria-authorized
+benchmark runs.
 
 Every established causal-transformer organ and the complete uncapped position
 relation now execute. Counted prediction has beaten trained twins and contextual
@@ -479,6 +482,44 @@ purpose-matched evidence:
 The main corpus is the mathematical authority and synchronized publication
 surface; the standalone repositories remain the canonical active development
 environments until Maria approves a coordinated release.
+
+## Completed Zenodo catalogue rebuild — 22 July 2026
+
+The account now contains 22 current record lineages and 120 published versions.
+Every article lineage has a finished main PDF named `00_MAIN_PAPER...`; source
+and supporting evidence follow it. The software lineage remains a software
+archive rather than being converted into a paper. The two older Protein
+lineages remain explicitly superseded historical records because they retain
+unique chronological provenance.
+
+Current authoritative and rebuilt article records:
+
+- main SFT synthesis: `10.5281/zenodo.21482731`;
+- foundation theorem: `10.5281/zenodo.21482734`;
+- terminal fine structure: `10.5281/zenodo.21482736`;
+- Blind Protein: `10.5281/zenodo.21482128`;
+- Hubble: `10.5281/zenodo.21482856`;
+- discrete fluid regularity: `10.5281/zenodo.21482905`;
+- Grand Lock: `10.5281/zenodo.21482969`;
+- Continuum: `10.5281/zenodo.21483049`;
+- Smithium: `10.5281/zenodo.21483101`;
+- No Dice: `10.5281/zenodo.21483216`;
+- uncertainty: `10.5281/zenodo.21483217`;
+- entanglement: `10.5281/zenodo.21483218`;
+- self and consciousness: `10.5281/zenodo.21483274`;
+- free will: `10.5281/zenodo.21483275`;
+- Freedom of Knowledge: `10.5281/zenodo.21483276`;
+- FoldBot Chess: `10.5281/zenodo.21483326`;
+- Fold Go: `10.5281/zenodo.21483328`;
+- UnisonAI: `10.5281/zenodo.21483329`;
+- Fold Decode: `10.5281/zenodo.21483332`.
+
+The public descriptions lead with positive results and their exact evidence.
+They preserve the one-self-proven-theorem, zero-axiom, zero-fitted-parameter
+argument; the priority of transparent derivation, machine proof, and empirical
+measurement; Maria Smith's publication authority; benchmark victories as
+explicit objectives; and development artifacts as attributed engineering
+evidence rather than agent-owned findings, limits, or endpoints.
 
 ## Rules for future Codex work
 

@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title":"The Law Inside Trained Weights: The Fold Decode Campaign",
+    "upload_type":"publication", "publication_type":"article",
+    "description":"<p><strong>Fold Decode replaces 'black box' as a stopping phrase with registered, falsifiable measurement of trained weight fields.</strong> Its instruments preserve tensor values while scrambling placement, execute transform identities as halt conditions and retain every measured output.</p><p>GPT-2's embedding and MLP expansion classes pass 39/39 registered real-versus-null checks. A widened coordinate and object atlas wakes every registered model family examined. In the committed GPT-2 causal experiment, loud-band deletion produces approximately 150 times greater behavioural damage than matched random-coordinate deletion. Checkpoint and twin experiments locate when spectral structure enters weights and gradients.</p><p>The campaign keeps measured results, Maria Smith's conclusions and agent-authored auxiliary hypotheses distinct. New models, bases and interventions extend the same registered programme; benchmark victory and wider decode remain explicit objectives.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/UnisonAI\">UnisonAI / Fold Decode</a>.</p>",
+    "creators":[{"name":"Smith, Maria","affiliation":"Ernos Labs"}], "publication_date":"2026-07-22", "version":"v1.3", "language":"eng", "access_right":"open", "license":"cc-by-4.0",
+    "keywords":["mechanistic interpretability","trained weights","spectral analysis","Walsh transform","causal ablation","registered measurement","Fold Decode","Smithian Fold Theory"],
+    "notes":"PDF-first publication edition. Instrument guide, protocol and release manifest remain supporting files.",
+    "related_identifiers":[{"identifier":"https://github.com/MettaMazza/UnisonAI","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21217278","relation":"references","scheme":"doi"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"}]
+  }
+}

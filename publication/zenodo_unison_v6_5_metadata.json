@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title":"UnisonAI: A Computational Proof of Derived Law with Zero Trained Parameters",
+    "upload_type":"publication", "publication_type":"article",
+    "description":"<p><strong>UnisonAI implements memory, binding, attention, context, generation, perception, learning and verification with zero trained parameters.</strong> Its laws are forced, forward-forced or constitutionally re-derived from one machine-checked self-proven theorem with zero axioms.</p><p>The main corpus executes 326 suites and 2,002 checks with zero failures. Unison's focused laws pass 8/8 coherence, 14/14 contextual integration and 13/13 generation selection checks; its standalone verifier passes 21/21. The live v5 relation preserves 277,583,049 positional observations as 212,395,127 canonical entries with no sampling, pruning, fitted capacity or row eviction.</p><p>Counted prediction measured 1.2891 against a matched trained twin's 1.8878, the counted word engine measured 3.1907 against 3.4292, teaching rose from 17% to 75%, contextual continuity reached 4/4 and exact transfer reached 8/8. The native one-to-one attention transformer and reward-conditioned learning route now advances through real user engagement toward general conversation and benchmark victory; agents do not declare walls or endpoints.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/UnisonAI\">UnisonAI</a>.</p>",
+    "creators":[{"name":"Smith, Maria","affiliation":"Ernos Labs"}], "publication_date":"2026-07-22", "version":"v6.5", "language":"eng", "access_right":"open", "license":"cc-by-4.0",
+    "keywords":["artificial intelligence","zero trained parameters","attention transformer","derived law","reward-conditioned learning","general conversation","UnisonAI","Smithian Fold Theory"],
+    "notes":"PDF-first publication edition. Architecture trace, provenance and machine-readable receipts remain supporting files.",
+    "related_identifiers":[{"identifier":"https://github.com/MettaMazza/UnisonAI","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"},{"identifier":"10.5281/zenodo.21396742","relation":"references","scheme":"doi"}]
+  }
+}

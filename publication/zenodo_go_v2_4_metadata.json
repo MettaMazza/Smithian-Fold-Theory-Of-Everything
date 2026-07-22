@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "title": "Fold Go: Exact Counted Legality, Certified Solves, and Zero-Parameter Competitive Play",
+    "upload_type":"publication", "publication_type":"article",
+    "description":"<p><strong>Fold Go derives legality, solved values and competitive decisions from the Smithian fold with zero trained policy, zero value network and zero learned weights.</strong> The exact engine reproduces the legal-position census 1, 57, 12,675 and 24,318,165 through 4x4 and secures exact empty-board values through 2x2.</p><p>Applied play includes two independently replayed two-game 9x9 sweeps against GNU Go at depth ceiling three and the preserved 19x19 harness measurement. The current engine binds complete augmented state, typed transposition bounds, universal pass, complete empty-board orbits, complete active fronts and immutable source/opponent receipts. Typed-table and no-cache values agree on a sealed 134-state surface with 24 pass-pass terminals.</p><p>The calculation ledger now preserves every SFT decision, completed depth and candidate fraction. Benchmark victory remains an explicit objective under Maria Smith's greater-than-50-percent criterion; development games direct construction and do not give agents authority to declare rank, findings, losses or endpoints.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Fold-Go\">Fold Go</a>.</p>",
+    "creators":[{"name":"Smith, Maria","affiliation":"Ernos Labs"}], "publication_date":"2026-07-22", "version":"v2.4", "language":"eng", "access_right":"open", "license":"cc-by-4.0",
+    "keywords":["Go","exact legality","small-board solving","zero parameters","competitive play","benchmark victory","Smithian Fold Theory","machine-checked derivation"],
+    "notes":"PDF-first publication edition. The companion exact-substrate paper and applied receipts remain supporting files.",
+    "related_identifiers":[{"identifier":"https://github.com/MettaMazza/Fold-Go","relation":"isSupplementedBy","scheme":"url"},{"identifier":"10.5281/zenodo.21182468","relation":"isPartOf","scheme":"doi"}]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "title": "No Dice: Deterministic Interference, Exact Branch Counts, and Quantum Measurement from the Fold",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Quantum probability is derived here as an exact preimage census, not installed as a primitive continuum lottery.</strong> From one machine-checked self-proven theorem, zero axioms and zero fitted parameters, Smithian Fold Theory generates eight observation branches of indivisible weight 1/8 and proves that they partition the One.</p><p>The same construction produces stationary spacing 1/8, ground share 1/16, exact phase return and deterministic bright-dark interference: maximal mismatch 1/2 is self-antipodal, aligned halves complete to the One, and the optics shares conserve the whole. A binary fibre independently generates the symmetric and antisymmetric exchange classes and proves that no third class exists.</p><p>The paper connects mathematical derivation, exact execution, independent generated certificates and physical measurement. It argues that opaque predictive reliability is not a substitute for empirical structural proof. Apparent single-event randomness is identified with the self-opacity of a non-invertible fold, while the complete branch relation remains deterministic.</p><p>Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["quantum measurement", "double slit", "determinism", "preimage count", "Born rule", "wave optics", "stationary states", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21028591", "relation": "references", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21028645", "relation": "references", "scheme": "doi"}
+    ]
+  }
+}
