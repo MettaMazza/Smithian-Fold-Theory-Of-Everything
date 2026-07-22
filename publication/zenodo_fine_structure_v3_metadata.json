@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "title": "The Fine-Structure Constant, Derived to Its Terminal Order: An Exact Zero-Parameter Rational Value",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives the fine-structure constant as one exact, finite and terminal rational object.</strong> No electromagnetic measurement, fitted parameter or selected decimal enters the derivation. The machine-checked self-proven foundation forces the One and fold; the fold's period spectrum supplies binary two and colour three; those counts force covering depths five and seven; and the three interchangeable spatial directions generate one finite four-rung ladder.</p><p>The counted rungs are <strong>125, 175, 245 and 343</strong>. Exactly one distinct successor exists at each non-terminal rung and none exists after the fourth. The resulting terminal value is <strong>1/alpha = 503846395469/3676744786 = 137.035999177180855326...</strong>. The construction is an exact rational fraction, not an infinite correction series or a regression against measured alpha.</p><p>Independent machine modules agree exactly at the first and second orders. The terminal certificate checks the unique promotion law, all four rungs, exact fractions, more-than-thousandfold collapse of successive shifts, the terminal decimal and the absence of a fifth successor. Generator mutations, rival covering shapes and alternative promotion constructions are rejected by exact identities.</p><p>Only after the value is sealed is it compared with experiment. It lies approximately <strong>0.009 standard deviations</strong> from the CODATA 2022 recommended inverse alpha, calls the unresolved digits <strong>...177181</strong>, and fixes a definite resolution point between the discordant caesium and rubidium recoil determinations. The paper states the executable falsification conditions and provides the exact repository paths for reproduction.</p><p><strong>Open source and machine evidence:</strong> <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [
+      {
+        "name": "Smith, Maria",
+        "affiliation": "Ernos Labs"
+      }
+    ],
+    "publication_date": "2026-07-22",
+    "version": "v3.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": [
+      "fine-structure constant",
+      "alpha",
+      "exact rational value",
+      "zero free parameters",
+      "terminal derivation",
+      "Smithian Fold Theory",
+      "machine-checked proof",
+      "CODATA",
+      "reproducible research"
+    ],
+    "notes": "Authoritative terminal-order fine-structure paper. The finished PDF is the first file and primary preview; the Markdown source follows as a supporting open document.",
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything",
+        "relation": "isSupplementedBy",
+        "scheme": "url"
+      },
+      {
+        "identifier": "10.5281/zenodo.21182468",
+        "relation": "isPartOf",
+        "scheme": "doi"
+      }
+    ]
+  }
+}

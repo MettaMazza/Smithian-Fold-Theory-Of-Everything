@@ -8,8 +8,9 @@ Ernos Labs, Scotland
 
 Complete verified corpus (this repository): 326 machine-verified proof suites, 2,002
 forced checks, reproducible on any machine with a C compiler in one command
-(`make -C verify prove`). Companion records: the 61-DOI constellation of standalone
-proof papers (Appendix B), each a single result of this model published separately.
+(`make -C verify prove`). The Zenodo catalogue is organized in Appendix B as an
+authoritative synthesis, focused derivations, computational proofs, explicitly
+superseded development lineages, and the separate software archive.
 
 ---
 
@@ -65,7 +66,7 @@ irrational number; no detector has ever clicked zero times in a way that
 distinguishes absence from the absence of a detector. This theory takes that history
 at face value: the domain is what humanity always actually computed with — exact
 ratios of a whole — and the results below are the demonstration that this domain is
-not merely philosophically tidier but **sufficient for the constants of nature**,
+both philosophically exact and **sufficient for the constants of nature**,
 which the continuum, with its ~26 fitted dials, never derived at all.
 
 **The foundation.** The theory has zero free parameters and, in the precise sense
@@ -405,7 +406,7 @@ fitting mechanically impossible:
   hardcoded 5 that is not also the counted cover of 27 kills the build.
 - **`forced_unique`** — a value claimed forced must be the *only* candidate that
   lands; if an alternative also reproduces it, the engine declares SELECTION and
-  halts. Choosing is detected, not merely discouraged.
+  halts. Choosing is detected and triggers the halt.
 - **Form and assembly enforcement** — every combining rule is guarded twice: the
   full grammar of same-size assemblies of the forced ingredients is generated and
   every rival shape must fail (`forbid_form_selection`), and generated-grammar
@@ -513,8 +514,8 @@ substitution.
 
 ## III.3 What the terminal value predicts
 
-Because the ladder closes, the theory states digits metrology has not yet
-resolved: at 2×10⁻¹¹ precision the digits are **…177181** (the second order alone
+Because the ladder closes, the theory states digits beyond current metrology's
+present resolution: at 2×10⁻¹¹ precision the digits are **…177181** (the second order alone
 would read …177162). And it adjudicates a live experimental dispute: the two best
 photon-recoil measurements disagree by 5.4σ (Rb 2020: 137.035999206(11); Cs 2018:
 137.035999046(27)); the terminal value sits between them — 2.6σ below Rb, 4.9σ
@@ -786,7 +787,7 @@ alpha-squared of its own rest energy.
 
 **Life's architecture.** The genetic code is the covering at base four: a base is
 a two-bit fold pair, a codon three bases, 4³ = 2⁶ = **64 codons** grouped by the
-wobble rung into the observed redundancy (the amino-acid count is honestly NOT
+wobble rung into the observed redundancy (the amino-acid count is NOT
 forced — stated as such). Kleiber's quarter-power law of life is the fold
 branching ratio **3/4**. Self-replication is the two-to-one covering; protein
 folding is a directed descent to one native fixed point (Levinthal's paradox
@@ -805,7 +806,7 @@ will ruled out — and backward, the fold is 2-to-1 — distinct pasts, equal
 presents, one bit lost per act — so **no self can pre-read its own next fold**.
 What exists is a determined self that cannot foresee its own determined act:
 from the inside, that is exactly what choosing feels like. Determinism plus
-forced self-opacity — a closure, not an open.
+forced self-opacity — one completed double statement.
 
 # Part XIII — Mathematics from the fold
 
@@ -1357,14 +1358,39 @@ UnisonAI re-derives the established causal-transformer and training computation 
 
 The v5 position-conditioned relation is complete and sealed: 277,583,049 observations, 212,395,127 unique canonical entries, 4,369,646,672 canonical bytes, and 5,097,483,048 packed bytes. Exact marginalisation supplies position-owned values and both semantic FFN depths without sampling, pruning, capping, fitting, or triplicating observations. Runtime integration, free multi-turn composition, reward learning, and benchmark victory are the next state. Counted prediction has already beaten matched trained twins at character and word scale, and every established transformer organ plus the complete position relation executes; no engine result establishes a theoretical wall on full conversational generalisation.
 
-## Appendix B — The published constellation and this record
+## Appendix B — The authoritative publication map
 
-This paper is the complete statement of the model. Sixty-one Zenodo records
-precede it — the main corpus record (DOI 10.5281/zenodo.20775538) and sixty
-standalone single-result papers, each machine-verified, each cross-linked — and
-this record supersedes none of them: they are the constellation, this is the sky.
-The clean-room repository (github.com/MettaMazza/Smithian-Fold-Theory-Of-
-Everything) carries every module, every test, the committed C, and the ledgers.
+This paper is the complete current statement of the model and the navigational hub
+for the Zenodo catalogue. The current account surface contains 22 record lineages
+and 100 chronological versions. Those version DOIs are development history, not 100
+separate current theories. The substantive hierarchy is:
+
+- **Authoritative corpus synthesis:** this paper, concept DOI
+  `10.5281/zenodo.21182468`.
+- **Authoritative foundation:** *There Is No Nothing*, concept DOI
+  `10.5281/zenodo.21035460`.
+- **Authoritative Protein computational proof:** *From One Self-Proven Theorem to
+  Blind Protein Structure*, DOI `10.5281/zenodo.21482128`.
+- **Active computational proofs:** FoldBot Chess, Fold Go, UnisonAI and Fold Decode,
+  each published from its own repository evidence and synchronized here.
+- **Focused derivations:** the fine-structure constant, Hubble tension and the
+  cosmological constant, discrete regularity, the grand lock of the constants,
+  quantum counting and entanglement, the continuum results, Smithium, mind and
+  free will.
+- **Methodology:** *Don't Be Evil: The Freedom of Knowledge*, preserving the case
+  for open derived science while using only current synchronized empirical results.
+- **Superseded historical Protein lineages:** concepts
+  `10.5281/zenodo.21276950` and `10.5281/zenodo.21368944`. They retain unique
+  chronological evidence but are superseded by `10.5281/zenodo.21482128` and do not
+  state the current Protein result.
+- **Software archive:** concept DOI `10.5281/zenodo.20775538`, maintained as source
+  releases rather than as a theory paper.
+
+Every current article edition uses a finished PDF as its primary preview, carries
+its Markdown source and machine evidence as secondary files, and identifies its
+status and relationships in the landing metadata. The clean-room repository
+(github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything) carries every module,
+every test, the committed C, the publication audit, and the ledgers.
 
 **Reproduce everything:** clone the repository; run `make -C verify prove`.
 

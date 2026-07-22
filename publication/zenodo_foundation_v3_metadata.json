@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "title": "There Is No Nothing: One Machine-Checked Self-Proven Theorem, Zero Axioms, and the Uniquely Forced Fold",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory begins with one machine-checked self-proven theorem: there is no nothing.</strong> Any denial of existence already occurs within a non-empty whole; an absent total domain cannot state its own absence. The act that could deny the theorem supplies the existence that proves it.</p><p>From that self-proof the construction forces the <strong>One</strong> and the exact domain of positive parts (0,1]. A complete normal-form argument then exhausts the minimal parameter-free self-maps as identity, square, constant One and closed doubling. Identity is static, square contracts, constant One collapses and closed doubling alone is both non-injective and recurrent. The unique generator is therefore <strong>the fold, F(x) = cast_out(x+x)</strong>. The engine's <code>forced_unique</code> guard halts if a rival qualifies.</p><p>The displaced ground is forced as the unique positive self-antipodal solution of x+x=1: <strong>x=1/2</strong>. It folds to the One, while the One remains the fold's fixed point. The fold's exact orbit spectrum then supplies the binary and colour counts rather than receiving them as assumptions. Three self-contained machine certificates verify the unique generator, full registered residue-class coverage, the displaced ground and unison identities using exact arithmetic.</p><p>The One began chronologically as the project's operational axiom and was subsequently derived. That history remains in the development audit, but the completed foundation is accurately stated as <strong>one self-proven theorem, zero axioms, zero fitted parameters and one uniquely forced fold</strong>.</p><p><strong>Open source and evidence:</strong> <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [
+      {
+        "name": "Smith, Maria",
+        "affiliation": "Ernos Labs"
+      }
+    ],
+    "publication_date": "2026-07-22",
+    "version": "v3.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": [
+      "self-proven theorem",
+      "there is no nothing",
+      "zero axioms",
+      "Smithian Fold Theory",
+      "the One",
+      "fold map",
+      "machine-checked proof",
+      "zero free parameters",
+      "exact rational mathematics",
+      "reproducible research"
+    ],
+    "notes": "Authoritative foundation paper. The primary PDF is the first file, followed by its Markdown source and exact machine-check evidence map.",
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything",
+        "relation": "isSupplementedBy",
+        "scheme": "url"
+      },
+      {
+        "identifier": "10.5281/zenodo.21182468",
+        "relation": "isPartOf",
+        "scheme": "doi"
+      }
+    ]
+  }
+}
