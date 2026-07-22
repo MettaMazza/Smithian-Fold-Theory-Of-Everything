@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "SUPERSEDED HISTORICAL RECORD — Fold Protein Super Parity Development Lineage",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>This lineage is superseded and is preserved only for historical development transparency.</strong> The authoritative current Protein paper is <a href=\"https://doi.org/10.5281/zenodo.21482128\"><em>From One Self-Proven Theorem to Blind Protein Structure</em></a>.</p><p>The chronological versions and evidence files in this concept preserve the exact lattice construction, sequence-only development, forcing registries, seals, generated structures and evaluation receipts that joined structural construction to blind prediction. These are provenance artifacts, not independent final claims or agent-owned findings.</p><p>The current authoritative work reports a sealed blind prediction of the complete 76-residue ubiquitin backbone at <strong>0.9891211351 TM-score, 0.2608575408 Angstrom C-alpha dRMSD and 0.3261459535 Angstrom Kabsch C-alpha RMSD</strong>. Material Architecture V1 restores 576 exact states at every residue, executes 43,776 raw state trials and seals its output before experimental comparison with zero runtime target accesses, fitted weights or trained parameters.</p><p><strong>Begin with the authoritative paper:</strong> <a href=\"https://doi.org/10.5281/zenodo.21482128\">10.5281/zenodo.21482128</a>. Author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.1-final-status",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["superseded record", "historical transparency", "Fold Protein", "blind predictive super parity", "Smithian Fold Theory"],
+    "notes": "Final status edition. The first PDF clearly marks this lineage as superseded. Historical versions and evidence remain preserved for provenance.",
+    "related_identifiers": [
+      {"identifier": "10.5281/zenodo.21482128", "relation": "isObsoletedBy", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"}
+    ]
+  }
+}

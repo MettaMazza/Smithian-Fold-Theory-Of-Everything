@@ -60,6 +60,8 @@ def main() -> None:
     parser.add_argument("--file", action="append", default=[], type=parse_file)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--metadata-only", action="store_true", help="Edit metadata on the supplied published record without creating a new version")
+    parser.add_argument("--retain-inherited", action="store_true", help="Keep inherited files that are not explicitly removed")
+    parser.add_argument("--remove-inherited", action="append", default=[], help="Exact inherited filename to remove")
     args = parser.parse_args()
     if not args.metadata_only and not args.file:
         parser.error("at least one --file is required when creating a new version")
@@ -81,10 +83,13 @@ def main() -> None:
     draft = request(token, "GET", f"{API}/deposit/depositions/{draft_id}")
     print(f"DRAFT record={draft_id}")
 
+    inherited_files = draft.get("files", [])
     if not args.metadata_only:
-        for inherited in draft.get("files", []):
-            request(token, "DELETE", inherited["links"]["self"])
-            print(f"REMOVED inherited={inherited['filename']}")
+        for inherited in inherited_files:
+            remove = not args.retain_inherited or inherited["filename"] in args.remove_inherited
+            if remove:
+                request(token, "DELETE", inherited["links"]["self"])
+                print(f"REMOVED inherited={inherited['filename']}")
 
     bucket = draft["links"]["bucket"].rstrip("/")
     expected: dict[str, tuple[int, str]] = {}
@@ -94,6 +99,12 @@ def main() -> None:
             for item in draft.get("files", [])
         }
     else:
+        if args.retain_inherited:
+            expected = {
+                item["filename"]: (int(item["filesize"]), item["checksum"].removeprefix("md5:"))
+                for item in inherited_files
+                if item["filename"] not in args.remove_inherited
+            }
         for public_name, local in args.file:
             encoded = urllib.parse.quote(public_name, safe="")
             request(token, "PUT", f"{bucket}/{encoded}", local.read_bytes(), "application/octet-stream")

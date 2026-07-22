@@ -73,8 +73,8 @@ Current editions lead with positive results and their evidence. Development chal
 
 | Current DOI | Record | Versions | Decision | Required publication action |
 |---|---|---:|---|---|
-| `10.5281/zenodo.21444557` | Earlier Fold Protein lineage | 11 | **KEEP ONLY AS HISTORICAL TRANSPARENCY — superseded** | Issue a final status edition whose primary PDF states that the lineage is superseded by `10.5281/zenodo.21482128`, explains its provenance value, and directs readers to the authoritative paper. Do not present it as the current Protein result. |
-| `10.5281/zenodo.21444572` | Earlier Super Parity lineage | 11 | **KEEP ONLY AS HISTORICAL TRANSPARENCY — superseded** | Issue the same clear status treatment, preserving construction and development evidence while directing readers to `10.5281/zenodo.21482128`. |
+| `10.5281/zenodo.21444557` | Earlier Fold Protein lineage | 11 | **KEEP ONLY AS HISTORICAL TRANSPARENCY — superseded** | Final status edition prepared: its primary PDF and metadata state that the lineage is superseded by `10.5281/zenodo.21482128`, explain its provenance value, and direct readers to the authoritative paper. Historical evidence remains carried in the record. |
+| `10.5281/zenodo.21444572` | Earlier Super Parity lineage | 11 | **KEEP ONLY AS HISTORICAL TRANSPARENCY — superseded** | Final status edition prepared with the same explicit treatment, preserving construction and development evidence while directing readers to `10.5281/zenodo.21482128`. |
 
 ### F. Software archive
 
