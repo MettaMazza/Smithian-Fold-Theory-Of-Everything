@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Smithium: Element 126, the Doubly Magic Island at 126/184, and the First g-Block Chemistry",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives one exact address for the superheavy island of stability: Z=126, N=184, A=310.</strong> From one machine-checked self-proven theorem, zero axioms and zero fitted parameters, three spatial dimensions, binary spin and the colour-three strong sector generate the shell sequence 2, 8, 20, 28, 50, 82, 126, 184. The engine derives the spin-orbit threshold at l=3, reproduces the complete registered sequence and proves that no generated closure lies between 82 and 126.</p><p>Maria Smith names element 126 <strong>Smithium (Sh)</strong>. An independent electronic walk derives subshell capacities 2(2l+1), reproduces the noble closures 2, 10, 18, 36, 54, 86, 118, fills 8s at 119-120, opens the eighteen-place 5g block at 121, and gives <strong>Sh = [Og] 8s² 5g⁶</strong> with eight electrons beyond the oganesson core. The corpus carries its high oxidation sequence as a forward chemical prediction.</p><p>A third exact route fixes the final whole nuclear charge at 137: 137 alpha is below the One and 138 alpha is above it. Smithium therefore lies inside the final admitted block of the completed table.</p><p>The address, configuration and endpoint are declared before synthesis and cannot be retuned after measurement. The synchronized release executes <strong>326 suites and 2,002 exact checks with zero failures</strong>, with all 326 generated-C certificates identical to source. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Scientific author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["Smithium", "element 126", "island of stability", "nuclear magic numbers", "N=184", "g-block", "superheavy elements", "periodic table", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the only PDF and primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"}
+    ]
+  }
+}
