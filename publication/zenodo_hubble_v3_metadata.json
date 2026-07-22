@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "The Hubble Calibration Ratio and the Cosmological Constant: One Finite Covering Ladder",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives the early-to-late Hubble calibration as one exact parameter-free ratio.</strong> The fold supplies binary two and colour three; their period-two orbit partitions the One into vacuum 2/3 and matter 1/3; and the colour-depth tower is 2^3 = 8. The unique admitted leading calibration is 13/12.</p><p>The same covering ladder has a forced deep end. The minimal binary cover of 3^4 = 81 is depth seven, whose genuine period-seven orbit floor is 2^7-1 = 127. Reading the identical calibration architecture at that end gives <strong>R = 3305/3048 = 1.084317585301837...</strong>. Exact machine checks establish the orbit floor and uniquely reject rival leading forms and rival deepenings.</p><p>Only after derivation is the result compared with the registered SH0ES 2022 and final Planck central values. Their ratio is 73.04/67.36 = 1.08432304038..., placing the exact SFT relation approximately <strong>five parts per million</strong> away. Neither measurement enters the construction.</p><p>The same foundation forces the vacuum as the positive half-One and places it on one counted hierarchy axis with exponent 127/2. The corpus does not construct the continuum zero-point mode sum whose cancellation produces the conventional cosmological-constant discrepancy; it derives one positive vacuum state on one finite scale architecture.</p><p><strong>Open source and machine evidence:</strong> <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v3.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["Hubble tension", "Hubble constant", "cosmological constant", "exact ratio", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation", "reproducible research"],
+    "notes": "Authoritative complete edition. The finished PDF is the first file and primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"}
+    ]
+  }
+}

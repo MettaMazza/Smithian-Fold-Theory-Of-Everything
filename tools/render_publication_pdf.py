@@ -63,14 +63,17 @@ def formula_text(value: str) -> str:
     replacements = {
         r"\operatorname{cast\_out}": "cast_out",
         r"\operatorname{cast_out}": "cast_out",
+        r"\Longrightarrow": "⇒",
         r"\longrightarrow": "→",
         r"\rightarrow": "→",
         r"\left": "",
         r"\right": "",
         r"\qquad": "    ",
+        r"\quad": "  ",
         r"\cdots": "…",
         r"\cdot": "·",
         r"\times": "×",
+        r"\pm": "±",
         r"\alpha": "α",
         r"\varepsilon": "ε",
         r"\hbar": "ℏ",
@@ -90,6 +93,7 @@ def formula_text(value: str) -> str:
         r"\text{Å}": "Å",
         r"\!": "",
         r"\,": " ",
+        r"\;": " ",
         r"\lfloor": "⌊",
         r"\rfloor": "⌋",
         r"\mathbb{Q}": "Q",
@@ -98,13 +102,14 @@ def formula_text(value: str) -> str:
     value = value.strip().replace("$", "")
     for old, new in replacements.items():
         value = value.replace(old, new)
+    value = re.sub(r"\^\{([^{}]+)\}", r"^(\1)", value)
+    value = re.sub(r"_\{([^{}]+)\}", r"_(\1)", value)
+    value = re.sub(r"\\frac(\d)\{([^{}]+)\}", r"(\1)/(\2)", value)
     value = re.sub(r"\\frac(\d)(\d)", r"\1/\2", value)
     previous = None
     while previous != value:
         previous = value
         value = re.sub(r"\\frac\{([^{}]+)\}\{([^{}]+)\}", r"(\1)/(\2)", value)
-    value = re.sub(r"\^\{([^{}]+)\}", r"^(\1)", value)
-    value = re.sub(r"_\{([^{}]+)\}", r"_(\1)", value)
     previous = None
     while previous != value:
         previous = value
