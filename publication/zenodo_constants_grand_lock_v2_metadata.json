@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "title": "The Constants Are One Object: A Machine-Checked Grand Lock from One Self-Proven Theorem",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory replaces separately entered constants with one inspectable, machine-checked dependency object.</strong> From one self-proven theorem, zero axioms and zero fitted parameters, the fold forces binary count two, colour count three and covering depths five and seven. Those same roots recur across electromagnetic, lepton, quark, cosmological and absolute-scale constructions.</p><p>The Grand Lock executes the dependency claim. At the shared foundation order it reconstructs exact cross-sector results including inverse alpha 34259/250, lepton and quark invariants, dark-to-baryon 27/5, dark fraction 27/32, Hubble calibration 13/12, Planck exponent 127/2, the cosmological floor and half-One. A counterfactual colour mutation from three to four moves every registered colour-dependent branch, while the colour-independent half-One control remains exactly 1/2.</p><p>The synchronized corpus also executes the completed deeper branches: terminal inverse alpha <strong>503846395469/3676744786</strong>, Hubble ratio <strong>3305/3048</strong>, and dark-to-baryon ratio <strong>279/52</strong>. The paper distinguishes mathematical forcing, machine execution and empirical comparison, showing why transparent derivation plus independent agreement carries more information than opaque numerical success alone.</p><p>The complete release executes <strong>326 suites and 2,002 exact checks with zero failures</strong>; all 326 generated-C certificates match their readable sources. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Scientific author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["physical constants", "zero free parameters", "zero axioms", "dependency graph", "fine-structure constant", "Hubble ratio", "dark-to-baryon ratio", "Smithian Fold Theory", "machine-checked proof", "reproducible research"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the first file and primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21279102", "relation": "references", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21279104", "relation": "references", "scheme": "doi"}
+    ]
+  }
+}
