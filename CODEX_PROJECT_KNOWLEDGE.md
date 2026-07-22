@@ -526,7 +526,7 @@ Current authoritative and rebuilt article records:
 - main SFT synthesis: `10.5281/zenodo.21482731`;
 - foundation theorem: `10.5281/zenodo.21482734`;
 - terminal fine structure: `10.5281/zenodo.21482736`;
-- Blind Protein: `10.5281/zenodo.21482128`;
+- Blind Protein concept DOI: `10.5281/zenodo.21482127`;
 - Hubble: `10.5281/zenodo.21482856`;
 - discrete fluid regularity: `10.5281/zenodo.21482905`;
 - Grand Lock: `10.5281/zenodo.21482969`;

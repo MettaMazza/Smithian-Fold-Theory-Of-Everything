@@ -1378,7 +1378,7 @@ separate current theories. The substantive hierarchy is:
 - **Authoritative foundation:** *There Is No Nothing*, concept DOI
   `10.5281/zenodo.21035460`.
 - **Authoritative Protein computational proof:** *From One Self-Proven Theorem to
-  Blind Protein Structure*, DOI `10.5281/zenodo.21482128`.
+  Blind Protein Structure*, concept DOI `10.5281/zenodo.21482127`.
 - **Active computational proofs:** FoldBot Chess, Fold Go, UnisonAI and Fold Decode,
   each published from its own repository evidence and synchronized here.
 - **Focused derivations:** the fine-structure constant, Hubble tension and the
@@ -1389,7 +1389,7 @@ separate current theories. The substantive hierarchy is:
   for open derived science while using only current synchronized empirical results.
 - **Superseded historical Protein lineages:** concepts
   `10.5281/zenodo.21276950` and `10.5281/zenodo.21368944`. They retain unique
-  chronological evidence but are superseded by `10.5281/zenodo.21482128` and do not
+  chronological evidence but are superseded by `10.5281/zenodo.21482127` and do not
   state the current Protein result.
 - **Software archive:** concept DOI `10.5281/zenodo.20775538`, maintained as source
   releases rather than as a theory paper.
