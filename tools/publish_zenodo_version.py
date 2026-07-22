@@ -57,9 +57,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--record", required=True, help="Current published record ID")
     parser.add_argument("--metadata", required=True, type=Path)
-    parser.add_argument("--file", action="append", required=True, type=parse_file)
+    parser.add_argument("--file", action="append", default=[], type=parse_file)
     parser.add_argument("--publish", action="store_true")
+    parser.add_argument("--metadata-only", action="store_true", help="Edit metadata on the supplied published record without creating a new version")
     args = parser.parse_args()
+    if not args.metadata_only and not args.file:
+        parser.error("at least one --file is required when creating a new version")
 
     token_path = Path(os.environ.get("ZENODO_TOKEN_FILE", "~/.zenodo_token")).expanduser()
     token = token_path.read_text(encoding="utf-8").strip()
@@ -67,7 +70,10 @@ def main() -> None:
         raise SystemExit("Zenodo token file is empty")
 
     metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
-    created = request(token, "POST", f"{API}/deposit/depositions/{args.record}/actions/newversion")
+    if args.metadata_only:
+        created = request(token, "POST", f"{API}/deposit/depositions/{args.record}/actions/edit")
+    else:
+        created = request(token, "POST", f"{API}/deposit/depositions/{args.record}/actions/newversion")
     draft_link = created.get("links", {}).get("latest_draft") or created.get("links", {}).get("self")
     if not draft_link:
         raise RuntimeError("Zenodo did not return a draft link")
@@ -75,17 +81,24 @@ def main() -> None:
     draft = request(token, "GET", f"{API}/deposit/depositions/{draft_id}")
     print(f"DRAFT record={draft_id}")
 
-    for inherited in draft.get("files", []):
-        request(token, "DELETE", inherited["links"]["self"])
-        print(f"REMOVED inherited={inherited['filename']}")
+    if not args.metadata_only:
+        for inherited in draft.get("files", []):
+            request(token, "DELETE", inherited["links"]["self"])
+            print(f"REMOVED inherited={inherited['filename']}")
 
     bucket = draft["links"]["bucket"].rstrip("/")
     expected: dict[str, tuple[int, str]] = {}
-    for public_name, local in args.file:
-        encoded = urllib.parse.quote(public_name, safe="")
-        request(token, "PUT", f"{bucket}/{encoded}", local.read_bytes(), "application/octet-stream")
-        expected[public_name] = (local.stat().st_size, md5(local))
-        print(f"UPLOADED file={public_name} bytes={expected[public_name][0]} md5={expected[public_name][1]}")
+    if args.metadata_only:
+        expected = {
+            item["filename"]: (int(item["filesize"]), item["checksum"].removeprefix("md5:"))
+            for item in draft.get("files", [])
+        }
+    else:
+        for public_name, local in args.file:
+            encoded = urllib.parse.quote(public_name, safe="")
+            request(token, "PUT", f"{bucket}/{encoded}", local.read_bytes(), "application/octet-stream")
+            expected[public_name] = (local.stat().st_size, md5(local))
+            print(f"UPLOADED file={public_name} bytes={expected[public_name][0]} md5={expected[public_name][1]}")
 
     request(token, "PUT", f"{API}/deposit/depositions/{draft_id}", json.dumps(metadata).encode("utf-8"), "application/json")
     verified = request(token, "GET", f"{API}/deposit/depositions/{draft_id}")
