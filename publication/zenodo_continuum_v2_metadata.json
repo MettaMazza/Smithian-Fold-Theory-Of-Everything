@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "title": "The Continuum Was the Bug: Exact Structural Replacements for Three Continuum Pathologies",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives a positive finite physical substrate instead of assuming a continuum and later discretising it.</strong> From one machine-checked self-proven theorem, zero axioms and zero fitted parameters, the fold forces exact counts, a terminal spatial floor and finite closure.</p><p>This rebuilt edition presents three current structural results without carrying forward obsolete inferences. The Riemann functional reflection has the unique real fixed axis <strong>1/2</strong>, with off-axis values explicitly paired. The strong sector has positive gap share <strong>1/3</strong> and self-coupling <strong>2/3</strong> in a closed period-two fold cycle that partitions the One. The fluid sector has exact floor <strong>1/32</strong> and vorticity cap <strong>32</strong>; a complete 512-cell material run moves the global maximum <strong>800 to 32</strong> while preserving total density <strong>150 to 150</strong>.</p><p>The same lattice reproduces the centred curvature of x squared exactly at registered spacings, and its depth-five binary ladder closes the One exactly. The paper argues that continuum mathematics can retain its valid relations without being granted authority as the physical primitive.</p><p>The Riemann fixed-axis theorem is stated exactly: symmetry alone does not exclude reflected off-axis zero pairs, so the next constructive objective is machine-checking that additional relation. This is forward derivation work, not evidence of a theoretical wall.</p><p>The complete synchronized release executes <strong>326 suites and 2,002 exact checks with zero failures</strong>, with 326 generated-C certificates identical to source. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Scientific author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v2.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["continuum", "Riemann critical line", "Yang-Mills mass gap", "Navier-Stokes regularity", "discrete physics", "positive lattice floor", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation", "reproducible research"],
+    "notes": "Authoritative rebuilt edition. The finished PDF is the only PDF and primary preview; the Markdown source follows.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"},
+      {"identifier": "10.5281/zenodo.21279106", "relation": "references", "scheme": "doi"}
+    ]
+  }
+}
