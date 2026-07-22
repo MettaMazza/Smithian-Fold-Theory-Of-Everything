@@ -85,6 +85,14 @@ def formula_text(value: str) -> str:
         r"\sigma": "σ",
         r"\Omega": "Ω",
         r"\lambda": "λ",
+        r"\omega": "ω",
+        r"\rho": "ρ",
+        r"\nu": "ν",
+        r"\Delta": "Δ",
+        r"\nabla": "∇",
+        r"\partial": "∂",
+        r"\sum": "Σ",
+        r"\max": "max",
         r"\in": "∈",
         r"\le": "≤",
         r"\ge": "≥",
@@ -98,12 +106,16 @@ def formula_text(value: str) -> str:
         r"\rfloor": "⌋",
         r"\mathbb{Q}": "Q",
         r"\ldots": "…",
+        r"\_": "_",
     }
     value = value.strip().replace("$", "")
     for old, new in replacements.items():
         value = value.replace(old, new)
-    value = re.sub(r"\^\{([^{}]+)\}", r"^(\1)", value)
-    value = re.sub(r"_\{([^{}]+)\}", r"_(\1)", value)
+    previous = None
+    while previous != value:
+        previous = value
+        value = re.sub(r"_\{([^{}]+)\}", r"_(\1)", value)
+        value = re.sub(r"\^\{([^{}]+)\}", r"^(\1)", value)
     value = re.sub(r"\\frac(\d)\{([^{}]+)\}", r"(\1)/(\2)", value)
     value = re.sub(r"\\frac(\d)(\d)", r"\1/\2", value)
     previous = None

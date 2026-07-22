@@ -48,22 +48,33 @@ class SFTCFDSolver:
                 
         return rot_x, rot_y, rot_z
 
-    def enforce_regularity(self):
-        """Enforces SFT Navier-Stokes regularity: local vorticity cap of 32."""
-        capped_count = 0
+    def vorticity_field(self):
+        """Return the complete measured vorticity-magnitude field."""
+        field = np.zeros((self.size, self.size, self.size), dtype=float)
         for x in range(self.size):
             for y in range(self.size):
                 for z in range(self.size):
                     rx, ry, rz = self.get_vorticity(x, y, z)
-                    magnitude = math.sqrt(rx*rx + ry*ry + rz*rz)
-                    if magnitude > 32.0:
-                        # Scale down local velocities to cap vorticity magnitude at 32
-                        scale = 32.0 / magnitude
-                        self.u[x, y, z] *= scale
-                        self.v[x, y, z] *= scale
-                        self.w[x, y, z] *= scale
-                        capped_count += 1
-        return capped_count
+                    field[x, y, z] = math.sqrt(rx*rx + ry*ry + rz*rz)
+        return field
+
+    def max_vorticity_magnitude(self):
+        """Measure the maximum over every cell, not a selected probe cell."""
+        return float(np.max(self.vorticity_field()))
+
+    def enforce_regularity(self):
+        """Project the complete velocity field onto the forced vorticity cap."""
+        magnitudes = self.vorticity_field()
+        violating_count = int(np.count_nonzero(magnitudes > 32.0))
+        measured_max = float(np.max(magnitudes))
+        if measured_max > 32.0:
+            # Curl is linear in the velocity field. The unique uniform factor that
+            # places the measured leader on the forced cap is cap / leader.
+            scale = 32.0 / measured_max
+            self.u *= scale
+            self.v *= scale
+            self.w *= scale
+        return violating_count
 
     def step(self, dt=0.01):
         """Run a single advection and diffusion step, then enforce regularity."""
@@ -139,19 +150,17 @@ def verify_conservation():
     solver.add_velocity(3, 3, 3, 50.0, 0.0, 0.0)
     solver.add_velocity(3, 4, 3, 0.0, -50.0, 0.0)
     
-    rx, ry, rz = solver.get_vorticity(3, 3, 3)
-    initial_vorticity = math.sqrt(rx*rx + ry*ry + rz*rz)
-    print(f"Initial vorticity magnitude at (3,3,3): {initial_vorticity:.3f} (cap is 32.0)")
+    initial_vorticity = solver.max_vorticity_magnitude()
+    print(f"Initial maximum vorticity over all cells: {initial_vorticity:.3f} (cap is 32.0)")
     
     # Run step
     capped = solver.step(dt=0.005)
     final_mass = np.sum(solver.rho)
     print(f"Final mass after step: {final_mass:.3f}")
     
-    rx2, ry2, rz2 = solver.get_vorticity(3, 3, 3)
-    final_vorticity = math.sqrt(rx2*rx2 + ry2*ry2 + rz2*rz2)
-    print(f"Final vorticity magnitude at (3,3,3): {final_vorticity:.3f}")
-    print(f"Number of cells capped in step: {capped}")
+    final_vorticity = solver.max_vorticity_magnitude()
+    print(f"Final maximum vorticity over all cells: {final_vorticity:.3f}")
+    print(f"Number of pre-projection cells above the cap: {capped}")
     
     # Mass conservation verification
     mass_diff = abs(initial_mass - final_mass)

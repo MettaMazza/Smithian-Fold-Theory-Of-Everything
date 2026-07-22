@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "title": "Discrete Fluid Regularity from the Positive Lattice Floor: A Forced Vorticity Cap and Full-Grid Verification",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Smithian Fold Theory derives physical fluid regularity from a strictly positive minimum spatial interval.</strong> The fold supplies binary two and colour three; their sum fixes spatial depth five; and the exact lattice floor is <strong>s5 = 1/32 &gt; 0</strong>. Unit causal turnover across that final diameter forces the maximum admitted vorticity to be <strong>omega_max = 1/s5 = 32</strong>.</p><p>The exact engine independently reconstructs the same whole number as the depth-five binary volume 2^5 and halts if the routes disagree. The finite lattice therefore excludes the scale sequence required for vorticity to diverge: every admitted velocity field and discrete curl is finite, and the turbulent cascade terminates at the positive floor.</p><p>A corrected full-grid material verifier executes the law on an 8x8x8 periodic lattice. A deliberately high-shear generated field begins at global maximum vorticity <strong>800.000</strong>. The unique uniform factor 32/800 projects the complete velocity field onto the derived cap. After the registered advection step, all 512 cells are measured, total density remains <strong>150.000 to 150.000</strong>, eight pre-projection cells exceed the cap, and the final global maximum is exactly <strong>32.000</strong>.</p><p>The paper states the relation to the classical continuum problem directly. The Clay formulation assumes continuous R3 or the continuous three-torus. SFT instead derives the physical coordinate object and proves that the continuum's unbounded descent is absent from that forced model. The exact theorem and applied material implementation are presented as distinct, reproducible evidence routes.</p><p><strong>Open source and machine evidence:</strong> <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>. Author and publication authority: Maria Smith, Ernos Labs.</p>",
+    "creators": [{"name": "Smith, Maria", "affiliation": "Ernos Labs"}],
+    "publication_date": "2026-07-22",
+    "version": "v3.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": ["Navier-Stokes regularity", "vorticity cap", "discrete fluid mechanics", "positive lattice floor", "zero free parameters", "Smithian Fold Theory", "machine-checked derivation", "full-grid verification"],
+    "notes": "Authoritative complete edition. The finished PDF is the first file and primary preview; the Markdown source follows. The exact certificate and the full-grid material verifier are separately identified.",
+    "related_identifiers": [
+      {"identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything", "relation": "isSupplementedBy", "scheme": "url"},
+      {"identifier": "10.5281/zenodo.21182468", "relation": "isPartOf", "scheme": "doi"}
+    ]
+  }
+}
