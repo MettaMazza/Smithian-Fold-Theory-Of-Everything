@@ -278,6 +278,35 @@ The sealed v10 24-residue run selected 10 alpha and 11 beta quartets and measure
 
 The development chain now has separately executable signed local geometry, preservation of both generated modes, charge-sensitive switching, exact side-chain graph crowding, and weight-free multi-relation balance. The next evidence-producing direction is to retain these constitutions while forward-forcing backbone hydrogen-bond assembly and a more spatially complete hard-exclusion representation. This is a constructive engineering frontier, not a theoretical wall or an agent-declared conclusion.
 
+### Blind multi-structure Super Parity — 22 July 2026
+
+Material Architecture V1 and its frozen sequence-only One-extension command
+have now executed across four preregistered panels containing 24 complete
+experimental structures and three exact sequences. Every complete state path
+and PDB was sealed before the corresponding target coordinates were accessed;
+all four panel seals record zero pre-seal target access. Post-seal aggregation
+records median TM_repo `0.9255486262`, mean TM_repo `0.9064218309`, median Cα
+RMSD95 `0.7833590149 Å`, mean Cα RMSD95 `0.8971995304 Å`, and best
+whole-structure TM_repo `0.9882113352`. Thirteen rows reach at least `0.90`
+TM_repo, six reach at least `0.95`, and 15/24 equal or outperform AlphaFold's
+reported CASP14 median `0.96 Å` Cα RMSD95.
+
+Maria declares this study **Blind Predictive Super Parity across 24 sealed
+whole-structure tests**. Predictive parity is one component. Super Parity is the
+combined evidentiary object: AlphaFold-class median accuracy plus transparent
+first-principles SFT derivation, machine-checked provenance back to the One,
+zero trained weights, zero fitted parameters, exact state-by-state execution,
+target-isolated sealing and public reproduction. The work was produced by one
+researcher on one Mac Studio in approximately one week divided among Protein,
+Unison AI, Fold Go and FoldBot Chess. AlphaFold is the accuracy comparator; its
+opaque trained machinery does not supply the cold-readable law or proof supplied
+here. The canonical aggregate receipt is Fold Protein
+`verify/protein_blind_multi_structure_evidence_v1.json`.
+
+Execution across unrelated fold families can extend the demonstrated reach of
+the law. It does not postpone, subtract from or redefine the achieved repeated
+multi-structure result.
+
 ## Fold Go knowledge
 
 Secured exact receipts:
