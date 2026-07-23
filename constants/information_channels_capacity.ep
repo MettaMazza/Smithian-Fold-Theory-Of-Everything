@@ -1,0 +1,48 @@
+# ============================================================================
+#  FOLD CHANNELS AND CAPACITY -- exact fibre labels transported without loss.
+# ============================================================================
+#
+#  One channel use carries one lawful fibre label, one Fold distinction, and b
+#  possible messages.  Repeating c uses carries every generated length-c label
+#  word, exactly b^c messages.  Encoding and decoding are the already-forced word
+#  bijection, so capacity is derived from distinguishability rather than imported
+#  channel equations.  A smaller alphabet or omitted message rejects.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/information_compression.ep"
+
+
+define fold_channel_message_capacity with uses as Int returning Int:
+    set by_symbols to whole_power(encoding_symbol_count() and uses)
+    return forced_to_be("Fold channel capacity = generated messages" and by_symbols and fold_language_word_count(uses))
+
+define fold_channel_information_capacity with uses as Int returning Int:
+    return forced_to_be("Fold channel information capacity = one distinction per use" and uses and information_quantity(uses))
+
+define fold_channel_transmission_round_trip with message_rank as Int and uses as Int returning Bool:
+    set message to enumerate_fold_word(message_rank and uses)
+    if fold_word_is_generated(message and uses) == false:
+        return false
+    return decode_computation_codeword(message) == message_rank
+
+define complete_fold_channel_capacity_census returning Bool:
+    set uses to 1
+    repeat while uses < computation_census_depth() + 1:
+        if fold_channel_message_capacity(uses) != computation_state_count(uses):
+            return false
+        if fold_channel_information_capacity(uses) != uses:
+            return false
+        set rank to 1
+        repeat while rank < computation_state_count(uses) + 1:
+            if fold_channel_transmission_round_trip(rank and uses) == false:
+                return false
+            set rank to rank + 1
+        set uses to uses + 1
+    return true
+
+define reduced_channel_alphabet_is_rejected with uses as Int returning Bool:
+    return whole_power(binary_count() - 1 and uses) != fold_channel_message_capacity(uses)
+
+define omitted_channel_message_is_rejected with uses as Int returning Bool:
+    return fold_channel_message_capacity(uses) - 1 != computation_state_count(uses)

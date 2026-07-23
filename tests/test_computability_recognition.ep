@@ -1,0 +1,31 @@
+# Machine-check Fold recognition.
+import "../constants/computability_recognition.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold recognition law ==="
+    set word to fold_grammar_word(85 and 7)
+    set ok to expect_true("a generated word is recognized by exact closure" and fold_recognizes_word(word))
+    set ok to expect_true("the complete depth-7 language is recognized" and fold_recognizes_complete_language(7))
+    set ok to expect_number("recognition counts all b^7 generated words" and fold_recognized_word_count(7) and 128)
+    set ok to expect_true("an outside-symbol word is rejected" and fold_rejects_outside_word(7))
+    set ok to expect_true("a word asserted at the wrong depth is rejected" and fold_rejects_wrong_depth(7))
+    set ok to expect_true("the complete recognition census holds" and complete_fold_recognition_census())
+    display "=== done ==="
+    return 0

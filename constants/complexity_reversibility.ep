@@ -1,0 +1,75 @@
+# ============================================================================
+#  FOLD REVERSIBILITY COST -- retained labels are the exact reverse resource.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A Fold step merges b preimages.  Reversal is possible exactly when the closed
+#  fibre label is retained.  The reverse cost is therefore forced by observation
+#  and degree reconstruction, not by an imported reversible-machine convention.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Reversing s dyadic Fold steps requires s held labels and distinguishes b^s
+#  source histories.  With the complete record, every source reconstructs.  With
+#  one label missing, b sources remain compatible, so the cost is minimal.  The
+#  period-b recurrent machine retains its distinction over a complete cycle and
+#  therefore has zero additional reverse cost for that cycle.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_randomness.ep"
+
+
+define fold_reversal_information_cost with steps as Int returning Int:
+    return forced_to_be("Fold reversal cost: held labels = closed information" and fold_communication_symbol_count(steps) and closed_information(steps))
+
+
+define fold_reversal_history_cost with steps as Int returning Int:
+    set by_record to whole_power(binary_count() and fold_reversal_information_cost(steps))
+    return forced_to_be("Fold reversal history cost = merged source histories" and by_record and closed_history_resource(steps))
+
+
+define recorded_fold_process_is_reversible with index as Int and depth as Int and steps as Int returning Bool:
+    return fold_degree_reconstruction_holds(index and depth and steps)
+
+
+define one_missing_reverse_label_leaves_binary_ambiguity with steps as Int returning Bool:
+    if steps < 1:
+        return true
+    return fold_query_remaining_completions(steps and steps - 1) == binary_count()
+
+
+define recurrent_cycle_reverse_cost returning Int:
+    if periodic_distinction_is_retained():
+        if recurrent_machine_period() == binary_count():
+            return 0
+    return 1
+
+
+define complete_fold_reversibility_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set steps to 0
+        repeat while steps < depth + 1:
+            if fold_reversal_information_cost(steps) != steps:
+                return false
+            if fold_reversal_history_cost(steps) != whole_power(binary_count() and steps):
+                return false
+            if one_missing_reverse_label_leaves_binary_ambiguity(steps) == false:
+                return false
+            set index to 1
+            repeat while index < computation_state_count(depth) + 1:
+                if recorded_fold_process_is_reversible(index and depth and steps):
+                    set index to index + 1
+                else:
+                    return false
+            set steps to steps + 1
+        set depth to depth + 1
+    return recurrent_cycle_reverse_cost() == 0
+
+
+define zero_cost_dyadic_reversal_is_rejected returning Bool:
+    return unassisted_fold_observation_is_indistinguishable(1 and 2)
+
+
+define extra_reverse_cost_is_not_minimal with steps as Int returning Bool:
+    return fold_reversal_information_cost(steps) + 1 != steps

@@ -1,0 +1,142 @@
+# ============================================================================
+#  FOLD SCIENTIFIC COMPUTATION.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Scientific calculation requires exact representations of approximation,
+#  stability, propagated error, discretization, convergence, simulation, inverse
+#  reconstruction, statistics, high-dimensional composition, and models.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The exact Fold grid is the discretization.  Numerical and symbolic routes are
+#  already identical at every prefix; observation classes are the derived
+#  approximation.  Adjacent-grid error is transported exactly, every source
+#  converges to the One in its counted depth, and a generated transition trace is
+#  the simulation.  Held labels solve the inverse problem.  Equal branch shares
+#  supply statistics, support products supply high-dimensional/many-body
+#  composition, and the formal specification plus verifier supplies the model.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  All admitted sources and prefixes through depth seven are exhausted.  Shifted
+#  numerical values, perturbed error, early convergence, missing inverse records,
+#  collapsed composed support, and false model assertions reject.
+# ============================================================================
+
+import "../constants/learning_intelligence_theory.ep"
+import "../constants/algorithms_numerical.ep"
+import "../constants/algorithms_symbolic.ep"
+import "../constants/algorithms_approximate.ep"
+import "../constants/complexity_reversibility.ep"
+
+
+define fold_exact_approximate_calculation_holds returning Bool:
+    if complete_fold_exact_arithmetic_census() == false:
+        return false
+    return complete_fold_approximate_algorithm_census()
+
+
+define fold_numerical_stability_holds with depth as Int and steps as Int returning Bool:
+    return fold_numerical_error_transport_is_exact(depth and steps)
+
+
+define fold_error_propagation_holds with depth as Int and steps as Int returning Bool:
+    set transported to fold_numerical_adjacent_error_after(depth and steps)
+    return fraction_compare(transported and fraction_from_whole_number(1)) < 1
+
+
+define fold_discretization_count with depth as Int returning Int:
+    return forced_to_be("Fold discretization = exact depth grid" and computation_state_count(depth) and whole_power(binary_count() and depth))
+
+
+define fold_convergence_holds with rank as Int and depth as Int returning Bool:
+    return fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and depth) == 1
+
+
+define fold_symbolic_science_holds returning Bool:
+    return complete_fold_symbolic_algorithm_census()
+
+
+define fold_simulation_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    return fold_circuit_semantics_holds(rank and depth and steps)
+
+
+define fold_computational_dynamics_holds returning Bool:
+    return complete_computation_transition_census()
+
+
+define fold_inverse_problem_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    return recorded_fold_process_is_reversible(rank and depth and steps)
+
+
+define fold_computational_statistics_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_average_routes_agree(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define fold_high_dimensional_support with first_depth as Int and second_depth as Int returning Int:
+    return forced_to_be("Fold high-dimensional support multiplies composed coordinates" and computation_state_count(first_depth) * computation_state_count(second_depth) and computation_state_count(first_depth + second_depth))
+
+
+define fold_many_body_computation_holds with bodies as Int and body_depth as Int returning Bool:
+    if bodies < 1:
+        return false
+    set combined_depth to bodies * body_depth
+    return whole_power(computation_state_count(body_depth) and bodies) == computation_state_count(combined_depth)
+
+
+define fold_mathematical_model_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    set asserted to fold_execute_compiled_trace(trace)
+    return fold_verify_program_proof(rank and depth and steps and asserted and trace)
+
+
+define complete_fold_scientific_computation_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_discretization_count(depth) != computation_state_count(depth):
+            return false
+        if fold_many_body_computation_holds(binary_count() and depth) == false:
+            return false
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_numerical_stability_holds(depth and steps) == false:
+                    return false
+                if fold_error_propagation_holds(depth and steps) == false:
+                    return false
+                if fold_simulation_holds(rank and depth and steps) == false:
+                    return false
+                if fold_inverse_problem_holds(rank and depth and steps) == false:
+                    return false
+                if fold_mathematical_model_holds(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            if fold_convergence_holds(rank and depth) == false:
+                return false
+            set rank to rank + 1
+        set depth to depth + 1
+    if fold_exact_approximate_calculation_holds() == false:
+        return false
+    if fold_symbolic_science_holds() == false:
+        return false
+    if fold_computational_dynamics_holds() == false:
+        return false
+    return fold_computational_statistics_holds()
+
+
+define early_scientific_convergence_is_rejected with depth as Int returning Bool:
+    set early_residual to fold_operational_semantics(enumerate_fold_word(1 and depth) and depth - 1)
+    return length_list(early_residual) != 0
+
+
+define missing_inverse_record_is_rejected with steps as Int returning Bool:
+    return one_missing_reverse_label_leaves_binary_ambiguity(steps)
+
+
+define collapsed_high_dimensional_support_is_rejected with first_depth as Int and second_depth as Int returning Bool:
+    return fold_high_dimensional_support(first_depth and second_depth) != computation_state_count(first_depth + second_depth) - 1

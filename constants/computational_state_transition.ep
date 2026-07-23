@@ -1,0 +1,303 @@
+# ============================================================================
+#  FOLD FINITE-STATE TRANSITION LAW -- state, step, composition, and closure.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The fundamental-computation programme first needs a state and a lawful step,
+#  but neither may be imported from a conventional machine.  Both are already
+#  present in the Fold.  At depth k, the exact parts i/b^k are the states; the
+#  established Fold is the step.  This module derives their complete finite
+#  transition law across every admitted covering depth.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Uses only the established One, Fold, binary and colour counts, counted powers,
+#  exact fractions, and the enforcement layer.
+#
+#  STATE.  Depth k has b^k exact coordinates i/b^k, 1 <= i <= b^k.  They are
+#  pairwise distinguishable because unequal indices have unequal exact fractions.
+#
+#  TRANSITION.  Folding i/b^k doubles it and casts out a completed One.  The
+#  result is j/b^(k-1), where j is i in the lower half and i-b^(k-1) in the upper
+#  half, with the final lower-grid index representing the One.  The engine checks
+#  every state at every admitted depth.
+#
+#  PREIMAGE COUNT, TWO INDEPENDENT ROUTES.  Route A enumerates the states of the
+#  depth-k grid.  Route B pairs every lower-grid state j with the two exact
+#  preimages j and j+b^(k-1).  Both preimages fold to j/b^(k-1), and
+#  forced_to_be requires the enumerated state count to equal b times the lower
+#  state count.  Thus every step merges exactly b states to one, using the already
+#  forced binary count rather than a chosen branching factor.
+#
+#  CLOSURE.  Every i/b^k closes to the One after k folds.  COMPOSITION.  For
+#  every split a+(k-a)=k, folding a times and then k-a times equals folding k
+#  times directly.  Both are checked over every state and every split.
+#
+#  The admitted census depth is the already forced deepest cover: Route A counts
+#  the binary cover of c^(c+1); Route B reads b+c+b.  forced_to_be requires both
+#  routes to give the same depth.  No new constant or selected form enters.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  The test executes the complete state, transition, preimage, closure, and
+#  composition census through the forced depth.  There is no measured target.
+# ============================================================================
+
+import "../foundation/structural_counts.ep"
+import "../foundation/counted_numbers.ep"
+import "../foundation/exact_fractions.ep"
+import "../foundation/the_one_and_the_fold.ep"
+import "../foundation/enforcement.ep"
+
+
+# The deepest admitted computation census, forced by two established routes.
+define computation_census_depth returning Int:
+    set b to binary_count()
+    set c to colour_count()
+    set volume to whole_power(c and c + 1)
+    set by_cover to minimal_binary_cover(volume)
+    set by_generators to b + c + b
+    return forced_to_be("computation census depth: cover(c^(c+1)) = b+c+b" and by_cover and by_generators)
+
+
+# The number of exact states at depth k: the established binary tower b^k.
+define computation_state_count with depth as Int returning Int:
+    return whole_power(binary_count() and depth)
+
+
+# State i of the depth-k grid, 1 <= i <= b^k.
+define computation_state with index as Int and depth as Int returning Fraction:
+    return fraction_from_ratio(index and computation_state_count(depth))
+
+
+# The established Fold applied once to an exact state.
+define computation_step with state as Fraction returning Fraction:
+    set state_twin to fraction_make(fraction_numerator(state) and fraction_denominator(state))
+    set doubled to fraction_add(state and state_twin)
+    return cast_out_whole_ones(doubled)
+
+
+# Apply the computational step an exact counted number of times.
+define computation_steps with state as Fraction and step_count as Int returning Fraction:
+    set current to state
+    set step to 0
+    repeat while step < step_count:
+        set current to computation_step(current)
+        set step to step + 1
+    return current
+
+
+# The index in the depth-(k-1) grid reached by index i at depth k.
+define lower_grid_index with index as Int and depth as Int returning Int:
+    set lower_count to computation_state_count(depth - 1)
+    if index > lower_count:
+        return index - lower_count
+    return index
+
+
+# All exact coordinates at a depth are distinguishable.  The generated grid is
+# ordered by its whole-number index over one fixed positive denominator, so it is
+# enough to require every adjacent coordinate to be strictly increasing; the
+# established exact order then separates every pair without a quadratic census.
+define states_are_distinguishable_at_depth with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_distinct to true
+    set index to 1
+    repeat while index < count:
+        set lower to computation_state(index and depth)
+        set upper to computation_state(index + 1 and depth)
+        set order to fraction_compare(lower and upper)
+        if order < 0:
+            set all_distinct to all_distinct
+        else:
+            set all_distinct to false
+        set index to index + 1
+    return all_distinct
+
+
+# Every Fold step lands exactly on its forced coordinate in the next lower grid.
+define transition_lands_on_lower_grid with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_land to true
+    set index to 1
+    repeat while index < count + 1:
+        set state to computation_state(index and depth)
+        set image to computation_step(state)
+        set next_index to lower_grid_index(index and depth)
+        set expected to computation_state(next_index and depth - 1)
+        if fraction_is_equal(image and expected):
+            set all_land to all_land
+        else:
+            set all_land to false
+        set index to index + 1
+    return all_land
+
+
+# Every lower-grid state has exactly the binary pair of distinct preimages.
+define binary_preimages_at_depth with depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set all_pair to true
+    set index to 1
+    repeat while index < lower_count + 1:
+        set low_preimage to computation_state(index and depth)
+        set high_preimage to computation_state(index + lower_count and depth)
+        set target to computation_state(index and depth - 1)
+        set low_image to computation_step(low_preimage)
+        set high_image to computation_step(high_preimage)
+        set low_lands to fraction_is_equal(low_image and target)
+        set high_lands to fraction_is_equal(high_image and target)
+        set distinct to fraction_compare(low_preimage and high_preimage) != 0
+        if low_lands:
+            if high_lands:
+                if distinct:
+                    set all_pair to all_pair
+                else:
+                    set all_pair to false
+            else:
+                set all_pair to false
+        else:
+            set all_pair to false
+        set index to index + 1
+    return all_pair
+
+
+# Route A (enumerated grid) must equal Route B (b preimages per lower state).
+define state_count_is_forced_at_depth with depth as Int returning Int:
+    set enumerated to 0
+    set index to 1
+    set count to computation_state_count(depth)
+    repeat while index < count + 1:
+        set enumerated to enumerated + 1
+        set index to index + 1
+    set by_preimages to binary_count() * computation_state_count(depth - 1)
+    return forced_to_be("depth-k state count = b times lower-grid count" and enumerated and by_preimages)
+
+
+# Every state at depth k reaches the One after k Fold steps.
+define all_states_close_at_depth with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set one to fraction_from_whole_number(1)
+    set all_close to true
+    set index to 1
+    repeat while index < count + 1:
+        set state to computation_state(index and depth)
+        set closed to computation_steps(state and depth)
+        if fraction_is_equal(closed and one):
+            set all_close to all_close
+        else:
+            set all_close to false
+        set index to index + 1
+    return all_close
+
+
+# Folding in two counted segments equals the same total Fold run directly.
+define composition_holds_at_depth with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_compose to true
+    set index to 1
+    repeat while index < count + 1:
+        set split to 0
+        repeat while split < depth + 1:
+            set direct_state to computation_state(index and depth)
+            set direct to computation_steps(direct_state and depth)
+            set staged_state to computation_state(index and depth)
+            set first_stage to computation_steps(staged_state and split)
+            set second_stage to computation_steps(first_stage and depth - split)
+            if fraction_is_equal(direct and second_stage):
+                set all_compose to all_compose
+            else:
+                set all_compose to false
+            set split to split + 1
+        set index to index + 1
+    return all_compose
+
+
+# NEGATIVE CONTROL: shifting the upper preimage pairing by one lower-grid state
+# must fail for every target. This rejects a neighboring but incorrect pairing.
+define shifted_preimage_pairing_is_rejected with depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    # At depth one there is only the One in the lower grid, so there is no
+    # different target onto which a pairing can be shifted.
+    if lower_count < 2:
+        return true
+    set upper_count to computation_state_count(depth)
+    set all_rejected to true
+    set index to 1
+    repeat while index < lower_count + 1:
+        set shifted_index to index + lower_count + 1
+        if shifted_index > upper_count:
+            set shifted_index to lower_count + 1
+        set shifted_preimage to computation_state(shifted_index and depth)
+        set shifted_image to computation_step(shifted_preimage)
+        set target to computation_state(index and depth - 1)
+        if fraction_is_equal(shifted_image and target):
+            set all_rejected to false
+        else:
+            set all_rejected to all_rejected
+        set index to index + 1
+    return all_rejected
+
+
+# NEGATIVE CONTROL: the first state has not closed one step before its depth.
+define first_state_does_not_close_early with depth as Int returning Bool:
+    set state to computation_state(1 and depth)
+    set early to computation_steps(state and depth - 1)
+    set one to fraction_from_whole_number(1)
+    if fraction_is_equal(early and one):
+        return false
+    return true
+
+
+# NEGATIVE CONTROL: one more branch than the Fold's binary count does not
+# reproduce the enumerated state count.
+define nonbinary_branch_count_is_rejected with depth as Int returning Bool:
+    set enumerated to computation_state_count(depth)
+    set perturbed to (binary_count() + 1) * computation_state_count(depth - 1)
+    if enumerated == perturbed:
+        return false
+    return true
+
+
+# Complete census over every depth from the first binary split to the forced cap.
+define complete_computation_transition_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set distinct to states_are_distinguishable_at_depth(depth)
+        set lands to transition_lands_on_lower_grid(depth)
+        set paired to binary_preimages_at_depth(depth)
+        set counted to state_count_is_forced_at_depth(depth)
+        set closes to all_states_close_at_depth(depth)
+        set composes to composition_holds_at_depth(depth)
+        set shifted_rejected to shifted_preimage_pairing_is_rejected(depth)
+        set early_rejected to first_state_does_not_close_early(depth)
+        set branch_rejected to nonbinary_branch_count_is_rejected(depth)
+        if distinct:
+            if lands:
+                if paired:
+                    if counted == computation_state_count(depth):
+                        if closes:
+                            if composes:
+                                if shifted_rejected:
+                                    if early_rejected:
+                                        if branch_rejected:
+                                            set all_hold to all_hold
+                                        else:
+                                            set all_hold to false
+                                    else:
+                                        set all_hold to false
+                                else:
+                                    set all_hold to false
+                            else:
+                                set all_hold to false
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    return all_hold

@@ -1,0 +1,71 @@
+# ============================================================================
+#  FOLD OPERATIONAL/DENOTATIONAL CORRESPONDENCE -- rewrites equal exact meaning.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The Fold supplies two independently closed semantic routes.  Operationally a
+#  program rewrites its generated word.  Denotationally it denotes the exact
+#  coordinate transformation obtained by applying the Fold.  Correspondence must
+#  be equality of their results, not an imported semantic convention.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  After every prefix, the rewritten residual word decodes to the same exact
+#  depth-(k-s) coordinate as direct Fold evaluation.  Both routes compose over
+#  every split.  The complete program census executes; a shifted denotation is
+#  rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_evaluation.ep"
+
+
+define fold_operational_semantics with word as List and steps as Int returning List:
+    if fold_program_syntax_is_lawful(word and steps) == false:
+        return create_list()
+    return fold_rewrite_steps(word and steps)
+
+
+define fold_denotational_semantics with word as List and steps as Int returning Fraction:
+    return fold_evaluate_program_value(word and steps)
+
+
+define fold_operational_denotational_agree with rank as Int and depth as Int and steps as Int returning Bool:
+    set operational to fold_operational_semantics(enumerate_fold_word(rank and depth) and steps)
+    set operational_rank to decode_computation_codeword(operational)
+    set operational_value to computation_state(operational_rank and depth - steps)
+    set denotational to fold_denotational_semantics(enumerate_fold_word(rank and depth) and steps)
+    return fraction_is_equal(operational_value and denotational)
+
+
+define fold_semantic_prefixes_compose with rank as Int and depth as Int and first as Int and second as Int returning Bool:
+    if first + second > depth:
+        return false
+    set direct to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and first + second)
+    set first_rank to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and first)
+    set staged to recursive_fold_index(first_rank and depth - first and second)
+    return direct == staged
+
+
+define complete_fold_operational_denotational_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_operational_denotational_agree(rank and depth and steps) == false:
+                    return false
+                if fold_semantic_prefixes_compose(rank and depth and steps and depth - steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define shifted_denotation_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set lawful to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and steps)
+    set shifted to lawful + 1
+    if shifted > computation_state_count(depth - steps):
+        set shifted to 1
+    return lawful != shifted

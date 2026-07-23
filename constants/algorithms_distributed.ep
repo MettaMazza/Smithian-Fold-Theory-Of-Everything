@@ -1,0 +1,89 @@
+# ============================================================================
+#  FOLD DISTRIBUTED ALGORITHMS -- exact fibre ownership and reconstruction.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The first Fold label partitions the complete state set into b disjoint fibres.
+#  That forced partition supplies distributed ownership without importing nodes,
+#  hashing, or a network topology.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Owner label 1..b selects one block of b^(k-1) states.  The local coordinate is
+#  the observed lower-grid index.  Owner plus local coordinate reconstruct the
+#  source through the already-closed relative-computation law, and the blocks are
+#  disjoint and exhaustive.  Sending the owner label with the generated local
+#  suffix uses exactly k labels for an exact global description.  Changed owners
+#  and missing partitions are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_parallel.ep"
+
+
+define fold_distributed_owner with rank as Int and depth as Int returning Int:
+    return held_fold_label_for_state(rank and depth)
+
+
+define fold_distributed_local_rank with rank as Int and depth as Int returning Int:
+    return lower_grid_index(rank and depth)
+
+
+define fold_distributed_partition_size with depth as Int returning Int:
+    return computation_state_count(depth - 1)
+
+
+define fold_distributed_reconstruct with owner as Int and local_rank as Int and depth as Int returning Int:
+    return relative_fold_reconstruct_source(local_rank and depth and owner)
+
+
+define fold_distributed_partition_is_exact with depth as Int returning Bool:
+    set owner_counts to create_list()
+    set owner to 1
+    repeat while owner < binary_count() + 1:
+        set ok to append_list(owner_counts and 0)
+        set owner to owner + 1
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set source_owner to fold_distributed_owner(rank and depth)
+        set position to source_owner - 1
+        set ok to set_list(owner_counts and position and get_list(owner_counts and position) + 1)
+        set local_rank to fold_distributed_local_rank(rank and depth)
+        if fold_distributed_reconstruct(source_owner and local_rank and depth) != rank:
+            return false
+        set rank to rank + 1
+    set owner to 1
+    repeat while owner < binary_count() + 1:
+        if get_list(owner_counts and owner - 1) != fold_distributed_partition_size(depth):
+            return false
+        set owner to owner + 1
+    return true
+
+
+define fold_distributed_message_length with depth as Int returning Int:
+    set owner_label to 1
+    set local_suffix to depth - 1
+    return forced_to_be("Fold distributed source message = owner plus local suffix" and owner_label + local_suffix and fold_guided_search_queries(depth))
+
+
+define complete_fold_distributed_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_distributed_partition_is_exact(depth) == false:
+            return false
+        if binary_count() * fold_distributed_partition_size(depth) != computation_state_count(depth):
+            return false
+        if fold_distributed_message_length(depth) != depth:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define changed_distributed_owner_is_rejected with rank as Int and depth as Int returning Bool:
+    set owner to fold_distributed_owner(rank and depth)
+    set changed_owner to binary_count() + 1 - owner
+    set local_rank to fold_distributed_local_rank(rank and depth)
+    return fold_distributed_reconstruct(changed_owner and local_rank and depth) != rank
+
+
+define missing_distributed_partition_is_rejected with depth as Int returning Bool:
+    return (binary_count() - 1) * fold_distributed_partition_size(depth) != computation_state_count(depth)

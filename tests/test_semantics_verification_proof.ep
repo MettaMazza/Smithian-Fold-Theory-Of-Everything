@@ -1,0 +1,26 @@
+# Machine-check Fold verification and proof systems.
+import "../constants/semantics_verification_proof.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold verification and proof systems ==="
+    set ok to expect_true("the exact trace proves rank 73 maps to nine" and fold_verify_program_proof(73 and 7 and 3 and 9 and fold_compile_program_trace(73 and 7 and 3)))
+    set ok to expect_true("every program has a complete proof" and fold_program_proof_is_complete(73 and 7 and 3))
+    set ok to expect_true("the complete proof census holds" and complete_fold_verification_proof_census())
+    set ok to expect_true("a false assertion is rejected" and false_program_assertion_is_rejected(73 and 7 and 3))
+    set ok to expect_true("a tampered proof is rejected" and tampered_program_proof_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

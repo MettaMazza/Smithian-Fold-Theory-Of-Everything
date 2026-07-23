@@ -1,0 +1,38 @@
+# Machine-check the finite closing and recurrent Fold process laws.
+import "../constants/computational_process_machine.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold process and machine law ==="
+    set ok to expect_number("the deepest first process reaches terminal in seven steps" and process_length_to_terminal(1 and 7) and 7)
+    set ok to expect_number("the depth-7 machine has one transition per state" and machine_transition_count(7) and 128)
+    set ok to expect_number("the depth-7 machine has exactly one terminal" and machine_terminal_count(7) and 1)
+    set ok to expect_true("every depth-7 state reaches the terminal" and every_machine_state_terminates(7))
+    set ok to expect_true("every depth-7 transition is single-valued" and every_transition_is_single_valued(7))
+    set ok to expect_true("every depth-7 process composes and decomposes" and every_process_composes_and_decomposes(7))
+    set ok to expect_number("the recurrent machine period is b" and recurrent_machine_period() and 2)
+    set ok to expect_true("the recurrent machine is forced" and recurrent_machine_is_forced())
+    set ok to expect_true("the recurrent machine has no terminal" and recurrent_machine_has_no_terminal())
+    set ok to expect_true("a false period-one cycle is rejected" and false_period_one_is_rejected())
+    set ok to expect_true("an extra terminal is rejected" and extra_terminal_is_rejected(7))
+    set ok to expect_true("complete process and machine census holds" and complete_process_machine_census())
+    display "=== done ==="
+    return 0

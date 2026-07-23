@@ -1,0 +1,31 @@
+# Machine-check the exact Fold self-decision boundary.
+import "../constants/computability_undecidability.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold undecidability law ==="
+    set ok to expect_number("outcome one is sent to its Fold partner" and self_negating_fold_actual(1) and 2)
+    set ok to expect_number("outcome two is sent to its Fold partner" and self_negating_fold_actual(2) and 1)
+    set ok to expect_true("the outcome partner is an involution" and fold_outcome_partner_is_involution())
+    set ok to expect_number("the generated self-negating fixed-point count is zero" and self_negating_fold_fixed_prediction_count() and 0)
+    set ok to expect_true("the self-negating total decision is undecidable" and fold_self_decision_is_undecidable())
+    set ok to expect_true("every candidate total self-prediction is rejected" and every_total_self_prediction_is_rejected())
+    set ok to expect_number("the non-negating identity control has b fixed outcomes" and nonnegating_identity_fixed_count() and 2)
+    display "=== done ==="
+    return 0

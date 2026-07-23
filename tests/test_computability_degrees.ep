@@ -1,0 +1,32 @@
+# Machine-check the Fold hierarchy of computational degrees.
+import "../constants/computability_degrees.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold degrees of computability ==="
+    set ok to expect_number("degree three distinguishes b^3 histories" and fold_degree_distinction_count(3) and 8)
+    set ok to expect_number("depth seven at degree three retains sixteen observed classes" and fold_degree_observed_class_count(7 and 3) and 16)
+    set ok to expect_number("degree accounting reconstructs all depth-seven states" and fold_degree_accounting(7 and 3) and 128)
+    set ok to expect_true("degree three reconstructs an exact source" and fold_degree_reconstruction_holds(85 and 7 and 3))
+    set ok to expect_true("adjacent degrees refine by exactly b" and adjacent_fold_degrees_are_nested(3))
+    set ok to expect_true("the complete degree hierarchy census holds" and complete_fold_degree_census())
+    set ok to expect_true("a degree beyond the description is rejected" and degree_beyond_description_is_rejected(7))
+    set ok to expect_true("changing a held degree label changes the source" and changed_degree_label_changes_source(7))
+    display "=== done ==="
+    return 0

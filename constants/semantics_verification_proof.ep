@@ -1,0 +1,76 @@
+# ============================================================================
+#  FOLD VERIFICATION AND PROOF -- complete exact transition certificates.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A proof system must expose evidence a verifier can check without trusting the
+#  evaluator.  The compiled transition trace supplies that evidence for every
+#  Fold program and asserted postcondition.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A certificate is accepted exactly when syntax is lawful, its first rank is the
+#  decoded source, every adjacent rank is the forced lower-grid transition, its
+#  length is s+1, and its last rank satisfies the exact formal specification.
+#  Every valid program has an accepted certificate (completeness), and acceptance
+#  forces the semantic result (soundness).  Tampered edges and false assertions
+#  reject.  No trusted external prover enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_compilation.ep"
+
+
+define fold_verify_program_proof with rank as Int and depth as Int and steps as Int and asserted_rank as Int and trace as List returning Bool:
+    if fold_program_syntax_is_lawful(enumerate_fold_word(rank and depth) and steps) == false:
+        return false
+    if length_list(trace) != steps + 1:
+        return false
+    if get_list(trace and 0) != rank:
+        return false
+    if fold_compiled_trace_is_lawful(trace and depth) == false:
+        return false
+    if fold_execute_compiled_trace(trace) != asserted_rank:
+        return false
+    return fold_specification_holds(rank and depth and steps and asserted_rank and depth - steps and steps)
+
+
+define fold_program_proof_is_complete with rank as Int and depth as Int and steps as Int returning Bool:
+    set expected to recursive_fold_index(rank and depth and steps)
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    return fold_verify_program_proof(rank and depth and steps and expected and trace)
+
+
+define complete_fold_verification_proof_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_program_proof_is_complete(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define false_program_assertion_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set expected to recursive_fold_index(rank and depth and steps)
+    set changed to expected + 1
+    if changed > computation_state_count(depth - steps):
+        set changed to 1
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    return fold_verify_program_proof(rank and depth and steps and changed and trace) == false
+
+
+define tampered_program_proof_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    if steps < 1:
+        return true
+    set expected to recursive_fold_index(rank and depth and steps)
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    set changed to get_list(trace and 1) + 1
+    if changed > computation_state_count(depth - 1):
+        set changed to 1
+    set ok to set_list(trace and 1 and changed)
+    return fold_verify_program_proof(rank and depth and steps and expected and trace) == false

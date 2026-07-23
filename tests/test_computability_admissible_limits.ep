@@ -1,0 +1,24 @@
+# Machine-check the exact admissible-computation boundary.
+import "../constants/computability_admissible_limits.ep"
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold admissible-computation limit law ==="
+    set word to fold_grammar_word(85 and 7)
+    set ok to expect_true("a lawful counted Fold prefix is admissible" and finite_fold_prefix_is_admissible(word and 4))
+    set ok to expect_true("every generated process prefix is admitted" and complete_admitted_prefix_census())
+    set ok to expect_true("premature completion is rejected" and premature_completion_claim_is_rejected(7))
+    set ok to expect_true("recurrent completion at the One is rejected" and recurrent_completion_claim_is_rejected())
+    set ok to expect_true("relative information is exactly accounted" and relative_information_is_accounted(7))
+    set ok to expect_true("a negative step count is rejected" and negative_step_count_is_rejected(7))
+    set ok to expect_true("an outside result symbol is rejected" and outside_result_symbol_is_rejected(7))
+    set ok to expect_true("a total self-negating outcome claim is rejected" and total_self_negating_claim_is_rejected())
+    set ok to expect_true("the complete admissible-limit census holds" and complete_admissible_computation_limit_census())
+    display "=== done ==="
+    return 0

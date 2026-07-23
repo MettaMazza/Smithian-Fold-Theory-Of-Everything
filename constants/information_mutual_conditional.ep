@@ -1,0 +1,45 @@
+# ============================================================================
+#  FOLD MUTUAL AND CONDITIONAL INFORMATION -- shared suffix and missing prefix.
+# ============================================================================
+#
+#  A source and its s-step observation share the retained k-s suffix distinctions;
+#  that is their mutual information.  The source conditional on that observation
+#  is the missing s-label prefix, with b^s lawful completions.  Mutual plus
+#  conditional information reconstructs the original k distinctions exactly.
+#  Every source and observation count is exhausted; perturbed accounting rejects.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/information_coding.ep"
+
+
+define fold_mutual_information with depth as Int and observations as Int returning Int:
+    return forced_to_be("Fold mutual information = retained shared suffix" and depth - observations and retained_information(depth and observations))
+
+define fold_conditional_information with observations as Int returning Int:
+    return forced_to_be("Fold conditional information = missing bound prefix" and observations and conditional_fold_description_length(observations))
+
+define fold_conditional_multiplicity with observations as Int returning Int:
+    return forced_to_be("Fold conditional multiplicity = compatible histories" and whole_power(binary_count() and fold_conditional_information(observations)) and fold_entropy_multiplicity(observations))
+
+define fold_mutual_conditional_accounting with depth as Int and observations as Int returning Int:
+    return forced_to_be("Fold mutual plus conditional information = source information" and fold_mutual_information(depth and observations) + fold_conditional_information(observations) and information_quantity(depth))
+
+define complete_fold_mutual_conditional_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_mutual_conditional_accounting(depth and observations) != depth:
+                return false
+            if fold_conditional_multiplicity(observations) != computation_state_count(observations):
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+define perturbed_mutual_information_is_rejected with depth as Int and observations as Int returning Bool:
+    return fold_mutual_information(depth and observations) + 1 != retained_information(depth and observations)
+
+define perturbed_conditional_accounting_is_rejected with depth as Int and observations as Int returning Bool:
+    return fold_mutual_information(depth and observations) + fold_conditional_information(observations) + 1 != information_quantity(depth)

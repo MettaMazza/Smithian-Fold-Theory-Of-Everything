@@ -1,0 +1,32 @@
+# Machine-check Fold quantum algorithms.
+import "../constants/algorithms_quantum.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold quantum algorithms ==="
+    set ok to expect_number("three quantum layers map rank 73 to image nine" and fold_quantum_algorithm_branch_image(73 and 7 and 3) and 9)
+    set ok to expect_number("three layers retain sixteen images" and fold_quantum_algorithm_image_count(7 and 3) and 16)
+    set ok to expect_true("transformation chunks compose exactly" and fold_quantum_algorithm_chunks_compose(73 and 7 and 3 and 4))
+    set ok to expect_true("every exact branch closes and reconstructs" and fold_quantum_algorithm_all_branches_close(7))
+    set ok to expect_number("complete quantum transformation work is 254" and fold_quantum_algorithm_work(7) and 254)
+    set ok to expect_true("the complete quantum-algorithm census holds" and complete_fold_quantum_algorithm_census())
+    set ok to expect_true("an omitted quantum branch is rejected" and omitted_quantum_branch_is_rejected(7))
+    set ok to expect_true("a shortened transformation remains binary" and shortened_quantum_algorithm_is_rejected(7))
+    display "=== done ==="
+    return 0

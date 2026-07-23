@@ -1,0 +1,66 @@
+# ============================================================================
+#  FOLD FORMAL SPECIFICATION -- exact precondition, result, type, and resource.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A Fold program's specification is forced by its syntax and state transition.
+#  It records no desired target: it states the lawful source, counted prefix,
+#  unique residual rank and type, and the work already forced by that prefix.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The precondition is generated syntax with 0<=s<=k.  The postcondition is the
+#  unique depth-(k-s) result rank; work is s.  Complete enumeration proves exactly
+#  one postcondition satisfies every precondition.  Outside syntax, changed
+#  results, and changed resource counts reject.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_termination_correctness.ep"
+
+
+define fold_specification_holds with rank as Int and depth as Int and steps as Int and result_rank as Int and result_type as Int and work as Int returning Bool:
+    if fold_program_syntax_is_lawful(enumerate_fold_word(rank and depth) and steps) == false:
+        return false
+    if result_type != depth - steps:
+        return false
+    if work != steps:
+        return false
+    return fold_program_prefix_is_correct(rank and depth and steps and result_rank)
+
+
+define fold_specification_has_unique_result with rank as Int and depth as Int and steps as Int returning Bool:
+    set matches to 0
+    set candidate to 1
+    repeat while candidate < computation_state_count(depth - steps) + 1:
+        if fold_specification_holds(rank and depth and steps and candidate and depth - steps and steps):
+            set matches to matches + 1
+        set candidate to candidate + 1
+    return forced_to_be("Fold specification has one exact postcondition" and matches and 1) == 1
+
+
+define complete_fold_formal_specification_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                set result to recursive_fold_index(rank and depth and steps)
+                if fold_specification_holds(rank and depth and steps and result and depth - steps and steps) == false:
+                    return false
+                if fold_specification_has_unique_result(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define changed_specification_resource_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set result to recursive_fold_index(rank and depth and steps)
+    return fold_specification_holds(rank and depth and steps and result and depth - steps and steps + 1) == false
+
+
+define changed_specification_type_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set result to recursive_fold_index(rank and depth and steps)
+    return fold_specification_holds(rank and depth and steps and result and depth - steps + 1 and steps) == false

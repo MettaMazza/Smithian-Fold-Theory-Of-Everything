@@ -1,0 +1,31 @@
+# Machine-check Fold symbolic algorithms.
+import "../constants/algorithms_symbolic.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold symbolic algorithms ==="
+    set ok to expect_number("symbolic evaluation decodes rank 73" and fold_symbolic_evaluate(enumerate_fold_word(73 and 7)) and 73)
+    set ok to expect_true("three rewrites equal three numerical Folds" and fold_symbolic_rewrite_matches_numerical(enumerate_fold_word(73 and 7) and 3))
+    set ok to expect_number("normalization takes seven exact rewrites" and fold_symbolic_normalization_steps(enumerate_fold_word(73 and 7)) and 7)
+    set ok to expect_number("the unique normal form is empty" and length_list(fold_symbolic_normal_form(enumerate_fold_word(73 and 7))) and 0)
+    set ok to expect_true("the complete symbolic census holds" and complete_fold_symbolic_algorithm_census())
+    set ok to expect_true("an early normal form is rejected" and early_symbolic_normal_form_is_rejected(7))
+    set ok to expect_true("changed symbolic meaning is rejected" and changed_symbolic_meaning_is_rejected(73 and 7))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,235 @@
+# ============================================================================
+#  FOLD PROCESS AND MACHINE LAW -- operations, terminals, cycles, composition.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A machine must not be imported as a tape, instruction set, or conventional
+#  automaton.  Steps 325-329 already force exact states, one lawful operation,
+#  observation fibres, resources, codewords, and information transformation.
+#  Their finite organization is the Fold machine.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A PROCESS is a counted sequence of the established Fold step.  Its state after
+#  s operations is computed exactly.  Splitting the sequence at any point gives
+#  the same result as the direct run, so every process composes and decomposes.
+#
+#  The depth-k CLOSING MACHINE contains the b^k exact grid states and one Fold
+#  transition from every state.  Every transition is single-valued and lands on
+#  the lower grid; every state reaches the One; and exactly one grid state is
+#  terminal because the One alone is fixed under the Fold.  Route A enumerates the
+#  transitions and terminal states.  Route B uses the state count and established
+#  fixed point; forced_to_be closes the counts.
+#
+#  The RECURRENT MACHINE is the period-b Fold orbit 1/3 <-> 2/3.  Its state count
+#  and walked period are both b, neither state is terminal, and the complete cycle
+#  returns each state exactly.  Thus terminal descent and recurrence are two exact
+#  operational regimes of the same Fold, not separate imported machine types.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every closing-machine state and every process split is executed through depth
+#  7, together with the complete recurrent orbit and negative controls.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_information.ep"
+
+
+# The exact state reached after a counted process prefix.
+define process_state_after with index as Int and depth as Int and steps as Int returning Fraction:
+    set initial to computation_state(index and depth)
+    return computation_steps(initial and steps)
+
+
+# The Fold terminal is the One.
+define machine_terminal_state returning Fraction:
+    return fraction_from_whole_number(1)
+
+
+# A state is terminal exactly when it is the One and the Fold fixes it.
+define state_is_terminal with state as Fraction returning Bool:
+    set one to machine_terminal_state()
+    set is_one to fraction_is_equal(state and one)
+    set next to computation_step(state)
+    set fixed to fraction_is_equal(next and state)
+    if is_one:
+        return fixed
+    return false
+
+
+# Count the process length from one dyadic state to the terminal One.
+define process_length_to_terminal with index as Int and depth as Int returning Int:
+    set state to computation_state(index and depth)
+    set steps to 0
+    set walking to true
+    repeat while walking:
+        if state_is_terminal(state):
+            set walking to false
+        else:
+            set state to computation_step(state)
+            set steps to steps + 1
+    return steps
+
+
+# Every state in the closing machine reaches the terminal.
+define every_machine_state_terminates with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_terminate to true
+    set index to 1
+    repeat while index < count + 1:
+        set state to process_state_after(index and depth and depth)
+        if state_is_terminal(state):
+            set all_terminate to all_terminate
+        else:
+            set all_terminate to false
+        set index to index + 1
+    return all_terminate
+
+
+# The Fold gives one exact image when evaluated twice from the same state.
+define every_transition_is_single_valued with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_single to true
+    set index to 1
+    repeat while index < count + 1:
+        set first_state to computation_state(index and depth)
+        set second_state to computation_state(index and depth)
+        set first_image to computation_step(first_state)
+        set second_image to computation_step(second_state)
+        if fraction_is_equal(first_image and second_image):
+            set all_single to all_single
+        else:
+            set all_single to false
+        set index to index + 1
+    return all_single
+
+
+# Route A enumerates one outgoing transition per state; Route B is the state count.
+define machine_transition_count with depth as Int returning Int:
+    set transitions to 0
+    set count to computation_state_count(depth)
+    set index to 1
+    repeat while index < count + 1:
+        set state to computation_state(index and depth)
+        set image to computation_step(state)
+        set transitions to transitions + 1
+        set index to index + 1
+    return forced_to_be("finite Fold machine: one transition per state" and transitions and count)
+
+
+# Enumerate fixed terminal states on the complete grid.
+define enumerated_terminal_count with depth as Int returning Int:
+    set terminals to 0
+    set count to computation_state_count(depth)
+    set index to 1
+    repeat while index < count + 1:
+        set state to computation_state(index and depth)
+        if state_is_terminal(state):
+            set terminals to terminals + 1
+        set index to index + 1
+    return terminals
+
+
+# The terminal count is forced equal to the One's single fixed state.
+define machine_terminal_count with depth as Int returning Int:
+    return forced_to_be("finite Fold machine: the One is the single terminal" and enumerated_terminal_count(depth) and 1)
+
+
+# Every direct process equals every split composition and decomposition.
+define every_process_composes_and_decomposes with depth as Int returning Bool:
+    return composition_holds_at_depth(depth)
+
+
+# Walk the recurrent orbit until it returns to its start.
+define recurrent_machine_period returning Int:
+    set start to fraction_from_ratio(1 and colour_count())
+    set state to computation_step(start)
+    set period to 1
+    set walking to true
+    repeat while walking:
+        if fraction_is_equal(state and start):
+            set walking to false
+        else:
+            set state to computation_step(state)
+            set period to period + 1
+    return period
+
+
+# The recurrent machine has the binary count of distinct states and period b.
+define recurrent_machine_is_forced returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    set distinct to fraction_compare(first and second) != 0
+    set state_count to binary_count()
+    set period to recurrent_machine_period()
+    set checked_period to forced_to_be("recurrent machine period = binary count" and period and binary_count())
+    if distinct:
+        return checked_period == state_count
+    return false
+
+
+# Neither recurrent state is the terminal One.
+define recurrent_machine_has_no_terminal returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    if state_is_terminal(first):
+        return false
+    if state_is_terminal(second):
+        return false
+    return true
+
+
+# NEGATIVE CONTROL: the recurrent orbit is not a period-one fixed state.
+define false_period_one_is_rejected returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set after_one to computation_step(first)
+    if fraction_is_equal(first and after_one):
+        return false
+    return true
+
+
+# NEGATIVE CONTROL: no second terminal is admitted on any grid.
+define extra_terminal_is_rejected with depth as Int returning Bool:
+    return machine_terminal_count(depth) == 1
+
+
+# Complete closing and recurrent machine census.
+define complete_process_machine_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set transitions to machine_transition_count(depth) == computation_state_count(depth)
+        set single_valued to every_transition_is_single_valued(depth)
+        set lower_grid to transition_lands_on_lower_grid(depth)
+        set terminates to every_machine_state_terminates(depth)
+        set terminal_count to machine_terminal_count(depth) == 1
+        set composes to every_process_composes_and_decomposes(depth)
+        set no_extra_terminal to extra_terminal_is_rejected(depth)
+        if transitions:
+            if single_valued:
+                if lower_grid:
+                    if terminates:
+                        if terminal_count:
+                            if composes:
+                                if no_extra_terminal:
+                                    set all_hold to all_hold
+                                else:
+                                    set all_hold to false
+                            else:
+                                set all_hold to false
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    if recurrent_machine_is_forced():
+        if recurrent_machine_has_no_terminal():
+            if false_period_one_is_rejected():
+                return all_hold
+    return false

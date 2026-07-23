@@ -1,0 +1,33 @@
+# Machine-check the Fold finite-state transition law over every admitted depth.
+import "../constants/computational_state_transition.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold finite-state transition law ==="
+    set ok to expect_number("census depth forced by cover(c^(c+1)) and b+c+b" and computation_census_depth() and 7)
+    set ok to expect_number("depth 1 has b states" and computation_state_count(1) and 2)
+    set ok to expect_number("depth 7 has b^7 states" and computation_state_count(7) and 128)
+    set ok to expect_true("complete state, step, preimage, closure, and composition census" and complete_computation_transition_census())
+    set ok to expect_true("shifted upper-preimage pairing is rejected" and shifted_preimage_pairing_is_rejected(7))
+    set ok to expect_true("the deepest first state does not close one step early" and first_state_does_not_close_early(7))
+    set ok to expect_true("a nonbinary branch count is rejected" and nonbinary_branch_count_is_rejected(7))
+    display "=== done ==="
+    return 0

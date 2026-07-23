@@ -1,0 +1,35 @@
+# Machine-check exact Fold symbols, codewords, decoding, and redundancy.
+import "../constants/computational_encoding.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold encoding law ==="
+    set ok to expect_number("the derived alphabet has b symbols" and encoding_symbol_count() and 2)
+    set ok to expect_number("depth-7 state 128 decodes from its codeword" and decode_computation_codeword(encode_computation_state(128 and 7)) and 128)
+    set ok to expect_true("all depth-7 states encode and decode exactly" and all_states_round_trip_at_depth(7))
+    set ok to expect_number("depth-7 codeword count is forced" and codeword_count_is_forced(7) and 128)
+    set ok to expect_true("observation retains every depth-7 codeword suffix" and every_observation_retains_suffix(7))
+    set ok to expect_number("each observed suffix has b-1 redundant alternatives" and redundant_codeword_alternatives(7) and 1)
+    set ok to expect_true("an out-of-alphabet symbol is rejected" and out_of_alphabet_symbol_is_rejected(7))
+    set ok to expect_true("changing one lawful symbol changes the decoded state" and changed_symbol_changes_state(7))
+    set ok to expect_true("complete encoding census holds" and complete_encoding_census())
+    display "=== done ==="
+    return 0

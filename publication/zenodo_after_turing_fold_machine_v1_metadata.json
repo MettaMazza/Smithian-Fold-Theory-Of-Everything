@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "title": "After Turing: The Fold Machine",
+    "upload_type": "publication",
+    "publication_type": "article",
+    "description": "<p><strong>Classical and quantum computation are derived here from one exact finite relation rather than installed as separate machine and physical formalisms.</strong> Smithian Fold Theory begins with one machine-checked self-proven theorem - there is no nothing - which forces the One, the exact positive-rational domain and the Fold. From the Fold's two-position fibre, the paper generates state, transition, observation, symbols, information, languages, automata, recursion, universality, computability boundaries, complexity, algorithms, semantics, distributed computation, security, learning, scientific computation, reversibility and quantum computation.</p><p>The declared fundamental-computation census contains <strong>164 obligations</strong>: 163 are internally closed and the foundational Fold-uniqueness statement is correctly conditional on its mechanically generated 84-form composition grammar through size three. Steps 325-407 execute 83 suites and 691 focused checks. The complete synchronized corpus executes <strong>409 suites and 2,693 checks with zero failures</strong>; all 409 readable sources regenerate their C certificates byte-identically.</p><p>Four depth-independent native results close the formerly named internal frontier: <strong>BB_F(k)=k</strong> for every positive finite Fold description depth; <strong>P_F=NP_F</strong> inside the admitted Fold evaluator/proof grammar; exact depth, width, and size lower bounds for every circuit assembled from lawful Fold edges; and the unique minimum fault width <strong>2t+1</strong> for every positive finite fault order. The paper proves each result constructively, supplies adverse controls, and states the exact boundary separating it from conventional Turing-machine, external complexity-class, arbitrary gate-basis, and stochastic hardware claims.</p><p>A standalone Fold Computational Laboratory consumes the corpus as immutable authority. Its native tape uses the empty One as blank and the two forced fibre labels as symbols. A proof kernel constrains every transition and a bounded autonomous constructor cannot alter its law or escape its declared resources. The same machine supplies a reversible/quantum mode through complete word support, period-two phase, predecessor interference, joint-word entanglement, record-based measurement, branchwise gates and the general repetition law. Twelve closed-law demonstrations and eight exact finite investigations pass 25 end-to-end tests, 20 unfavorable controls and an independently compiled 34-check C certificate.</p><p>The title honors Turing, Church, Goedel, Shannon, von Neumann, Landauer, Bennett, Feynman and Deutsch. Their work supplies the historical correspondence boundary; it does not select the SFT derivations. Scientific author and publication authority: Maria Smith, Ernos Labs. Open source: <a href=\"https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything\">Smithian Fold Theory of Everything</a>.</p>",
+    "creators": [
+      {
+        "name": "Smith, Maria",
+        "affiliation": "Ernos Labs"
+      }
+    ],
+    "publication_date": "2026-07-23",
+    "version": "v1.0",
+    "language": "eng",
+    "access_right": "open",
+    "license": "cc-by-4.0",
+    "keywords": [
+      "Smithian Fold Theory",
+      "theoretical computer science",
+      "quantum computing",
+      "computability",
+      "computational complexity",
+      "information theory",
+      "reversible computation",
+      "quantum information",
+      "fault tolerance",
+      "Turing machine",
+      "machine-checked derivation",
+      "computational proof",
+      "Fold P versus NP",
+      "Busy Beaver",
+      "circuit lower bounds",
+      "quantum fault tolerance",
+      "zero axioms",
+      "exact rational mathematics"
+    ],
+    "notes": "<p><strong>Subtitle:</strong> An Exact Smithian Derivation of Classical and Quantum Computation, in Correspondence with Turing, Church, Gödel, Shannon, von Neumann, Landauer, Bennett, Feynman, and Deutsch.</p><p>New standalone article. The finished PDF is the primary preview; Markdown source, computation census, evidence manifest and standalone proof-laboratory archive follow. OpenAI Codex provided implementation assistance, corpus reconciliation, test execution and editorial assembly under Maria Smith's direction; it is not the scientific author or publication authority.</p>",
+    "related_identifiers": [
+      {
+        "identifier": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything",
+        "relation": "isSupplementedBy",
+        "scheme": "url"
+      },
+      {
+        "identifier": "https://github.com/MettaMazza/Smithian-Fold-Computational-Sciences",
+        "relation": "isSupplementedBy",
+        "scheme": "url"
+      },
+      {
+        "identifier": "10.5281/zenodo.21182468",
+        "relation": "isPartOf",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.5281/zenodo.21035460",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.5281/zenodo.21028523",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.5281/zenodo.21028645",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1112/plms/s2-42.1.230",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.2307/2371045",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1007/BF01700692",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1147/rd.53.0183",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1147/rd.176.0525",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1007/BF02650179",
+        "relation": "references",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1098/rspa.1985.0070",
+        "relation": "references",
+        "scheme": "doi"
+      }
+    ],
+    "references": [
+      "Smith, M. The Smithian Fold Theory of Everything. Zenodo. doi:10.5281/zenodo.21182468.",
+      "Smith, M. There Is No Nothing: The Self-Proven Foundation of Smithian Fold Theory. Zenodo. doi:10.5281/zenodo.21035460.",
+      "Smith, M. No Dice: Deterministic Interference, Exact Branch Counts, and Quantum Measurement from the Fold. Zenodo. doi:10.5281/zenodo.21028523.",
+      "Smith, M. Entanglement Without Spookiness: Shared Origin, Product Structure, and Correlation Without a Travelling Signal. Zenodo. doi:10.5281/zenodo.21028645.",
+      "Turing, A. M. (1937). On Computable Numbers, with an Application to the Entscheidungsproblem. Proceedings of the London Mathematical Society 42, 230-265. doi:10.1112/plms/s2-42.1.230.",
+      "Church, A. (1936). An Unsolvable Problem of Elementary Number Theory. American Journal of Mathematics 58(2), 345-363. doi:10.2307/2371045.",
+      "Gödel, K. (1931). Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I. Monatshefte für Mathematik und Physik 38, 173-198. doi:10.1007/BF01700692.",
+      "Shannon, C. E. (1948). A Mathematical Theory of Communication. Bell System Technical Journal 27, 379-423 and 623-656.",
+      "von Neumann, J. (1945). First Draft of a Report on the EDVAC. Moore School of Electrical Engineering, University of Pennsylvania.",
+      "von Neumann, J. (1966). Theory of Self-Reproducing Automata. A. W. Burks, ed. University of Illinois Press.",
+      "Landauer, R. (1961). Irreversibility and Heat Generation in the Computing Process. IBM Journal of Research and Development 5(3), 183-191. doi:10.1147/rd.53.0183.",
+      "Bennett, C. H. (1973). Logical Reversibility of Computation. IBM Journal of Research and Development 17(6), 525-532. doi:10.1147/rd.176.0525.",
+      "Feynman, R. P. (1982). Simulating Physics with Computers. International Journal of Theoretical Physics 21, 467-488. doi:10.1007/BF02650179.",
+      "Deutsch, D. (1985). Quantum Theory, the Church-Turing Principle and the Universal Quantum Computer. Proceedings of the Royal Society A 400, 97-117. doi:10.1098/rspa.1985.0070."
+    ]
+  }
+}

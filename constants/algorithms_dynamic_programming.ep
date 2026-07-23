@@ -1,0 +1,71 @@
+# ============================================================================
+#  FOLD DYNAMIC PROGRAMMING -- exact reuse of merged suffix states.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Observation merges b source histories onto each lower state.  Computing the
+#  same lower-state closure once and reusing it for every preimage is therefore
+#  forced by the transition graph itself; no tabulation convention is imported.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The depth-k frontier contributes b^k previously unseen states, followed by
+#  the already-solved depth-(k-1) frontier.  The recurrence W(k)=b^k+W(k-1),
+#  W(0)=0, equals the independently enumerated circuit size.  Including the One
+#  gives the tree-node table.  Recomputing a length-k closure independently for
+#  every source costs k b^k and is strictly larger once sharing exists.  Omitted
+#  layers and false no-sharing claims are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_geometric.ep"
+
+
+define fold_dynamic_closure_work with depth as Int returning Int:
+    if depth < 1:
+        return 0
+    return computation_state_count(depth) + fold_dynamic_closure_work(depth - 1)
+
+
+define fold_dynamic_closure_table_nodes with depth as Int returning Int:
+    return fold_dynamic_closure_work(depth) + 1
+
+
+define fold_dynamic_work_is_forced with depth as Int returning Int:
+    return forced_to_be("Fold dynamic recurrence = complete shared transition circuit" and fold_dynamic_closure_work(depth) and fold_circuit_size(depth))
+
+
+define fold_dynamic_table_is_complete with depth as Int returning Bool:
+    if fold_dynamic_closure_table_nodes(depth) != fold_tree_node_count(depth):
+        return false
+    return every_machine_state_terminates(depth)
+
+
+define fold_independent_recomputation_work with depth as Int returning Int:
+    return depth * computation_state_count(depth)
+
+
+define fold_dynamic_reuse_saves_work with depth as Int returning Bool:
+    if depth < 2:
+        return true
+    return fold_dynamic_closure_work(depth) < fold_independent_recomputation_work(depth)
+
+
+define complete_fold_dynamic_programming_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_dynamic_work_is_forced(depth) != fold_circuit_size(depth):
+            return false
+        if fold_dynamic_table_is_complete(depth) == false:
+            return false
+        if fold_dynamic_reuse_saves_work(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define omitted_dynamic_layer_is_rejected with depth as Int returning Bool:
+    return fold_dynamic_closure_work(depth) - computation_state_count(depth) != fold_circuit_size(depth)
+
+
+define false_no_sharing_claim_is_rejected with depth as Int returning Bool:
+    return fold_dynamic_closure_work(depth) != fold_independent_recomputation_work(depth)

@@ -1,0 +1,86 @@
+# ============================================================================
+#  FOLD COMPUTATIONAL-MODEL EQUIVALENCE LAW -- one process, five exact forms.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Coordinates, words, readers, rewrites, and recursion were independently
+#  forced from the same Fold fibres.  Their equivalence must now be executed,
+#  rather than inferred from their names.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  For each state i/b^k and each prefix s, five routes are evaluated:
+#    coordinate Fold steps; process-machine execution; automaton index descent;
+#    word rewriting followed by decoding; and recursive Fold evaluation.
+#  Every route must land on the same exact depth-(k-s) coordinate.  The census
+#  covers every state and every prefix through the forced depth.
+#
+#  Equivalence is therefore exact equality of observable Fold state after every
+#  process prefix, with bidirectional encode/decode already closed by Step 328.
+#  A shifted rewrite count and a changed initial coordinate are controls.
+# ============================================================================
+
+import "../constants/computational_recursion_self_application.ep"
+import "../constants/computational_process_machine.ep"
+
+
+define rewritten_fold_state with index as Int and depth as Int and steps as Int returning Fraction:
+    set word to fold_grammar_word(index and depth)
+    set residual to fold_rewrite_steps(word and steps)
+    set residual_index to decode_computation_codeword(residual)
+    return computation_state(residual_index and depth - steps)
+
+
+define automaton_fold_state with index as Int and depth as Int and steps as Int returning Fraction:
+    set current_index to index
+    set remaining to depth
+    set count to 0
+    repeat while count < steps:
+        set current_index to fold_automaton_next_index(current_index and remaining)
+        set remaining to remaining - 1
+        set count to count + 1
+    return computation_state(current_index and remaining)
+
+
+define all_fold_models_agree with index as Int and depth as Int and steps as Int returning Bool:
+    set coordinate to computation_steps(computation_state(index and depth) and steps)
+    set process to process_state_after(index and depth and steps)
+    set automaton to automaton_fold_state(index and depth and steps)
+    set rewriting to rewritten_fold_state(index and depth and steps)
+    set recursion to recursive_fold_evaluate(computation_state(index and depth) and steps)
+    if fraction_is_equal(coordinate and process) == false:
+        return false
+    if fraction_is_equal(coordinate and automaton) == false:
+        return false
+    if fraction_is_equal(coordinate and rewriting) == false:
+        return false
+    return fraction_is_equal(coordinate and recursion)
+
+
+define complete_fold_model_equivalence_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if all_fold_models_agree(index and depth and steps):
+                    set steps to steps + 1
+                else:
+                    return false
+            set index to index + 1
+        set depth to depth + 1
+    return true
+
+
+# UNFAVORABLE CONTROL: one additional rewrite is a different process prefix.
+define shifted_model_step_is_rejected with depth as Int returning Bool:
+    set lawful to rewritten_fold_state(1 and depth and 1)
+    set shifted to rewritten_fold_state(1 and depth and 2)
+    return fraction_is_equal(lawful and shifted) == false
+
+
+# UNFAVORABLE CONTROL: changing the source coordinate changes the zero-step state.
+define changed_model_source_is_rejected with depth as Int returning Bool:
+    set first to rewritten_fold_state(1 and depth and 0)
+    set changed to rewritten_fold_state(2 and depth and 0)
+    return fraction_is_equal(first and changed) == false

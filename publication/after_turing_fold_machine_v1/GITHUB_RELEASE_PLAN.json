@@ -1,0 +1,21 @@
+{
+  "status": "PREPARED_NOT_CREATED",
+  "tag_name": "after-turing-fold-machine-v1.0",
+  "target_commitish": "main",
+  "name": "After Turing: The Fold Machine — v1.0",
+  "draft": true,
+  "prerelease": false,
+  "body_file": "publication/after_turing_fold_machine_v1/GITHUB_RELEASE_BODY.md",
+  "assets_in_order": [
+    "output/pdf/After_Turing_The_Fold_Machine_v1.pdf",
+    "papers/After_Turing_The_Fold_Machine.md",
+    "FUNDAMENTAL_COMPUTATION_CENSUS.md",
+    "publication/after_turing_fold_machine_v1/After_Turing_Fold_Machine_Evidence_v1.zip",
+    "publication/after_turing_fold_machine_v1_manifest.json",
+    "publication/after_turing_fold_machine_v1/SHA256SUMS.txt",
+    "publication/after_turing_fold_machine_v1/CITATION.cff",
+    "publication/after_turing_fold_machine_v1/PDF_RENDER_RECEIPT.md"
+  ],
+  "external_release_authorized": false,
+  "notes": "Do not create the GitHub release, push the tag, or upload assets without Maria Smith's explicit authorization. Set external_release_authorized only in the executed release receipt, not in this prepared plan."
+}

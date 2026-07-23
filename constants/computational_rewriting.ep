@@ -1,0 +1,140 @@
+# ============================================================================
+#  FOLD REWRITING LAW -- observation is the forced word-reduction rule.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The language and reader leave no freedom for a separate rewriting system.
+#  Observation closes the first fibre distinction and Step 328 proves that the
+#  remaining representation is exactly the codeword suffix.  Therefore the
+#  lawful rewrite is forced: remove the first symbol and retain the suffix.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  One rewrite equals one Fold observation.  Repeating it k times sends every
+#  depth-k word to the empty word at the One.  Splitting a rewrite sequence at
+#  any count gives the same suffix as direct rewriting.  Every suffix has exactly
+#  b one-step predecessors, obtained by prepending the b lawful fibre labels.
+#  Thus reduction, composition, normal form, and predecessor multiplicity are all
+#  inherited exactly from the Fold rather than chosen as textual conventions.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every word, split, and predecessor through depth seven is executed.  A shifted
+#  suffix and an early normal form are unfavorable controls.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_automaton.ep"
+
+
+# Remove exactly the first fibre label.
+define fold_rewrite_once with word as List returning List:
+    set suffix to create_list()
+    set position to 1
+    repeat while position < length_list(word):
+        set ok to append_list(suffix and get_list(word and position))
+        set position to position + 1
+    return suffix
+
+
+define fold_rewrite_steps with word as List and steps as Int returning List:
+    set current to word
+    set count to 0
+    repeat while count < steps:
+        set current to fold_rewrite_once(current)
+        set count to count + 1
+    return current
+
+
+# Rewriting one word gives exactly the encoding of the Fold-observed state.
+define fold_rewrite_matches_observation with index as Int and depth as Int returning Bool:
+    set word to fold_grammar_word(index and depth)
+    set rewritten to fold_rewrite_once(word)
+    set observed_index to lower_grid_index(index and depth)
+    set observed_word to fold_grammar_word(observed_index and depth - 1)
+    return fold_words_are_equal(rewritten and observed_word)
+
+
+# All depth-k words reach the unique empty normal form in exactly k rewrites.
+define every_fold_word_reaches_normal_form with depth as Int returning Bool:
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        set word to fold_grammar_word(index and depth)
+        set normal to fold_rewrite_steps(word and depth)
+        if length_list(normal) != 0:
+            return false
+        if decode_computation_codeword(normal) != 1:
+            return false
+        set index to index + 1
+    return true
+
+
+# Count the lawful one-step predecessors of a suffix by generating all labels.
+define fold_rewrite_preimage_count with suffix as List returning Int:
+    set count to 0
+    set symbol to 1
+    repeat while symbol < encoding_symbol_count() + 1:
+        set predecessor to fold_grammar_prepend(symbol and suffix)
+        set image to fold_rewrite_once(predecessor)
+        if fold_words_are_equal(image and suffix):
+            set count to count + 1
+        set symbol to symbol + 1
+    return forced_to_be("Fold rewrite: every suffix has the binary fibre of predecessors" and count and binary_count())
+
+
+# Direct rewriting equals every split rewrite sequence.
+define fold_rewrite_composition_holds with index as Int and depth as Int returning Bool:
+    set word to fold_grammar_word(index and depth)
+    set split to 0
+    repeat while split < depth + 1:
+        set direct to fold_rewrite_steps(word and depth)
+        set first to fold_rewrite_steps(word and split)
+        set second to fold_rewrite_steps(first and depth - split)
+        if fold_words_are_equal(direct and second) == false:
+            return false
+        set split to split + 1
+    return true
+
+
+# UNFAVORABLE CONTROL: a neighboring lower-grid word is not the rewrite image.
+define shifted_rewrite_suffix_is_rejected with depth as Int returning Bool:
+    if depth < 2:
+        return true
+    set word to fold_grammar_word(1 and depth)
+    set actual to fold_rewrite_once(word)
+    set shifted to fold_grammar_word(2 and depth - 1)
+    return fold_words_are_equal(actual and shifted) == false
+
+
+# UNFAVORABLE CONTROL: one rewrite fewer leaves one symbol, not normal form.
+define early_rewrite_normal_form_is_rejected with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    set early to fold_rewrite_steps(word and depth - 1)
+    return length_list(early) != 0
+
+
+define complete_fold_rewriting_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            if fold_rewrite_matches_observation(index and depth):
+                if fold_rewrite_composition_holds(index and depth):
+                    set index to index + 1
+                else:
+                    return false
+            else:
+                return false
+        if every_fold_word_reaches_normal_form(depth):
+            set suffix to fold_grammar_word(1 and depth - 1)
+            if fold_rewrite_preimage_count(suffix) == binary_count():
+                if shifted_rewrite_suffix_is_rejected(depth):
+                    if early_rewrite_normal_form_is_rejected(depth):
+                        set depth to depth + 1
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        else:
+            return false
+    return true

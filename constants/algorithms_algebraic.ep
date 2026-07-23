@@ -1,0 +1,86 @@
+# ============================================================================
+#  FOLD ALGEBRAIC ALGORITHMS -- identity, composition, and recurrent inverse.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Algebraic computation is forced here by the operation already present: a
+#  counted Fold transformation.  The zero-count transformation is identity;
+#  joining counted transformations adds their lengths; regrouping joins cannot
+#  alter the resulting coordinate.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Every state and every admitted split execute identity, closure, composition,
+#  and regrouping exactly.  On the period-b recurrent orbit, b-1 further Fold
+#  steps invert one Fold because the complete b-step cycle is identity.  Thus the
+#  closing action and recurrent inverse arise from the same operation.  Replacing
+#  a nonzero action by identity is rejected.  No external algebraic structure or
+#  selected operation table enters, and no new assembled constant is asserted.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_trees_graphs.ep"
+
+
+define fold_algebra_identity_holds with index as Int and depth as Int returning Bool:
+    return recursive_fold_index(index and depth and 0) == index
+
+
+define fold_algebra_composition_holds with index as Int and depth as Int and first_steps as Int and second_steps as Int returning Bool:
+    if first_steps + second_steps > depth:
+        return false
+    set direct to recursive_fold_index(index and depth and first_steps + second_steps)
+    set first_image to recursive_fold_index(index and depth and first_steps)
+    set staged to recursive_fold_index(first_image and depth - first_steps and second_steps)
+    return direct == staged
+
+
+define fold_algebra_regrouping_holds with index as Int and depth as Int and first_steps as Int and second_steps as Int and third_steps as Int returning Bool:
+    if first_steps + second_steps + third_steps > depth:
+        return false
+    set first_second to recursive_fold_index(index and depth and first_steps + second_steps)
+    set left to recursive_fold_index(first_second and depth - first_steps - second_steps and third_steps)
+    set first_image to recursive_fold_index(index and depth and first_steps)
+    set right to recursive_fold_index(first_image and depth - first_steps and second_steps + third_steps)
+    return left == right
+
+
+define fold_recurrent_inverse_holds returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    set restored to computation_steps(second and binary_count() - 1)
+    return fraction_is_equal(restored and first)
+
+
+define complete_fold_algebraic_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            if fold_algebra_identity_holds(index and depth) == false:
+                return false
+            set first_steps to 0
+            repeat while first_steps < depth + 1:
+                set second_steps to 0
+                repeat while second_steps < depth - first_steps + 1:
+                    if fold_algebra_composition_holds(index and depth and first_steps and second_steps) == false:
+                        return false
+                    set third_steps to depth - first_steps - second_steps
+                    if fold_algebra_regrouping_holds(index and depth and first_steps and second_steps and third_steps) == false:
+                        return false
+                    set second_steps to second_steps + 1
+                set first_steps to first_steps + 1
+            set index to index + 1
+        set depth to depth + 1
+    return fold_recurrent_inverse_holds()
+
+
+define false_nonzero_identity_is_rejected with depth as Int returning Bool:
+    set state to computation_state(1 and depth)
+    set moved to computation_step(state)
+    return fraction_is_equal(state and moved) == false
+
+
+define shortened_recurrent_inverse_is_rejected returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    return fraction_is_equal(second and first) == false

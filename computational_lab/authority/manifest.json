@@ -1,0 +1,30 @@
+{
+  "authority": "Smithian Fold Theory main corpus",
+  "corpus_root_candidates": [
+    "..",
+    "../Smithian Fold Theory"
+  ],
+  "seal_expected": {
+    "certificate_count": 409,
+    "check_count": 2693,
+    "suite_count": 409
+  },
+  "sources": {
+    "FUNDAMENTAL_COMPUTATION_CENSUS.md": "5bf48ee3226d8fb0f98bee697401b0a53ae075b06da0f1a2a0d8faba71423ce5",
+    "OneFoldMaster.md": "42c4be709dcd9edcfbedc70ee82055a8660d9658de21758561fd46e068a727bf",
+    "constants/computability_busy_beaver_unrestricted.ep": "75e39ba4574835bbdd7c470f48ae2232dc62ac0a501011e895a6a3e2f698effc",
+    "constants/complexity_arbitrary_circuit_lower_bounds.ep": "0c80fb5c35c5b8e9fee368aea93afce08048f63c52b0123cb913476441a7ca5f",
+    "constants/complexity_fold_p_np.ep": "f1d215965b845d8299e2666d7f6d9aae4f17d377228175fedf8c30f7fcaddd11",
+    "constants/computation_depth_induction.ep": "ddddf7551d166fec3bff07b641628460e9b3cf4e271c55ace34eba6300eee690",
+    "constants/quantum_communication_coding_fault_tolerance.ep": "db6f85ece499bc5861ab2dfa7a2bd44945e1448b7e3c1d50d1dcfd31d5368ca2",
+    "constants/quantum_gates_circuits_universality.ep": "fdfa98c7b4da22467bcf6899f437a587ec2aa58726ef7da37d20b02ced2d5f5c",
+    "constants/quantum_multi_error_fault_tolerance.ep": "bcd9bd85abfc693a668621ec542d2b0ac2ec6e1942baf28716bfb9860aab6965",
+    "constants/quantum_simulation_verification_learning_limits.ep": "338296f45e826cedf0b99fb7a8bcf8b618ee5d82d5add37f59c6bae4d2fbbaf6",
+    "constants/quantum_unbounded_finite_fault_thresholds.ep": "aae43e22a573d368accf0a0786332eb1cd65db245541d1c869205e52285f2bb2",
+    "constants/reversible_quantum_foundations.ep": "def2af94b57bd26f218bbfe387e55e6699bad985ca727ad75ea6c5a6e483999c",
+    "foundation/fold_form_grammar_enumeration.ep": "935a96a51832a983030abb1fcde8b336af46ca0e27ac9ba8db25a1e825b44e67",
+    "verify/foundation_induction_multifault_401_403_receipt_20260723.md": "c42cc9c42b8842d09ebc9b753240519ddbeb95bbf51edfe45247c57eee0ef3d6",
+    "verify/unrestricted_computation_404_407_receipt_20260723.md": "dcf5ae7791691906a2312ebea124f84c39456c733aa47a0bc6e95189826ac2e2"
+  },
+  "usage": "Read-only authority. Laboratory findings cannot mutate or extend this manifest."
+}

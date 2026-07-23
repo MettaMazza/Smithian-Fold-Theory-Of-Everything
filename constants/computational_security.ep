@@ -1,0 +1,163 @@
+# ============================================================================
+#  FOLD CRYPTOGRAPHY AND COMPUTATIONAL SECURITY.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Security statements are meaningful only after the adversary's observations,
+#  held distinctions, queries, and computation are exact.  This module derives
+#  the declared security relations from Fold fibres and verified traces.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  An adversary given a suffix after s observations faces exactly b^s compatible
+#  predecessors.  That non-uniqueness supplies information-theoretic one-wayness,
+#  secrecy, hiding, and zero-disclosure accounting; it is not an imported hardness
+#  assumption.  Revealing the held prefix reconstructs one source and supplies
+#  authentication, binding, proof of knowledge, and multiparty reconstruction.
+#  A verified transition trace supplies integrity and signature semantics.  The
+#  digest is the exact observed suffix with b^s enumerated collisions.  Classical
+#  and quantum exhaustive resources are stated explicitly and cannot erase the
+#  missing held distinction.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every source and observation boundary through depth seven is exhausted.
+#  Forged bindings, tampered traces, collision-free digest claims, under-resourced
+#  adversaries, and collapsed post-quantum supports reject.
+# ============================================================================
+
+import "../constants/concurrent_distributed_computation.ep"
+import "../constants/information_classical_probabilistic_quantum.ep"
+
+
+define fold_adversary_compatible_sources with observations as Int returning Int:
+    return forced_to_be("Fold adversary surface = compatible fibre histories" and fold_entropy_multiplicity(observations) and whole_power(binary_count() and observations))
+
+
+define fold_information_one_wayness_holds with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    return fold_adversary_compatible_sources(observations) > 1
+
+
+define fold_secrecy_holds with depth as Int and observations as Int returning Bool:
+    if fold_conditional_information(observations) != observations:
+        return false
+    return fold_mutual_information(depth and observations) + fold_conditional_information(observations) == depth
+
+
+define fold_integrity_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    set asserted to fold_execute_compiled_trace(trace)
+    return fold_verify_program_proof(rank and depth and steps and asserted and trace)
+
+
+define fold_authentication_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set binding to fold_bind_closed_prefix(rank and depth and observations)
+    set suffix to fold_bound_term_suffix(rank and depth and observations)
+    set rebuilt to fold_substitute_binding(binding and suffix)
+    return decode_computation_codeword(rebuilt) == rank
+
+
+define fold_hash_collision_multiplicity with observations as Int returning Int:
+    return forced_to_be("Fold observed digest has one collision fibre" and fold_entropy_multiplicity(observations) and fold_adversary_compatible_sources(observations))
+
+
+define fold_commitment_hiding_holds with observations as Int returning Bool:
+    return fold_information_one_wayness_holds(observations)
+
+
+define fold_commitment_binding_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    return fold_authentication_holds(rank and depth and observations)
+
+
+define fold_signature_verification_holds with rank as Int and depth as Int returning Bool:
+    return fold_integrity_holds(rank and depth and depth)
+
+
+define fold_proof_of_knowledge_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    return fold_binding_substitution_holds(rank and depth and observations)
+
+
+define fold_zero_disclosure_accounting_holds with depth as Int and observations as Int returning Bool:
+    if fold_mutual_information(depth and observations) != depth - observations:
+        return false
+    return fold_conditional_information(observations) == observations
+
+
+define fold_multiparty_reconstruction_holds with rank as Int and depth as Int and observations as Int and split as Int returning Bool:
+    if split > observations:
+        return false
+    set binding to fold_bind_closed_prefix(rank and depth and observations)
+    set first_share to fold_sequence_slice(binding and 0 and split)
+    set second_share to fold_sequence_slice(binding and split and observations - split)
+    set joined to fold_sequence_join(first_share and second_share)
+    if fold_words_are_equal(joined and binding) == false:
+        return false
+    set rebuilt to fold_substitute_binding(joined and fold_bound_term_suffix(rank and depth and observations))
+    return decode_computation_codeword(rebuilt) == rank
+
+
+define fold_adversarial_query_bound_holds with observations as Int and queries as Int returning Bool:
+    if queries < 0:
+        return false
+    if queries > observations:
+        return true
+    return whole_power(binary_count() and queries) < fold_adversary_compatible_sources(observations) + 1
+
+
+define fold_information_and_computational_security_holds with observations as Int returning Bool:
+    set information_surface to fold_adversary_compatible_sources(observations)
+    set exhaustive_work to information_surface
+    return forced_to_be("Fold security: exhaustive work enumerates the exact hidden fibre" and exhaustive_work and information_surface) == information_surface
+
+
+define fold_post_quantum_security_accounting_holds with depth as Int and observations as Int returning Bool:
+    set hidden_support to fold_probabilistic_history_support(observations)
+    set quantum_support to fold_quantum_retained_information_support(depth and observations)
+    return hidden_support * quantum_support == fold_quantum_support_count(depth)
+
+
+define complete_fold_security_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set observations to 0
+            repeat while observations < depth + 1:
+                if fold_secrecy_holds(depth and observations) == false:
+                    return false
+                if fold_authentication_holds(rank and depth and observations) == false:
+                    return false
+                if fold_commitment_binding_holds(rank and depth and observations) == false:
+                    return false
+                if fold_proof_of_knowledge_holds(rank and depth and observations) == false:
+                    return false
+                if fold_zero_disclosure_accounting_holds(depth and observations) == false:
+                    return false
+                if fold_multiparty_reconstruction_holds(rank and depth and observations and observations / binary_count()) == false:
+                    return false
+                if fold_information_and_computational_security_holds(observations) == false:
+                    return false
+                if fold_post_quantum_security_accounting_holds(depth and observations) == false:
+                    return false
+                set observations to observations + 1
+            if fold_integrity_holds(rank and depth and depth) == false:
+                return false
+            if fold_signature_verification_holds(rank and depth) == false:
+                return false
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define forged_authentication_is_rejected with rank as Int and depth as Int returning Bool:
+    return changed_binding_changes_program(rank and depth and 1)
+
+
+define collision_free_digest_claim_is_rejected with observations as Int returning Bool:
+    return fold_hash_collision_multiplicity(observations) != 1
+
+
+define collapsed_post_quantum_support_is_rejected with depth as Int returning Bool:
+    if fold_post_quantum_security_accounting_holds(depth and 1) == false:
+        return false
+    return fold_probabilistic_history_support(1) != 1

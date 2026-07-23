@@ -1,0 +1,55 @@
+# ============================================================================
+#  FOLD ENTROPY AND UNCERTAINTY -- closed distinctions and exact support product.
+# ============================================================================
+#
+#  Entropy is the counted number s of source distinctions closed by observation.
+#  Its exact multiplicity is b^s and each unresolved history has share 1/b^s.
+#  Uncertainty is the complementary support pair b^s and b^(k-s), whose product
+#  is always b^k.  This cross-routes the existing entropy fibres, information
+#  accounting, randomness shares, and uncertainty bound without importing a
+#  logarithm, distribution, or uncertainty measure.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_verification_proof.ep"
+
+
+define fold_entropy_quantity with observations as Int returning Int:
+    return forced_to_be("Fold entropy quantity = closed distinctions" and observations and closed_information(observations))
+
+define fold_entropy_multiplicity with observations as Int returning Int:
+    return forced_to_be("Fold entropy multiplicity = unresolved histories" and whole_power(binary_count() and fold_entropy_quantity(observations)) and unresolved_fold_history_count(observations))
+
+define fold_entropy_history_share with observations as Int returning Fraction:
+    return fraction_from_ratio(1 and fold_entropy_multiplicity(observations))
+
+define fold_uncertainty_support_product with depth as Int and observations as Int returning Int:
+    set closed_support to fold_entropy_multiplicity(observations)
+    set retained_support to retained_resource(depth and observations)
+    return forced_to_be("Fold uncertainty: closed times retained support = total states" and closed_support * retained_support and uncertainty_bound(depth))
+
+define fold_entropy_is_monotone with observations as Int returning Bool:
+    return fold_entropy_multiplicity(observations + 1) == binary_count() * fold_entropy_multiplicity(observations)
+
+define complete_fold_entropy_uncertainty_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_entropy_quantity(observations) != observations:
+                return false
+            if fold_uncertainty_support_product(depth and observations) != computation_state_count(depth):
+                return false
+            if unresolved_fold_histories_partition_one(observations) == false:
+                return false
+            if fold_entropy_is_monotone(observations) == false:
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+define decreased_entropy_multiplicity_is_rejected with observations as Int returning Bool:
+    return fold_entropy_multiplicity(observations + 1) != fold_entropy_multiplicity(observations) - 1
+
+define subbound_uncertainty_is_rejected with depth as Int and observations as Int returning Bool:
+    return fold_uncertainty_support_product(depth and observations) - 1 < uncertainty_bound(depth)

@@ -1,0 +1,40 @@
+import "../constants/mathematical_foundations_complete.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold mathematical foundations ==="
+    set ok to expect_true("foundation registration holds" and fold_foundation_registration_holds())
+    set ok to expect_true("exact number structure holds" and fold_exact_number_structure_holds())
+    set ok to expect_true("discrete mathematics holds" and fold_discrete_mathematics_holds())
+    set ok to expect_true("combinatorics holds" and fold_combinatorics_holds())
+    set ok to expect_true("graph and network theory holds" and fold_graph_network_theory_holds())
+    set ok to expect_true("algebraic structure holds" and fold_algebraic_structure_holds())
+    set ok to expect_true("order and lattice structure holds" and fold_order_lattice_holds())
+    set ok to expect_true("computational geometry and topology hold" and fold_computational_geometry_topology_holds())
+    set ok to expect_true("probability and statistics hold" and fold_probability_statistics_holds())
+    set ok to expect_true("optimization foundation holds" and fold_optimization_foundation_holds())
+    set ok to expect_true("dynamical system holds" and fold_dynamical_system_holds())
+    set ok to expect_true("logic and proof theory hold" and fold_logic_proof_theory_holds())
+    set ok to expect_true("typed composition holds" and fold_compositional_structure_holds())
+    set ok to expect_true("complete mathematical foundations hold" and complete_fold_mathematical_foundations())
+    set ok to expect_true("false combinatorial count is rejected" and false_combinatorial_count_is_rejected(7))
+    set ok to expect_true("broken lattice absorption is rejected" and broken_lattice_absorption_is_rejected())
+    set ok to expect_true("unequal lengths are not a metric pair" and unequal_word_lengths_are_not_a_metric())
+    display "=== done ==="
+    return 0

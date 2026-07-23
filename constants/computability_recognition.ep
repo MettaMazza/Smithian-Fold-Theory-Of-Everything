@@ -1,0 +1,86 @@
+# ============================================================================
+#  FOLD RECOGNITION LAW -- generated paths are recognized by exact closure.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Recognition cannot be imported as a machine convention.  The derived language
+#  and automaton already force it: a supplied path is recognized exactly when it
+#  is generated from lawful fibre labels and its exact reader reaches the One
+#  after consuming the entire path.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Route A checks grammar membership, decodes the coordinate, and executes its
+#  Fold path.  Route B runs the Step-332 reader over the same symbols.  They agree
+#  for every generated word.  The recognized depth-k language contains b^k words,
+#  cross-routed to both the grammar count and the exact state census.
+#
+#  An outside symbol and a word asserted at the wrong depth are rejected.  Both
+#  recognition and rejection finish after inspection of the finite supplied path.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_universality.ep"
+
+
+define fold_recognizes_word with word as List returning Bool:
+    set depth to length_list(word)
+    if fold_word_is_generated(word and depth) == false:
+        return false
+    set accepted to fold_automaton_accepts(word)
+    set final to universal_fold_execute_word(word and depth)
+    set one to fraction_from_whole_number(1)
+    if accepted:
+        return fraction_is_equal(final and one)
+    return false
+
+
+define fold_recognizes_complete_language with depth as Int returning Bool:
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        if fold_recognizes_word(fold_grammar_word(index and depth)):
+            set index to index + 1
+        else:
+            return false
+    return true
+
+
+define fold_recognized_word_count with depth as Int returning Int:
+    set recognized to 0
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        if fold_recognizes_word(fold_grammar_word(index and depth)):
+            set recognized to recognized + 1
+        set index to index + 1
+    set checked to forced_to_be("Fold recognition: accepted words = grammar words" and recognized and fold_language_word_count(depth))
+    return forced_to_be("Fold recognition: accepted words = exact states" and checked and computation_state_count(depth))
+
+
+# Rejection is also a completed exact result for a supplied finite path.
+define fold_rejects_outside_word with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    set ok to set_list(word and 0 and encoding_symbol_count() + 1)
+    return fold_recognizes_word(word) == false
+
+
+define fold_rejects_wrong_depth with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    return fold_word_is_generated(word and depth + 1) == false
+
+
+define complete_fold_recognition_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_recognizes_complete_language(depth):
+            if fold_recognized_word_count(depth) == computation_state_count(depth):
+                if fold_rejects_outside_word(depth):
+                    if fold_rejects_wrong_depth(depth):
+                        set depth to depth + 1
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        else:
+            return false
+    return true

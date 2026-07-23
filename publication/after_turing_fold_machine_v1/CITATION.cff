@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this release, please cite After Turing: The Fold Machine and the Smithian Fold Theory source corpus."
+title: "After Turing: The Fold Machine"
+type: article
+version: "1.0"
+date-released: 2026-07-23
+doi: 10.5281/zenodo.21512799
+url: "https://doi.org/10.5281/zenodo.21512799"
+authors:
+  - family-names: Smith
+    given-names: Maria
+    affiliation: Ernos Labs
+repository-code: "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything"
+license: CC-BY-4.0
+abstract: >-
+  An exact Smithian derivation of the declared mathematical sciences of
+  classical and quantum computation, with a proof-carrying Fold Machine,
+  executable census, unfavorable controls and independent certificates.
+keywords:
+  - Smithian Fold Theory
+  - theoretical computer science
+  - quantum computation
+  - computability
+  - computational complexity
+  - information theory
+  - reversible computation
+  - machine-checked derivation
+preferred-citation:
+  type: article
+  title: "After Turing: The Fold Machine"
+  authors:
+    - family-names: Smith
+      given-names: Maria
+  year: 2026
+  doi: 10.5281/zenodo.21512799
+  url: "https://doi.org/10.5281/zenodo.21512799"
+  publisher:
+    name: Ernos Labs

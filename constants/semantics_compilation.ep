@@ -1,0 +1,96 @@
+# ============================================================================
+#  FOLD SEMANTICS-PRESERVING COMPILATION -- syntax to exact transition trace.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Compilation must translate a program into another executable form without
+#  changing its meaning.  The Fold program's unique coordinate path supplies the
+#  target form directly: the ordered list of state ranks visited by its prefix.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Compiling `(word,s)` emits s+1 ranks: the decoded source followed by each
+#  forced lower-grid image.  Every adjacent pair is one lawful Fold transition;
+#  executing the trace returns the same result rank and type as evaluation.
+#  Every program is compiled.  Shortened and tampered traces reject.  No external
+#  instruction set or compiler model enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_program_transformation.ep"
+
+
+define fold_compile_program_trace with rank as Int and depth as Int and steps as Int returning List:
+    set trace to create_list()
+    set current_rank to rank
+    set current_depth to depth
+    set ok to append_list(trace and current_rank)
+    set compiled to 0
+    repeat while compiled < steps:
+        set current_rank to lower_grid_index(current_rank and current_depth)
+        set current_depth to current_depth - 1
+        set ok to append_list(trace and current_rank)
+        set compiled to compiled + 1
+    return trace
+
+
+define fold_compiled_trace_is_lawful with trace as List and depth as Int returning Bool:
+    if length_list(trace) < 1:
+        return false
+    set position to 0
+    repeat while position < length_list(trace) - 1:
+        set current_rank to get_list(trace and position)
+        set next_rank to get_list(trace and position + 1)
+        if next_rank != lower_grid_index(current_rank and depth - position):
+            return false
+        set position to position + 1
+    return true
+
+
+define fold_execute_compiled_trace with trace as List returning Int:
+    if length_list(trace) < 1:
+        return 0
+    return get_list(trace and length_list(trace) - 1)
+
+
+define fold_compilation_preserves_semantics with rank as Int and depth as Int and steps as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    if length_list(trace) != steps + 1:
+        return false
+    if fold_compiled_trace_is_lawful(trace and depth) == false:
+        return false
+    set compiled_result to fold_execute_compiled_trace(trace)
+    set semantic_result to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and steps)
+    return compiled_result == semantic_result
+
+
+define complete_fold_compilation_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_compilation_preserves_semantics(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define tampered_compiled_trace_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    if steps < 1:
+        return true
+    set trace to fold_compile_program_trace(rank and depth and steps)
+    set changed to get_list(trace and 1) + 1
+    if changed > computation_state_count(depth - 1):
+        set changed to 1
+    set ok to set_list(trace and 1 and changed)
+    return fold_compiled_trace_is_lawful(trace and depth) == false
+
+
+define shortened_compiled_trace_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    if steps < 1:
+        return true
+    set short_trace to fold_compile_program_trace(rank and depth and steps - 1)
+    return length_list(short_trace) != steps + 1

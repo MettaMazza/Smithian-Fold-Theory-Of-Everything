@@ -1,0 +1,112 @@
+# ============================================================================
+#  FOLD GEOMETRIC ALGORITHMS -- exact grid distance, scaling, and nearest point.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Computational geometry must use the Fold's own coordinates.  At depth k these
+#  are the ordered exact parts i/b^k, so adjacency, distance, scaling, and nearest
+#  point are all exhaustively decidable without an imported metric or floating
+#  representation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Adjacent spacing is exactly 1/b^k.  Within one Fold branch, one transition
+#  multiplies separation by b; paired preimages of one image are separated by
+#  the closed half-One.  Nearest-point search enumerates the complete exact grid
+#  and compares exact fraction distances.  Every grid point selects itself
+#  uniquely.  A shifted nearest point and perturbed spacing are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_algebraic.ep"
+
+
+define fold_fraction_distance with first as Fraction and second as Fraction returning Fraction:
+    if fraction_compare(first and second) < 0:
+        return fraction_subtract(second and first)
+    return fraction_subtract(first and second)
+
+
+define fold_grid_spacing with depth as Int returning Fraction:
+    return fraction_from_ratio(1 and computation_state_count(depth))
+
+
+define fold_grid_distance with first_rank as Int and second_rank as Int and depth as Int returning Fraction:
+    return fold_fraction_distance(computation_state(first_rank and depth) and computation_state(second_rank and depth))
+
+
+define every_fold_grid_adjacency_is_exact with depth as Int returning Bool:
+    set spacing to fold_grid_spacing(depth)
+    set rank to 1
+    repeat while rank < computation_state_count(depth):
+        if fraction_is_equal(fold_grid_distance(rank and rank + 1 and depth) and spacing) == false:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_distance_scales_on_one_branch with depth as Int returning Bool:
+    if depth < 2:
+        return true
+    set before to fold_grid_distance(1 and 2 and depth)
+    set after to fold_grid_distance(1 and 2 and depth - 1)
+    set scaled to fraction_multiply(before and fraction_from_whole_number(binary_count()))
+    return fraction_is_equal(scaled and after)
+
+
+define fold_preimage_separation_is_half with depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set target to 1
+    repeat while target < lower_count + 1:
+        set separation to fold_grid_distance(target and target + lower_count and depth)
+        if fraction_is_equal(separation and fraction_from_ratio(1 and binary_count())) == false:
+            return false
+        set target to target + 1
+    return true
+
+
+define fold_nearest_grid_rank with target as Fraction and depth as Int returning Int:
+    set best_rank to 1
+    set best_distance to fold_fraction_distance(target and computation_state(1 and depth))
+    set rank to 2
+    repeat while rank < computation_state_count(depth) + 1:
+        set distance to fold_fraction_distance(target and computation_state(rank and depth))
+        if fraction_compare(distance and best_distance) < 0:
+            set best_rank to rank
+            set best_distance to distance
+        set rank to rank + 1
+    return best_rank
+
+
+define every_fold_grid_point_is_its_nearest with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_nearest_grid_rank(computation_state(rank and depth) and depth) != rank:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define complete_fold_geometric_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if every_fold_grid_adjacency_is_exact(depth) == false:
+            return false
+        if fold_distance_scales_on_one_branch(depth) == false:
+            return false
+        if fold_preimage_separation_is_half(depth) == false:
+            return false
+        if every_fold_grid_point_is_its_nearest(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define shifted_nearest_point_is_rejected with rank as Int and depth as Int returning Bool:
+    set target to computation_state(rank and depth)
+    return fold_nearest_grid_rank(target and depth) != rank + 1
+
+
+define perturbed_grid_spacing_is_rejected with depth as Int returning Bool:
+    set lawful to fold_grid_spacing(depth)
+    set perturbed to fraction_from_ratio(1 and computation_state_count(depth) + 1)
+    return fraction_is_equal(lawful and perturbed) == false

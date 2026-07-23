@@ -1,0 +1,29 @@
+import "../constants/quantum_simulation_verification_learning_limits.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold quantum simulation, verification, learning, and limits ==="
+    set ok to expect_true("simulation executes every branch" and fold_quantum_simulation_holds(7 and 3))
+    set ok to expect_true("verification proves every branch trace" and fold_quantum_verification_holds(7 and 3))
+    set ok to expect_true("quantum learning reduces support exactly" and fold_quantum_learning_holds(7 and 3))
+    set ok to expect_true("classical and quantum operations correspond" and fold_operational_classical_quantum_correspondence_holds(73 and 7 and 3))
+    set ok to expect_true("quantum computation obeys the computation boundary" and fold_quantum_computation_limit_holds())
+    set ok to expect_true("the complete final quantum census holds" and complete_fold_quantum_final_census())
+    set ok to expect_true("an omitted simulation branch is rejected" and omitted_quantum_simulation_branch_is_rejected(7))
+    set ok to expect_true("a false quantum proof is rejected" and false_quantum_verification_is_rejected(73 and 7 and 3))
+    set ok to expect_true("a shifted correspondence result is rejected" and shifted_classical_quantum_correspondence_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

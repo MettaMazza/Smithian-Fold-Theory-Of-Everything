@@ -1,0 +1,106 @@
+# ============================================================================
+#  FOLD ADMISSIBLE-COMPUTATION LIMIT LAW -- exact boundary of completion claims.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Computability claims beyond ordinary closure must still obey the same corpus
+#  law: lawful description, counted execution, exact transition, and registered
+#  information provenance.  This module consolidates the forced boundary.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A finite process prefix is admitted when its word is generated, its step count
+#  is nonnegative, and the universal Fold executor produces its exact result.
+#  Terminal completion additionally requires arrival at the One; the first
+#  depth-k path cannot claim this before k steps.  A complete recurrent period
+#  proves that its machine does not complete at the One.
+#
+#  Relative computation may restore one held fibre label, but retained information
+#  plus that held distinction equals the original depth: no distinction is created.
+#  A non-Fold transition, an outside label, a negative count, and a total outcome
+#  for the self-negating process are inadmissible.  These are the exact limits on
+#  stronger-computation claims inside the current Fold grammar.
+# ============================================================================
+
+import "../constants/computability_relative.ep"
+
+
+define finite_fold_prefix_is_admissible with word as List and steps as Int returning Bool:
+    set depth to length_list(word)
+    if fold_word_is_generated(word and depth) == false:
+        return false
+    if steps < 0:
+        return false
+    set result to universal_fold_execute_word(word and steps)
+    set repeated to computation_steps(computation_state(decode_computation_codeword(word) and depth) and steps)
+    return fraction_is_equal(result and repeated)
+
+
+define complete_admitted_prefix_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            set word to fold_grammar_word(index and depth)
+            set steps to 0
+            repeat while steps < depth + 1:
+                if finite_fold_prefix_is_admissible(word and steps):
+                    set steps to steps + 1
+                else:
+                    return false
+            set index to index + 1
+        set depth to depth + 1
+    return true
+
+
+define premature_completion_claim_is_rejected with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    set early to universal_fold_execute_word(word and depth - 1)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(early and one) == false
+
+
+define recurrent_completion_claim_is_rejected returning Bool:
+    return recurrent_fold_machine_does_not_halt()
+
+
+# The held first label exactly restores the one distinction closed by observation.
+define relative_information_is_accounted with depth as Int returning Bool:
+    set retained_after_observation to retained_information(depth and 1)
+    set held_distinction to 1
+    return retained_after_observation + held_distinction == information_quantity(depth)
+
+
+define negative_step_count_is_rejected with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    return finite_fold_prefix_is_admissible(word and 0 - 1) == false
+
+
+define outside_result_symbol_is_rejected with depth as Int returning Bool:
+    return outside_relative_label_is_rejected(depth)
+
+
+define total_self_negating_claim_is_rejected returning Bool:
+    return fold_self_decision_is_undecidable()
+
+
+define complete_admissible_computation_limit_census returning Bool:
+    if complete_admitted_prefix_census():
+        set depth to 1
+        repeat while depth < computation_census_depth() + 1:
+            if premature_completion_claim_is_rejected(depth):
+                if relative_information_is_accounted(depth):
+                    if negative_step_count_is_rejected(depth):
+                        if outside_result_symbol_is_rejected(depth):
+                            set depth to depth + 1
+                        else:
+                            return false
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        if recurrent_completion_claim_is_rejected():
+            if total_self_negating_claim_is_rejected():
+                return nonfold_transition_is_rejected(computation_census_depth())
+    return false

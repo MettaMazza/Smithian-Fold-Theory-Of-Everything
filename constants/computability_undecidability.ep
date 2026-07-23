@@ -1,0 +1,87 @@
+# ============================================================================
+#  FOLD UNDECIDABILITY LAW -- the exact self-negating decision boundary.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Recognition and halting are exact for supplied finite Fold paths and certified
+#  recurrent periods.  Self-application now forces the boundary case: a process
+#  may consume its own predicted outcome and choose the other Fold outcome.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The outcome alphabet is not imported.  It is the same binary fibre labels
+#  1..b.  The partner of label x is b+1-x, the other member of that fibre.  The
+#  engine generates every possible predicted outcome.  For each, the constructed
+#  self-process returns its partner.  No prediction equals its result: the exact
+#  fixed-point count is zero.
+#
+#  Therefore a total internally correct outcome for this self-negating process is
+#  inadmissible.  This is the Fold undecidability claim and its exact scope.  The
+#  non-negating identity relation has all b fixed outcomes, proving the zero is
+#  caused by the self-negating construction rather than by a missing outcome.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computability_reduction.ep"
+
+
+define fold_decision_outcome_is_lawful with outcome as Int returning Bool:
+    return encoding_symbol_is_lawful(outcome)
+
+
+# The other exact member of the binary outcome fibre.
+define fold_outcome_partner with outcome as Int returning Int:
+    if fold_decision_outcome_is_lawful(outcome) == false:
+        return 0
+    return binary_count() + 1 - outcome
+
+
+# A self-negating process makes the actual outcome the partner of its prediction.
+define self_negating_fold_actual with predicted as Int returning Int:
+    return fold_outcome_partner(predicted)
+
+
+# Generate the complete outcome alphabet and count self-consistent predictions.
+define self_negating_fold_fixed_prediction_count returning Int:
+    set fixed to 0
+    set predicted to 1
+    repeat while predicted < binary_count() + 1:
+        set actual to self_negating_fold_actual(predicted)
+        if actual == predicted:
+            set fixed to fixed + 1
+        set predicted to predicted + 1
+    return forced_to_be("self-negating Fold decision: fixed predictions = zero" and fixed and 0)
+
+
+define fold_self_decision_is_undecidable returning Bool:
+    return self_negating_fold_fixed_prediction_count() == 0
+
+
+define every_total_self_prediction_is_rejected returning Bool:
+    set predicted to 1
+    repeat while predicted < binary_count() + 1:
+        if self_negating_fold_actual(predicted) == predicted:
+            return false
+        set predicted to predicted + 1
+    return true
+
+
+# Applying the partner relation twice restores every lawful outcome.
+define fold_outcome_partner_is_involution returning Bool:
+    set outcome to 1
+    repeat while outcome < binary_count() + 1:
+        if fold_outcome_partner(fold_outcome_partner(outcome)) != outcome:
+            return false
+        set outcome to outcome + 1
+    return true
+
+
+# CONTROL: without the self-negating partner, identity has all b fixed outcomes.
+define nonnegating_identity_fixed_count returning Int:
+    set fixed to 0
+    set predicted to 1
+    repeat while predicted < binary_count() + 1:
+        set actual to predicted
+        if actual == predicted:
+            set fixed to fixed + 1
+        set predicted to predicted + 1
+    return forced_to_be("non-negating Fold decision: identity has every outcome fixed" and fixed and binary_count())

@@ -1,0 +1,42 @@
+import "../constants/computational_security.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold computational security ==="
+    set ok to expect_number("three hidden labels admit eight sources" and fold_adversary_compatible_sources(3) and 8)
+    set ok to expect_true("the observed map is information-one-way" and fold_information_one_wayness_holds(3))
+    set ok to expect_true("secrecy accounting holds" and fold_secrecy_holds(7 and 3))
+    set ok to expect_true("verified traces preserve integrity" and fold_integrity_holds(73 and 7 and 3))
+    set ok to expect_true("held labels authenticate the source" and fold_authentication_holds(73 and 7 and 3))
+    set ok to expect_number("the digest fibre has eight collisions" and fold_hash_collision_multiplicity(3) and 8)
+    set ok to expect_true("commitment hiding holds" and fold_commitment_hiding_holds(3))
+    set ok to expect_true("commitment binding holds" and fold_commitment_binding_holds(73 and 7 and 3))
+    set ok to expect_true("signature verification holds" and fold_signature_verification_holds(73 and 7))
+    set ok to expect_true("proof of held-label knowledge holds" and fold_proof_of_knowledge_holds(73 and 7 and 3))
+    set ok to expect_true("zero-disclosure information is accounted" and fold_zero_disclosure_accounting_holds(7 and 3))
+    set ok to expect_true("multiparty shares reconstruct" and fold_multiparty_reconstruction_holds(73 and 7 and 4 and 2))
+    set ok to expect_true("adversarial query bound is exact" and fold_adversarial_query_bound_holds(3 and 2))
+    set ok to expect_true("information and computation security agree" and fold_information_and_computational_security_holds(3))
+    set ok to expect_true("post-quantum support is accounted" and fold_post_quantum_security_accounting_holds(7 and 3))
+    set ok to expect_true("the complete security census holds" and complete_fold_security_census())
+    set ok to expect_true("a forged authentication is rejected" and forged_authentication_is_rejected(73 and 7))
+    set ok to expect_true("collision-free digest claims reject" and collision_free_digest_claim_is_rejected(3))
+    set ok to expect_true("collapsed post-quantum support rejects" and collapsed_post_quantum_support_is_rejected(7))
+    display "=== done ==="
+    return 0

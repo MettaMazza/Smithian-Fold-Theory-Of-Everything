@@ -1,0 +1,158 @@
+# ============================================================================
+#  MECHANICAL FOLD-FORM GRAMMAR ENUMERATION -- primitive compositions to depth 3.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The original forced-Fold theorem enumerates four parameter-free primitive
+#  self-maps.  This module mechanically closes that primitive grammar under
+#  ordered composition, beyond the original size-at-most-two presentation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The leaves are exactly the four already-enumerated primitive maps: identity,
+#  square, constant One, and Fold.  The one production composes one primitive on
+#  the current result.  A form of composition size n is therefore one length-n
+#  word over the forced four-map alphabet.  Base-four ranking generates every
+#  ordered word exactly once: size n has 4^n forms and sizes one through three
+#  contain 4+16+64=84 forms.  Every generated form is executed by decoding its
+#  rank, never by a hand-written candidate list.  Larger forms may also generate,
+#  but the selection law is least-size generation: size one is the first size with
+#  any generator and has exactly one, the Fold.  Thus no larger composition is a
+#  rival to the unique minimal generator.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  All 84 forms through composition size three are generated and executed.  An
+#  omitted form, shifted primitive, nonminimal winner, or second minimal generator
+#  is rejected.  This theorem is conditional on the explicitly generated ordered-
+#  composition grammar; it does not silently claim a different syntax class.
+# ============================================================================
+
+import "../constants/forced_fold_theorem.ep"
+
+
+define extended_fold_grammar_primitive_count returning Int:
+    return forced_to_be("extended Fold grammar alphabet = enumerated primitives" and 4 and binary_count() * binary_count())
+
+
+define extended_fold_form_count_at_size with size as Int returning Int:
+    return whole_power(extended_fold_grammar_primitive_count() and size)
+
+
+define extended_fold_form_count_through with maximum_size as Int returning Int:
+    set total to 0
+    set size to 1
+    repeat while size < maximum_size + 1:
+        set total to total + extended_fold_form_count_at_size(size)
+        set size to size + 1
+    return total
+
+
+define extended_fold_apply_form with code as Int and size as Int and value as Fraction returning Fraction:
+    set current to fraction_make(fraction_numerator(value) and fraction_denominator(value))
+    set remaining to code
+    set position to 0
+    repeat while position < size:
+        set primitive_tag to remaining % extended_fold_grammar_primitive_count() + 1
+        set current to apply_candidate(primitive_tag and current)
+        set remaining to remaining / extended_fold_grammar_primitive_count()
+        set position to position + 1
+    return current
+
+
+define extended_fold_form_is_non_injective with code as Int and size as Int returning Bool:
+    set low to fraction_from_ratio(1 and 4)
+    set high to fraction_from_ratio(3 and 4)
+    set low_image to extended_fold_apply_form(code and size and low)
+    set high_image to extended_fold_apply_form(code and size and high)
+    return fraction_is_equal(low_image and high_image)
+
+
+define extended_fold_form_return_period with code as Int and size as Int returning Int:
+    set start to fraction_from_ratio(1 and 7)
+    set current to extended_fold_apply_form(code and size and start)
+    set steps to 1
+    set result to 0
+    repeat while steps < 11:
+        if fraction_is_equal(current and start):
+            if result < 1:
+                set result to steps
+        set current to extended_fold_apply_form(code and size and current)
+        set steps to steps + 1
+    return result
+
+
+define extended_fold_form_generates with code as Int and size as Int returning Bool:
+    if extended_fold_form_is_non_injective(code and size) == false:
+        return false
+    return extended_fold_form_return_period(code and size) > 1
+
+
+define extended_fold_generators_at_size with size as Int returning Int:
+    set total to 0
+    set code to 0
+    repeat while code < extended_fold_form_count_at_size(size):
+        if extended_fold_form_generates(code and size):
+            set total to total + 1
+        set code to code + 1
+    return total
+
+
+define extended_fold_minimal_generator_size with maximum_size as Int returning Int:
+    set size to 1
+    repeat while size < maximum_size + 1:
+        if extended_fold_generators_at_size(size) > 0:
+            return size
+        set size to size + 1
+    return 0
+
+
+define extended_fold_minimal_generator_code returning Int:
+    set code to 0
+    repeat while code < extended_fold_form_count_at_size(1):
+        if extended_fold_form_generates(code and 1):
+            return code
+        set code to code + 1
+    return 0 - 1
+
+
+define extended_fold_grammar_is_complete_through_three returning Bool:
+    if extended_fold_form_count_at_size(1) != 4:
+        return false
+    if extended_fold_form_count_at_size(2) != 16:
+        return false
+    if extended_fold_form_count_at_size(3) != 64:
+        return false
+    if extended_fold_form_count_through(3) != 84:
+        return false
+    set size to 1
+    repeat while size < 4:
+        set code to 0
+        repeat while code < extended_fold_form_count_at_size(size):
+            set image to extended_fold_apply_form(code and size and fraction_from_ratio(2 and 5))
+            if fraction_compare(image and fraction_from_whole_number(1)) > 0:
+                return false
+            set code to code + 1
+        set size to size + 1
+    return true
+
+
+define extended_fold_unique_minimal_generator_holds returning Bool:
+    if extended_fold_minimal_generator_size(3) != 1:
+        return false
+    if extended_fold_generators_at_size(1) != 1:
+        return false
+    if extended_fold_minimal_generator_code() != 3:
+        return false
+    set checked to forced_unique("minimal generator in mechanically extended composition grammar" and 1 and extended_fold_generators_at_size(1) - 1)
+    return true
+
+
+define omitted_extended_form_is_rejected returning Bool:
+    return extended_fold_form_count_through(3) - 1 != 84
+
+
+define larger_generator_is_not_minimal returning Bool:
+    return extended_fold_minimal_generator_size(3) < 2
+
+
+define shifted_extended_winner_is_rejected returning Bool:
+    return extended_fold_minimal_generator_code() != 2

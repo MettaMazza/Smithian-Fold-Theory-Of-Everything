@@ -1,0 +1,32 @@
+# Machine-check Fold trees and graphs.
+import "../constants/algorithms_trees_graphs.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold trees and graphs ==="
+    set example to enumerate_fold_word(73 and 7)
+    set ok to expect_number("depth-seven tree has 255 nodes" and fold_tree_node_count(7) and 255)
+    set ok to expect_number("depth-seven tree has 254 edges" and fold_tree_edge_count(7) and 254)
+    set ok to expect_true("a generated node has one exact parent" and fold_tree_parent_is_unique(example))
+    set ok to expect_true("every closing node reaches the root" and every_fold_node_reaches_root(7))
+    set ok to expect_true("the complete tree and graph census holds" and complete_fold_trees_graphs_census())
+    set ok to expect_true("a closing self-edge is rejected" and closing_graph_self_edge_is_rejected(7))
+    set ok to expect_true("an extra parent is rejected" and extra_tree_parent_is_rejected(7))
+    display "=== done ==="
+    return 0

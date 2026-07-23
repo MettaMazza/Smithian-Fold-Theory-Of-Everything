@@ -1,0 +1,32 @@
+import "../constants/quantum_communication_coding_fault_tolerance.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold quantum communication, coding, and faults ==="
+    set ok to expect_true("the channel transmits every quantum branch" and fold_quantum_communication_holds(7))
+    set ok to expect_true("every branch has an exact protected codeword" and fold_quantum_coding_holds(73 and 7))
+    set ok to expect_true("one changed encoded position is corrected" and fold_quantum_error_correction_holds(73 and 7 and 11))
+    set ok to expect_true("the protected circuit preserves exact semantics" and fold_quantum_fault_tolerant_circuit_holds(73 and 7 and 3 and 11))
+    set ok to expect_number("fault-tolerance redundancy is two labels per source label" and fold_quantum_fault_tolerance_redundancy(7) and 14)
+    set ok to expect_true("the complete communication/coding/fault census holds" and complete_fold_quantum_communication_coding_fault_census())
+    set ok to expect_true("an omitted channel branch is rejected" and omitted_quantum_channel_branch_is_rejected(7))
+    set ok to expect_true("binary-width protection is rejected" and binary_width_quantum_code_is_rejected())
+    set ok to expect_true("shortened protection is rejected" and shortened_quantum_protection_is_rejected(7))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,31 @@
+# Machine-check Fold parallel algorithms.
+import "../constants/algorithms_parallel.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold parallel algorithms ==="
+    set ok to expect_number("three rounds retain sixteen candidates" and fold_parallel_search_active_count(73 and 7 and 3) and 16)
+    set ok to expect_number("seven rounds retain one target" and fold_parallel_search_active_count(73 and 7 and 7) and 1)
+    set ok to expect_number("layered parallel search work is 254" and fold_parallel_search_work(7) and 254)
+    set ok to expect_true("every target follows the exact filtering law" and fold_parallel_search_identifies_target(73 and 7))
+    set ok to expect_true("the complete parallel census holds" and complete_fold_parallel_algorithm_census())
+    set ok to expect_true("a shortened search leaves binary ambiguity" and shortened_parallel_search_is_rejected(73 and 7))
+    set ok to expect_true("a missing parallel worker is rejected" and missing_parallel_worker_is_rejected(7))
+    display "=== done ==="
+    return 0

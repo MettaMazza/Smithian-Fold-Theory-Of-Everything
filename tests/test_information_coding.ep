@@ -1,0 +1,24 @@
+import "../constants/information_coding.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold coding theory ==="
+    set ok to expect_number("minimal correcting repetition is three" and fold_minimum_single_error_repetition() and 3)
+    set ok to expect_number("depth-seven redundancy is fourteen" and fold_coding_redundancy(7) and 14)
+    set ok to expect_true("one changed position is corrected" and fold_protected_code_corrects_one_error(73 and 7 and 8))
+    set ok to expect_true("the complete coding census holds" and complete_fold_coding_census())
+    set ok to expect_true("binary repetition cannot correct one error" and binary_repetition_cannot_correct_one_error())
+    set ok to expect_true("a shortened protected code is rejected" and shortened_protected_code_is_rejected(7))
+    return 0

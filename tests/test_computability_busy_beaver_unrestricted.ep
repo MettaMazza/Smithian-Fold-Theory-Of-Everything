@@ -1,0 +1,35 @@
+# Machine-check the unrestricted native Fold Busy-Beaver law.
+import "../constants/computability_busy_beaver_unrestricted.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Unrestricted native Fold Busy Beaver ==="
+    set ok to expect_number("depth one maximum halt time" and fold_busy_beaver_value(1) and 1)
+    set ok to expect_number("depth seven maximum halt time" and fold_busy_beaver_value(7) and 7)
+    set ok to expect_number("depth seven halting descriptions" and fold_busy_beaver_halting_description_count(7) and 128)
+    set ok to expect_true("complete admitted-depth census" and complete_native_fold_busy_beaver_census())
+    set ok to expect_true("depth-independent certificate executes through fourteen" and fold_busy_beaver_unrestricted_certificate(14))
+    set ok to expect_true("recurrent process excluded by nonhalting certificate" and recurrent_process_is_excluded_from_busy_beaver())
+    set ok to expect_true("shorter maximum rejected" and shorter_busy_beaver_claim_is_rejected(7))
+    set ok to expect_true("nonpositive description depth rejected" and nonpositive_busy_beaver_depth_is_rejected())
+    display "=== done ==="
+    return 0
+

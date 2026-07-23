@@ -1,0 +1,26 @@
+import "../constants/information_noise_error.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold noise and error ==="
+    set reference to enumerate_fold_word(73 and 7)
+    set changed to fold_change_symbol_at(enumerate_fold_word(73 and 7) and 0)
+    set ok to expect_number("one changed label is one exact error" and fold_symbol_error_count(reference and changed) and 1)
+    set ok to expect_true("a closed-prefix error is removed" and closed_prefix_error_is_removed(73 and 7 and 3))
+    set ok to expect_true("a retained-suffix error persists" and retained_suffix_error_persists(73 and 7 and 3))
+    set ok to expect_true("the complete noise census holds" and complete_fold_noise_error_census())
+    set ok to expect_true("zero-error change is rejected" and zero_error_changed_word_is_rejected(73 and 7))
+    set ok to expect_true("unequal lengths reject" and unequal_length_error_claim_is_rejected(7))
+    return 0

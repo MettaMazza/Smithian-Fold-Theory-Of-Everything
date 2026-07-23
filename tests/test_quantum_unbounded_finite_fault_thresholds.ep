@@ -1,0 +1,37 @@
+# Machine-check the unbounded finite quantum fault-tolerance law.
+import "../constants/quantum_unbounded_finite_fault_thresholds.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Unbounded finite quantum fault tolerance ==="
+    set ok to expect_number("one error forces width three" and fold_unbounded_fault_width(1) and 3)
+    set ok to expect_number("three errors force width seven" and fold_unbounded_fault_width(3) and 7)
+    set ok to expect_number("fourteen errors force width twenty-nine" and fold_unbounded_fault_width(14) and 29)
+    set ok to expect_true("arbitrary supplied order has strict-majority correction" and fold_unbounded_fault_width_is_minimal(14))
+    set ok to expect_true("induction certificate executes through fourteen" and fold_unbounded_fault_induction_certificate(14))
+    set ok to expect_true("no fixed colour-three ceiling" and no_fixed_positive_fault_ceiling_holds(3))
+    set ok to expect_true("corrected depth-seven quantum circuit" and fold_unbounded_fault_quantum_circuit_holds(1 and 7 and 7 and 14))
+    set ok to expect_true("complete finite-census plus unbounded certificate" and complete_unbounded_finite_fault_certificate())
+    set ok to expect_true("shortened width rejected" and shortened_unbounded_fault_width_is_rejected(14))
+    set ok to expect_true("nonpositive fault order rejected" and nonpositive_fault_order_is_rejected())
+    display "=== done ==="
+    return 0
+

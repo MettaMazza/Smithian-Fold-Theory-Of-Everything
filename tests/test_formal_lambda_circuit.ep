@@ -1,0 +1,32 @@
+import "../constants/formal_lambda_circuit.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold lambda-like calculus and circuit semantics ==="
+    set ok to expect_true("beta evaluation reconstructs the source" and fold_beta_evaluation_holds(73 and 7 and 3))
+    set ok to expect_true("the complete lambda census holds" and complete_fold_lambda_calculus_census())
+    set trace to fold_compile_program_trace(73 and 7 and 3)
+    set ok to expect_number("three compiled Fold edges are three gates" and fold_circuit_gate_count(trace) and 3)
+    set ok to expect_true("circuit execution preserves semantics" and fold_circuit_semantics_holds(73 and 7 and 3))
+    set ok to expect_true("the complete circuit census holds" and complete_fold_circuit_semantics_census())
+    set ok to expect_true("the joint formalism closes" and complete_fold_lambda_and_circuit_formalism())
+    set ok to expect_true("a changed binding is rejected" and changed_lambda_binding_is_rejected(73 and 7))
+    set ok to expect_true("a shortened full circuit is rejected" and shortened_fold_circuit_is_rejected(73 and 7))
+    display "=== done ==="
+    return 0

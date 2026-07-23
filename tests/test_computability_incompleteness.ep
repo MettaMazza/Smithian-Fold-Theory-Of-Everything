@@ -1,0 +1,31 @@
+# Machine-check the exact Fold incompleteness boundaries.
+import "../constants/computability_incompleteness.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold incompleteness boundary ==="
+    set ok to expect_true("zero missing distinctions is complete" and fold_description_is_complete(0))
+    set ok to expect_number("three missing distinctions have b^3 completions" and fold_compatible_completion_count(3) and 8)
+    set ok to expect_true("every positive missing depth is incomplete" and every_missing_fold_distinction_is_incomplete(7))
+    set ok to expect_true("held degree information completes an exact source" and held_degree_completes_description(85 and 7 and 3))
+    set ok to expect_true("the complete incompleteness census holds" and complete_fold_incompleteness_census())
+    set ok to expect_true("false uniqueness with a missing label is rejected" and false_unique_incomplete_description_is_rejected())
+    set ok to expect_true("false self-negating completion is rejected" and false_self_negating_completion_is_rejected())
+    display "=== done ==="
+    return 0

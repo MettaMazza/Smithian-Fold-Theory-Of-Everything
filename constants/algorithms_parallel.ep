@@ -1,0 +1,83 @@
+# ============================================================================
+#  FOLD PARALLEL ALGORITHMS -- simultaneous prefix filtering.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Every generated word can compare its next fibre label independently of every
+#  other word.  A target label therefore filters all live candidates in one
+#  simultaneous layer, and the next label acts only after that layer closes.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Before round r there are b^(k-r+1) live candidates; after it, b^(k-r) remain.
+#  Summed comparison work is the circuit size, maximum width is b^k, and dependent
+#  rounds are k.  After k rounds exactly one generated target remains.  Every
+#  target and every round is exhaustively counted.  Removing one worker or one
+#  round is rejected; no external scheduler enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_randomized.ep"
+
+
+define fold_word_prefix_matches with candidate as List and target as List and prefix_length as Int returning Bool:
+    set position to 0
+    repeat while position < prefix_length:
+        if get_list(candidate and position) != get_list(target and position):
+            return false
+        set position to position + 1
+    return true
+
+
+define fold_parallel_search_active_count with target_rank as Int and depth as Int and rounds as Int returning Int:
+    set target to enumerate_fold_word(target_rank and depth)
+    set active to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set candidate to enumerate_fold_word(rank and depth)
+        if fold_word_prefix_matches(candidate and target and rounds):
+            set active to active + 1
+        set rank to rank + 1
+    return active
+
+
+define fold_parallel_search_work with depth as Int returning Int:
+    set work to 0
+    set round to 1
+    repeat while round < depth + 1:
+        set work to work + computation_state_count(depth - round + 1)
+        set round to round + 1
+    return forced_to_be("Fold parallel search work = layered Fold circuit" and work and fold_circuit_size(depth))
+
+
+define fold_parallel_search_identifies_target with target_rank as Int and depth as Int returning Bool:
+    set round to 0
+    repeat while round < depth + 1:
+        set active to fold_parallel_search_active_count(target_rank and depth and round)
+        if active != computation_state_count(depth - round):
+            return false
+        set round to round + 1
+    return true
+
+
+define complete_fold_parallel_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_parallel_search_work(depth) != fold_circuit_size(depth):
+            return false
+        set target to 1
+        repeat while target < computation_state_count(depth) + 1:
+            if fold_parallel_search_identifies_target(target and depth) == false:
+                return false
+            set target to target + 1
+        set depth to depth + 1
+    return true
+
+
+define shortened_parallel_search_is_rejected with target_rank as Int and depth as Int returning Bool:
+    if depth < 1:
+        return true
+    return fold_parallel_search_active_count(target_rank and depth and depth - 1) == binary_count()
+
+
+define missing_parallel_worker_is_rejected with depth as Int returning Bool:
+    return computation_state_count(depth) - 1 != fold_parallel_width(depth)

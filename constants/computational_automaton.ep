@@ -1,0 +1,154 @@
+# ============================================================================
+#  FOLD AUTOMATON LAW -- the exact state reader forced by generated words.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 331 derives words as fibre paths.  A reader of those words is therefore
+#  already forced: at each position it checks the current state's fibre label and
+#  applies the Fold to reach the next lower configuration.  No separate machine
+#  convention is admitted.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A reader configuration is the pair (exact grid index, remaining depth).  The
+#  next word symbol must equal the state's first fibre label.  The only lawful
+#  transition then removes that label and moves to the Fold image.  After k
+#  symbols the configuration is (One, 0), the sole accepting terminal.
+#
+#  The complete depth-k reader has one configuration for every state at levels
+#  0..k.  Route A enumerates those grids; Route B begins with the One and extends
+#  every frontier configuration by its b preimages.  Their counts agree exactly.
+#  Every generated word is accepted; premature acceptance and a word paired with
+#  the wrong source state are rejected.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every word and transition through the forced depth is executed.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_language_grammar.ep"
+
+
+# The fibre label expected at one exact reader configuration.
+define fold_automaton_expected_symbol with index as Int and depth as Int returning Int:
+    set word to encode_computation_state(index and depth)
+    return get_list(word and 0)
+
+
+# The exact next configuration index after consuming the expected symbol.
+define fold_automaton_next_index with index as Int and depth as Int returning Int:
+    return lower_grid_index(index and depth)
+
+
+# Execute one word against one declared source configuration.
+define fold_automaton_matches_state with word as List and index as Int and depth as Int returning Bool:
+    if fold_word_is_generated(word and depth) == false:
+        return false
+    set current_index to index
+    set remaining to depth
+    set position to 0
+    repeat while position < depth:
+        set expected to fold_automaton_expected_symbol(current_index and remaining)
+        set supplied to get_list(word and position)
+        if expected != supplied:
+            return false
+        set current_index to fold_automaton_next_index(current_index and remaining)
+        set remaining to remaining - 1
+        set position to position + 1
+    if remaining != 0:
+        return false
+    return current_index == 1
+
+
+# A word is accepted when its decoded source follows it exactly to the One.
+define fold_automaton_accepts with word as List returning Bool:
+    set depth to length_list(word)
+    if fold_word_is_generated(word and depth) == false:
+        return false
+    set index to decode_computation_codeword(word)
+    return fold_automaton_matches_state(word and index and depth)
+
+
+# Every generated depth-k word is accepted by the same exact reader.
+define fold_automaton_accepts_complete_language with depth as Int returning Bool:
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        if fold_automaton_accepts(fold_grammar_word(index and depth)):
+            set index to index + 1
+        else:
+            return false
+    return true
+
+
+# Route A: enumerate all grid configurations at remaining depths 0..k.
+define enumerated_fold_automaton_configurations with depth as Int returning Int:
+    set total to 0
+    set level to 0
+    repeat while level < depth + 1:
+        set total to total + computation_state_count(level)
+        set level to level + 1
+    return total
+
+
+# Route B: grow the configuration frontier by the forced fibre count.
+define generated_fold_automaton_configurations with depth as Int returning Int:
+    set total to 1
+    set frontier to 1
+    set level to 1
+    repeat while level < depth + 1:
+        set frontier to frontier * binary_count()
+        set total to total + frontier
+        set level to level + 1
+    return total
+
+
+define fold_automaton_configuration_count with depth as Int returning Int:
+    return forced_to_be("Fold automaton configurations: grid enumeration = fibre generation" and enumerated_fold_automaton_configurations(depth) and generated_fold_automaton_configurations(depth))
+
+
+# Every nonterminal configuration has exactly one outgoing Fold transition.
+define fold_automaton_transition_count with depth as Int returning Int:
+    set transitions to 0
+    set level to 1
+    repeat while level < depth + 1:
+        set transitions to transitions + computation_state_count(level)
+        set level to level + 1
+    return forced_to_be("Fold automaton: one transition per nonterminal configuration" and transitions and fold_automaton_configuration_count(depth) - 1)
+
+
+# UNFAVORABLE CONTROL: the first depth-k state has not accepted after k-1 reads.
+define premature_fold_automaton_acceptance_is_rejected with depth as Int returning Bool:
+    set state to computation_state(1 and depth)
+    set early to computation_steps(state and depth - 1)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(early and one) == false
+
+
+# UNFAVORABLE CONTROL: change the first lawful symbol but retain the declared
+# source state; the resulting path cannot be that state's path.
+define mismatched_fold_word_is_rejected with depth as Int returning Bool:
+    set word to fold_grammar_word(1 and depth)
+    set changed to binary_count()
+    set ok to set_list(word and 0 and changed)
+    return fold_automaton_matches_state(word and 1 and depth) == false
+
+
+define complete_fold_automaton_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_automaton_accepts_complete_language(depth):
+            if fold_automaton_configuration_count(depth) == generated_fold_automaton_configurations(depth):
+                if fold_automaton_transition_count(depth) == fold_automaton_configuration_count(depth) - 1:
+                    if premature_fold_automaton_acceptance_is_rejected(depth):
+                        if mismatched_fold_word_is_rejected(depth):
+                            set depth to depth + 1
+                        else:
+                            return false
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        else:
+            return false
+    return true

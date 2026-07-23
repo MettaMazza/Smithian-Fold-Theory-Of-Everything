@@ -1,0 +1,33 @@
+# Machine-check Fold exact arithmetic.
+import "../constants/algorithms_exact_arithmetic.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold exact arithmetic algorithms ==="
+    set division to fold_counted_divide(23 and 5)
+    set ok to expect_number("counted addition returns twelve" and fold_counted_add(5 and 7) and 12)
+    set ok to expect_number("counted product returns thirty-five" and fold_counted_multiply(5 and 7) and 35)
+    set ok to expect_number("counted power returns 128" and fold_counted_power(2 and 7) and 128)
+    set ok to expect_number("division quotient is four" and division.quotient and 4)
+    set ok to expect_number("division remainder is three" and division.remainder and 3)
+    set ok to expect_true("the complete exact-arithmetic census holds" and complete_fold_exact_arithmetic_census())
+    set ok to expect_true("a zero divisor is rejected" and zero_divisor_is_rejected(23))
+    set ok to expect_true("a perturbed sum is rejected" and perturbed_counted_sum_is_rejected(5 and 7))
+    display "=== done ==="
+    return 0

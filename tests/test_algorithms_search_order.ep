@@ -1,0 +1,33 @@
+# Machine-check Fold search and order.
+import "../constants/algorithms_search_order.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold search and order ==="
+    set target to enumerate_fold_word(73 and 7)
+    set ok to expect_number("ordered search finds rank 73" and fold_ordered_search_rank(target and 7) and 73)
+    set ok to expect_number("ordered search uses 73 exact comparisons" and fold_ordered_search_comparisons(73 and 7) and 73)
+    set ok to expect_number("guided search decodes the same rank" and fold_guided_search_rank(target and 7) and 73)
+    set ok to expect_number("guided search uses seven forced labels" and fold_guided_search_queries(7) and 7)
+    set ok to expect_true("the complete coordinate order is strict" and fold_order_is_exact(7))
+    set ok to expect_true("every target is found in the complete census" and complete_fold_search_order_census())
+    set ok to expect_true("an outside word is rejected" and outside_search_word_is_rejected(7))
+    set ok to expect_true("reversed adjacent order is rejected" and reversed_adjacent_order_is_rejected(7))
+    display "=== done ==="
+    return 0

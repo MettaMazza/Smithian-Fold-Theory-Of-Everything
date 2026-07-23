@@ -1,0 +1,35 @@
+# Machine-check Fold-P versus Fold-NP.
+import "../constants/complexity_fold_p_np.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold-P versus Fold-NP ==="
+    set ok to expect_number("Fold-P depth-seven decision resource" and fold_p_decision_time(7) and 7)
+    set ok to expect_number("Fold-NP depth-seven verification resource" and fold_np_verification_time(7) and 7)
+    set ok to expect_true("Fold-P is contained in Fold-NP" and fold_p_is_contained_in_fold_np(1 and 7))
+    set ok to expect_true("Fold-NP is contained in Fold-P" and fold_np_is_contained_in_fold_p(1 and 7))
+    set ok to expect_true("complete admitted-depth equality census" and complete_fold_p_np_census())
+    set ok to expect_true("depth-independent equality resource certificate" and fold_p_np_depth_induction_certificate(14))
+    set ok to expect_true("tampered nondeterministic branch rejected" and tampered_fold_np_branch_is_rejected(1 and 7))
+    set ok to expect_true("false native separation rejected" and false_fold_p_np_separation_is_rejected(7))
+    display "=== done ==="
+    return 0
+

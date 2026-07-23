@@ -1,0 +1,39 @@
+# Machine-check the Fold information law and its existing-result bridges.
+import "../constants/computational_information.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold information law ==="
+    set ok to expect_number("depth-7 information quantity" and information_quantity(7) and 7)
+    set ok to expect_number("seven binary distinctions carry 128 states" and information_multiplicity(7) and 128)
+    set ok to expect_number("three observations retain four distinctions" and retained_information(7 and 3) and 4)
+    set ok to expect_number("three observations close three distinctions" and closed_information(3) and 3)
+    set ok to expect_number("retained plus closed reconstructs the initial quantity" and information_accounting(7 and 3) and 7)
+    set ok to expect_true("all depth-7 branch shares partition the One" and information_branches_partition_one(7))
+    set ok to expect_true("the general branch share meets the established measurement weight" and measurement_branch_bridge_holds())
+    set ok to expect_true("uncertainty support equals information multiplicity" and uncertainty_matches_information(7))
+    set ok to expect_true("dyadic distinctions close under observation" and dyadic_distinction_closes(7))
+    set ok to expect_true("periodic distinctions return and are retained" and periodic_distinction_is_retained())
+    set ok to expect_true("perturbed accounting is rejected" and perturbed_information_accounting_is_rejected(7 and 3))
+    set ok to expect_true("an incomplete cycle is not called an identity" and incomplete_cycle_identity_is_rejected())
+    set ok to expect_true("complete information census holds" and complete_information_census())
+    display "=== done ==="
+    return 0

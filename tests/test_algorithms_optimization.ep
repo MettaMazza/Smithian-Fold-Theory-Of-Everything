@@ -1,0 +1,31 @@
+# Machine-check Fold optimization.
+import "../constants/algorithms_optimization.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold optimization algorithms ==="
+    set ok to expect_number("minimum closure work is zero" and fold_optimization_minimum_work(7) and 0)
+    set ok to expect_number("the One is the unique first minimizer" and fold_optimization_minimizer_rank(7) and 128)
+    set ok to expect_number("maximum closure work is seven" and fold_optimization_maximum_work(7) and 7)
+    set ok to expect_number("sixty-four sources attain maximum work" and fold_optimization_maximizer_count(7) and 64)
+    set ok to expect_true("the complete optimization census holds" and complete_fold_optimization_census())
+    set ok to expect_true("omitting the terminal changes the minimum" and omitted_terminal_changes_minimum(7))
+    set ok to expect_true("a shortened optimum is rejected" and shortened_optimum_is_rejected(7))
+    display "=== done ==="
+    return 0

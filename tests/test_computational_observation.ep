@@ -1,0 +1,33 @@
+# Machine-check the Fold observation law over every admitted depth.
+import "../constants/computational_observation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold observation law ==="
+    set ok to expect_number("depth-7 observation retains 64 exact classes" and retained_observation_distinctions(7) and 64)
+    set ok to expect_number("each observation class closes the binary distinction" and closed_observation_distinctions_per_class(7) and 2)
+    set ok to expect_number("observation classes partition all 128 source states" and observation_partition_is_forced(7) and 128)
+    set ok to expect_true("paired states are distinct before and identical after observation" and paired_states_close_under_observation(1 and 7))
+    set ok to expect_true("singleton observation classes are rejected" and singleton_observation_class_is_rejected(7))
+    set ok to expect_true("shifted observation targets are rejected" and shifted_observation_target_is_rejected(7))
+    set ok to expect_true("complete observation census holds through the forced depth" and complete_observation_census())
+    display "=== done ==="
+    return 0

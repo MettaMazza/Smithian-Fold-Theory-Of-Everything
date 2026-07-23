@@ -1,0 +1,230 @@
+# ============================================================================
+#  FOLD ENCODING LAW -- symbols, codewords, exact decoding, and redundancy.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Representation cannot begin from a conventional alphabet or numeral system.
+#  Observation already forces exactly b members in every Fold fibre.  Their
+#  positions inside successive fibres are therefore the symbols, and the path of
+#  fibre positions from a state to the One is its codeword.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  SYMBOLS are the counted labels 1..b.  At each depth a state lies in the lower
+#  or upper member of its observation fibre.  Encoding records that member label,
+#  then continues with the retained lower-grid state.  A depth-k state therefore
+#  produces exactly k forced symbols.
+#
+#  DECODING begins at the One and reads the labels in reverse, restoring the
+#  selected member at each deeper fibre.  Every state at every admitted depth is
+#  encoded and decoded exactly.  Route A counts the enumerated codewords; Route B
+#  counts b choices at each of k depths; forced_to_be requires both counts to equal
+#  the state grid b^k.
+#
+#  OBSERVATION removes the first fibre label and retains the exact suffix.  Each
+#  retained suffix has b source codewords, so it has b-1 redundant alternatives
+#  relative to the observed class.  That redundancy is counted both from the
+#  observation fibre and from the generator.  An out-of-alphabet label and a
+#  changed lawful label are explicit negative controls.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every state and every codeword through depth 7 is executed.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_resources.ep"
+
+
+# The Fold alphabet is the binary fibre count.
+define encoding_symbol_count returning Int:
+    return binary_count()
+
+
+# A lawful Fold symbol is one of the counted fibre positions 1..b.
+define encoding_symbol_is_lawful with symbol as Int returning Bool:
+    if symbol < 1:
+        return false
+    if symbol > encoding_symbol_count():
+        return false
+    return true
+
+
+# Encode a state index by its successive lower/upper fibre labels.
+define encode_computation_state with index as Int and depth as Int returning List:
+    set codeword to create_list()
+    set current_index to index
+    set current_depth to depth
+    repeat while current_depth > 0:
+        set lower_count to computation_state_count(current_depth - 1)
+        set symbol to 1
+        if current_index > lower_count:
+            set symbol to binary_count()
+            set current_index to current_index - lower_count
+        set ok to append_list(codeword and symbol)
+        set current_depth to current_depth - 1
+    return codeword
+
+
+# Every symbol of a codeword lies in the forced alphabet.
+define codeword_is_lawful with codeword as List returning Bool:
+    set length to length_list(codeword)
+    set all_lawful to true
+    set position to 0
+    repeat while position < length:
+        set symbol to get_list(codeword and position)
+        if encoding_symbol_is_lawful(symbol):
+            set all_lawful to all_lawful
+        else:
+            set all_lawful to false
+        set position to position + 1
+    return all_lawful
+
+
+# Decode by rebuilding the fibre choices from the One outward.
+define decode_computation_codeword with codeword as List returning Int:
+    set length to length_list(codeword)
+    set current_index to 1
+    set built_depth to 1
+    set position to length - 1
+    repeat while position > 0 - 1:
+        set symbol to get_list(codeword and position)
+        if symbol == binary_count():
+            set current_index to current_index + computation_state_count(built_depth - 1)
+        set built_depth to built_depth + 1
+        set position to position - 1
+    return current_index
+
+
+# One state's exact encoding/decoding round trip.
+define encoding_round_trip with index as Int and depth as Int returning Bool:
+    set codeword to encode_computation_state(index and depth)
+    set length_ok to length_list(codeword) == depth
+    set lawful to codeword_is_lawful(codeword)
+    set decoded to decode_computation_codeword(codeword)
+    if length_ok:
+        if lawful:
+            return decoded == index
+    return false
+
+
+# Every state at one depth round-trips exactly.
+define all_states_round_trip_at_depth with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_round_trip to true
+    set index to 1
+    repeat while index < count + 1:
+        if encoding_round_trip(index and depth):
+            set all_round_trip to all_round_trip
+        else:
+            set all_round_trip to false
+        set index to index + 1
+    return all_round_trip
+
+
+# Route A enumerates one codeword per state; Route B counts b choices per depth.
+define codeword_count_is_forced with depth as Int returning Int:
+    set enumerated to 0
+    set index to 1
+    set count to computation_state_count(depth)
+    repeat while index < count + 1:
+        set codeword to encode_computation_state(index and depth)
+        if codeword_is_lawful(codeword):
+            set enumerated to enumerated + 1
+        set index to index + 1
+    set by_symbols to whole_power(encoding_symbol_count() and depth)
+    set checked to forced_to_be("codewords: enumerated states = symbol choices by depth" and enumerated and by_symbols)
+    return forced_to_be("codeword count = state count" and checked and computation_state_count(depth))
+
+
+# Observation removes the first fibre label and retains the exact codeword suffix.
+define observation_retains_codeword_suffix with index as Int and depth as Int returning Bool:
+    set source_codeword to encode_computation_state(index and depth)
+    set observed_index to lower_grid_index(index and depth)
+    set observed_codeword to encode_computation_state(observed_index and depth - 1)
+    set suffix_holds to true
+    set position to 0
+    repeat while position < depth - 1:
+        set source_symbol to get_list(source_codeword and position + 1)
+        set observed_symbol to get_list(observed_codeword and position)
+        if source_symbol == observed_symbol:
+            set suffix_holds to suffix_holds
+        else:
+            set suffix_holds to false
+        set position to position + 1
+    return suffix_holds
+
+
+# Every source codeword retains the correct observed suffix.
+define every_observation_retains_suffix with depth as Int returning Bool:
+    set count to computation_state_count(depth)
+    set all_retain to true
+    set index to 1
+    repeat while index < count + 1:
+        if observation_retains_codeword_suffix(index and depth):
+            set all_retain to all_retain
+        else:
+            set all_retain to false
+        set index to index + 1
+    return all_retain
+
+
+# Each retained suffix has b source representations; b-1 are redundant
+# alternatives relative to the observed class identity.
+define redundant_codeword_alternatives with depth as Int returning Int:
+    set representations to members_of_observation_class(1 and depth)
+    set enumerated_alternatives to representations - 1
+    set by_generator to binary_count() - 1
+    return forced_to_be("redundant source codewords per observed suffix = b-1" and enumerated_alternatives and by_generator)
+
+
+# NEGATIVE CONTROL: a label above b is outside the derived alphabet.
+define out_of_alphabet_symbol_is_rejected with depth as Int returning Bool:
+    set codeword to encode_computation_state(1 and depth)
+    set ok to set_list(codeword and 0 and binary_count() + 1)
+    if codeword_is_lawful(codeword):
+        return false
+    return true
+
+
+# NEGATIVE CONTROL: changing one lawful fibre label changes the decoded state.
+define changed_symbol_changes_state with depth as Int returning Bool:
+    set codeword to encode_computation_state(1 and depth)
+    set ok to set_list(codeword and 0 and binary_count())
+    set changed_index to decode_computation_codeword(codeword)
+    if changed_index == 1:
+        return false
+    return true
+
+
+# Complete encoding census over every admitted depth.
+define complete_encoding_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set round_trip to all_states_round_trip_at_depth(depth)
+        set counted to codeword_count_is_forced(depth) == computation_state_count(depth)
+        set suffix to every_observation_retains_suffix(depth)
+        set redundancy to redundant_codeword_alternatives(depth) == binary_count() - 1
+        set outside_rejected to out_of_alphabet_symbol_is_rejected(depth)
+        set change_detected to changed_symbol_changes_state(depth)
+        if round_trip:
+            if counted:
+                if suffix:
+                    if redundancy:
+                        if outside_rejected:
+                            if change_detected:
+                                set all_hold to all_hold
+                            else:
+                                set all_hold to false
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    return all_hold

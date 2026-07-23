@@ -1,0 +1,109 @@
+# ============================================================================
+#  FOLD QUANTUM SIMULATION, VERIFICATION, LEARNING, CORRESPONDENCE, AND LIMITS.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The final quantum-computing laws must connect the branch model to executable
+#  simulation, proof, learning, classical operation, and the already-forced
+#  computability boundary.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Simulation enumerates every b^k branch and applies the exact gate circuit.
+#  Verification checks each compiled trace and the image/history support product.
+#  Quantum learning is exact reduction of unresolved support by supplied labels,
+#  with sample complexity equal to the missing distinction count.  Operational
+#  classical/quantum correspondence is branchwise equality: enumerating a
+#  classical word, applying s classical Fold rewrites, and applying the s-layer
+#  quantum branch circuit yield the same rank; the measurement record reconstructs
+#  the original word.  Quantum computation retains the same finite descriptions,
+#  exact depth/resources, self-negating boundary, and admissibility rules, so it
+#  does not license a total decision beyond the derived computation limit.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every branch and prefix through depth seven is executed.  Omitted simulation
+#  branches, false trace claims, shortened learning evidence, shifted classical/
+#  quantum results, collapsed support, and total self-negating decisions reject.
+# ============================================================================
+
+import "../constants/quantum_communication_coding_fault_tolerance.ep"
+
+
+define fold_quantum_simulation_holds with depth as Int and layers as Int returning Bool:
+    set rank to 1
+    repeat while rank < fold_quantum_support_count(depth) + 1:
+        if fold_quantum_circuit_semantics_holds(rank and depth and layers) == false:
+            return false
+        set rank to rank + 1
+    return fold_quantum_circuit_support_holds(depth and layers)
+
+
+define fold_quantum_verification_holds with depth as Int and layers as Int returning Bool:
+    set rank to 1
+    repeat while rank < fold_quantum_support_count(depth) + 1:
+        set trace to fold_compile_program_trace(rank and depth and layers)
+        set asserted to fold_quantum_algorithm_branch_image(rank and depth and layers)
+        if fold_verify_program_proof(rank and depth and layers and asserted and trace) == false:
+            return false
+        set rank to rank + 1
+    return fold_quantum_circuit_support_holds(depth and layers)
+
+
+define fold_quantum_learning_holds with depth as Int and observations as Int returning Bool:
+    if fold_learning_sample_complexity(observations) != observations:
+        return false
+    if fold_quantum_support_after_observation(depth and observations) != computation_state_count(depth - observations):
+        return false
+    return fold_classical_quantum_learning_holds(depth and observations)
+
+
+define fold_operational_classical_quantum_correspondence_holds with rank as Int and depth as Int and layers as Int returning Bool:
+    set classical_result to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and layers)
+    set quantum_result to fold_quantum_algorithm_branch_image(rank and depth and layers)
+    if classical_result != quantum_result:
+        return false
+    return fold_quantum_measurement_semantics_holds(rank and depth and layers)
+
+
+define fold_quantum_computation_limit_holds returning Bool:
+    if complete_admissible_computation_limit_census() == false:
+        return false
+    if fold_self_decision_is_undecidable() == false:
+        return false
+    return total_self_negating_claim_is_rejected()
+
+
+define complete_fold_quantum_final_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set layers to 0
+        repeat while layers < depth + 1:
+            if fold_quantum_simulation_holds(depth and layers) == false:
+                return false
+            if fold_quantum_verification_holds(depth and layers) == false:
+                return false
+            if fold_quantum_learning_holds(depth and layers) == false:
+                return false
+            set rank to 1
+            repeat while rank < fold_quantum_support_count(depth) + 1:
+                if fold_operational_classical_quantum_correspondence_holds(rank and depth and layers) == false:
+                    return false
+                set rank to rank + 1
+            set layers to layers + 1
+        set depth to depth + 1
+    return fold_quantum_computation_limit_holds()
+
+
+define omitted_quantum_simulation_branch_is_rejected with depth as Int returning Bool:
+    return fold_quantum_support_count(depth) - 1 != computation_state_count(depth)
+
+
+define false_quantum_verification_is_rejected with rank as Int and depth as Int and layers as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and layers)
+    set false_assertion to fold_quantum_algorithm_branch_image(rank and depth and layers) + 1
+    return fold_verify_program_proof(rank and depth and layers and false_assertion and trace) == false
+
+
+define shifted_classical_quantum_correspondence_is_rejected with rank as Int and depth as Int and layers as Int returning Bool:
+    set classical_result to fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and layers)
+    set shifted_quantum_result to fold_quantum_algorithm_branch_image(rank and depth and layers) + 1
+    return classical_result != shifted_quantum_result

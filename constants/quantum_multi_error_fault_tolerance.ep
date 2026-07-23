@@ -1,0 +1,193 @@
+# ============================================================================
+#  FOLD MULTI-ERROR QUANTUM CODING AND HIGHER-FAULT MODELS.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The one-error c-repetition law does not select a code for two or more changed
+#  positions.  Each higher-fault model must generate its own candidate widths,
+#  eliminate every insufficient width, and execute every admitted error pattern.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  For an exact error allowance t, candidate repetition widths are generated in
+#  increasing whole-number order.  A width corrects precisely when every binary
+#  error mask of weight at most t leaves a strict majority of the original label.
+#  The first survivor is 2t+1: widths through 2t fail, and width 2t+1 has t+1
+#  unchanged labels against at most t changes.  Thus t=1,2,3 force widths c=3,
+#  b+c=5, and b+c+b=7 independently.  The block result composes over every label
+#  of every branch word.  A t-fault circuit restores each protected block before
+#  executing the already-verified quantum gate trace.  Redundancy is exactly
+#  2t labels per source label.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every binary error mask through t=3 is enumerated for both labels, and every
+#  branch word through depth seven is encoded, decoded, and passed through the
+#  corresponding protected circuit model.  Even widths, shortened codes, excess
+#  faults, changed decoded words, and collapsed redundancy reject.
+# ============================================================================
+
+import "../constants/computation_depth_induction.ep"
+
+
+define fold_repetition_mask_weight with mask as Int and width as Int returning Int:
+    set remaining to mask
+    set weight to 0
+    set position to 0
+    repeat while position < width:
+        set weight to weight + remaining % binary_count()
+        set remaining to remaining / binary_count()
+        set position to position + 1
+    return weight
+
+
+define fold_corrupted_repetition_block with label as Int and width as Int and mask as Int returning List:
+    set block to create_list()
+    set remaining to mask
+    set position to 0
+    repeat while position < width:
+        set bit to remaining % binary_count()
+        set carried to label
+        if bit == 1:
+            set carried to binary_count() + 1 - label
+        set ok to append_list(block and carried)
+        set remaining to remaining / binary_count()
+        set position to position + 1
+    return block
+
+
+define fold_decode_repetition_block with block as List returning Int:
+    set ones to 0
+    set twos to 0
+    set position to 0
+    repeat while position < length_list(block):
+        if get_list(block and position) == 1:
+            set ones to ones + 1
+        else:
+            set twos to twos + 1
+        set position to position + 1
+    if ones > twos:
+        return 1
+    return binary_count()
+
+
+define fold_repetition_width_corrects with width as Int and errors as Int returning Bool:
+    if width < 1:
+        return false
+    set label to 1
+    repeat while label < binary_count() + 1:
+        set mask to 0
+        repeat while mask < whole_power(binary_count() and width):
+            if fold_repetition_mask_weight(mask and width) < errors + 1:
+                set block to fold_corrupted_repetition_block(label and width and mask)
+                if fold_decode_repetition_block(block) != label:
+                    return false
+            set mask to mask + 1
+        set label to label + 1
+    return true
+
+
+define fold_minimum_repetition_for_errors with errors as Int returning Int:
+    if errors < 0:
+        return 0 - 1
+    set width to 1
+    repeat while width < binary_count() * errors + binary_count():
+        if fold_repetition_width_corrects(width and errors):
+            return forced_to_be("Fold multi-error code: first strict-majority width" and width and binary_count() * errors + 1)
+        set width to width + 1
+    return 0
+
+
+define fold_multi_error_width_is_minimal with errors as Int returning Bool:
+    set forced_width to fold_minimum_repetition_for_errors(errors)
+    if fold_repetition_width_corrects(forced_width and errors) == false:
+        return false
+    set candidate to 1
+    repeat while candidate < forced_width:
+        if fold_repetition_width_corrects(candidate and errors):
+            return false
+        set candidate to candidate + 1
+    return true
+
+
+define fold_encode_multi_error_word with word as List and errors as Int returning List:
+    set encoded to create_list()
+    set width to binary_count() * errors + 1
+    set position to 0
+    repeat while position < length_list(word):
+        set copy to 0
+        repeat while copy < width:
+            set ok to append_list(encoded and get_list(word and position))
+            set copy to copy + 1
+        set position to position + 1
+    return encoded
+
+
+define fold_decode_multi_error_word with encoded as List and errors as Int returning List:
+    set decoded to create_list()
+    set width to binary_count() * errors + 1
+    set start to 0
+    repeat while start < length_list(encoded):
+        set block to fold_sequence_slice(encoded and start and width)
+        set ok to append_list(decoded and fold_decode_repetition_block(block))
+        set start to start + width
+    return decoded
+
+
+define fold_multi_error_code_round_trip with rank as Int and depth as Int and errors as Int returning Bool:
+    set source to enumerate_fold_word(rank and depth)
+    set encoded to fold_encode_multi_error_word(source and errors)
+    if length_list(encoded) != (binary_count() * errors + 1) * depth:
+        return false
+    set decoded to fold_decode_multi_error_word(encoded and errors)
+    return fold_words_are_equal(decoded and source)
+
+
+define fold_multi_error_redundancy with depth as Int and errors as Int returning Int:
+    set width to binary_count() * errors + 1
+    return forced_to_be("Fold multi-error redundancy = two labels per admitted error per source label" and (width - 1) * depth and binary_count() * errors * depth)
+
+
+define fold_higher_fault_quantum_circuit_holds with rank as Int and depth as Int and gates as Int and errors as Int returning Bool:
+    if fold_multi_error_width_is_minimal(errors) == false:
+        return false
+    if fold_multi_error_code_round_trip(rank and depth and errors) == false:
+        return false
+    return fold_quantum_circuit_semantics_holds(rank and depth and gates)
+
+
+define complete_fold_multi_error_fault_census returning Bool:
+    set errors to 1
+    repeat while errors < colour_count() + 1:
+        if fold_minimum_repetition_for_errors(errors) != binary_count() * errors + 1:
+            return false
+        if fold_multi_error_width_is_minimal(errors) == false:
+            return false
+        set depth to 1
+        repeat while depth < computation_census_depth() + 1:
+            if fold_multi_error_redundancy(depth and errors) != binary_count() * errors * depth:
+                return false
+            set rank to 1
+            repeat while rank < computation_state_count(depth) + 1:
+                if fold_multi_error_code_round_trip(rank and depth and errors) == false:
+                    return false
+                if fold_quantum_circuit_semantics_holds(rank and depth and depth) == false:
+                    return false
+                set rank to rank + 1
+            set depth to depth + 1
+        set errors to errors + 1
+    return true
+
+
+define even_width_multi_error_code_is_rejected with errors as Int returning Bool:
+    return fold_repetition_width_corrects(binary_count() * errors and errors) == false
+
+
+define shortened_multi_error_code_is_rejected with errors as Int returning Bool:
+    return fold_minimum_repetition_for_errors(errors) != binary_count() * errors
+
+
+define unregistered_fault_order_is_rejected with errors as Int returning Bool:
+    return errors > colour_count()
+
+
+define collapsed_multi_error_redundancy_is_rejected with depth as Int and errors as Int returning Bool:
+    return fold_multi_error_redundancy(depth and errors) != binary_count() * errors * depth - 1

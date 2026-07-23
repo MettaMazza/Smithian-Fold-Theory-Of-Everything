@@ -1,0 +1,66 @@
+# ============================================================================
+#  FOLD COMPRESSION -- minimal held prefix relative to an observed suffix.
+# ============================================================================
+#
+#  A depth-k source needs k labels without side information.  After s observations
+#  the suffix is already held, so lossless reconstruction sends exactly the s
+#  closed prefix labels.  Those labels distinguish all b^s compatible histories;
+#  any shorter description has capacity at most b^(s-1) and cannot select one.
+#  Every source round-trips.  No external compressor or code-length convention
+#  enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/information_entropy_uncertainty.ep"
+
+
+define fold_compressed_description with rank as Int and depth as Int and observations as Int returning List:
+    return fold_bind_closed_prefix(rank and depth and observations)
+
+define fold_decompress_relative_source with compressed as List and observed_suffix as List returning Int:
+    set rebuilt to fold_sequence_join(compressed and observed_suffix)
+    return decode_computation_codeword(rebuilt)
+
+define fold_compression_length with observations as Int returning Int:
+    return forced_to_be("Fold relative compression length = conditional description" and observations and conditional_fold_description_length(observations))
+
+define fold_compression_round_trip with rank as Int and depth as Int and observations as Int returning Bool:
+    set compressed to fold_compressed_description(rank and depth and observations)
+    if length_list(compressed) != fold_compression_length(observations):
+        return false
+    set suffix to fold_bound_term_suffix(rank and depth and observations)
+    return fold_decompress_relative_source(compressed and suffix) == rank
+
+define fold_compression_is_minimal with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set shorter_capacity to whole_power(binary_count() and observations - 1)
+    return shorter_capacity < fold_entropy_multiplicity(observations)
+
+define complete_fold_compression_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set observations to 0
+            repeat while observations < depth + 1:
+                if fold_compression_round_trip(rank and depth and observations) == false:
+                    return false
+                if fold_compression_is_minimal(observations) == false:
+                    return false
+                set observations to observations + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+define shortened_compression_is_rejected with observations as Int returning Bool:
+    return fold_compression_is_minimal(observations)
+
+define changed_compressed_label_is_rejected with rank as Int and depth as Int and observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set compressed to fold_compressed_description(rank and depth and observations)
+    set original to get_list(compressed and 0)
+    set ok to set_list(compressed and 0 and binary_count() + 1 - original)
+    set suffix to fold_bound_term_suffix(rank and depth and observations)
+    return fold_decompress_relative_source(compressed and suffix) != rank

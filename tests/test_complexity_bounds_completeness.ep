@@ -1,0 +1,33 @@
+# Machine-check Fold bounds and completeness.
+import "../constants/complexity_bounds_completeness.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold lower/upper bounds and completeness ==="
+    set ok to expect_number("the depth-7 time lower bound is seven" and fold_time_lower_bound(7) and 7)
+    set ok to expect_number("the depth-7 time upper bound is seven" and fold_time_upper_bound(7) and 7)
+    set ok to expect_true("the time bound is exact and tight" and fold_time_bound_is_tight(7))
+    set ok to expect_number("the space lower bound is 128" and fold_space_lower_bound(7) and 128)
+    set ok to expect_number("the space upper bound is 128" and fold_space_upper_bound(7) and 128)
+    set ok to expect_true("Fold closure is complete for every admitted source" and fold_closure_is_complete(7))
+    set ok to expect_true("the complete bounds census holds" and complete_fold_bounds_census())
+    set ok to expect_true("a shorter upper bound is rejected" and false_shorter_upper_bound_is_rejected(7))
+    set ok to expect_true("an incomplete reduction is rejected" and incomplete_closure_reduction_is_rejected(7))
+    display "=== done ==="
+    return 0

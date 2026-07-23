@@ -1,0 +1,34 @@
+# Machine-check Fold strings and sequences.
+import "../constants/algorithms_strings_sequences.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold strings and sequences ==="
+    set first to enumerate_fold_word(3 and 2)
+    set second to enumerate_fold_word(5 and 3)
+    set joined to fold_sequence_join(first and second)
+    set ok to expect_number("joined sequence length is five" and length_list(joined) and 5)
+    set ok to expect_true("joined generated paths remain generated" and fold_sequence_join_is_generated(first and second))
+    set ok to expect_true("every split rejoins exactly" and fold_sequence_split_rejoins(joined and 2))
+    set ok to expect_number("joined choice count is thirty-two" and fold_sequence_product_count(2 and 3) and 32)
+    set ok to expect_true("the complete sequence census holds" and complete_fold_strings_sequences_census())
+    set ok to expect_true("a changed sequence is distinguished" and changed_sequence_is_rejected(7))
+    set ok to expect_true("an outside sequence symbol is rejected" and outside_sequence_symbol_is_rejected(7))
+    display "=== done ==="
+    return 0

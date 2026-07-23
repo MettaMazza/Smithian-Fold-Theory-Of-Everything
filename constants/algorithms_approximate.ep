@@ -1,0 +1,71 @@
+# ============================================================================
+#  FOLD APPROXIMATE ALGORITHMS -- exact observation classes and refinement.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  An approximate Fold result is the exact observation class already forced by
+#  Step 354, not a selected numerical tolerance.  The algorithm returns the
+#  retained suffix coordinate and accounts for every source it represents.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Closing s leading distinctions maps a source to one of b^(k-s) exact classes,
+#  each containing b^s sources.  Identifying that class reads its k-s retained
+#  labels.  Decreasing s by one refines every class by b, and s=0 returns the
+#  exact singleton source.  Every source, class, and observation count is
+#  exhausted.  False singleton and shortened retained descriptions are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_symbolic.ep"
+
+
+define fold_approximate_result_class with rank as Int and depth as Int and observations as Int returning Int:
+    return recursive_fold_index(rank and depth and observations)
+
+
+define fold_approximate_algorithm_work with depth as Int and observations as Int returning Int:
+    set retained_labels to depth - observations
+    return forced_to_be("Fold approximate algorithm work = retained class description" and retained_labels and fold_approximation_retained_precision(depth and observations))
+
+
+define fold_approximate_class_member_count with class_rank as Int and depth as Int and observations as Int returning Int:
+    set members to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_approximate_result_class(rank and depth and observations) == class_rank:
+            set members to members + 1
+        set rank to rank + 1
+    return forced_to_be("Fold approximate result class contains every closed history" and members and fold_approximation_class_size(observations))
+
+
+define complete_fold_approximate_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_approximate_algorithm_work(depth and observations) != depth - observations:
+                return false
+            set class_rank to 1
+            repeat while class_rank < computation_state_count(depth - observations) + 1:
+                if fold_approximate_class_member_count(class_rank and depth and observations) != computation_state_count(observations):
+                    return false
+                set class_rank to class_rank + 1
+            if fold_approximation_accounting(depth and observations) != computation_state_count(depth):
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+
+define false_approximate_singleton_is_rejected with depth as Int and observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set class_rank to fold_approximate_result_class(1 and depth and observations)
+    return fold_approximate_class_member_count(class_rank and depth and observations) != 1
+
+
+define shortened_approximate_description_is_rejected with depth as Int and observations as Int returning Bool:
+    set required to fold_approximate_algorithm_work(depth and observations)
+    if required < 1:
+        return true
+    return whole_power(binary_count() and required - 1) < fold_approximation_class_count(depth and observations)

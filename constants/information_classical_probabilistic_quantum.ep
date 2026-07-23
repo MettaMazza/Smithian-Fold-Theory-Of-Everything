@@ -1,0 +1,58 @@
+# ============================================================================
+#  FOLD CLASSICAL/PROBABILISTIC/QUANTUM INFORMATION CORRESPONDENCE.
+# ============================================================================
+#
+#  One supplied source is a classical singleton.  Without s closed labels, the
+#  exact unresolved-history support is b^s with equal shares; this is the Fold
+#  probabilistic form.  The retained quantum branch support is b^(k-s).  Their
+#  product is the complete b^k information support, and supplying the held labels
+#  reconstructs the same classical source.  Thus the three forms are exact views
+#  of one Fold accounting, not imported state models.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/information_mutual_conditional.ep"
+
+
+define fold_classical_information_support returning Int:
+    return 1
+
+define fold_probabilistic_history_support with observations as Int returning Int:
+    return fold_entropy_multiplicity(observations)
+
+define fold_quantum_retained_information_support with depth as Int and observations as Int returning Int:
+    return fold_quantum_support_after_observation(depth and observations)
+
+define fold_three_form_information_accounting with depth as Int and observations as Int returning Int:
+    set unresolved to fold_probabilistic_history_support(observations)
+    set retained to fold_quantum_retained_information_support(depth and observations)
+    return forced_to_be("Fold information correspondence: unresolved times retained = complete support" and unresolved * retained and fold_quantum_support_count(depth))
+
+define fold_three_form_reconstructs_classical with rank as Int and depth as Int and observations as Int returning Bool:
+    if fold_classical_information_support() != 1:
+        return false
+    return fold_degree_reconstruction_holds(rank and depth and observations)
+
+define complete_fold_information_correspondence_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_three_form_information_accounting(depth and observations) != computation_state_count(depth):
+                return false
+            set rank to 1
+            repeat while rank < computation_state_count(depth) + 1:
+                if fold_three_form_reconstructs_classical(rank and depth and observations) == false:
+                    return false
+                set rank to rank + 1
+            set observations to observations + 1
+        set depth to depth + 1
+    return fold_quantum_measurement_bridge_holds()
+
+define collapsed_probabilistic_support_is_rejected with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    return fold_probabilistic_history_support(observations) != 1
+
+define collapsed_quantum_information_support_is_rejected with depth as Int returning Bool:
+    return fold_quantum_retained_information_support(depth and 0) != 1

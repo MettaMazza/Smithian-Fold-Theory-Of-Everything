@@ -1,0 +1,30 @@
+# Machine-check Fold termination and correctness.
+import "../constants/semantics_termination_correctness.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold termination and correctness ==="
+    set ok to expect_number("depth-seven normalization takes seven steps" and fold_program_termination_steps(enumerate_fold_word(73 and 7)) and 7)
+    set ok to expect_true("the program terminates at the empty One form" and fold_program_terminates(73 and 7))
+    set ok to expect_true("the three-step result rank nine is correct" and fold_program_prefix_is_correct(73 and 7 and 3 and 9))
+    set ok to expect_true("the complete termination/correctness census holds" and complete_fold_termination_correctness_census())
+    set ok to expect_true("premature termination is rejected" and premature_program_termination_is_rejected(7))
+    set ok to expect_true("a changed postcondition is rejected" and changed_program_postcondition_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

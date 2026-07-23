@@ -1,0 +1,26 @@
+# Machine-check Fold formal specification.
+import "../constants/semantics_formal_specification.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold formal specification ==="
+    set ok to expect_true("rank 73 specifies result nine, type four, work three" and fold_specification_holds(73 and 7 and 3 and 9 and 4 and 3))
+    set ok to expect_true("the result postcondition is unique" and fold_specification_has_unique_result(73 and 7 and 3))
+    set ok to expect_true("the complete specification census holds" and complete_fold_formal_specification_census())
+    set ok to expect_true("a changed resource count is rejected" and changed_specification_resource_is_rejected(73 and 7 and 3))
+    set ok to expect_true("a changed result type is rejected" and changed_specification_type_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,87 @@
+# ============================================================================
+#  FOLD LOWER/UPPER BOUNDS AND COMPLETENESS -- exact closure resources.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Bounds must be derived from executed Fold paths, and completeness from the
+#  already-forced universal reduction, not from imported complexity classes.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The first depth-k state requires k transitions, giving the lower time bound.
+#  Exhaustive walking shows every state terminates within k, giving the upper
+#  bound.  They meet exactly.  Distinguishing every input requires and is supplied
+#  by the b^k state grid, so the space bounds also meet.  Fold closure is complete
+#  for the admitted family because every coordinate reduces to its exact word and
+#  the universal recognizer closes that word.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_quantum.ep"
+
+
+define enumerated_fold_worst_halt_time with depth as Int returning Int:
+    set worst to 0
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        set length to process_length_to_terminal(index and depth)
+        if length > worst:
+            set worst to length
+        set index to index + 1
+    return worst
+
+
+define fold_time_lower_bound with depth as Int returning Int:
+    return forced_to_be("Fold time lower bound = first-state required walk" and first_fold_state_halt_time(depth) and depth)
+
+
+define fold_time_upper_bound with depth as Int returning Int:
+    return forced_to_be("Fold time upper bound = enumerated worst halt time" and enumerated_fold_worst_halt_time(depth) and depth)
+
+
+define fold_time_bound_is_tight with depth as Int returning Bool:
+    return fold_time_lower_bound(depth) == fold_time_upper_bound(depth)
+
+
+define fold_space_lower_bound with depth as Int returning Int:
+    set distinct_inputs to fold_language_word_count(depth)
+    return forced_to_be("Fold space lower bound = distinguishable input words" and distinct_inputs and computation_state_count(depth))
+
+
+define fold_space_upper_bound with depth as Int returning Int:
+    return forced_to_be("Fold space upper bound = enumerated state grid" and enumerated_space_resource(depth) and computation_state_count(depth))
+
+
+# Every admitted closing process reduces to the one universal Fold recognizer.
+define fold_closure_is_complete with depth as Int returning Bool:
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        if word_to_state_reduction_is_inverse(index and depth) == false:
+            return false
+        set word to enumerate_fold_word(index and depth)
+        if fold_recognizes_word(word) == false:
+            return false
+        if state_to_word_reduction_preserves_process(index and depth and depth) == false:
+            return false
+        set index to index + 1
+    return true
+
+
+define complete_fold_bounds_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_time_bound_is_tight(depth) == false:
+            return false
+        if fold_space_lower_bound(depth) != fold_space_upper_bound(depth):
+            return false
+        if fold_closure_is_complete(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define false_shorter_upper_bound_is_rejected with depth as Int returning Bool:
+    return enumerated_fold_worst_halt_time(depth) > depth - 1
+
+
+define incomplete_closure_reduction_is_rejected with depth as Int returning Bool:
+    return changed_reduction_symbol_is_rejected(depth)

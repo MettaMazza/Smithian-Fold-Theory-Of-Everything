@@ -1,0 +1,127 @@
+# ============================================================================
+#  FOLD RECURSION AND SELF-APPLICATION LAW -- the rule reapplies to its result.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Repetition alone does not establish recursion.  The result of one lawful step
+#  must become the input to the same rule until the Fold base state is reached.
+#  Steps 325 and 333 supply exactly that structure, while the established
+#  self-simulation law supplies the Fold's own self-observation closure state.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The recursive rule has one base: zero remaining depth returns the present
+#  state.  Otherwise it applies one Fold and calls itself on the result with one
+#  less distinction.  The word route does the same by rewriting once and calling
+#  itself on the suffix.  Both recursive routes agree with the already-executed
+#  iterative process for every state, depth, and prefix through the forced cap.
+#
+#  SELF-APPLICATION feeds the established self-observation closure state 1/4 to
+#  this same recursive Fold rule.  Its forced depth is b.  It reaches the One in
+#  b calls, and one further application returns the same One.  Thus the rule acts
+#  on the corpus's own self-state and closes at its fixed base without a new rule.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Truncated recursion and identity-in-place-of-Fold are unfavorable controls.
+# ============================================================================
+
+import "../constants/computational_rewriting.ep"
+import "../constants/self_simulation_nesting.ep"
+
+
+# Recursive state evaluation: the output of one Fold is the next call's input.
+define recursive_fold_evaluate with state as Fraction and remaining as Int returning Fraction:
+    if remaining < 1:
+        return state
+    set next to computation_step(state)
+    return recursive_fold_evaluate(next and remaining - 1)
+
+
+# Recursive coordinate descent using the same lower-grid transition.
+define recursive_fold_index with index as Int and depth as Int and remaining as Int returning Int:
+    if remaining < 1:
+        return index
+    set next_index to lower_grid_index(index and depth)
+    return recursive_fold_index(next_index and depth - 1 and remaining - 1)
+
+
+# Recursive word normalization using the forced rewrite rule.
+define recursive_fold_word with word as List returning List:
+    if length_list(word) < 1:
+        return word
+    set suffix to fold_rewrite_once(word)
+    return recursive_fold_word(suffix)
+
+
+# Recursive, iterative, coordinate, and word routes agree for one process prefix.
+define recursive_fold_routes_agree with index as Int and depth as Int and steps as Int returning Bool:
+    set state to computation_state(index and depth)
+    set recursive_state to recursive_fold_evaluate(state and steps)
+    set iterative_state to computation_steps(state and steps)
+    if fraction_is_equal(recursive_state and iterative_state) == false:
+        return false
+    set recursive_index to recursive_fold_index(index and depth and steps)
+    set recursive_coordinate to computation_state(recursive_index and depth - steps)
+    if fraction_is_equal(recursive_state and recursive_coordinate) == false:
+        return false
+    set word to fold_grammar_word(index and depth)
+    set residual_word to fold_rewrite_steps(word and steps)
+    set recursive_word to word
+    set prefix to 0
+    repeat while prefix < steps:
+        set recursive_word to fold_rewrite_once(recursive_word)
+        set prefix to prefix + 1
+    return fold_words_are_equal(residual_word and recursive_word)
+
+
+# Every admitted process prefix closes under the same recursive law.
+define complete_recursive_fold_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if recursive_fold_routes_agree(index and depth and steps):
+                    set steps to steps + 1
+                else:
+                    return false
+            set word to fold_grammar_word(index and depth)
+            if length_list(recursive_fold_word(word)) != 0:
+                return false
+            set index to index + 1
+        set depth to depth + 1
+    return true
+
+
+# The same recursive rule applied to the established self-observation state.
+define recursive_self_application_closes returning Bool:
+    set self_state to closure_state()
+    set recursive_result to recursive_fold_evaluate(self_state and binary_count())
+    set one to fraction_from_whole_number(1)
+    if fraction_is_equal(recursive_result and one):
+        if nesting_reaches_unison():
+            return nesting_depth() == binary_count()
+    return false
+
+
+# One further self-application is the fixed base, not a new recursion level.
+define recursive_self_application_reaches_fixed_base returning Bool:
+    set self_state to closure_state()
+    set closed to recursive_fold_evaluate(self_state and binary_count())
+    set one_more to recursive_fold_evaluate(closed and 1)
+    return fraction_is_equal(closed and one_more)
+
+
+# UNFAVORABLE CONTROL: one recursive call fewer does not close the self-state.
+define truncated_self_application_is_rejected returning Bool:
+    set early to recursive_fold_evaluate(closure_state() and binary_count() - 1)
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(early and one) == false
+
+
+# UNFAVORABLE CONTROL: retaining the input instead of applying the Fold cannot
+# perform the self-state closure.
+define identity_recursion_is_rejected returning Bool:
+    set unchanged to closure_state()
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(unchanged and one) == false

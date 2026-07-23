@@ -1,0 +1,129 @@
+# ============================================================================
+#  FOLD DEPTH-INDEPENDENT COMPUTATION CERTIFICATES.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A finite depth-seven execution census verifies every admitted small instance,
+#  while the recurring forms also require a certificate that constructs the law
+#  at an arbitrary supplied finite depth rather than naming a new fixed ceiling.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The base depth has one empty word.  The sole successor production prepends one
+#  of b fibre labels, so S(k+1)=b*S(k).  Iterating that constructor proves S(k)=b^k
+#  for any supplied finite k.  The same successor partitions support into retained
+#  b^(k-s) and closed b^s factors, adds one circuit layer of b^(k+1) gates, carries
+#  one reverse label per step, and supplies one channel distinction per use.  The
+#  certificate is a recursive construction from the base and successor equations;
+#  it does not infer an untested universal statement from seven examples.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  The general certificate accepts any nonnegative finite depth representable by
+#  exact counted arithmetic.  It is additionally executed through twice the
+#  already-forced census depth.  Changed branching, skipped successors, shortened
+#  reversal records, and collapsed support products reject.
+# ============================================================================
+
+import "../constants/quantum_simulation_verification_learning_limits.ep"
+
+
+define fold_induction_execution_depth returning Int:
+    return binary_count() * computation_census_depth()
+
+
+define fold_state_count_induction_base returning Bool:
+    return computation_state_count(0) == 1
+
+
+define fold_state_count_induction_step with depth as Int returning Bool:
+    return computation_state_count(depth + 1) == binary_count() * computation_state_count(depth)
+
+
+define fold_state_count_induction_certificate with depth as Int returning Bool:
+    if depth < 0:
+        return false
+    if fold_state_count_induction_base() == false:
+        return false
+    set current to 0
+    repeat while current < depth:
+        if fold_state_count_induction_step(current) == false:
+            return false
+        set current to current + 1
+    return true
+
+
+define fold_information_partition_induction_certificate with depth as Int returning Bool:
+    set observations to 0
+    repeat while observations < depth + 1:
+        set retained to whole_power(binary_count() and depth - observations)
+        set closed to whole_power(binary_count() and observations)
+        if retained * closed != computation_state_count(depth):
+            return false
+        set observations to observations + 1
+    return true
+
+
+define fold_circuit_resource_induction_step with depth as Int returning Bool:
+    if fold_circuit_size(depth + 1) != fold_circuit_size(depth) + computation_state_count(depth + 1):
+        return false
+    if fold_circuit_width(depth + 1) != binary_count() * fold_circuit_width(depth):
+        return false
+    return fold_circuit_depth(depth + 1) == fold_circuit_depth(depth) + 1
+
+
+define fold_circuit_resource_induction_certificate with depth as Int returning Bool:
+    set current to 1
+    repeat while current < depth:
+        if fold_circuit_resource_induction_step(current) == false:
+            return false
+        set current to current + 1
+    return true
+
+
+define fold_quantum_support_induction_step with depth as Int returning Bool:
+    return fold_quantum_support_count(depth + 1) == binary_count() * fold_quantum_support_count(depth)
+
+
+define fold_reverse_record_induction_step with steps as Int returning Bool:
+    return fold_reversal_information_cost(steps + 1) == fold_reversal_information_cost(steps) + 1
+
+
+define fold_channel_capacity_induction_step with uses as Int returning Bool:
+    if fold_channel_message_capacity(uses + 1) != binary_count() * fold_channel_message_capacity(uses):
+        return false
+    return fold_channel_information_capacity(uses + 1) == fold_channel_information_capacity(uses) + 1
+
+
+define complete_fold_depth_induction_certificate with depth as Int returning Bool:
+    if fold_state_count_induction_certificate(depth) == false:
+        return false
+    if fold_information_partition_induction_certificate(depth) == false:
+        return false
+    if fold_circuit_resource_induction_certificate(depth) == false:
+        return false
+    set current to 1
+    repeat while current < depth:
+        if fold_quantum_support_induction_step(current) == false:
+            return false
+        set current to current + 1
+    set current to 0
+    repeat while current < depth:
+        if fold_reverse_record_induction_step(current) == false:
+            return false
+        if fold_channel_capacity_induction_step(current) == false:
+            return false
+        set current to current + 1
+    return true
+
+
+define changed_branching_induction_is_rejected with depth as Int returning Bool:
+    return computation_state_count(depth + 1) != (binary_count() + 1) * computation_state_count(depth)
+
+
+define skipped_successor_is_rejected with depth as Int returning Bool:
+    return fold_circuit_depth(depth + 1) != fold_circuit_depth(depth) + binary_count()
+
+
+define collapsed_inductive_support_is_rejected with depth as Int and observations as Int returning Bool:
+    set retained to whole_power(binary_count() and depth - observations)
+    set closed to whole_power(binary_count() and observations)
+    return retained * closed != computation_state_count(depth) - 1

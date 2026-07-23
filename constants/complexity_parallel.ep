@@ -1,0 +1,84 @@
+# ============================================================================
+#  FOLD PARALLEL COMPLEXITY -- simultaneous independent layer transitions.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The Step-346 circuit is already layered.  Within one layer, every source
+#  coordinate has its own single-valued Fold transition and can advance without
+#  waiting for another source in that layer.  Between layers, each image must be
+#  formed before its next Fold.  This forces parallel work, width, and depth.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Layer r has b^r simultaneous transitions.  Total work is the unchanged circuit
+#  size sum b^r.  Maximum simultaneous width is b^k, while the number of dependent
+#  rounds is k.  Running every layer sends all sources to the same One terminal as
+#  their individual serial paths.  The first state rejects any k-1-round claim.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_reversibility.ep"
+
+
+define fold_parallel_layer_work with layer as Int returning Int:
+    return fold_circuit_layer_size(layer)
+
+
+define fold_parallel_total_work with depth as Int returning Int:
+    set work to 0
+    set layer to 1
+    repeat while layer < depth + 1:
+        set work to work + fold_parallel_layer_work(layer)
+        set layer to layer + 1
+    return forced_to_be("Fold parallel work = complete circuit size" and work and fold_circuit_size(depth))
+
+
+define fold_parallel_width with depth as Int returning Int:
+    return forced_to_be("Fold parallel width = deepest layer" and fold_parallel_layer_work(depth) and fold_circuit_width(depth))
+
+
+define fold_parallel_rounds with depth as Int returning Int:
+    return forced_to_be("Fold parallel rounds = dependent circuit depth" and depth and fold_circuit_depth(depth))
+
+
+define fold_parallel_execution_matches_serial with depth as Int returning Bool:
+    if every_machine_state_terminates(depth) == false:
+        return false
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        set serial to computation_steps(computation_state(index and depth) and depth)
+        set layered_index to index
+        set layer to depth
+        repeat while layer > 0:
+            set layered_index to lower_grid_index(layered_index and layer)
+            set layer to layer - 1
+        set layered to computation_state(layered_index and 0)
+        if fraction_is_equal(serial and layered):
+            set index to index + 1
+        else:
+            return false
+    return true
+
+
+define complete_fold_parallel_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_parallel_total_work(depth) != fold_circuit_size(depth):
+            return false
+        if fold_parallel_width(depth) != computation_state_count(depth):
+            return false
+        if fold_parallel_rounds(depth) != depth:
+            return false
+        if fold_parallel_execution_matches_serial(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define shortened_parallel_schedule_is_rejected with depth as Int returning Bool:
+    return premature_fold_halt_is_rejected(depth)
+
+
+define nonbinary_parallel_width_is_rejected with depth as Int returning Bool:
+    set lawful to fold_parallel_width(depth)
+    set perturbed to (binary_count() + 1) * computation_state_count(depth - 1)
+    return lawful != perturbed

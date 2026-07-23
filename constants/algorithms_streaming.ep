@@ -1,0 +1,84 @@
+# ============================================================================
+#  FOLD STREAMING ALGORITHMS -- one-pass observation of generated paths.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The automaton already consumes one fibre label and advances one Fold state at
+#  a time.  This forces a streaming algorithm: retain only the current coordinate
+#  and remaining distinction count; never revisit a consumed label.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  After s streamed symbols, the current coordinate is the s-step Fold image and
+#  the unconsumed suffix has k-s labels.  Work is one per symbol, retained
+#  information is k-s, and two streamed chunks compose to the same prefix result.
+#  Consuming all k labels reaches the One.  Every source and prefix is executed;
+#  a skipped or changed symbol is rejected.  No external buffer model enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_distributed.ep"
+
+
+define fold_stream_state_rank with rank as Int and depth as Int and consumed as Int returning Int:
+    return recursive_fold_index(rank and depth and consumed)
+
+
+define fold_stream_prefix_is_exact with rank as Int and depth as Int and consumed as Int returning Bool:
+    set word to enumerate_fold_word(rank and depth)
+    set suffix to fold_rewrite_steps(word and consumed)
+    if length_list(suffix) != depth - consumed:
+        return false
+    set streamed_rank to fold_stream_state_rank(rank and depth and consumed)
+    return decode_computation_codeword(suffix) == streamed_rank
+
+
+define fold_stream_work with consumed as Int returning Int:
+    return forced_to_be("Fold stream work = one transition per consumed label" and consumed and fold_query_count(consumed))
+
+
+define fold_stream_retained_information with depth as Int and consumed as Int returning Int:
+    return forced_to_be("Fold stream memory = unconsumed distinctions" and depth - consumed and retained_information(depth and consumed))
+
+
+define fold_stream_chunks_compose with rank as Int and depth as Int and first_chunk as Int and second_chunk as Int returning Bool:
+    if first_chunk + second_chunk > depth:
+        return false
+    set direct to fold_stream_state_rank(rank and depth and first_chunk + second_chunk)
+    set first_state to fold_stream_state_rank(rank and depth and first_chunk)
+    set staged to recursive_fold_index(first_state and depth - first_chunk and second_chunk)
+    return direct == staged
+
+
+define complete_fold_streaming_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set consumed to 0
+            repeat while consumed < depth + 1:
+                if fold_stream_prefix_is_exact(rank and depth and consumed) == false:
+                    return false
+                if fold_stream_work(consumed) != consumed:
+                    return false
+                if fold_stream_retained_information(depth and consumed) != depth - consumed:
+                    return false
+                if fold_stream_chunks_compose(rank and depth and consumed and depth - consumed) == false:
+                    return false
+                set consumed to consumed + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define shortened_stream_is_rejected with rank as Int and depth as Int returning Bool:
+    if depth < 1:
+        return true
+    return fold_stream_state_rank(rank and depth and depth - 1) != computation_state_count(1)
+
+
+define changed_stream_symbol_is_rejected with rank as Int and depth as Int returning Bool:
+    set word to enumerate_fold_word(rank and depth)
+    set original to get_list(word and 0)
+    set changed to binary_count() + 1 - original
+    set ok to set_list(word and 0 and changed)
+    return fold_guided_search_rank(word and depth) != rank

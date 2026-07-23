@@ -1,0 +1,32 @@
+# Machine-check Fold streaming algorithms.
+import "../constants/algorithms_streaming.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold streaming algorithms ==="
+    set ok to expect_number("three symbols leave streamed rank nine" and fold_stream_state_rank(73 and 7 and 3) and 9)
+    set ok to expect_true("the streamed prefix equals exact rewriting" and fold_stream_prefix_is_exact(73 and 7 and 3))
+    set ok to expect_number("three streamed symbols cost three transitions" and fold_stream_work(3) and 3)
+    set ok to expect_number("three symbols retain four distinctions" and fold_stream_retained_information(7 and 3) and 4)
+    set ok to expect_true("streamed chunks compose exactly" and fold_stream_chunks_compose(73 and 7 and 3 and 4))
+    set ok to expect_true("the complete streaming census holds" and complete_fold_streaming_algorithm_census())
+    set ok to expect_true("a shortened stream is rejected" and shortened_stream_is_rejected(1 and 7))
+    set ok to expect_true("a changed stream symbol is rejected" and changed_stream_symbol_is_rejected(73 and 7))
+    display "=== done ==="
+    return 0

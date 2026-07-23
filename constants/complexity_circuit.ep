@@ -1,0 +1,85 @@
+# ============================================================================
+#  FOLD CIRCUIT SIZE AND DEPTH -- complete layered transition organization.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A circuit need not be imported as a separate device.  Step 332 already forces
+#  the complete layered reader: every nonterminal coordinate has one Fold
+#  transition to the next lower layer.  That organization forces circuit size,
+#  width, and depth.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Layer r contains b^r source configurations and therefore b^r Fold gates.  The
+#  complete depth-k size is the enumerated sum over r=1..k, independently equal
+#  to the automaton's transition count.  Width is the deepest layer b^k.  Circuit
+#  depth is k because k layers suffice for every source and the first state does
+#  not close through k-1 layers.  Every layer transition lands exactly on the
+#  next grid.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computability_incompleteness.ep"
+
+
+define fold_circuit_layer_size with layer as Int returning Int:
+    return computation_state_count(layer)
+
+
+define enumerated_fold_circuit_size with depth as Int returning Int:
+    set gates to 0
+    set layer to 1
+    repeat while layer < depth + 1:
+        set gates to gates + fold_circuit_layer_size(layer)
+        set layer to layer + 1
+    return gates
+
+
+define fold_circuit_size with depth as Int returning Int:
+    return forced_to_be("Fold circuit size: layered gates = automaton transitions" and enumerated_fold_circuit_size(depth) and fold_automaton_transition_count(depth))
+
+
+define fold_circuit_width with depth as Int returning Int:
+    return forced_to_be("Fold circuit width = deepest exact state layer" and fold_circuit_layer_size(depth) and space_resource(depth))
+
+
+define fold_circuit_depth with depth as Int returning Int:
+    set by_layers to depth
+    set by_required_walk to first_fold_state_halt_time(depth)
+    return forced_to_be("Fold circuit depth: layer count = required closure walk" and by_layers and by_required_walk)
+
+
+define every_fold_circuit_layer_is_lawful with depth as Int returning Bool:
+    set layer to 1
+    repeat while layer < depth + 1:
+        if transition_lands_on_lower_grid(layer):
+            set layer to layer + 1
+        else:
+            return false
+    return true
+
+
+define omitted_fold_circuit_gate_is_rejected with depth as Int returning Bool:
+    return fold_circuit_size(depth) - 1 != fold_automaton_transition_count(depth)
+
+
+define shortened_fold_circuit_depth_is_rejected with depth as Int returning Bool:
+    return premature_fold_halt_is_rejected(depth)
+
+
+define complete_fold_circuit_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_circuit_size(depth) != fold_automaton_transition_count(depth):
+            return false
+        if fold_circuit_width(depth) != computation_state_count(depth):
+            return false
+        if fold_circuit_depth(depth) != depth:
+            return false
+        if every_fold_circuit_layer_is_lawful(depth) == false:
+            return false
+        if omitted_fold_circuit_gate_is_rejected(depth) == false:
+            return false
+        if shortened_fold_circuit_depth_is_rejected(depth) == false:
+            return false
+        set depth to depth + 1
+    return true

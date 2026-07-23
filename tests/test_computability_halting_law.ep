@@ -1,0 +1,30 @@
+# Machine-check the complete Fold halting law.
+import "../constants/computability_halting_law.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold halting law ==="
+    set ok to expect_true("every depth-7 closing state halts within seven Fold steps" and every_closing_fold_state_halts(7))
+    set ok to expect_number("the first depth-7 state halts in exactly seven steps" and first_fold_state_halt_time(7) and 7)
+    set ok to expect_true("the complete recurrent period certifies nonhalting" and recurrent_fold_machine_does_not_halt())
+    set ok to expect_true("premature halting is rejected" and premature_fold_halt_is_rejected(7))
+    set ok to expect_true("a recurrent terminal claim is rejected" and recurrent_terminal_claim_is_rejected())
+    set ok to expect_true("the complete halting census holds" and complete_fold_halting_census())
+    display "=== done ==="
+    return 0

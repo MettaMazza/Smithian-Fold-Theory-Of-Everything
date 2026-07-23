@@ -1,0 +1,104 @@
+# ============================================================================
+#  FOLD STRINGS AND SEQUENCES -- exact path parts, joins, and decompositions.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A Fold string is not imported character data.  It is the already-forced
+#  sequence of fibre labels joining a coordinate to the One.  Its lawful
+#  operations must therefore preserve generated path structure.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Taking a prefix or suffix copies exact labels.  Joining two generated paths
+#  produces a generated path whose length is the sum of their depths and whose
+#  count is the product b^a b^c = b^(a+c).  Splitting at every position and
+#  rejoining restores the original word exactly.  Changed and outside labels are
+#  rejected.  No conventional string encoding or library operation is assumed.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_exact_arithmetic.ep"
+
+
+define fold_sequence_slice with word as List and start as Int and count as Int returning List:
+    set part to create_list()
+    set position to 0
+    repeat while position < count:
+        set ok to append_list(part and get_list(word and start + position))
+        set position to position + 1
+    return part
+
+
+define fold_sequence_join with first as List and second as List returning List:
+    set joined to create_list()
+    set position to 0
+    repeat while position < length_list(first):
+        set ok to append_list(joined and get_list(first and position))
+        set position to position + 1
+    set position to 0
+    repeat while position < length_list(second):
+        set ok to append_list(joined and get_list(second and position))
+        set position to position + 1
+    return joined
+
+
+define fold_sequence_split_rejoins with word as List and split as Int returning Bool:
+    if split < 0:
+        return false
+    if split > length_list(word):
+        return false
+    set first to fold_sequence_slice(word and 0 and split)
+    set second to fold_sequence_slice(word and split and length_list(word) - split)
+    return fold_words_are_equal(fold_sequence_join(first and second) and word)
+
+
+define fold_sequence_join_is_generated with first as List and second as List returning Bool:
+    if fold_word_is_generated(first and length_list(first)) == false:
+        return false
+    if fold_word_is_generated(second and length_list(second)) == false:
+        return false
+    set joined to fold_sequence_join(first and second)
+    return fold_word_is_generated(joined and length_list(first) + length_list(second))
+
+
+define fold_sequence_product_count with first_depth as Int and second_depth as Int returning Int:
+    set by_parts to fold_language_word_count(first_depth) * fold_language_word_count(second_depth)
+    set by_join to fold_language_word_count(first_depth + second_depth)
+    return forced_to_be("Fold sequence joins: part choices = joint paths" and by_parts and by_join)
+
+
+define every_fold_sequence_decomposes with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set word to enumerate_fold_word(rank and depth)
+        set split to 0
+        repeat while split < depth + 1:
+            if fold_sequence_split_rejoins(word and split) == false:
+                return false
+            set split to split + 1
+        set rank to rank + 1
+    return true
+
+
+define complete_fold_strings_sequences_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if every_fold_sequence_decomposes(depth) == false:
+            return false
+        set word to enumerate_fold_word(1 and depth)
+        if fold_sequence_join_is_generated(word and word) == false:
+            return false
+        set depth to depth + 1
+    return fold_sequence_product_count(binary_count() and colour_count()) == computation_state_count(binary_count() + colour_count())
+
+
+define changed_sequence_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    set changed to fold_sequence_slice(word and 0 and depth)
+    set ok to set_list(changed and 0 and binary_count())
+    return fold_words_are_equal(word and changed) == false
+
+
+define outside_sequence_symbol_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    set ok to set_list(word and 0 and binary_count() + 1)
+    return fold_word_is_generated(word and depth) == false

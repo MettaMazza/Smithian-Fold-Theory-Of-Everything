@@ -1,0 +1,31 @@
+# Machine-check Fold approximate algorithms.
+import "../constants/algorithms_approximate.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold approximate algorithms ==="
+    set class_rank to fold_approximate_result_class(73 and 7 and 3)
+    set ok to expect_number("three observations return class rank nine" and class_rank and 9)
+    set ok to expect_number("the class description requires four labels" and fold_approximate_algorithm_work(7 and 3) and 4)
+    set ok to expect_number("the result class contains eight sources" and fold_approximate_class_member_count(class_rank and 7 and 3) and 8)
+    set ok to expect_true("the complete approximate census holds" and complete_fold_approximate_algorithm_census())
+    set ok to expect_true("a false approximate singleton is rejected" and false_approximate_singleton_is_rejected(7 and 3))
+    set ok to expect_true("a shortened class description is rejected" and shortened_approximate_description_is_rejected(7 and 3))
+    display "=== done ==="
+    return 0

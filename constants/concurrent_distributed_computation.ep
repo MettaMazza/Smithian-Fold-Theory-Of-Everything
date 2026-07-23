@@ -1,0 +1,173 @@
+# ============================================================================
+#  FOLD CONCURRENT AND DISTRIBUTED COMPUTATION.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Multiple Fold processes require exact laws for causal order, synchronization,
+#  communication, agreement, faults, knowledge, locality, and network routing.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Concurrent actions are counted Fold prefixes; independent splits commute
+#  because both execute the same forced total prefix.  Depth is the causal order
+#  and a synchronized round removes one distinction from every branch.  Fibre
+#  words provide the channel, prefix tree, ownership, replication, and partial
+#  order.  All closing processes agree at the One, while the binary preimage pair
+#  proves that agreement on an unrecorded predecessor is impossible.  The closed
+#  coding and information laws supply exact fault and distributed-knowledge laws.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every source, process split, and depth through seven is executed.  Changed
+#  replicas, omitted causal steps, false predecessor agreement, retained faults,
+#  and disconnected routes reject.
+# ============================================================================
+
+import "../constants/mathematical_foundations_complete.ep"
+import "../constants/formal_lambda_circuit.ep"
+import "../constants/information_noise_error.ep"
+import "../constants/information_coding.ep"
+import "../constants/information_mutual_conditional.ep"
+
+
+define fold_concurrent_prefixes_commute with rank as Int and depth as Int and first as Int and second as Int returning Bool:
+    if first + second > depth:
+        return false
+    set state to computation_state(rank and depth)
+    set first_then_second to computation_steps(computation_steps(state and first) and second)
+    set second_then_first to computation_steps(computation_steps(state and second) and first)
+    return fraction_is_equal(first_then_second and second_then_first)
+
+
+define fold_causal_depth_after with depth as Int and events as Int returning Int:
+    if events < 0:
+        return 0 - 1
+    if events > depth:
+        return 0 - 1
+    return forced_to_be("Fold causality: each event closes one depth" and depth - events and fold_evaluation_result_type(enumerate_fold_word(1 and depth) and events))
+
+
+define fold_synchronization_round_holds with depth as Int and rounds as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_evaluation_result_type(enumerate_fold_word(rank and depth) and rounds) != depth - rounds:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_communication_law_holds returning Bool:
+    return complete_fold_channel_capacity_census()
+
+
+define fold_causal_prefix_precedes with first as Int and second as Int returning Bool:
+    return first < second + 1
+
+
+define fold_partial_order_holds returning Bool:
+    set first to 0
+    repeat while first < computation_census_depth() + 1:
+        if fold_causal_prefix_precedes(first and first) == false:
+            return false
+        set second to first
+        repeat while second < computation_census_depth() + 1:
+            if fold_causal_prefix_precedes(first and second) == false:
+                return false
+            set third to second
+            repeat while third < computation_census_depth() + 1:
+                if fold_causal_prefix_precedes(first and third) == false:
+                    return false
+                set third to third + 1
+            set second to second + 1
+        set first to first + 1
+    return true
+
+
+define fold_terminal_consensus_holds with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and depth) != 1:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_unrecorded_predecessor_agreement_is_impossible with depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set first to 1
+    set second to first + lower_count
+    if lower_grid_index(first and depth) != lower_grid_index(second and depth):
+        return false
+    return fraction_compare(computation_state(first and depth) and computation_state(second and depth)) != 0
+
+
+define fold_replication_consistency_holds with rank as Int and depth as Int returning Bool:
+    set source to enumerate_fold_word(rank and depth)
+    set replica to enumerate_fold_word(rank and depth)
+    return fold_words_are_equal(source and replica)
+
+
+define fold_fault_model_holds returning Bool:
+    if complete_fold_coding_census() == false:
+        return false
+    return complete_fold_noise_error_census()
+
+
+define fold_distributed_knowledge_holds with depth as Int and observations as Int returning Bool:
+    return fold_mutual_conditional_accounting(depth and observations) == depth
+
+
+define fold_locality_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set source to enumerate_fold_word(rank and depth)
+    set residual to fold_rewrite_steps(source and observations)
+    if length_list(residual) != depth - observations:
+        return false
+    return fold_words_are_equal(residual and fold_bound_term_suffix(rank and depth and observations))
+
+
+define fold_network_computation_holds returning Bool:
+    return complete_fold_trees_graphs_census()
+
+
+define complete_fold_concurrent_distributed_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_synchronization_round_holds(depth and depth) == false:
+            return false
+        if fold_terminal_consensus_holds(depth) == false:
+            return false
+        if fold_unrecorded_predecessor_agreement_is_impossible(depth) == false:
+            return false
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            if fold_replication_consistency_holds(rank and depth) == false:
+                return false
+            set first to 0
+            repeat while first < depth + 1:
+                set second to 0
+                repeat while second < depth - first + 1:
+                    if fold_concurrent_prefixes_commute(rank and depth and first and second) == false:
+                        return false
+                    set second to second + 1
+                if fold_distributed_knowledge_holds(depth and first) == false:
+                    return false
+                if fold_locality_holds(rank and depth and first) == false:
+                    return false
+                set first to first + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    if fold_partial_order_holds() == false:
+        return false
+    if fold_communication_law_holds() == false:
+        return false
+    if fold_fault_model_holds() == false:
+        return false
+    return fold_network_computation_holds()
+
+
+define changed_replica_is_rejected with rank as Int and depth as Int returning Bool:
+    set source to enumerate_fold_word(rank and depth)
+    set replica to fold_change_symbol_at(enumerate_fold_word(rank and depth) and 0)
+    return fold_words_are_equal(source and replica) == false
+
+
+define omitted_causal_event_is_rejected with depth as Int returning Bool:
+    return fold_causal_depth_after(depth and 1) != depth

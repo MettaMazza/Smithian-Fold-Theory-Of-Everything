@@ -1,0 +1,24 @@
+import "../constants/information_channels_capacity.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold channels and capacity ==="
+    set ok to expect_number("seven channel uses carry 128 messages" and fold_channel_message_capacity(7) and 128)
+    set ok to expect_number("seven uses carry seven distinctions" and fold_channel_information_capacity(7) and 7)
+    set ok to expect_true("rank 73 transmits exactly" and fold_channel_transmission_round_trip(73 and 7))
+    set ok to expect_true("the complete channel census holds" and complete_fold_channel_capacity_census())
+    set ok to expect_true("a reduced alphabet is rejected" and reduced_channel_alphabet_is_rejected(7))
+    set ok to expect_true("an omitted message is rejected" and omitted_channel_message_is_rejected(7))
+    return 0

@@ -1,0 +1,37 @@
+# Machine-check arbitrary admitted Fold-circuit lower bounds.
+import "../constants/complexity_arbitrary_circuit_lower_bounds.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Arbitrary admitted Fold-circuit lower bounds ==="
+    set ok to expect_number("depth-three exact size lower bound" and arbitrary_fold_circuit_size_lower_bound(3) and 14)
+    set ok to expect_number("depth-seven exact path lower bound" and arbitrary_fold_circuit_depth_lower_bound(7) and 7)
+    set ok to expect_number("depth-seven exact width lower bound" and arbitrary_fold_circuit_width_lower_bound(7) and 128)
+    set ok to expect_number("all depth-three edge subsets leave one survivor" and complete_fold_circuit_edge_subset_survivor_count(3) and 1)
+    set ok to expect_true("complete subset census and induction certificate" and complete_arbitrary_fold_circuit_lower_bound_census())
+    set ok to expect_true("one omitted edge rejected" and omitted_arbitrary_fold_circuit_edge_is_rejected(7))
+    set ok to expect_true("one shortened dependent round rejected" and shortened_arbitrary_fold_circuit_path_is_rejected(7))
+    set ok to expect_true("one narrowed frontier state rejected" and narrowed_arbitrary_fold_circuit_frontier_is_rejected(7))
+    set ok to expect_true("rewired non-Fold edge rejected" and rewired_arbitrary_fold_circuit_edge_is_rejected(7))
+    set ok to expect_true("lower-bound induction executes through fourteen" and arbitrary_fold_circuit_lower_bound_certificate(14))
+    display "=== done ==="
+    return 0
+

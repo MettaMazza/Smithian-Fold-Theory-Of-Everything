@@ -1,0 +1,34 @@
+import "../foundation/fold_form_grammar_enumeration.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== mechanically extended Fold-form grammar ==="
+    set ok to expect_number("the primitive alphabet has four forms" and extended_fold_grammar_primitive_count() and 4)
+    set ok to expect_number("composition size three has 64 generated forms" and extended_fold_form_count_at_size(3) and 64)
+    set ok to expect_number("sizes one through three contain 84 forms" and extended_fold_form_count_through(3) and 84)
+    set ok to expect_true("all 84 forms are generated and execute in-domain" and extended_fold_grammar_is_complete_through_three())
+    set ok to expect_number("the first generating size is one" and extended_fold_minimal_generator_size(3) and 1)
+    set ok to expect_number("exactly one size-one form generates" and extended_fold_generators_at_size(1) and 1)
+    set ok to expect_number("the unique minimal code is the Fold" and extended_fold_minimal_generator_code() and 3)
+    set ok to expect_true("the Fold remains the unique minimal generator" and extended_fold_unique_minimal_generator_holds())
+    set ok to expect_true("an omitted extended form is rejected" and omitted_extended_form_is_rejected())
+    set ok to expect_true("larger generators are not minimal rivals" and larger_generator_is_not_minimal())
+    set ok to expect_true("a shifted winner is rejected" and shifted_extended_winner_is_rejected())
+    display "=== done ==="
+    return 0

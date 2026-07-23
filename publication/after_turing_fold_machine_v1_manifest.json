@@ -1,0 +1,616 @@
+{
+  "schema": "sft-after-turing-release-manifest-v1",
+  "status": "PREPARED_FOR_AUTHORIZED_PUBLICATION",
+  "title": "After Turing: The Fold Machine",
+  "subtitle": "An Exact Smithian Derivation of Classical and Quantum Computation, in Correspondence with Turing, Church, Gödel, Shannon, von Neumann, Landauer, Bennett, Feynman, and Deutsch",
+  "version": "1.0",
+  "date": "2026-07-23",
+  "scientific_author": "Maria Smith",
+  "affiliation": "Ernos Labs",
+  "repository": "https://github.com/MettaMazza/Smithian-Fold-Theory-Of-Everything",
+  "recommended_tag": "after-turing-fold-machine-v1.0",
+  "git_commit": null,
+  "git_tag": null,
+  "zenodo_deposition": 21512799,
+  "zenodo_doi": "10.5281/zenodo.21512799",
+  "authorization_boundary": "Maria Smith explicitly authorized main-branch GitHub synchronization, standalone repository creation, and Zenodo publication on 23 July 2026.",
+  "corpus_validation": {
+    "suites": 409,
+    "checks": 2693,
+    "failures": 0,
+    "identical_generated_c_certificates": 409,
+    "drifted_certificates": 0,
+    "absent_certificates": 0,
+    "computation_steps": "325-407",
+    "computation_step_count": 83,
+    "focused_checks": 691,
+    "declared_census_obligations": 164,
+    "internally_closed": 163,
+    "conditional_uniqueness": 1
+  },
+  "laboratory_validation": {
+    "theorem_demonstrations": 12,
+    "finite_investigations": 8,
+    "frontier_investigations": 0,
+    "main_corpus_closed_frontiers": 4,
+    "python_tests": 25,
+    "unfavorable_controls": 20,
+    "independent_c_checks": 34,
+    "failures": 0,
+    "promoted_frontier_claims": 0,
+    "receipt_sha256": "38a0262a5a9194eb10c4d58c4679a1862caf5f8045d05b2069ed4df4f5ca6a7e",
+    "authority_manifest_sha256": "39ddcb85b0c57eff6ac621d67eac3712171e8c61913226442e73d6979a2b0abe"
+  },
+  "scope_boundaries": {
+    "fold_form_uniqueness": "Conditional on 84 mechanically generated ordered compositions through size three.",
+    "depth": "Constructive base/successor certificate for any supplied finite representable depth; executable census additionally run through depth 14.",
+    "fault_tolerance": "Every positive finite t uniquely forces width 2t+1; masks are separately exhausted at t=1,2,3 and the general law is certified by necessity/sufficiency induction.",
+    "excluded_applications": [
+      "Unison AI",
+      "Fold Chess",
+      "Fold Go",
+      "Fold Protein"
+    ],
+    "native_closures": [
+      "BB_F(k)=k for every positive finite Fold depth",
+      "P_F=NP_F in the admitted Fold grammar",
+      "exact lower bounds for every lawful Fold circuit",
+      "unique minimum fault width 2t+1 for every positive finite t"
+    ],
+    "external_correspondence_frontier": [
+      "arbitrary conventional Turing-machine grammars",
+      "arbitrary external language and gate-basis complexity classes",
+      "stochastic physical-hardware fault thresholds"
+    ]
+  },
+  "evidence_archive": {
+    "path": "publication/after_turing_fold_machine_v1/After_Turing_Fold_Machine_Evidence_v1.zip",
+    "members": 347,
+    "sha256": "22de5d035a97ca80be0ba41c180ca14f78bdce78128cf5e23447aac42efa3e4e",
+    "fixed_member_timestamp": "2026-07-23T00:00:00"
+  },
+  "step_files": [
+    {
+      "step": 325,
+      "source": "constants/computational_state_transition.ep",
+      "test": "tests/test_computational_state_transition.ep",
+      "certificate": "verify/test_computational_state_transition.c"
+    },
+    {
+      "step": 326,
+      "source": "constants/computational_observation.ep",
+      "test": "tests/test_computational_observation.ep",
+      "certificate": "verify/test_computational_observation.c"
+    },
+    {
+      "step": 327,
+      "source": "constants/computational_resources.ep",
+      "test": "tests/test_computational_resources.ep",
+      "certificate": "verify/test_computational_resources.c"
+    },
+    {
+      "step": 328,
+      "source": "constants/computational_encoding.ep",
+      "test": "tests/test_computational_encoding.ep",
+      "certificate": "verify/test_computational_encoding.c"
+    },
+    {
+      "step": 329,
+      "source": "constants/computational_information.ep",
+      "test": "tests/test_computational_information.ep",
+      "certificate": "verify/test_computational_information.c"
+    },
+    {
+      "step": 330,
+      "source": "constants/computational_process_machine.ep",
+      "test": "tests/test_computational_process_machine.ep",
+      "certificate": "verify/test_computational_process_machine.c"
+    },
+    {
+      "step": 331,
+      "source": "constants/computational_language_grammar.ep",
+      "test": "tests/test_computational_language_grammar.ep",
+      "certificate": "verify/test_computational_language_grammar.c"
+    },
+    {
+      "step": 332,
+      "source": "constants/computational_automaton.ep",
+      "test": "tests/test_computational_automaton.ep",
+      "certificate": "verify/test_computational_automaton.c"
+    },
+    {
+      "step": 333,
+      "source": "constants/computational_rewriting.ep",
+      "test": "tests/test_computational_rewriting.ep",
+      "certificate": "verify/test_computational_rewriting.c"
+    },
+    {
+      "step": 334,
+      "source": "constants/computational_recursion_self_application.ep",
+      "test": "tests/test_computational_recursion_self_application.ep",
+      "certificate": "verify/test_computational_recursion_self_application.c"
+    },
+    {
+      "step": 335,
+      "source": "constants/computational_model_equivalence.ep",
+      "test": "tests/test_computational_model_equivalence.ep",
+      "certificate": "verify/test_computational_model_equivalence.c"
+    },
+    {
+      "step": 336,
+      "source": "constants/computational_universality.ep",
+      "test": "tests/test_computational_universality.ep",
+      "certificate": "verify/test_computational_universality.c"
+    },
+    {
+      "step": 337,
+      "source": "constants/computability_recognition.ep",
+      "test": "tests/test_computability_recognition.ep",
+      "certificate": "verify/test_computability_recognition.c"
+    },
+    {
+      "step": 338,
+      "source": "constants/computability_halting_law.ep",
+      "test": "tests/test_computability_halting_law.ep",
+      "certificate": "verify/test_computability_halting_law.c"
+    },
+    {
+      "step": 339,
+      "source": "constants/computability_enumeration.ep",
+      "test": "tests/test_computability_enumeration.ep",
+      "certificate": "verify/test_computability_enumeration.c"
+    },
+    {
+      "step": 340,
+      "source": "constants/computability_reduction.ep",
+      "test": "tests/test_computability_reduction.ep",
+      "certificate": "verify/test_computability_reduction.c"
+    },
+    {
+      "step": 341,
+      "source": "constants/computability_undecidability.ep",
+      "test": "tests/test_computability_undecidability.ep",
+      "certificate": "verify/test_computability_undecidability.c"
+    },
+    {
+      "step": 342,
+      "source": "constants/computability_relative.ep",
+      "test": "tests/test_computability_relative.ep",
+      "certificate": "verify/test_computability_relative.c"
+    },
+    {
+      "step": 343,
+      "source": "constants/computability_admissible_limits.ep",
+      "test": "tests/test_computability_admissible_limits.ep",
+      "certificate": "verify/test_computability_admissible_limits.c"
+    },
+    {
+      "step": 344,
+      "source": "constants/computability_degrees.ep",
+      "test": "tests/test_computability_degrees.ep",
+      "certificate": "verify/test_computability_degrees.c"
+    },
+    {
+      "step": 345,
+      "source": "constants/computability_incompleteness.ep",
+      "test": "tests/test_computability_incompleteness.ep",
+      "certificate": "verify/test_computability_incompleteness.c"
+    },
+    {
+      "step": 346,
+      "source": "constants/complexity_circuit.ep",
+      "test": "tests/test_complexity_circuit.ep",
+      "certificate": "verify/test_complexity_circuit.c"
+    },
+    {
+      "step": 347,
+      "source": "constants/complexity_communication_query.ep",
+      "test": "tests/test_complexity_communication_query.ep",
+      "certificate": "verify/test_complexity_communication_query.c"
+    },
+    {
+      "step": 348,
+      "source": "constants/complexity_randomness.ep",
+      "test": "tests/test_complexity_randomness.ep",
+      "certificate": "verify/test_complexity_randomness.c"
+    },
+    {
+      "step": 349,
+      "source": "constants/complexity_reversibility.ep",
+      "test": "tests/test_complexity_reversibility.ep",
+      "certificate": "verify/test_complexity_reversibility.c"
+    },
+    {
+      "step": 350,
+      "source": "constants/complexity_parallel.ep",
+      "test": "tests/test_complexity_parallel.ep",
+      "certificate": "verify/test_complexity_parallel.c"
+    },
+    {
+      "step": 351,
+      "source": "constants/complexity_quantum.ep",
+      "test": "tests/test_complexity_quantum.ep",
+      "certificate": "verify/test_complexity_quantum.c"
+    },
+    {
+      "step": 352,
+      "source": "constants/complexity_bounds_completeness.ep",
+      "test": "tests/test_complexity_bounds_completeness.ep",
+      "certificate": "verify/test_complexity_bounds_completeness.c"
+    },
+    {
+      "step": 353,
+      "source": "constants/complexity_average_worst.ep",
+      "test": "tests/test_complexity_average_worst.ep",
+      "certificate": "verify/test_complexity_average_worst.c"
+    },
+    {
+      "step": 354,
+      "source": "constants/complexity_approximation.ep",
+      "test": "tests/test_complexity_approximation.ep",
+      "certificate": "verify/test_complexity_approximation.c"
+    },
+    {
+      "step": 355,
+      "source": "constants/complexity_parameterized.ep",
+      "test": "tests/test_complexity_parameterized.ep",
+      "certificate": "verify/test_complexity_parameterized.c"
+    },
+    {
+      "step": 356,
+      "source": "constants/complexity_descriptive.ep",
+      "test": "tests/test_complexity_descriptive.ep",
+      "certificate": "verify/test_complexity_descriptive.c"
+    },
+    {
+      "step": 357,
+      "source": "constants/algorithms_search_order.ep",
+      "test": "tests/test_algorithms_search_order.ep",
+      "certificate": "verify/test_algorithms_search_order.c"
+    },
+    {
+      "step": 358,
+      "source": "constants/algorithms_exact_arithmetic.ep",
+      "test": "tests/test_algorithms_exact_arithmetic.ep",
+      "certificate": "verify/test_algorithms_exact_arithmetic.c"
+    },
+    {
+      "step": 359,
+      "source": "constants/algorithms_strings_sequences.ep",
+      "test": "tests/test_algorithms_strings_sequences.ep",
+      "certificate": "verify/test_algorithms_strings_sequences.c"
+    },
+    {
+      "step": 360,
+      "source": "constants/algorithms_trees_graphs.ep",
+      "test": "tests/test_algorithms_trees_graphs.ep",
+      "certificate": "verify/test_algorithms_trees_graphs.c"
+    },
+    {
+      "step": 361,
+      "source": "constants/algorithms_algebraic.ep",
+      "test": "tests/test_algorithms_algebraic.ep",
+      "certificate": "verify/test_algorithms_algebraic.c"
+    },
+    {
+      "step": 362,
+      "source": "constants/algorithms_geometric.ep",
+      "test": "tests/test_algorithms_geometric.ep",
+      "certificate": "verify/test_algorithms_geometric.c"
+    },
+    {
+      "step": 363,
+      "source": "constants/algorithms_dynamic_programming.ep",
+      "test": "tests/test_algorithms_dynamic_programming.ep",
+      "certificate": "verify/test_algorithms_dynamic_programming.c"
+    },
+    {
+      "step": 364,
+      "source": "constants/algorithms_optimization.ep",
+      "test": "tests/test_algorithms_optimization.ep",
+      "certificate": "verify/test_algorithms_optimization.c"
+    },
+    {
+      "step": 365,
+      "source": "constants/algorithms_randomized.ep",
+      "test": "tests/test_algorithms_randomized.ep",
+      "certificate": "verify/test_algorithms_randomized.c"
+    },
+    {
+      "step": 366,
+      "source": "constants/algorithms_parallel.ep",
+      "test": "tests/test_algorithms_parallel.ep",
+      "certificate": "verify/test_algorithms_parallel.c"
+    },
+    {
+      "step": 367,
+      "source": "constants/algorithms_distributed.ep",
+      "test": "tests/test_algorithms_distributed.ep",
+      "certificate": "verify/test_algorithms_distributed.c"
+    },
+    {
+      "step": 368,
+      "source": "constants/algorithms_streaming.ep",
+      "test": "tests/test_algorithms_streaming.ep",
+      "certificate": "verify/test_algorithms_streaming.c"
+    },
+    {
+      "step": 369,
+      "source": "constants/algorithms_numerical.ep",
+      "test": "tests/test_algorithms_numerical.ep",
+      "certificate": "verify/test_algorithms_numerical.c"
+    },
+    {
+      "step": 370,
+      "source": "constants/algorithms_symbolic.ep",
+      "test": "tests/test_algorithms_symbolic.ep",
+      "certificate": "verify/test_algorithms_symbolic.c"
+    },
+    {
+      "step": 371,
+      "source": "constants/algorithms_approximate.ep",
+      "test": "tests/test_algorithms_approximate.ep",
+      "certificate": "verify/test_algorithms_approximate.c"
+    },
+    {
+      "step": 372,
+      "source": "constants/algorithms_quantum.ep",
+      "test": "tests/test_algorithms_quantum.ep",
+      "certificate": "verify/test_algorithms_quantum.c"
+    },
+    {
+      "step": 373,
+      "source": "constants/semantics_syntax.ep",
+      "test": "tests/test_semantics_syntax.ep",
+      "certificate": "verify/test_semantics_syntax.c"
+    },
+    {
+      "step": 374,
+      "source": "constants/semantics_binding_substitution.ep",
+      "test": "tests/test_semantics_binding_substitution.ep",
+      "certificate": "verify/test_semantics_binding_substitution.c"
+    },
+    {
+      "step": 375,
+      "source": "constants/semantics_evaluation.ep",
+      "test": "tests/test_semantics_evaluation.ep",
+      "certificate": "verify/test_semantics_evaluation.c"
+    },
+    {
+      "step": 376,
+      "source": "constants/semantics_operational_denotational.ep",
+      "test": "tests/test_semantics_operational_denotational.ep",
+      "certificate": "verify/test_semantics_operational_denotational.c"
+    },
+    {
+      "step": 377,
+      "source": "constants/semantics_type_theory.ep",
+      "test": "tests/test_semantics_type_theory.ep",
+      "certificate": "verify/test_semantics_type_theory.c"
+    },
+    {
+      "step": 378,
+      "source": "constants/semantics_program_equivalence.ep",
+      "test": "tests/test_semantics_program_equivalence.ep",
+      "certificate": "verify/test_semantics_program_equivalence.c"
+    },
+    {
+      "step": 379,
+      "source": "constants/semantics_termination_correctness.ep",
+      "test": "tests/test_semantics_termination_correctness.ep",
+      "certificate": "verify/test_semantics_termination_correctness.c"
+    },
+    {
+      "step": 380,
+      "source": "constants/semantics_formal_specification.ep",
+      "test": "tests/test_semantics_formal_specification.ep",
+      "certificate": "verify/test_semantics_formal_specification.c"
+    },
+    {
+      "step": 381,
+      "source": "constants/semantics_program_transformation.ep",
+      "test": "tests/test_semantics_program_transformation.ep",
+      "certificate": "verify/test_semantics_program_transformation.c"
+    },
+    {
+      "step": 382,
+      "source": "constants/semantics_compilation.ep",
+      "test": "tests/test_semantics_compilation.ep",
+      "certificate": "verify/test_semantics_compilation.c"
+    },
+    {
+      "step": 383,
+      "source": "constants/semantics_verification_proof.ep",
+      "test": "tests/test_semantics_verification_proof.ep",
+      "certificate": "verify/test_semantics_verification_proof.c"
+    },
+    {
+      "step": 384,
+      "source": "constants/information_entropy_uncertainty.ep",
+      "test": "tests/test_information_entropy_uncertainty.ep",
+      "certificate": "verify/test_information_entropy_uncertainty.c"
+    },
+    {
+      "step": 385,
+      "source": "constants/information_compression.ep",
+      "test": "tests/test_information_compression.ep",
+      "certificate": "verify/test_information_compression.c"
+    },
+    {
+      "step": 386,
+      "source": "constants/information_channels_capacity.ep",
+      "test": "tests/test_information_channels_capacity.ep",
+      "certificate": "verify/test_information_channels_capacity.c"
+    },
+    {
+      "step": 387,
+      "source": "constants/information_noise_error.ep",
+      "test": "tests/test_information_noise_error.ep",
+      "certificate": "verify/test_information_noise_error.c"
+    },
+    {
+      "step": 388,
+      "source": "constants/information_coding.ep",
+      "test": "tests/test_information_coding.ep",
+      "certificate": "verify/test_information_coding.c"
+    },
+    {
+      "step": 389,
+      "source": "constants/information_mutual_conditional.ep",
+      "test": "tests/test_information_mutual_conditional.ep",
+      "certificate": "verify/test_information_mutual_conditional.c"
+    },
+    {
+      "step": 390,
+      "source": "constants/information_classical_probabilistic_quantum.ep",
+      "test": "tests/test_information_classical_probabilistic_quantum.ep",
+      "certificate": "verify/test_information_classical_probabilistic_quantum.c"
+    },
+    {
+      "step": 391,
+      "source": "constants/mathematical_foundations_complete.ep",
+      "test": "tests/test_mathematical_foundations_complete.ep",
+      "certificate": "verify/test_mathematical_foundations_complete.c"
+    },
+    {
+      "step": 392,
+      "source": "constants/formal_lambda_circuit.ep",
+      "test": "tests/test_formal_lambda_circuit.ep",
+      "certificate": "verify/test_formal_lambda_circuit.c"
+    },
+    {
+      "step": 393,
+      "source": "constants/concurrent_distributed_computation.ep",
+      "test": "tests/test_concurrent_distributed_computation.ep",
+      "certificate": "verify/test_concurrent_distributed_computation.c"
+    },
+    {
+      "step": 394,
+      "source": "constants/computational_security.ep",
+      "test": "tests/test_computational_security.ep",
+      "certificate": "verify/test_computational_security.c"
+    },
+    {
+      "step": 395,
+      "source": "constants/learning_intelligence_theory.ep",
+      "test": "tests/test_learning_intelligence_theory.ep",
+      "certificate": "verify/test_learning_intelligence_theory.c"
+    },
+    {
+      "step": 396,
+      "source": "constants/scientific_computation.ep",
+      "test": "tests/test_scientific_computation.ep",
+      "certificate": "verify/test_scientific_computation.c"
+    },
+    {
+      "step": 397,
+      "source": "constants/reversible_quantum_foundations.ep",
+      "test": "tests/test_reversible_quantum_foundations.ep",
+      "certificate": "verify/test_reversible_quantum_foundations.c"
+    },
+    {
+      "step": 398,
+      "source": "constants/quantum_gates_circuits_universality.ep",
+      "test": "tests/test_quantum_gates_circuits_universality.ep",
+      "certificate": "verify/test_quantum_gates_circuits_universality.c"
+    },
+    {
+      "step": 399,
+      "source": "constants/quantum_communication_coding_fault_tolerance.ep",
+      "test": "tests/test_quantum_communication_coding_fault_tolerance.ep",
+      "certificate": "verify/test_quantum_communication_coding_fault_tolerance.c"
+    },
+    {
+      "step": 400,
+      "source": "constants/quantum_simulation_verification_learning_limits.ep",
+      "test": "tests/test_quantum_simulation_verification_learning_limits.ep",
+      "certificate": "verify/test_quantum_simulation_verification_learning_limits.c"
+    },
+    {
+      "step": 401,
+      "source": "foundation/fold_form_grammar_enumeration.ep",
+      "test": "tests/test_fold_form_grammar_enumeration.ep",
+      "certificate": "verify/test_fold_form_grammar_enumeration.c"
+    },
+    {
+      "step": 402,
+      "source": "constants/computation_depth_induction.ep",
+      "test": "tests/test_computation_depth_induction.ep",
+      "certificate": "verify/test_computation_depth_induction.c"
+    },
+    {
+      "step": 403,
+      "source": "constants/quantum_multi_error_fault_tolerance.ep",
+      "test": "tests/test_quantum_multi_error_fault_tolerance.ep",
+      "certificate": "verify/test_quantum_multi_error_fault_tolerance.c"
+    },
+    {
+      "step": 404,
+      "source": "constants/computability_busy_beaver_unrestricted.ep",
+      "test": "tests/test_computability_busy_beaver_unrestricted.ep",
+      "certificate": "verify/test_computability_busy_beaver_unrestricted.c"
+    },
+    {
+      "step": 405,
+      "source": "constants/complexity_fold_p_np.ep",
+      "test": "tests/test_complexity_fold_p_np.ep",
+      "certificate": "verify/test_complexity_fold_p_np.c"
+    },
+    {
+      "step": 406,
+      "source": "constants/complexity_arbitrary_circuit_lower_bounds.ep",
+      "test": "tests/test_complexity_arbitrary_circuit_lower_bounds.ep",
+      "certificate": "verify/test_complexity_arbitrary_circuit_lower_bounds.c"
+    },
+    {
+      "step": 407,
+      "source": "constants/quantum_unbounded_finite_fault_thresholds.ep",
+      "test": "tests/test_quantum_unbounded_finite_fault_thresholds.ep",
+      "certificate": "verify/test_quantum_unbounded_finite_fault_thresholds.c"
+    }
+  ],
+  "zenodo_deposit_order": [
+    {
+      "path": "output/pdf/After_Turing_The_Fold_Machine_v1.pdf",
+      "role": "primary finished paper PDF",
+      "bytes": 192431,
+      "sha256": "a2557a3d2d00fb98a78359c216913f83461d20acabf71ef50b12e54fd0cddc4c"
+    },
+    {
+      "path": "papers/After_Turing_The_Fold_Machine.md",
+      "role": "paper source",
+      "bytes": 99225,
+      "sha256": "f91513ccf0775bfa08433d17005320a532f326eed10f5dc018e1624d79da3594"
+    },
+    {
+      "path": "FUNDAMENTAL_COMPUTATION_CENSUS.md",
+      "role": "exact 164-obligation computation census",
+      "bytes": 42053,
+      "sha256": "5bf48ee3226d8fb0f98bee697401b0a53ae075b06da0f1a2a0d8faba71423ce5"
+    },
+    {
+      "path": "publication/after_turing_fold_machine_v1/After_Turing_Fold_Machine_Evidence_v1.zip",
+      "role": "deterministic source, certificate, and laboratory evidence",
+      "bytes": 7114742,
+      "sha256": "22de5d035a97ca80be0ba41c180ca14f78bdce78128cf5e23447aac42efa3e4e"
+    },
+    {
+      "path": "publication/zenodo_after_turing_fold_machine_v1_metadata.json",
+      "role": "prepared Zenodo metadata",
+      "bytes": 8376,
+      "sha256": "a2babf60da7bd43e95ac8b69c668acb9c4f3ce8066225729c6461f1f7dcc60a2"
+    },
+    {
+      "path": "publication/after_turing_fold_machine_v1/PDF_RENDER_RECEIPT.md",
+      "role": "PDF render and visual-inspection receipt",
+      "bytes": 1341,
+      "sha256": "a61cbe678460889dea2405b4a9afe35f90bf44eb588e256ebcdbe8b5ad0c2379"
+    },
+    {
+      "path": "publication/after_turing_fold_machine_v1/CITATION.cff",
+      "role": "citation metadata before DOI reservation",
+      "bytes": 1217,
+      "sha256": "5acc35258042d0167b50055a898d96393a031717263179cf4d3ade07ba12cb42"
+    }
+  ]
+}

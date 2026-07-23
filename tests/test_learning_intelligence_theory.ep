@@ -1,0 +1,41 @@
+import "../constants/learning_intelligence_theory.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold learning and intelligence theory ==="
+    set ok to expect_true("held evidence infers the exact source" and fold_inference_reconstructs(73 and 7 and 3))
+    set ok to expect_number("classification is the residual rank" and fold_classification_label(73 and 7 and 3) and fold_evaluate_program_rank(enumerate_fold_word(73 and 7) and 3))
+    set ok to expect_number("prediction reads the next forced label" and fold_prediction_next_label(73 and 7 and 3) and get_list(enumerate_fold_word(73 and 7) and 3))
+    set ok to expect_true("class members share the residual" and fold_generalization_class_holds(73 and 7 and 3))
+    set ok to expect_number("three hidden distinctions require three labels" and fold_learning_sample_complexity(3) and 3)
+    set ok to expect_true("learning optimization is exhaustive" and fold_learning_optimization_holds())
+    set ok to expect_number("induction has b extensions" and fold_induction_extension_count(4) and 2)
+    set ok to expect_true("search and planning find every target" and fold_search_planning_holds())
+    set ok to expect_number("three rewarded actions remove three steps" and fold_reinforcement_improvement(7 and 3) and 3)
+    set ok to expect_true("multi-agent evidence reconstructs" and fold_multi_agent_learning_holds(73 and 7 and 4))
+    set ok to expect_true("adaptation updates the retained representation" and fold_adaptation_holds(73 and 7 and 3))
+    set ok to expect_true("missing labels impose the learning limit" and fold_learning_limit_holds(3))
+    set ok to expect_true("the representation and trace are interpretable" and fold_interpretability_verification_holds(73 and 7 and 3))
+    set ok to expect_true("classical and quantum learning supports correspond" and fold_classical_quantum_learning_holds(7 and 3))
+    set ok to expect_true("the complete learning census holds" and complete_fold_learning_intelligence_census())
+    set ok to expect_true("a shortened sample is rejected" and shortened_learning_sample_is_rejected(3))
+    set ok to expect_true("a changed representation is rejected" and changed_learning_representation_is_rejected(73 and 7))
+    set ok to expect_true("absent reinforcement improvement is rejected" and absent_reinforcement_improvement_is_rejected(7))
+    display "=== done ==="
+    return 0

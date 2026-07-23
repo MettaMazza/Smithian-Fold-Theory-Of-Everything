@@ -1,0 +1,187 @@
+# ============================================================================
+#  FOLD RESOURCE LAW -- time, space, histories, retained and closed distinctions.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Complexity needs resource quantities, but no outside machine clock, memory
+#  model, or asymptotic convention may define them.  Step 325 gives exact states
+#  and steps; Step 326 gives the exact distinction closed by each observation.
+#  Their counts force the Fold resources.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  SPACE at depth k is the complete state grid b^k, cross-routed between direct
+#  enumeration and the established tower.  TIME for the deepest first state is
+#  the number of Fold steps required to reach the One; the walk is counted and
+#  forced equal to k, with one-step-early closure rejected.
+#
+#  After s steps from depth k:
+#      retained distinctions = b^(k-s),
+#      closed histories       = b^s,
+#      retained * closed      = b^k.
+#  Route A is the source-state census.  Route B is the repeated binary observation
+#  fibre.  forced_to_be requires the history count and the retained/closed product
+#  to equal the initial space at every k and every s <= k.
+#
+#  PATH COUNT is the number of distinct initial histories closing to the One after
+#  k steps.  Every state is walked; the count is forced equal both to the state
+#  census and to b^k repeated fibres.  A nonbinary history factor is rejected.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Complete resource accounting is executed at all depths 1 through 7 and every
+#  intermediate step count.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_observation.ep"
+
+
+# Route A: enumerate the complete depth-k space.
+define enumerated_space_resource with depth as Int returning Int:
+    set count to computation_state_count(depth)
+    set enumerated to 0
+    set index to 1
+    repeat while index < count + 1:
+        set enumerated to enumerated + 1
+        set index to index + 1
+    return enumerated
+
+
+# Space is forced equal between enumeration and the established binary tower.
+define space_resource with depth as Int returning Int:
+    set enumerated to enumerated_space_resource(depth)
+    set tower to whole_power(binary_count() and depth)
+    return forced_to_be("space resource: enumerated states = binary tower" and enumerated and tower)
+
+
+# Count the Fold steps taken by the first state to reach the One.
+define walked_time_resource with depth as Int returning Int:
+    set state to computation_state(1 and depth)
+    set one to fraction_from_whole_number(1)
+    set steps to 0
+    set walking to true
+    repeat while walking:
+        if fraction_is_equal(state and one):
+            set walking to false
+        else:
+            set state to computation_step(state)
+            set steps to steps + 1
+    return steps
+
+
+# Time is forced equal between the walked closure and the state's depth.
+define time_resource with depth as Int returning Int:
+    return forced_to_be("time resource: walked folds = depth" and walked_time_resource(depth) and depth)
+
+
+# Distinctions retained after a counted number of Fold observations.
+define retained_resource with depth as Int and steps as Int returning Int:
+    return computation_state_count(depth - steps)
+
+
+# Initial histories closed together after the counted observations.
+define closed_history_resource with steps as Int returning Int:
+    return whole_power(binary_count() and steps)
+
+
+# Retained classes times closed histories reconstruct the complete initial space.
+define retained_closed_accounting with depth as Int and steps as Int returning Int:
+    set retained to retained_resource(depth and steps)
+    set closed to closed_history_resource(steps)
+    set reconstructed to retained * closed
+    return forced_to_be("retained distinctions times closed histories = initial space" and reconstructed and space_resource(depth))
+
+
+# Route A path census: walk every initial state and count those closing to the One.
+define enumerated_closing_paths with depth as Int returning Int:
+    set count to computation_state_count(depth)
+    set one to fraction_from_whole_number(1)
+    set paths to 0
+    set index to 1
+    repeat while index < count + 1:
+        set state to computation_state(index and depth)
+        set closed to computation_steps(state and depth)
+        if fraction_is_equal(closed and one):
+            set paths to paths + 1
+        set index to index + 1
+    return paths
+
+
+# Route B path count: one binary fibre per observation step.
+define fibre_path_count with depth as Int returning Int:
+    set histories to 1
+    set step to 0
+    repeat while step < depth:
+        set histories to histories * binary_count()
+        set step to step + 1
+    return histories
+
+
+# The complete closing-path count is forced by enumeration and repeated fibres.
+define path_resource with depth as Int returning Int:
+    set enumerated to enumerated_closing_paths(depth)
+    set by_fibres to fibre_path_count(depth)
+    set checked to forced_to_be("path resource: enumerated closures = repeated binary fibres" and enumerated and by_fibres)
+    return forced_to_be("path resource = state-space resource" and checked and space_resource(depth))
+
+
+# NEGATIVE CONTROL: the first state cannot close one Fold before its forced time.
+define shortened_time_is_rejected with depth as Int returning Bool:
+    return first_state_does_not_close_early(depth)
+
+
+# NEGATIVE CONTROL: replacing one binary fibre by b+1 changes the history count.
+define nonbinary_history_is_rejected with depth as Int returning Bool:
+    set lawful to fibre_path_count(depth)
+    set perturbed to 1
+    set step to 0
+    repeat while step < depth:
+        if step < 1:
+            set perturbed to perturbed * (binary_count() + 1)
+        else:
+            set perturbed to perturbed * binary_count()
+        set step to step + 1
+    if lawful == perturbed:
+        return false
+    return true
+
+
+# Complete resource census over all admitted depths and intermediate step counts.
+define complete_resource_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set space_ok to space_resource(depth) == computation_state_count(depth)
+        set time_ok to time_resource(depth) == depth
+        set paths_ok to path_resource(depth) == computation_state_count(depth)
+        set short_rejected to shortened_time_is_rejected(depth)
+        set history_rejected to nonbinary_history_is_rejected(depth)
+        set steps to 0
+        set accounting_ok to true
+        repeat while steps < depth + 1:
+            if retained_closed_accounting(depth and steps) == computation_state_count(depth):
+                set accounting_ok to accounting_ok
+            else:
+                set accounting_ok to false
+            set steps to steps + 1
+        if space_ok:
+            if time_ok:
+                if paths_ok:
+                    if accounting_ok:
+                        if short_rejected:
+                            if history_rejected:
+                                set all_hold to all_hold
+                            else:
+                                set all_hold to false
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    return all_hold

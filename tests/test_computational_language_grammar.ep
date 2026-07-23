@@ -1,0 +1,36 @@
+# Machine-check the Fold formal-language and grammar law.
+import "../constants/computational_language_grammar.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold formal-language and grammar law ==="
+    set start to fold_grammar_start()
+    set ok to expect_number("the grammar start is the empty path at the One" and length_list(start) and 0)
+    set word to fold_grammar_word(85 and 7)
+    set ok to expect_true("a depth-7 coordinate word is generated" and fold_word_is_generated(word and 7))
+    set ok to expect_true("the word rebuilds exactly from the grammar start" and fold_words_are_equal(word and fold_grammar_rebuild(word)))
+    set ok to expect_number("the depth-7 language contains b^7 words" and fold_language_word_count(7) and 128)
+    set ok to expect_number("every word has exactly b lawful extensions" and fold_grammar_extension_count(word) and 2)
+    set ok to expect_true("an enlarged alphabet is rejected" and enlarged_alphabet_is_rejected(7))
+    set ok to expect_true("a shortened derivation is rejected" and shortened_grammar_derivation_is_rejected(7))
+    set ok to expect_true("the complete language and grammar census holds" and complete_fold_language_grammar_census())
+    display "=== done ==="
+    return 0

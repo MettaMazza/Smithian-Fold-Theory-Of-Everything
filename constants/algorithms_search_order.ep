@@ -1,0 +1,105 @@
+# ============================================================================
+#  FOLD SEARCH AND ORDER -- exact rank, guided search, and coordinate order.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Search and order may not begin from a chosen comparison routine.  The Fold
+#  already supplies a strict coordinate order and a unique generated word for
+#  every coordinate.  Those two closed structures force both operations.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Ordered search walks the generated ranks 1..b^k and stops only when the exact
+#  word agrees.  Its comparison count is the target rank and its worst case is
+#  b^k.  Guided search consumes the target's k fibre labels and decodes them;
+#  Step 347 proves that fewer than k labels leave ambiguity.  Coordinate order is
+#  exact fraction order, and adjacent ranks exhaust the complete ordered grid.
+#  No conventional search tree, sorting routine, key distribution, or heuristic
+#  enters.  No new assembled constant is asserted.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_descriptive.ep"
+
+
+define fold_order_compare with first_rank as Int and second_rank as Int and depth as Int returning Int:
+    set first to computation_state(first_rank and depth)
+    set second to computation_state(second_rank and depth)
+    return fraction_compare(first and second)
+
+
+define fold_order_is_exact with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth):
+        if fold_order_compare(rank and rank + 1 and depth) >= 0:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_ordered_search_rank with target_word as List and depth as Int returning Int:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set candidate to enumerate_fold_word(rank and depth)
+        if fold_words_are_equal(candidate and target_word):
+            return rank
+        set rank to rank + 1
+    return 0
+
+
+define fold_ordered_search_comparisons with target_rank as Int and depth as Int returning Int:
+    set target to enumerate_fold_word(target_rank and depth)
+    set rank to 1
+    set comparisons to 0
+    repeat while rank < computation_state_count(depth) + 1:
+        set comparisons to comparisons + 1
+        if fold_words_are_equal(enumerate_fold_word(rank and depth) and target):
+            return forced_to_be("Fold ordered search comparisons = exact target rank" and comparisons and target_rank)
+        set rank to rank + 1
+    return 0
+
+
+define fold_guided_search_rank with target_word as List and depth as Int returning Int:
+    if fold_word_is_generated(target_word and depth) == false:
+        return 0
+    return decode_computation_codeword(target_word)
+
+
+define fold_guided_search_queries with depth as Int returning Int:
+    return forced_to_be("Fold guided search reads one label per distinction" and depth and fold_query_count(depth))
+
+
+define every_fold_target_is_found with depth as Int returning Bool:
+    set target_rank to 1
+    repeat while target_rank < computation_state_count(depth) + 1:
+        set target to enumerate_fold_word(target_rank and depth)
+        if fold_ordered_search_rank(target and depth) != target_rank:
+            return false
+        if fold_guided_search_rank(target and depth) != target_rank:
+            return false
+        set target_rank to target_rank + 1
+    return true
+
+
+define complete_fold_search_order_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_order_is_exact(depth) == false:
+            return false
+        if every_fold_target_is_found(depth) == false:
+            return false
+        if fold_ordered_search_comparisons(computation_state_count(depth) and depth) != computation_state_count(depth):
+            return false
+        if fold_guided_search_queries(depth) != depth:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define outside_search_word_is_rejected with depth as Int returning Bool:
+    set outside to enumerate_fold_word(1 and depth)
+    set ok to set_list(outside and 0 and binary_count() + 1)
+    return fold_ordered_search_rank(outside and depth) == 0
+
+
+define reversed_adjacent_order_is_rejected with depth as Int returning Bool:
+    return fold_order_compare(2 and 1 and depth) > 0

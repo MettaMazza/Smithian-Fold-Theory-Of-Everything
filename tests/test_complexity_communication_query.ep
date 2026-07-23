@@ -1,0 +1,32 @@
+# Machine-check Fold communication and query complexity.
+import "../constants/complexity_communication_query.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold communication and query complexity ==="
+    set ok to expect_number("three observations require three communicated labels" and fold_communication_symbol_count(3) and 3)
+    set ok to expect_number("three labels distinguish eight histories" and fold_communication_history_count(3) and 8)
+    set ok to expect_number("three observations require three queries" and fold_query_count(3) and 3)
+    set ok to expect_true("the query answers reconstruct an exact source" and fold_queries_reconstruct_source(85 and 7 and 3))
+    set ok to expect_number("one fewer query leaves b completions" and fold_query_remaining_completions(3 and 2) and 2)
+    set ok to expect_true("the complete communication/query census holds" and complete_fold_communication_query_census())
+    set ok to expect_true("zero-symbol nonzero communication is rejected" and zero_symbol_nonzero_communication_is_rejected())
+    set ok to expect_true("a shortened query claim is rejected" and shortened_query_claim_is_rejected(3))
+    display "=== done ==="
+    return 0

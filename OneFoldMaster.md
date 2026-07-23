@@ -80,7 +80,7 @@ for each constant and scale: its forced value, the **trace back to the One**
 CODATA / PDG / Planck, through a sealed boundary a measurement can never cross into a
 derivation). It ends with `EVERYTHING FORCED, DERIVED, COUNTED, AND VERIFIED — traced
 to the One, and checked against external CODATA / PDG / Planck measurement` (currently
-326 suites, 2,002 forced checks, 0 failures). It needs nothing but a C compiler. Use
+409 suites, 2,693 forced checks, 0 failures). It needs nothing but a C compiler. Use
 `make -C verify check` for the terser per-suite `ok`/`ALL PROOFS PASS` form.
 
 ### How to read a module (three separated voices)
@@ -5515,6 +5515,591 @@ checks).
 
 **What it does.** Forces the remaining selection operations used by contextual generation. Association spread has unit capacity at the closed lock `1/2`: the minimal strongest-neighbour shares fill that capacity, with `1/3 + 1/6 = 1/2`, and the suppressed tail supplies the complementary half. A held context binds to live context at the same lock: strong kin `2/3` binds and weak association `1/3` remains free. Fresh re-expression requires at least the binary count `b = 2` held expressions; a single expression can only repeat its held surface and therefore must defer rather than masquerade as generation. The capacity and binding threshold cross-route to the already-closed attention focus lock, while the minimum cross-routes to the generator itself; posting caps, corpus size, neighbour-count caps, and fitted thresholds are forbidden derivation inputs. This is the exact generation-selection law consumed by UnisonAI and published in its v6.1 architecture paper. Ernos-verified 2026-07-17 (13/13 checks).
 
+### Step 325 — The Fold finite-state transition law
+
+**File:** `constants/computational_state_transition.ep` (test: `tests/test_computational_state_transition.ep`)
+
+**What it does.** Establishes the first common law of the fundamental-computation programme directly from the existing Fold. At depth `k`, the grid has `b^k` exact states `i/b^k`; their fixed positive denominator orders them strictly, so every state is distinguishable. One Fold carries every depth-`k` state onto the depth-`k−1` grid. Every lower-grid image has exactly the binary pair of distinct preimages, and the enumerated depth-`k` state count is forced equal to `b` times the lower-grid count through `forced_to_be`. Every state closes to the One after `k` steps, and every split of that run composes to the same exact result as the direct run. The complete census is executed at every admitted depth through `cover(c^(c+1)) = b+c+b = 7`, including all 128 deepest-grid states. A shifted preimage pairing, one-step-early closure, and a nonbinary branch count are each rejected. No conventional automaton, machine, state model, branching factor, or transition rule enters: state is the Fold grid and step is the established Fold. No new assembled constant is asserted; the depth, tower, operation, and binary preimage count are reused closed structures. Ernos-verified 2026-07-23 (7/7 top-level checks; complete internal census).
+
+### Step 326 — The Fold observation law
+
+**File:** `constants/computational_observation.ep` (test: `tests/test_computational_observation.ep`)
+
+**What it does.** Derives observation classes as exact Fold fibres. At depth `k`, one observation applies the established Fold and retains one of `b^(k-1)` lower-grid images. Full source enumeration proves every image has exactly `b` preimages; the class count times the binary fibre is forced equal to all `b^k` source states through `forced_to_be`. The image retains the class identity while the distinction between its paired preimages closes. Singleton fibres and shifted targets are rejected. The complete class/source census executes through depth 7. No observer postulate, probability, measurement target, or external state model enters. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 327 — The Fold resource law
+
+**File:** `constants/computational_resources.ep` (test: `tests/test_computational_resources.ep`)
+
+**What it does.** Forces computation's exact resources from the state and observation laws. Space at depth `k` is the enumerated grid `b^k`; time is the counted Fold walk of the first state to the One, exactly `k`; the number of closing histories is `b^k`. After `s` observations, retained distinctions are `b^(k-s)` and closed histories are `b^s`, whose product is forced back to the initial space at every depth and every intermediate step. A shortened closure time and a nonbinary history factor are rejected. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 328 — The Fold encoding law
+
+**File:** `constants/computational_encoding.ep` (test: `tests/test_computational_encoding.ep`)
+
+**What it does.** Derives the alphabet from the `b` positions in each Fold observation fibre. A depth-`k` state is encoded by the exact sequence of its lower/upper fibre labels on the path to the One; decoding reads those labels in reverse and rebuilds the state. Every one of the 254 states through depth 7 round-trips exactly. Enumerated codewords are forced equal to `b^k` symbol choices and the state count. Observation removes the first fibre label and retains the exact suffix; each suffix has `b-1` redundant source alternatives relative to its observed class. An out-of-alphabet label and a changed lawful label are rejected. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 329 — The Fold information law
+
+**File:** `constants/computational_information.ep` (test: `tests/test_computational_information.ep`)
+
+**What it does.** Consolidates encoding, entropy, uncertainty, branch weight, recurrence, and merging into one exact information law. Information quantity is the binary distinction depth: codeword length and the walked closure time are independently forced equal to `k`; its multiplicity is `b^k`, cross-routed to the state/codeword census. After `s` observations, retained information `k-s` plus closed information `s` equals the initial quantity. Each state carries share `1/b^k`, all shares partition the One, and at depth `c` that share equals the established measurement branch weight. The uncertainty support product equals the same multiplicity. Dyadic fibres lose one distinction by merging; the complete period-`b` orbit retains its two distinctions by exact return. Perturbed accounting and a false incomplete-cycle identity are rejected. Ernos-verified 2026-07-23 (13/13 checks).
+
+### Step 330 — The Fold process and machine law
+
+**File:** `constants/computational_process_machine.ep` (test: `tests/test_computational_process_machine.ep`)
+
+**What it does.** Derives finite operational processes and machines without importing tapes, instructions, or automata. A process is a counted Fold sequence; every split composes and decomposes to the same exact result. The depth-`k` closing machine has `b^k` states, one single-valued Fold transition per state, complete termination at the One, and exactly one terminal because the One alone is fixed. The recurrent machine is the exact period-`b` orbit `{1/3, 2/3}`: two distinct states, no terminal, exact return. Enumeration and closed counts are joined through `forced_to_be`; a false period-one cycle and extra terminal are rejected. Every state and process split through depth 7 is executed. Ernos-verified 2026-07-23 (12/12 checks).
+
+### Step 331 — The Fold formal-language and grammar law
+
+**File:** `constants/computational_language_grammar.ep` (test: `tests/test_computational_language_grammar.ep`)
+
+**What it does.** Derives the Fold language without importing an alphabet or grammar. The empty path at the One is the start form. One production prepends exactly one of the `b` fibre labels already forced by Step 328. Repeating that production `k` times generates every depth-`k` word and no other word. Coordinate enumeration and repeated production both count `b^k` words, and every word decodes and re-encodes identically. An enlarged alphabet and a shortened derivation are rejected. The complete word census executes through depth 7. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 332 — The Fold automaton law
+
+**File:** `constants/computational_automaton.ep` (test: `tests/test_computational_automaton.ep`)
+
+**What it does.** Derives the exact reader forced by the Step-331 paths. A reader configuration is an exact coordinate together with its remaining depth. Each supplied symbol must equal the coordinate's current fibre label; the only next configuration is its Fold image. Consuming the full word reaches `(One,0)`. The depth-`k` reader contains every grid configuration at levels `0..k`; grid enumeration and binary frontier generation agree, and every nonterminal configuration has one transition. Every generated word is accepted. Premature acceptance and a word paired with the wrong source are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 333 — The Fold rewriting law
+
+**File:** `constants/computational_rewriting.ep` (test: `tests/test_computational_rewriting.ep`)
+
+**What it does.** Forces rewriting as the exact representation of observation: remove the first fibre label and retain the suffix. One rewrite equals one Fold; `k` rewrites send every depth-`k` word to the empty word at the One; every split rewrite composes identically; and every suffix has exactly `b` predecessors generated by prepending the lawful labels. A shifted suffix and early normal form are rejected. Every word, predecessor, and split through depth 7 is executed. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 334 — The Fold recursion and self-application law
+
+**File:** `constants/computational_recursion_self_application.ep` (test: `tests/test_computational_recursion_self_application.ep`)
+
+**What it does.** Derives recursion from the Fold rule taking its own output as the next call's input, with zero remaining distinctions as its base. Recursive coordinate descent and recursive word rewriting agree with iterative execution at every state and prefix through depth 7. Self-application feeds the already-established self-observation closure state `1/4` to the same recursive Fold rule: it reaches the One in the forced binary depth `b`, and one further application remains at the fixed base. Truncated self-application and identity in place of Fold are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 335 — The Fold computational-model equivalence law
+
+**File:** `constants/computational_model_equivalence.ep` (test: `tests/test_computational_model_equivalence.ep`)
+
+**What it does.** Executes coordinate stepping, process-machine execution, automaton descent, word rewriting/decoding, and recursive evaluation for every state and every prefix. All five land on the same exact depth-`(k-s)` Fold coordinate throughout the complete depth-1-through-7 census. Thus model equivalence is forced as exact observable-state equality after every process prefix, not asserted from familiar model names. A shifted step and changed source are rejected. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 336 — The Fold computational universality law
+
+**File:** `constants/computational_universality.ep` (test: `tests/test_computational_universality.ep`)
+
+**What it does.** Derives one executor for every process generated by the Fold grammar. Supplied with an exact state or its generated word and a counted prefix, the established Fold reproduces all five Step-335 forms. At depth `k`, enumerated process descriptions equal `b^k(k+1)`. The same executor also advances and closes the period-`b` recurrent machine, so closing and recurrent regimes need no second operation. Every execution split composes; a shifted non-Fold transition is rejected. The exact scope is universality over the admitted Fold computation forms. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 337 — The Fold recognition law
+
+**File:** `constants/computability_recognition.ep` (test: `tests/test_computability_recognition.ep`)
+
+**What it does.** Derives recognition as two agreeing routes: grammar membership followed by exact Fold closure, and the Step-332 reader consuming the same path. Every one of the `b^k` generated depth-`k` words is recognized; an outside symbol and a word asserted at the wrong depth are rejected after finite inspection of the supplied path. The complete language through depth 7 is executed. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 338 — The Fold halting law
+
+**File:** `constants/computability_halting_law.ep` (test: `tests/test_computability_halting_law.ep`)
+
+**What it does.** Defines halting by arrival at the unique One terminal already forced by Step 330. Every depth-`k` grid state halts within `k` Fold steps, and the first state requires exactly `k`. The recurrent `{1/3,2/3}` machine contains no terminal and returns after its complete period `b`; single-valued repetition therefore certifies continued nonhalting. Premature closure and a terminal claim for either recurrent state are rejected. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 339 — The Fold enumeration law
+
+**File:** `constants/computability_enumeration.ep` (test: `tests/test_computability_enumeration.ep`)
+
+**What it does.** Derives enumeration from the exact coordinate order already present at each depth. Unranking encodes coordinate `i/b^k`; ranking decodes its word. Both compositions are identities, adjacent ranks are distinct, and the enumeration count is `b^k`. Enumeration across levels `0..k` equals the independently generated automaton-configuration count. Ranks outside `1..b^k` are rejected. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 340 — The Fold reduction law
+
+**File:** `constants/computability_reduction.ep` (test: `tests/test_computability_reduction.ep`)
+
+**What it does.** Forces reduction as an exact translation that preserves the Fold state after every counted prefix. Coordinate-to-word encoding and word-to-coordinate decoding are inverses; word suffix reduction and coordinate observation give the same transition; and repeated reductions compose. Every state and prefix through depth 7 is checked. A changed symbol and a shortened process fail preservation and are rejected. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 341 — The Fold undecidability law
+
+**File:** `constants/computability_undecidability.ep` (test: `tests/test_computability_undecidability.ep`)
+
+**What it does.** Derives the exact self-decision boundary from the Fold's own outcome fibre. The complete outcome alphabet is the two lawful labels `1..b`; the partner of `x` is `b+1-x`. A self-process that consumes its predicted outcome and returns its partner has zero self-consistent predictions under complete enumeration. Therefore no total internally correct outcome is admissible for this self-negating construction. The partner is an involution, and the non-negating identity control has all `b` fixed outcomes, isolating the source of the boundary. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 342 — The Fold relative-computation law
+
+**File:** `constants/computability_relative.ep` (test: `tests/test_computability_relative.ep`)
+
+**What it does.** Derives relative computation from the distinction closed by observation. Paired preimages have one indistinguishable observed coordinate. Retaining their exact first fibre label reconstructs the source by `observed index + (label-1)b^(k-1)`. Every source through depth 7 reconstructs and folds back to the supplied observation. Thus the held relation restores exactly one accounted distinction; it does not inject an outside answer. An outside label and changed-label identity are rejected. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 343 — The Fold admissible-computation limit law
+
+**File:** `constants/computability_admissible_limits.ep` (test: `tests/test_computability_admissible_limits.ep`)
+
+**What it does.** Consolidates the exact boundary for stronger-computation claims. An admitted prefix has a generated description, nonnegative counted execution, and the exact universal Fold result. Terminal completion requires actual arrival at the One; recurrent completion at the One, premature completion, negative counts, outside labels, shifted transitions, and a total outcome for the Step-341 self-negating process are rejected. Relative computation is permitted with exact information accounting: retained depth plus the held distinction equals the original depth. The complete admitted-prefix and limit census executes through depth 7. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 344 — The Fold degrees-of-computability law
+
+**File:** `constants/computability_degrees.ep` (test: `tests/test_computability_degrees.ep`)
+
+**What it does.** Derives computational degree as the counted number `d` of closed fibre labels retained relative to a state observed after `d` Fold steps. Degree `d` distinguishes `b^d` histories within each of `b^(k-d)` observed classes; their product reconstructs all `b^k` sources. Appending the held prefix to the observed suffix reconstructs every exact state, and each next degree refines the prior degree by exactly `b`. Degrees `0..k` are exhausted; an excessive degree and changed held label are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 345 — The Fold incompleteness-boundary law
+
+**File:** `constants/computability_incompleteness.ep` (test: `tests/test_computability_incompleteness.ep`)
+
+**What it does.** Makes incompleteness an exact multiplicity. With `d` closed labels absent, one observed suffix has `b^d` lawful source completions. Zero missing distinctions gives one completion; every positive count gives more than one, while supplying the complete held degree restores the selected source. The Step-341 self-negating construction supplies the second boundary: its complete binary outcome alphabet still has zero internally consistent predictions. False uniqueness and false self-negating completion are rejected. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 346 — The Fold circuit size-and-depth law
+
+**File:** `constants/complexity_circuit.ep` (test: `tests/test_complexity_circuit.ep`)
+
+**What it does.** Derives the circuit as the complete layered Fold transition organization. Layer `r` contains `b^r` gates, complete size is `sum(r=1..k)b^r`, independently equal to the automaton transition count, width is `b^k`, and depth is exactly `k`. Every transition lands on its next grid. At depth 7 the circuit has 254 gates, width 128, and depth 7. An omitted gate and shortened depth are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 347 — The Fold communication-and-query complexity law
+
+**File:** `constants/complexity_communication_query.ep` (test: `tests/test_complexity_communication_query.ep`)
+
+**What it does.** Forces one communicated label and one query per closed Fold distinction. After `s` observations there are `b^s` compatible histories; the `s` exact labels reconstruct the source. With `s-1` query answers, exactly `b` completions remain, proving `s` both sufficient and necessary. Every state and observation count through depth 7 is executed; zero-symbol nonzero communication and shortened queries are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 348 — The Fold randomness law
+
+**File:** `constants/complexity_randomness.ep` (test: `tests/test_complexity_randomness.ep`)
+
+**What it does.** Derives randomness as the unresolved exact history set inside an observation class, without an external probability source. After `s` observations there are `b^s` equally lawful histories, each with exact share `1/b^s`, partitioning the One. Supplying the closed labels resolves one source deterministically, so randomness quantity equals closed distinction count. Nonbinary history growth and perturbed shares are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 349 — The Fold reversibility-cost law
+
+**File:** `constants/complexity_reversibility.ep` (test: `tests/test_complexity_reversibility.ep`)
+
+**What it does.** Forces the reverse resource from observation merging. Reversing `s` dyadic Fold steps requires exactly `s` retained labels, distinguishing `b^s` source histories. A complete record reconstructs every source; one missing label leaves binary ambiguity. A complete recurrent period retains its distinction and therefore has zero additional reverse cost. Zero-cost dyadic reversal and nonminimal extra cost are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 350 — The Fold parallel-complexity law
+
+**File:** `constants/complexity_parallel.ep` (test: `tests/test_complexity_parallel.ep`)
+
+**What it does.** Derives parallel execution from the circuit layers. All `b^r` transitions within layer `r` advance independently; total work remains the circuit size, maximum width is `b^k`, and dependent round depth is `k`. Complete layered execution agrees with every serial path to the One. At depth 7 the work is 254, width 128, and rounds 7. Shortened schedules and nonbinary width are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 351 — The Fold quantum-complexity law
+
+**File:** `constants/complexity_quantum.ep` (test: `tests/test_complexity_quantum.ep`)
+
+**What it does.** Joins the already-closed quantum branch, uncertainty, observation, information, and circuit structures. Depth `k` has complete unresolved support `b^k`, with exact branch share `1/b^k`; composed depths multiply supports to `b^(a+c)`. After `s` observations support is `b^(k-s)`. Transformation depth is `k`, branch width is `b^k`, uncertainty support matches, and the colour-depth share equals the established measurement branch weight. Collapsed support and shortened depth are rejected. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 352 — The Fold lower/upper-bound and completeness law
+
+**File:** `constants/complexity_bounds_completeness.ep` (test: `tests/test_complexity_bounds_completeness.ep`)
+
+**What it does.** Derives tight time and space bounds by complete execution. The first depth-`k` state requires `k` steps, while every state halts within `k`, so lower and upper time bounds meet. Both space bounds meet at the `b^k` distinguishable descriptions/state grid. Fold closure is complete for the admitted family because every coordinate reduces to its exact word and the universal recognizer closes every word. A shorter upper bound and incomplete reduction are rejected. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 353 — The Fold average/worst-case law
+
+**File:** `constants/complexity_average_worst.ep` (test: `tests/test_complexity_average_worst.ep`)
+
+**What it does.** Uses the complete equal-share depth-`k` state census, not a sampled distribution. Total halt work is computed both state-by-state and grouped by exact halt length. Their equality gives average `((k-1)b^k+1)/b^k`; worst case is exactly `k`. At depth 7 total work is 769, average `769/128`, and worst case 7. False average-equals-worst and shortened worst bounds are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 354 — The Fold approximation-complexity law
+
+**File:** `constants/complexity_approximation.ep` (test: `tests/test_complexity_approximation.ep`)
+
+**What it does.** Derives approximation as the exact observation class rather than a numerical tolerance. After `s` observations there are `b^(k-s)` retained classes with `b^s` exact sources each; retained precision is `k-s` distinctions and ambiguity is `s`. One refinement divides ambiguity by `b`, and zero observation loss is the singleton exact source. False singleton coarse classes and perturbed accounting are rejected. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 355 — The Fold parameterized-complexity law
+
+**File:** `constants/complexity_parameterized.ep` (test: `tests/test_complexity_parameterized.ep`)
+
+**What it does.** Forces the intrinsic parameter `p` as retained distinction depth. Active resource is `b^p`, residual histories are `b^(k-p)`, their product is `b^k`, and active closure time is `p`. Increasing `p` by one multiplies active states by `b` and divides residual ambiguity by `b`. Every `p` in `0..k` is exhausted; outside values and nonbinary scaling are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 356 — The Fold descriptive-complexity law
+
+**File:** `constants/complexity_descriptive.ep` (test: `tests/test_complexity_descriptive.ep`)
+
+**What it does.** Forces minimal state-description length from the Fold alphabet. Length `l` supplies `b^l` generated words; the first length capable of distinguishing all `b^k` depth-`k` configurations is exactly `k`. Every state has one lawful length-`k` round-trip description, while length `k-1` is insufficient. Conditional description relative to an observed suffix is exactly the number of held closed labels. Redundant longer and outside-symbol descriptions are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 357 — The Fold search-and-order law
+
+**File:** `constants/algorithms_search_order.ep` (test: `tests/test_algorithms_search_order.ep`)
+
+**What it does.** Derives strict order from the exact coordinates `i/b^k` and search from their unique generated words. Ordered search walks ranks `1..b^k`, finds every target at its exact rank, and has comparison count equal to that rank. Guided search decodes the target's `k` fibre labels; Step 347 proves fewer labels remain ambiguous. Every target and adjacent order through depth 7 is exhausted; outside words and reversed adjacency are rejected. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 358 — The Fold exact-arithmetic algorithm law
+
+**File:** `constants/algorithms_exact_arithmetic.ep` (test: `tests/test_algorithms_exact_arithmetic.ep`)
+
+**What it does.** Executes addition as repeated One, multiplication as repeated addition, powers as repeated multiplication, and positive division as exhaustive divisor removal with exact quotient and remainder. Each route is forced equal to the established whole-number operation; exact grid-fraction addition cross-routes through counted numerators. Zero divisors and perturbed sums reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 359 — The Fold strings-and-sequences law
+
+**File:** `constants/algorithms_strings_sequences.ep` (test: `tests/test_algorithms_strings_sequences.ep`)
+
+**What it does.** Treats a string as the already-forced fibre-label path. Exact slices and joins preserve generated paths; joining depths `a` and `c` multiplies their choices to `b^(a+c)`. Every split of every word rejoins identically. Changed and outside symbols reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 360 — The Fold trees-and-graphs law
+
+**File:** `constants/algorithms_trees_graphs.ep` (test: `tests/test_algorithms_trees_graphs.ep`)
+
+**What it does.** Forces the empty path as root, lawful label extensions as children, and observation suffixes as unique parents. Level `r` has `b^r` nodes; nodes through depth `k` equal the automaton configurations and nonroot edges equal circuit size. Every closing node reaches the root along strictly decreasing depth, while the period-`b` recurrent orbit remains the separately closed cyclic graph. Extra parents and closing self-edges reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 361 — The Fold algebraic-algorithm law
+
+**File:** `constants/algorithms_algebraic.ep` (test: `tests/test_algorithms_algebraic.ep`)
+
+**What it does.** Derives the zero-count identity, counted Fold-action composition, and exact regrouping from the transition itself. Every state and admitted action split is exhausted. On the period-`b` recurrent orbit, `b-1` further Fold actions invert one Fold because the full period is identity. False nonzero identity and shortened inverse claims reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 362 — The Fold geometric-algorithm law
+
+**File:** `constants/algorithms_geometric.ep` (test: `tests/test_algorithms_geometric.ep`)
+
+**What it does.** Derives exact grid spacing `1/b^k`, fraction distance, within-branch Fold scaling by `b`, half-One separation of paired preimages, and exhaustive nearest-grid search. Every grid point is its own unique zero-distance nearest result. Shifted nearest results and perturbed spacing reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 363 — The Fold dynamic-programming law
+
+**File:** `constants/algorithms_dynamic_programming.ep` (test: `tests/test_algorithms_dynamic_programming.ep`)
+
+**What it does.** Derives reuse from Fold merging: each lower-state closure is solved once for all its preimages. The recurrence `W(k)=b^k+W(k-1)`, `W(0)=0`, equals the independently enumerated circuit size; including the One equals the tree-node table. It is strictly smaller than independent `k b^k` source recomputation once sharing occurs. Omitted layers and false no-sharing claims reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 364 — The Fold optimization-algorithm law
+
+**File:** `constants/algorithms_optimization.ep` (test: `tests/test_algorithms_optimization.ep`)
+
+**What it does.** Exhausts the admitted depth-`k` grid under the already-derived closure-work objective. The One uniquely minimizes work at zero; maximum work is `k` and exactly `b^(k-1)` states attain it. Omitting the terminal changes the minimum and shortening the maximum rejects. No fitted score or heuristic enters. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 365 — The Fold unresolved-branch randomized-algorithm law
+
+**File:** `constants/algorithms_randomized.ep` (test: `tests/test_algorithms_randomized.ep`)
+
+**What it does.** Applies Step 348's equal exact shares to the complete unresolved target set while leaving every transition deterministic. For `N=b^k` lawful targets, exhaustive rank-search work is `N(N+1)/b`, the exact equal-share mean is `(N+1)/b`, and a budget covering `q` distinct targets has success share `q/N`. This does **not** assert stochastic Fold dynamics or import a sampler: once a source is distinguished, its execution is fixed. Biased shares and omitted-target certainty reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 366 — The Fold parallel-algorithm law
+
+**File:** `constants/algorithms_parallel.ep` (test: `tests/test_algorithms_parallel.ep`)
+
+**What it does.** Simultaneously filters generated candidates by successive target fibre labels. Before round `r` there are `b^(k-r+1)` live candidates and afterward `b^(k-r)`; total comparison work equals circuit size, width is `b^k`, and `k` dependent rounds leave one target. Every target and filtering round is counted. A missing worker or round rejects. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 367 — The Fold distributed-algorithm law
+
+**File:** `constants/algorithms_distributed.ep` (test: `tests/test_algorithms_distributed.ep`)
+
+**What it does.** Uses the first fibre label as one of `b` disjoint owners, each holding `b^(k-1)` local coordinates. Owner plus observed lower-grid index reconstructs every source by the relative-computation law; all partitions are disjoint and exhaustive. An exact global description remains `k` labels. Changed owners and missing partitions reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 368 — The Fold streaming-algorithm law
+
+**File:** `constants/algorithms_streaming.ep` (test: `tests/test_algorithms_streaming.ep`)
+
+**What it does.** Consumes one fibre label and advances one Fold state without revisiting consumed input. After `s` symbols the streamed coordinate equals the `s`-rewrite suffix, work is `s`, and retained information is `k-s`; streamed chunks compose exactly and full consumption reaches the One. Every source and prefix is executed. Shortened streams and changed symbols reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 369 — The Fold numerical-algorithm law
+
+**File:** `constants/algorithms_numerical.ep` (test: `tests/test_algorithms_numerical.ep`)
+
+**What it does.** Evaluates counted Fold iteration by exact integer grid descent and rebuilds the exact lower-grid fraction, agreeing with direct fraction execution at every prefix. Refining rank and denominator by `b` preserves value exactly. Adjacent same-branch separation transports from `1/b^k` to `1/b^(k-s)` after `s` steps. Shifted evaluations and perturbed error reject; no floating representation or tolerance enters. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 370 — The Fold symbolic-algorithm law
+
+**File:** `constants/algorithms_symbolic.ep` (test: `tests/test_algorithms_symbolic.ep`)
+
+**What it does.** Evaluates generated words by exact decoding and rewrites them by the observation law. Every symbolic prefix equals the corresponding numerical Fold; normalization takes exactly the word length and reaches the unique empty path at the One. Early normal form and changed-symbol meaning reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 371 — The Fold approximate-algorithm law
+
+**File:** `constants/algorithms_approximate.ep` (test: `tests/test_algorithms_approximate.ep`)
+
+**What it does.** Returns the exact Step-354 observation class rather than a selected tolerance. Closing `s` distinctions yields one of `b^(k-s)` classes containing exactly `b^s` sources; its description uses the `k-s` retained labels. Refinement divides multiplicity by `b`, and `s=0` is exact. Every class is enumerated; false singleton and shortened-description claims reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 372 — The Fold quantum-algorithm law
+
+**File:** `constants/algorithms_quantum.ep` (test: `tests/test_algorithms_quantum.ep`)
+
+**What it does.** Simultaneously transforms the complete `b^k` closed quantum support. After `s` layers there are `b^(k-s)` exact images, each collecting `b^s` histories; after `k` layers every branch reaches the One and retained labels reconstruct every source. Layer chunks compose and total work equals the circuit size. Omitted support and shortened closure reject; no external gate, amplitude, oracle, or algorithm template enters. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 373 — The Fold program-syntax law
+
+**File:** `constants/semantics_syntax.ep` (test: `tests/test_semantics_syntax.ep`)
+
+**What it does.** Forces a program form as one generated depth-`k` word paired with a counted prefix `s` in `0..k`. The remaining syntactic depth is `k-s`, and exhaustive enumeration gives `b^k(k+1)` programs, exactly the independently closed universal-process description count. Outside symbols and overlong prefixes reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 374 — The Fold binding-and-substitution law
+
+**File:** `constants/semantics_binding_substitution.ep` (test: `tests/test_semantics_binding_substitution.ep`)
+
+**What it does.** Derives binding as the `s` held fibre labels closed by observation and the bound term as the retained `k-s` suffix. Substitution joins them and reconstructs every exact source word and coordinate. Changed labels and excessive bindings reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 375 — The Fold evaluation law
+
+**File:** `constants/semantics_evaluation.ep` (test: `tests/test_semantics_evaluation.ep`)
+
+**What it does.** Evaluates a lawful program by rewriting `s` leading labels and decoding the residual depth-`(k-s)` word. The rebuilt exact coordinate equals direct universal Fold execution for every program. Overlong evaluation and changed results reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 376 — The Fold operational/denotational-correspondence law
+
+**File:** `constants/semantics_operational_denotational.ep` (test: `tests/test_semantics_operational_denotational.ep`)
+
+**What it does.** Operational word rewriting and denotational exact-coordinate transformation agree after every program prefix and every composition split. A shifted denotation rejects. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 377 — The Fold depth-indexed type law
+
+**File:** `constants/semantics_type_theory.ep` (test: `tests/test_semantics_type_theory.ep`)
+
+**What it does.** Forces a generated word's type to be its distinction depth. Evaluation by `s` steps preserves a generated result of type `k-s`; type zero is the unique empty One form. Wrong annotations and outside terms reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 378 — The Fold program-equivalence law
+
+**File:** `constants/semantics_program_equivalence.ep` (test: `tests/test_semantics_program_equivalence.ep`)
+
+**What it does.** Two lawful programs are equivalent exactly when they have the same residual type and exact denotational rank. Every program equals its canonical zero-step residual form, forcing reflexive, symmetric, and transitive equality through that representative. Changed denotations reject. Ernos-verified 2026-07-23 (5/5 checks).
+
+### Step 379 — The Fold termination-and-correctness law
+
+**File:** `constants/semantics_termination_correctness.ep` (test: `tests/test_semantics_termination_correctness.ep`)
+
+**What it does.** Every depth-`k` closing program normalizes in exactly `k` rewrites to the empty One form. A prefix is correct exactly when its asserted rank equals the unique evaluated rank at type `k-s`. Premature termination and changed postconditions reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 380 — The Fold formal-specification law
+
+**File:** `constants/semantics_formal_specification.ep` (test: `tests/test_semantics_formal_specification.ep`)
+
+**What it does.** Specifies a program by its generated-source precondition, counted prefix, unique residual rank, residual type, and exact work. Complete enumeration finds exactly one result satisfying every specification. Changed type and resource assertions reject. Ernos-verified 2026-07-23 (5/5 checks).
+
+### Step 381 — The Fold program-transformation law
+
+**File:** `constants/semantics_program_transformation.ep` (test: `tests/test_semantics_program_transformation.ep`)
+
+**What it does.** Transforms `(word,s)` into its canonical `s`-rewrite residual program with zero remaining steps. Source and residual are semantically equivalent, and sequential transformations equal their joined prefix. Changed residual syntax rejects. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 382 — The Fold semantics-preserving-compilation law
+
+**File:** `constants/semantics_compilation.ep` (test: `tests/test_semantics_compilation.ep`)
+
+**What it does.** Compiles a program prefix into its exact `s+1` coordinate-rank trace. Every adjacent pair is the forced lower-grid transition, and compiled execution returns the same rank and type as source evaluation. Tampered and shortened traces reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 383 — The Fold verification-and-proof-system law
+
+**File:** `constants/semantics_verification_proof.ep` (test: `tests/test_semantics_verification_proof.ep`)
+
+**What it does.** Accepts a proof exactly when syntax is lawful, the trace begins at the decoded source, every edge is a forced Fold transition, its length is `s+1`, and its final rank satisfies the formal specification. Every lawful program has an accepted certificate and every accepted certificate forces the semantic result. False assertions and tampered edges reject. Ernos-verified 2026-07-23 (5/5 checks).
+
+### Step 384 — The Fold entropy-and-uncertainty law
+
+**File:** `constants/information_entropy_uncertainty.ep` (test: `tests/test_information_entropy_uncertainty.ep`)
+
+**What it does.** Defines entropy solely as the exact number `s` of distinctions closed by `s` observations. Its unresolved history multiplicity is `b^s`, each history has equal exact share `1/b^s`, and retained support `b^(k-s)` times history support `b^s` is the full `b^k` source support. One further observation multiplies history support by exactly `b`; decreased entropy and sub-bound uncertainty reject. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 385 — The Fold compression law
+
+**File:** `constants/information_compression.ep` (test: `tests/test_information_compression.ep`)
+
+**What it does.** Relative to a known observed suffix, the exact compressed record is the `s` closed fibre labels. Joining that record to the suffix reconstructs every source. There are `b^s` possible records, while a shorter record has only `b^(s-1)` forms and cannot distinguish all histories. Shortened and changed records reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 386 — The Fold channel-and-capacity law
+
+**File:** `constants/information_channels_capacity.ep` (test: `tests/test_information_channels_capacity.ep`)
+
+**What it does.** One lawful channel use carries one forced fibre label and therefore exactly one distinction among `b` messages. `u` composed uses carry exactly `b^u` words and `u` distinctions, with exhaustive encode/transmit/decode identity. Reduced alphabets and omitted messages reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 387 — The Fold noise-and-error law
+
+**File:** `constants/information_noise_error.ep` (test: `tests/test_information_noise_error.ep`)
+
+**What it does.** Noise is an exact change of a transmitted fibre label, and error is the exact count of label disagreements. A change inside the closed prefix is hidden by the corresponding observation; a change in the retained suffix remains distinguishable. Equal words have zero error, and unequal lengths are not comparable codewords. False zero-error and unequal-length claims reject; no stochastic distribution enters. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 388 — The Fold coding law
+
+**File:** `constants/information_coding.ep` (test: `tests/test_information_coding.ep`)
+
+**What it does.** Exhaustive candidate elimination forces the first repetition width that can correct one changed binary label: widths one and `b` fail, so `c=3` is minimal. Triplicating every source label and taking the exact majority decodes every word after every single-position corruption. Code length is `ck` and redundancy is `(c-1)k=bk`; shortened codes reject. Ernos-verified 2026-07-23 (6/6 checks).
+
+### Step 389 — The Fold mutual-and-conditional-information law
+
+**File:** `constants/information_mutual_conditional.ep` (test: `tests/test_information_mutual_conditional.ep`)
+
+**What it does.** For a depth-`k` source after `s` observations, mutual information with the observed state is the `k-s` retained suffix distinctions, and conditional information needed to recover the source is the `s` closed prefix distinctions. Their exact sum is `k`, the conditional multiplicity is `b^s`, and the held prefix reconstructs every source. Perturbed accounting rejects. Ernos-verified 2026-07-23 (7/7 checks).
+
+### Step 390 — The Fold classical/probabilistic/quantum-information correspondence law
+
+**File:** `constants/information_classical_probabilistic_quantum.ep` (test: `tests/test_information_classical_probabilistic_quantum.ep`)
+
+**What it does.** A classical exact state is one generated word with singleton support. Relative to an observed suffix, the unresolved history description has support `b^s`, while the retained unresolved branch structure has support `b^(k-s)`; their product is the complete classical support `b^k`. Supplying the held labels selects and reconstructs one exact classical source, giving an explicit observation/measurement bridge without importing outside probabilistic or quantum formalisms. Collapsed supports and changed records reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 391 — The registered Fold mathematical-foundations law
+
+**File:** `constants/mathematical_foundations_complete.ep` (test: `tests/test_mathematical_foundations_complete.ep`)
+
+**What it does.** Consolidates the theorem-forced One/domain/Fold, exact arithmetic, structural counts, form enforcement, discrete state sets, combinatorial partitions, prefix graphs, Fold algebra and dynamics, depth meet/join lattice, codeword geometry and rooted topology, equal-share probability/statistics, exhaustive optimization, proof logic, and typed composition. Every admitted depth through seven executes; false counts, broken absorption, and invalid metric pairs reject. The forced-Fold result retains its declared conditional uniqueness inside the enumerated foundational grammar. Ernos-verified 2026-07-23 (17/17 checks).
+
+### Step 392 — The Fold lambda-like-calculus and formal-circuit law
+
+**File:** `constants/formal_lambda_circuit.ep` (test: `tests/test_formal_lambda_circuit.ep`)
+
+**What it does.** Derives abstraction as held-prefix binding, application as exact substitution, and beta evaluation as source reconstruction. A formal circuit is a lawful compiled sequence of forced Fold edges; gate count, trace semantics, source evaluation, and denotation agree for every word and prefix. Changed bindings and shortened circuits reject. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 393 — The Fold concurrent-and-distributed-computation law
+
+**File:** `constants/concurrent_distributed_computation.ep` (test: `tests/test_concurrent_distributed_computation.ep`)
+
+**What it does.** Derives commuting process splits, causal depth, synchronized rounds, channel communication, prefix partial order, terminal consensus, the unrecorded-predecessor agreement impossibility, exact replication, coded faults, distributed knowledge, observation locality, and rooted network computation. Every source and process split through depth seven executes. Changed replicas and omitted causal events reject. Ernos-verified 2026-07-23 (15/15 checks).
+
+### Step 394 — The Fold cryptography-and-computational-security law
+
+**File:** `constants/computational_security.ep` (test: `tests/test_computational_security.ep`)
+
+**What it does.** Fixes the adversary surface exactly as observations, held distinctions, queries, and computation. A suffix after `s` observations has `b^s` compatible predecessors, forcing information one-wayness, secrecy, digest collisions, commitment hiding, and zero-disclosure accounting. Held records and verified traces force authentication, binding, signatures, knowledge proofs, multiparty reconstruction, integrity, exhaustive adversarial work, and post-quantum support accounting. Forgery, collision-free digests, and collapsed supports reject. Ernos-verified 2026-07-23 (19/19 checks).
+
+### Step 395 — The Fold learning-and-intelligence-theory law
+
+**File:** `constants/learning_intelligence_theory.ep` (test: `tests/test_learning_intelligence_theory.ep`)
+
+**What it does.** Derives representation as a generated word, classification as its residual observation class, inference as held-label reconstruction, prediction as the next forced label, generalization as shared suffix, and sample complexity as the exact number of missing distinctions. Exhaustive optimization, induction, search/planning, reinforcement, multi-agent reconstruction, adaptation, learning limits, interpretability, verification, and classical/quantum learning supports follow from earlier Fold laws. Short samples and changed representations reject. Ernos-verified 2026-07-23 (18/18 checks).
+
+### Step 396 — The Fold scientific-computation law
+
+**File:** `constants/scientific_computation.ep` (test: `tests/test_scientific_computation.ep`)
+
+**What it does.** Joins exact/approximate calculation, numerical stability, error propagation, grid discretization, counted convergence, symbolic normalization, trace simulation, computational dynamics, recorded inverse reconstruction, exact statistics, high-dimensional support products, many-body composition, and verified mathematical models. Every source and prefix through depth seven executes. Early convergence, missing inverse records, and collapsed composed supports reject. Ernos-verified 2026-07-23 (17/17 checks).
+
+### Step 397 — The Fold reversible-and-quantum-foundations law
+
+**File:** `constants/reversible_quantum_foundations.ep` (test: `tests/test_reversible_quantum_foundations.ep`)
+
+**What it does.** Completes the reversible model by retaining one fibre label per Fold step. One quantum information unit is the forced `b`-way distinction; words compose supports multiplicatively, and complete equal-share unresolved support is the superposition-equivalent structure. Phase is the period-`b` label action, interference is merger of its predecessor pair, entangling composition is one exactly sliceable joint word, and measurement selects a suffix while retaining the inverse record. Missing labels and collapsed units reject. Ernos-verified 2026-07-23 (12/12 checks).
+
+### Step 398 — The Fold quantum-gate, circuit, and universality law
+
+**File:** `constants/quantum_gates_circuits_universality.ep` (test: `tests/test_quantum_gates_circuits_universality.ep`)
+
+**What it does.** Defines the primitive quantum gate as one forced Fold transition on every unresolved branch, reversible with its fibre-label record. An `s`-gate circuit is its lawful compiled branch trace, with `b^(k-s)` images and `b^s` histories reconstructing `b^k` support. Repetition of the one gate covers every admitted closing and recurrent Fold process. Shifted gates, shortened circuits, and collapsed support reject. Ernos-verified 2026-07-23 (10/10 checks).
+
+### Step 399 — The Fold quantum-communication, coding, correction, and fault-tolerance law
+
+**File:** `constants/quantum_communication_coding_fault_tolerance.ep` (test: `tests/test_quantum_communication_coding_fault_tolerance.ep`)
+
+**What it does.** Transmits every one of the `b^k` branch words in `k` channel uses. Applying the already-forced minimal `c=3` repetition to every branch corrects every single changed encoded position, with redundancy `bk`. The declared one-error fault-tolerant circuit restores the exact branch before its verified gate trace. Omitted branches, binary-width protection, and shortened codes reject. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 400 — The Fold quantum-simulation, verification, learning, correspondence, and limit law
+
+**File:** `constants/quantum_simulation_verification_learning_limits.ep` (test: `tests/test_quantum_simulation_verification_learning_limits.ep`)
+
+**What it does.** Simulates and verifies every branch trace, reduces learning support by exactly the supplied distinction count, and proves operational classical/quantum correspondence branch by branch: classical rewriting and quantum circuit transformation return the same rank, while measurement records restore the source. Quantum computation remains inside the finite-description, resource, undecidability, and admissibility boundaries already forced for computation. Omitted branches, false proofs, shifted correspondence, and total self-negating decisions reject. Ernos-verified 2026-07-23 (9/9 checks).
+
+### Step 401 — The mechanically extended Fold-form grammar law
+
+**File:** `foundation/fold_form_grammar_enumeration.ep` (test: `tests/test_fold_form_grammar_enumeration.ep`)
+
+**What it does.** Extends the original four primitive parameter-free self-maps by the generated production of ordered composition. Base-four ranking mechanically enumerates every composition word: 4 forms at size one, 16 at size two, and 64 at size three, totaling 84 executed forms without a hand-written extension list. Larger compositions may generate, but the selection rule is least-size generation: size one is the first generating size and has exactly one generator, the Fold. Omitted forms, shifted winners, and nonminimal rivals reject. The result is conditional on this explicitly generated composition grammar. Ernos-verified 2026-07-23 (11/11 checks).
+
+### Step 402 — The Fold depth-independent induction-certificate law
+
+**File:** `constants/computation_depth_induction.ep` (test: `tests/test_computation_depth_induction.ep`)
+
+**What it does.** Replaces reliance on a depth-seven pattern alone with constructive base/successor certificates. The empty word supplies `S(0)=1`; prepending one of `b` labels forces `S(k+1)=bS(k)`. The same successor proves retained/closed information products, circuit size/width/depth recurrence, quantum support, reverse-record length, and channel capacity for any supplied finite depth representable by the exact counter. The schema is additionally executed through depth 14, twice the established census depth. Changed branching, skipped successors, and collapsed support reject. Ernos-verified 2026-07-23 (10/10 checks).
+
+### Step 403 — The Fold multi-error quantum fault-tolerance law
+
+**File:** `constants/quantum_multi_error_fault_tolerance.ep` (test: `tests/test_quantum_multi_error_fault_tolerance.ep`)
+
+**What it does.** Generates repetition widths in increasing order for an exact error allowance `t` and exhausts every binary error mask of weight at most `t` for both labels. The first strict-majority survivor is `2t+1`; consequently one, two, and three errors independently force widths 3, 5, and 7. Every branch word through depth seven round-trips under each registered model, and the corrected word feeds the exact quantum circuit semantics. Redundancy is `2t` labels per source label. Even widths, shortened codes, excess unregistered fault orders, and collapsed redundancy reject. Ernos-verified 2026-07-23 (14/14 checks).
+
+### Step 404 — The unrestricted native Fold Busy-Beaver law
+
+**File:** `constants/computability_busy_beaver_unrestricted.ep` (test: `tests/test_computability_busy_beaver_unrestricted.ep`)
+
+**What it does.** Defines Busy-Beaver behavior from the already-derived native
+Fold process grammar rather than importing a conventional transition table. At
+description depth `k`, every closing process has at most `k` lawful depth-
+lowering transitions, while the first depth-`k` state has least halt time exactly
+`k`; therefore `BB_F(k)=k` for every supplied positive finite `k`. The
+base/successor certificate executes through depth fourteen, and the period-`b`
+recurrent machine is excluded by its exact nonhalting certificate. A shorter
+maximum and nonpositive description depth reject. The theorem is unrestricted
+over finite depth in the admitted Fold grammar and makes no claim about arbitrary
+external Turing-machine tables. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 405 — The Fold-P equals Fold-NP law
+
+**File:** `constants/complexity_fold_p_np.ep` (test: `tests/test_complexity_fold_p_np.ep`)
+
+**What it does.** Defines the native comparison using exact Fold evaluation and
+the already-derived proof verifier. Every deterministic evaluation emits its
+lawful compiled trace, giving `P_F` contained in `NP_F`; proof soundness forces
+every accepted trace to equal the unique deterministic evaluation, giving
+`NP_F` contained in `P_F`. Both resources equal the supplied description depth,
+so `P_F = NP_F` throughout the admitted Fold process grammar. Every source
+through depth seven is executed, the depth certificate runs through fourteen,
+and tampered alternative branches reject. No conclusion is asserted for
+arbitrary external languages, encodings, nondeterministic machines, polynomial
+conventions, or Boolean gate bases. Ernos-verified 2026-07-23 (8/8 checks).
+
+### Step 406 — The arbitrary admitted Fold-circuit lower-bound law
+
+**File:** `constants/complexity_arbitrary_circuit_lower_bounds.ep` (test: `tests/test_complexity_arbitrary_circuit_lower_bounds.ep`)
+
+**What it does.** Proves lower bounds over every circuit assembled from lawful
+Fold edges, rather than only recounting one implementation. A Fold gate is the
+unique edge from depth `r` to `r-1`; it cannot close two dependent distinctions
+on one path or replace a different source edge. Hence a depth-`k` closing path
+requires `k` gates, complete input support requires width `b^k`, and complete
+layered coverage requires `sum(r=1..k)b^r` edges. The existing circuit attains all
+three bounds. Every subset of the forced edge set is enumerated through the
+forced colour depth and exactly the full set survives; a base/successor
+certificate extends the result through depth fourteen and to every supplied
+positive finite depth. Omitted, shortened, narrowed, and rewired candidates
+reject. External Boolean or quantum gate bases remain outside the claim.
+Ernos-verified 2026-07-23 (10/10 checks).
+
+### Step 407 — The unbounded finite quantum fault-tolerance law
+
+**File:** `constants/quantum_unbounded_finite_fault_thresholds.ep` (test: `tests/test_quantum_unbounded_finite_fault_thresholds.ep`)
+
+**What it does.** Replaces the former fixed `t=1,2,3` frontier with a
+constructive certificate for every supplied positive finite error allowance.
+Width `2t+1` leaves at least `t+1` original labels against at most `t` changes.
+Every shorter width `w<=2t` has an executed counterexample obtained by changing
+`ceil(w/2)` labels. Thus `2t+1` is the unique first strict-majority survivor for
+every finite `t`, redundancy is exactly `2t` labels per source label, and the
+successor `t -> t+1` adds exactly two labels. The certificate executes through
+`t=14`, integrates the corrected depth-seven quantum circuit at `t=14`, and
+constructively defeats every proposed fixed positive finite ceiling by producing
+its successor order. This is an unbounded exact-code theorem, not an infinite-
+width object, stochastic-noise rate, or physical hardware threshold theorem.
+Ernos-verified 2026-07-23 (10/10 checks).
+
+### Form closure of the unrestricted computation extensions (Steps 404–407)
+
+- **404** — the native Busy-Beaver value is the equality of the already-closed
+  exact lower witness and complete time upper bound. Its successor is one lawful
+  depth reduction. No new instruction set, fitted bound, or assembled constant
+  enters.
+- **405** — `P_F = NP_F` is the two-way equality of the already-closed evaluator
+  and sound/complete proof trace. The resource is the generated description
+  depth. No polynomial form, language family, or nondeterministic machine is
+  imported.
+- **406** — the size, width, and path bounds are the existing exact circuit
+  resources, now proved necessary across the generated space of lawful edge
+  subsets and extended by their forced successor recurrences. No alternative
+  gate basis or selected circuit shape enters.
+- **407** — `2t+1` is not a selected fixed value: candidate widths are generated
+  in increasing order for the supplied `t`; explicit shorter counterexamples
+  eliminate every predecessor, strict majority admits the first survivor, and
+  the successor adds the already-forced binary count. No empirical error rate or
+  hardware parameter enters.
+
+### Publication synchronization record — *After Turing: The Fold Machine*
+
+**Status:** `PREPARED — NOT PUSHED — NOT DEPOSITED — NOT PUBLISHED`
+
+The comprehensive computation paper is synchronized locally to Steps 325–407,
+the 164-row `FUNDAMENTAL_COMPUTATION_CENSUS.md`, the 409-suite / 2,693-check
+current-source seal, and the authority-locked `computational_lab/` release. The
+paper introduces no new mathematical step and does not promote laboratory
+outputs into the theory. Its twelve theorem demonstrations execute consequences
+already registered here; its eight finite investigations remain exact only
+inside their stated generated spaces. The Fold-form uniqueness statement remains
+conditional on the mechanically generated 84-form grammar through size three,
+the exhaustive `t=1,2,3` masks remain finite witnesses, and Step 407 supplies the
+separate necessity/sufficiency induction forcing width `2t+1` for every positive
+finite fault order.
+
+The synchronized local artifacts are
+`papers/After_Turing_The_Fold_Machine.md`,
+`output/pdf/After_Turing_The_Fold_Machine_v1.pdf`,
+`publication/zenodo_after_turing_fold_machine_v1_metadata.json`, and the
+deterministic release manifest and evidence archive under
+`publication/after_turing_fold_machine_v1/`. No Git commit, tag, push, Zenodo
+deposition, DOI reservation, upload, or publication is asserted by this record.
+Those actions require Maria Smith's separate explicit authorization. Unison AI,
+Fold Chess, Fold Go, and Fold Protein rebuilds or translations were not executed;
+they are retained as frontier work for a later paper.
+
 ### Form-closure sweep of the decode subseries (Steps 308–324) — complete
 
 The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted **assembled algebraic form** be minimal over a generated candidate space and unique among same-size shapes (`assembly_enumeration` + `forbid_form_selection`), not merely that its ingredient counts are forced. Auditing the whole fold-AI subseries against that bar (2026-07-15): **the functional band (Step 311) was the sole step that asserted new assembled constants, and both now carry both guards** — the colour volume c³ (a two-operation cube, minimal and unique over {c}) and the covering depth b+c (minimal and unique over {b, c}). Every other step asserts **no new assembled constant**, so owes no assembly guard, and is closed by the machinery it already runs:
@@ -5535,6 +6120,47 @@ The corpus's *finished* standard (STANDARDS Rule 1) demands that every asserted 
 - **322** — the coherence value reuses the closed lock 1/2, fold preimage, cascade shares, and kin partition; the four-scale sum telescopes to the One and the score-as-measurement route is guarded off. No new form.
 - **323** — contextual integration reuses the closed covering depth and functional band, cross-routing its depth, floor, and colour volume; the dyadic weights are successive folds of the closed lock and engineering dimensions are guarded off. No new form.
 - **324** — generation selection reuses and cross-routes the closed focus lock for both capacity and binding, and the generator count for the re-expression minimum; caps and fitted thresholds are guarded off. No new form.
+
+### Form closure of the fundamental-computation foundation (Steps 325–330)
+
+- **325** — finite-state transition reuses the closed Fold, binary tower, exact grid, and deepest covering depth; its state count is cross-routed by enumeration and binary preimage pairing through `forced_to_be`. No new form.
+- **326** — observation reuses the established Fold-as-observation and exact fibres; enumerated class membership is cross-routed to class count times `b`. No new form.
+- **327** — resources reuse depth, the binary tower, closure, and observation fibres; enumerated space/time/paths cross-route to their counted forms. No new form.
+- **328** — encoding reuses the binary fibre positions as symbols; enumerated codewords cross-route to `b^k`, and decoding is executed state by state. No new form.
+- **329** — information reuses codeword depth, Fold time, entropy merging, branch weight, uncertainty, and recurrence; all quantities are cross-routed counts or exact partitions. No new form.
+- **330** — process/machine structure reuses exact states, Fold transitions, composition, the One fixed point, and the closed period-`b` orbit; state, transition, terminal, and period counts are enumerated and cross-routed. No new form.
+
+### Form closure of formal computation and computability (Steps 331–343)
+
+- **331** — language/grammar reuses the closed fibre alphabet and codeword bijection; generated production counts cross-route to exact state enumeration. No new assembled constant.
+- **332** — the automaton is the already-forced coordinate/depth configuration under one Fold transition; grid enumeration cross-routes to binary frontier generation. No new form.
+- **333** — rewriting is the Step-328 observed suffix identity; predecessor enumeration cross-routes to the forced fibre count and every composition split executes. No new form.
+- **334** — recursion reapplies the established Fold to its own result; iterative, coordinate, and word routes agree, and self-application consumes the already-closed self-observation state. No new form.
+- **335** — model equivalence is exact equality of five previously closed routes at every process prefix. No new form or value.
+- **336** — universality reuses the one Fold executor; process descriptions are enumerated and cross-routed to `b^k(k+1)`, with both closing and recurrent regimes executed. No new form.
+- **337** — recognition joins generated-word membership to exact terminal closure and the independent reader route. No new form.
+- **338** — halting reuses the unique terminal and complete recurrent period; terminal and nonterminal certificates are executed and unfavorable classifications rejected. No new form.
+- **339** — enumeration reuses the exact coordinate order and encode/decode bijection; rank counts cross-route to state and automaton counts. No new form.
+- **340** — reduction is a semantics-preserving equality across already-closed representations and every prefix; changed mappings are rejected. No new form.
+- **341** — undecidability generates the complete binary outcome fibre and counts zero fixed predictions under its forced partner involution; the identity control counts `b`. No selected outcome or new constant enters.
+- **342** — relative computation reuses the exact fibre label closed by observation; reconstruction is exhaustively checked and information remains accounted. No outside relation or new form enters.
+- **343** — admissible limits consolidate the registered grammar, executor, terminal, recurrence, information accounting, and self-decision boundary. No new assembled constant.
+
+### Form closure of computability degrees and complexity (Steps 344–356)
+
+- **344** — degrees reuse held fibre labels and observed suffixes; every reconstruction is executed and class/history counts cross-route to the complete source space. No new form.
+- **345** — incompleteness is the already-forced missing-history multiplicity `b^d`, cross-routed to closed resources; the self-negating boundary is reused. No new form.
+- **346** — circuit size enumerates the already-forced transition layers and cross-routes to automaton transitions; width and depth cross-route to space and walked closure. No new form.
+- **347** — communication and queries reuse closed labels; sufficiency is exact reconstruction and necessity is the generated `b`-completion remainder. No new form.
+- **348** — randomness reuses the complete observation fibres and equal exact branch partition; supplied labels deterministically resolve the same histories. No external distribution or new form.
+- **349** — reversibility cost is the closed-label count, cross-routed to merged histories; the zero-cost recurrent case reuses the closed periodic distinction. No new form.
+- **350** — parallel complexity reorganizes the same circuit transitions by independent layer; total work, width, and dependent rounds cross-route to Steps 346 and 338. No new form.
+- **351** — quantum complexity reuses closed branch weight, uncertainty support, information multiplicity, observation, and circuit resources; all support products and depths are exact cross-routes. No new form.
+- **352** — lower and upper bounds are complete walked censuses; completeness is the already-closed encode/reduce/recognize route over every source. No new form.
+- **353** — average and worst cases exhaust the equal-share state census; state-by-state and halt-length-grouped sums agree exactly. No fitted distribution or new constant.
+- **354** — approximation is the exact observation partition, with class/member products and binary refinements cross-routed to resources and information. No tolerance enters.
+- **355** — parameterized complexity reuses retained depth; active and residual factors reconstruct the state space and adjacent factors scale by `b`. No selected parameter form.
+- **356** — descriptive complexity reuses generated Fold words; minimal length follows from complete capacity enumeration and encode/decode sufficiency. No outside code language.
 
 The whole subseries compiles and passes under `ernos` with zero violations. **Every fold-AI decode step is now closed to the corpus's finished form-closure standard** — the same standard the physics constants meet — with the band the only one that owed, and received, the generated-minimality and named-shape guards; all others reduce to reused-closed primitives, counts forced two ways, complements of closed values, and structural telescopings.
 

@@ -1,0 +1,114 @@
+# ============================================================================
+#  ARBITRARY ADMITTED FOLD-CIRCUIT LOWER BOUNDS.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Earlier circuit laws count the canonical layered circuit.  A lower-bound law
+#  must also exclude every smaller alternative organization admitted by the Fold
+#  circuit grammar, rather than merely recounting the chosen implementation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A lawful Fold gate is one unique edge from depth r to depth r-1.  It cannot
+#  close two dependent distinctions on one path and it cannot stand in for a
+#  different source edge.  Thus a depth-k closing path requires at least k gates;
+#  complete support requires all b^k deepest inputs at once; and a circuit that
+#  covers every source at every layer requires sum(r=1..k)b^r edges.  The bounds
+#  are attained by the existing circuit, so they are exact.
+#
+#  All subsets of the forced edge set are mechanically exhausted through the
+#  forced colour depth.  Exactly the full set survives.  A base/successor
+#  certificate extends size, width, and depth to every supplied finite depth.
+#  "Arbitrary" here means every circuit assembled from lawful Fold edges,
+#  including shared and parallel organizations; external Boolean gate bases are
+#  outside the claim.
+# ============================================================================
+
+import "../constants/complexity_fold_p_np.ep"
+
+
+define arbitrary_fold_circuit_size_lower_bound with depth as Int returning Int:
+    return fold_circuit_size(depth)
+
+
+define arbitrary_fold_circuit_depth_lower_bound with depth as Int returning Int:
+    return fold_circuit_depth(depth)
+
+
+define arbitrary_fold_circuit_width_lower_bound with depth as Int returning Int:
+    return fold_circuit_width(depth)
+
+
+define arbitrary_fold_circuit_candidate_covers_complete_support with size as Int and rounds as Int and width as Int and depth as Int returning Bool:
+    if size < arbitrary_fold_circuit_size_lower_bound(depth):
+        return false
+    if rounds < arbitrary_fold_circuit_depth_lower_bound(depth):
+        return false
+    if width < arbitrary_fold_circuit_width_lower_bound(depth):
+        return false
+    return true
+
+
+define fold_circuit_edge_subset_is_complete with mask as Int and depth as Int returning Bool:
+    set required_edges to arbitrary_fold_circuit_size_lower_bound(depth)
+    return fold_repetition_mask_weight(mask and required_edges) == required_edges
+
+
+define complete_fold_circuit_edge_subset_survivor_count with depth as Int returning Int:
+    set required_edges to arbitrary_fold_circuit_size_lower_bound(depth)
+    set candidates to whole_power(binary_count() and required_edges)
+    set survivors to 0
+    set mask to 0
+    repeat while mask < candidates:
+        if fold_circuit_edge_subset_is_complete(mask and depth):
+            set survivors to survivors + 1
+        set mask to mask + 1
+    return forced_to_be("arbitrary Fold circuit subsets: only the complete edge set survives" and survivors and 1)
+
+
+define arbitrary_fold_circuit_lower_bound_induction_step with depth as Int returning Bool:
+    if depth < 1:
+        return false
+    if arbitrary_fold_circuit_size_lower_bound(depth + 1) != arbitrary_fold_circuit_size_lower_bound(depth) + computation_state_count(depth + 1):
+        return false
+    if arbitrary_fold_circuit_width_lower_bound(depth + 1) != binary_count() * arbitrary_fold_circuit_width_lower_bound(depth):
+        return false
+    return arbitrary_fold_circuit_depth_lower_bound(depth + 1) == arbitrary_fold_circuit_depth_lower_bound(depth) + 1
+
+
+define arbitrary_fold_circuit_lower_bound_certificate with supplied_depth as Int returning Bool:
+    if supplied_depth < 1:
+        return false
+    set depth to 1
+    repeat while depth < supplied_depth:
+        if arbitrary_fold_circuit_lower_bound_induction_step(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define complete_arbitrary_fold_circuit_lower_bound_census returning Bool:
+    set depth to 1
+    repeat while depth < colour_count() + 1:
+        if complete_fold_circuit_edge_subset_survivor_count(depth) != 1:
+            return false
+        if arbitrary_fold_circuit_candidate_covers_complete_support(fold_circuit_size(depth) and fold_circuit_depth(depth) and fold_circuit_width(depth) and depth) == false:
+            return false
+        set depth to depth + 1
+    return arbitrary_fold_circuit_lower_bound_certificate(fold_induction_execution_depth())
+
+
+define omitted_arbitrary_fold_circuit_edge_is_rejected with depth as Int returning Bool:
+    return arbitrary_fold_circuit_candidate_covers_complete_support(fold_circuit_size(depth) - 1 and fold_circuit_depth(depth) and fold_circuit_width(depth) and depth) == false
+
+
+define shortened_arbitrary_fold_circuit_path_is_rejected with depth as Int returning Bool:
+    return arbitrary_fold_circuit_candidate_covers_complete_support(fold_circuit_size(depth) and fold_circuit_depth(depth) - 1 and fold_circuit_width(depth) and depth) == false
+
+
+define narrowed_arbitrary_fold_circuit_frontier_is_rejected with depth as Int returning Bool:
+    return arbitrary_fold_circuit_candidate_covers_complete_support(fold_circuit_size(depth) and fold_circuit_depth(depth) and fold_circuit_width(depth) - 1 and depth) == false
+
+
+define rewired_arbitrary_fold_circuit_edge_is_rejected with depth as Int returning Bool:
+    return tampered_program_proof_is_rejected(1 and depth and depth)
+

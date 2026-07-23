@@ -1,0 +1,82 @@
+# ============================================================================
+#  FOLD APPROXIMATION COMPLEXITY -- exact observation classes and refinement.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Approximation may not mean an unregistered numerical tolerance.  The Fold
+#  supplies its exact coarse representation: after s observations, one retained
+#  coordinate represents the complete fibre of source histories that share it.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A depth-k approximation after s observations has b^(k-s) retained classes and
+#  b^s exact source members per class.  Their product is b^k.  Its retained
+#  precision is k-s distinctions and its exact ambiguity is s distinctions.
+#  Refining by one observation level divides class multiplicity by b.  At s=0 the
+#  class is a singleton exact source; no tolerance or selected representative is
+#  introduced.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_average_worst.ep"
+
+
+define fold_approximation_class_count with depth as Int and observations as Int returning Int:
+    return retained_resource(depth and observations)
+
+
+define fold_approximation_class_size with observations as Int returning Int:
+    return closed_history_resource(observations)
+
+
+define fold_approximation_retained_precision with depth as Int and observations as Int returning Int:
+    return retained_information(depth and observations)
+
+
+define fold_approximation_ambiguity with observations as Int returning Int:
+    return closed_information(observations)
+
+
+define fold_approximation_accounting with depth as Int and observations as Int returning Int:
+    set reconstructed to fold_approximation_class_count(depth and observations) * fold_approximation_class_size(observations)
+    return forced_to_be("Fold approximation: classes times members = exact source space" and reconstructed and computation_state_count(depth))
+
+
+define fold_approximation_refinement_is_binary with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set coarse to fold_approximation_class_size(observations)
+    set refined to fold_approximation_class_size(observations - 1)
+    return coarse == binary_count() * refined
+
+
+define fold_approximation_is_exact_at_zero with depth as Int returning Bool:
+    return fold_approximation_class_size(0) == 1
+
+
+define complete_fold_approximation_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_approximation_accounting(depth and observations) != computation_state_count(depth):
+                return false
+            if fold_approximation_retained_precision(depth and observations) + fold_approximation_ambiguity(observations) != depth:
+                return false
+            if fold_approximation_refinement_is_binary(observations) == false:
+                return false
+            set observations to observations + 1
+        if fold_approximation_is_exact_at_zero(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define false_singleton_coarse_class_is_rejected with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    return fold_approximation_class_size(observations) != 1
+
+
+define perturbed_approximation_accounting_is_rejected with depth as Int and observations as Int returning Bool:
+    set perturbed to fold_approximation_class_count(depth and observations) * (fold_approximation_class_size(observations) + 1)
+    return perturbed != computation_state_count(depth)

@@ -1,0 +1,25 @@
+import "../constants/information_mutual_conditional.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold mutual and conditional information ==="
+    set ok to expect_number("mutual information is four" and fold_mutual_information(7 and 3) and 4)
+    set ok to expect_number("conditional information is three" and fold_conditional_information(3) and 3)
+    set ok to expect_number("conditional multiplicity is eight" and fold_conditional_multiplicity(3) and 8)
+    set ok to expect_number("mutual plus conditional reconstructs seven" and fold_mutual_conditional_accounting(7 and 3) and 7)
+    set ok to expect_true("the complete mutual census holds" and complete_fold_mutual_conditional_census())
+    set ok to expect_true("perturbed mutual information is rejected" and perturbed_mutual_information_is_rejected(7 and 3))
+    set ok to expect_true("perturbed accounting is rejected" and perturbed_conditional_accounting_is_rejected(7 and 3))
+    return 0

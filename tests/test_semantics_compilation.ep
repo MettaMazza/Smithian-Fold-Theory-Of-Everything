@@ -1,0 +1,32 @@
+# Machine-check Fold semantics-preserving compilation.
+import "../constants/semantics_compilation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold semantics-preserving compilation ==="
+    set trace to fold_compile_program_trace(73 and 7 and 3)
+    set ok to expect_number("three-step compilation emits four ranks" and length_list(trace) and 4)
+    set ok to expect_number("compiled execution returns rank nine" and fold_execute_compiled_trace(trace) and 9)
+    set ok to expect_true("every compiled edge is lawful" and fold_compiled_trace_is_lawful(fold_compile_program_trace(73 and 7 and 3) and 7))
+    set ok to expect_true("compilation preserves semantics" and fold_compilation_preserves_semantics(73 and 7 and 3))
+    set ok to expect_true("the complete compilation census holds" and complete_fold_compilation_census())
+    set ok to expect_true("a tampered trace is rejected" and tampered_compiled_trace_is_rejected(73 and 7 and 3))
+    set ok to expect_true("a shortened trace is rejected" and shortened_compiled_trace_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

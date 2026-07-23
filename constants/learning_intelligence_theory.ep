@@ -1,0 +1,144 @@
+# ============================================================================
+#  FOLD LEARNING AND INTELLIGENCE THEORY.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Learning is derived here as exact change in distinguishability and retained
+#  state, not from an imported statistical learner or pretrained model.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A representation is a generated Fold word.  Observation classifies it by its
+#  residual suffix; held labels infer and reconstruct the exact source.  All
+#  members of one class share that suffix, forcing generalization.  Distinguishing
+#  b^s compatible histories requires exactly s supplied labels, forcing sample
+#  complexity.  Search, optimization, reinforcement, multi-agent combination,
+#  adaptation, interpretation, and the classical/quantum learning bridge are
+#  then exact routes through already-closed algorithms and information supports.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every source and observation count through depth seven is executed.  Short
+#  samples, changed representations, false class membership, absent improvement,
+#  and collapsed learning supports reject.
+# ============================================================================
+
+import "../constants/computational_security.ep"
+import "../constants/algorithms_search_order.ep"
+import "../constants/complexity_descriptive.ep"
+
+
+define fold_learning_representation with rank as Int and depth as Int returning List:
+    return enumerate_fold_word(rank and depth)
+
+
+define fold_inference_reconstructs with rank as Int and depth as Int and observations as Int returning Bool:
+    return fold_compression_round_trip(rank and depth and observations)
+
+
+define fold_classification_label with rank as Int and depth as Int and observations as Int returning Int:
+    return fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and observations)
+
+
+define fold_prediction_next_label with rank as Int and depth as Int and observed as Int returning Int:
+    if observed > depth - 1:
+        return 0
+    return get_list(enumerate_fold_word(rank and depth) and observed)
+
+
+define fold_generalization_class_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set class_rank to fold_classification_label(rank and depth and observations)
+    set expected_suffix to enumerate_fold_word(class_rank and depth - observations)
+    return fold_words_are_equal(expected_suffix and fold_bound_term_suffix(rank and depth and observations))
+
+
+define fold_learning_sample_complexity with observations as Int returning Int:
+    return forced_to_be("Fold sample complexity = labels needed to select one history" and observations and fold_compression_length(observations))
+
+
+define fold_learning_optimization_holds returning Bool:
+    return complete_fold_optimization_census()
+
+
+define fold_induction_extension_count with depth as Int returning Int:
+    return forced_to_be("Fold induction: each generated prefix has b extensions" and binary_count() and computation_state_count(depth + 1) / computation_state_count(depth))
+
+
+define fold_search_planning_holds returning Bool:
+    return complete_fold_search_order_census()
+
+
+define fold_reinforcement_improvement with depth as Int and actions as Int returning Int:
+    if actions > depth:
+        return 0 - 1
+    return forced_to_be("Fold reinforcement: each lawful closure action removes one remaining step" and actions and depth - fold_causal_depth_after(depth and actions))
+
+
+define fold_multi_agent_learning_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    return fold_multiparty_reconstruction_holds(rank and depth and observations and observations / binary_count())
+
+
+define fold_adaptation_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set adapted to fold_bound_term_suffix(rank and depth and observations)
+    return length_list(adapted) == depth - observations
+
+
+define fold_learning_limit_holds with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    return fold_adversary_compatible_sources(observations) > 1
+
+
+define fold_interpretability_verification_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    set representation to fold_learning_representation(rank and depth)
+    if decode_computation_codeword(representation) != rank:
+        return false
+    return fold_integrity_holds(rank and depth and steps)
+
+
+define fold_classical_quantum_learning_holds with depth as Int and observations as Int returning Bool:
+    return fold_three_form_information_accounting(depth and observations) == computation_state_count(depth)
+
+
+define complete_fold_learning_intelligence_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_induction_extension_count(depth) != binary_count():
+            return false
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set observations to 0
+            repeat while observations < depth + 1:
+                if fold_inference_reconstructs(rank and depth and observations) == false:
+                    return false
+                if fold_generalization_class_holds(rank and depth and observations) == false:
+                    return false
+                if fold_learning_sample_complexity(observations) != observations:
+                    return false
+                if fold_multi_agent_learning_holds(rank and depth and observations) == false:
+                    return false
+                if fold_adaptation_holds(rank and depth and observations) == false:
+                    return false
+                if fold_classical_quantum_learning_holds(depth and observations) == false:
+                    return false
+                set observations to observations + 1
+            if fold_interpretability_verification_holds(rank and depth and depth) == false:
+                return false
+            set rank to rank + 1
+        set depth to depth + 1
+    if fold_learning_optimization_holds() == false:
+        return false
+    return fold_search_planning_holds()
+
+
+define shortened_learning_sample_is_rejected with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    return fold_learning_sample_complexity(observations) != observations - 1
+
+
+define changed_learning_representation_is_rejected with rank as Int and depth as Int returning Bool:
+    set changed to fold_change_symbol_at(fold_learning_representation(rank and depth) and 0)
+    return decode_computation_codeword(changed) != rank
+
+
+define absent_reinforcement_improvement_is_rejected with depth as Int returning Bool:
+    return fold_reinforcement_improvement(depth and 1) != 0

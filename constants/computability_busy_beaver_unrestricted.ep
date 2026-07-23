@@ -1,0 +1,99 @@
+# ============================================================================
+#  UNRESTRICTED NATIVE FOLD BUSY-BEAVER LAW.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The finite laboratory census fixed a four-action showcase grammar and a
+#  program length.  The main corpus instead asks for behavior across every
+#  finite description depth in the already-derived universal Fold process
+#  grammar.  No conventional transition table or binary tape is imported.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A depth-k native process has one lawful transition per layer and no lawful
+#  closing path longer than k.  Step 352 supplies the exact upper bound k.  The
+#  first depth-k state supplies a witness whose least terminal time is k, so the
+#  upper and lower bounds meet.  Therefore the maximum halting time over every
+#  depth-k closing Fold description is BB_F(k)=k for every positive finite k.
+#
+#  The period-b recurrent machine is not a larger halting candidate: its complete
+#  nonterminal period is an exact nonhalting certificate.  The result is
+#  unrestricted over finite depth in the native Fold grammar.  It is not a claim
+#  about arbitrary externally supplied Turing-machine transition tables.
+# ============================================================================
+
+import "../constants/quantum_multi_error_fault_tolerance.ep"
+
+
+define fold_busy_beaver_halting_description_count with depth as Int returning Int:
+    if depth < 1:
+        return 0
+    return computation_state_count(depth)
+
+
+define fold_busy_beaver_lower_witness with depth as Int returning Int:
+    if depth < 1:
+        return 0
+    return first_fold_state_halt_time(depth)
+
+
+define fold_busy_beaver_upper_bound with depth as Int returning Int:
+    if depth < 1:
+        return 0
+    return fold_time_upper_bound(depth)
+
+
+define fold_busy_beaver_value with depth as Int returning Int:
+    if depth < 1:
+        return 0
+    return forced_to_be("native Fold Busy Beaver: lower witness = complete upper bound" and fold_busy_beaver_lower_witness(depth) and fold_busy_beaver_upper_bound(depth))
+
+
+define fold_busy_beaver_induction_step with depth as Int returning Bool:
+    if depth < 1:
+        return false
+    if first_fold_state_halt_time(depth + 1) != first_fold_state_halt_time(depth) + 1:
+        return false
+    if fold_circuit_depth(depth + 1) != fold_circuit_depth(depth) + 1:
+        return false
+    return fold_state_count_induction_step(depth)
+
+
+define fold_busy_beaver_unrestricted_certificate with supplied_depth as Int returning Bool:
+    if supplied_depth < 1:
+        return false
+    if fold_busy_beaver_lower_witness(1) != 1:
+        return false
+    set depth to 1
+    repeat while depth < supplied_depth:
+        if fold_busy_beaver_induction_step(depth) == false:
+            return false
+        set depth to depth + 1
+    return fold_busy_beaver_lower_witness(supplied_depth) == supplied_depth
+
+
+define complete_native_fold_busy_beaver_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_busy_beaver_halting_description_count(depth) != computation_state_count(depth):
+            return false
+        if fold_busy_beaver_value(depth) != depth:
+            return false
+        set depth to depth + 1
+    return fold_busy_beaver_unrestricted_certificate(fold_induction_execution_depth())
+
+
+define recurrent_process_is_excluded_from_busy_beaver returning Bool:
+    if recurrent_fold_machine_does_not_halt() == false:
+        return false
+    return recurrent_machine_has_no_terminal()
+
+
+define shorter_busy_beaver_claim_is_rejected with depth as Int returning Bool:
+    if depth < 1:
+        return true
+    return fold_busy_beaver_lower_witness(depth) > depth - 1
+
+
+define nonpositive_busy_beaver_depth_is_rejected returning Bool:
+    return fold_busy_beaver_unrestricted_certificate(0) == false
+

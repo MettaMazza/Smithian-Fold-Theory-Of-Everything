@@ -1,0 +1,7829 @@
+{
+  "authority": {
+    "all_identical": true,
+    "manifest_hash": "39ddcb85b0c57eff6ac621d67eac3712171e8c61913226442e73d6979a2b0abe",
+    "sources": [
+      {
+        "actual": "5bf48ee3226d8fb0f98bee697401b0a53ae075b06da0f1a2a0d8faba71423ce5",
+        "expected": "5bf48ee3226d8fb0f98bee697401b0a53ae075b06da0f1a2a0d8faba71423ce5",
+        "identical": true,
+        "present": true,
+        "source": "FUNDAMENTAL_COMPUTATION_CENSUS.md"
+      },
+      {
+        "actual": "42c4be709dcd9edcfbedc70ee82055a8660d9658de21758561fd46e068a727bf",
+        "expected": "42c4be709dcd9edcfbedc70ee82055a8660d9658de21758561fd46e068a727bf",
+        "identical": true,
+        "present": true,
+        "source": "OneFoldMaster.md"
+      },
+      {
+        "actual": "0c80fb5c35c5b8e9fee368aea93afce08048f63c52b0123cb913476441a7ca5f",
+        "expected": "0c80fb5c35c5b8e9fee368aea93afce08048f63c52b0123cb913476441a7ca5f",
+        "identical": true,
+        "present": true,
+        "source": "constants/complexity_arbitrary_circuit_lower_bounds.ep"
+      },
+      {
+        "actual": "f1d215965b845d8299e2666d7f6d9aae4f17d377228175fedf8c30f7fcaddd11",
+        "expected": "f1d215965b845d8299e2666d7f6d9aae4f17d377228175fedf8c30f7fcaddd11",
+        "identical": true,
+        "present": true,
+        "source": "constants/complexity_fold_p_np.ep"
+      },
+      {
+        "actual": "75e39ba4574835bbdd7c470f48ae2232dc62ac0a501011e895a6a3e2f698effc",
+        "expected": "75e39ba4574835bbdd7c470f48ae2232dc62ac0a501011e895a6a3e2f698effc",
+        "identical": true,
+        "present": true,
+        "source": "constants/computability_busy_beaver_unrestricted.ep"
+      },
+      {
+        "actual": "ddddf7551d166fec3bff07b641628460e9b3cf4e271c55ace34eba6300eee690",
+        "expected": "ddddf7551d166fec3bff07b641628460e9b3cf4e271c55ace34eba6300eee690",
+        "identical": true,
+        "present": true,
+        "source": "constants/computation_depth_induction.ep"
+      },
+      {
+        "actual": "db6f85ece499bc5861ab2dfa7a2bd44945e1448b7e3c1d50d1dcfd31d5368ca2",
+        "expected": "db6f85ece499bc5861ab2dfa7a2bd44945e1448b7e3c1d50d1dcfd31d5368ca2",
+        "identical": true,
+        "present": true,
+        "source": "constants/quantum_communication_coding_fault_tolerance.ep"
+      },
+      {
+        "actual": "fdfa98c7b4da22467bcf6899f437a587ec2aa58726ef7da37d20b02ced2d5f5c",
+        "expected": "fdfa98c7b4da22467bcf6899f437a587ec2aa58726ef7da37d20b02ced2d5f5c",
+        "identical": true,
+        "present": true,
+        "source": "constants/quantum_gates_circuits_universality.ep"
+      },
+      {
+        "actual": "bcd9bd85abfc693a668621ec542d2b0ac2ec6e1942baf28716bfb9860aab6965",
+        "expected": "bcd9bd85abfc693a668621ec542d2b0ac2ec6e1942baf28716bfb9860aab6965",
+        "identical": true,
+        "present": true,
+        "source": "constants/quantum_multi_error_fault_tolerance.ep"
+      },
+      {
+        "actual": "338296f45e826cedf0b99fb7a8bcf8b618ee5d82d5add37f59c6bae4d2fbbaf6",
+        "expected": "338296f45e826cedf0b99fb7a8bcf8b618ee5d82d5add37f59c6bae4d2fbbaf6",
+        "identical": true,
+        "present": true,
+        "source": "constants/quantum_simulation_verification_learning_limits.ep"
+      },
+      {
+        "actual": "aae43e22a573d368accf0a0786332eb1cd65db245541d1c869205e52285f2bb2",
+        "expected": "aae43e22a573d368accf0a0786332eb1cd65db245541d1c869205e52285f2bb2",
+        "identical": true,
+        "present": true,
+        "source": "constants/quantum_unbounded_finite_fault_thresholds.ep"
+      },
+      {
+        "actual": "def2af94b57bd26f218bbfe387e55e6699bad985ca727ad75ea6c5a6e483999c",
+        "expected": "def2af94b57bd26f218bbfe387e55e6699bad985ca727ad75ea6c5a6e483999c",
+        "identical": true,
+        "present": true,
+        "source": "constants/reversible_quantum_foundations.ep"
+      },
+      {
+        "actual": "935a96a51832a983030abb1fcde8b336af46ca0e27ac9ba8db25a1e825b44e67",
+        "expected": "935a96a51832a983030abb1fcde8b336af46ca0e27ac9ba8db25a1e825b44e67",
+        "identical": true,
+        "present": true,
+        "source": "foundation/fold_form_grammar_enumeration.ep"
+      },
+      {
+        "actual": "c42cc9c42b8842d09ebc9b753240519ddbeb95bbf51edfe45247c57eee0ef3d6",
+        "expected": "c42cc9c42b8842d09ebc9b753240519ddbeb95bbf51edfe45247c57eee0ef3d6",
+        "identical": true,
+        "present": true,
+        "source": "verify/foundation_induction_multifault_401_403_receipt_20260723.md"
+      },
+      {
+        "actual": "dcf5ae7791691906a2312ebea124f84c39456c733aa47a0bc6e95189826ac2e2",
+        "expected": "dcf5ae7791691906a2312ebea124f84c39456c733aa47a0bc6e95189826ac2e2",
+        "identical": true,
+        "present": true,
+        "source": "verify/unrestricted_computation_404_407_receipt_20260723.md"
+      }
+    ]
+  },
+  "finite_investigations": [
+    {
+      "accepted_result": {
+        "halting_programs": 182,
+        "maximum_observed_labels": 2,
+        "winners": [
+          [
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          [
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          [
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          [
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          [
+            "ADVANCE",
+            "WRITE_1",
+            "ADVANCE",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          [
+            "ADVANCE",
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_1",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_2",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "WRITE_1"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "WRITE_2"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "ADVANCE"
+          ],
+          [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "HALT"
+          ]
+        ]
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-MACHINE-345",
+        "SFT-COMP-RESOURCE-327"
+      ],
+      "exhaustive_boundary": "all 4^4 action words of exact length 4 on the declared tape",
+      "identifier": "FIN-01",
+      "initial": {
+        "alphabet": [
+          "WRITE_1",
+          "WRITE_2",
+          "ADVANCE",
+          "HALT"
+        ],
+        "initial_word": [
+          1,
+          1
+        ],
+        "program_length": 4
+      },
+      "negative_control": {
+        "name": "unrestricted Busy Beaver conclusion",
+        "reason": "the census fixes both grammar and program length",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "4388dbb5587a4a472a3279b0cbaf53728ebce814efc91820f267ab5ae24bb03c",
+      "resources": {
+        "branches": 256,
+        "retained_information": 2,
+        "space": 2,
+        "time": 1024
+      },
+      "title": "Small SFT Busy Beaver census",
+      "trace": [
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_1",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_1",
+            "ADVANCE",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_1",
+            "HALT",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_1",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            2,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_1",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "WRITE_2",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 4,
+          "word": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 2,
+          "program": [
+            "ADVANCE",
+            "ADVANCE",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 3,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 1,
+          "program": [
+            "ADVANCE",
+            "HALT",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 2,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_1",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "WRITE_2",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "ADVANCE",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_1",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_1",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_1",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_1",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_2",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_2",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_2",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "WRITE_2",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "ADVANCE",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "ADVANCE",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "ADVANCE",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "ADVANCE",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "HALT",
+            "WRITE_1"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "HALT",
+            "WRITE_2"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "HALT",
+            "ADVANCE"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        },
+        {
+          "observed": 0,
+          "program": [
+            "HALT",
+            "HALT",
+            "HALT",
+            "HALT"
+          ],
+          "steps": 1,
+          "word": [
+            1,
+            1
+          ]
+        }
+      ],
+      "trace_hash": "239fbc4d25c3e4346164be56968f8cebe0a4e0f4bc62131a1727839e04542707"
+    },
+    {
+      "accepted_result": {
+        "assignments": 8,
+        "solution_count": 4,
+        "solutions": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-ALG-SEARCH-369",
+        "SFT-COMP-DECIDE-351"
+      ],
+      "exhaustive_boundary": "all 2^3 generated assignments for the declared two-clause instance",
+      "identifier": "FIN-02",
+      "initial": {
+        "clauses": [
+          "x1=1 or x2=2",
+          "x2=1 or x3=2"
+        ],
+        "variables": 3
+      },
+      "negative_control": {
+        "name": "omit one generated assignment",
+        "reason": "complete support contains eight assignments",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "a4be1f7985586ee4d93dcee01bb1c97b93a1b40ff59843e7cf45b5961b342b90",
+      "resources": {
+        "branches": 8,
+        "retained_information": 3,
+        "space": 3,
+        "time": 8
+      },
+      "title": "Exact finite satisfiability census",
+      "trace": [
+        {
+          "accepted": true,
+          "assignment": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "accepted": true,
+          "assignment": [
+            1,
+            1,
+            2
+          ]
+        },
+        {
+          "accepted": false,
+          "assignment": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "accepted": true,
+          "assignment": [
+            1,
+            2,
+            2
+          ]
+        },
+        {
+          "accepted": false,
+          "assignment": [
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "accepted": false,
+          "assignment": [
+            2,
+            1,
+            2
+          ]
+        },
+        {
+          "accepted": false,
+          "assignment": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "accepted": true,
+          "assignment": [
+            2,
+            2,
+            2
+          ]
+        }
+      ],
+      "trace_hash": "f7df6d2c7db9d6486bef26158c657b06a017ef908d430b895709a11cfb520492"
+    },
+    {
+      "accepted_result": {
+        "minimum_length": 2,
+        "programs": [
+          [
+            "WRITE_2",
+            "HALT"
+          ]
+        ]
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-PROCESS-345",
+        "SFT-COMP-DESC-368"
+      ],
+      "exhaustive_boundary": "every action word of lengths one through three in the declared four-action grammar",
+      "identifier": "FIN-03",
+      "initial": {
+        "maximum_length": 3,
+        "source": [
+          1
+        ],
+        "target": [
+          2
+        ],
+        "terminal_required": true
+      },
+      "negative_control": {
+        "name": "one-action solution",
+        "reason": "writing and terminal closure require distinct kernel transitions",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "42543cd2e6a4761b4cb2b62f98d643016036f406cd4b25805ab484a9e02adb3a",
+      "resources": {
+        "branches": 6,
+        "retained_information": 1,
+        "space": 1,
+        "time": 84
+      },
+      "title": "Minimal process-description census",
+      "trace": [
+        {
+          "length": 2,
+          "program": [
+            "WRITE_2",
+            "HALT"
+          ]
+        },
+        {
+          "length": 3,
+          "program": [
+            "WRITE_1",
+            "WRITE_2",
+            "HALT"
+          ]
+        },
+        {
+          "length": 3,
+          "program": [
+            "WRITE_2",
+            "WRITE_2",
+            "HALT"
+          ]
+        },
+        {
+          "length": 3,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "ADVANCE"
+          ]
+        },
+        {
+          "length": 3,
+          "program": [
+            "WRITE_2",
+            "ADVANCE",
+            "HALT"
+          ]
+        },
+        {
+          "length": 3,
+          "program": [
+            "WRITE_2",
+            "HALT",
+            "HALT"
+          ]
+        }
+      ],
+      "trace_hash": "d38cf5cd0967fb4869775b8dd3a5546315d5a1cd7c31881e10d8da5a74b3ba7b"
+    },
+    {
+      "accepted_result": {
+        "minimal_circuits": [
+          [
+            1
+          ]
+        ],
+        "minimum_depth": 1
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-GATE-398",
+        "SFT-COMP-CIRCUIT-392"
+      ],
+      "exhaustive_boundary": "all position-flip circuits through depth three on complete depth-two support",
+      "identifier": "FIN-04",
+      "initial": {
+        "maximum_circuit_depth": 3,
+        "support_depth": 2,
+        "target": "flip first label"
+      },
+      "negative_control": {
+        "name": "empty circuit implements target",
+        "reason": "branchwise source-to-output correspondence differs from the target permutation",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "4ac947898a79ff8c56f8fe45d2cdce851a82e61d9d561d54d3fb9a14731752ed",
+      "resources": {
+        "branches": 4,
+        "retained_information": 2,
+        "space": 2,
+        "time": 14
+      },
+      "title": "Small reversible circuit minimum",
+      "trace": [
+        {
+          "circuit": [
+            1
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            2
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            1,
+            1
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            1,
+            2
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            2,
+            1
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            2,
+            2
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            1,
+            1,
+            1
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            1,
+            1,
+            2
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            1,
+            2,
+            1
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            1,
+            2,
+            2
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            2,
+            1,
+            1
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            2,
+            1,
+            2
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            2,
+            2,
+            1
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            2,
+            2,
+            2
+          ],
+          "correct": false
+        }
+      ],
+      "trace_hash": "afb93fb4d846da08a24a93964bdde3ade06692173b4ecb877b8e0209be2fc76c"
+    },
+    {
+      "accepted_result": {
+        "minimal_circuits": [
+          [
+            "C12"
+          ]
+        ],
+        "minimum_depth": 1
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-CIRCUIT-398",
+        "SFT-Q-UNIVERSAL-398"
+      ],
+      "exhaustive_boundary": "all four-gate circuits of depths one and two on complete depth-two support",
+      "identifier": "FIN-05",
+      "initial": {
+        "support_depth": 2,
+        "target": "controlled 1-to-2 label action"
+      },
+      "negative_control": {
+        "name": "unrelated one-gate circuit",
+        "reason": "uncontrolled label action differs branch by branch",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "dd1085ac15e104c6ff5d9b6de173b336214e753788d3a9be9f4e37ffdcf4910d",
+      "resources": {
+        "branches": 4,
+        "retained_information": 2,
+        "space": 2,
+        "time": 20
+      },
+      "title": "Minimal quantum Fold circuit depth",
+      "trace": [
+        {
+          "circuit": [
+            "F1"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F2"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C12"
+          ],
+          "correct": true
+        },
+        {
+          "circuit": [
+            "C21"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F1",
+            "F1"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F1",
+            "F2"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F1",
+            "C12"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F1",
+            "C21"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F2",
+            "F1"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F2",
+            "F2"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F2",
+            "C12"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "F2",
+            "C21"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C12",
+            "F1"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C12",
+            "F2"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C12",
+            "C12"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C12",
+            "C21"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C21",
+            "F1"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C21",
+            "F2"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C21",
+            "C12"
+          ],
+          "correct": false
+        },
+        {
+          "circuit": [
+            "C21",
+            "C21"
+          ],
+          "correct": false
+        }
+      ],
+      "trace_hash": "0e68b0f176805050ac3ee94327d09ff092dfb0366d5421ff4b621a12e5c4aa5d"
+    },
+    {
+      "accepted_result": {
+        "descriptions": 30,
+        "self_fixed_descriptions": 0
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-INCOMPLETE-357"
+      ],
+      "exhaustive_boundary": "all generated descriptions at depths one through four",
+      "identifier": "FIN-06",
+      "initial": {
+        "depths": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "negative_control": {
+        "name": "claim a self-fixed terminal label",
+        "reason": "neither fibre label is fixed by Fold opposition",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "9c3269182ec90fb677c2c78110d63fd2b3b8383c16a845a7f40710bd0f649bef",
+      "resources": {
+        "branches": 30,
+        "retained_information": 4,
+        "space": 4,
+        "time": 30
+      },
+      "title": "Finite proof-search self-opposition census",
+      "trace": [
+        {
+          "description": [
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            1,
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            1,
+            2,
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            1,
+            2,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            1,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            1,
+            2
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            2,
+            1
+          ],
+          "self_opposed": false
+        },
+        {
+          "description": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "self_opposed": false
+        }
+      ],
+      "trace_hash": "77c41e5201efbaebd66fc650d76b22fdc0cac571bfbe31e4dbffd07f016ea005"
+    },
+    {
+      "accepted_result": {
+        "all_copied": true,
+        "minimum_transitions": 4
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-SELFAPP-348"
+      ],
+      "exhaustive_boundary": "all descriptions at depths one through three under the declared copy constructor",
+      "identifier": "FIN-07",
+      "initial": {
+        "description_depths": [
+          1,
+          2,
+          3
+        ]
+      },
+      "negative_control": {
+        "name": "copy with no write transitions",
+        "reason": "observation alone cannot extend the internal tape",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "6671b3d5997c4937bf0ca43b1231942d35154518568987da8d8abca5981617a8",
+      "resources": {
+        "branches": 14,
+        "retained_information": 3,
+        "space": 6,
+        "time": 116
+      },
+      "title": "Exact self-reproducing tape minima",
+      "trace": [
+        {
+          "copied": true,
+          "description": [
+            1
+          ],
+          "transitions": 4
+        },
+        {
+          "copied": true,
+          "description": [
+            2
+          ],
+          "transitions": 4
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            1
+          ],
+          "transitions": 7
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            2
+          ],
+          "transitions": 7
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            1
+          ],
+          "transitions": 7
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            2
+          ],
+          "transitions": 7
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            1,
+            1
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            1,
+            2
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            2,
+            1
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            1,
+            2,
+            2
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            1,
+            1
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            1,
+            2
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            2,
+            1
+          ],
+          "transitions": 10
+        },
+        {
+          "copied": true,
+          "description": [
+            2,
+            2,
+            2
+          ],
+          "transitions": 10
+        }
+      ],
+      "trace_hash": "5ef4a63999a98ecd9ca4a61b985e0fc1fa730e8c3d6bdb310488589614fff121"
+    },
+    {
+      "accepted_result": {
+        "all_recovered": true,
+        "cases": 162
+      },
+      "claim_class": "EXACT_FINITE_INVESTIGATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-MULTIFAULT-403"
+      ],
+      "exhaustive_boundary": "all masks of weights one through t, both labels, at t=1,2,3",
+      "identifier": "FIN-08",
+      "initial": {
+        "capacities": [
+          1,
+          2,
+          3
+        ]
+      },
+      "negative_control": {
+        "name": "promote to unlimited threshold",
+        "reason": "only t=1,2,3 are exhaustively executed here",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "99b61eb0b24492f569906b5f2be38233ea5d2a8441276579b85d201227f2b0ac",
+      "resources": {
+        "branches": 162,
+        "retained_information": 7,
+        "space": 7,
+        "time": 162
+      },
+      "title": "Fault-pattern and recovery census",
+      "trace": [
+        {
+          "all_recovered": true,
+          "cases": 6,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 1,
+          "forced_width": 3,
+          "mask_count_per_label": 3
+        },
+        {
+          "all_recovered": true,
+          "cases": 30,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 2,
+          "forced_width": 5,
+          "mask_count_per_label": 15
+        },
+        {
+          "all_recovered": true,
+          "cases": 126,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                6,
+                7
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 3,
+          "forced_width": 7,
+          "mask_count_per_label": 63
+        }
+      ],
+      "trace_hash": "6cb8ddf253ccd22e506e92640fda5a5fb26784a97be8af2401764911c6eb2626"
+    }
+  ],
+  "frontier_assessments": [],
+  "generated_utc": "2026-07-23T15:20:54.982839+00:00",
+  "laboratory": "Fold Computational Laboratory",
+  "main_corpus_closed_frontiers": [
+    {
+      "criteria": {
+        "alternatives_eliminated": true,
+        "candidate_space_generated": true,
+        "depth_independent_or_boundary_explicit": true,
+        "fold_definition_derived": true,
+        "independent_certificate_reproduces": true,
+        "unfavorable_controls_pass": true
+      },
+      "problem": "unrestricted native SFT Busy Beaver behavior",
+      "reason": "Step 404 proves BB_F(k)=k for every supplied positive finite Fold depth",
+      "status": "CLOSED_BY_MAIN_CORPUS"
+    },
+    {
+      "criteria": {
+        "alternatives_eliminated": true,
+        "candidate_space_generated": true,
+        "depth_independent_or_boundary_explicit": true,
+        "fold_definition_derived": true,
+        "independent_certificate_reproduces": true,
+        "unfavorable_controls_pass": true
+      },
+      "problem": "native Fold P-versus-NP equality",
+      "reason": "Step 405 proves P_F=NP_F inside the admitted Fold evaluator/proof grammar",
+      "status": "CLOSED_BY_MAIN_CORPUS"
+    },
+    {
+      "criteria": {
+        "alternatives_eliminated": true,
+        "candidate_space_generated": true,
+        "depth_independent_or_boundary_explicit": true,
+        "fold_definition_derived": true,
+        "independent_certificate_reproduces": true,
+        "unfavorable_controls_pass": true
+      },
+      "problem": "arbitrary native Fold circuit lower bounds",
+      "reason": "Step 406 proves exact depth, width, and edge-size lower bounds for every lawful Fold circuit",
+      "status": "CLOSED_BY_MAIN_CORPUS"
+    },
+    {
+      "criteria": {
+        "alternatives_eliminated": true,
+        "candidate_space_generated": true,
+        "depth_independent_or_boundary_explicit": true,
+        "fold_definition_derived": true,
+        "independent_certificate_reproduces": true,
+        "unfavorable_controls_pass": true
+      },
+      "problem": "unbounded finite-order Fold fault thresholds",
+      "reason": "Step 407 proves the unique minimum width 2t+1 for every supplied positive finite t",
+      "status": "CLOSED_BY_MAIN_CORPUS"
+    }
+  ],
+  "run_hash": "fa2cebf51ee6d7651b4f8f46e1533b1ffb91ef32862c845375fb6280f660c7fa",
+  "source_hashes": {
+    "run_lab.py": "0b3ec87dab5bf1b99deaa61c9b511a56bf1764469e7efa280488af1296cfed0c",
+    "sft_lab/__init__.py": "fabc4f46584b886678b176ed214c14ec0c04f392771cdeaec4d82c82f39cd708",
+    "sft_lab/autonomy.py": "fb8082d168aa9e2aec5172a977e8a51092fc44848b07b00ccc9219a9e41e5286",
+    "sft_lab/cli.py": "ef3542d50a36baefa8b12b750aaf55b061c4b15fb3c5c691dafaed8582d9c5fb",
+    "sft_lab/constitution.py": "cd7c35497e27d42cd415afa307853e024ac244fe247bb602adc447b7e680fe7c",
+    "sft_lab/demonstrations.py": "84ccdcd2bb73fbad4f0cf6a335daf08cb50280765c74e615e54a6db0372667be",
+    "sft_lab/finite.py": "4912eb01b3f985370ad1f846bd9ee385df98efe2cbf45c62d12bd6c5031651bd",
+    "sft_lab/frontier.py": "2a817c9a03d4c31d8eb35016b44c5a8a4fef4e2bab9252f2bcbcfd6e5cb1f036",
+    "sft_lab/proof.py": "26cfc7b57a74884da5fec9ac14481411e9e17ca8cee244f3d4c71676e5931594",
+    "sft_lab/quantum.py": "e85c1a97f517f3cb517dd5c94ce9c84bd6a2cb096e39803ded94a6338ec77f1d",
+    "sft_lab/receipt.py": "548fd7cbb28276c0848bec74d46fbb94c3a968d40cfcc51b40736e16529de143",
+    "sft_lab/records.py": "6485e41af991ce04c1efc44c927a320d3a95a31540635cdf698d1b043ee0337e",
+    "sft_lab/tape.py": "ecdbd4087d0322248c238ceba45176c62b0c24221b3d88ab77b70699fe076f4b",
+    "tests/test_lab.py": "ea49c0fc0252d7c45a509965f12fcfbc42f097d545d4cbc6ae5a5fddfe65d06f",
+    "verify/fold_lab_certificate.c": "e3264c94ebb9c69a4bfa8910c0874983bf3536332bb0bf02da90099f325e12fa",
+    "verify/run_all.sh": "a5b5d1bc5a19150a1cca3f0900fb7028dee4a33ef85694c4a79436c8d9901287"
+  },
+  "summary": {
+    "accepted_negative_controls": 20,
+    "finite_investigations": 8,
+    "frontier_claims_promoted": 0,
+    "frontier_items": 0,
+    "main_corpus_closed_frontiers": 4,
+    "theorem_demonstrations": 12
+  },
+  "theorem_demonstrations": [
+    {
+      "accepted_result": {
+        "accepted": true,
+        "statement": "no total internal two-label decider survives exact self-negation"
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-UNIV-350",
+        "SFT-COMP-HALT-352",
+        "SFT-OBSERVATION-326",
+        "SFT-COMP-REDUCE-354"
+      ],
+      "exhaustive_boundary": "all two forced decision labels",
+      "identifier": "THM-01",
+      "initial": {
+        "candidate_outputs": [
+          1,
+          2
+        ],
+        "self_application": true
+      },
+      "negative_control": {
+        "name": "claim a fixed label",
+        "reason": "both generated labels are reversed",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "655391f9e9cc16fb9657e035efc5d74ae4864d5feb6d44b1a40d47fa0c20e344",
+      "resources": {
+        "branches": 2,
+        "retained_information": 1,
+        "space": 1,
+        "time": 2
+      },
+      "title": "Turing self-negating halting boundary",
+      "trace": [
+        {
+          "diagonal_label": 2,
+          "fixed": false,
+          "predicted_label": 1
+        },
+        {
+          "diagonal_label": 1,
+          "fixed": false,
+          "predicted_label": 2
+        }
+      ],
+      "trace_hash": "1c661729fdbe93f82d8dc4c84fd5e0176e4b3d372b57007ad8fbcaea3ac46106"
+    },
+    {
+      "accepted_result": {
+        "finite_prefix_decided": 9,
+        "total_self_reference_rejected": true
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-UNIV-350",
+        "SFT-COMP-HALT-352",
+        "SFT-OBSERVATION-326",
+        "SFT-COMP-DECIDE-351"
+      ],
+      "exhaustive_boundary": "all 3^2 programs in the declared length-two grammar",
+      "identifier": "THM-02",
+      "initial": {
+        "grammar": [
+          "WRITE_1",
+          "WRITE_2",
+          "HALT"
+        ],
+        "length": 2
+      },
+      "negative_control": {
+        "name": "extend finite census to a total decider",
+        "reason": "the generated diagonal lies outside total consistent classification",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "23bdd82b1fc47d831dcd06bbecc5c2eae80e257639c9027483d0fcbfd1564edc",
+      "resources": {
+        "branches": 9,
+        "retained_information": 1,
+        "space": 1,
+        "time": 16
+      },
+      "title": "Entscheidungs generated-prefix boundary",
+      "trace": [
+        {
+          "classified_halted": false,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_1",
+            "WRITE_1"
+          ]
+        },
+        {
+          "classified_halted": false,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_1",
+            "WRITE_2"
+          ]
+        },
+        {
+          "classified_halted": true,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_1",
+            "HALT"
+          ]
+        },
+        {
+          "classified_halted": false,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_2",
+            "WRITE_1"
+          ]
+        },
+        {
+          "classified_halted": false,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_2",
+            "WRITE_2"
+          ]
+        },
+        {
+          "classified_halted": true,
+          "inspected_steps": 2,
+          "program": [
+            "WRITE_2",
+            "HALT"
+          ]
+        },
+        {
+          "classified_halted": false,
+          "inspected_steps": 1,
+          "program": [
+            "HALT",
+            "WRITE_1"
+          ]
+        },
+        {
+          "classified_halted": false,
+          "inspected_steps": 1,
+          "program": [
+            "HALT",
+            "WRITE_2"
+          ]
+        },
+        {
+          "classified_halted": true,
+          "inspected_steps": 2,
+          "program": [
+            "HALT",
+            "HALT"
+          ]
+        }
+      ],
+      "trace_hash": "346ee8bafa29c720cd78b97d89553abd6119861b838a1bc816f0e70baa1f7a75"
+    },
+    {
+      "accepted_result": {
+        "accepted": true,
+        "statement": "a closed verifier cannot retain the distinction required to certify its own opposed description"
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-INCOMPLETE-357",
+        "SFT-COMP-RECURSE-348"
+      ],
+      "exhaustive_boundary": "all depth-two descriptions and both terminal verifier labels",
+      "identifier": "THM-03",
+      "initial": {
+        "description_depth": 2,
+        "descriptions": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      "negative_control": {
+        "name": "self-certificate equals its opposed label",
+        "reason": "Fold opposition has no fixed fibre label",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "6d26503a5c9ad6d5dfc90aff679a2feab8a85eb8575859f5cb2216e3ede10af6",
+      "resources": {
+        "branches": 4,
+        "retained_information": 2,
+        "space": 2,
+        "time": 4
+      },
+      "title": "Fold self-verification incompleteness boundary",
+      "trace": [
+        {
+          "description": [
+            1,
+            1
+          ],
+          "opposed": 2,
+          "verifier_label": 1
+        },
+        {
+          "description": [
+            1,
+            2
+          ],
+          "opposed": 1,
+          "verifier_label": 2
+        },
+        {
+          "description": [
+            2,
+            1
+          ],
+          "opposed": 2,
+          "verifier_label": 1
+        },
+        {
+          "description": [
+            2,
+            2
+          ],
+          "opposed": 1,
+          "verifier_label": 2
+        }
+      ],
+      "trace_hash": "548117bf342dde6a0eaf30338b88aeaaf7d4166efcb191f67d62dc61b06bd8be"
+    },
+    {
+      "accepted_result": {
+        "accepted": true,
+        "common_output": [
+          2,
+          2,
+          1
+        ],
+        "models": 5
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-EQUIV-349",
+        "SFT-SEM-COMPILE-379",
+        "SFT-Q-GATE-398"
+      ],
+      "exhaustive_boundary": "the declared process executed in five registered Fold models",
+      "identifier": "THM-04",
+      "initial": {
+        "operation": "replace first held label",
+        "source_word": [
+          1,
+          2,
+          1
+        ]
+      },
+      "negative_control": {
+        "name": "altered circuit output",
+        "reason": "altered output fails common-result equality",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "612ff308c53091dd4e0dbc16a3d8118b3e51be534f25e0c647ae2833ac1da4bc",
+      "resources": {
+        "branches": 5,
+        "retained_information": 3,
+        "space": 3,
+        "time": 7
+      },
+      "title": "Computational-model correspondence",
+      "trace": [
+        {
+          "action": "WRITE_2",
+          "after": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              2,
+              2,
+              1
+            ],
+            "retained_distinctions": 3,
+            "state_space": 8,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              1,
+              2,
+              1
+            ],
+            "retained_distinctions": 3,
+            "state_space": 8,
+            "transition_count": 0
+          },
+          "certificate_hash": "d0c89d30f04dc0d2d3f382758306408f8f3d52ffff018452d88c30995ecd1e1f",
+          "closed_distinctions": 0,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 3,
+          "state_space": 8,
+          "time_cost": 1
+        },
+        {
+          "action": "READ",
+          "after": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              2,
+              2,
+              1
+            ],
+            "retained_distinctions": 3,
+            "state_space": 8,
+            "transition_count": 2
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              2,
+              2,
+              1
+            ],
+            "retained_distinctions": 3,
+            "state_space": 8,
+            "transition_count": 1
+          },
+          "certificate_hash": "e5e2866d16abeba625ba139e45ca9c5b64ea3531fee627a7a3e36a1bf68cfc70",
+          "closed_distinctions": 0,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 3,
+          "state_space": 8,
+          "time_cost": 1
+        },
+        {
+          "model": "tape",
+          "output": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "model": "rewriting",
+          "output": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "model": "lambda_like_binding",
+          "output": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "model": "abstract_machine",
+          "output": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "model": "circuit",
+          "output": [
+            2,
+            2,
+            1
+          ]
+        }
+      ],
+      "trace_hash": "b473f7c8cc097650b90ac04c40ff469df32f34352008035cf69b4329594d061a"
+    },
+    {
+      "accepted_result": {
+        "capacity_at_depth": 8,
+        "input_support": 8,
+        "lost_label_per_output": 1,
+        "output_support": 4
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-INFO-382",
+        "SFT-INFO-COMPRESS-383",
+        "SFT-INFO-CHANNEL-384"
+      ],
+      "exhaustive_boundary": "complete depth-three support under prefix channel",
+      "identifier": "THM-05",
+      "initial": {
+        "input_depth": 3,
+        "support": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            2,
+            2,
+            1
+          ],
+          [
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      "negative_control": {
+        "name": "lossless depth-three to depth-two code",
+        "reason": "each output has two exact predecessors",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "8d09af31b51685a01aabe58f83d0ecb0ceb64a2deaad871e98a0fd18aa3bc634",
+      "resources": {
+        "branches": 8,
+        "retained_information": 2,
+        "space": 3,
+        "time": 8
+      },
+      "title": "Exact information, channel, and compression law",
+      "trace": [
+        {
+          "output": [
+            1,
+            1
+          ],
+          "predecessors": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "output": [
+            1,
+            2
+          ],
+          "predecessors": [
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              2
+            ]
+          ]
+        },
+        {
+          "output": [
+            2,
+            1
+          ],
+          "predecessors": [
+            [
+              2,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              2
+            ]
+          ]
+        },
+        {
+          "output": [
+            2,
+            2
+          ],
+          "predecessors": [
+            [
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        }
+      ],
+      "trace_hash": "4b1c7d773e9e998fe020e30a9e1d1c63f2cf478ebfe78573dd653b1a0ccb0827"
+    },
+    {
+      "accepted_result": {
+        "required_record_labels": 1,
+        "restored": true
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-REVCOST-362",
+        "SFT-Q-REVERSIBLE-397"
+      ],
+      "exhaustive_boundary": "one arbitrary Fold observation step; law is transition-local",
+      "identifier": "THM-06",
+      "initial": {
+        "blank": false,
+        "closed_distinctions": 0,
+        "head_position": 1,
+        "held": [],
+        "process_state": "ACTIVE",
+        "residual": [
+          1,
+          2
+        ],
+        "retained_distinctions": 2,
+        "state_space": 4,
+        "transition_count": 0
+      },
+      "negative_control": {
+        "name": "delete held reverse record",
+        "reason": "kernel refuses reversal without the exact predecessor label",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "178b688634e6b14a9531278451854bd0a219c43449a317f31780a7c10d6c0848",
+      "resources": {
+        "branches": 1,
+        "retained_information": 1,
+        "space": 2,
+        "time": 2
+      },
+      "title": "Landauer-Bennett exact reversal cost",
+      "trace": [
+        {
+          "action": "ADVANCE",
+          "after": {
+            "blank": false,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              1
+            ],
+            "process_state": "ACTIVE",
+            "residual": [
+              2
+            ],
+            "retained_distinctions": 1,
+            "state_space": 4,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              1,
+              2
+            ],
+            "retained_distinctions": 2,
+            "state_space": 4,
+            "transition_count": 0
+          },
+          "certificate_hash": "fd3a136ec19b37f4b92375220ac748c62add92860384f340af40e6429d3f3013",
+          "closed_distinctions": 1,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 1,
+          "state_space": 4,
+          "time_cost": 1
+        },
+        {
+          "action": "REVERSE",
+          "after": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              1,
+              2
+            ],
+            "retained_distinctions": 2,
+            "state_space": 4,
+            "transition_count": 2
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              1
+            ],
+            "process_state": "ACTIVE",
+            "residual": [
+              2
+            ],
+            "retained_distinctions": 1,
+            "state_space": 4,
+            "transition_count": 1
+          },
+          "certificate_hash": "8dd8badce492d0c0c40c6cf0d8a5a1b0d1660034a9ec2f405c0765b59da35c7a",
+          "closed_distinctions": 0,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 2,
+          "state_space": 4,
+          "time_cost": 1
+        }
+      ],
+      "trace_hash": "08e14068978524b392f5b895af35f906558c09fa34cb622dcf0a6f91c9f789f9"
+    },
+    {
+      "accepted_result": {
+        "closed": 3,
+        "reconstructed": true,
+        "retained": 1
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-MEASURE-397",
+        "SFT-Q-CORRESPOND-400"
+      ],
+      "exhaustive_boundary": "all four depth-two branches with declared observation rank three",
+      "identifier": "THM-07",
+      "initial": {
+        "support": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      "negative_control": {
+        "name": "erase measurement record",
+        "reason": "erasure would remove the exact reconstruction witness",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "7e64b4272fbf20797d4f6ad240a6da84f9c00238f020269deaea6c5fa3d88cf3",
+      "resources": {
+        "branches": 4,
+        "retained_information": 4,
+        "space": 2,
+        "time": 1
+      },
+      "title": "Observation and measurement record semantics",
+      "trace": [
+        {
+          "observation_rank": 3,
+          "observed": [
+            2,
+            1
+          ],
+          "recorded_support": 4
+        }
+      ],
+      "trace_hash": "391546a9ca4912bcb089b3839730a58d7b960903458e8abfa2ce17fcf50b43f1"
+    },
+    {
+      "accepted_result": {
+        "composition_complete": true,
+        "joint_support": 4,
+        "opposed_pair_closed": true
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-INTERFERENCE-397",
+        "SFT-Q-ENTANGLE-397",
+        "SFT-Q-GATE-398"
+      ],
+      "exhaustive_boundary": "all depth-one predecessors and their complete joint product",
+      "identifier": "THM-08",
+      "initial": {
+        "phases": [
+          1,
+          2
+        ],
+        "predecessors": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ]
+      },
+      "negative_control": {
+        "name": "treat joint support as independent single branch",
+        "reason": "complete pair composition has four generated joint words",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "017b66bcb01160e1bb6ab48107bf9be303afcc519f06e3ffe16564cce167d7dd",
+      "resources": {
+        "branches": 4,
+        "retained_information": 2,
+        "space": 2,
+        "time": 2
+      },
+      "title": "Fold interference and entangling composition",
+      "trace": [
+        {
+          "merged_image": [
+            1
+          ],
+          "retained_after_opposed_pair": []
+        },
+        {
+          "joint_words": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        }
+      ],
+      "trace_hash": "a9506ea24b94d31a6b706b46c9464382b5a461de8beffcb1a539b53a922b2ae7"
+    },
+    {
+      "accepted_result": {
+        "accepted": true,
+        "forced_widths": [
+          3,
+          5,
+          7
+        ]
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-Q-FAULT-399",
+        "SFT-Q-MULTIFAULT-403"
+      ],
+      "exhaustive_boundary": "every nonempty error mask of size at most t for t=1,2,3 and both labels",
+      "identifier": "THM-09",
+      "initial": {
+        "fault_capacities": [
+          1,
+          2,
+          3
+        ]
+      },
+      "negative_control": {
+        "name": "width 2t",
+        "reason": "even width lacks a forced strict retained multiplicity at t faults",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "8b63f06bc90b8129219d6777fd9f7a8809e0e32e2bf3e6f5186e2d23d393ca96",
+      "resources": {
+        "branches": 162,
+        "retained_information": 7,
+        "space": 7,
+        "time": 162
+      },
+      "title": "Forced multi-error repetition correction",
+      "trace": [
+        {
+          "all_recovered": true,
+          "cases": 6,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 1,
+          "forced_width": 3,
+          "mask_count_per_label": 3
+        },
+        {
+          "all_recovered": true,
+          "cases": 30,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 2,
+          "forced_width": 5,
+          "mask_count_per_label": 15
+        },
+        {
+          "all_recovered": true,
+          "cases": 126,
+          "checks": [
+            [
+              1,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                1,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                2,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                3,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                4,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              1,
+              [
+                5,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                3
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                2,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                1,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                4
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                3,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                2,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                5
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                4,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                3,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5,
+                6
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                5,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                4,
+                6,
+                7
+              ],
+              true
+            ],
+            [
+              2,
+              [
+                5,
+                6,
+                7
+              ],
+              true
+            ]
+          ],
+          "fault_capacity": 3,
+          "forced_width": 7,
+          "mask_count_per_label": 63
+        }
+      ],
+      "trace_hash": "6cb8ddf253ccd22e506e92640fda5a5fb26784a97be8af2401764911c6eb2626"
+    },
+    {
+      "accepted_result": {
+        "predecessors_identifiable_with_records": true,
+        "terminal_agreement": true
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-DIST-CONSENSUS-393",
+        "SFT-DIST-IMPOSSIBILITY-393"
+      ],
+      "exhaustive_boundary": "both forced one-label predecessor histories",
+      "identifier": "THM-10",
+      "initial": {
+        "processes": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ]
+      },
+      "negative_control": {
+        "name": "identify predecessor after deleting records",
+        "reason": "both histories have the same unrecorded terminal One",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "97bd6b92980388dbe59a7807ec3b61f701dd7d87d156cf1d7849f65a7582d22c",
+      "resources": {
+        "branches": 2,
+        "retained_information": 2,
+        "space": 1,
+        "time": 2
+      },
+      "title": "Terminal agreement and predecessor impossibility",
+      "trace": [
+        {
+          "action": "ADVANCE",
+          "after": {
+            "blank": true,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              1
+            ],
+            "process_state": "ONE",
+            "residual": [],
+            "retained_distinctions": 0,
+            "state_space": 2,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              1
+            ],
+            "retained_distinctions": 1,
+            "state_space": 2,
+            "transition_count": 0
+          },
+          "certificate_hash": "2eb0aa0105194c87e3a646a938b987328445d9640b61481e8ff33abdda31de0e",
+          "closed_distinctions": 1,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 0,
+          "state_space": 2,
+          "time_cost": 1
+        },
+        {
+          "action": "ADVANCE",
+          "after": {
+            "blank": true,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              2
+            ],
+            "process_state": "ONE",
+            "residual": [],
+            "retained_distinctions": 0,
+            "state_space": 2,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              2
+            ],
+            "retained_distinctions": 1,
+            "state_space": 2,
+            "transition_count": 0
+          },
+          "certificate_hash": "6fd7b048e8e17b4134fb90a902fb926613577cc2ec75663d4bc489faf4f4d5b8",
+          "closed_distinctions": 1,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 0,
+          "state_space": 2,
+          "time_cost": 1
+        }
+      ],
+      "trace_hash": "dd5c2aca7428e08b590e0484ace8ca5111cb4fd915188daed2f148beb7cb7962"
+    },
+    {
+      "accepted_result": {
+        "constructed_word": [
+          1,
+          2,
+          2,
+          1,
+          1,
+          2,
+          2,
+          1
+        ],
+        "exact_internal_copy": true,
+        "external_replication": false,
+        "kernel_verified": true
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-COMP-SELFAPP-348",
+        "SFT-COMP-UNIV-350"
+      ],
+      "exhaustive_boundary": "one declared four-label constructor and its bounded internal duplicate",
+      "identifier": "THM-11",
+      "initial": {
+        "constructor_description": [
+          1,
+          2,
+          2,
+          1
+        ],
+        "declared_internal_tape": [
+          1,
+          2,
+          2,
+          1
+        ]
+      },
+      "negative_control": {
+        "name": "mutated second description",
+        "reason": "the altered internal word is not an exact copy",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "d20e7593653dfa1fcd69263e1dbe4c17913da9a3db28dfa85533d6cbaad7d7d6",
+      "resources": {
+        "branches": 1,
+        "retained_information": 4,
+        "space": 8,
+        "time": 13
+      },
+      "title": "Restrained von Neumann internal self-reproduction",
+      "trace": [
+        {
+          "certificate": "e293a0c1e6ac4a924e458cd747ec5eda1e5f49ca3bd61b6d527948261d847ef9",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "706c33eeca0b3517659489646013d5583b3adb45836ae5f1ba0989e60053949c",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "394d6abe1ba73b3da349f9d84ee3802d9bce389dbe86584802ba91f0bd7a85b5",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "e853594b2dc8a94ead29bf8f48f62d8468c856e4a372a1531416133c9e23b4f8",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "4d597a86e7c5c09ff08a33382b192864c729f8c77704452009e50ef85cbd25ee",
+          "decision": "WRITE_1"
+        },
+        {
+          "certificate": "277b8db73622217e0c70c9268a20774254a262265b6e3351f7735e09e5a8871b",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "4bf508756acd100c631e54f152d9cbe76ad714cb3e9136bff31745b45b1228e3",
+          "decision": "WRITE_2"
+        },
+        {
+          "certificate": "199ae1eec20e570ea88ac408de1cb42680fc57638b36d5b976a39abced73c523",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "2f0a4d10911e9cffda8dc5ac6f34f6d61366c815c49c5a6740a6c9cb9c9e0ba5",
+          "decision": "WRITE_2"
+        },
+        {
+          "certificate": "207a6d45019cb9d8c136d025ad6b04ede71c08aa5ce871bdfde470bf2c623af5",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "ed9db069f264f7b6de8b0fea17895bd50d9f4abbfb01560ba7725ed8ac6990f6",
+          "decision": "WRITE_1"
+        },
+        {
+          "certificate": "98d817b613950aef9d7eabb988bd6c63ddcf64c4fdb27917c69f4817c2f07d3b",
+          "decision": "ADVANCE"
+        },
+        {
+          "certificate": "666c1c90485b2adcb83f39e38273369b2ae9b9c78a23cdfa41ac58b1462e9090",
+          "decision": "HALT"
+        }
+      ],
+      "trace_hash": "19be69784573756cc011f904f2554d60bece8d74626043ec94df2e64f1f21c12"
+    },
+    {
+      "accepted_result": {
+        "reverse_records_distinguish": true,
+        "same_visible_terminal": true,
+        "unaccounted_gain": false
+      },
+      "claim_class": "CLOSED_THEOREM_DEMONSTRATION",
+      "dependencies": [
+        "ONE",
+        "SFT-INFO-CONSERVATION-382",
+        "SFT-COMP-REVCOST-362"
+      ],
+      "exhaustive_boundary": "both forced one-label histories through complete observation",
+      "identifier": "THM-12",
+      "initial": {
+        "hidden_inputs": [
+          1,
+          2
+        ]
+      },
+      "negative_control": {
+        "name": "reverse both histories without records",
+        "reason": "the visible terminal cannot select either exact predecessor",
+        "rejected": true,
+        "tampered_or_false": true
+      },
+      "record_hash": "b60894b40c581bc8bcd4b08f3af755372ba9c23b36e4f3a3d65f799d85746f73",
+      "resources": {
+        "branches": 2,
+        "retained_information": 2,
+        "space": 1,
+        "time": 2
+      },
+      "title": "Maxwell-style exact information accounting",
+      "trace": [
+        {
+          "action": "ADVANCE",
+          "after": {
+            "blank": true,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              1
+            ],
+            "process_state": "ONE",
+            "residual": [],
+            "retained_distinctions": 0,
+            "state_space": 2,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              1
+            ],
+            "retained_distinctions": 1,
+            "state_space": 2,
+            "transition_count": 0
+          },
+          "certificate_hash": "2eb0aa0105194c87e3a646a938b987328445d9640b61481e8ff33abdda31de0e",
+          "closed_distinctions": 1,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 0,
+          "state_space": 2,
+          "time_cost": 1
+        },
+        {
+          "action": "ADVANCE",
+          "after": {
+            "blank": true,
+            "closed_distinctions": 1,
+            "head_position": 2,
+            "held": [
+              2
+            ],
+            "process_state": "ONE",
+            "residual": [],
+            "retained_distinctions": 0,
+            "state_space": 2,
+            "transition_count": 1
+          },
+          "before": {
+            "blank": false,
+            "closed_distinctions": 0,
+            "head_position": 1,
+            "held": [],
+            "process_state": "ACTIVE",
+            "residual": [
+              2
+            ],
+            "retained_distinctions": 1,
+            "state_space": 2,
+            "transition_count": 0
+          },
+          "certificate_hash": "6fd7b048e8e17b4134fb90a902fb926613577cc2ec75663d4bc489faf4f4d5b8",
+          "closed_distinctions": 1,
+          "kernel_fingerprint": "72be467c39b7bb8c72ff9dfe31b21bbb30b43002c29152d21a5785ea79e9ec68",
+          "retained_distinctions": 0,
+          "state_space": 2,
+          "time_cost": 1
+        }
+      ],
+      "trace_hash": "dd5c2aca7428e08b590e0484ace8ca5111cb4fd915188daed2f148beb7cb7962"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+import "../constants/quantum_multi_error_fault_tolerance.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold multi-error quantum fault tolerance ==="
+    set ok to expect_number("one error forces repetition three" and fold_minimum_repetition_for_errors(1) and 3)
+    set ok to expect_number("two errors force repetition five" and fold_minimum_repetition_for_errors(2) and 5)
+    set ok to expect_number("three errors force repetition seven" and fold_minimum_repetition_for_errors(3) and 7)
+    set ok to expect_true("the one-error width is minimal" and fold_multi_error_width_is_minimal(1))
+    set ok to expect_true("the two-error width is minimal" and fold_multi_error_width_is_minimal(2))
+    set ok to expect_true("the three-error width is minimal" and fold_multi_error_width_is_minimal(3))
+    set ok to expect_true("a two-error protected word round-trips" and fold_multi_error_code_round_trip(73 and 7 and 2))
+    set ok to expect_number("two-error depth-seven redundancy is 28" and fold_multi_error_redundancy(7 and 2) and 28)
+    set ok to expect_true("the three-fault circuit preserves exact semantics" and fold_higher_fault_quantum_circuit_holds(73 and 7 and 3 and 3))
+    set ok to expect_true("the complete multi-error census holds" and complete_fold_multi_error_fault_census())
+    set ok to expect_true("an even-width two-error code is rejected" and even_width_multi_error_code_is_rejected(2))
+    set ok to expect_true("a shortened three-error code is rejected" and shortened_multi_error_code_is_rejected(3))
+    set ok to expect_true("fault orders beyond the registered model reject" and unregistered_fault_order_is_rejected(4))
+    set ok to expect_true("collapsed redundancy is rejected" and collapsed_multi_error_redundancy_is_rejected(7 and 2))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,31 @@
+# Machine-check Fold type theory.
+import "../constants/semantics_type_theory.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold type theory ==="
+    set ok to expect_number("a depth-seven term has type seven" and fold_term_type(enumerate_fold_word(73 and 7)) and 7)
+    set ok to expect_number("three steps produce type four" and fold_evaluation_result_type(enumerate_fold_word(73 and 7) and 3) and 4)
+    set ok to expect_true("evaluation preserves the depth-indexed type" and fold_type_preservation_holds(73 and 7 and 3))
+    set ok to expect_true("type zero is the unique empty One form" and fold_terminal_type_is_unique())
+    set ok to expect_true("the complete type census holds" and complete_fold_type_theory_census())
+    set ok to expect_true("a wrong type is rejected" and wrong_fold_type_is_rejected(73 and 7))
+    set ok to expect_true("an outside term is untyped" and outside_fold_term_is_untyped(7))
+    display "=== done ==="
+    return 0

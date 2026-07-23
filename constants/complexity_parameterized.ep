@@ -1,0 +1,84 @@
+# ============================================================================
+#  FOLD PARAMETERIZED COMPLEXITY -- exact factorization by retained depth.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A parameter must be forced by the Fold structure, not selected from an outside
+#  problem encoding.  The retained distinction depth p is already exact after
+#  observing k-p levels, so it is the intrinsic Fold parameter.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  At total depth k and parameter p, active state resource is b^p, residual
+#  history multiplicity is b^(k-p), and their product is b^k.  Closing the active
+#  state requires p rounds.  Increasing p by one multiplies the active state
+#  resource by exactly b while dividing residual ambiguity by b.  Every p in
+#  0..k is exhausted; values outside that interval reject.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_approximation.ep"
+
+
+define fold_parameter_is_admitted with parameter as Int and depth as Int returning Bool:
+    if parameter < 0:
+        return false
+    return parameter <= depth
+
+
+define fold_parameter_active_states with parameter as Int returning Int:
+    return computation_state_count(parameter)
+
+
+define fold_parameter_residual_histories with depth as Int and parameter as Int returning Int:
+    return whole_power(binary_count() and depth - parameter)
+
+
+define fold_parameter_accounting with depth as Int and parameter as Int returning Int:
+    set product to fold_parameter_active_states(parameter) * fold_parameter_residual_histories(depth and parameter)
+    return forced_to_be("Fold parameter: active states times residual histories = full space" and product and computation_state_count(depth))
+
+
+define fold_parameter_time with parameter as Int returning Int:
+    if parameter < 1:
+        return 0
+    return fold_time_upper_bound(parameter)
+
+
+define adjacent_fold_parameters_scale_by_binary with depth as Int and parameter as Int returning Bool:
+    if parameter >= depth:
+        return true
+    set active to fold_parameter_active_states(parameter)
+    set next_active to fold_parameter_active_states(parameter + 1)
+    set residual to fold_parameter_residual_histories(depth and parameter)
+    set next_residual to fold_parameter_residual_histories(depth and parameter + 1)
+    if next_active != binary_count() * active:
+        return false
+    return residual == binary_count() * next_residual
+
+
+define complete_fold_parameterized_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set parameter to 0
+        repeat while parameter < depth + 1:
+            if fold_parameter_accounting(depth and parameter) != computation_state_count(depth):
+                return false
+            if fold_parameter_time(parameter) != parameter:
+                return false
+            if adjacent_fold_parameters_scale_by_binary(depth and parameter) == false:
+                return false
+            set parameter to parameter + 1
+        set depth to depth + 1
+    return true
+
+
+define outside_fold_parameter_is_rejected with depth as Int returning Bool:
+    if fold_parameter_is_admitted(0 - 1 and depth):
+        return false
+    return fold_parameter_is_admitted(depth + 1 and depth) == false
+
+
+define nonbinary_parameter_scaling_is_rejected with parameter as Int returning Bool:
+    set lawful to fold_parameter_active_states(parameter + 1)
+    set perturbed to (binary_count() + 1) * fold_parameter_active_states(parameter)
+    return lawful != perturbed

@@ -1,0 +1,103 @@
+# ============================================================================
+#  FOLD OPTIMIZATION -- exhaustive feasible states and exact closure objective.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Optimization requires both an admitted candidate set and an exact objective.
+#  Here the candidate set is the complete depth-k Fold grid and the objective is
+#  its already-derived counted work to the unique terminal.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Exhaustive enumeration selects the minimum and maximum closure work without a
+#  fitted score or heuristic.  The One uniquely supplies minimum zero.  Maximum
+#  work is k and is attained by exactly b^(k-1) states, the states whose first
+#  terminal arrival occurs at depth k.  Omitting the terminal changes the minimum;
+#  shortening the maximum is rejected.  No external optimizer enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_dynamic_programming.ep"
+
+
+define fold_optimization_closure_work with rank as Int and depth as Int returning Int:
+    set current_rank to rank
+    set current_depth to depth
+    set work to 0
+    repeat while current_rank != computation_state_count(current_depth):
+        set current_rank to lower_grid_index(current_rank and current_depth)
+        set current_depth to current_depth - 1
+        set work to work + 1
+    return work
+
+
+define fold_optimization_minimum_work with depth as Int returning Int:
+    set best to depth
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set work to fold_optimization_closure_work(rank and depth)
+        if work < best:
+            set best to work
+        set rank to rank + 1
+    return best
+
+
+define fold_optimization_maximum_work with depth as Int returning Int:
+    set best to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set work to fold_optimization_closure_work(rank and depth)
+        if work > best:
+            set best to work
+        set rank to rank + 1
+    return best
+
+
+define fold_optimization_minimizer_rank with depth as Int returning Int:
+    set minimum to fold_optimization_minimum_work(depth)
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_optimization_closure_work(rank and depth) == minimum:
+            return rank
+        set rank to rank + 1
+    return 0
+
+
+define fold_optimization_maximizer_count with depth as Int returning Int:
+    set maximum to fold_optimization_maximum_work(depth)
+    set count to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_optimization_closure_work(rank and depth) == maximum:
+            set count to count + 1
+        set rank to rank + 1
+    return forced_to_be("Fold optimization: maximum-depth sources = deepest binary half" and count and computation_state_count(depth - 1))
+
+
+define complete_fold_optimization_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_optimization_minimum_work(depth) != 0:
+            return false
+        if fold_optimization_minimizer_rank(depth) != computation_state_count(depth):
+            return false
+        if fold_optimization_maximum_work(depth) != depth:
+            return false
+        if fold_optimization_maximizer_count(depth) != computation_state_count(depth - 1):
+            return false
+        set depth to depth + 1
+    return true
+
+
+define omitted_terminal_changes_minimum with depth as Int returning Bool:
+    set best_without_terminal to depth
+    set rank to 1
+    repeat while rank < computation_state_count(depth):
+        set work to fold_optimization_closure_work(rank and depth)
+        if work < best_without_terminal:
+            set best_without_terminal to work
+        set rank to rank + 1
+    return best_without_terminal > fold_optimization_minimum_work(depth)
+
+
+define shortened_optimum_is_rejected with depth as Int returning Bool:
+    return fold_optimization_maximum_work(depth) != depth - 1

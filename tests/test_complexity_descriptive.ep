@@ -1,0 +1,32 @@
+# Machine-check Fold descriptive complexity.
+import "../constants/complexity_descriptive.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold descriptive complexity ==="
+    set ok to expect_number("length seven has capacity 128" and fold_description_capacity(7) and 128)
+    set ok to expect_number("the minimal depth-seven description length is seven" and fold_minimal_description_length(7) and 7)
+    set ok to expect_true("every state has an exact minimal description" and every_fold_state_has_minimal_description(7))
+    set ok to expect_true("a length-six description space is insufficient" and shorter_fold_description_is_insufficient(7))
+    set ok to expect_number("three closed distinctions need three conditional labels" and conditional_fold_description_length(3) and 3)
+    set ok to expect_true("the complete descriptive census holds" and complete_fold_descriptive_census())
+    set ok to expect_true("a redundant longer description is not minimal" and redundant_longer_description_is_not_minimal(7))
+    set ok to expect_true("an outside description symbol is rejected" and outside_description_symbol_is_rejected(7))
+    display "=== done ==="
+    return 0

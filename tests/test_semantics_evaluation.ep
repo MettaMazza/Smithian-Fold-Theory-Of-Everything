@@ -1,0 +1,33 @@
+# Machine-check Fold evaluation.
+import "../constants/semantics_evaluation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_fraction with label as Str and got as Fraction and want as Fraction:
+    return expect_equal(label and fraction_to_text(got) and fraction_to_text(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold evaluation ==="
+    set ok to expect_number("three-step evaluation returns rank nine" and fold_evaluate_program_rank(enumerate_fold_word(73 and 7) and 3) and 9)
+    set ok to expect_fraction("the evaluated value is 9/16" and fold_evaluate_program_value(enumerate_fold_word(73 and 7) and 3) and fraction_from_ratio(9 and 16))
+    set ok to expect_true("evaluation equals universal execution" and fold_program_evaluation_is_exact(73 and 7 and 3))
+    set ok to expect_true("the complete evaluation census holds" and complete_fold_program_evaluation_census())
+    set ok to expect_true("overlong evaluation is rejected" and overlong_evaluation_is_rejected(7))
+    set ok to expect_true("a changed result is rejected" and changed_evaluation_result_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,40 @@
+import "../constants/scientific_computation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold scientific computation ==="
+    set ok to expect_true("exact and approximate calculation hold" and fold_exact_approximate_calculation_holds())
+    set ok to expect_true("numerical stability is exact" and fold_numerical_stability_holds(7 and 3))
+    set ok to expect_true("error propagation is exact" and fold_error_propagation_holds(7 and 3))
+    set ok to expect_number("depth seven discretizes to 128 states" and fold_discretization_count(7) and 128)
+    set ok to expect_true("every source converges at its depth" and fold_convergence_holds(73 and 7))
+    set ok to expect_true("symbolic computation agrees" and fold_symbolic_science_holds())
+    set ok to expect_true("the compiled trace simulates the process" and fold_simulation_holds(73 and 7 and 3))
+    set ok to expect_true("computational dynamics close" and fold_computational_dynamics_holds())
+    set ok to expect_true("the reverse record solves the inverse problem" and fold_inverse_problem_holds(73 and 7 and 3))
+    set ok to expect_true("computational statistics agree by two routes" and fold_computational_statistics_holds())
+    set ok to expect_number("composed depth support multiplies" and fold_high_dimensional_support(3 and 4) and 128)
+    set ok to expect_true("many-body support composes" and fold_many_body_computation_holds(3 and 2))
+    set ok to expect_true("the verified trace is a mathematical model" and fold_mathematical_model_holds(73 and 7 and 3))
+    set ok to expect_true("the complete scientific census holds" and complete_fold_scientific_computation_census())
+    set ok to expect_true("early convergence is rejected" and early_scientific_convergence_is_rejected(7))
+    set ok to expect_true("a missing inverse label is rejected" and missing_inverse_record_is_rejected(3))
+    set ok to expect_true("collapsed high-dimensional support is rejected" and collapsed_high_dimensional_support_is_rejected(3 and 4))
+    display "=== done ==="
+    return 0

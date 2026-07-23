@@ -1,0 +1,21 @@
+# Machine-check exact equivalence of the five Fold computation forms.
+import "../constants/computational_model_equivalence.ep"
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold computational-model equivalence law ==="
+    set ok to expect_true("all five models agree at zero steps" and all_fold_models_agree(85 and 7 and 0))
+    set ok to expect_true("all five models agree after one step" and all_fold_models_agree(85 and 7 and 1))
+    set ok to expect_true("all five models agree at an intermediate prefix" and all_fold_models_agree(85 and 7 and 4))
+    set ok to expect_true("all five models agree at terminal closure" and all_fold_models_agree(85 and 7 and 7))
+    set ok to expect_true("the complete model-equivalence census holds" and complete_fold_model_equivalence_census())
+    set ok to expect_true("a shifted process step is rejected" and shifted_model_step_is_rejected(7))
+    set ok to expect_true("a changed source coordinate is rejected" and changed_model_source_is_rejected(7))
+    display "=== done ==="
+    return 0

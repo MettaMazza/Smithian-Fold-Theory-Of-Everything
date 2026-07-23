@@ -1,0 +1,32 @@
+# Machine-check the exact Fold reversibility cost.
+import "../constants/complexity_reversibility.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold reversibility cost ==="
+    set ok to expect_number("reversing three Fold steps costs three held labels" and fold_reversal_information_cost(3) and 3)
+    set ok to expect_number("the reverse record distinguishes eight histories" and fold_reversal_history_cost(3) and 8)
+    set ok to expect_true("a complete record reverses an exact source" and recorded_fold_process_is_reversible(85 and 7 and 3))
+    set ok to expect_true("one missing reverse label leaves binary ambiguity" and one_missing_reverse_label_leaves_binary_ambiguity(3))
+    set ok to expect_number("a complete recurrent cycle has zero reverse cost" and recurrent_cycle_reverse_cost() and 0)
+    set ok to expect_true("the complete reversibility census holds" and complete_fold_reversibility_census())
+    set ok to expect_true("zero-cost dyadic reversal is rejected" and zero_cost_dyadic_reversal_is_rejected())
+    set ok to expect_true("an extra reverse cost is not minimal" and extra_reverse_cost_is_not_minimal(3))
+    display "=== done ==="
+    return 0

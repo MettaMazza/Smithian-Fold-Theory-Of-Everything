@@ -1,0 +1,26 @@
+import "../constants/information_classical_probabilistic_quantum.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold classical probabilistic quantum information ==="
+    set ok to expect_number("classical exact support is one" and fold_classical_information_support() and 1)
+    set ok to expect_number("three missing labels give eight histories" and fold_probabilistic_history_support(3) and 8)
+    set ok to expect_number("three observations retain sixteen quantum images" and fold_quantum_retained_information_support(7 and 3) and 16)
+    set ok to expect_number("the three-form accounting reconstructs 128" and fold_three_form_information_accounting(7 and 3) and 128)
+    set ok to expect_true("held labels reconstruct the classical source" and fold_three_form_reconstructs_classical(73 and 7 and 3))
+    set ok to expect_true("the complete correspondence census holds" and complete_fold_information_correspondence_census())
+    set ok to expect_true("collapsed probabilistic support is rejected" and collapsed_probabilistic_support_is_rejected(3))
+    set ok to expect_true("collapsed quantum support is rejected" and collapsed_quantum_information_support_is_rejected(7))
+    return 0

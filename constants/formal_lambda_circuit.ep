@@ -1,0 +1,106 @@
+# ============================================================================
+#  FOLD LAMBDA-LIKE CALCULUS AND CIRCUIT SEMANTICS.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The two formal-computation rows not yet registered require no imported
+#  variable calculus or electrical gate set.  The already-forced binding/suffix
+#  split supplies abstraction and application, while a lawful compiled Fold trace
+#  supplies circuit syntax and execution.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Abstraction closes a prefix and exposes its residual term.  Application joins
+#  the held labels to that term; beta evaluation is therefore exact source
+#  reconstruction.  A circuit is the counted sequence of forced Fold edges in a
+#  compiled trace.  Its gate count is the observation count, every edge has the
+#  unique transition semantics, and execution equals source evaluation.  Every
+#  source and prefix through depth seven is enumerated.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Changed bindings, excessive abstractions, shortened circuits, tampered edges,
+#  and changed output assertions are rejected by exhaustive checks.
+# ============================================================================
+
+import "../constants/semantics_binding_substitution.ep"
+import "../constants/semantics_compilation.ep"
+
+
+define fold_lambda_abstraction with rank as Int and depth as Int and bound_count as Int returning List:
+    return fold_bind_closed_prefix(rank and depth and bound_count)
+
+
+define fold_lambda_body with rank as Int and depth as Int and bound_count as Int returning List:
+    return fold_bound_term_suffix(rank and depth and bound_count)
+
+
+define fold_lambda_apply with abstraction as List and body as List returning List:
+    return fold_substitute_binding(abstraction and body)
+
+
+define fold_beta_evaluation_holds with rank as Int and depth as Int and bound_count as Int returning Bool:
+    set abstraction to fold_lambda_abstraction(rank and depth and bound_count)
+    set body to fold_lambda_body(rank and depth and bound_count)
+    set applied to fold_lambda_apply(abstraction and body)
+    return fold_words_are_equal(applied and enumerate_fold_word(rank and depth))
+
+
+define complete_fold_lambda_calculus_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set bound_count to 0
+            repeat while bound_count < depth + 1:
+                if fold_beta_evaluation_holds(rank and depth and bound_count) == false:
+                    return false
+                set bound_count to bound_count + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define fold_circuit_gate_count with trace as List returning Int:
+    if length_list(trace) < 1:
+        return 0 - 1
+    return length_list(trace) - 1
+
+
+define fold_circuit_semantics_holds with rank as Int and depth as Int and gates as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and gates)
+    if fold_circuit_gate_count(trace) != gates:
+        return false
+    if fold_compiled_trace_is_lawful(trace and depth) == false:
+        return false
+    if fold_execute_compiled_trace(trace) != fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and gates):
+        return false
+    return fold_compilation_preserves_semantics(rank and depth and gates)
+
+
+define complete_fold_circuit_semantics_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set gates to 0
+            repeat while gates < depth + 1:
+                if fold_circuit_semantics_holds(rank and depth and gates) == false:
+                    return false
+                set gates to gates + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define changed_lambda_binding_is_rejected with rank as Int and depth as Int returning Bool:
+    return changed_binding_changes_program(rank and depth and 1)
+
+
+define shortened_fold_circuit_is_rejected with rank as Int and depth as Int returning Bool:
+    set full_trace to fold_compile_program_trace(rank and depth and depth)
+    return fold_circuit_gate_count(full_trace) != depth - 1
+
+
+define complete_fold_lambda_and_circuit_formalism returning Bool:
+    if complete_fold_lambda_calculus_census() == false:
+        return false
+    return complete_fold_circuit_semantics_census()

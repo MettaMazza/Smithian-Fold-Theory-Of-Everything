@@ -1,0 +1,83 @@
+# ============================================================================
+#  FOLD SYMBOLIC ALGORITHMS -- exact words, rewriting, and unique normal form.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 331 forces the symbols and Step 333 forces their rewrite.  Symbolic
+#  computation is therefore the exact manipulation of those generated paths,
+#  with meaning fixed by their decoded coordinates.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Evaluation decodes a generated word.  One rewrite removes its leading fibre
+#  label and has the same meaning as one numerical Fold.  Repeating for the word
+#  length reaches the unique empty path at the One; every split of the rewrite
+#  sequence composes.  Joined descriptions remain generated.  Early normal form,
+#  outside symbols, and changed-symbol equality are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_numerical.ep"
+
+
+define fold_symbolic_evaluate with word as List returning Int:
+    if fold_word_is_generated(word and length_list(word)) == false:
+        return 0
+    return decode_computation_codeword(word)
+
+
+define fold_symbolic_rewrite_matches_numerical with word as List and steps as Int returning Bool:
+    set source_depth to length_list(word)
+    if steps > source_depth:
+        return false
+    set source_copy to fold_sequence_slice(word and 0 and source_depth)
+    set source_rank to fold_symbolic_evaluate(source_copy)
+    set symbolic to fold_rewrite_steps(word and steps)
+    set numerical_rank to recursive_fold_index(source_rank and source_depth and steps)
+    return fold_symbolic_evaluate(symbolic) == numerical_rank
+
+
+define fold_symbolic_normal_form with word as List returning List:
+    return recursive_fold_word(word)
+
+
+define fold_symbolic_normalization_steps with word as List returning Int:
+    set original_length to length_list(word)
+    set current to word
+    set steps to 0
+    repeat while length_list(current) > 0:
+        set current to fold_rewrite_once(current)
+        set steps to steps + 1
+    return forced_to_be("Fold symbolic normalization steps = generated word length" and steps and original_length)
+
+
+define complete_fold_symbolic_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            if fold_symbolic_evaluate(enumerate_fold_word(rank and depth)) != rank:
+                return false
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_symbolic_rewrite_matches_numerical(enumerate_fold_word(rank and depth) and steps) == false:
+                    return false
+                set steps to steps + 1
+            if length_list(fold_symbolic_normal_form(enumerate_fold_word(rank and depth))) != 0:
+                return false
+            if fold_symbolic_normalization_steps(enumerate_fold_word(rank and depth)) != depth:
+                return false
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define early_symbolic_normal_form_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    return length_list(fold_rewrite_steps(word and depth - 1)) != 0
+
+
+define changed_symbolic_meaning_is_rejected with rank as Int and depth as Int returning Bool:
+    set word to enumerate_fold_word(rank and depth)
+    set original to get_list(word and 0)
+    set ok to set_list(word and 0 and binary_count() + 1 - original)
+    return fold_symbolic_evaluate(word) != rank

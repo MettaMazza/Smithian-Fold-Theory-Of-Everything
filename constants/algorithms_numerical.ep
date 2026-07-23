@@ -1,0 +1,87 @@
+# ============================================================================
+#  FOLD NUMERICAL ALGORITHMS -- exact iteration, refinement, and error transport.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A numerical Fold algorithm operates on the exact coordinates already forced
+#  by the corpus.  Decimal approximation is unnecessary: iteration, refinement,
+#  and separation can all remain exact fractions.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A counted evaluation advances the integer grid index and rebuilds its exact
+#  lower-grid fraction.  This agrees with direct Fold iteration for every state
+#  and prefix.  Doubling both rank and denominator refines a representation
+#  without changing its value.  Adjacent same-branch error begins at 1/b^k and
+#  grows by b per Fold to 1/b^(k-s), exactly.  Perturbed error and shifted
+#  evaluation are rejected; no floating model or tolerance enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_streaming.ep"
+
+
+define fold_numerical_evaluate with rank as Int and depth as Int and steps as Int returning Fraction:
+    set final_rank to recursive_fold_index(rank and depth and steps)
+    return computation_state(final_rank and depth - steps)
+
+
+define fold_numerical_evaluation_is_exact with rank as Int and depth as Int and steps as Int returning Bool:
+    set direct to computation_steps(computation_state(rank and depth) and steps)
+    return fraction_is_equal(direct and fold_numerical_evaluate(rank and depth and steps))
+
+
+define fold_numerical_refinement_preserves_value with rank as Int and depth as Int returning Bool:
+    set coarse to computation_state(rank and depth)
+    set refined to computation_state(binary_count() * rank and depth + 1)
+    return fraction_is_equal(coarse and refined)
+
+
+define fold_numerical_adjacent_error_after with depth as Int and steps as Int returning Fraction:
+    set first to fold_numerical_evaluate(1 and depth and steps)
+    set second to fold_numerical_evaluate(2 and depth and steps)
+    return fold_fraction_distance(first and second)
+
+
+define fold_numerical_error_transport_is_exact with depth as Int and steps as Int returning Bool:
+    if steps > depth - 1:
+        return true
+    set transported to fold_numerical_adjacent_error_after(depth and steps)
+    set forced_spacing to fold_grid_spacing(depth - steps)
+    return fraction_is_equal(transported and forced_spacing)
+
+
+define complete_fold_numerical_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_numerical_evaluation_is_exact(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            if fold_numerical_refinement_preserves_value(rank and depth) == false:
+                return false
+            set rank to rank + 1
+        set steps to 0
+        repeat while steps < depth:
+            if fold_numerical_error_transport_is_exact(depth and steps) == false:
+                return false
+            set steps to steps + 1
+        set depth to depth + 1
+    return true
+
+
+define shifted_numerical_evaluation_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set lawful to fold_numerical_evaluate(rank and depth and steps)
+    set shifted_rank to recursive_fold_index(rank and depth and steps) + 1
+    if shifted_rank > computation_state_count(depth - steps):
+        set shifted_rank to 1
+    set shifted to computation_state(shifted_rank and depth - steps)
+    return fraction_is_equal(lawful and shifted) == false
+
+
+define perturbed_numerical_error_is_rejected with depth as Int and steps as Int returning Bool:
+    set lawful to fold_numerical_adjacent_error_after(depth and steps)
+    set perturbed to fraction_from_ratio(1 and computation_state_count(depth - steps) + 1)
+    return fraction_is_equal(lawful and perturbed) == false

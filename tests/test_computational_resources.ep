@@ -1,0 +1,35 @@
+# Machine-check exact Fold resources over every admitted depth.
+import "../constants/computational_resources.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+        display concat("    got:  " and got)
+        display concat("    want: " and want)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold resource law ==="
+    set ok to expect_number("depth-7 exact space resource" and space_resource(7) and 128)
+    set ok to expect_number("depth-7 exact time resource" and time_resource(7) and 7)
+    set ok to expect_number("three observations retain 16 distinctions" and retained_resource(7 and 3) and 16)
+    set ok to expect_number("three observations close 8 histories" and closed_history_resource(3) and 8)
+    set ok to expect_number("retained and closed resources reconstruct 128" and retained_closed_accounting(7 and 3) and 128)
+    set ok to expect_number("depth-7 path resource" and path_resource(7) and 128)
+    set ok to expect_true("one-step-short time is rejected" and shortened_time_is_rejected(7))
+    set ok to expect_true("nonbinary history growth is rejected" and nonbinary_history_is_rejected(7))
+    set ok to expect_true("complete resource census holds" and complete_resource_census())
+    display "=== done ==="
+    return 0

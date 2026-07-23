@@ -1,0 +1,32 @@
+# Machine-check the Fold randomness law.
+import "../constants/complexity_randomness.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold randomness law ==="
+    set ok to expect_number("three unresolved distinctions have eight histories" and unresolved_fold_history_count(3) and 8)
+    set ok to expect_equal("each history has exact share 1/8" and fraction_to_text(unresolved_fold_history_share(3)) and "1/8")
+    set ok to expect_true("all unresolved history shares partition the One" and unresolved_fold_histories_partition_one(3))
+    set ok to expect_number("randomness quantity equals closed distinction count" and fold_randomness_quantity(3) and 3)
+    set ok to expect_true("held labels resolve the source deterministically" and held_labels_resolve_fold_randomness(85 and 7 and 3))
+    set ok to expect_true("the complete randomness census holds" and complete_fold_randomness_census())
+    set ok to expect_true("a nonbinary history count is rejected" and nonbinary_random_history_is_rejected(3))
+    set ok to expect_true("a perturbed history share is rejected" and perturbed_random_share_is_rejected(3))
+    display "=== done ==="
+    return 0

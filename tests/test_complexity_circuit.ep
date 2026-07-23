@@ -1,0 +1,32 @@
+# Machine-check Fold circuit size and depth.
+import "../constants/complexity_circuit.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold circuit size and depth ==="
+    set ok to expect_number("the deepest layer contains b^7 gates" and fold_circuit_layer_size(7) and 128)
+    set ok to expect_number("the complete depth-7 circuit contains 254 gates" and fold_circuit_size(7) and 254)
+    set ok to expect_number("the circuit width is 128" and fold_circuit_width(7) and 128)
+    set ok to expect_number("the forced circuit depth is seven" and fold_circuit_depth(7) and 7)
+    set ok to expect_true("every circuit layer uses lawful Fold transitions" and every_fold_circuit_layer_is_lawful(7))
+    set ok to expect_true("omitting a gate is rejected" and omitted_fold_circuit_gate_is_rejected(7))
+    set ok to expect_true("shortening circuit depth is rejected" and shortened_fold_circuit_depth_is_rejected(7))
+    set ok to expect_true("the complete Fold circuit census holds" and complete_fold_circuit_census())
+    display "=== done ==="
+    return 0

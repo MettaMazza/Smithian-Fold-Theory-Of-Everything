@@ -1,0 +1,32 @@
+# Machine-check Fold numerical algorithms.
+import "../constants/algorithms_numerical.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_fraction with label as Str and got as Fraction and want as Fraction:
+    return expect_equal(label and fraction_to_text(got) and fraction_to_text(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold numerical algorithms ==="
+    set ok to expect_fraction("three steps evaluate rank 73 to 9/16" and fold_numerical_evaluate(73 and 7 and 3) and fraction_from_ratio(9 and 16))
+    set ok to expect_true("integer-index and direct fraction routes agree" and fold_numerical_evaluation_is_exact(73 and 7 and 3))
+    set ok to expect_true("one refinement preserves exact value" and fold_numerical_refinement_preserves_value(73 and 7))
+    set ok to expect_fraction("three steps transport adjacent error to 1/16" and fold_numerical_adjacent_error_after(7 and 3) and fraction_from_ratio(1 and 16))
+    set ok to expect_true("the error transport law is exact" and fold_numerical_error_transport_is_exact(7 and 3))
+    set ok to expect_true("the complete numerical census holds" and complete_fold_numerical_algorithm_census())
+    set ok to expect_true("a shifted evaluation is rejected" and shifted_numerical_evaluation_is_rejected(73 and 7 and 3))
+    set ok to expect_true("perturbed numerical error is rejected" and perturbed_numerical_error_is_rejected(7 and 3))
+    display "=== done ==="
+    return 0

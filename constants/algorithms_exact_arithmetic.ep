@@ -1,0 +1,120 @@
+# ============================================================================
+#  FOLD EXACT ARITHMETIC -- counted successor, product, power, and division.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Exact arithmetic must be an executed organization of Fold counts, not an
+#  imported numeral algorithm.  The One supplies the unit, repeated counting
+#  supplies addition, repeated addition supplies multiplication, and repeated
+#  multiplication supplies powers.  Division is the exhaustive removal of one
+#  positive counted divisor while retaining the exact remainder.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Every route is executed and forced equal to the already-closed whole-number
+#  operation.  Quotient and remainder reconstruct the dividend and the remainder
+#  is strictly below the divisor.  Exact grid fractions are then added by the
+#  established exact-fraction engine and cross-checked against their counted
+#  numerators.  Zero divisors and perturbed arithmetic are rejected.  No new
+#  assembled constant is asserted.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_search_order.ep"
+
+
+define structure FoldDivision:
+    field quotient as Int
+    field remainder as Int
+
+
+define fold_counted_add with first as Int and second as Int returning Int:
+    set total to first
+    set count to 0
+    repeat while count < second:
+        set total to total + 1
+        set count to count + 1
+    return forced_to_be("Fold counted addition = repeated One" and total and first + second)
+
+
+define fold_counted_multiply with first as Int and second as Int returning Int:
+    set total to 0
+    set count to 0
+    repeat while count < second:
+        set total to fold_counted_add(total and first)
+        set count to count + 1
+    return forced_to_be("Fold counted product = repeated counted addition" and total and first * second)
+
+
+define fold_counted_power with base as Int and exponent as Int returning Int:
+    set total to 1
+    set count to 0
+    repeat while count < exponent:
+        set total to fold_counted_multiply(total and base)
+        set count to count + 1
+    return forced_to_be("Fold counted power = repeated counted product" and total and whole_power(base and exponent))
+
+
+define fold_counted_divide with dividend as Int and divisor as Int returning FoldDivision:
+    set quotient to 0
+    set remainder to dividend
+    if divisor < 1:
+        set rejected to create FoldDivision:
+            quotient is 0
+            remainder is dividend
+        return rejected
+    repeat while remainder > divisor - 1:
+        set remainder to remainder - divisor
+        set quotient to quotient + 1
+    set outcome to create FoldDivision:
+        quotient is quotient
+        remainder is remainder
+    return outcome
+
+
+define fold_division_is_exact with dividend as Int and divisor as Int returning Bool:
+    if divisor < 1:
+        return false
+    set outcome to fold_counted_divide(dividend and divisor)
+    set rebuilt to fold_counted_add(fold_counted_multiply(outcome.quotient and divisor) and outcome.remainder)
+    if rebuilt != dividend:
+        return false
+    return outcome.remainder < divisor
+
+
+define fold_grid_fraction_add with first_rank as Int and second_rank as Int and depth as Int returning Fraction:
+    set first to computation_state(first_rank and depth)
+    set second to computation_state(second_rank and depth)
+    set exact_sum to fraction_add(first and second)
+    set counted_sum to fraction_from_ratio(fold_counted_add(first_rank and second_rank) and computation_state_count(depth))
+    if fraction_is_equal(exact_sum and counted_sum):
+        return exact_sum
+    return fraction_from_whole_number(0)
+
+
+define complete_fold_exact_arithmetic_census returning Bool:
+    set bound to computation_census_depth()
+    set first to 0
+    repeat while first < bound + 1:
+        set second to 0
+        repeat while second < bound + 1:
+            if fold_counted_add(first and second) != first + second:
+                return false
+            if fold_counted_multiply(first and second) != first * second:
+                return false
+            if second > 0:
+                if fold_division_is_exact(first and second) == false:
+                    return false
+            set second to second + 1
+        if fold_counted_power(binary_count() and first) != computation_state_count(first):
+            return false
+        set first to first + 1
+    set exact_sum to fold_grid_fraction_add(1 and 2 and colour_count())
+    return fraction_is_equal(exact_sum and fraction_from_ratio(3 and computation_state_count(colour_count())))
+
+
+define zero_divisor_is_rejected with dividend as Int returning Bool:
+    return fold_division_is_exact(dividend and 0) == false
+
+
+define perturbed_counted_sum_is_rejected with first as Int and second as Int returning Bool:
+    return fold_counted_add(first and second) != first + second + 1

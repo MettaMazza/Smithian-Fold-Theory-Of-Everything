@@ -1,0 +1,145 @@
+# ============================================================================
+#  UNBOUNDED FINITE QUANTUM FAULT-TOLERANCE LAW.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 403 exhausts t=1,2,3.  A claim with no fixed finite fault ceiling needs
+#  a constructive certificate for every supplied positive finite t; it cannot be
+#  inferred from those three instances.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  For t errors, width 2t+1 leaves at least t+1 original labels and at most t
+#  changed labels, so strict majority restores the source.  Every width w<=2t
+#  fails: changing ceil(w/2) positions creates either an opposing majority or,
+#  for even w, the generated tie that rejects at least one source label; this
+#  uses no more than t changes.  Therefore 2t+1 is the unique first survivor for
+#  every positive finite t.  The successor law adds two labels when t increases
+#  by one, so no fixed positive finite ceiling exists inside exact representable
+#  arithmetic.
+#
+#  The law composes blockwise with the already-verified quantum circuit and keeps
+#  redundancy exactly 2t labels per source label.  "Unbounded" means every
+#  supplied positive finite t.  It is not an infinite-width code, a stochastic
+#  physical noise rate, or a hardware threshold theorem.
+# ============================================================================
+
+import "../constants/complexity_arbitrary_circuit_lower_bounds.ep"
+
+
+define fold_unbounded_fault_width with errors as Int returning Int:
+    if errors < 1:
+        return 0
+    return binary_count() * errors + 1
+
+
+define fold_changes_required_to_defeat_width with width as Int returning Int:
+    if width < 1:
+        return 0
+    return (width + 1) / binary_count()
+
+
+define fold_unbounded_fault_width_corrects_algebraically with errors as Int returning Bool:
+    if errors < 1:
+        return false
+    set width to fold_unbounded_fault_width(errors)
+    set changed to 0
+    repeat while changed < errors + 1:
+        set unchanged to width - changed
+        if unchanged <= changed:
+            return false
+        set changed to changed + 1
+    return true
+
+
+define fold_shorter_fault_width_counterexample_holds with width as Int and errors as Int returning Bool:
+    if width < 1:
+        return false
+    set required_changes to fold_changes_required_to_defeat_width(width)
+    if required_changes > errors:
+        return false
+    set mask to whole_power(binary_count() and required_changes) - 1
+    set block to fold_corrupted_repetition_block(1 and width and mask)
+    return fold_decode_repetition_block(block) != 1
+
+
+define every_shorter_fault_width_has_counterexample with errors as Int returning Bool:
+    if errors < 1:
+        return false
+    set width to 1
+    repeat while width < fold_unbounded_fault_width(errors):
+        if fold_shorter_fault_width_counterexample_holds(width and errors) == false:
+            return false
+        set width to width + 1
+    return true
+
+
+define fold_unbounded_fault_width_is_minimal with errors as Int returning Bool:
+    if fold_unbounded_fault_width_corrects_algebraically(errors) == false:
+        return false
+    return every_shorter_fault_width_has_counterexample(errors)
+
+
+define fold_unbounded_fault_successor_holds with errors as Int returning Bool:
+    if errors < 1:
+        return false
+    return fold_unbounded_fault_width(errors + 1) == fold_unbounded_fault_width(errors) + binary_count()
+
+
+define fold_unbounded_fault_redundancy with depth as Int and errors as Int returning Int:
+    return forced_to_be("unbounded finite fault redundancy = two labels per error per source label" and (fold_unbounded_fault_width(errors) - 1) * depth and binary_count() * errors * depth)
+
+
+define fold_unbounded_fault_order_certificate with errors as Int returning Bool:
+    if fold_unbounded_fault_width_is_minimal(errors) == false:
+        return false
+    if fold_unbounded_fault_successor_holds(errors) == false:
+        return false
+    return fold_unbounded_fault_redundancy(1 and errors) == binary_count() * errors
+
+
+define fold_unbounded_fault_induction_certificate with supplied_errors as Int returning Bool:
+    if supplied_errors < 1:
+        return false
+    set errors to 1
+    repeat while errors < supplied_errors + 1:
+        if fold_unbounded_fault_order_certificate(errors) == false:
+            return false
+        set errors to errors + 1
+    return true
+
+
+define no_fixed_positive_fault_ceiling_holds with proposed_ceiling as Int returning Bool:
+    if proposed_ceiling < 1:
+        return false
+    return fold_unbounded_fault_order_certificate(proposed_ceiling + 1)
+
+
+define fold_unbounded_fault_quantum_circuit_holds with rank as Int and depth as Int and gates as Int and errors as Int returning Bool:
+    if fold_unbounded_fault_order_certificate(errors) == false:
+        return false
+    if fold_multi_error_code_round_trip(rank and depth and errors) == false:
+        return false
+    return fold_quantum_circuit_semantics_holds(rank and depth and gates)
+
+
+define complete_unbounded_finite_fault_certificate returning Bool:
+    if complete_fold_multi_error_fault_census() == false:
+        return false
+    if fold_unbounded_fault_induction_certificate(fold_induction_execution_depth()) == false:
+        return false
+    if no_fixed_positive_fault_ceiling_holds(colour_count()) == false:
+        return false
+    return fold_unbounded_fault_quantum_circuit_holds(1 and computation_census_depth() and computation_census_depth() and fold_induction_execution_depth())
+
+
+define fixed_colour_fault_ceiling_is_rejected returning Bool:
+    return fold_unbounded_fault_order_certificate(colour_count() + 1)
+
+
+define shortened_unbounded_fault_width_is_rejected with errors as Int returning Bool:
+    set shortened to fold_unbounded_fault_width(errors) - 1
+    return fold_changes_required_to_defeat_width(shortened) < errors + 1
+
+
+define nonpositive_fault_order_is_rejected returning Bool:
+    return fold_unbounded_fault_order_certificate(0) == false

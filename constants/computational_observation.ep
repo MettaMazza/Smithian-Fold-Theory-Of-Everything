@@ -1,0 +1,176 @@
+# ============================================================================
+#  FOLD OBSERVATION LAW -- exact fibres, retained classes, and closed distinction.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A computational observation must be derived before information or machines can
+#  be derived.  The corpus has already closed that observation is the Fold.  Step
+#  325 supplies the complete state grid and its binary preimages.  Therefore an
+#  observation class is not imported: it is the exact fibre of states sharing one
+#  Fold image.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  At depth k there are b^k distinguishable states.  Observing once applies the
+#  established Fold and yields one of b^(k-1) retained images.  For each image the
+#  engine enumerates every source state and counts exactly b preimages.  Thus:
+#
+#      observed classes * closed distinctions per class
+#          = b^(k-1) * b = b^k = source states.
+#
+#  Route A is full source-state enumeration.  Route B is the class count times the
+#  forced binary fibre; forced_to_be requires exact agreement at every admitted
+#  depth.  The observed image retains the class identity.  The distinction between
+#  the b members of that class is closed by the observation because all have the
+#  same exact image.
+#
+#  A singleton fibre and a shifted class target are executed as negative controls.
+#  No external observer, measurement value, probability, or conventional state
+#  model enters.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  The test executes every class and every source state at depths 1 through 7.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_state_transition.ep"
+
+
+# Observation is exactly one established computational Fold step.
+define observe_computation_state with state as Fraction returning Fraction:
+    return computation_step(state)
+
+
+# The retained observation classes are the states of the next lower grid.
+define observation_class_count with depth as Int returning Int:
+    return computation_state_count(depth - 1)
+
+
+# Count by full enumeration how many depth-k source states share one image.
+define members_of_observation_class with target_index as Int and depth as Int returning Int:
+    set target to computation_state(target_index and depth - 1)
+    set source_count to computation_state_count(depth)
+    set members to 0
+    set source_index to 1
+    repeat while source_index < source_count + 1:
+        set source to computation_state(source_index and depth)
+        set image to observe_computation_state(source)
+        if fraction_is_equal(image and target):
+            set members to members + 1
+        set source_index to source_index + 1
+    return members
+
+
+# Every exact observation class has the established binary fibre count.
+define every_observation_class_is_binary with depth as Int returning Bool:
+    set class_count to observation_class_count(depth)
+    set all_binary to true
+    set target_index to 1
+    repeat while target_index < class_count + 1:
+        set members to members_of_observation_class(target_index and depth)
+        if members == binary_count():
+            set all_binary to all_binary
+        else:
+            set all_binary to false
+        set target_index to target_index + 1
+    return all_binary
+
+
+# Route A enumerates every source member across all classes.  Route B multiplies
+# retained classes by the forced binary closed distinction.
+define observation_partition_is_forced with depth as Int returning Int:
+    set class_count to observation_class_count(depth)
+    set enumerated_members to 0
+    set target_index to 1
+    repeat while target_index < class_count + 1:
+        set enumerated_members to enumerated_members + members_of_observation_class(target_index and depth)
+        set target_index to target_index + 1
+    set by_fibres to class_count * binary_count()
+    set checked to forced_to_be("observation classes times binary fibre = source grid" and enumerated_members and by_fibres)
+    return forced_to_be("observation partition covers every source state" and checked and computation_state_count(depth))
+
+
+# The retained distinctions are the exact observation classes.
+define retained_observation_distinctions with depth as Int returning Int:
+    return observation_class_count(depth)
+
+
+# The distinction closed inside each class is the binary fibre itself.
+define closed_observation_distinctions_per_class with depth as Int returning Int:
+    set first_class_members to members_of_observation_class(1 and depth)
+    return forced_to_be("closed observation distinction = binary fibre" and first_class_members and binary_count())
+
+
+# Two paired preimages are distinct before observation and equal after it.
+define paired_states_close_under_observation with target_index as Int and depth as Int returning Bool:
+    set lower_count to observation_class_count(depth)
+    set first to computation_state(target_index and depth)
+    set second to computation_state(target_index + lower_count and depth)
+    set distinct_before to fraction_compare(first and second) != 0
+    set first_image to observe_computation_state(first)
+    set second_image to observe_computation_state(second)
+    set same_after to fraction_is_equal(first_image and second_image)
+    if distinct_before:
+        return same_after
+    return false
+
+
+# NEGATIVE CONTROL: no observation class is a singleton.
+define singleton_observation_class_is_rejected with depth as Int returning Bool:
+    set class_count to observation_class_count(depth)
+    set target_index to 1
+    repeat while target_index < class_count + 1:
+        if members_of_observation_class(target_index and depth) == 1:
+            return false
+        set target_index to target_index + 1
+    return true
+
+
+# NEGATIVE CONTROL: where a neighboring target exists, the second preimage of
+# one class must not observe as that neighboring target.
+define shifted_observation_target_is_rejected with depth as Int returning Bool:
+    set class_count to observation_class_count(depth)
+    if class_count < 2:
+        return true
+    set target_index to 1
+    repeat while target_index < class_count + 1:
+        set neighbor_index to target_index + 1
+        if neighbor_index > class_count:
+            set neighbor_index to 1
+        set upper_preimage to computation_state(target_index + class_count and depth)
+        set image to observe_computation_state(upper_preimage)
+        set neighbor to computation_state(neighbor_index and depth - 1)
+        if fraction_is_equal(image and neighbor):
+            return false
+        set target_index to target_index + 1
+    return true
+
+
+# Complete observation census over every admitted computation depth.
+define complete_observation_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set binary_classes to every_observation_class_is_binary(depth)
+        set covered to observation_partition_is_forced(depth) == computation_state_count(depth)
+        set paired to paired_states_close_under_observation(1 and depth)
+        set singleton_rejected to singleton_observation_class_is_rejected(depth)
+        set shifted_rejected to shifted_observation_target_is_rejected(depth)
+        if binary_classes:
+            if covered:
+                if paired:
+                    if singleton_rejected:
+                        if shifted_rejected:
+                            set all_hold to all_hold
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    return all_hold

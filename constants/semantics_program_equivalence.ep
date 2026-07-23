@@ -1,0 +1,73 @@
+# ============================================================================
+#  FOLD PROGRAM EQUIVALENCE -- equality of typed denotational results.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Surface descriptions can differ while observation sends them to the same
+#  residual program.  Equivalence is therefore forced by equal result type and
+#  equal exact denotation, not by textual identity or an imported relation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Two lawful programs are equivalent exactly when they retain the same depth and
+#  evaluate to the same rank there.  Every program is equivalent to its canonical
+#  residual word with zero further steps.  This supplies reflexivity, symmetry,
+#  transitivity, and congruence under a further shared prefix.  Changed residual
+#  ranks reject.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_type_theory.ep"
+
+
+define fold_programs_are_equivalent with first_word as List and first_steps as Int and second_word as List and second_steps as Int returning Bool:
+    set first_depth to length_list(first_word)
+    set second_depth to length_list(second_word)
+    if fold_program_syntax_is_lawful(first_word and first_steps) == false:
+        return false
+    if fold_program_syntax_is_lawful(second_word and second_steps) == false:
+        return false
+    if first_depth - first_steps != second_depth - second_steps:
+        return false
+    set first_rank to fold_evaluate_program_rank(first_word and first_steps)
+    set second_rank to fold_evaluate_program_rank(second_word and second_steps)
+    return first_rank == second_rank
+
+
+define fold_program_has_canonical_equivalent with rank as Int and depth as Int and steps as Int returning Bool:
+    set result_rank to recursive_fold_index(rank and depth and steps)
+    set remaining to depth - steps
+    return fold_programs_are_equivalent(enumerate_fold_word(rank and depth) and steps and enumerate_fold_word(result_rank and remaining) and 0)
+
+
+define fold_program_equivalence_is_symmetric with rank as Int and depth as Int and steps as Int returning Bool:
+    set result_rank to recursive_fold_index(rank and depth and steps)
+    set remaining to depth - steps
+    set forward to fold_programs_are_equivalent(enumerate_fold_word(rank and depth) and steps and enumerate_fold_word(result_rank and remaining) and 0)
+    set backward to fold_programs_are_equivalent(enumerate_fold_word(result_rank and remaining) and 0 and enumerate_fold_word(rank and depth) and steps)
+    return forward == backward
+
+
+define complete_fold_program_equivalence_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_program_has_canonical_equivalent(rank and depth and steps) == false:
+                    return false
+                if fold_program_equivalence_is_symmetric(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define changed_program_denotation_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set result_rank to recursive_fold_index(rank and depth and steps)
+    set remaining to depth - steps
+    set changed to result_rank + 1
+    if changed > computation_state_count(remaining):
+        set changed to 1
+    return fold_programs_are_equivalent(enumerate_fold_word(rank and depth) and steps and enumerate_fold_word(changed and remaining) and 0) == false

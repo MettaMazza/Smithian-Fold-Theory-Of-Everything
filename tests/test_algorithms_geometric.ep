@@ -1,0 +1,35 @@
+# Machine-check Fold geometric algorithms.
+import "../constants/algorithms_geometric.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_fraction with label as Str and got as Fraction and want as Fraction:
+    return expect_equal(label and fraction_to_text(got) and fraction_to_text(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold geometric algorithms ==="
+    set ok to expect_fraction("depth-seven spacing is 1/128" and fold_grid_spacing(7) and fraction_from_ratio(1 and 128))
+    set ok to expect_true("every adjacent separation is exact" and every_fold_grid_adjacency_is_exact(7))
+    set ok to expect_true("one Fold scales same-branch distance by b" and fold_distance_scales_on_one_branch(7))
+    set ok to expect_true("paired preimages are separated by half-One" and fold_preimage_separation_is_half(7))
+    set ok to expect_number("exact nearest search returns rank 73" and fold_nearest_grid_rank(computation_state(73 and 7) and 7) and 73)
+    set ok to expect_true("the complete geometric census holds" and complete_fold_geometric_algorithm_census())
+    set ok to expect_true("a shifted nearest point is rejected" and shifted_nearest_point_is_rejected(73 and 7))
+    set ok to expect_true("perturbed grid spacing is rejected" and perturbed_grid_spacing_is_rejected(7))
+    display "=== done ==="
+    return 0

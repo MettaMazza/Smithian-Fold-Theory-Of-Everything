@@ -1,0 +1,35 @@
+import "../constants/reversible_quantum_foundations.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold reversible and quantum foundations ==="
+    set ok to expect_true("the recorded Fold model is reversible" and fold_reversible_model_holds(73 and 7 and 3))
+    set ok to expect_number("one quantum unit has b alternatives" and fold_quantum_information_unit_alternatives() and 2)
+    set ok to expect_true("quantum state supports compose" and fold_quantum_state_composition_holds(3 and 4))
+    set ok to expect_true("unresolved support partitions the One" and fold_superposition_equivalent_structure_holds(7))
+    set ok to expect_true("phase has the forced period b" and fold_quantum_phase_period_holds(1))
+    set ok to expect_true("the relative-phase pair interferes to one image" and fold_quantum_interference_holds(37 and 7))
+    set ok to expect_true("joint state composition reconstructs both components" and fold_entangled_composition_holds(5 and 3 and 11 and 4))
+    set ok to expect_true("measurement retains an exact reverse record" and fold_quantum_measurement_semantics_holds(73 and 7 and 3))
+    set ok to expect_true("the complete quantum-foundation census holds" and complete_fold_reversible_quantum_foundations_census())
+    set ok to expect_true("a missing reverse label is rejected" and missing_reverse_label_is_rejected(73 and 7 and 3))
+    set ok to expect_true("a collapsed information unit is rejected" and collapsed_quantum_unit_is_rejected())
+    set ok to expect_true("a nonperiodic phase claim is rejected" and nonperiodic_phase_is_rejected())
+    display "=== done ==="
+    return 0

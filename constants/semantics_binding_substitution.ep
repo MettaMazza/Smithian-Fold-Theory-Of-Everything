@@ -1,0 +1,74 @@
+# ============================================================================
+#  FOLD BINDING AND SUBSTITUTION -- held distinctions restore observed syntax.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Observation separates a source word into a closed prefix and retained suffix.
+#  The exact held prefix is therefore the forced binding; joining it back onto the
+#  suffix is substitution.  No variable convention or environment is imported.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  After s observations, binding holds the first s lawful fibre labels and the
+#  observed term is the remaining k-s suffix.  Substitution joins them and
+#  reconstructs every original source word and coordinate.  Binding length is
+#  exactly s, and a changed held label reconstructs a different source.  Every
+#  state and observation count through depth seven is exhausted.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_syntax.ep"
+
+
+define fold_bind_closed_prefix with rank as Int and depth as Int and observations as Int returning List:
+    return fold_degree_held_prefix(rank and depth and observations)
+
+
+define fold_bound_term_suffix with rank as Int and depth as Int and observations as Int returning List:
+    return fold_rewrite_steps(enumerate_fold_word(rank and depth) and observations)
+
+
+define fold_substitute_binding with binding as List and term as List returning List:
+    return fold_sequence_join(binding and term)
+
+
+define fold_binding_substitution_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set binding to fold_bind_closed_prefix(rank and depth and observations)
+    if length_list(binding) != observations:
+        return false
+    set term to fold_bound_term_suffix(rank and depth and observations)
+    if length_list(term) != depth - observations:
+        return false
+    set rebuilt to fold_substitute_binding(binding and term)
+    if fold_words_are_equal(rebuilt and enumerate_fold_word(rank and depth)) == false:
+        return false
+    return decode_computation_codeword(rebuilt) == rank
+
+
+define complete_fold_binding_substitution_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set observations to 0
+            repeat while observations < depth + 1:
+                if fold_binding_substitution_holds(rank and depth and observations) == false:
+                    return false
+                set observations to observations + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define changed_binding_changes_program with rank as Int and depth as Int and observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set binding to fold_bind_closed_prefix(rank and depth and observations)
+    set original to get_list(binding and 0)
+    set ok to set_list(binding and 0 and binary_count() + 1 - original)
+    set term to fold_bound_term_suffix(rank and depth and observations)
+    set changed to fold_substitute_binding(binding and term)
+    return decode_computation_codeword(changed) != rank
+
+
+define excessive_binding_is_rejected with rank as Int and depth as Int returning Bool:
+    return fold_degree_is_admitted(depth + 1 and depth) == false

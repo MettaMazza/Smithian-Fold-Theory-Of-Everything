@@ -1,0 +1,33 @@
+# Machine-check Fold quantum complexity.
+import "../constants/complexity_quantum.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold quantum complexity ==="
+    set ok to expect_number("depth seven has 128 unresolved quantum branches" and fold_quantum_support_count(7) and 128)
+    set ok to expect_equal("each depth-seven branch has share 1/128" and fraction_to_text(fold_quantum_branch_share(7)) and "1/128")
+    set ok to expect_true("the complete branch support partitions the One" and fold_quantum_branches_partition_one(7))
+    set ok to expect_number("composed binary and colour depths have support 32" and fold_quantum_composed_support(2 and 3) and 32)
+    set ok to expect_number("three observations retain sixteen branches" and fold_quantum_support_after_observation(7 and 3) and 16)
+    set ok to expect_number("quantum transformation depth is seven" and fold_quantum_transformation_depth(7) and 7)
+    set ok to expect_true("the complete quantum-complexity census holds" and complete_fold_quantum_complexity_census())
+    set ok to expect_true("collapsed support is rejected" and collapsed_quantum_support_is_rejected(7))
+    set ok to expect_true("shortened quantum depth is rejected" and shortened_quantum_depth_is_rejected(7))
+    display "=== done ==="
+    return 0

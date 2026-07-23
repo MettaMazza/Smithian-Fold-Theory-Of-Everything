@@ -1,0 +1,32 @@
+# Machine-check Fold parallel complexity.
+import "../constants/complexity_parallel.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold parallel complexity ==="
+    set ok to expect_number("the deepest parallel layer has 128 transitions" and fold_parallel_layer_work(7) and 128)
+    set ok to expect_number("total parallel work remains 254 transitions" and fold_parallel_total_work(7) and 254)
+    set ok to expect_number("maximum parallel width is 128" and fold_parallel_width(7) and 128)
+    set ok to expect_number("dependent parallel depth is seven rounds" and fold_parallel_rounds(7) and 7)
+    set ok to expect_true("parallel layered execution matches serial paths" and fold_parallel_execution_matches_serial(7))
+    set ok to expect_true("the complete parallel census holds" and complete_fold_parallel_census())
+    set ok to expect_true("a shortened parallel schedule is rejected" and shortened_parallel_schedule_is_rejected(7))
+    set ok to expect_true("a nonbinary parallel width is rejected" and nonbinary_parallel_width_is_rejected(7))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,72 @@
+# ============================================================================
+#  FOLD TERMINATION AND CORRECTNESS -- exact normalisation and postcondition.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Termination and correctness are already determined by the Fold program's
+#  generated depth and exact evaluation.  They need no external stopping rule or
+#  discretionary correctness predicate.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Every depth-k closing program normalizes in exactly k rewrites to the empty One
+#  form.  A prefix is correct exactly when its asserted result rank equals the
+#  unique evaluated rank at retained type k-s.  Every program and prefix is
+#  exhausted.  Premature termination and changed postconditions reject.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/semantics_program_equivalence.ep"
+
+
+define fold_program_termination_steps with word as List returning Int:
+    if fold_term_type(word) < 0:
+        return 0 - 1
+    return length_list(word)
+
+
+define fold_program_terminates with rank as Int and depth as Int returning Bool:
+    set result to fold_operational_semantics(enumerate_fold_word(rank and depth) and depth)
+    if length_list(result) != 0:
+        return false
+    return fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and depth) == 1
+
+
+define fold_program_prefix_is_correct with rank as Int and depth as Int and steps as Int and asserted_rank as Int returning Bool:
+    if asserted_rank < 1:
+        return false
+    if asserted_rank > computation_state_count(depth - steps):
+        return false
+    return fold_evaluate_program_rank(enumerate_fold_word(rank and depth) and steps) == asserted_rank
+
+
+define complete_fold_termination_correctness_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            if fold_program_termination_steps(enumerate_fold_word(rank and depth)) != depth:
+                return false
+            if fold_program_terminates(rank and depth) == false:
+                return false
+            set steps to 0
+            repeat while steps < depth + 1:
+                set expected to recursive_fold_index(rank and depth and steps)
+                if fold_program_prefix_is_correct(rank and depth and steps and expected) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define premature_program_termination_is_rejected with depth as Int returning Bool:
+    set result to fold_operational_semantics(enumerate_fold_word(1 and depth) and depth - 1)
+    return length_list(result) != 0
+
+
+define changed_program_postcondition_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    set expected to recursive_fold_index(rank and depth and steps)
+    set changed to expected + 1
+    if changed > computation_state_count(depth - steps):
+        set changed to 1
+    return fold_program_prefix_is_correct(rank and depth and steps and changed) == false

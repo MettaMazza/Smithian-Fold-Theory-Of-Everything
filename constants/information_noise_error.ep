@@ -1,0 +1,80 @@
+# ============================================================================
+#  FOLD NOISE AND ERROR -- exact disagreement positions and observation transport.
+# ============================================================================
+#
+#  Noise is a lawful received word differing from its exact generated reference.
+#  Error quantity is the counted number of label disagreements.  A changed label
+#  in a prefix already closed by s observations disappears from the residual;
+#  a changed retained-suffix label remains distinguishable.  Every source and
+#  observation boundary is executed.  No stochastic noise distribution enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/information_channels_capacity.ep"
+
+
+define fold_symbol_error_count with reference as List and received as List returning Int:
+    if length_list(reference) != length_list(received):
+        return 0 - 1
+    set errors to 0
+    set position to 0
+    repeat while position < length_list(reference):
+        if get_list(reference and position) != get_list(received and position):
+            set errors to errors + 1
+        set position to position + 1
+    return errors
+
+define fold_change_symbol_at with word as List and position as Int returning List:
+    set original to get_list(word and position)
+    set ok to set_list(word and position and binary_count() + 1 - original)
+    return word
+
+define closed_prefix_error_is_removed with rank as Int and depth as Int and observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set reference to enumerate_fold_word(rank and depth)
+    set changed_source to enumerate_fold_word(rank and depth)
+    set changed to fold_change_symbol_at(changed_source and observations - 1)
+    set reference_suffix to fold_rewrite_steps(reference and observations)
+    set changed_suffix to fold_rewrite_steps(changed and observations)
+    return fold_words_are_equal(reference_suffix and changed_suffix)
+
+define retained_suffix_error_persists with rank as Int and depth as Int and observations as Int returning Bool:
+    if observations > depth - 1:
+        return true
+    set reference to enumerate_fold_word(rank and depth)
+    set changed_source to enumerate_fold_word(rank and depth)
+    set changed to fold_change_symbol_at(changed_source and observations)
+    set reference_suffix to fold_rewrite_steps(reference and observations)
+    set changed_suffix to fold_rewrite_steps(changed and observations)
+    return fold_words_are_equal(reference_suffix and changed_suffix) == false
+
+define complete_fold_noise_error_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set original to enumerate_fold_word(rank and depth)
+            set changed_source to enumerate_fold_word(rank and depth)
+            set changed to fold_change_symbol_at(changed_source and 0)
+            if fold_symbol_error_count(original and changed) != 1:
+                return false
+            set observations to 0
+            repeat while observations < depth + 1:
+                if closed_prefix_error_is_removed(rank and depth and observations) == false:
+                    return false
+                if retained_suffix_error_persists(rank and depth and observations) == false:
+                    return false
+                set observations to observations + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+define zero_error_changed_word_is_rejected with rank as Int and depth as Int returning Bool:
+    set original to enumerate_fold_word(rank and depth)
+    set changed_source to enumerate_fold_word(rank and depth)
+    set changed to fold_change_symbol_at(changed_source and 0)
+    return fold_symbol_error_count(original and changed) != 0
+
+define unequal_length_error_claim_is_rejected with depth as Int returning Bool:
+    return fold_symbol_error_count(enumerate_fold_word(1 and depth) and enumerate_fold_word(1 and depth - 1)) == 0 - 1

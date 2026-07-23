@@ -1,0 +1,31 @@
+# Machine-check Fold operational/denotational correspondence.
+import "../constants/semantics_operational_denotational.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold operational and denotational semantics ==="
+    set operational to fold_operational_semantics(enumerate_fold_word(73 and 7) and 3)
+    set ok to expect_number("operational rewriting leaves four symbols" and length_list(operational) and 4)
+    set ok to expect_number("the operational result decodes to rank nine" and decode_computation_codeword(operational) and 9)
+    set ok to expect_true("operational and denotational routes agree" and fold_operational_denotational_agree(73 and 7 and 3))
+    set ok to expect_true("semantic prefixes compose" and fold_semantic_prefixes_compose(73 and 7 and 3 and 4))
+    set ok to expect_true("the complete correspondence census holds" and complete_fold_operational_denotational_census())
+    set ok to expect_true("a shifted denotation is rejected" and shifted_denotation_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

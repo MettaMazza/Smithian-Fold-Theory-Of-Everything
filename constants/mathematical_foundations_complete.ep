@@ -1,0 +1,232 @@
+# ============================================================================
+#  FOLD MATHEMATICAL FOUNDATIONS -- the registered computational mathematics.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Later computation may consume only mathematical structure already forced by
+#  the One, the Fold, and exact counted distinctions.  This module consolidates
+#  that structure before concurrency, security, learning, scientific, or
+#  quantum-computing laws are admitted.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Exact arithmetic is the existing whole-number and reduced-fraction machinery.
+#  Finite words supply discrete sets and combinatorial partitions.  Their prefix
+#  tree supplies graphs, their Fold action supplies algebra and dynamics, and the
+#  totally ordered depth chain supplies meet and join.  Codeword disagreement is
+#  the computational geometry; reachability of the unique root supplies its
+#  connected topology.  Equal exact branch shares supply probability/statistics;
+#  exhaustive closure work supplies optimization.  Accepted traces supply logic
+#  and proof, while typed Fold observations supply compositional morphisms.  Each
+#  route is cross-checked against an independently established earlier law.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  The complete admitted depth-one-through-seven census is executed.  Changed
+#  counts, broken lattice absorption, negative distance, disconnected roots,
+#  altered compositions, and false proofs are rejected by the imported laws.
+# ============================================================================
+
+import "../constants/the_axiom_is_a_theorem.ep"
+import "../constants/forced_fold_theorem.ep"
+import "../constants/general_covering_depth.ep"
+import "../foundation/form_enforcement.ep"
+import "../constants/algorithms_exact_arithmetic.ep"
+import "../constants/algorithms_trees_graphs.ep"
+import "../constants/algorithms_optimization.ep"
+import "../constants/complexity_average_worst.ep"
+import "../constants/complexity_quantum.ep"
+import "../constants/algorithms_quantum.ep"
+import "../constants/semantics_verification_proof.ep"
+
+
+define fold_foundation_registration_holds returning Bool:
+    if fraction_is_equal(fold_value_size(the_one()) and fraction_from_whole_number(1)) == false:
+        return false
+    if fraction_is_equal(one_is_the_fold_fixed_point() and fraction_from_whole_number(1)) == false:
+        return false
+    if unique_generator_is_the_fold() == false:
+        return false
+    if binary_count() != 2:
+        return false
+    if colour_count() != 3:
+        return false
+    if covering_principle_holds() == false:
+        return false
+    return forbid_form_selection("registered same-size form has one survivor" and 1) == 1
+
+
+define fold_exact_number_structure_holds returning Bool:
+    set left to fraction_add(fraction_from_ratio(1 and 3) and fraction_from_ratio(1 and 6))
+    set right to fraction_from_ratio(1 and 2)
+    if fraction_is_equal(left and right) == false:
+        return false
+    return complete_fold_exact_arithmetic_census()
+
+
+define fold_discrete_mathematics_holds returning Bool:
+    return complete_computation_transition_census()
+
+
+define fold_combinatorial_partition_count with depth as Int and observations as Int returning Int:
+    set classes to retained_resource(depth and observations)
+    set histories_per_class to whole_power(binary_count() and observations)
+    return forced_to_be("Fold combinatorics: classes times histories enumerate all words" and classes * histories_per_class and computation_state_count(depth))
+
+
+define fold_combinatorics_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_combinatorial_partition_count(depth and observations) != computation_state_count(depth):
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+
+define fold_graph_network_theory_holds returning Bool:
+    return complete_fold_trees_graphs_census()
+
+
+define fold_algebraic_structure_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if composition_holds_at_depth(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define fold_depth_meet with first as Int and second as Int returning Int:
+    if first < second:
+        return first
+    return second
+
+
+define fold_depth_join with first as Int and second as Int returning Int:
+    if first > second:
+        return first
+    return second
+
+
+define fold_order_lattice_holds returning Bool:
+    set first to 0
+    repeat while first < computation_census_depth() + 1:
+        set second to 0
+        repeat while second < computation_census_depth() + 1:
+            if fold_depth_meet(first and fold_depth_join(first and second)) != first:
+                return false
+            if fold_depth_join(first and fold_depth_meet(first and second)) != first:
+                return false
+            set second to second + 1
+        set first to first + 1
+    return true
+
+
+define fold_word_distance with first as List and second as List returning Int:
+    if length_list(first) != length_list(second):
+        return 0 - 1
+    set distance to 0
+    set position to 0
+    repeat while position < length_list(first):
+        if get_list(first and position) != get_list(second and position):
+            set distance to distance + 1
+        set position to position + 1
+    return distance
+
+
+define fold_computational_geometry_topology_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set first to enumerate_fold_word(1 and depth)
+        set last to enumerate_fold_word(computation_state_count(depth) and depth)
+        if fold_word_distance(first and first) != 0:
+            return false
+        if fold_word_distance(first and last) != depth:
+            return false
+        if every_fold_node_reaches_root(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define fold_probability_statistics_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_quantum_branches_partition_one(depth) == false:
+            return false
+        if fold_average_routes_agree(depth) == false:
+            return false
+        if fold_average_does_not_exceed_worst(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define fold_optimization_foundation_holds returning Bool:
+    return complete_fold_optimization_census()
+
+
+define fold_dynamical_system_holds returning Bool:
+    return complete_computation_transition_census()
+
+
+define fold_logic_proof_theory_holds returning Bool:
+    return complete_fold_verification_proof_census()
+
+
+define fold_compositional_structure_holds returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set first_steps to 0
+        repeat while first_steps < depth + 1:
+            set second_steps to 0
+            repeat while second_steps < depth - first_steps + 1:
+                if fold_type_preservation_holds(1 and depth and first_steps + second_steps) == false:
+                    return false
+                if fold_quantum_algorithm_chunks_compose(1 and depth and first_steps and second_steps) == false:
+                    return false
+                set second_steps to second_steps + 1
+            set first_steps to first_steps + 1
+        set depth to depth + 1
+    return true
+
+
+define complete_fold_mathematical_foundations returning Bool:
+    if fold_foundation_registration_holds() == false:
+        return false
+    if fold_exact_number_structure_holds() == false:
+        return false
+    if fold_discrete_mathematics_holds() == false:
+        return false
+    if fold_combinatorics_holds() == false:
+        return false
+    if fold_graph_network_theory_holds() == false:
+        return false
+    if fold_algebraic_structure_holds() == false:
+        return false
+    if fold_order_lattice_holds() == false:
+        return false
+    if fold_computational_geometry_topology_holds() == false:
+        return false
+    if fold_probability_statistics_holds() == false:
+        return false
+    if fold_optimization_foundation_holds() == false:
+        return false
+    if fold_dynamical_system_holds() == false:
+        return false
+    if fold_logic_proof_theory_holds() == false:
+        return false
+    return fold_compositional_structure_holds()
+
+
+define false_combinatorial_count_is_rejected with depth as Int returning Bool:
+    return fold_combinatorial_partition_count(depth and 1) != computation_state_count(depth) - 1
+
+
+define broken_lattice_absorption_is_rejected returning Bool:
+    return fold_depth_meet(2 and fold_depth_join(2 and 5)) != 5
+
+
+define unequal_word_lengths_are_not_a_metric returning Bool:
+    return fold_word_distance(enumerate_fold_word(1 and 2) and enumerate_fold_word(1 and 3)) == 0 - 1

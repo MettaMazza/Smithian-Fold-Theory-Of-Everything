@@ -1,0 +1,25 @@
+import "../constants/information_entropy_uncertainty.ep"
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+define main:
+    display "=== Fold entropy and uncertainty ==="
+    set ok to expect_number("three observations close entropy three" and fold_entropy_quantity(3) and 3)
+    set ok to expect_number("that entropy has eight histories" and fold_entropy_multiplicity(3) and 8)
+    set ok to expect_number("closed and retained supports reconstruct 128" and fold_uncertainty_support_product(7 and 3) and 128)
+    set ok to expect_true("entropy multiplicity grows by b" and fold_entropy_is_monotone(3))
+    set ok to expect_true("the complete entropy census holds" and complete_fold_entropy_uncertainty_census())
+    set ok to expect_true("decreased entropy is rejected" and decreased_entropy_multiplicity_is_rejected(3))
+    set ok to expect_true("sub-bound uncertainty is rejected" and subbound_uncertainty_is_rejected(7 and 3))
+    return 0

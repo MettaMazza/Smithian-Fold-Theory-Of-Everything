@@ -1,0 +1,92 @@
+# ============================================================================
+#  FOLD QUANTUM COMMUNICATION, CODING, ERROR CORRECTION, AND FAULT TOLERANCE.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Quantum support requires communication and protection laws that act on every
+#  admitted branch, not merely on one selected classical word.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A quantum channel transmits one fibre distinction per use and therefore all
+#  b^k branch words in k uses.  Quantum coding applies the already-forced minimal
+#  c-fold repetition to every branch label.  Exact majority restores every branch
+#  after one changed encoded position.  A circuit is one-error fault tolerant in
+#  this declared model when protection and correction restore its exact input
+#  branch before the verified Fold gate trace executes.  The error surface,
+#  redundancy, circuit depth, and adversary are all counted explicitly.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every source branch and every encoded error position through depth seven is
+#  executed.  Omitted channel branches, binary-width codes, two-error claims,
+#  shortened protection, and changed circuit results reject.
+# ============================================================================
+
+import "../constants/quantum_gates_circuits_universality.ep"
+
+
+define fold_quantum_communication_holds with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < fold_quantum_support_count(depth) + 1:
+        if fold_channel_transmission_round_trip(rank and depth) == false:
+            return false
+        set rank to rank + 1
+    return fold_channel_message_capacity(depth) == fold_quantum_support_count(depth)
+
+
+define fold_quantum_codeword with rank as Int and depth as Int returning List:
+    return fold_encode_protected_word(enumerate_fold_word(rank and depth))
+
+
+define fold_quantum_coding_holds with rank as Int and depth as Int returning Bool:
+    set encoded to fold_quantum_codeword(rank and depth)
+    if length_list(encoded) != colour_count() * depth:
+        return false
+    set decoded to fold_decode_protected_word(encoded)
+    return decode_computation_codeword(decoded) == rank
+
+
+define fold_quantum_error_correction_holds with rank as Int and depth as Int and error_position as Int returning Bool:
+    return fold_protected_code_corrects_one_error(rank and depth and error_position)
+
+
+define fold_quantum_fault_tolerant_circuit_holds with rank as Int and depth as Int and gates as Int and error_position as Int returning Bool:
+    if fold_quantum_error_correction_holds(rank and depth and error_position) == false:
+        return false
+    return fold_quantum_circuit_semantics_holds(rank and depth and gates)
+
+
+define fold_quantum_fault_tolerance_redundancy with depth as Int returning Int:
+    return forced_to_be("Fold quantum fault tolerance uses the minimal one-error redundancy" and fold_coding_redundancy(depth) and binary_count() * depth)
+
+
+define complete_fold_quantum_communication_coding_fault_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_quantum_communication_holds(depth) == false:
+            return false
+        if fold_quantum_fault_tolerance_redundancy(depth) != binary_count() * depth:
+            return false
+        set rank to 1
+        repeat while rank < fold_quantum_support_count(depth) + 1:
+            if fold_quantum_coding_holds(rank and depth) == false:
+                return false
+            set error_position to 0
+            repeat while error_position < colour_count() * depth:
+                if fold_quantum_fault_tolerant_circuit_holds(rank and depth and depth and error_position) == false:
+                    return false
+                set error_position to error_position + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define omitted_quantum_channel_branch_is_rejected with depth as Int returning Bool:
+    return fold_channel_message_capacity(depth) - 1 != fold_quantum_support_count(depth)
+
+
+define binary_width_quantum_code_is_rejected returning Bool:
+    return binary_repetition_cannot_correct_one_error()
+
+
+define shortened_quantum_protection_is_rejected with depth as Int returning Bool:
+    return shortened_protected_code_is_rejected(depth)

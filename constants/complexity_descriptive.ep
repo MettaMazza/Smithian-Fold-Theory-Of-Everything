@@ -1,0 +1,84 @@
+# ============================================================================
+#  FOLD DESCRIPTIVE COMPLEXITY -- minimal fibre-label description length.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 328 gives a sufficient exact description.  Minimality must be counted:
+#  a shorter Fold word must be unable to distinguish the complete depth-k state
+#  set.  This derives descriptive complexity without an imported code language.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Length l supplies b^l generated descriptions.  The first length whose capacity
+#  reaches the b^k depth-k configurations is exactly k.  Every state has one
+#  lawful length-k word and round-trips.  Length k-1 has only b^(k-1) words and is
+#  insufficient.  Relative to the observed suffix after s folds, the conditional
+#  description is exactly the s held labels already forced by communication.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_parameterized.ep"
+
+
+define fold_description_capacity with length as Int returning Int:
+    return whole_power(binary_count() and length)
+
+
+define fold_minimal_description_length with depth as Int returning Int:
+    set target_states to computation_state_count(depth)
+    set length to 0
+    set searching to true
+    repeat while searching:
+        if fold_description_capacity(length) >= target_states:
+            set searching to false
+        else:
+            set length to length + 1
+    return forced_to_be("Fold descriptive complexity: first sufficient word length = depth" and length and depth)
+
+
+define every_fold_state_has_minimal_description with depth as Int returning Bool:
+    set minimum to fold_minimal_description_length(depth)
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        set word to fold_grammar_word(index and depth)
+        if length_list(word) != minimum:
+            return false
+        if encoding_round_trip(index and depth) == false:
+            return false
+        set index to index + 1
+    return true
+
+
+define shorter_fold_description_is_insufficient with depth as Int returning Bool:
+    if depth < 1:
+        return true
+    return fold_description_capacity(depth - 1) < computation_state_count(depth)
+
+
+define conditional_fold_description_length with observations as Int returning Int:
+    return forced_to_be("conditional Fold description = held closed labels" and fold_communication_symbol_count(observations) and observations)
+
+
+define complete_fold_descriptive_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_minimal_description_length(depth) != depth:
+            return false
+        if every_fold_state_has_minimal_description(depth) == false:
+            return false
+        if shorter_fold_description_is_insufficient(depth) == false:
+            return false
+        set observations to 0
+        repeat while observations < depth + 1:
+            if conditional_fold_description_length(observations) != observations:
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+
+define redundant_longer_description_is_not_minimal with depth as Int returning Bool:
+    return fold_minimal_description_length(depth) != depth + 1
+
+
+define outside_description_symbol_is_rejected with depth as Int returning Bool:
+    return fold_rejects_outside_word(depth)

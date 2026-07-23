@@ -1,0 +1,94 @@
+# ============================================================================
+#  FOLD RELATIVE-COMPUTATION LAW -- a held distinction restores a closed fibre.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Observation maps both members of a Fold fibre to one image.  Computation
+#  relative to an additional exact relation is therefore forced by the missing
+#  distinction itself: retain the lawful fibre label that observation closed.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Without the held label, paired preimages have the same observed coordinate.
+#  With it, source = observed index + (label-1) times the lower-grid count.  The
+#  engine reconstructs every source state at every admitted depth and checks that
+#  folding the reconstruction returns the supplied observation.  The two members
+#  have different held labels, so the relative computation distinguishes exactly
+#  what the unassisted observation cannot.
+#
+#  The held relation contributes one already-counted distinction; it does not
+#  introduce an outside answer.  An outside label and a changed lawful label are
+#  unfavorable controls.
+# ============================================================================
+
+import "../constants/computability_undecidability.ep"
+
+
+define held_fold_label_for_state with index as Int and depth as Int returning Int:
+    set word to fold_grammar_word(index and depth)
+    return get_list(word and 0)
+
+
+define relative_fold_reconstruct_source with observed_index as Int and depth as Int and held_label as Int returning Int:
+    if encoding_symbol_is_lawful(held_label) == false:
+        return 0
+    set lower_count to computation_state_count(depth - 1)
+    return observed_index + (held_label - 1) * lower_count
+
+
+define relative_fold_reconstruction_holds with index as Int and depth as Int returning Bool:
+    set observed_index to lower_grid_index(index and depth)
+    set held_label to held_fold_label_for_state(index and depth)
+    set reconstructed to relative_fold_reconstruct_source(observed_index and depth and held_label)
+    if reconstructed != index:
+        return false
+    set reconstructed_state to computation_state(reconstructed and depth)
+    set image to computation_step(reconstructed_state)
+    set observed_state to computation_state(observed_index and depth - 1)
+    return fraction_is_equal(image and observed_state)
+
+
+define complete_relative_fold_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            if relative_fold_reconstruction_holds(index and depth):
+                set index to index + 1
+            else:
+                return false
+        set depth to depth + 1
+    return true
+
+
+# The observation alone cannot distinguish a paired fibre.
+define unassisted_fold_observation_is_indistinguishable with target_index as Int and depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set first to computation_state(target_index and depth)
+    set second to computation_state(target_index + lower_count and depth)
+    set first_image to computation_step(first)
+    set second_image to computation_step(second)
+    return fraction_is_equal(first_image and second_image)
+
+
+# Their held labels are distinct and reconstruct the two exact sources.
+define relative_fold_label_distinguishes_pair with target_index as Int and depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set first_label to held_fold_label_for_state(target_index and depth)
+    set second_label to held_fold_label_for_state(target_index + lower_count and depth)
+    if first_label == second_label:
+        return false
+    set first_source to relative_fold_reconstruct_source(target_index and depth and first_label)
+    set second_source to relative_fold_reconstruct_source(target_index and depth and second_label)
+    if first_source != target_index:
+        return false
+    return second_source == target_index + lower_count
+
+
+define outside_relative_label_is_rejected with depth as Int returning Bool:
+    return relative_fold_reconstruct_source(1 and depth and binary_count() + 1) == 0
+
+
+define changed_relative_label_changes_source with depth as Int returning Bool:
+    set first to relative_fold_reconstruct_source(1 and depth and 1)
+    set changed to relative_fold_reconstruct_source(1 and depth and binary_count())
+    return first != changed

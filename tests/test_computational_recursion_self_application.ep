@@ -1,0 +1,36 @@
+# Machine-check Fold recursion and self-application.
+import "../constants/computational_recursion_self_application.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold recursion and self-application law ==="
+    set state to computation_state(85 and 7)
+    set recursive to recursive_fold_evaluate(state and 3)
+    set iterative to computation_steps(state and 3)
+    set ok to expect_true("recursive and iterative Fold evaluation agree" and fraction_is_equal(recursive and iterative))
+    set ok to expect_true("all recursive representations agree for one prefix" and recursive_fold_routes_agree(85 and 7 and 3))
+    set word to fold_grammar_word(85 and 7)
+    set ok to expect_number("recursive word rewriting reaches the empty base" and length_list(recursive_fold_word(word)) and 0)
+    set ok to expect_true("the complete recursive Fold census holds" and complete_recursive_fold_census())
+    set ok to expect_true("the Fold rule closes its established self-state" and recursive_self_application_closes())
+    set ok to expect_true("one further self-application remains at the fixed base" and recursive_self_application_reaches_fixed_base())
+    set ok to expect_true("truncated self-application is rejected" and truncated_self_application_is_rejected())
+    set ok to expect_true("identity in place of recursive Fold is rejected" and identity_recursion_is_rejected())
+    display "=== done ==="
+    return 0

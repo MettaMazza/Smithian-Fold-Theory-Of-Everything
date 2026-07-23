@@ -1,0 +1,38 @@
+import "../constants/concurrent_distributed_computation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold concurrent and distributed computation ==="
+    set ok to expect_true("concurrent prefixes commute" and fold_concurrent_prefixes_commute(73 and 7 and 2 and 3))
+    set ok to expect_number("three causal events leave depth four" and fold_causal_depth_after(7 and 3) and 4)
+    set ok to expect_true("synchronized rounds preserve one depth per round" and fold_synchronization_round_holds(7 and 3))
+    set ok to expect_true("channel communication holds" and fold_communication_law_holds())
+    set ok to expect_true("causal prefixes form a partial order" and fold_partial_order_holds())
+    set ok to expect_true("all closing processes agree at the One" and fold_terminal_consensus_holds(7))
+    set ok to expect_true("unrecorded predecessor agreement is impossible" and fold_unrecorded_predecessor_agreement_is_impossible(7))
+    set ok to expect_true("replication is exact" and fold_replication_consistency_holds(73 and 7))
+    set ok to expect_true("the exact fault model holds" and fold_fault_model_holds())
+    set ok to expect_true("distributed knowledge accounts exactly" and fold_distributed_knowledge_holds(7 and 3))
+    set ok to expect_true("observation is local to a prefix" and fold_locality_holds(73 and 7 and 3))
+    set ok to expect_true("network computation reaches the root" and fold_network_computation_holds())
+    set ok to expect_true("the complete distributed census holds" and complete_fold_concurrent_distributed_census())
+    set ok to expect_true("a changed replica is rejected" and changed_replica_is_rejected(73 and 7))
+    set ok to expect_true("an omitted causal event is rejected" and omitted_causal_event_is_rejected(7))
+    display "=== done ==="
+    return 0

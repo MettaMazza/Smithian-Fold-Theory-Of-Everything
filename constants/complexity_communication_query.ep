@@ -1,0 +1,88 @@
+# ============================================================================
+#  FOLD COMMUNICATION AND QUERY COMPLEXITY -- one label per closed distinction.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 342 restores one observed fibre using one held label, and Step 344 extends
+#  this to every degree.  Communication and query requirements are therefore
+#  counted from the closed distinctions themselves, not from an imported channel
+#  or request model.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  After s observations there are b^s compatible histories.  Communicating the s
+#  exact closed labels reconstructs the source.  One query reveals one lawful
+#  fibre label, so s queries suffice.  With only s-1 labels, b completions remain;
+#  therefore fewer queries cannot select one source.  Route A counts the held
+#  prefix, Route B reads closed information, and both require exactly s.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_circuit.ep"
+
+
+define fold_communication_symbol_count with observations as Int returning Int:
+    set by_prefix to observations
+    set by_closed_information to closed_information(observations)
+    return forced_to_be("Fold communication: labels sent = closed distinctions" and by_prefix and by_closed_information)
+
+
+define fold_communication_history_count with observations as Int returning Int:
+    set by_labels to whole_power(binary_count() and fold_communication_symbol_count(observations))
+    set by_histories to closed_history_resource(observations)
+    return forced_to_be("Fold communication: label histories = closed histories" and by_labels and by_histories)
+
+
+define fold_query_count with observations as Int returning Int:
+    return forced_to_be("Fold queries: one query per closed fibre label" and observations and fold_communication_symbol_count(observations))
+
+
+define fold_queries_reconstruct_source with index as Int and depth as Int and observations as Int returning Bool:
+    set observed_index to recursive_fold_index(index and depth and observations)
+    set answers to fold_degree_held_prefix(index and depth and observations)
+    if length_list(answers) != fold_query_count(observations):
+        return false
+    return fold_degree_reconstruct_source(observed_index and depth and answers) == index
+
+
+# Compatible sources left when fewer than the required labels were supplied.
+define fold_query_remaining_completions with required as Int and supplied as Int returning Int:
+    if supplied > required:
+        return 0
+    return whole_power(binary_count() and required - supplied)
+
+
+define fewer_fold_queries_are_insufficient with observations as Int returning Bool:
+    if observations < 1:
+        return true
+    set fewer to observations - 1
+    return fold_query_remaining_completions(observations and fewer) == binary_count()
+
+
+define complete_fold_communication_query_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_communication_symbol_count(observations) != observations:
+                return false
+            if fold_communication_history_count(observations) != whole_power(binary_count() and observations):
+                return false
+            if fewer_fold_queries_are_insufficient(observations) == false:
+                return false
+            set index to 1
+            repeat while index < computation_state_count(depth) + 1:
+                if fold_queries_reconstruct_source(index and depth and observations):
+                    set index to index + 1
+                else:
+                    return false
+            set observations to observations + 1
+        set depth to depth + 1
+    return true
+
+
+define zero_symbol_nonzero_communication_is_rejected returning Bool:
+    return fold_communication_symbol_count(1) != 0
+
+
+define shortened_query_claim_is_rejected with observations as Int returning Bool:
+    return fewer_fold_queries_are_insufficient(observations)

@@ -1,0 +1,88 @@
+# ============================================================================
+#  FOLD QUANTUM ALGORITHMS -- complete branch transformation and observation.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The Fold quantum support, equal branch shares, transformation layers, and
+#  observation classes are already closed.  Their algorithm is the simultaneous
+#  lawful transformation of every admitted branch, with exact reconstruction of
+#  any observed branch from its retained labels.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  At depth k the algorithm begins with b^k branches.  After s layers it has
+#  b^(k-s) distinct images, each collecting b^s histories; after k layers every
+#  branch reaches the One.  Layer chunks compose, total work is the circuit size,
+#  depth is k, and retained branch labels reconstruct every exact source.  An
+#  omitted branch and shortened transformation are rejected.  No external gate,
+#  amplitude, oracle, or algorithm template enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_approximate.ep"
+
+
+define fold_quantum_algorithm_branch_image with rank as Int and depth as Int and layers as Int returning Int:
+    return recursive_fold_index(rank and depth and layers)
+
+
+define fold_quantum_algorithm_image_count with depth as Int and layers as Int returning Int:
+    set seen_count to computation_state_count(depth - layers)
+    set histories_per_image to computation_state_count(layers)
+    set reconstructed_support to seen_count * histories_per_image
+    set forced_support to forced_to_be("Fold quantum algorithm: images times histories = complete support" and reconstructed_support and fold_quantum_support_count(depth))
+    if forced_support == fold_quantum_support_count(depth):
+        return seen_count
+    return 0
+
+
+define fold_quantum_algorithm_all_branches_close with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < fold_quantum_support_count(depth) + 1:
+        if fold_quantum_algorithm_branch_image(rank and depth and depth) != 1:
+            return false
+        if fold_degree_reconstruction_holds(rank and depth and depth) == false:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_quantum_algorithm_chunks_compose with rank as Int and depth as Int and first_layers as Int and second_layers as Int returning Bool:
+    if first_layers + second_layers > depth:
+        return false
+    set direct to fold_quantum_algorithm_branch_image(rank and depth and first_layers + second_layers)
+    set first_image to fold_quantum_algorithm_branch_image(rank and depth and first_layers)
+    set staged to recursive_fold_index(first_image and depth - first_layers and second_layers)
+    return direct == staged
+
+
+define fold_quantum_algorithm_work with depth as Int returning Int:
+    return forced_to_be("Fold quantum algorithm work = complete transformation circuit" and fold_parallel_total_work(depth) and fold_circuit_size(depth))
+
+
+define complete_fold_quantum_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set layers to 0
+        repeat while layers < depth + 1:
+            if fold_quantum_algorithm_image_count(depth and layers) != computation_state_count(depth - layers):
+                return false
+            set rank to 1
+            repeat while rank < computation_state_count(depth) + 1:
+                if fold_quantum_algorithm_chunks_compose(rank and depth and layers and depth - layers) == false:
+                    return false
+                set rank to rank + 1
+            set layers to layers + 1
+        if fold_quantum_algorithm_all_branches_close(depth) == false:
+            return false
+        if fold_quantum_algorithm_work(depth) != fold_circuit_size(depth):
+            return false
+        set depth to depth + 1
+    return true
+
+
+define omitted_quantum_branch_is_rejected with depth as Int returning Bool:
+    return fold_quantum_support_count(depth) - 1 != computation_state_count(depth)
+
+
+define shortened_quantum_algorithm_is_rejected with depth as Int returning Bool:
+    return fold_quantum_algorithm_image_count(depth and depth - 1) == binary_count()

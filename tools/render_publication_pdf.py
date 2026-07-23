@@ -320,7 +320,8 @@ class PublicationDoc(BaseDocTemplate):
         canvas.line(20 * mm, 12 * mm, width - 20 * mm, 12 * mm)
         canvas.setFillColor(MID)
         canvas.setFont("Ernos", 7.2)
-        canvas.drawString(20 * mm, 8 * mm, f"doi:{self.args.doi}")
+        doi_text = "DOI pending publication" if self.args.doi.lower() == "pending" else f"doi:{self.args.doi}"
+        canvas.drawString(20 * mm, 8 * mm, doi_text)
         canvas.drawRightString(width - 20 * mm, 8 * mm, f"{page}")
         canvas.restoreState()
 
@@ -349,7 +350,11 @@ def cover(args: argparse.Namespace) -> list:
     edition = html.escape(args.edition)
     if not edition.lower().startswith("publication edition"):
         edition = f"Publication edition {edition}"
-    story.append(Paragraph(f'{html.escape(args.date)}&nbsp;&nbsp;·&nbsp;&nbsp;{edition}<br/><link href="https://doi.org/{args.doi}" color="#087F8C"><u>doi:{args.doi}</u></link>', ParagraphStyle("Edition", fontName="Ernos", fontSize=9, leading=13, textColor=MID, alignment=TA_CENTER, spaceAfter=16)))
+    if args.doi.lower() == "pending":
+        doi_line = "DOI to be assigned at publication"
+    else:
+        doi_line = f'<link href="https://doi.org/{args.doi}" color="#087F8C"><u>doi:{args.doi}</u></link>'
+    story.append(Paragraph(f'{html.escape(args.date)}&nbsp;&nbsp;·&nbsp;&nbsp;{edition}<br/>{doi_line}', ParagraphStyle("Edition", fontName="Ernos", fontSize=9, leading=13, textColor=MID, alignment=TA_CENTER, spaceAfter=16)))
 
     box_data = [
         [Paragraph(f"<b>{html.escape(args.result_label.upper())}</b>", ParagraphStyle("BoxHead", fontName="ErnosBold", fontSize=8, leading=10, textColor=colors.white, alignment=TA_CENTER))],

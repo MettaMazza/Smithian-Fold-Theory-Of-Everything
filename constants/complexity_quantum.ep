@@ -1,0 +1,90 @@
+# ============================================================================
+#  FOLD QUANTUM COMPLEXITY -- complete branch support and Fold transformation.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The corpus already closes branch weight, uncertainty support, merging, and
+#  periodic retention.  Step 329 joins them to exact information, while Steps
+#  346 and 350 derive the complete transformation circuit.  Their shared counts
+#  force the quantum-complexity resources without importing amplitudes or gates.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  At depth k the unresolved quantum support is the complete b^k branch set, each
+#  branch carrying exact share 1/b^k and together partitioning the One.  Composed
+#  depths a and c multiply supports to b^(a+c).  After s observations support is
+#  b^(k-s), exactly the retained state resource.  Transformation depth is k and
+#  maximum branch width is b^k.  The uncertainty support equals the same count,
+#  and the colour-depth branch equals the established measurement branch weight.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_parallel.ep"
+
+
+define fold_quantum_support_count with depth as Int returning Int:
+    set by_information to information_multiplicity(depth)
+    set by_uncertainty to minimum_uncertainty_product(depth)
+    return forced_to_be("Fold quantum support: information branches = uncertainty support" and by_information and by_uncertainty)
+
+
+define fold_quantum_branch_share with depth as Int returning Fraction:
+    return information_branch_share(depth)
+
+
+define fold_quantum_branches_partition_one with depth as Int returning Bool:
+    return information_branches_partition_one(depth)
+
+
+define fold_quantum_composed_support with first_depth as Int and second_depth as Int returning Int:
+    set by_parts to fold_quantum_support_count(first_depth) * fold_quantum_support_count(second_depth)
+    set by_joint_depth to fold_quantum_support_count(first_depth + second_depth)
+    return forced_to_be("Fold quantum composition: part supports multiply to joint depth" and by_parts and by_joint_depth)
+
+
+define fold_quantum_support_after_observation with depth as Int and observations as Int returning Int:
+    set by_information to information_multiplicity(retained_information(depth and observations))
+    set by_resources to retained_resource(depth and observations)
+    return forced_to_be("Fold quantum observation: retained support = retained state resource" and by_information and by_resources)
+
+
+define fold_quantum_transformation_depth with depth as Int returning Int:
+    return forced_to_be("Fold quantum transformation depth = circuit depth" and information_quantity(depth) and fold_circuit_depth(depth))
+
+
+define fold_quantum_branch_width with depth as Int returning Int:
+    return forced_to_be("Fold quantum branch width = parallel width" and fold_quantum_support_count(depth) and fold_parallel_width(depth))
+
+
+define fold_quantum_measurement_bridge_holds returning Bool:
+    set general to fold_quantum_branch_share(colour_count())
+    return fraction_is_equal(general and branch_weight())
+
+
+define complete_fold_quantum_complexity_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_quantum_support_count(depth) != computation_state_count(depth):
+            return false
+        if fold_quantum_branches_partition_one(depth) == false:
+            return false
+        if fold_quantum_transformation_depth(depth) != depth:
+            return false
+        if fold_quantum_branch_width(depth) != computation_state_count(depth):
+            return false
+        set observations to 0
+        repeat while observations < depth + 1:
+            if fold_quantum_support_after_observation(depth and observations) != computation_state_count(depth - observations):
+                return false
+            set observations to observations + 1
+        set depth to depth + 1
+    if fold_quantum_composed_support(binary_count() and colour_count()) != computation_state_count(binary_count() + colour_count()):
+        return false
+    return fold_quantum_measurement_bridge_holds()
+
+
+define collapsed_quantum_support_is_rejected with depth as Int returning Bool:
+    return fold_quantum_support_count(depth) - 1 != computation_state_count(depth)
+
+
+define shortened_quantum_depth_is_rejected with depth as Int returning Bool:
+    return fold_quantum_transformation_depth(depth) - 1 != depth

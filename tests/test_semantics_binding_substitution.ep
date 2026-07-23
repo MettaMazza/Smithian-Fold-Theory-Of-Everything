@@ -1,0 +1,34 @@
+# Machine-check Fold binding and substitution.
+import "../constants/semantics_binding_substitution.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold binding and substitution ==="
+    set binding to fold_bind_closed_prefix(73 and 7 and 3)
+    set term to fold_bound_term_suffix(73 and 7 and 3)
+    set rebuilt to fold_substitute_binding(binding and term)
+    set ok to expect_number("binding holds three exact labels" and length_list(binding) and 3)
+    set ok to expect_number("the retained term has four labels" and length_list(term) and 4)
+    set ok to expect_number("substitution reconstructs rank 73" and decode_computation_codeword(rebuilt) and 73)
+    set ok to expect_true("the binding/substitution identity holds" and fold_binding_substitution_holds(73 and 7 and 3))
+    set ok to expect_true("the complete binding census holds" and complete_fold_binding_substitution_census())
+    set ok to expect_true("a changed binding changes the program" and changed_binding_changes_program(73 and 7 and 3))
+    set ok to expect_true("an excessive binding is rejected" and excessive_binding_is_rejected(73 and 7))
+    display "=== done ==="
+    return 0

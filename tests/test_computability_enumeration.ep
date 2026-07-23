@@ -1,0 +1,30 @@
+# Machine-check exact Fold enumeration.
+import "../constants/computability_enumeration.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold enumeration law ==="
+    set ok to expect_true("rank 85 round-trips through its depth-7 word" and fold_enumeration_round_trip(85 and 7))
+    set ok to expect_true("all depth-7 ranks enumerate uniquely" and complete_fold_enumeration_at_depth(7))
+    set ok to expect_number("depth-7 enumeration contains b^7 words" and fold_enumeration_count(7) and 128)
+    set ok to expect_number("enumeration through depth seven contains 255 configurations" and fold_enumeration_through_depth(7) and 255)
+    set ok to expect_true("outside ranks are rejected" and outside_fold_rank_is_rejected(7))
+    set ok to expect_true("the complete enumeration census holds" and complete_fold_enumeration_census())
+    display "=== done ==="
+    return 0

@@ -1,0 +1,33 @@
+# Machine-check the exact Fold word reader.
+import "../constants/computational_automaton.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold automaton law ==="
+    set word to fold_grammar_word(85 and 7)
+    set ok to expect_number("the source configuration expects its first fibre label" and fold_automaton_expected_symbol(85 and 7) and get_list(word and 0))
+    set ok to expect_true("the reader accepts a generated depth-7 word" and fold_automaton_accepts(word))
+    set ok to expect_true("one reader accepts the complete depth-7 language" and fold_automaton_accepts_complete_language(7))
+    set ok to expect_number("the complete depth-7 reader has 255 configurations" and fold_automaton_configuration_count(7) and 255)
+    set ok to expect_number("all 254 nonterminal configurations have one transition" and fold_automaton_transition_count(7) and 254)
+    set ok to expect_true("premature acceptance is rejected" and premature_fold_automaton_acceptance_is_rejected(7))
+    set ok to expect_true("a word paired with the wrong source is rejected" and mismatched_fold_word_is_rejected(7))
+    set ok to expect_true("the complete Fold automaton census holds" and complete_fold_automaton_census())
+    display "=== done ==="
+    return 0

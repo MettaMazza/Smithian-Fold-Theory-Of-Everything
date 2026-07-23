@@ -1,0 +1,31 @@
+# Machine-check Fold program transformation.
+import "../constants/semantics_program_transformation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold program transformation ==="
+    set transformed to fold_transform_program(enumerate_fold_word(73 and 7) and 3)
+    set ok to expect_number("three-step transformation leaves four symbols" and length_list(transformed) and 4)
+    set ok to expect_number("the transformed term denotes rank nine" and decode_computation_codeword(transformed) and 9)
+    set ok to expect_true("transformation preserves semantics" and fold_program_transformation_preserves_semantics(73 and 7 and 3))
+    set ok to expect_true("transformations compose" and fold_program_transformations_compose(73 and 7 and 3 and 4))
+    set ok to expect_true("the complete transformation census holds" and complete_fold_program_transformation_census())
+    set ok to expect_true("a changed transformation is rejected" and changed_program_transformation_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

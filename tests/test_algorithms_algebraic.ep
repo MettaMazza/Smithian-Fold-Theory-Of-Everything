@@ -1,0 +1,28 @@
+# Machine-check Fold algebraic algorithms.
+import "../constants/algorithms_algebraic.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold algebraic algorithms ==="
+    set ok to expect_true("zero Fold actions are identity" and fold_algebra_identity_holds(73 and 7))
+    set ok to expect_true("counted actions compose exactly" and fold_algebra_composition_holds(73 and 7 and 3 and 4))
+    set ok to expect_true("three action blocks regroup exactly" and fold_algebra_regrouping_holds(73 and 7 and 2 and 3 and 2))
+    set ok to expect_true("the recurrent Fold action has its forced inverse" and fold_recurrent_inverse_holds())
+    set ok to expect_true("the complete algebraic census holds" and complete_fold_algebraic_algorithm_census())
+    set ok to expect_true("a nonzero identity claim is rejected" and false_nonzero_identity_is_rejected(7))
+    set ok to expect_true("a shortened recurrent inverse is rejected" and shortened_recurrent_inverse_is_rejected())
+    display "=== done ==="
+    return 0

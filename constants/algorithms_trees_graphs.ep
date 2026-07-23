@@ -1,0 +1,110 @@
+# ============================================================================
+#  FOLD TREES AND GRAPHS -- generated prefix nodes and transition edges.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Network structure is already present in the Fold grammar.  The empty path is
+#  the root, each lawful fibre-label extension is a child, and observation gives
+#  the unique parent edge by deleting the first label.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Level r has b^r nodes.  Nodes through depth k equal the automaton configuration
+#  count; nonroot edges equal the circuit size.  Every nonroot node has one parent,
+#  every parent has b children, and depth falls on every parent edge, forcing a
+#  unique path to the root and excluding a closing-graph cycle.  The established
+#  recurrent period-b orbit remains the separately closed cyclic graph.  No
+#  conventional tree or graph definition selects these counts.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_strings_sequences.ep"
+
+
+define fold_tree_level_nodes with level as Int returning Int:
+    return fold_language_word_count(level)
+
+
+define fold_tree_node_count with depth as Int returning Int:
+    set nodes to 0
+    set level to 0
+    repeat while level < depth + 1:
+        set nodes to nodes + fold_tree_level_nodes(level)
+        set level to level + 1
+    return forced_to_be("Fold tree nodes = automaton configurations" and nodes and fold_automaton_configuration_count(depth))
+
+
+define fold_tree_edge_count with depth as Int returning Int:
+    set edges to 0
+    set level to 1
+    repeat while level < depth + 1:
+        set edges to edges + fold_tree_level_nodes(level)
+        set level to level + 1
+    return forced_to_be("Fold tree edges = complete circuit transitions" and edges and fold_circuit_size(depth))
+
+
+define fold_tree_parent with word as List returning List:
+    if length_list(word) < 1:
+        return fold_grammar_start()
+    return fold_sequence_slice(word and 1 and length_list(word) - 1)
+
+
+define fold_tree_parent_is_unique with word as List returning Bool:
+    if length_list(word) < 1:
+        return true
+    set parent to fold_tree_parent(word)
+    if fold_word_is_generated(parent and length_list(word) - 1) == false:
+        return false
+    set matches to 0
+    set symbol to 1
+    repeat while symbol < encoding_symbol_count() + 1:
+        set child to fold_grammar_prepend(symbol and parent)
+        if fold_words_are_equal(child and word):
+            set matches to matches + 1
+        set symbol to symbol + 1
+    return forced_to_be("Fold graph: each nonroot node has one parent" and matches and 1) == 1
+
+
+define every_fold_node_reaches_root with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set word to enumerate_fold_word(rank and depth)
+        set remaining to depth
+        repeat while remaining > 0:
+            if fold_tree_parent_is_unique(word) == false:
+                return false
+            set word to fold_tree_parent(word)
+            set remaining to remaining - 1
+            if length_list(word) != remaining:
+                return false
+        if length_list(word) != 0:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define complete_fold_trees_graphs_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_tree_node_count(depth) != fold_automaton_configuration_count(depth):
+            return false
+        if fold_tree_edge_count(depth) != fold_circuit_size(depth):
+            return false
+        if every_fold_node_reaches_root(depth) == false:
+            return false
+        set example to enumerate_fold_word(1 and depth)
+        if fold_grammar_extension_count(example) != binary_count():
+            return false
+        set depth to depth + 1
+    return recurrent_machine_is_forced()
+
+
+define closing_graph_self_edge_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    return fold_words_are_equal(word and fold_tree_parent(word)) == false
+
+
+define extra_tree_parent_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    set parent to fold_tree_parent(word)
+    set changed to fold_grammar_prepend(binary_count() and parent)
+    return fold_words_are_equal(word and changed) == false

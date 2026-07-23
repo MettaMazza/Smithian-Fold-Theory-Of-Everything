@@ -67,13 +67,13 @@ for source_file in test_*.ep; do
     fi
 done
 
-if [ "$suite_total" -ne 326 ]; then
-    echo "MANIFEST_FAIL expected_suites=326 got=$suite_total"
+if [ "$suite_total" -ne 409 ]; then
+    echo "MANIFEST_FAIL expected_suites=409 got=$suite_total"
     exit 1
 fi
 
-if [ "$check_total" -ne 2002 ]; then
-    echo "MANIFEST_FAIL expected_checks=2002 got=$check_total"
+if [ "$check_total" -ne 2693 ]; then
+    echo "MANIFEST_FAIL expected_checks=2693 got=$check_total"
     exit 1
 fi
 

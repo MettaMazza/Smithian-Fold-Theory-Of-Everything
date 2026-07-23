@@ -1,0 +1,96 @@
+# ============================================================================
+#  FOLD ENUMERATION LAW -- exact counted order of every generated description.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Enumeration need not import a numbering scheme.  Step 325 already orders the
+#  exact coordinates 1/b^k through b^k/b^k, and Step 328 gives each coordinate a
+#  unique word.  The coordinate index is therefore the forced rank.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Unranking encodes the indexed coordinate.  Ranking decodes its word.  Both
+#  compositions are identities for every state through the forced depth, adjacent
+#  ranks produce distinct exact words, and the rank count is b^k.  Across levels
+#  0..k, enumeration contains the same sum of configurations as the Fold automaton.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computability_halting_law.ep"
+
+
+define enumerate_fold_word with rank as Int and depth as Int returning List:
+    return fold_grammar_word(rank and depth)
+
+
+define rank_fold_word with word as List returning Int:
+    return decode_computation_codeword(word)
+
+
+define fold_enumeration_round_trip with rank as Int and depth as Int returning Bool:
+    if rank < 1:
+        return false
+    if rank > computation_state_count(depth):
+        return false
+    set word to enumerate_fold_word(rank and depth)
+    if fold_word_is_generated(word and depth) == false:
+        return false
+    return rank_fold_word(word) == rank
+
+
+define complete_fold_enumeration_at_depth with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_enumeration_round_trip(rank and depth):
+            if rank < computation_state_count(depth):
+                set current to enumerate_fold_word(rank and depth)
+                set next to enumerate_fold_word(rank + 1 and depth)
+                if fold_words_are_equal(current and next):
+                    return false
+            set rank to rank + 1
+        else:
+            return false
+    return true
+
+
+define fold_enumeration_count with depth as Int returning Int:
+    set enumerated to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_enumeration_round_trip(rank and depth):
+            set enumerated to enumerated + 1
+        set rank to rank + 1
+    return forced_to_be("Fold enumeration: ranked words = exact state count" and enumerated and computation_state_count(depth))
+
+
+define fold_enumeration_through_depth with depth as Int returning Int:
+    set enumerated to 0
+    set level to 0
+    repeat while level < depth + 1:
+        set enumerated to enumerated + computation_state_count(level)
+        set level to level + 1
+    return forced_to_be("Fold enumeration through depth = automaton configurations" and enumerated and fold_automaton_configuration_count(depth))
+
+
+define outside_fold_rank_is_rejected with depth as Int returning Bool:
+    if fold_enumeration_round_trip(0 and depth):
+        return false
+    return fold_enumeration_round_trip(computation_state_count(depth) + 1 and depth) == false
+
+
+define complete_fold_enumeration_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if complete_fold_enumeration_at_depth(depth):
+            if fold_enumeration_count(depth) == computation_state_count(depth):
+                if fold_enumeration_through_depth(depth) == fold_automaton_configuration_count(depth):
+                    if outside_fold_rank_is_rejected(depth):
+                        set depth to depth + 1
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        else:
+            return false
+    return true

@@ -1,0 +1,26 @@
+# Machine-check Fold program equivalence.
+import "../constants/semantics_program_equivalence.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold program equivalence ==="
+    set ok to expect_true("a program equals its canonical residual form" and fold_program_has_canonical_equivalent(73 and 7 and 3))
+    set ok to expect_true("program equivalence is symmetric" and fold_program_equivalence_is_symmetric(73 and 7 and 3))
+    set ok to expect_true("the explicit source and residual programs are equivalent" and fold_programs_are_equivalent(enumerate_fold_word(73 and 7) and 3 and enumerate_fold_word(9 and 4) and 0))
+    set ok to expect_true("the complete equivalence census holds" and complete_fold_program_equivalence_census())
+    set ok to expect_true("a changed denotation is rejected" and changed_program_denotation_is_rejected(73 and 7 and 3))
+    display "=== done ==="
+    return 0

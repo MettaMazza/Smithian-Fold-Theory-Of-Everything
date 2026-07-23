@@ -1,6 +1,6 @@
 # Codex Living Knowledge — Smithian Fold Programme
 
-**Last grounded:** 19 July 2026
+**Last grounded:** 23 July 2026
 **Owner:** Maria Smith  
 **Maintaining agent:** OpenAI Codex, gpt-5.6-sol
 **Audit level:** root/direct integration audit, high reasoning level; project subagents are read-only when Maria explicitly authorizes their use
@@ -87,6 +87,32 @@ Forcing and derivation validity are defined by the engines and `STANDARDS.md`: t
 
 **Current synchronization record, 17 July 2026:** coherence is registered as `SFT-COHERENCE-322`. Direct review then established that Unison v6.1 already publishes `contextual_integration` and `generation_selection_law` as 27/27 form-closed and the engine consumes them. Their main-corpus lag was synchronization debt, not unpublished work. They are now registered as Steps 323–324 with matching certificates, completing the 326-suite release surface.
 
+**Current development record, 23 July 2026:** the fundamental-computation programme
+registers Steps 325–407: the common computation foundation, formal computation,
+computability, degrees and incompleteness, the complete declared complexity block,
+and the complete algorithms/mathematical-data-structures block through search and
+order, exact arithmetic, sequences, trees/graphs, algebraic/geometric action,
+dynamic reuse, optimization, unresolved-branch randomized search, parallel,
+distributed and streaming execution, numerical and symbolic evaluation,
+approximation, quantum branch algorithms, and the complete semantics/programming-
+theory block through syntax, binding/substitution, evaluation, semantic
+correspondence, types, equivalence, termination/correctness, specification,
+transformation, compilation, proof verification, and the complete information-
+science branch through entropy/uncertainty, compression, channel capacity,
+noise/error, coding, mutual/conditional information, and the classical/
+probabilistic/quantum correspondence, registered mathematical foundations,
+lambda/circuit formalism, concurrency/distribution, security, learning,
+scientific computation, the complete reversible/quantum-computation block,
+the mechanically extended foundation, depth-induction schema, and registered
+multi-error quantum fault models, unrestricted native Busy-Beaver behavior,
+native Fold evaluator/verifier equality, exact lawful-circuit lower bounds, and
+unbounded finite-order fault width. The eighty-three suites pass 691/691
+top-level checks over complete depth-1-through-7 censuses.  The isolated
+current-source gate now executes **409 suites / 2,693 checks / zero failures**, with
+**409 identical / zero drifted / zero absent** generated-C certificates.  Publication
+mirrors retain their prior release counts until Maria authorizes a coordinated
+publication synchronization.
+
 ## Documentation inventory and reading rule
 
 The five roots contain 159 Markdown files. Many are exact or near duplicates: compiler manuals copied into every standalone project, papers mirrored under the umbrella, `OneFoldMaster` and theory-paper copies inside Unison, and umbrella/standalone Omni documents.
@@ -166,7 +192,17 @@ Never collapse these into “works” or “doesn't work.”
 
 ## Current umbrella execution anchor
 
-Fresh on 17 July 2026, the complete current-source and generated-certificate surfaces both execute **326 suites / 2,002 checks / zero failures**, and all 326 source/certificate pairs regenerate byte-identically. Earlier 307/1,844 and 308/1,848 totals are historical intermediate surfaces and must not appear as current release counts.
+Fresh on 23 July 2026, the complete current-source and generated-certificate surfaces both execute **409 suites / 2,693 checks / zero failures**, and all 409 source/certificate pairs regenerate byte-identically. The 405/2,657 Steps-325–403 surface is the immediately preceding development record; the 402/2,622 Steps-325–400, 392/2,488 Steps-325–390, 385/2,442 Steps-325–383, 374/2,376 Steps-325–372, 358/2,257 Steps-325–356, 345/2,151 Steps-325–343, and 332/2,059 Steps-325–330 surfaces are earlier development history; the 17 July 326/2,002 surface is the preceding synchronized release record.
+
+**Publication preparation record, 23 July 2026:** *After Turing: The Fold
+Machine* is locally synchronized to Steps 325–407, the fundamental-computation
+census, the 409/2,693 seal, and the portable proof laboratory. The Markdown,
+finished PDF, Zenodo metadata, citation record, rendering receipt, deterministic
+evidence archive, checksums, and release manifest are prepared. This is a
+documentary release candidate, not a new scientific step. It has not been
+committed, tagged, pushed, deposited, assigned a DOI, uploaded, or published.
+Unison AI, Fold Chess, Fold Go, and Fold Protein were deliberately excluded and
+remain later translation/frontier work.
 
 Additional registered checks include deliberate fitted-value halt behavior, the fine-structure neighborhood scan, declared-tolerance NIST comparisons, and the refereed chess legality anchor. Each retains its own evidence and scope.
 
@@ -176,15 +212,15 @@ The NIST checker tolerances are not uniform: inverse alpha uses `1e-6` relative 
 
 Inventory after chronological and certificate reconciliation:
 
-- 326 `.ep` test sources;
-- 326 generated-C certificates;
-- the complete source and generated-C surfaces both execute **326 suites / 2,002 checks / zero failures**;
-- **326/326 source/C pairs regenerate byte-identically**;
+- 409 `.ep` test sources;
+- 409 generated-C certificates;
+- the complete source and generated-C surfaces both execute **409 suites / 2,693 checks / zero failures**;
+- **409/409 source/C pairs regenerate byte-identically**;
 - zero pairs drift and zero certificates are absent.
 
-The last two certificates are `test_contextual_integration` (14 checks) and `test_generation_selection_law` (13 checks). Their 27 checks were already published by Unison v6.1 and are now attached to Steps 323–324 and the registered release. The endgame-table suite separately completed both full 2^19 re-proofs, including value-law closure, exact censuses, win/loss/draw counts, mate counts, and maximum distances.
+The newest four certificates are `test_computability_busy_beaver_unrestricted`, `test_complexity_fold_p_np`, `test_complexity_arbitrary_circuit_lower_bounds`, and `test_quantum_unbounded_finite_fault_thresholds`, attached to Steps 404–407 and totaling 36 checks. The full Steps-325–407 computation programme totals 691 checks; Steps 325–403 contribute the preceding 655. The preceding two certificates before the computation programme are `test_contextual_integration` (14 checks) and `test_generation_selection_law` (13 checks); their 27 checks were already published by Unison v6.1 and remain attached to Steps 323–324. The endgame-table suite separately completed both full 2^19 re-proofs, including value-law closure, exact censuses, win/loss/draw counts, mate counts, and maximum distances.
 
-Use `verify/prove_current_source_isolated.sh` for the non-destructive live-source gate. It builds and runs in a temporary directory, leaves `tests/` and `verify/` untouched, and reports both the 326/2,002 execution receipt and certificate comparison. Current expected comparison is **326 identical, zero drifted, zero absent**.
+Use `verify/prove_current_source_isolated.sh` for the non-destructive live-source gate. It builds and runs in a temporary directory, leaves `tests/` and `verify/` untouched, and reports both the 409/2,693 execution receipt and certificate comparison. Current expected comparison is **409 identical, zero drifted, zero absent**.
 
 The twelve formerly drifted pairs were synchronized mechanically and remain visible in the audit history: `test_applied_signatures`, `test_codata_comparison`, `test_constants_rationality`, `test_counterfactual_map`, `test_endgame_oracle`, `test_fine_hyperfine`, `test_finite_inventory`, `test_fold_chess_bot`, `test_measured_values`, `test_particle_census`, `test_trace_to_the_one`, `test_turbulence_spectrum`.
 
@@ -192,10 +228,10 @@ Do not run `verify/build_from_source.sh` casually. It deletes non-`.ep` files un
 
 ## Dependency audit
 
-All 326 test sources reach the foundation transitively. Of them:
+All 409 test sources reach the foundation transitively. Of them:
 
-- 307 reach `structural_counts`;
-- 208 reach `One`/`FoldValue`;
+- 390 reach `structural_counts`;
+- 291 reach `One`/`FoldValue`;
 - two directly reach the axiom theorem;
 - two reach the measured-values boundary.
 
@@ -306,6 +342,50 @@ here. The canonical aggregate receipt is Fold Protein
 Execution across unrelated fold families can extend the demonstrated reach of
 the law. It does not postpone, subtract from or redefine the achieved repeated
 multi-structure result.
+
+### Fold-Machine complete-support translation — 23 July 2026
+
+The newly closed classical/quantum computation corpus materially advances the
+active generalized Protein frontier. Its applicable laws are complete generated
+support, exact observation classes, reversible predecessor records, shared-
+suffix dynamic reuse, branchwise transformation, and the prohibition on
+recovering an absent distinction without a lawful record. The Protein
+translation binds directly to the current corpus sources for computation state
+and transition, rewriting, information, reversible/quantum foundations, gates,
+and quantum algorithms.
+
+A cross-check corrected the interpretation of the earlier bidirectional support
+artifact. Its `83,451` source-bound paths preserve every minimum-exclusion state
+at every residue, but each path varies one residue around the material seed. It
+is therefore a complete **per-residue preservation audit**, not the Cartesian
+whole-chain support. This correction does not remove a positive state, alter a
+sealed prediction, or revise the published multi-structure result.
+
+`tools/compile_fold_machine_joint_support.py` now represents the actual joint
+support without enumerating or truncating it. The encoding is exact and
+reversible: `24 = colour(3) * binary(2)^3`, `576 = colour(3)^2 * binary(2)^6`,
+and all 576 lattice states round-trip through their generated Fold words. Across
+the registered 4APD, 3RYG, 1VIE and 7IEI development sequences it preserves all
+`85,814` minimum-domain states over 255 residues with zero removal. Their exact
+joint-support counts contain respectively 82, 128, 155 and 262 decimal digits.
+Every three-residue window composes through its two-residue overlap and One-
+residue advance in both directions; closed-history multiplied by retained
+support reconstructs the complete support at every residue boundary. All four
+independent reproductions are byte-identical and record zero target access,
+zero weights and zero fitted parameters.
+
+The same audit identifies the next material requirement precisely. The existing
+contact, hydrogen-bond and topology rows were evaluated as seed-conditioned
+one-residue substitution slices. They are real applied data, but they are not
+yet a compatibility relation over simultaneous states drawn from several
+residue domains. They therefore cannot lawfully eliminate paths from the newly
+represented Cartesian support. The next construction is one exact, target-free
+generated segment/path image whose equality defines compatibility and whose
+retained Fold record reconstructs every supported predecessor. Quantum
+interference is not applied until both a protein phase predicate and common-
+image relation are derived; applying it sooner would insert an unforced
+selector. Runtime integration and a new broad blind panel follow only after
+that relation preserves the complete positive support and closes uniquely.
 
 ## Fold Go knowledge
 
@@ -436,7 +516,7 @@ persisted and remain required for learning.
 - standalone `verify_omni.py`: 21/21;
 - native-transformer repository suite: 55/55;
 - main-corpus context/generation laws: 27/27;
-- full main corpus: 326 suites, 2,002 checks, zero failures, 326/326
+- full main corpus: 409 suites, 2,693 checks, zero failures, 409/409
   source/certificate identities.
 
 The exact packed v4 serving form retains all seven count tables without
@@ -494,23 +574,208 @@ wall.
 
 ## Current next implementation order
 
-All four computational proofs remain active in parallel under their own
-purpose-matched evidence:
+Protein is the current active development focus. Go, Chess and Unison retain
+their secured states above; no new run or source change was made to those three
+projects during the 23 July Fold-Machine translation. Resume them only under
+Maria's next direction.
 
-1. Protein: retain v5-v10's secured inter-window, orientation, charge,
-   side-chain, and balanced relations; add backbone hydrogen-bond assembly and
-   spatially complete side-chain exclusion; rerun sealed 76-residue prediction.
-2. Go: extend exact augmented-state coverage and per-move receipts; execute the
-   Maria-authorized 9x9/full-board campaign through the greater-than-50% gate.
-3. Chess: derive the next lossless calculation improvement from the 36-position
-   panel, remeasure it, and execute the Maria-authorized 2100 run.
-4. Unison: integrate the sealed v5 position relation, rebuild the native
-   artifact, and execute held-out free multi-turn generalisation with reward
-   learning retained.
+1. Protein: derive the exact target-free joint segment/path image that combines
+   generated contacts, hydrogen bonds, topology and whole-chain orientation;
+   compile the complete factorized support through that relation; machine-check
+   preservation and uniqueness; then execute the next sealed blind trial.
+2. Go, when resumed: extend exact augmented-state coverage and per-move
+   receipts; execute the Maria-authorized 9x9/full-board campaign through the
+   greater-than-50% gate.
+3. Chess, when resumed: derive the next lossless calculation improvement from
+   the 36-position panel, remeasure it, and execute the Maria-authorized 2100
+   run.
+4. Unison, when resumed: execute held-out single-turn, multi-turn, paraphrased
+   transfer, free composition and full Discord engagement through the active
+   native v5 position-conditioned path with reward learning retained.
 
 The main corpus is the mathematical authority and synchronized publication
 surface; the standalone repositories remain the canonical active development
 environments until Maria approves a coordinated release.
+
+## Next-session technical handoff — 23 July 2026
+
+### Exact live state
+
+No Protein computation is running. No source, result, paper or metadata from
+this Fold-Machine translation has been committed, pushed, uploaded or
+published. The active generalized runtime was not altered. The four current
+receipts are pre-integration development evidence; they are not official runs
+or new structure predictions.
+
+The Fold Protein worktree contains substantial earlier live changes and
+generated evidence. Preserve them. The files added specifically for the
+Fold-Machine joint-support correction are:
+
+- `tools/compile_fold_machine_joint_support.py`;
+- `tools/verify_fold_machine_joint_support.py`;
+- `tests/test_fold_machine_joint_support.py`.
+
+`verify/protein_forcing_registry_v1.json` was extended narrowly to classify
+those three sources under `protein_material_transfer_development`. The main
+corpus `CODEX_PROJECT_KNOWLEDGE.md` was updated with the computation programme
+and this Protein translation. Do not sweep unrelated dirty files into a commit.
+
+### Current source-bound applied artifacts
+
+The authoritative current receipts use the `r2` paths below. The earlier
+non-`r2` directories are preserved first executions from before the compiler's
+streaming-memory correction; do not use them as the current reproduction
+anchor.
+
+- 4APD: `verify/development_runs/protein_fresh_short_4apd_fold_machine_joint_support_r2_20260723/`;
+- 3RYG: `verify/development_runs/protein_fresh_compact_3ryg_fold_machine_joint_support_r2_20260723/`;
+- 1VIE: `verify/development_runs/protein_fresh_medium_1vie_fold_machine_joint_support_r2_20260723/`;
+- 7IEI: `verify/development_runs/protein_fresh_long_7iei_fold_machine_joint_support_r2_20260723/`.
+
+Each directory contains `result.json` and a pre-target `seal.json`. All four
+verify independently and reproduce byte-identically. Their exact applied
+summary is:
+
+| Protein | Residues | Preserved minimum-domain states | Joint-support decimal digits | Minimum binary cover depth |
+|---|---:|---:|---:|---:|
+| 4APD | 31 | 13,557 | 82 | 271 |
+| 3RYG | 51 | 19,001 | 128 | 424 |
+| 1VIE | 60 | 24,224 | 155 | 514 |
+| 7IEI | 113 | 29,032 | 262 | 870 |
+| **Total** | **255** | **85,814** | separate source-bound supports | **2,079 across the four covers** |
+
+Every receipt records zero target access, zero weights, zero fitted parameters,
+zero state removal and no frontier truncation. Runtime integration is false and
+uniqueness has not yet been tested because no lawful joint physical relation has
+yet acted on the Cartesian support.
+
+### What the computation work established
+
+The corpus and standalone Fold Computational Laboratory were read together.
+The applicable computation laws are exact generated state/transition support,
+rewriting and shared-suffix recurrence, reversible predecessor records,
+complete branch transformation, common-image merger, and exact information
+accounting. The Protein compiler binds the source identities of the relevant
+main-corpus computation files and the *After Turing* paper/constitution.
+
+The 24-lattice has an exact mixed Fold factorization:
+
+- `24 = colour(3) * binary(2)^3` per angular axis;
+- `576 = colour(3)^2 * binary(2)^6` per paired state;
+- all 576 states round-trip through the generated representation;
+- a ten-label binary covering word represents every state, with the 448
+  non-lattice codes rejected rather than interpreted as Protein states.
+
+The earlier bidirectional closure's 83,451 paths remain valid positive applied
+evidence, but source inspection and the new support census establish their
+exact scope: every path changes one residue around the material seed. They
+prove complete per-residue preservation and physical evaluation, not the full
+Cartesian simultaneous-state support. The new factorized compiler corrects
+that representation without deleting or downgrading any path.
+
+Three-residue window products, two-residue overlap products and One-residue
+advance products now agree exactly in both directions. At every residue
+boundary, retained support multiplied by the closed predecessor-history count
+reconstructs the complete Cartesian support. This is the working basis for
+lossless dynamic reuse; it is not a selector.
+
+### Exact remaining scientific construction
+
+The existing contact, hydrogen-bond and topology rows are real target-free
+executions, but their geometry was generated with one residue changed while all
+other residues remained at the material seed. They are therefore unary
+conditional slices. Combining their scalar counts as if they were simultaneous
+multi-residue compatibility data would be invalid.
+
+The next construction must derive one joint physical image from SFT rather than
+adding another selector. Trace it through the already closed least-action,
+molecular-bond, intermolecular, stationary-state, quantum-phase and computation
+laws. The relation must specify, from sequence and mutually generated geometry:
+
+1. the exact state carried by a generated segment;
+2. its boundary frame and forward/reverse composition law;
+3. complete contact identities and still-open contact obligations;
+4. hydrogen-bond donor/acceptor identities and retained capacities;
+5. hydrophobic, charge and long-range topology identities;
+6. the common physical image under which two histories may merge;
+7. the exact predecessor record that reconstructs every merged history.
+
+Do not assign molecular, intermolecular, kinetic or potential fractions to
+Protein interactions merely because similarly named corpus quantities exist.
+The mapping itself must be derived and machine-checked. Do not apply quantum
+phase cancellation or interference until a Protein phase predicate and
+common-image relation have both been derived. Computation supplies exhaustive
+lossless execution; it does not manufacture physical information absent from
+the constitution.
+
+### Required machine gates before integration
+
+The joint relation must pass all of the following in the consolidated
+architecture:
+
+- direct, forward or constitutional provenance to the One and Ernos admission;
+- exact 576-state encoding and complete-domain preservation;
+- exact segment composition: joined execution equals direct execution;
+- three-residue windows, binary overlaps and One advances in both directions;
+- translation, rotation, chirality and chain-orientation invariance;
+- deterministic independent reproduction;
+- zero target access, zero trained weights, zero fitted parameters and no
+  arbitrary ranking or threshold;
+- no hidden iteration, hash, cache or file ordering used as a choice;
+- complete positive-frontier preservation before the new relation applies;
+- proof that any removal has no compatible whole-chain support in either
+  direction;
+- one unique constitutional path before emission.
+
+Floating geometry may remain a human readout, but it cannot enter the exact
+constitutional law. The current relations using floating coordinates must be
+re-expressed through exact discrete identities or a separately derived exact
+algebraic representation before they can control joint support.
+
+### Ordered next execution
+
+1. Reuse the sealed `r4` zero-exclusion domain audits; do not rerun their
+   approximately 1 GB candidate files unless their bound source changes.
+2. Implement the joint segment/path image as one consolidated relation, not a
+   succession of selector variants.
+3. Prove direct-versus-composed and forward-versus-reverse equality on a complete
+   generated finite boundary.
+4. Apply it to the four registered factorized supports while retaining every
+   predecessor record and live progress/ETA output.
+5. If support remains plural, read the retained distinction record to derive
+   the missing physical relation; do not choose by target score or ordering.
+6. If support closes uniquely, integrate the relation once into the generalized
+   runtime, emit and seal target-free structures, and only then access targets
+   for TM/dRMSD and contact/topology measurements.
+7. After unique target-free closure, preregister and run one fresh diverse blind
+   development panel. Maria determines its conclusion and whether a later run
+   is official.
+
+The current technical recommendation is not to spend a fresh blind panel yet:
+the corrected support compiler is a major coverage and correctness improvement,
+but it does not yet emit a unique structure. The next purpose-matched trial is
+the complete joint-relation closure. This recommendation does not veto any run
+Maria orders.
+
+### Focused reproduction commands
+
+From `/Users/mettamazza/Desktop/Fold Protein`:
+
+```bash
+python3 -m unittest tests.test_fold_machine_joint_support tests.test_protein_bidirectional_domain_support -v
+python3 -m tools.verify_protein_forcing_registry
+python3 -m tools.verify_fold_machine_joint_support \
+  verify/development_runs/protein_fresh_short_4apd_fold_machine_joint_support_r2_20260723/result.json \
+  verify/development_runs/protein_fresh_short_4apd_fold_machine_joint_support_r2_20260723/seal.json
+```
+
+Repeat the last command with the 3RYG, 1VIE and 7IEI `r2` directories. The last
+executions returned four verified statuses, 576/576 state round-trips each,
+byte-identical deterministic reproductions and zero target accesses. The
+forcing registry returned `verified`, 526 classified sources and verified
+derivation admission. Do not rerun the complete 405-suite main corpus merely to
+re-establish these unchanged application facts; use the full isolated corpus
+gate for a coordinated release or after a main-corpus derivation changes.
 
 ## Completed Zenodo catalogue rebuild — 22 July 2026
 

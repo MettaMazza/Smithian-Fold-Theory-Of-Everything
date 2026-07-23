@@ -1,0 +1,124 @@
+# ============================================================================
+#  FOLD DEGREES OF COMPUTABILITY -- exact hierarchy of held distinctions.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 342 proves that one held fibre label restores the one distinction closed
+#  by one observation.  Repeating that relation forces a complete hierarchy: a
+#  degree is the counted number of closed labels made available to a computation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  At depth k, degree d retains the first d fibre labels and receives the state
+#  observed after d Fold steps.  Concatenating the held labels with the observed
+#  suffix reconstructs the original word and coordinate.  Degree d distinguishes
+#  b^d histories inside each observed class; degree d+1 refines every degree-d
+#  class by exactly b.  The observed classes b^(k-d) times held histories b^d
+#  reconstruct all b^k states.
+#
+#  Every degree 0..k and every state through the forced depth is executed.  A
+#  degree beyond the description and a changed held label are rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computability_admissible_limits.ep"
+
+
+define fold_degree_is_admitted with degree as Int and depth as Int returning Bool:
+    if degree < 0:
+        return false
+    return degree <= depth
+
+
+# The first d closed labels of one exact state.
+define fold_degree_held_prefix with index as Int and depth as Int and degree as Int returning List:
+    set word to fold_grammar_word(index and depth)
+    set held to create_list()
+    set position to 0
+    repeat while position < degree:
+        set ok to append_list(held and get_list(word and position))
+        set position to position + 1
+    return held
+
+
+# Rejoin the held labels to the observed suffix and decode the exact source.
+define fold_degree_reconstruct_source with observed_index as Int and depth as Int and held as List returning Int:
+    set degree to length_list(held)
+    if fold_degree_is_admitted(degree and depth) == false:
+        return 0
+    set observed_depth to depth - degree
+    set observed_word to fold_grammar_word(observed_index and observed_depth)
+    set complete_word to create_list()
+    set position to 0
+    repeat while position < degree:
+        set label to get_list(held and position)
+        if encoding_symbol_is_lawful(label) == false:
+            return 0
+        set ok to append_list(complete_word and label)
+        set position to position + 1
+    set suffix_position to 0
+    repeat while suffix_position < observed_depth:
+        set ok to append_list(complete_word and get_list(observed_word and suffix_position))
+        set suffix_position to suffix_position + 1
+    return decode_computation_codeword(complete_word)
+
+
+define fold_degree_reconstruction_holds with index as Int and depth as Int and degree as Int returning Bool:
+    set observed_index to recursive_fold_index(index and depth and degree)
+    set held to fold_degree_held_prefix(index and depth and degree)
+    return fold_degree_reconstruct_source(observed_index and depth and held) == index
+
+
+# The number of histories distinguished inside one observed class at degree d.
+define fold_degree_distinction_count with degree as Int returning Int:
+    return whole_power(binary_count() and degree)
+
+
+define fold_degree_observed_class_count with depth as Int and degree as Int returning Int:
+    return computation_state_count(depth - degree)
+
+
+define fold_degree_accounting with depth as Int and degree as Int returning Int:
+    set classes to fold_degree_observed_class_count(depth and degree)
+    set histories to fold_degree_distinction_count(degree)
+    return forced_to_be("Fold degree: observed classes times held histories = source states" and classes * histories and computation_state_count(depth))
+
+
+# Each next degree refines the held-history space by exactly the fibre count.
+define adjacent_fold_degrees_are_nested with degree as Int returning Bool:
+    set lower to fold_degree_distinction_count(degree)
+    set higher to fold_degree_distinction_count(degree + 1)
+    return higher == binary_count() * lower
+
+
+define complete_fold_degree_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set degree to 0
+        repeat while degree < depth + 1:
+            if fold_degree_accounting(depth and degree) != computation_state_count(depth):
+                return false
+            if degree < depth:
+                if adjacent_fold_degrees_are_nested(degree) == false:
+                    return false
+            set index to 1
+            repeat while index < computation_state_count(depth) + 1:
+                if fold_degree_reconstruction_holds(index and depth and degree):
+                    set index to index + 1
+                else:
+                    return false
+            set degree to degree + 1
+        set depth to depth + 1
+    return true
+
+
+define degree_beyond_description_is_rejected with depth as Int returning Bool:
+    return fold_degree_is_admitted(depth + 1 and depth) == false
+
+
+define changed_degree_label_changes_source with depth as Int returning Bool:
+    set held to fold_degree_held_prefix(1 and depth and 1)
+    set observed to recursive_fold_index(1 and depth and 1)
+    set lawful to fold_degree_reconstruct_source(observed and depth and held)
+    set ok to set_list(held and 0 and binary_count())
+    set changed to fold_degree_reconstruct_source(observed and depth and held)
+    return lawful != changed

@@ -1,0 +1,96 @@
+# ============================================================================
+#  FOLD HALTING LAW -- terminal closure and nonterminal recurrence, exactly.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 330 derives both closing and recurrent Fold machines.  Halting is therefore
+#  not equated with a chosen runtime convention: it is arrival at the unique One
+#  terminal.  Failure to halt is certified when a complete nonterminal period has
+#  returned, because deterministic repetition then preserves that period.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Every depth-k grid state reaches the One within k steps.  Its least halt count
+#  is found by walking until that terminal; the first state requires exactly k.
+#  The recurrent {1/3,2/3} machine contains no terminal and returns after b steps.
+#  Since its transition is single-valued, repeating the completed period can never
+#  introduce the absent terminal.  Thus the admitted terminal and recurrent cases
+#  have exact, finite outcome certificates.
+# ============================================================================
+
+import "../constants/computability_recognition.ep"
+
+
+define fold_state_halts_within with index as Int and depth as Int and bound as Int returning Bool:
+    set state to computation_state(index and depth)
+    set one to fraction_from_whole_number(1)
+    set steps to 0
+    repeat while steps < bound + 1:
+        if fraction_is_equal(state and one):
+            return true
+        set state to computation_step(state)
+        set steps to steps + 1
+    return false
+
+
+define every_closing_fold_state_halts with depth as Int returning Bool:
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        if fold_state_halts_within(index and depth and depth):
+            set index to index + 1
+        else:
+            return false
+    return true
+
+
+define first_fold_state_halt_time with depth as Int returning Int:
+    return forced_to_be("first Fold state halt time = depth" and process_length_to_terminal(1 and depth) and depth)
+
+
+# A complete nonterminal period is an exact nonhalting certificate.
+define recurrent_fold_machine_does_not_halt returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    set returned to computation_steps(first and binary_count())
+    set one to fraction_from_whole_number(1)
+    if fraction_is_equal(first and one):
+        return false
+    if fraction_is_equal(second and one):
+        return false
+    if fraction_is_equal(returned and first):
+        if recurrent_machine_has_no_terminal():
+            return recurrent_machine_period() == binary_count()
+    return false
+
+
+# UNFAVORABLE CONTROL: the deepest first state does not halt one step early.
+define premature_fold_halt_is_rejected with depth as Int returning Bool:
+    return fold_state_halts_within(1 and depth and depth - 1) == false
+
+
+# UNFAVORABLE CONTROL: neither member of the recurrent period may be labelled
+# as the One terminal.
+define recurrent_terminal_claim_is_rejected returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to computation_step(first)
+    set one to fraction_from_whole_number(1)
+    if fraction_is_equal(first and one):
+        return false
+    return fraction_is_equal(second and one) == false
+
+
+define complete_fold_halting_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if every_closing_fold_state_halts(depth):
+            if first_fold_state_halt_time(depth) == depth:
+                if premature_fold_halt_is_rejected(depth):
+                    set depth to depth + 1
+                else:
+                    return false
+            else:
+                return false
+        else:
+            return false
+    if recurrent_fold_machine_does_not_halt():
+        return recurrent_terminal_claim_is_rejected()
+    return false

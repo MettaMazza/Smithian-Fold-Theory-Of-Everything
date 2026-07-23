@@ -1,0 +1,21 @@
+# Machine-check Fold reductions.
+import "../constants/computability_reduction.ep"
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold reduction law ==="
+    set ok to expect_true("state-to-word reduction preserves a process prefix" and state_to_word_reduction_preserves_process(85 and 7 and 4))
+    set ok to expect_true("word-to-state reduction is the exact inverse" and word_to_state_reduction_is_inverse(85 and 7))
+    set ok to expect_true("observation reduction preserves the Fold transition" and observation_reduction_preserves_transition(85 and 7))
+    set ok to expect_true("Fold reductions compose at every split" and fold_reduction_composes(85 and 7))
+    set ok to expect_true("the complete reduction census holds" and complete_fold_reduction_census())
+    set ok to expect_true("a changed reduction symbol is rejected" and changed_reduction_symbol_is_rejected(7))
+    set ok to expect_true("a shortened reduction process is rejected" and shortened_reduction_process_is_rejected(7))
+    display "=== done ==="
+    return 0

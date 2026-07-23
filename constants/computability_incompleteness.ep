@@ -1,0 +1,87 @@
+# ============================================================================
+#  FOLD INCOMPLETENESS BOUNDARY -- missing distinctions force multiplicity.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The degree hierarchy makes completeness exact.  A description is complete
+#  when it selects one source.  Every missing fibre label leaves its full binary
+#  alternatives lawful, so incompleteness is a counted multiplicity rather than
+#  a discretionary limitation.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  After d observations without their held labels, one retained suffix has b^d
+#  compatible source completions.  Zero missing labels gives one completion;
+#  every positive d gives more than one.  The boundary is therefore the first
+#  absent distinction.  Supplying all d labels through the Step-344 degree route
+#  restores exactly one source.
+#
+#  The self-negating Fold decision remains the second boundary: even a complete
+#  binary outcome alphabet has zero internally consistent predictions for that
+#  generated construction.  Both boundaries are exhaustively executed.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computability_degrees.ep"
+
+
+define fold_compatible_completion_count with missing_distinctions as Int returning Int:
+    return whole_power(binary_count() and missing_distinctions)
+
+
+define fold_description_is_complete with missing_distinctions as Int returning Bool:
+    return fold_compatible_completion_count(missing_distinctions) == 1
+
+
+define every_missing_fold_distinction_is_incomplete with depth as Int returning Bool:
+    set missing to 1
+    repeat while missing < depth + 1:
+        if fold_compatible_completion_count(missing) > 1:
+            set missing to missing + 1
+        else:
+            return false
+    return true
+
+
+# Complete held information restores the selected source despite the suffix's
+# unassisted multiplicity.
+define held_degree_completes_description with index as Int and depth as Int and missing as Int returning Bool:
+    set observed_index to recursive_fold_index(index and depth and missing)
+    set held to fold_degree_held_prefix(index and depth and missing)
+    set restored to fold_degree_reconstruct_source(observed_index and depth and held)
+    return restored == index
+
+
+define incompleteness_multiplicity_matches_resources with missing as Int returning Int:
+    set by_completions to fold_compatible_completion_count(missing)
+    set by_histories to closed_history_resource(missing)
+    return forced_to_be("Fold incompleteness: compatible completions = closed histories" and by_completions and by_histories)
+
+
+define complete_fold_incompleteness_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_description_is_complete(0) == false:
+            return false
+        if every_missing_fold_distinction_is_incomplete(depth) == false:
+            return false
+        set missing to 0
+        repeat while missing < depth + 1:
+            if incompleteness_multiplicity_matches_resources(missing) != whole_power(binary_count() and missing):
+                return false
+            set index to 1
+            repeat while index < computation_state_count(depth) + 1:
+                if held_degree_completes_description(index and depth and missing):
+                    set index to index + 1
+                else:
+                    return false
+            set missing to missing + 1
+        set depth to depth + 1
+    return fold_self_decision_is_undecidable()
+
+
+define false_unique_incomplete_description_is_rejected returning Bool:
+    return fold_description_is_complete(1) == false
+
+
+define false_self_negating_completion_is_rejected returning Bool:
+    return self_negating_fold_fixed_prediction_count() == 0

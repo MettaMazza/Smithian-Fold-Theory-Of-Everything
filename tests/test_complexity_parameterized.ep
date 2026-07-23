@@ -1,0 +1,32 @@
+# Machine-check Fold parameterized complexity.
+import "../constants/complexity_parameterized.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold parameterized complexity ==="
+    set ok to expect_number("parameter three has eight active states" and fold_parameter_active_states(3) and 8)
+    set ok to expect_number("depth seven parameter three has sixteen residual histories" and fold_parameter_residual_histories(7 and 3) and 16)
+    set ok to expect_number("parameter accounting reconstructs 128 states" and fold_parameter_accounting(7 and 3) and 128)
+    set ok to expect_number("parameter-three closure time is three" and fold_parameter_time(3) and 3)
+    set ok to expect_true("adjacent parameters scale by exactly b" and adjacent_fold_parameters_scale_by_binary(7 and 3))
+    set ok to expect_true("the complete parameterized census holds" and complete_fold_parameterized_census())
+    set ok to expect_true("outside parameter values are rejected" and outside_fold_parameter_is_rejected(7))
+    set ok to expect_true("nonbinary parameter scaling is rejected" and nonbinary_parameter_scaling_is_rejected(3))
+    display "=== done ==="
+    return 0

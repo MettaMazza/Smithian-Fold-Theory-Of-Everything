@@ -1,0 +1,32 @@
+# Machine-check Fold dynamic programming.
+import "../constants/algorithms_dynamic_programming.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold dynamic programming ==="
+    set ok to expect_number("shared depth-seven closure work is 254" and fold_dynamic_closure_work(7) and 254)
+    set ok to expect_number("the complete closure table has 255 nodes" and fold_dynamic_closure_table_nodes(7) and 255)
+    set ok to expect_number("dynamic work equals the transition circuit" and fold_dynamic_work_is_forced(7) and 254)
+    set ok to expect_true("the shared table solves every terminal" and fold_dynamic_table_is_complete(7))
+    set ok to expect_true("shared suffixes save exact work" and fold_dynamic_reuse_saves_work(7))
+    set ok to expect_true("the complete dynamic census holds" and complete_fold_dynamic_programming_census())
+    set ok to expect_true("an omitted dynamic layer is rejected" and omitted_dynamic_layer_is_rejected(7))
+    set ok to expect_true("a false no-sharing claim is rejected" and false_no_sharing_claim_is_rejected(7))
+    display "=== done ==="
+    return 0

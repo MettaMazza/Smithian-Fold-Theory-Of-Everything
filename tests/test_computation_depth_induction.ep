@@ -1,0 +1,33 @@
+import "../constants/computation_depth_induction.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold depth-independent induction certificates ==="
+    set ok to expect_number("the extended execution reaches twice depth seven" and fold_induction_execution_depth() and 14)
+    set ok to expect_true("the state-count base is the empty One word" and fold_state_count_induction_base())
+    set ok to expect_true("the state-count successor holds at depth thirteen" and fold_state_count_induction_step(13))
+    set ok to expect_true("the arbitrary-depth state certificate constructs depth fourteen" and fold_state_count_induction_certificate(fold_induction_execution_depth()))
+    set ok to expect_true("information support partitions at depth fourteen" and fold_information_partition_induction_certificate(fold_induction_execution_depth()))
+    set ok to expect_true("circuit resources satisfy the successor certificate" and fold_circuit_resource_induction_certificate(fold_induction_execution_depth()))
+    set ok to expect_true("the complete depth-independent schema constructs depth fourteen" and complete_fold_depth_induction_certificate(fold_induction_execution_depth()))
+    set ok to expect_true("changed branching is rejected" and changed_branching_induction_is_rejected(13))
+    set ok to expect_true("a skipped successor is rejected" and skipped_successor_is_rejected(13))
+    set ok to expect_true("collapsed support is rejected" and collapsed_inductive_support_is_rejected(14 and 6))
+    display "=== done ==="
+    return 0

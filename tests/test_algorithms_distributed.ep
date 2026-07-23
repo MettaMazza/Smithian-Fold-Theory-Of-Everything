@@ -1,0 +1,34 @@
+# Machine-check Fold distributed algorithms.
+import "../constants/algorithms_distributed.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold distributed algorithms ==="
+    set owner to fold_distributed_owner(73 and 7)
+    set local_rank to fold_distributed_local_rank(73 and 7)
+    set ok to expect_number("rank 73 belongs to owner two" and owner and 2)
+    set ok to expect_number("its local rank is nine" and local_rank and 9)
+    set ok to expect_number("owner and local rank reconstruct 73" and fold_distributed_reconstruct(owner and local_rank and 7) and 73)
+    set ok to expect_number("each owner holds sixty-four states" and fold_distributed_partition_size(7) and 64)
+    set ok to expect_number("exact distributed description uses seven labels" and fold_distributed_message_length(7) and 7)
+    set ok to expect_true("the complete distributed census holds" and complete_fold_distributed_algorithm_census())
+    set ok to expect_true("a changed owner is rejected" and changed_distributed_owner_is_rejected(73 and 7))
+    set ok to expect_true("a missing partition is rejected" and missing_distributed_partition_is_rejected(7))
+    display "=== done ==="
+    return 0

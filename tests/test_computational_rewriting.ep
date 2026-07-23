@@ -1,0 +1,34 @@
+# Machine-check the Fold rewriting law.
+import "../constants/computational_rewriting.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold rewriting law ==="
+    set ok to expect_true("one rewrite equals one Fold observation" and fold_rewrite_matches_observation(85 and 7))
+    set word to fold_grammar_word(85 and 7)
+    set suffix to fold_rewrite_once(word)
+    set ok to expect_number("one rewrite closes exactly one symbol" and length_list(suffix) and 6)
+    set ok to expect_number("every suffix has exactly b predecessors" and fold_rewrite_preimage_count(suffix) and 2)
+    set ok to expect_true("all depth-7 words reach the empty normal form" and every_fold_word_reaches_normal_form(7))
+    set ok to expect_true("rewrite composition holds at every split" and fold_rewrite_composition_holds(85 and 7))
+    set ok to expect_true("a shifted suffix is rejected" and shifted_rewrite_suffix_is_rejected(7))
+    set ok to expect_true("an early normal form is rejected" and early_rewrite_normal_form_is_rejected(7))
+    set ok to expect_true("the complete Fold rewriting census holds" and complete_fold_rewriting_census())
+    display "=== done ==="
+    return 0

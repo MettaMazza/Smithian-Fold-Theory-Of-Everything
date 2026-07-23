@@ -1,0 +1,30 @@
+# Machine-check Fold program syntax.
+import "../constants/semantics_syntax.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold program syntax ==="
+    set ok to expect_true("rank 73 with three steps is lawful syntax" and fold_program_syntax_is_lawful(enumerate_fold_word(73 and 7) and 3))
+    set ok to expect_number("three steps leave syntactic depth four" and fold_program_remaining_depth(enumerate_fold_word(73 and 7) and 3) and 4)
+    set ok to expect_number("depth seven has 1024 program forms" and fold_program_syntax_count(7) and 1024)
+    set ok to expect_true("the complete syntax census holds" and complete_fold_program_syntax_census())
+    set ok to expect_true("an overlong prefix is rejected" and overlong_program_prefix_is_rejected(7))
+    set ok to expect_true("an outside program symbol is rejected" and outside_program_symbol_is_rejected(7))
+    display "=== done ==="
+    return 0

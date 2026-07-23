@@ -1,0 +1,94 @@
+# ============================================================================
+#  FOLD REDUCTION LAW -- exact translations preserve process and recognition.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  A reduction is forced here from the already-closed equivalence routes.  It is
+#  an exact translation between Fold representations that preserves the state
+#  reached after every counted prefix and therefore preserves recognition at the
+#  terminal.  No external problem class or mapping convention is imported.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Coordinate-to-word is Step-328 encoding; word-to-coordinate is its inverse.
+#  One observation reduces a depth-k word to its suffix and a depth-k coordinate
+#  to its lower-grid image.  Repeated reduction composes exactly.  Every source,
+#  target, and prefix through the forced depth is checked.  A changed symbol and
+#  a shortened process do not preserve the source result and are rejected.
+# ============================================================================
+
+import "../constants/computability_enumeration.ep"
+
+
+define state_to_word_reduction_preserves_process with index as Int and depth as Int and steps as Int returning Bool:
+    set word to enumerate_fold_word(index and depth)
+    set from_state to computation_steps(computation_state(index and depth) and steps)
+    set from_word to universal_fold_execute_word(word and steps)
+    return fraction_is_equal(from_state and from_word)
+
+
+define word_to_state_reduction_is_inverse with index as Int and depth as Int returning Bool:
+    set word to enumerate_fold_word(index and depth)
+    return rank_fold_word(word) == index
+
+
+define observation_reduction_preserves_transition with index as Int and depth as Int returning Bool:
+    set word to enumerate_fold_word(index and depth)
+    set reduced_word to fold_rewrite_once(word)
+    set reduced_index to rank_fold_word(reduced_word)
+    set word_state to computation_state(reduced_index and depth - 1)
+    set state_image to computation_step(computation_state(index and depth))
+    return fraction_is_equal(word_state and state_image)
+
+
+define fold_reduction_composes with index as Int and depth as Int returning Bool:
+    set word to enumerate_fold_word(index and depth)
+    set split to 0
+    repeat while split < depth + 1:
+        set direct to fold_rewrite_steps(word and depth)
+        set first to fold_rewrite_steps(word and split)
+        set second to fold_rewrite_steps(first and depth - split)
+        if fold_words_are_equal(direct and second) == false:
+            return false
+        set split to split + 1
+    return true
+
+
+define complete_fold_reduction_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            if word_to_state_reduction_is_inverse(index and depth):
+                if observation_reduction_preserves_transition(index and depth):
+                    if fold_reduction_composes(index and depth):
+                        set steps to 0
+                        repeat while steps < depth + 1:
+                            if state_to_word_reduction_preserves_process(index and depth and steps):
+                                set steps to steps + 1
+                            else:
+                                return false
+                        set index to index + 1
+                    else:
+                        return false
+                else:
+                    return false
+            else:
+                return false
+        set depth to depth + 1
+    return true
+
+
+define changed_reduction_symbol_is_rejected with depth as Int returning Bool:
+    set lawful to enumerate_fold_word(1 and depth)
+    set changed to enumerate_fold_word(1 and depth)
+    set ok to set_list(changed and 0 and binary_count())
+    set lawful_state to universal_fold_execute_word(lawful and 0)
+    set changed_state to universal_fold_execute_word(changed and 0)
+    return fraction_is_equal(lawful_state and changed_state) == false
+
+
+define shortened_reduction_process_is_rejected with depth as Int returning Bool:
+    set word to enumerate_fold_word(1 and depth)
+    set complete to universal_fold_execute_word(word and depth)
+    set early_result to universal_fold_execute_word(word and depth - 1)
+    return fraction_is_equal(complete and early_result) == false

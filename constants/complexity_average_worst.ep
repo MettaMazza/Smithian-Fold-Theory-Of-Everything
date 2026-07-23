@@ -1,0 +1,94 @@
+# ============================================================================
+#  FOLD AVERAGE AND WORST CASE -- complete equal-share state census.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 329 forces equal exact shares over all depth-k states.  Average and worst
+#  resources can therefore be derived by exhausting that complete state set,
+#  without importing a sampling distribution.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Worst halt time is the longest walked path, exactly k.  Total halt work is
+#  summed over every state.  Route A sums each state's walked length; Route B
+#  groups the same complete census by exact halt length.  Dividing by b^k gives
+#  the exact equal-share average.  The grouped count also yields
+#  `((k-1)b^k + 1)/b^k`, independently checked at every admitted depth.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/complexity_bounds_completeness.ep"
+
+
+define enumerated_fold_total_halt_work with depth as Int returning Int:
+    set total to 0
+    set index to 1
+    repeat while index < computation_state_count(depth) + 1:
+        set total to total + process_length_to_terminal(index and depth)
+        set index to index + 1
+    return total
+
+
+define grouped_fold_total_halt_work with depth as Int returning Int:
+    set total to 0
+    set length to 0
+    repeat while length < depth + 1:
+        set count_at_length to 0
+        set index to 1
+        repeat while index < computation_state_count(depth) + 1:
+            if process_length_to_terminal(index and depth) == length:
+                set count_at_length to count_at_length + 1
+            set index to index + 1
+        set total to total + length * count_at_length
+        set length to length + 1
+    return total
+
+
+define fold_total_halt_work with depth as Int returning Int:
+    return forced_to_be("Fold average: state sum = grouped halt-length sum" and enumerated_fold_total_halt_work(depth) and grouped_fold_total_halt_work(depth))
+
+
+define fold_average_halt_time with depth as Int returning Fraction:
+    return fraction_from_ratio(fold_total_halt_work(depth) and computation_state_count(depth))
+
+
+define fold_average_closed_form with depth as Int returning Fraction:
+    set states to computation_state_count(depth)
+    set numerator to (depth - 1) * states + 1
+    return fraction_from_ratio(numerator and states)
+
+
+define fold_average_routes_agree with depth as Int returning Bool:
+    return fraction_is_equal(fold_average_halt_time(depth) and fold_average_closed_form(depth))
+
+
+define fold_worst_case_halt_time with depth as Int returning Int:
+    return fold_time_upper_bound(depth)
+
+
+define fold_average_does_not_exceed_worst with depth as Int returning Bool:
+    set average to fold_average_halt_time(depth)
+    set worst to fraction_from_whole_number(fold_worst_case_halt_time(depth))
+    return fraction_compare(average and worst) <= 0
+
+
+define complete_fold_average_worst_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_average_routes_agree(depth) == false:
+            return false
+        if fold_worst_case_halt_time(depth) != depth:
+            return false
+        if fold_average_does_not_exceed_worst(depth) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define false_average_equals_worst_is_rejected with depth as Int returning Bool:
+    set average to fold_average_halt_time(depth)
+    set worst to fraction_from_whole_number(fold_worst_case_halt_time(depth))
+    return fraction_is_equal(average and worst) == false
+
+
+define false_shorter_worst_case_is_rejected with depth as Int returning Bool:
+    return fold_worst_case_halt_time(depth) != depth - 1

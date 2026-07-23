@@ -1,0 +1,165 @@
+# ============================================================================
+#  FOLD REVERSIBLE AND QUANTUM COMPUTATION FOUNDATIONS.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Quantum computation requires explicit information units, composed states,
+#  unresolved support, phase/interference operations, entangling composition,
+#  measurement, and a reversible computational model before gates are admitted.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  A Fold step is made reversible by retaining its unique fibre label; s steps
+#  retain exactly s labels and the inverse rejoins them to the residual.  One
+#  quantum information unit is therefore the forced b-way fibre distinction.
+#  Units compose by word joining, so supports multiply.  Superposition-equivalent
+#  structure is the complete unresolved b^k word support with equal exact shares.
+#  Phase is the period-b action on a fibre label; the two relative phases are the
+#  distinct predecessor pair, and interference is their forced merger under one
+#  Fold observation.  Entangling composition is the one generated joint word and
+#  rank whose component slices reconstruct exactly.  Measurement is observation:
+#  it selects a retained suffix, closes a b^s history fibre, and the retained
+#  record restores one classical source.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every word, prefix, and composition through depth seven is executed.  Missing
+#  reverse labels, collapsed units/supports, nonperiodic phase, unmerged
+#  interference, changed component slices, and record-free measurement reject.
+# ============================================================================
+
+import "../constants/scientific_computation.ep"
+
+
+define fold_reversible_forward_residual with rank as Int and depth as Int and steps as Int returning List:
+    return fold_bound_term_suffix(rank and depth and steps)
+
+
+define fold_reversible_record with rank as Int and depth as Int and steps as Int returning List:
+    return fold_bind_closed_prefix(rank and depth and steps)
+
+
+define fold_reversible_inverse with record as List and residual as List returning List:
+    return fold_sequence_join(record and residual)
+
+
+define fold_reversible_model_holds with rank as Int and depth as Int and steps as Int returning Bool:
+    set record to fold_reversible_record(rank and depth and steps)
+    set residual to fold_reversible_forward_residual(rank and depth and steps)
+    if length_list(record) != steps:
+        return false
+    set restored to fold_reversible_inverse(record and residual)
+    return fold_words_are_equal(restored and enumerate_fold_word(rank and depth))
+
+
+define fold_quantum_information_unit_alternatives returning Int:
+    return forced_to_be("Fold quantum information unit = one fibre distinction" and binary_count() and fold_language_word_count(1))
+
+
+define fold_quantum_information_unit_share returning Fraction:
+    return fraction_from_ratio(1 and fold_quantum_information_unit_alternatives())
+
+
+define fold_quantum_state_composition_holds with first_depth as Int and second_depth as Int returning Bool:
+    set composed_support to fold_quantum_composed_support(first_depth and second_depth)
+    return composed_support == fold_quantum_support_count(first_depth + second_depth)
+
+
+define fold_superposition_equivalent_structure_holds with depth as Int returning Bool:
+    if fold_quantum_support_count(depth) != computation_state_count(depth):
+        return false
+    return fold_quantum_branches_partition_one(depth)
+
+
+define fold_quantum_phase_label with label as Int and turns as Int returning Int:
+    set phase to label
+    set step to 0
+    repeat while step < turns:
+        set phase to binary_count() + 1 - phase
+        set step to step + 1
+    return phase
+
+
+define fold_quantum_phase_period_holds with label as Int returning Bool:
+    if fold_quantum_phase_label(label and 1) == label:
+        return false
+    return fold_quantum_phase_label(label and binary_count()) == label
+
+
+define fold_quantum_interference_holds with lower_rank as Int and depth as Int returning Bool:
+    set lower_count to computation_state_count(depth - 1)
+    set first_rank to lower_rank
+    set second_rank to lower_rank + lower_count
+    set first_image to computation_step(computation_state(first_rank and depth))
+    set second_image to computation_step(computation_state(second_rank and depth))
+    if fraction_compare(computation_state(first_rank and depth) and computation_state(second_rank and depth)) == 0:
+        return false
+    return fraction_is_equal(first_image and second_image)
+
+
+define fold_entangled_composition_holds with first_rank as Int and first_depth as Int and second_rank as Int and second_depth as Int returning Bool:
+    set first_word to enumerate_fold_word(first_rank and first_depth)
+    set second_word to enumerate_fold_word(second_rank and second_depth)
+    set joint to fold_sequence_join(first_word and second_word)
+    if length_list(joint) != first_depth + second_depth:
+        return false
+    set recovered_first to fold_sequence_slice(joint and 0 and first_depth)
+    set recovered_second to fold_sequence_slice(joint and first_depth and second_depth)
+    if fold_words_are_equal(recovered_first and first_word) == false:
+        return false
+    if fold_words_are_equal(recovered_second and second_word) == false:
+        return false
+    return decode_computation_codeword(joint) > 0
+
+
+define fold_quantum_measurement_semantics_holds with rank as Int and depth as Int and observations as Int returning Bool:
+    set record to fold_reversible_record(rank and depth and observations)
+    set measured_state to fold_reversible_forward_residual(rank and depth and observations)
+    if fold_quantum_support_after_observation(depth and observations) != computation_state_count(depth - observations):
+        return false
+    if fold_entropy_multiplicity(observations) != computation_state_count(observations):
+        return false
+    set restored to fold_reversible_inverse(record and measured_state)
+    return decode_computation_codeword(restored) == rank
+
+
+define complete_fold_reversible_quantum_foundations_census returning Bool:
+    if fold_quantum_information_unit_alternatives() != binary_count():
+        return false
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_superposition_equivalent_structure_holds(depth) == false:
+            return false
+        if fold_quantum_phase_period_holds(1) == false:
+            return false
+        set lower_rank to 1
+        repeat while lower_rank < computation_state_count(depth - 1) + 1:
+            if fold_quantum_interference_holds(lower_rank and depth) == false:
+                return false
+            set lower_rank to lower_rank + 1
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set steps to 0
+            repeat while steps < depth + 1:
+                if fold_reversible_model_holds(rank and depth and steps) == false:
+                    return false
+                if fold_quantum_measurement_semantics_holds(rank and depth and steps) == false:
+                    return false
+                set steps to steps + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return true
+
+
+define missing_reverse_label_is_rejected with rank as Int and depth as Int and steps as Int returning Bool:
+    if steps < 1:
+        return true
+    set shortened_record to fold_sequence_slice(fold_reversible_record(rank and depth and steps) and 0 and steps - 1)
+    set restored to fold_reversible_inverse(shortened_record and fold_reversible_forward_residual(rank and depth and steps))
+    return fold_words_are_equal(restored and enumerate_fold_word(rank and depth)) == false
+
+
+define collapsed_quantum_unit_is_rejected returning Bool:
+    return fold_quantum_information_unit_alternatives() != 1
+
+
+define nonperiodic_phase_is_rejected returning Bool:
+    return fold_quantum_phase_label(1 and binary_count()) != fold_quantum_phase_label(1 and 1)

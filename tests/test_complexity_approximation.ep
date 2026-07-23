@@ -1,0 +1,33 @@
+# Machine-check Fold approximation complexity.
+import "../constants/complexity_approximation.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold approximation complexity ==="
+    set ok to expect_number("three observations retain sixteen approximation classes" and fold_approximation_class_count(7 and 3) and 16)
+    set ok to expect_number("each class represents eight exact sources" and fold_approximation_class_size(3) and 8)
+    set ok to expect_number("class accounting reconstructs all 128 sources" and fold_approximation_accounting(7 and 3) and 128)
+    set ok to expect_number("the approximation retains four distinctions" and fold_approximation_retained_precision(7 and 3) and 4)
+    set ok to expect_true("one refinement divides ambiguity by b" and fold_approximation_refinement_is_binary(3))
+    set ok to expect_true("zero observation loss is exact" and fold_approximation_is_exact_at_zero(7))
+    set ok to expect_true("the complete approximation census holds" and complete_fold_approximation_census())
+    set ok to expect_true("a false singleton coarse class is rejected" and false_singleton_coarse_class_is_rejected(3))
+    set ok to expect_true("perturbed approximation accounting is rejected" and perturbed_approximation_accounting_is_rejected(7 and 3))
+    display "=== done ==="
+    return 0

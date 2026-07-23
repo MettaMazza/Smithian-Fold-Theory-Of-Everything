@@ -1,0 +1,30 @@
+# Machine-check universality of the one Fold executor over admitted processes.
+import "../constants/computational_universality.ep"
+
+define expect_equal with label as Str and got as Str and want as Str:
+    if got equals want:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define expect_number with label as Str and got as Int and want as Int:
+    return expect_equal(label and int_to_string(got) and int_to_string(want))
+
+define expect_true with label as Str and got as Bool:
+    if got:
+        display concat("  ok    " and label)
+    else:
+        display concat("  FAIL  " and label)
+    return 0
+
+define main:
+    display "=== Fold computational universality law ==="
+    set ok to expect_true("one executor covers an arbitrary admitted process prefix" and universal_fold_covers_process(85 and 7 and 4))
+    set ok to expect_true("one executor covers every admitted process" and complete_universal_fold_census())
+    set ok to expect_number("depth-7 has 128 times 8 process descriptions" and universal_fold_description_count(7) and 1024)
+    set ok to expect_true("the same executor covers the recurrent machine" and universal_fold_covers_recurrent_machine())
+    set ok to expect_true("universal execution composes at every split" and universal_fold_execution_composes(85 and 7))
+    set ok to expect_true("a non-Fold shifted transition is rejected" and nonfold_transition_is_rejected(7))
+    display "=== done ==="
+    return 0

@@ -1,0 +1,74 @@
+# ============================================================================
+#  FOLD RANDOMIZED ALGORITHMS -- equal-share target order and exact expectation.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Step 348 forces the only admitted randomness: unresolved generated histories
+#  with equal exact shares.  Applying it to the complete ordered target set gives
+#  a randomized search law without importing a random-number source or chosen
+#  distribution.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  Every target rank 1..b^k carries share 1/b^k.  Ordered search spends its rank
+#  in comparisons, so complete enumeration gives total N(N+1)/b and exact mean
+#  (N+1)/b, with b the already-forced binary count.  A budget of q distinct
+#  histories succeeds on exact share q/N.  Biased shares and omitted histories
+#  are rejected.  No fitted stochastic prior enters.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/algorithms_optimization.ep"
+
+
+define fold_randomized_search_total_comparisons with depth as Int returning Int:
+    set total to 0
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        set total to total + fold_ordered_search_comparisons(rank and depth)
+        set rank to rank + 1
+    set states to computation_state_count(depth)
+    set counted_route to (states * (states + 1)) / binary_count()
+    return forced_to_be("Fold randomized search: enumerated rank sum = counted pair sum" and total and counted_route)
+
+
+define fold_randomized_search_expected_comparisons with depth as Int returning Fraction:
+    return fraction_from_ratio(fold_randomized_search_total_comparisons(depth) and computation_state_count(depth))
+
+
+define fold_randomized_search_expected_closed_route with depth as Int returning Fraction:
+    return fraction_from_ratio(computation_state_count(depth) + 1 and binary_count())
+
+
+define fold_randomized_search_expectation_is_exact with depth as Int returning Bool:
+    return fraction_is_equal(fold_randomized_search_expected_comparisons(depth) and fold_randomized_search_expected_closed_route(depth))
+
+
+define fold_randomized_search_success_share with budget as Int and depth as Int returning Fraction:
+    if budget < 0:
+        return fraction_from_whole_number(0)
+    if budget > computation_state_count(depth):
+        return fraction_from_whole_number(1)
+    return fraction_from_ratio(budget and computation_state_count(depth))
+
+
+define complete_fold_randomized_algorithm_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_randomized_search_expectation_is_exact(depth) == false:
+            return false
+        if unresolved_fold_histories_partition_one(depth) == false:
+            return false
+        set full_share to fold_randomized_search_success_share(computation_state_count(depth) and depth)
+        if fraction_is_equal(full_share and fraction_from_whole_number(1)) == false:
+            return false
+        set depth to depth + 1
+    return true
+
+
+define biased_randomized_search_is_rejected with depth as Int returning Bool:
+    return perturbed_random_share_is_rejected(depth)
+
+
+define omitted_random_target_is_rejected with depth as Int returning Bool:
+    set incomplete to fold_randomized_search_success_share(computation_state_count(depth) - 1 and depth)
+    return fraction_is_equal(incomplete and fraction_from_whole_number(1)) == false

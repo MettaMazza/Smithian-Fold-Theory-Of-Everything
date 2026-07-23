@@ -1,0 +1,208 @@
+# ============================================================================
+#  FOLD INFORMATION LAW -- quantity, transformation, retention, loss, conservation.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  The corpus already contains entropy, uncertainty, branch weight, merging, and
+#  recurrence.  Steps 325-328 now supply exact state, observation, resource, and
+#  encoding laws.  Their common count forces a single computational information
+#  law without importing logarithms, amplitudes, or a conventional information
+#  model.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  INFORMATION QUANTITY is the number of binary distinctions carried by a Fold
+#  codeword.  Route A counts the codeword symbols.  Route B walks the Fold steps
+#  required by the first state to close.  forced_to_be requires both to equal the
+#  depth k.  Its multiplicity is b^k, cross-routed to the exact state/codeword
+#  census.
+#
+#  After s observations:
+#      retained information = k-s,
+#      closed information   = s,
+#      retained + closed    = k.
+#  The associated multiplicities obey the already-forced resource product
+#  b^(k-s) * b^s = b^k.
+#
+#  Each exact state carries branch share 1/b^k, and all shares partition the One.
+#  At the established observation depth c this is exactly the closed measurement
+#  branch weight.  The uncertainty support product equals the same b^k count.
+#
+#  LOSS and CONSERVATION are the Fold's two orbit regimes.  On dyadic descent,
+#  distinct binary preimages merge and one codeword symbol closes per step.  On
+#  the period-b orbit {1/3, 2/3}, the two distinct states return after the full
+#  period, so their distinction is retained under the complete cycle.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every information accounting identity is executed at every admitted depth and
+#  every intermediate observation count, with perturbed accounting rejected.
+# ============================================================================
+
+import "../foundation/enforcement.ep"
+import "../constants/computational_encoding.ep"
+import "../constants/entropy.ep"
+import "../constants/measurement_branch_weight.ep"
+import "../constants/uncertainty_principle.ep"
+
+
+# Route A: the exact number of symbols in a depth-k state codeword.
+define codeword_information_quantity with depth as Int returning Int:
+    set codeword to encode_computation_state(1 and depth)
+    return length_list(codeword)
+
+
+# Route B: the exact number of Fold steps walked to closure.
+define walked_information_quantity with depth as Int returning Int:
+    return walked_time_resource(depth)
+
+
+# Information quantity is forced equal through encoding and closure routes.
+define information_quantity with depth as Int returning Int:
+    set by_codeword to codeword_information_quantity(depth)
+    set by_walk to walked_information_quantity(depth)
+    set checked to forced_to_be("information quantity: codeword symbols = closure steps" and by_codeword and by_walk)
+    return forced_to_be("information quantity = depth" and checked and depth)
+
+
+# The multiplicity carried by k binary distinctions.
+define information_multiplicity with depth as Int returning Int:
+    set by_symbols to whole_power(binary_count() and information_quantity(depth))
+    set by_codewords to codeword_count_is_forced(depth)
+    set checked to forced_to_be("information multiplicity: binary distinctions = codewords" and by_symbols and by_codewords)
+    return forced_to_be("information multiplicity = state count" and checked and computation_state_count(depth))
+
+
+# Information retained and closed after a counted number of observations.
+define retained_information with depth as Int and observations as Int returning Int:
+    return depth - observations
+
+define closed_information with observations as Int returning Int:
+    return observations
+
+
+# Exact additive accounting of distinction depth.
+define information_accounting with depth as Int and observations as Int returning Int:
+    set retained to retained_information(depth and observations)
+    set closed to closed_information(observations)
+    set reconstructed to retained + closed
+    return forced_to_be("retained information plus closed information = initial information" and reconstructed and information_quantity(depth))
+
+
+# The exact share carried by one state at depth k.
+define information_branch_share with depth as Int returning Fraction:
+    return fraction_from_ratio(1 and information_multiplicity(depth))
+
+
+# Every equal branch share partitions back to the One.
+define information_branches_partition_one with depth as Int returning Bool:
+    set count to information_multiplicity(depth)
+    set total to information_branch_share(depth)
+    set branch to 1
+    repeat while branch < count:
+        set total to fraction_add(total and information_branch_share(depth))
+        set branch to branch + 1
+    set one to fraction_from_whole_number(1)
+    return fraction_is_equal(total and one)
+
+
+# The general branch share meets the established measurement branch at depth c.
+define measurement_branch_bridge_holds returning Bool:
+    set general_share to information_branch_share(colour_count())
+    set measured_structure_share to branch_weight()
+    return fraction_is_equal(general_share and measured_structure_share)
+
+
+# The established uncertainty support product carries the same multiplicity.
+define uncertainty_matches_information with depth as Int returning Bool:
+    return minimum_uncertainty_product(depth) == information_multiplicity(depth)
+
+
+# Dyadic information loss: distinct paired states merge under one observation.
+define dyadic_distinction_closes with depth as Int returning Bool:
+    set existing_entropy_count to preimages_per_image() == binary_count()
+    set existing_merge to images_coincide()
+    set computational_merge to paired_states_close_under_observation(1 and depth)
+    if existing_entropy_count:
+        if existing_merge:
+            return computational_merge
+    return false
+
+
+# Periodic information conservation: both distinct states return after b steps.
+define periodic_distinction_is_retained returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set second to fraction_from_ratio(binary_count() and colour_count())
+    set distinct to fraction_compare(first and second) != 0
+    set first_return to computation_steps(first and binary_count())
+    set second_return to computation_steps(second and binary_count())
+    set first_same to fraction_is_equal(first and first_return)
+    set second_same to fraction_is_equal(second and second_return)
+    if distinct:
+        if first_same:
+            return second_same
+    return false
+
+
+# NEGATIVE CONTROL: adding one unforced retained distinction breaks accounting.
+define perturbed_information_accounting_is_rejected with depth as Int and observations as Int returning Bool:
+    set perturbed to retained_information(depth and observations) + 1 + closed_information(observations)
+    if perturbed == information_quantity(depth):
+        return false
+    return true
+
+
+# NEGATIVE CONTROL: the period-b state has moved after one step, so conservation
+# belongs to the complete cycle rather than an asserted pointwise identity.
+define incomplete_cycle_identity_is_rejected returning Bool:
+    set first to fraction_from_ratio(1 and colour_count())
+    set after_one to computation_step(first)
+    if fraction_is_equal(first and after_one):
+        return false
+    return true
+
+
+# Complete information census over every admitted depth and observation count.
+define complete_information_census returning Bool:
+    set deepest to computation_census_depth()
+    set all_hold to true
+    set depth to 1
+    repeat while depth < deepest + 1:
+        set quantity_ok to information_quantity(depth) == depth
+        set multiplicity_ok to information_multiplicity(depth) == computation_state_count(depth)
+        set partition_ok to information_branches_partition_one(depth)
+        set uncertainty_ok to uncertainty_matches_information(depth)
+        set loss_ok to dyadic_distinction_closes(depth)
+        set observations to 0
+        set accounting_ok to true
+        repeat while observations < depth + 1:
+            if information_accounting(depth and observations) == depth:
+                if perturbed_information_accounting_is_rejected(depth and observations):
+                    set accounting_ok to accounting_ok
+                else:
+                    set accounting_ok to false
+            else:
+                set accounting_ok to false
+            set observations to observations + 1
+        if quantity_ok:
+            if multiplicity_ok:
+                if partition_ok:
+                    if uncertainty_ok:
+                        if loss_ok:
+                            if accounting_ok:
+                                set all_hold to all_hold
+                            else:
+                                set all_hold to false
+                        else:
+                            set all_hold to false
+                    else:
+                        set all_hold to false
+                else:
+                    set all_hold to false
+            else:
+                set all_hold to false
+        else:
+            set all_hold to false
+        set depth to depth + 1
+    if periodic_distinction_is_retained():
+        if incomplete_cycle_identity_is_rejected():
+            return all_hold
+    return false

@@ -1,0 +1,115 @@
+# ============================================================================
+#  FOLD QUANTUM GATES, CIRCUITS, AND UNIVERSALITY.
+# ============================================================================
+#
+#  -- WHY --------------------------------------------------------------------
+#  Branch counts and circuit resources do not alone specify a quantum circuit.
+#  The transformation, syntax, branch semantics, reversibility record, and
+#  universal coverage must be explicit.
+#
+#  -- DERIVATION -------------------------------------------------------------
+#  The primitive gate is one forced Fold transition on every unresolved branch.
+#  Its input label is retained as the reversible record.  A circuit of s gates is
+#  the lawful s-edge compiled trace applied branchwise: it has b^(k-s) images,
+#  b^s histories per image, exact depth s, and the same result as operational and
+#  denotational evaluation.  Repeating this one gate covers every admitted Fold
+#  process, so universality is inherited from the already-enumerated universal
+#  executor rather than from an imported gate basis.
+#
+#  -- CHECK ------------------------------------------------------------------
+#  Every branch, circuit prefix, and split through depth seven is executed.
+#  Shifted gates, omitted branches, tampered traces, shortened depth, missing
+#  reverse labels, and non-Fold transitions reject.
+# ============================================================================
+
+import "../constants/reversible_quantum_foundations.ep"
+import "../constants/complexity_circuit.ep"
+import "../constants/computational_universality.ep"
+
+
+define fold_quantum_gate_image with rank as Int and depth as Int returning Int:
+    return lower_grid_index(rank and depth)
+
+
+define fold_quantum_gate_record with rank as Int and depth as Int returning Int:
+    return get_list(enumerate_fold_word(rank and depth) and 0)
+
+
+define fold_quantum_gate_is_reversible with rank as Int and depth as Int returning Bool:
+    set record to fold_quantum_gate_record(rank and depth)
+    set residual to fold_rewrite_steps(enumerate_fold_word(rank and depth) and 1)
+    set held to create_list()
+    set ok to append_list(held and record)
+    set restored to fold_sequence_join(held and residual)
+    return decode_computation_codeword(restored) == rank
+
+
+define fold_quantum_gate_theory_holds with depth as Int returning Bool:
+    set rank to 1
+    repeat while rank < computation_state_count(depth) + 1:
+        if fold_quantum_gate_image(rank and depth) != fold_quantum_algorithm_branch_image(rank and depth and 1):
+            return false
+        if fold_quantum_gate_is_reversible(rank and depth) == false:
+            return false
+        set rank to rank + 1
+    return true
+
+
+define fold_quantum_circuit_semantics_holds with rank as Int and depth as Int and gates as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and gates)
+    if fold_compiled_trace_is_lawful(trace and depth) == false:
+        return false
+    if fold_circuit_gate_count(trace) != gates:
+        return false
+    set branch_image to fold_quantum_algorithm_branch_image(rank and depth and gates)
+    if fold_execute_compiled_trace(trace) != branch_image:
+        return false
+    return fold_reversible_model_holds(rank and depth and gates)
+
+
+define fold_quantum_circuit_support_holds with depth as Int and gates as Int returning Bool:
+    set images to fold_quantum_algorithm_image_count(depth and gates)
+    set histories to fold_entropy_multiplicity(gates)
+    return images * histories == fold_quantum_support_count(depth)
+
+
+define fold_quantum_universality_holds returning Bool:
+    if complete_universal_fold_census() == false:
+        return false
+    if complete_fold_quantum_algorithm_census() == false:
+        return false
+    return universal_fold_covers_recurrent_machine()
+
+
+define complete_fold_quantum_gate_circuit_census returning Bool:
+    set depth to 1
+    repeat while depth < computation_census_depth() + 1:
+        if fold_quantum_gate_theory_holds(depth) == false:
+            return false
+        set rank to 1
+        repeat while rank < computation_state_count(depth) + 1:
+            set gates to 0
+            repeat while gates < depth + 1:
+                if fold_quantum_circuit_semantics_holds(rank and depth and gates) == false:
+                    return false
+                if fold_quantum_circuit_support_holds(depth and gates) == false:
+                    return false
+                set gates to gates + 1
+            set rank to rank + 1
+        set depth to depth + 1
+    return fold_quantum_universality_holds()
+
+
+define shifted_quantum_gate_is_rejected with rank as Int and depth as Int returning Bool:
+    return fold_quantum_gate_image(rank and depth) + 1 != fold_quantum_algorithm_branch_image(rank and depth and 1)
+
+
+define shortened_quantum_circuit_semantics_is_rejected with rank as Int and depth as Int returning Bool:
+    set trace to fold_compile_program_trace(rank and depth and depth)
+    return fold_circuit_gate_count(trace) != depth - 1
+
+
+define collapsed_quantum_circuit_support_is_rejected with depth as Int and gates as Int returning Bool:
+    set images to fold_quantum_algorithm_image_count(depth and gates)
+    set histories to fold_entropy_multiplicity(gates)
+    return images * histories != fold_quantum_support_count(depth) - 1
