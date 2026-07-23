@@ -26,9 +26,10 @@ bounds, and the unique minimum fault width `2t+1` for every positive finite
 `t`. The synchronized corpus seal is **409 suites, 2,693 checks, zero failures,
 and 409/409 byte-identical generated certificates**.
 
-**Release status:** publication-ready local draft; GitHub push, Zenodo
-deposition, DOI assignment and publication await Maria Smith's explicit release
-authorization.
+**Release status:** published 23 July 2026. Main corpus and standalone laboratory
+are public on GitHub; the archival edition is [Zenodo record
+21512799](https://zenodo.org/records/21512799), DOI
+[`10.5281/zenodo.21512799`](https://doi.org/10.5281/zenodo.21512799).
 
 Every fundamental constant and structural law of physics — **forced, counted,
 derived, and verified** from a single self-proving foundation. No number here is

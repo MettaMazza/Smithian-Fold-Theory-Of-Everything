@@ -194,15 +194,17 @@ Never collapse these into “works” or “doesn't work.”
 
 Fresh on 23 July 2026, the complete current-source and generated-certificate surfaces both execute **409 suites / 2,693 checks / zero failures**, and all 409 source/certificate pairs regenerate byte-identically. The 405/2,657 Steps-325–403 surface is the immediately preceding development record; the 402/2,622 Steps-325–400, 392/2,488 Steps-325–390, 385/2,442 Steps-325–383, 374/2,376 Steps-325–372, 358/2,257 Steps-325–356, 345/2,151 Steps-325–343, and 332/2,059 Steps-325–330 surfaces are earlier development history; the 17 July 326/2,002 surface is the preceding synchronized release record.
 
-**Publication preparation record, 23 July 2026:** *After Turing: The Fold
-Machine* is locally synchronized to Steps 325–407, the fundamental-computation
-census, the 409/2,693 seal, and the portable proof laboratory. The Markdown,
-finished PDF, Zenodo metadata, citation record, rendering receipt, deterministic
-evidence archive, checksums, and release manifest are prepared. This is a
-documentary release candidate, not a new scientific step. It has not been
-committed, tagged, pushed, deposited, assigned a DOI, uploaded, or published.
-Unison AI, Fold Chess, Fold Go, and Fold Protein were deliberately excluded and
-remain later translation/frontier work.
+**Publication record, 23 July 2026:** *After Turing: The Fold Machine* is
+synchronized to Steps 325–407, the fundamental-computation census, the
+409/2,693 seal, and the portable proof laboratory. The 32-page DOI-bearing PDF,
+Markdown, citation record, rendering receipt, deterministic 347-member evidence
+archive, checksums, and release manifest are published from main-corpus commit
+`9125e60`. The standalone laboratory is public at
+`MettaMazza/Smithian-Fold-Computational-Sciences` commit `107e470`. Zenodo record
+21512799 is published at DOI `10.5281/zenodo.21512799` with ten checksum-verified
+files. This documentary synchronization is not a new scientific step. Unison AI,
+Fold Chess, Fold Go, and Fold Protein were deliberately excluded and remain
+later translation/frontier work.
 
 Additional registered checks include deliberate fitted-value halt behavior, the fine-structure neighborhood scan, declared-tolerance NIST comparisons, and the refereed chess legality anchor. Each retains its own evidence and scope.
 
